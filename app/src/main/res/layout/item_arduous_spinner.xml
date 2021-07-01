@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/containerCl"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="48dp">
+    <Button
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/listItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:textSize="@dimen/sp16"
+        android:padding="0dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

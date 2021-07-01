@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingLottie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_fileName="bar-chart.json" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white_ffffff"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rootView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/illustIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/topGuideIv"
+                android:layout_width="@dimen/dp328"
+                android:layout_height="@dimen/dp328"
+                android:layout_marginEnd="@dimen/dp56"
+                android:layout_marginStart="@dimen/dp144"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/bottomGuideIv"
+                android:layout_width="@dimen/dp328"
+                android:layout_height="@dimen/dp328"
+                android:layout_marginEnd="@dimen/dp56"
+                app:layout_constraintStart_toStartOf="@+id/topGuideIv"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mailContainerCl"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:background="@color/grey_f2f2f2"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    style="@style/TextGrey_818181.ExtraBold"
+                    android:id="@+id/mailGuideText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="메일로 공유하기"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toTopOf="@+id/mailBtn"
+                    app:layout_constraintBottom_toBottomOf="@+id/mailBtn"
+                    app:layout_constraintEnd_toStartOf="@+id/mailBtn"/>
+
+                <ImageButton
+                    android:id="@+id/mailBtn"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_mail"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp64"
+        android:background="@color/white_fafafa"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:src="@drawable/ic_toolbar_back"
+            android:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp18"
+            android:gravity="center_horizontal"
+            android:text="간식타입 보고서"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

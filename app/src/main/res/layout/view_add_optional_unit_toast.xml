@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingEnd="24dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/dp264"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_yellow_ffb300_round_20"
+        android:padding="@dimen/dp32">
+
+        <LinearLayout
+            android:id="@+id/contentsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/titleTv"
+                style="@style/TextBrown_8f5f00.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:text="가이드"
+                android:textSize="@dimen/sp18"
+                app:lineHeight="@dimen/sp24" />
+
+            <TextView
+                android:id="@+id/contentTv"
+                style="@style/TextBrown_8f5f00.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="하루 30문제 풀기 성공!"
+                android:textColor="@color/brown_8f5f00"
+                android:textSize="@dimen/sp14" />
+
+            <CheckBox
+                android:id="@+id/checkNoShow"
+                style="@style/TextBrown_8f5f00.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:button="@drawable/checkbox_brown"
+                android:paddingStart="10dp"
+                android:text="일주일동안 보지않기"
+                android:textColor="@color/brown_8f5f00"
+                android:textSize="@dimen/sp14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnNo"
+                    style="@style/TextBrown_8f5f00.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_brown_e19502_round_5"
+                    android:text="아니요"
+                    android:textSize="@dimen/sp16" />
+
+                <Button
+                    android:id="@+id/btnYes"
+                    style="@style/TextBrown_8f5f00.ExtraBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_white_fffbef_round_5"
+                    android:text="추가할게요"
+                    android:textSize="@dimen/sp16" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/view_succes_toast_right_arrow_yellow" />
+
+</LinearLayout>

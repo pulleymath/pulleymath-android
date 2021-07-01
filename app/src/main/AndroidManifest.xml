@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.freewheelin.pulley">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:name=".bases.MyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/pulley_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:resizeableActivity="false"
+        android:roundIcon="@mipmap/pulley_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup">
+        <activity android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity" />
+        <activity android:name=".activities.learning.tabFragment.usertest.StudentMockReportActivity" />
+        <activity
+            android:name=".activities.learning.tabFragment.analysis.StudyHistoryActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.auth.InitSettingCompleteActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.auth.InitSettingActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.learning.tabFragment.main.component.SnackReportActivity"
+            android:screenOrientation="sensorLandscape" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="@string/provider_id"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".activities.auth.InitTestActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.auth.StudyReportActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.StartActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.mobile.MStartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.OnboardingActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.auth.signup.SignupActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.auth.findEmailAndPw.FindEmailAndPwActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize|stateUnchanged" />
+        <activity
+            android:name=".activities.auth.login.LoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activities.WrongTestReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".activities.DailyTestReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".activities.WeeklyTestReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".activities.analysis.AnalysisTabActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.MockReportActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorLandscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.OMRActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity
+            android:name=".activities.learning.LearningTabActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities.solve.SolveActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity
+            android:name=".activities.learning.tabFragment.main.mypage.MyPageActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity
+            android:name=".activities.mypage.MyRecommendSettingActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+
+        <receiver
+            android:name=".bases.UpdateReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <!-- 2021 revision -->
+        <activity
+            android:name=".revision2021.activity.PdfListActivity"
+            android:screenOrientation="sensorLandscape"/>
+
+    </application>
+
+</manifest>

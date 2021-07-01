@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MFRadioButton.MockTab"
+    android:layout_width="108dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:paddingEnd="16dp"
+    android:gravity="center"
+    android:text="수학(상)" />

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="464dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_fafafa_round">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_white_ffffff_round_top_only"
+            android:layout_height="@dimen/dp64">
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="학습자료 메일로 보내기"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/xBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp24"
+                android:src="@drawable/ic_x_grey_19dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            style="@style/Border_Grey_e8e8e8_Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp32"
+            android:lineSpacingExtra="@dimen/sp8"
+            android:textSize="@dimen/sp16"
+            android:text="선택한 학습자료를\n입력하신 메일로 보내드릴게요 :)" />
+
+        <com.freewheelin.pulley.views.EditText.DaebakInputField
+            android:id="@+id/emailField"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp32"
+            app:DaebakInputField_Label="받는사람 이메일"
+            app:DaebakInputField_Hint="name@naver.com">
+
+        </com.freewheelin.pulley.views.EditText.DaebakInputField>
+        
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/sendBtn"
+            android:text="메일 보내기"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp24"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            app:ButtonTextSize="@dimen/sp18"/>
+    </LinearLayout>
+
+</LinearLayout>

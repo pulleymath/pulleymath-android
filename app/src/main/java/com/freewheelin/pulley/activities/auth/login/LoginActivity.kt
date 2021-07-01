@@ -1,0 +1,338 @@
+package com.freewheelin.pulley.activities.auth.login
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.text.InputType
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
+import android.util.Log
+import android.view.View
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.auth.InitSettingActivity
+import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActivity
+import com.freewheelin.pulley.activities.auth.signup.SignupActivity
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.bases.BaseActivity
+import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.hideKeyboard
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
+import com.freewheelin.pulley.core.API_V1
+import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
+import com.freewheelin.pulley.dialogs.DeviceManagerDialog
+import com.freewheelin.pulley.model.ResponseBody
+import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.EditText.*
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
+import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+
+class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnterListener, DaebakPasswordFieldListener, DaebakPasswordEnterListener, LifecycleObserver {
+
+    companion object {
+
+        const val ALREADY_WITHDRAW = "ALREADY_WITHDRAW"
+        const val AVAILABLE = "AVAILABLE" // 가능
+
+        const val LOCK_ACCOUNT = "LOCK_ACCOUNT"
+        const val LOGINID_EXIST  = "LOGINID_EXIST" // 존재
+        const val LOGINID_INVALID = "LOGINID_INVALID" // 이상함
+
+        const val NOT_FOUND_DATA = "NOT_FOUND_DATA"
+        const val NOT_MATCH_PW = "NOT_MATCH_PW" // 패스워드 불일
+
+        const val WRONG_LOGINPW = "WRONG_LOGINPW"
+        const val WRONG_LOGINID = "WRONG_LOGINID"
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+        greetingLabel.text = "안녕하세요.\n풀리에 오신 것을 환영합니다 :)"
+        val content = SpannableString(findIdPwTv.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        loginBtn.setOnClickListener {
+            if(loginBtn.isEnableUI()) this.onLoginBtnClicked()
+        }
+        findIdPwTv.setOnClickListener {
+            this.onFindIdPwTvClicked()
+        }
+        signupTv.setOnClickListener {
+            onSignupBtnClicked()
+        }
+        findIdPwTv.extensionTouchArea(12.toPx())
+        emailDet.text = user?.email?: ""
+        emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        emailDet.listener = this
+        pwDet.enterListener = this
+
+        rootView.setOnTouchListener { view, motionEvent ->
+            currentFocus?.let { hideKeyboard(it) }
+            false
+        }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
+        loginBtn.toDisableUI()
+
+        setListener()
+    }
+
+    fun setListener() {
+        emailDet.editText.doAfterTextChanged { text ->
+            if(isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
+        }
+        pwDet.editText.doAfterTextChanged { text ->
+            if(isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
+        }
+    }
+
+    fun isValid() : Boolean{
+        if(emailDet.text.isEmpty() || pwDet.text.isEmpty()) {
+            return false
+        }
+        return emailDet.text.isValidEmail() && pwDet.text.isValidPW()
+    }
+
+    override fun onDestroy() {
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+        super.onDestroy()
+    }
+
+    var requested = false
+
+    fun onLoginBtnClicked() {
+        val email = emailDet.text
+        val pw = pwDet.text
+
+        if(email.isEmpty() || pw.isEmpty()) {
+            if(email.isEmpty()) emailDet.showErrorMsg("이메일을 입력해주세요.")
+            if(pw.isEmpty()) pwDet.showErrorMsg("비밀번호를 입력해주세요.")
+            return
+        }
+
+        // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
+//        if(!email.isValidEmail() ) {
+//            emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
+//            return
+//        }
+
+        emailDet.isShownError = false
+        pwDet.isShownError = false
+
+        if(!requested) { // 요청이 동시에 날라가는 케이스 방지
+            requested = true
+            showProgress()
+
+            API_V2.loginApp(RequestLogin(email, pw)).enqueue(object : Callback<Template<User?>> {
+                override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
+                    responseFailed(this@LoginActivity, t)
+                    hideProgress()
+                    requested = false
+                }
+
+                override fun onResponse(call: Call<Template<User?>>, response: Response<Template<User?>>) {
+                    Preferences.isAvailableRushDialog.set(true)
+                    val user = response.body()?.data
+                    user?.connectToCrashlytics()
+                    handleResponse(response, user)
+                    hideProgress()
+
+                    requested = false
+                }
+            })
+        }
+    }
+
+    fun onFindIdPwTvClicked() {
+        startActivity(FindEmailAndPwActivity::class.java)
+    }
+
+    fun handleResponse(response: Response<Template<User?>>, user: User?) {
+        var template = response.body()
+
+        Log.d(javaClass.simpleName, "template=$template")
+
+        when(response.code()) {
+            200 -> {
+                if(MyApplication.user == null) MyApplication.user = user
+                else MyApplication.user!!.update(user)
+
+                Log.d("로그인", "after login : user=$user")
+
+                when {
+                    user?.isValidPhone == false -> {
+                        ConfirmPhoneDialog(this, successCB = {
+                            commitUser()
+                            goLearningTab()
+                        }, failCB = { clearToken() }).show()
+                    }
+                    user?.isExceedDevice  == true -> { // 기기 초과 > 삭제팝업
+                        // commit 은 기기 삭제후에
+                        DialogUtils.confirmExceedDevice(this) {
+                            DeviceManagerDialog(this, successCB = {
+                                commitUser()
+                                goLearningTab()
+                            }, failCB = { clearToken() }).show()
+                        }
+                    }
+                    user?.initSettingCompleted == false -> {
+                        commitUser()
+                        goInitSetting()
+                    }
+                    else -> {
+                        commitUser()
+                        goLearningTab()
+                    }
+                }
+            }
+            else -> {
+                clearToken()
+
+                val errorTemplate = response?.errorBody()?.let { errorBody ->
+                    Gson().fromJson(errorBody.string(), ResponseBody::class.java)
+                }
+
+                Log.d(javaClass.simpleName, "errorTemplate=$errorTemplate")
+
+                when(errorTemplate?.error){
+                    WRONG_LOGINID -> {
+                        emailDet.showErrorMsg(errorTemplate.message?:"")
+                        pwDet.isShownError = false
+                    }
+                    WRONG_LOGINPW, NOT_MATCH_PW -> {
+                        emailDet.isShownError = false
+                        pwDet.showErrorMsg(errorTemplate.message?:"")
+                    }
+                    NOT_FOUND_DATA -> {
+                        pwDet.isShownError = false
+                        emailDet.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+                    }
+                    LOGINID_INVALID -> {
+                        pwDet.isShownError = false
+                        emailDet.showErrorMsg(errorTemplate.message?:"")
+                    }
+                    LOCK_ACCOUNT -> {
+                        DialogUtils.lockAccountDialog(this) {
+                            openResetPassword()
+                        }.show()
+                    }
+                    else -> {
+                        DialogUtils.showServerErr(this)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openResetPassword() {
+        Intent(this, FindEmailAndPwActivity::class.java).run {
+            this.putExtra(FindEmailAndPwActivity.PAGE, 1) // 1이 비밀번호 재설정
+            startActivity(this)
+            finish()
+        }
+    }
+
+    private fun commitUser() {
+        MyApplication.user?.commit("LoginActivity")
+    }
+
+    private fun clearToken() {
+        MyApplication.user?.token = ""
+        MyApplication.user?.commit("LoginActivity")
+    }
+
+    private fun goLearningTab() {
+        startActivity(Intent(this, LearningTabActivity::class.java))
+        finishAffinity()
+    }
+
+    private fun goInitSetting() {
+        startActivity(InitSettingActivity.getIntent(this))
+        finishAffinity()
+    }
+
+    fun onSignupBtnClicked() {
+        LogUtils.logEvent(this, user, PulleyEvent.INIT_SETTING, "로그인", "회원가입링크")
+
+        val intent = SignupActivity.getIntent(this)
+        startActivity(intent)
+    }
+
+    private fun showProgress() {
+        loadingContainer.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                loadingContainer.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onFieldFocusChanged(view: DaebakInputField, hasFocus: Boolean) {
+        if(!hasFocus) {
+            if(view.text.isEmpty())
+                emailDet.showErrorMsg("이메일을 입력해주세요.")
+            else {
+                API_V2.existId(view.text).enqueue(object: Callback<Template<String?>> {
+                    override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                        responseFailed(this@LoginActivity, t)
+                    }
+
+                    override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                        val httpCode = response.code()
+                        val statusCode = response.body()?.data?:""
+                        handleCheckIDResponse(httpCode, statusCode)
+                    }
+                })
+            }
+        }
+    }
+
+    fun handleCheckIDResponse(httpCode: Int, statusCode:String?) {
+        when(httpCode) {
+            200 -> {
+                when(statusCode) {
+                    AVAILABLE -> emailDet.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+                    LOGINID_INVALID -> emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
+                    ALREADY_WITHDRAW, LOGINID_EXIST -> emailDet.isShownError = false
+                }
+
+            }
+            else -> {
+                DialogUtils.showServerErr(this)
+            }
+        }
+    }
+
+    override fun onEnter(view: View) {
+        if(view.id == R.id.pwDet) // 이메일에서 엔터 쳤을때만 동작
+            onLoginBtnClicked()
+    }
+
+    override fun onFieldValueChanged(view: DaebakInputField) {
+
+    }
+
+    override fun onFieldFocusChanged(view: DaebakPasswordField, hasFocus: Boolean) {
+
+    }
+}

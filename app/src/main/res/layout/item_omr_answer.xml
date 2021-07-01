@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yellow_fffbef">
+        <View
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:background="@color/red_ffe8e8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/verticalStartBorder" />
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/numberTv"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            style="@style/OMR_Vertical_border"
+            android:id="@+id/verticalStartBorder"
+            app:layout_constraintLeft_toRightOf="@+id/numberTv" />
+
+        <View
+            style="@style/OMR_horizontal_border"
+            android:id="@+id/horizontalBorder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/numberTv" />
+
+        <com.freewheelin.pulley.views.AnswerSelectionView
+            android:id="@+id/answerSelectionView"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            app:buttonMargin="@dimen/omr_button_margin"
+            app:buttonWidth="16dp"
+            app:buttonHeight="28dp"
+            app:selectionTheme="omr"
+            app:textSize="@dimen/omr_button_textSize"
+            app:layout_constraintStart_toStartOf="@+id/verticalStartBorder"
+            app:layout_constraintEnd_toEndOf="@+id/verticalEndBorder"
+            app:layout_constraintTop_toTopOf="@+id/numberTv"
+            app:layout_constraintBottom_toBottomOf="@+id/numberTv">
+        </com.freewheelin.pulley.views.AnswerSelectionView>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/verticalEndBorder"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

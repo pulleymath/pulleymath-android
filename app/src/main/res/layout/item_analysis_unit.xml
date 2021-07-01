@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/expandableIndictor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_expandable"
+        android:layout_marginStart="23dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/checkboxContainerCl"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toEndOf="@+id/expandableIndictor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder">
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:button="@drawable/checkbox_blue_white_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/unitTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:text="단원명"
+        app:layout_constraintStart_toEndOf="@+id/checkboxContainerCl"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"/>
+
+
+    <View style="@style/Border_Grey_e8e8e8_Vertical"
+        android:id="@+id/firstColumnBorder"
+        android:layout_height="16dp"
+        android:layout_marginEnd="@dimen/dp96"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+        app:layout_constraintEnd_toStartOf="@+id/secondColumnBorder"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/problemCntTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:text="10문제"
+        app:layout_constraintStart_toStartOf="@+id/firstColumnBorder"
+        app:layout_constraintEnd_toEndOf="@+id/secondColumnBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"/>
+
+
+    <View style="@style/Border_Grey_e8e8e8_Vertical"
+        android:id="@+id/secondColumnBorder"
+        android:layout_height="16dp"
+        android:layout_marginEnd="@dimen/Report_Unit_list_correctRate_width"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    
+    <com.freewheelin.pulley.views.Bars.HorizontalBar
+        android:id="@+id/correctRateHb"
+        android:layout_width="188dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/dp24"
+        app:layout_constraintStart_toEndOf="@+id/secondColumnBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </com.freewheelin.pulley.views.Bars.HorizontalBar>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/correctRateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:text="80%"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+        app:layout_constraintStart_toEndOf="@+id/correctRateHb" />
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        android:id="@+id/columnHorizontalBorder"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

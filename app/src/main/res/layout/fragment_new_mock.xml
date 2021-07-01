@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.learning.tabFragment.mockExam.NewMockFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:background="@drawable/shadow"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginEnd="@dimen/dp16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.freewheelin.pulley.views.ArduousSpinner
+            android:id="@+id/yearFilter"
+            android:layout_width="160dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp48"
+            app:defaultStr="출제 연도 전체"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.freewheelin.pulley.views.ArduousSpinner
+            android:id="@+id/monthFilter"
+            android:layout_width="136dp"
+            android:layout_height="36dp"
+            app:defaultStr="출제월 전체"
+            android:layout_marginStart="@dimen/dp16"
+            app:layout_constraintTop_toTopOf="@+id/yearFilter"
+            app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
+            app:layout_constraintStart_toEndOf="@+id/yearFilter"/>
+
+        <com.freewheelin.pulley.views.ArduousSpinner
+            android:id="@+id/gradeFilter"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            app:defaultStr="학년 전체"
+            android:layout_marginStart="@dimen/dp16"
+            app:layout_constraintTop_toTopOf="@+id/yearFilter"
+            app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
+            app:layout_constraintStart_toEndOf="@+id/monthFilter"/>
+
+
+        <com.freewheelin.pulley.views.ArduousSpinner
+            android:id="@+id/typeFilter"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/dp16"
+            app:defaultStr="계열 전체"
+            app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
+            app:layout_constraintStart_toEndOf="@+id/gradeFilter"
+            app:layout_constraintTop_toTopOf="@+id/yearFilter" />
+
+
+        <com.freewheelin.pulley.views.TextViews.SortableTextView
+            android:id="@+id/yearSl"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp60"
+            android:layout_marginTop="@dimen/dp32"
+            app:label="연도"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/yearFilter"/>
+
+        <com.freewheelin.pulley.views.TextViews.SortableTextView
+            android:id="@+id/monthSl"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp20"
+            app:label="월"
+            app:layout_constraintTop_toTopOf="@+id/yearSl"
+            app:layout_constraintBottom_toBottomOf="@+id/yearSl"
+            app:layout_constraintStart_toEndOf="@+id/yearSl" />
+
+        <com.freewheelin.pulley.views.TextViews.SortableTextView
+            android:id="@+id/gradeSl"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp16"
+            app:label="학년"
+            app:layout_constraintTop_toTopOf="@+id/yearSl"
+            app:layout_constraintBottom_toBottomOf="@+id/yearSl"
+            app:layout_constraintStart_toEndOf="@+id/monthSl" />
+
+
+        <com.freewheelin.pulley.views.TextViews.SortableTextView
+            android:id="@+id/typeSl"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp20"
+            app:label="계열"
+            app:layout_constraintStart_toEndOf="@+id/gradeSl"
+            app:layout_constraintTop_toTopOf="@+id/yearSl"
+            app:layout_constraintBottom_toBottomOf="@+id/yearSl"/>
+
+
+        <com.freewheelin.pulley.views.TextViews.SortableTextView
+            android:id="@+id/titleSl"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp16"
+            app:label="제목"
+            app:layout_constraintTop_toTopOf="@+id/yearSl"
+            app:layout_constraintBottom_toBottomOf="@+id/yearSl"
+            app:layout_constraintStart_toEndOf="@+id/typeSl" />
+
+        <View
+            android:id="@+id/view2"
+            style="@style/Border_Grey_e8e8e8_Horizontal"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeSl" />
+
+        <ImageView
+            android:id="@+id/scrollShadow"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view2"
+            android:src="@drawable/gradient_shadow_under_list_header"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mockRv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingBottom="56dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/typeSl"
+            app:layout_constraintEnd_toEndOf="@id/view2"
+            tools:listitem="@layout/item_new_test" />
+
+        <LinearLayout
+            android:id="@+id/emptyGuideContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeSl">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/ic_empty" />
+
+            <TextView
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="6dp"
+                android:text="@string/guide_empty_mock"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_white_ffffff_round"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/titleLabel"
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="빠른채점"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintBottom_toBottomOf="@+id/titleHorizontalBorder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleTv"
+        style="@style/TextGrey_c0c0c0.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="EBS 수능완성 미분과 적분"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintBottom_toBottomOf="@+id/titleLabel"
+        app:layout_constraintStart_toEndOf="@+id/titleLabel"
+        app:layout_constraintTop_toTopOf="@+id/titleLabel" />
+
+    <ImageButton
+        android:id="@+id/xBtn"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_x_grey_19dp"
+        android:background="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/titleHorizontalBorder"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <View
+        android:id="@+id/titleHorizontalBorder"
+        style="@style/Border_Grey_e8e8e8_Horizontal"
+        android:layout_marginTop="64dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/grey_f2f2f2"
+        app:layout_constraintTop_toBottomOf="@+id/titleHorizontalBorder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/megaphoneIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_megaphone"
+            android:layout_marginStart="@dimen/dp24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/printGuideTv"
+            app:layout_constraintBottom_toBottomOf="@+id/printGuideTv"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/printGuideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginStart="8dp"
+            android:text="프린트해서 문제를 풀고 빠르게 채점할 수 있습니다 :)"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/megaphoneIv"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/unitRv"
+            android:padding="1dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintWidth_percent="0.42"
+            app:layout_constraintTop_toBottomOf="@+id/printGuideTv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/markingContainerLl">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/markingContainerLl"
+            android:padding="1dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintTop_toTopOf="@+id/unitRv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/unitRv"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/markingRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="8dp">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/shadow_top"
+            app:layout_constraintBottom_toTopOf="@+id/actionContainer"
+            app:layout_constraintEnd_toEndOf="@+id/actionContainer"
+            app:layout_constraintStart_toStartOf="@+id/actionContainer" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/actionContainer"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintStart_toStartOf="@+id/markingContainerLl"
+            app:layout_constraintEnd_toEndOf="@+id/markingContainerLl"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/markingCl"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/btn_purple_6d6dff_grey_e0e0e0_round"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/reviewBtn">
+                
+                <TextView
+                    style="@style/TextWhite_ffffff.ExtraBold"
+                    android:id="@+id/answeringLabel"
+                    android:text="채점하기"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/answeringCntTv"/>
+
+                <TextView
+                    style="@style/TextPurple_6d6dff.ExtraBold"
+                    android:id="@+id/answeringCntTv"
+                    android:text="4"
+                    android:textSize="12sp"
+                    android:background="@drawable/bg_white_ffffff_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:minWidth="20dp"
+                    android:gravity="center"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@id/answeringLabel"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                android:id="@+id/reviewBtn"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                app:buttonTheme="blue"
+                android:text="문제 리뷰"
+                app:layout_constraintStart_toEndOf="@+id/markingCl"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

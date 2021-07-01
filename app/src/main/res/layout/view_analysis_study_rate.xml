@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingStart="@dimen/dp64"
+    android:paddingEnd="@dimen/dp64"
+    android:paddingTop="@dimen/dp64"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyRateView
+        android:id="@+id/studyRateChart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/guideTv"
+        style="@style/TextBlack_4c4c4c.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp80"
+        android:text="지수함수와 로그함수 정복 시 백분위 4%상승 예상됩니다."
+        android:textSize="@dimen/sp24"
+        app:layout_constraintStart_toEndOf="@+id/studyRateChart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/chartGuideLabel"
+        style="@style/TextGrey_9f9f9f.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="6sp"
+        android:text="전체 공부량 중 오답학습 비중"
+        android:textColor="@color/grey_9f9f9f"
+        android:textSize="@dimen/sp14"
+        app:layout_constraintBottom_toBottomOf="@+id/actionBtn"
+        app:layout_constraintEnd_toEndOf="@+id/studyRateChart"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/studyRateChart"
+        app:layout_constraintTop_toTopOf="@+id/actionBtn" />
+
+
+    <TextView
+        style="@style/TextGrey_9f9f9f.Bold"
+        android:id="@+id/summaryTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp24"
+        android:lineSpacingExtra="8sp"
+        android:text="문제풀면서 긴가민가... 했던 그 문제!\n확실히 알 수 있도록 풀리가 도와줄게요!"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintStart_toStartOf="@+id/guideTv"
+        app:layout_constraintTop_toBottomOf="@+id/guideTv" />
+
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        android:id="@+id/actionBtn"
+        android:layout_width="@dimen/primaryBtn_width_200dp"
+        android:layout_height="@dimen/dp56"
+        android:layout_marginTop="@dimen/dp32"
+        android:text="추천 문제 풀기"
+        android:layout_marginBottom="@dimen/dp64"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideTv"
+        app:layout_constraintTop_toBottomOf="@+id/summaryTv" />
+
+    <TextView
+        style="@style/TextGrey_c0c0c0.ExtraBold"
+        android:id="@+id/chartNormalTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="7"
+        android:textSize="@dimen/sp24"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="@+id/versus"
+        app:layout_constraintEnd_toStartOf="@+id/versus"
+        app:layout_constraintStart_toStartOf="@+id/studyRateChart"
+        app:layout_constraintTop_toTopOf="@+id/versus" />
+
+    <TextView
+        android:id="@+id/versus"
+        style="@style/TextGrey_c0c0c0.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp100"
+        android:text=":"
+        android:textSize="@dimen/sp24"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="@+id/studyRateChart"
+        app:layout_constraintStart_toEndOf="@+id/chartNormalTv"
+        app:layout_constraintEnd_toStartOf="@+id/chartNoteTv" />
+
+    <TextView
+        style="@style/TextYellow_ffb300.ExtraBold"
+        android:id="@+id/chartNoteTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="3"
+        android:textSize="@dimen/sp24"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="@+id/versus"
+        app:layout_constraintStart_toEndOf="@+id/versus"
+        app:layout_constraintEnd_toEndOf="@+id/studyRateChart"
+        app:layout_constraintTop_toTopOf="@+id/versus" />
+
+
+    <TextView
+        style="@style/TextGrey_9f9f9f.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="기본학습"
+        android:textSize="@dimen/sp12"
+        app:layout_constraintStart_toStartOf="@+id/studyRateChart"
+        app:layout_constraintEnd_toStartOf="@+id/guideView"
+        app:layout_constraintTop_toBottomOf="@+id/versus" />
+
+    <TextView
+        style="@style/TextYellow_ffb300.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="오답학습"
+        android:textSize="@dimen/sp12"
+        app:layout_constraintEnd_toEndOf="@+id/studyRateChart"
+        app:layout_constraintStart_toEndOf="@+id/guideView"
+        app:layout_constraintTop_toBottomOf="@+id/versus" />
+
+
+    <View
+        android:id="@+id/guideView"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="1dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="@+id/studyRateChart"
+        app:layout_constraintEnd_toEndOf="@+id/studyRateChart"
+        app:layout_constraintBottom_toBottomOf="@+id/studyRateChart"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

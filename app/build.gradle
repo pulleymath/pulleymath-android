@@ -1,0 +1,226 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+
+    signingConfigs {
+        config {
+            keyAlias 'pulley_v2'
+            keyPassword '<REDACTED>'
+            storeFile file('./key/pulley_v2.jks')
+            storePassword '<REDACTED>'
+        }
+    }
+
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "com.freewheelin.pulley"
+        minSdkVersion 23
+        targetSdkVersion 30
+        versionCode 140
+        versionName '1.2.140'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            renderscriptDebuggable = true
+            signingConfig signingConfigs.config
+        }
+
+        debug {
+//            resValue "string", "app_name", "PULLEY-DEBUG"
+//            applicationIdSuffix ".debug"
+        }
+    }
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    flavorDimensions "type"
+
+    productFlavors {
+        prod {
+            dimension "type"
+
+            resValue "string", "app_name", "PULLEY"
+            resValue "string", "facebook_app_id", "1045837815850615"
+            resValue "string", "provider_id", "com.freewheelin.fileprovider"
+        }
+
+        beta {
+            applicationIdSuffix ".beta"
+
+            dimension "type"
+
+            resValue "string", "app_name", "PULLEY-BETA"
+            resValue "string", "facebook_app_id", "3498422050272145"
+            resValue "string", "provider_id", "com.freewheelin.beta.fileprovider"
+        }
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    // rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:2.1.1'
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+
+    implementation 'com.github.nitrico.lastadapter:lastadapter:2.3.0'
+    implementation 'com.g00fy2:versioncompare:1.3.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'net.danlew:android.joda:2.10.1.2'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.rm:freedrawview:1.1.2'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
+    implementation 'com.airbnb.android:lottie:3.1.0'
+    implementation 'com.github.hyuntae0117:android-BalloonWindow:0.2.4'
+    implementation 'com.github.hyuntae0117:android-RecyclerAdapters:0.6'
+    implementation 'com.haibin:calendarview:3.6.1'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
+    implementation 'com.google.android:flexbox:2.0.1'
+
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // facebook sdk
+    implementation 'com.facebook.android:facebook-android-sdk:7.1.0'
+    // play console
+    implementation 'com.google.android.play:core:1.8.0'
+    implementation 'com.google.android.play:core-ktx:1.8.0'
+
+    // spen
+//    implementation project(":sdk-v1.0.0")
+//    implementation project(":spenremote-v1.0.1")
+
+    // pdf
+    implementation project(":pdf")
+
+    //jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+    //paging ktx
+    def paging_version = "2.1.2"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    testImplementation "androidx.paging:paging-common-ktx:$paging_version"
+    implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
+
+    //hilt
+    def dagger_version = "2.28-alpha"
+    implementation "com.google.dagger:hilt-android:$dagger_version"
+    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
+
+    // lifecycle
+    def lifecycle_version = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    def hilt_version = "1.0.0-alpha01"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_version"
+
+//    //hilt
+//    def dagger_version = "2.28-alpha"
+//    implementation "com.google.dagger:hilt-android:$dagger_version"
+//    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
+//
+////    def hilt_version = "1.0.0-beta01"
+////    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+////    kapt "androidx.hilt:hilt-compiler:$hilt_version"
+//
+//    // lifecycle
+//    def lifecycle_version = "2.2.0"
+//    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+//    // ViewModel
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+//    // LiveData
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // fragment
+    def fragment_version = "1.3.2"
+    // Kotlin
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
+    testImplementation 'androidx.test:core:1.0.0'
+    testImplementation "org.robolectric:robolectric:4.1"
+    testImplementation 'joda-time:joda-time:2.9.3'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+
+    androidTestImplementation 'androidx.test:rules:1.1.2-alpha02'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0-alpha4'
+}
+

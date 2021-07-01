@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="600dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_ffffff_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
+                android:text="풀이방법을 선택해주세요"
+                android:textColor="@color/black_4c4c4c"
+                android:textSize="24sp" />
+
+
+            <TextView
+                android:id="@+id/guideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:lineSpacingExtra="8sp"
+                android:text="시험지를 프린트하여 풀이하신다면 [실전 OMR 모드]를\n태블릿에서 문제를 보며 풀고 싶다면\n[바로 풀기 모드]를 선택해주세요!"
+                android:textColor="@color/grey_818181"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="아래 버튼을 누르면 바로 시험이 시작됩니다:)"
+                android:textColor="@color/purple_6D6DFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/bg_purple_6d6dff_round"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
+                android:text="실전 OMR 모드"
+                android:textColor="@color/white_ffffff" />
+
+            <Button
+                android:id="@+id/startWithoutPrintBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/bg_transparent_stroke_grey_9f9f9f_round"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
+                android:text="바로 풀기 모드"
+                android:textColor="@color/grey_9f9f9f" />
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/xBtn"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@null"
+            android:src="@drawable/ic_x_grey_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

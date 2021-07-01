@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.learning.tabFragment.UnitStudyFragment">
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pieceVp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/pageTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 / 5"
+        android:textColor="@color/grey_9f9f9f"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/guideView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/pieceVp"
+        app:layout_constraintTop_toTopOf="@+id/pieceVp">
+
+        <ImageView
+            android:id="@+id/guideIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/guide_empty_unit"
+            android:layout_marginBottom="@dimen/dp24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideTv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+
+        <TextView
+            android:id="@+id/guideTv"
+            style="@style/TextGrey_c0c0c0.Bold"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintTop_toBottomOf="@+id/guideIv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="@dimen/learning_unitStudy_pager_bottom_margin" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="@dimen/learning_unitStudy_pager_top_margin" />
+
+    <com.freewheelin.pulley.views.ArduousSpinner
+        android:id="@+id/viewTypeSpinner"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        app:defaultStr="플랜 전체"
+        app:layout_constraintBottom_toBottomOf="@+id/addPieceBtn"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/megaphoneIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_megaphone"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTypeSpinner"
+        app:layout_constraintStart_toEndOf="@+id/viewTypeSpinner"
+        app:layout_constraintTop_toTopOf="@+id/viewTypeSpinner" />
+
+    <TextView
+        style="@style/TextBlack_4c4c4c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="유형학습 카드 상단의 [메일발송] 버튼을 누르면 인쇄용 파일을 받을 수 있습니다."
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTypeSpinner"
+        app:layout_constraintStart_toEndOf="@+id/megaphoneIv"
+        app:layout_constraintTop_toTopOf="@+id/viewTypeSpinner">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/addPieceBtn"
+        android:layout_width="180dp"
+        android:layout_height="@dimen/learning_unitStudy_addPieceBtn_height"
+        android:background="@drawable/bg_yellow_ffb300_radius_40_left_only"
+        android:drawableLeft="@drawable/ic_plus_grey"
+        android:drawableTint="@color/white_ffffff"
+        android:fontFamily="@font/font_nanum_square_extra_bold"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:text="플랜 추가하기"
+        android:textColor="@color/white_ffffff"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,94 @@
+package com.freewheelin.pulley.activities.mypage
+
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ResolveInfo
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.views.DaebakToast
+import kotlinx.android.synthetic.main.fragment_my_version.*
+
+
+class MyVersionFragment : MyPageBaseFragment() {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_my_version, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        currentVersionTv.text = "V ${VersionManager.appVersion}"
+        latestVersionTv.text = "V ${VersionManager.info!!.version}"
+
+        if(VersionManager.isNeedToUpdate() == true) {
+            currentVersionTv.typeface = Theme.bold(requireContext())
+            currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
+            updateBtn.text = "업데이트하기"
+            updateBtn.toEnableUI()
+            updateBtn.setOnClickListener {
+                openAppMarket(requireContext())
+            }
+        } else {
+            currentVersionTv.typeface = Theme.regular(requireContext())
+            currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0))
+            updateBtn.text = "최신 버전 사용 중"
+            updateBtn.toDisableUI()
+            updateBtn.setOnClickListener {
+                DaebakToast.show(requireContext(), "이미 최신버전 입니다.")
+            }
+        }
+    }
+
+
+    fun openAppMarket(context: Context) {
+        // you can also use BuildConfig.APPLICATION_ID
+        val appId: String = context.getPackageName()
+        val rateIntent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=$appId"))
+        var marketFound = false
+
+        // find all applications able to handle our rateIntent
+        val otherApps: List<ResolveInfo> = context.getPackageManager()
+                .queryIntentActivities(rateIntent, 0)
+        for (otherApp in otherApps) {
+            // look for Google Play application
+            if (otherApp.activityInfo.applicationInfo.packageName
+                    == "com.android.vending") {
+                val otherAppActivity = otherApp.activityInfo
+                val componentName = ComponentName(
+                        otherAppActivity.applicationInfo.packageName,
+                        otherAppActivity.name
+                )
+                // make sure it does NOT open in the stack of your activity
+                rateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                // task reparenting if needed
+                rateIntent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+                // if the Google Play was already open in a search result
+                //  this make sure it still go to the app page you requested
+                rateIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                // this make sure only the Google Play app is allowed to
+                // intercept the intent
+                rateIntent.component = componentName
+                context.startActivity(rateIntent)
+                marketFound = true
+                break
+            }
+        }
+
+        // if GP not present on device, open web browser
+        if (!marketFound) {
+            val webIntent = Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$appId"))
+            context.startActivity(webIntent)
+        }
+    }
+}

@@ -1,0 +1,53 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestPageFinishFragment">
+    
+    <ImageView
+        android:id="@+id/clearIv"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:layout_marginStart="@dimen/dp40"
+        android:src="@drawable/ic_check_green_circle_w48"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/titleTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextGrey_9f9f9f.Bold"
+        android:id="@+id/titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp20"
+        android:text="데일리\n테스트"
+        android:textSize="@dimen/sp36"
+        android:lineSpacingExtra="@dimen/sp18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearIv"
+        app:layout_constraintBottom_toTopOf="@+id/descTv"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+
+
+    <TextView
+        style="@style/TextRed_fe7b67.Bold"
+        android:id="@+id/descTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp40"
+        android:layout_marginEnd="@dimen/dp40"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="@dimen/dp32"
+        android:lineSpacingExtra="8sp"
+        android:text="다음 데일리 테스트는 월요일 오전 6시에 공개됩니다 :)"
+        app:layout_constraintTop_toBottomOf="@+id/titleTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

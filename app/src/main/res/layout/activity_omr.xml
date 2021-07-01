@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_4c4c4c"
+    tools:context=".activities.OMRActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppTheme.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        app:contentInsetStartWithNavigation="@dimen/toolbar_nav_inset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleMarginStart="@dimen/toolbar_title_start_margin"
+        app:titleTextAppearance="@style/AppTheme.Toolbar.TitleText">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            tools:text="2021년 3월 고3 모의고사 (확률과 통계, 기하 선택)" />
+
+        <Button
+            android:id="@+id/spyBtn"
+            style="@style/TextBlack_333333.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/bg_grey_9f9f9f_round"
+            android:maxLines="1"
+            android:text="SPY"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:autoSizeMaxTextSize="14sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.freewheelin.pulley.views.TimerView
+        android:id="@+id/timerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/omrViewLeftContainer"
+        app:layout_constraintStart_toStartOf="@+id/omrViewLeftContainer"
+        app:layout_constraintEnd_toStartOf="@+id/submitBtn"
+        app:orientation="solve">
+    </com.freewheelin.pulley.views.TimerView>
+
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        android:id="@+id/submitBtn"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:text="제출하기"
+        app:buttonTheme="blue"
+        app:screenTheme="dark"
+        app:layout_constraintEnd_toEndOf="@+id/omrViewRightContainer"
+        app:layout_constraintTop_toTopOf="@+id/timerView"
+        app:layout_constraintBottom_toBottomOf="@+id/timerView"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/omrViewLeftContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/omr_margin_bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/omr_margin_top"
+        android:layout_marginStart="@dimen/omr_margin_start"
+        app:layout_constraintEnd_toStartOf="@id/omrViewRightContainer"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="3"
+        android:background="@drawable/bg_red_ffe8e8_round_8">
+
+        <TextView
+            android:id="@+id/lbCommonSubject"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="공 통 과 목"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.freewheelin.pulley.views.OMRView
+            android:id="@+id/omrViewLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipChildren="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lbCommonSubject" />
+
+        <View
+            android:id="@+id/dividerFirstOmrLeft"
+            android:layout_width="@dimen/omr_answer_borderWidth"
+            android:layout_height="0dp"
+            android:background="@color/red_ffc6bc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3333333334"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lbCommonSubject" />
+
+        <View
+            android:id="@+id/dividerCommonSubject"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/omr_answer_borderWidth"
+            android:background="@color/red_ffc6bc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lbCommonSubject" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/dividerSecondOmrLeft"
+        android:layout_width="@dimen/omr_answer_borderWidth"
+        android:layout_height="0dp"
+        android:background="@color/red_ffc6bc"
+        app:layout_constraintBottom_toBottomOf="@id/omrViewLeftContainer"
+        app:layout_constraintEnd_toEndOf="@id/omrViewLeftContainer"
+        app:layout_constraintHorizontal_bias="0.666666666"
+        app:layout_constraintStart_toStartOf="@id/omrViewLeftContainer"
+        app:layout_constraintTop_toTopOf="@id/omrViewLeftContainer" />
+
+    <View
+        android:id="@+id/frontDimmedLl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black50_000000"
+        android:visibility="gone"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:focusable="true" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/omrViewRightContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/omr_margin_bottom"
+        android:layout_marginEnd="@dimen/omr_margin_end"
+        android:layout_marginTop="@dimen/omr_margin_top"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/omrViewLeftContainer"
+        android:background="@drawable/bg_red_ffe8e8_round_8"
+        android:clipChildren="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:text="선 택 과 목"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/lbSelectedSubject"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"/>
+
+        <View
+            android:id="@+id/dividerSelectedSubject"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/omr_answer_borderWidth"
+            app:layout_constraintTop_toBottomOf="@id/lbSelectedSubject"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/red_ffc6bc" />
+
+        <com.freewheelin.pulley.views.OMRView
+            android:id="@+id/omrViewRight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerSelectedSubject" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/leftDim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black50_000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dividerSecondOmrLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <View
+        android:id="@+id/rightDim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black50_000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/omrViewLeftContainer"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <View
+        android:id="@+id/topDim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black50_000000"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/rightDim"
+        app:layout_constraintBottom_toTopOf="@+id/dividerSecondOmrLeft"
+        app:layout_constraintStart_toEndOf="@id/leftDim"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <View
+        android:id="@+id/bottomDim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black50_000000"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/rightDim"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/leftDim"
+        app:layout_constraintTop_toBottomOf="@+id/omrViewLeftContainer" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/dimOfLeftOmr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:clickable="true"
+        app:constraint_referenced_ids="topDim, leftDim, rightDim, bottomDim"
+        android:focusable="true" />
+
+    <com.freewheelin.pulley.views.NumberKeypadView
+        android:id="@+id/keypadView"
+        android:layout_width="@dimen/omrActivity_keypad_width"
+        android:layout_height="@dimen/omrActivity_keypad_height"
+        android:layout_marginRight="300dp"
+        app:layout_constraintBottom_toBottomOf="@+id/omrViewRightContainer"
+        app:layout_constraintEnd_toEndOf="@+id/omrViewRightContainer">
+
+    </com.freewheelin.pulley.views.NumberKeypadView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

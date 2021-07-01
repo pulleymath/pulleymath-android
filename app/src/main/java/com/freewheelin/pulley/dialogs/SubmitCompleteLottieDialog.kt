@@ -1,0 +1,111 @@
+package com.freewheelin.pulley.dialogs
+
+import android.animation.Animator
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.View
+import androidx.core.content.ContextCompat
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.DailyTestReportActivity
+import com.freewheelin.pulley.activities.WeeklyTestReportActivity
+import com.freewheelin.pulley.activities.WrongTestReportActivity
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.model.contents.Content
+import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.partialFontAndColored
+import kotlinx.android.synthetic.main.dialog_submit_complete_lottie.*
+
+class SubmitCompleteLottieDialog(context: Context, content: Content): Dialog(context) {
+    init {
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setContentView(R.layout.dialog_submit_complete_lottie)
+        confirmBtn.setOnClickListener { onConfirmBtnClicked(content) }
+        scoreTv.text = content.score.toString()
+
+        when(content) {
+            is Test -> {
+                when(content.getTestType()) {
+                    Test.TestType.daily -> {
+                        completeGuideTv.text = "데일리 테스트 ${content.scoringTestPieceCount}회차 클리어!\n" +
+                                "꼭 확인할 문제는 무엇일까요?"
+                    }
+                    Test.TestType.weekly -> {
+                        completeGuideTv.text = "이번 주 주간테스트 클리어!\n" +
+                                "꼭 확인할 문제는 무엇일까요?"
+                    }
+                }
+            }
+        }
+
+    }
+
+    override fun show() {
+        super.show()
+        playAnim()
+    }
+    fun show(cb: () -> Unit) {
+        super.show()
+        playAnim(cb)
+    }
+
+
+    fun showScoreInfo() {
+        scoreTv.visibility = View.VISIBLE
+        scoreSuffixLabel.visibility = View.VISIBLE
+        completeGuideTv.visibility  = View.VISIBLE
+        confirmBtn.visibility = View.VISIBLE
+    }
+
+    fun playAnim(cb: (() -> Unit)? = null) {
+        submitLottie.playAnimation()
+        submitLottie.addAnimatorListener(object: Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                submitLottie.visibility = View.INVISIBLE
+                showScoreInfo()
+                if(cb != null)
+                    cb()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+            }
+        })
+    }
+
+    private fun onConfirmBtnClicked(content: Content) {
+        dismiss()
+
+        when(content) {
+            is Test -> {
+                when(content.getTestType()) {
+                    Test.TestType.daily -> {
+                        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "테스트", "보고서 바로보기", "데일리테스트")
+                        val intent = DailyTestReportActivity.getIntent(context, content, true)
+                        context.startActivity(intent)
+                    }
+                    Test.TestType.weekly -> {
+                        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "테스트", "보고서 바로보기","주간테스트")
+                        val intent = WeeklyTestReportActivity.getIntent(context, content, true)
+                        context.startActivity(intent)
+                    }
+                    Test.TestType.wrong -> {
+                        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "테스트", "보고서 바로보기","오답테스트")
+                        val intent = WrongTestReportActivity.getIntent(context, content, true)
+                        context.startActivity(intent)
+                    }
+                }
+            }
+        }
+    }
+}

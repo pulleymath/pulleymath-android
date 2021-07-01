@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.freewheelin.pulley.activities.WrongTestReportActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="960dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_fafafa_round"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topContainerCl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp64"
+            android:background="@drawable/bg_white_ffffff_round_top_only"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오답 테스트 보고서"
+                android:textSize="@dimen/sp18"
+                android:layout_marginStart="@dimen/dp32"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/xBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_x_grey_19dp"
+                android:background="@null"
+                android:layout_marginEnd="@dimen/dp24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/topContainerCl">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/contentsCl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp32"
+                android:paddingStart="@dimen/dp40"
+                android:paddingEnd="@dimen/dp40"
+                android:paddingBottom="@dimen/dp64"
+                app:layout_constraintTop_toBottomOf="@+id/topContainerCl"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f"
+                    android:id="@+id/scoreResultLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp18"
+                    android:text="채점 결과"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/scoreResultContainerCl"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp200"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/white_ffffff"
+                    app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:id="@+id/scoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp104"
+                        android:text="100"
+                        android:layout_marginTop="@dimen/dp48"
+                        android:layout_marginBottom="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp64"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:id="@+id/scoreLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="@dimen/dp20"
+                        android:textSize="@dimen/sp48"
+                        android:text="점"
+                        app:layout_constraintStart_toEndOf="@+id/scoreTv"
+                        app:layout_constraintBottom_toBottomOf="@+id/scoreTv"/>
+
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c"
+                        android:id="@+id/scoreGuideTv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="오답문항을 완벽하게 이해했는지 알고 싶나요?\n[리뷰하기]에서 오답과 닮은 유사문항으로 확인할 수 있어요 :)"
+                        android:textSize="@dimen/sp16"
+                        android:layout_marginStart="@dimen/dp64"
+                        android:layout_marginEnd="@dimen/dp48"
+                        android:maxLines="3"
+                        android:lineSpacingExtra="@dimen/sp8"
+                        app:layout_constraintStart_toEndOf="@+id/scoreLabel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
+                        app:layout_constraintVertical_chainStyle="packed"/>
+
+                    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                        android:id="@+id/reviewBtn"
+                        android:layout_width="@dimen/primaryBtn_width_160dp"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:text="리뷰하기"
+                        app:buttonTheme="blue"
+                        app:layout_constraintStart_toStartOf="@id/scoreGuideTv"
+                        app:layout_constraintTop_toBottomOf="@+id/scoreGuideTv"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f"
+                    android:id="@+id/problemResultLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="출제 문항별 정오 현황"
+                    android:textSize="@dimen/sp18"
+                    android:layout_marginTop="@dimen/dp48"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/scoreResultContainerCl"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:padding="@dimen/dp32"
+                    android:background="@color/white_ffffff"
+                    android:layout_marginBottom="@dimen/dp64"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/problemResultLabel"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/columnCl"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp48"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp48"
+                            app:layout_constraintWidth_percent="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/leftNumTv"
+                                android:layout_width="@dimen/dp40"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="번호"
+                                android:textSize="@dimen/sp14"
+                                android:background="@color/white_fafafa"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="0dp"
+                                app:layout_constraintTop_toTopOf="@+id/leftNumTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
+                                app:layout_constraintStart_toStartOf="@+id/leftNumTv"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="0dp"
+                                app:layout_constraintTop_toTopOf="@+id/leftNumTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
+                                app:layout_constraintEnd_toEndOf="@+id/leftNumTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/leftResultTv"
+                                android:layout_width="@dimen/dp72"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="결과"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/leftNumTv"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                app:layout_constraintStart_toEndOf="@+id/leftResultTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
+                                app:layout_constraintTop_toTopOf="@+id/leftResultTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/leftCorrectRateTv"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="N등급 정답률"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/leftResultTv"
+                                app:layout_constraintEnd_toStartOf="@+id/leftCenterVerticalBorder"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                android:id="@+id/leftCenterVerticalBorder"
+                                app:layout_constraintStart_toEndOf="@+id/leftCorrectRateTv"
+                                app:layout_constraintEnd_toStartOf="@+id/leftWrongCntTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
+                                app:layout_constraintTop_toTopOf="@+id/leftResultTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/leftWrongCntTv"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="전체 틀린 횟수"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/leftCenterVerticalBorder"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp48"
+                            app:layout_constraintWidth_percent="0.5"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/rightNumTv"
+                                android:layout_width="@dimen/dp40"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="번호"
+                                android:textSize="@dimen/sp14"
+                                android:background="@color/white_fafafa"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="0dp"
+                                app:layout_constraintTop_toTopOf="@+id/rightNumTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
+                                app:layout_constraintStart_toStartOf="@+id/rightNumTv"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="0dp"
+                                app:layout_constraintTop_toTopOf="@+id/rightNumTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
+                                app:layout_constraintEnd_toEndOf="@+id/rightNumTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/rightResultTv"
+                                android:layout_width="@dimen/dp72"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="결과"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/rightNumTv"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                app:layout_constraintStart_toEndOf="@+id/rightResultTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/rightResultTv"
+                                app:layout_constraintTop_toTopOf="@+id/rightResultTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/rightCorrectRateTv"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="N등급 정답률"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/rightResultTv"
+                                app:layout_constraintEnd_toStartOf="@+id/rightCenterVerticalBorder"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                android:id="@+id/rightCenterVerticalBorder"
+                                app:layout_constraintStart_toEndOf="@+id/rightCorrectRateTv"
+                                app:layout_constraintEnd_toStartOf="@+id/rightWrongCntTv"
+                                app:layout_constraintBottom_toBottomOf="@+id/rightCorrectRateTv"
+                                app:layout_constraintTop_toTopOf="@+id/rightResultTv"/>
+
+                            <TextView
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:id="@+id/rightWrongCntTv"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="전체 틀린 횟수"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/rightCenterVerticalBorder"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                            <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="0dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/leftScoringRv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/columnCl"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/rightScoringRv">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rightScoringRv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/columnCl"
+                        app:layout_constraintStart_toEndOf="@+id/leftScoringRv"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <CheckBox
+                        style="@style/TextBlack_4c4c4c"
+                        android:id="@+id/clearCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp36"
+                        android:textSize="@dimen/sp16"
+                        android:text="정답인 문제 모두 클리어하기"
+                        android:paddingStart="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/leftScoringRv"/>
+
+
+                    <TextView
+                        style="@style/TextGrey_c0c0c0.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="36dp"
+                        android:layout_marginTop="4dp"
+                        android:text="클리어 설정시 오답테스트 출제문항에서 제외됩니다."
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/clearCheckbox"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                
+                
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

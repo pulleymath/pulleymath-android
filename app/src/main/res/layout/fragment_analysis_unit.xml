@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dp32"
+    android:paddingEnd="@dimen/dp32"
+    tools:context=".activities.analysis.tabFragment.AnalysisUnitFragment">
+
+    <TextView
+        android:id="@+id/summaryLabel"
+        style="@style/TextGrey_c0c0c0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="과목별 성취도 현황"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/summaryContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="386dp"
+        android:layout_marginTop="@dimen/dp16"
+        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summaryLabel"></androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/summaryTv"
+        style="@style/TextBlack_4c4c4c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp48"
+        android:text="지난주에 비해서 성적이 4% 향상됐어요."
+        android:textSize="@dimen/sp24"
+        app:layout_constraintStart_toStartOf="@+id/summaryContainerCl"
+        app:layout_constraintTop_toTopOf="@+id/summaryContainerCl" />
+
+    <com.freewheelin.pulley.views.charts.BarVerticalChartView
+        android:id="@+id/subjectChart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/Report_Unit_tripleBarChart_margin"
+        android:layout_marginTop="@dimen/dp32"
+        android:layout_marginEnd="@dimen/Report_Unit_tripleBarChart_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/summaryContainerCl"
+        app:layout_constraintEnd_toEndOf="@+id/summaryContainerCl"
+        app:layout_constraintStart_toStartOf="@+id/summaryContainerCl"
+        app:layout_constraintTop_toBottomOf="@+id/summaryTv" />
+
+    <TextView
+        android:id="@+id/achieveLabel"
+        style="@style/TextGrey_c0c0c0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp48"
+        android:text="단원별 성취도 순위"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summaryContainerCl" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/achieveContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:paddingBottom="@dimen/dp64"
+        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/achieveLabel">
+        <com.freewheelin.pulley.views.DaebakTabRadio
+            android:id="@+id/achieveOrderRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginTop="@dimen/dp48"
+            app:layout_constraintStart_toStartOf="@+id/achieveContainerCl"
+            app:layout_constraintTop_toTopOf="@+id/achieveContainerCl"
+            app:tabWidth="@dimen/Report_Unit_achieveTab_width" />
+
+        <TextView
+            android:id="@+id/achieveGuideTv"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginTop="@dimen/dp40"
+            android:text="순열과 조합(대단원명) 단원의 성취도가 가장 낮아요."
+            android:textSize="@dimen/sp24"
+            app:layout_constraintStart_toStartOf="@+id/achieveContainerCl"
+            app:layout_constraintTop_toBottomOf="@+id/achieveOrderRadio" />
+
+
+        <TextView
+            android:id="@+id/firstRatingLabel"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:text="1위"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintBottom_toTopOf="@+id/firstRatingContainerCl"
+            app:layout_constraintStart_toStartOf="@+id/firstRatingContainerCl" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstRatingContainerCl"
+            android:layout_width="0dp"
+            android:layout_height="284dp"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginTop="88dp"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintEnd_toStartOf="@+id/secondRatingContainerCl"
+            app:layout_constraintStart_toStartOf="@+id/achieveContainerCl"
+            app:layout_constraintTop_toBottomOf="@+id/achieveGuideTv">
+
+            <TextView
+                android:id="@+id/firstSubjectTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/firstUnitTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="12dp"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstSubjectTv" />
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:id="@+id/firstRatingBorder"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/firstUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/firstProblemCntTv"
+                app:layout_constraintStart_toEndOf="@+id/firstUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/firstUnitTv" />
+
+            <TextView
+                android:id="@+id/firstProblemCntTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:text="73문제"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="@+id/firstUnitTv"
+                app:layout_constraintStart_toEndOf="@+id/firstUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/firstUnitTv" />
+
+
+            <com.freewheelin.pulley.views.charts.TriplePenChart
+                android:layout_width="0dp"
+                android:id="@+id/firstTPC"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginEnd="@dimen/Report_Unit_penBarChart_end_margin"
+                android:layout_marginBottom="48dp"
+                app:isGoneLast="true"
+                app:focusIndex="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </com.freewheelin.pulley.views.charts.TriplePenChart>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:id="@+id/firstAchieveEmptyGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1위 데이터가 없습니다."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/secondRatingLabel"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:text="2위"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintBottom_toTopOf="@+id/secondRatingContainerCl"
+            app:layout_constraintStart_toStartOf="@+id/secondRatingContainerCl" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/secondRatingContainerCl"
+            android:layout_width="0dp"
+            android:layout_height="284dp"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintEnd_toStartOf="@+id/thirdRatingContainerCl"
+            app:layout_constraintStart_toEndOf="@+id/firstRatingContainerCl"
+            app:layout_constraintTop_toTopOf="@+id/firstRatingContainerCl">
+
+            <TextView
+                android:id="@+id/secondSubjectTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/secondUnitTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="12dp"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/secondSubjectTv" />
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:id="@+id/secondRatingBorder"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/secondUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/secondProblemCntTv"
+                app:layout_constraintStart_toEndOf="@+id/secondUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/secondUnitTv" />
+
+            <TextView
+                android:id="@+id/secondProblemCntTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:text="73문제"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="@+id/secondUnitTv"
+                app:layout_constraintStart_toEndOf="@+id/secondUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/secondUnitTv" />
+
+            <com.freewheelin.pulley.views.charts.TriplePenChart
+                android:layout_width="0dp"
+                android:id="@+id/secondTPC"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginEnd="@dimen/Report_Unit_penBarChart_end_margin"
+                android:layout_marginBottom="48dp"
+                app:isGoneLast="true"
+                app:focusIndex="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </com.freewheelin.pulley.views.charts.TriplePenChart>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:id="@+id/secondAchieveEmptyGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2위 데이터가 없습니다."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/thirdRatingLabel"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:text="3위"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintBottom_toTopOf="@+id/thirdRatingContainerCl"
+            app:layout_constraintStart_toStartOf="@+id/thirdRatingContainerCl" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/thirdRatingContainerCl"
+            android:layout_width="0dp"
+            android:layout_height="284dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintEnd_toEndOf="@+id/achieveContainerCl"
+            app:layout_constraintStart_toEndOf="@+id/secondRatingContainerCl"
+            app:layout_constraintTop_toTopOf="@+id/firstRatingContainerCl">
+
+            <TextView
+                android:id="@+id/thirdSubjectTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/thirdUnitTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="12dp"
+                android:text="확률과 통계"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/thirdSubjectTv" />
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:id="@+id/thirdRatingBorder"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/thirdUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/thirdProblemCntTv"
+                app:layout_constraintStart_toEndOf="@+id/thirdUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/thirdUnitTv" />
+
+            <TextView
+                android:id="@+id/thirdProblemCntTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:text="73문제"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="@+id/thirdUnitTv"
+                app:layout_constraintStart_toEndOf="@+id/thirdUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/thirdUnitTv" />
+
+            <com.freewheelin.pulley.views.charts.TriplePenChart
+                android:layout_width="0dp"
+                android:id="@+id/thirdTPC"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginEnd="@dimen/Report_Unit_penBarChart_end_margin"
+                android:layout_marginBottom="48dp"
+                app:isGoneLast="true"
+                app:focusIndex="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </com.freewheelin.pulley.views.charts.TriplePenChart>
+
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:id="@+id/thirdAchieveEmptyGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3위 데이터가 없습니다."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/unitAnalysisLabel"
+        style="@style/TextGrey_c0c0c0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp48"
+        android:text="취약단원 분석"
+        android:textSize="@dimen/sp18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/achieveContainerCl" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/unitAnalysisContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unitAnalysisLabel">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp40"
+            android:layout_marginBottom="63dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:minHeight="320dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/unitGuideTv">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/checkboxContainerCl"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <CheckBox
+                    android:id="@+id/allCheckBox"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:button="@drawable/checkbox_blue_white_bg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단원명"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintStart_toEndOf="@+id/checkboxContainerCl"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <View
+                android:id="@+id/firstColumnBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp96"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintEnd_toStartOf="@+id/secondColumBorder"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문제 수"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintEnd_toEndOf="@+id/secondColumBorder"
+                app:layout_constraintStart_toStartOf="@+id/firstColumnBorder"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <View
+                android:id="@+id/secondColumBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/Report_Unit_list_correctRate_width"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/correctRateColumnLabel"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="정답률"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/secondColumBorder"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/columnHorizontalBorder"
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/unitRv"
+                android:layout_width="match_parent"
+                android:layout_height="410dp"
+                android:paddingStart="1dp"
+                android:paddingTop="1dp"
+                android:paddingEnd="1dp"
+                app:layout_constraintTop_toTopOf="@+id/columnHorizontalBorder">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/guideView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/columnHorizontalBorder">
+
+                <ImageView
+                    android:id="@+id/emptyGuideIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/guide_empty_analysis_study"
+                    app:layout_constraintBottom_toTopOf="@+id/unitEmptyGuideTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/unitEmptyGuideTv"
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/sp8"
+                    android:text="조금 더 학습을 진행하신 후,\n더 공부하고 싶은 단원을 체크하면 문제리뷰 &amp; 오답학습을 할 수 있어요 :)"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emptyGuideIv"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/unitGuideTv"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="수열의 극한(대단원명) 단원의 보완이 필요해 보여요"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintStart_toStartOf="@+id/unitAnalysisContainerCl"
+            app:layout_constraintTop_toTopOf="@+id/unitAnalysisContainerCl" />
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/TextGrey_9f9f9f"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp32"
+            android:text="* 분석에 필요한 기준치 미달 단원 및 중복 문제는 제외하였습니다."
+            android:textSize="@dimen/sp14"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toBottomOf="@+id/unitAnalysisContainerCl"
+        app:layout_constraintEnd_toEndOf="@+id/unitAnalysisContainerCl"
+        app:layout_constraintStart_toStartOf="@+id/unitAnalysisContainerCl"/>
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        android:layout_width="0dp"
+        app:layout_constraintTop_toTopOf="@+id/bottomContainerCl"
+        app:layout_constraintStart_toStartOf="@+id/bottomContainerCl"
+        app:layout_constraintEnd_toEndOf="@+id/bottomContainerCl"/>
+
+    <TextView
+        style="@style/TextGrey_c0c0c0"
+        android:id="@+id/unitSelectGuideTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="임시라고 합니다만 일단 만들었습니다."
+        android:textSize="@dimen/sp14"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomContainerCl"
+        app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
+        app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
+
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        android:id="@+id/reviewBtn"
+        style="@style/Btn_Orange.Primary.M"
+        android:layout_width="160dp"
+        android:layout_marginEnd="16dp"
+        android:text="문제 리뷰하기"
+        android:textSize="16sp"
+        app:buttonTheme="blue"
+        app:screenTheme="bright"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomContainerCl"
+        app:layout_constraintEnd_toStartOf="@+id/learnBtn"
+        app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
+
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        android:id="@+id/learnBtn"
+        style="@style/Btn_Orange.Primary.M"
+        android:layout_width="160dp"
+        android:layout_marginEnd="@dimen/dp40"
+        android:text="추가학습하기"
+        android:textSize="16sp"
+        app:buttonTheme="orange"
+        app:screenTheme="bright"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomContainerCl"
+        app:layout_constraintEnd_toEndOf="@+id/bottomContainerCl"
+        app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

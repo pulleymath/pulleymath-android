@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dp64"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/barContainer"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp32"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.freewheelin.pulley.views.Bars.VerticalBar
+            android:id="@+id/myCorrectRateBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp24"
+            android:layout_marginRight="@dimen/dp24"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintEnd_toStartOf="@+id/averageCorrectRateBar"
+            app:layout_constraintStart_toStartOf="@+id/unitTv"
+            app:layout_constraintBottom_toTopOf="@+id/unitTv"/>
+
+        <com.freewheelin.pulley.views.Bars.VerticalBar
+            android:id="@+id/averageCorrectRateBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp24"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/myCorrectRateBar"
+            app:layout_constraintEnd_toEndOf="@+id/unitTv"
+            app:layout_constraintBottom_toTopOf="@+id/unitTv"/>
+
+        <TextView
+            style="@style/TextWhite_ffffff.ExtraBold"
+            android:id="@+id/myBarLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/sp12"
+            android:lineSpacingExtra="6sp"
+            android:text="나의\n정답률"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="@+id/myCorrectRateBar"
+            app:layout_constraintEnd_toEndOf="@+id/myCorrectRateBar"
+            app:layout_constraintBottom_toBottomOf="@+id/myCorrectRateBar"/>
+
+        <TextView
+            style="@style/TextGrey_9f9f9f.ExtraBold"
+            android:id="@+id/averageBarLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/sp12"
+            android:lineSpacingExtra="6sp"
+            android:text="3등급\n평균"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="@+id/averageCorrectRateBar"
+            app:layout_constraintEnd_toEndOf="@+id/averageCorrectRateBar"
+            app:layout_constraintBottom_toBottomOf="@+id/myCorrectRateBar"/>
+
+
+        <TextView
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/unitTv"
+            android:text="지수함수와 로그함수 백분위 비교"
+            android:textSize="@dimen/sp14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.ExtraBold"
+        android:id="@+id/guideTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp80"
+        android:textSize="@dimen/sp24"
+        android:text="지수함수와 로그함수 정복 시 백분위 4%상승 예상됩니다."
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/barContainer" />
+
+    <TextView
+        style="@style/TextGrey_9f9f9f.Bold"
+        android:id="@+id/recommendTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:text="성취도를 가장 빨리 높일 수 있는 단원은?\n바로 이거! 두 원의 교점을 지나는 직선과 원의 방정식"
+        android:lineSpacingExtra="8sp"
+        android:layout_marginTop="@dimen/dp24"
+        app:layout_constraintStart_toStartOf="@+id/guideTv"
+        app:layout_constraintTop_toBottomOf="@+id/guideTv"/>
+    
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        android:id="@+id/actionBtn"
+        android:layout_width="@dimen/primaryBtn_width_200dp"
+        android:layout_height="@dimen/dp56"
+        android:text="추천 유형학습 풀기"
+        android:layout_marginTop="@dimen/dp32"
+        app:layout_constraintStart_toStartOf="@+id/guideTv"
+        app:layout_constraintTop_toBottomOf="@+id/recommendTv"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+package com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.model.contents.Test
+import kotlinx.android.synthetic.main.view_selector_daily_test.view.*
+
+class DailyTestSelectorView: TestSelectorView {
+    constructor(context: Context): super(context)
+    constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet)
+
+    init {
+        LayoutInflater.from(context).inflate(R.layout.view_selector_daily_test, this)
+    }
+
+    override fun setTestUI(test: Test) {
+        firstTestIv.setImageResource(R.drawable.ic_1_grey_24)
+        secondTestIv.setImageResource(R.drawable.ic_2_grey_24)
+        thirdTestIv.setImageResource(R.drawable.ic_3_grey_24)
+
+        if(test.scoringTestPieceCount >= 1)
+            firstTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
+
+        if(test.scoringTestPieceCount >= 2)
+            secondTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
+
+        if(test.scoringTestPieceCount >= 3)
+            thirdTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
+
+        if(test.isCompleted()) {
+            titleTv.text = "데일리 테스트 완료!"
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.green_70d000))
+            guideTv.text = "다음 데일리 테스트가 공개되는\n" +
+                    "내일 오전 6시에 또 만나요!"
+        } else {
+            titleTv.text = "데일리 테스트"
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            guideTv.text = if(test.scoringTestPieceCount == 0) "5문제 데일리 테스트는 하루에 딱 3번만 풀 수 있어요!\n지금 바로 풀어볼까요?"
+                else "응시할수록 데이터가 쌓여\n나에게 꼭 필요한 문제를 제공해요 :)"
+        }
+    }
+
+    override fun toDisableUI() {
+        super.toDisableUI()
+        guideTv.text = "다음 데일리 테스트는\n월요일 오전 6시에 공개됩니다 :)"
+    }
+}

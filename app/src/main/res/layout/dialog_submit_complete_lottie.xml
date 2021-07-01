@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/bg_white_ffffff_round"
+    android:layout_width="424dp"
+    android:layout_height="wrap_content">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/submitLottie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="submit_complete.json"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <TextView
+        style="@style/TextPurple_6d6dff.ExtraBold"
+        android:id="@+id/scoreTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp104"
+        android:layout_marginTop="@dimen/dp36"
+        android:visibility="invisible"
+        android:text="80"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/scoreSuffixLabel"
+        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextPurple_6d6dff.ExtraBold"
+        android:id="@+id/scoreSuffixLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp48"
+        android:visibility="invisible"
+        android:text="점"
+        android:layout_marginStart="6dp"
+        app:layout_constraintStart_toEndOf="@+id/scoreTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/scoreTv"
+        app:layout_constraintHorizontal_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/completeGuideTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp16"
+        android:gravity="center"
+        android:lineSpacingExtra="8sp"
+        android:visibility="invisible"
+        android:text="데일리테스트 N회차 클리어!\n유사문제로 리뷰해볼까요?"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scoreTv"/>
+
+    <Button
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/confirmBtn"
+        android:background="@drawable/bg_grey_f2f2f2_round_18"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp36"
+        android:textSize="@dimen/sp16"
+        android:text="보고서 보기"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginBottom="@dimen/dp36"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completeGuideTv"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:focusable="false"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/bridgeView"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@color/grey_c0c0c0"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bgView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white_ffffff"
+        android:focusable="false"
+        app:layout_constraintStart_toEndOf="@+id/bridgeView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:focusable="false"
+            app:layout_constraintStart_toStartOf="@+id/numberTv"
+            app:layout_constraintTop_toBottomOf="@+id/numberTv">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:adjustViewBounds="true"
+                android:focusable="false"
+                android:scaleType="fitStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/numberTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:text="1"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp16"
+            android:focusable="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/resultIv"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_correct_new"
+            android:focusable="false"
+            app:layout_constraintStart_toEndOf="@+id/numberTv"
+            app:layout_constraintTop_toTopOf="@+id/numberTv"
+            app:layout_constraintBottom_toBottomOf="@+id/numberTv"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clearCoverCl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#c0ffffff"
+            android:focusable="false"
+            app:layout_constraintTop_toTopOf="@+id/bgView"
+            app:layout_constraintBottom_toBottomOf="@+id/bgView"
+            app:layout_constraintStart_toStartOf="@+id/bgView"
+            app:layout_constraintEnd_toEndOf="@+id/bgView">
+            <ImageView
+                android:layout_width="@dimen/dp96"
+                android:layout_height="@dimen/dp96"
+                android:src="@drawable/ic_check_green_circle_w48"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/coverView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#30000000"
+            android:focusable="false"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_transparent_stroke_grey_e8e8e8"
+            android:focusable="false"/>
+
+        <ImageView
+            android:id="@+id/tagIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_tag_yellow"
+            android:layout_marginEnd="@dimen/dp16"
+            android:focusable="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/selectView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_transparent_stroke_purple_6d6dff_2dp"
+            android:padding="@dimen/dp16"
+            android:focusable="false">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/triangleIv"
+            android:layout_width="@dimen/dp28"
+            android:layout_height="@dimen/dp28"
+            android:src="@drawable/ic_triangle"
+            android:focusable="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/statusIv"
+        android:layout_width="@dimen/dp36"
+        android:layout_height="@dimen/dp36"
+        android:src="@drawable/ic_siren_white"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

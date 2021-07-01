@@ -1,0 +1,126 @@
+풀리수학 Android (Pulley Math for Android)
+Copyright (C) 2018-2026 Freewheelin Inc. ((주)프리윌린)
+
+이 프로그램은 GNU Affero General Public License 버전 3(AGPL-3.0)에 따라
+배포됩니다. 전문은 LICENSE 파일을 참고하세요.
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, version 3. This program is distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+================================================================================
+상표 고지 / Trademark Notice
+================================================================================
+
+"풀리", "풀리수학", "Pulley", "Pulley Math" 명칭과 로고, 캐릭터, 앱 아이콘 등
+브랜드 요소는 Freewheelin Inc.((주)프리윌린)의 상표 및 저작물이며, AGPL-3.0 라이선스의 대상이
+아닙니다. AGPL-3.0 제7조 (e)에 따라 이 소스를 수정하거나 재배포하는 경우
+위 명칭과 브랜드 요소를 사용할 수 있는 권리는 부여되지 않습니다. 파생 앱을
+배포하려면 이 명칭과 브랜드 요소를 제거하거나 교체해야 합니다.
+
+The names "풀리", "풀리수학", "Pulley" and "Pulley Math", together with the
+associated logos, characters, app icons and other brand assets, are
+trademarks and works of Freewheelin Inc. and are NOT licensed under AGPL-3.0.
+Pursuant to Section 7(e) of AGPL-3.0, no rights are granted to use these
+names or brand assets in modified or redistributed versions. Derivative
+works must remove or replace them.
+
+
+================================================================================
+제3자 구성요소 / Third-Party Components
+================================================================================
+
+--------------------------------------------------------------------------------
+MuPDF
+--------------------------------------------------------------------------------
+Copyright (C) 2004-2025 Artifex Software, Inc.
+License: GNU Affero General Public License v3.0 — 전문: LICENSE
+https://mupdf.com
+
+- 라이브러리: com.artifex.mupdf:fitz 1.18.0 (pdf 모듈 의존성)
+  이 버전의 소스:
+    https://github.com/ArtifexSoftware/mupdf-android-fitz/tree/1.18.0
+    https://github.com/ArtifexSoftware/mupdf/tree/1.18.0
+- 파생 코드: MuPDF Android viewer(https://github.com/ArtifexSoftware/mupdf-android-viewer)
+  에서 파생되어 Freewheelin Inc.가 2021년부터 수정한 아래 파일들. 각 파일 헤더에
+  원저작권과 수정 사실을 표기했다.
+  pdf/src/main/java/com/pulleymath/android/pdf/
+    CancellableAsyncTask.java, CancellableTaskDefinition.java,
+    DocumentActivity.java, MuPDFCancellableTaskDefinition.java, MuPDFCore.java,
+    OutlineActivity.java, PageAdapter.java, PageView.java, ReaderView.java,
+    SearchTask.java, SearchTaskResult.java, Stepper.java
+
+MuPDF 라이브러리에는 아래 오픈소스 구성요소가 함께 포함되어 있다(fitz 1.26.11 기준).
+버전별 정확한 목록과 라이선스 전문은 위 MuPDF 소스의 thirdparty/ 디렉터리를 참고한다.
+
+  - FreeType — FreeType License (FTL)
+    Portions of this software are copyright (C) The FreeType Project
+    (www.freetype.org). All rights reserved.
+  - HarfBuzz — MIT (Old MIT) License
+  - jbig2dec — GNU AGPL v3.0 (Artifex Software, Inc.)
+  - Little CMS (lcms2mt) — MIT License
+  - OpenJPEG — BSD 2-Clause License
+  - libjpeg — IJG License
+    This software is based in part on the work of the Independent JPEG Group.
+  - zlib — zlib License
+  - Brotli — MIT License
+  - Gumbo — Apache License 2.0 — 전문: licenses/Apache-2.0.txt
+  - extract — GNU AGPL v3.0 (Artifex Software, Inc.)
+  - MuJS — ISC License (이전 버전은 GNU AGPL v3.0) (Artifex Software, Inc.)
+
+--------------------------------------------------------------------------------
+FreeDrawView
+--------------------------------------------------------------------------------
+Copyright 2017 Riccardo Moro
+License: Apache License 2.0 — 전문: licenses/Apache-2.0.txt
+https://github.com/RiccardoMoro/FreeDrawView
+
+- 아래 디렉터리의 FreeDraw*, HistoryPath, Point, ResizeBehaviour, Path*Listener
+  Java 파일. Freewheelin Inc.가 수정했으며 각 파일 헤더에 원저작권과 수정 사실을
+  표기했다. 버전에 따라 일부 디렉터리만 있다.
+  app/src/main/java/com/freewheelin/pulley/views/MemoView/
+  app/src/main/java/com/freewheelin/pulley/legacy/views/memoView/
+  app/src/main/java/com/freewheelin/pulley/revision2021/cookingmemo/
+  pdf/src/main/java/com/pulleymath/android/pdf/memo/
+
+--------------------------------------------------------------------------------
+Simple Draw
+--------------------------------------------------------------------------------
+Copyright (C) Simple Mobile Tools
+License: GNU General Public License v3.0 — 전문: licenses/GPL-3.0.txt
+https://github.com/SimpleMobileTools/Simple-Draw
+
+- pdf/src/main/java/com/pulleymath/android/pdf/draw/ 의
+  Action.kt, DrawView.kt, Line.kt, Move.kt, MyPath.kt, PaintOptions.kt, Quad.kt
+  (해당 파일이 있는 버전에 한함). Freewheelin Inc.가 수정했으며 각 파일 헤더에
+  원저작권과 수정 사실을 표기했다. GPL-3.0 제13조와 AGPL-3.0 제13조에 따라
+  이 프로그램과 결합되어 배포된다.
+
+--------------------------------------------------------------------------------
+Pretendard
+--------------------------------------------------------------------------------
+Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
+with Reserved Font Name 'Pretendard'.
+License: SIL Open Font License 1.1 — 전문: licenses/Pretendard-OFL-1.1.txt
+- app/src/main/res/font/pretendard_*.otf, pdf/src/main/res/font/pretendard_*.otf
+
+--------------------------------------------------------------------------------
+나눔스퀘어 (NanumSquare)
+--------------------------------------------------------------------------------
+Copyright (c) 2010, NAVER Corporation (https://www.navercorp.com/)
+이 앱에는 네이버에서 제공한 나눔글꼴이 적용되어 있습니다.
+License: SIL Open Font License 1.1 — 전문: licenses/NanumSquare-OFL-1.1.txt
+https://help.naver.com/service/30016/contents/18088
+- app/src/main/res/font/nanum_square_*.ttf
+
+--------------------------------------------------------------------------------
+오픈소스 라이브러리
+--------------------------------------------------------------------------------
+그 밖에 Gradle 의존성으로 포함되는 오픈소스 라이브러리(AndroidX, Kotlin,
+Retrofit, OkHttp, Gson, Glide, Picasso, ExoPlayer, Lottie, MPAndroidChart,
+RxJava 등)의 라이선스는 각 프로젝트의 LICENSE 고지를 따른다. 대부분 Apache
+License 2.0이며 전문은 licenses/Apache-2.0.txt 에 있다. 목록은 각 모듈의
+build.gradle(.kts)와 gradle/libs.versions.toml 에서 확인할 수 있다.

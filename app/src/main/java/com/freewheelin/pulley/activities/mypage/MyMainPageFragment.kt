@@ -1,0 +1,639 @@
+package com.freewheelin.pulley.activities.mypage
+
+
+import android.app.AlarmManager
+import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+//import com.crashlytics.android.Crashlytics
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.SplashActivity
+import com.freewheelin.pulley.activities.auth.InitSettingActivity
+import com.freewheelin.pulley.activities.auth.login.LoginActivity
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.activities.mypage.Setting.*
+import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.assets.DessertType
+import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.isSPYMode
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.core.Version.v1
+import com.freewheelin.pulley.core.manage.*
+import com.freewheelin.pulley.dialogs.UpdateDialog
+import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.utils.*
+import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
+import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
+import com.ht.RecyclerAdapters.SectionAdapter.SectionType
+import com.ht.RecyclerAdapters.SectionAdapter.Type
+import kotlinx.android.synthetic.main.dialog_daebak.*
+import kotlinx.android.synthetic.main.fragment_my_main_page.*
+import kotlinx.android.synthetic.main.item_mypage_list.view.*
+
+
+enum class SettingCategory(val title: String) {
+    PRIVATE("개인 설정"),
+    SETTING("설정"),
+    SUPPORT("지원"),
+    ETC(""),
+
+    SPY("개발 테스트용");
+
+    val setting: List<Setting>
+        get() {
+            return when (this) {
+                PRIVATE -> listOf(SignUpInfo, StudyInfo)
+                SETTING -> listOf(AppSetting)
+                SUPPORT -> listOf(Guide, Notice, Customer, Version) // 고객지원 -> , FAQ, Contact, Policy
+                ETC -> listOf(Logout)
+                SPY -> {
+                    listOf(InitSetting, ClearMockExam, ClearBooks, ClearTests, Recommend,
+                            ClearAllClearHistory, ClearAllScrapHistory,
+                            ClearAllStudy,
+                            CrashlyticsCrash, CrashlyticsReport,
+                            ClearTutorialHistory,
+                            TestAPI,
+                            ShowEventLogging,
+                            ShowProblem,
+                            Flutter_INIT_TEST,
+                            SHOW_UPDATE_DIALOG,
+                            START_FREE,
+                            SHOW_ALWAYS_COMPLETE_TOAST,
+                            SNACKTEST_SETTING,
+                            EventSignUp,
+                            OffSpyMode)
+                }
+            }
+        }
+}
+
+enum class Setting(val title: String) {
+    SignUpInfo("개인 정보"),
+    StudyInfo("학습 정보"),
+    Recommend("추천 설정"),
+
+    AppSetting("알림 설정"),
+
+    Guide("풀리 200% 활용가이드"),
+    Notice("풀리 새소식"),
+    Customer("고객 지원"),
+    FAQ("자주 묻는 질문"),
+    Contact("1:1 문의하기"),
+    Version("버전 정보"),
+    Policy("이용약관 · 개인정보취급방침"),
+
+    Logout("로그아웃"),
+
+    EventSignUp("SignUp 이벤트 생성"),
+
+    InitSetting("초기설정으로가기"),
+    ClearMockExam("모의고사 풀이내역 전체삭제"),
+    ClearBooks("내 유형학습 내역 전체삭제"),
+    ClearTests("내 테스트 내역 전체삭제"),
+    ClearAllClearHistory("클리어내역 전체 삭제"),
+    ClearAllStudy("학습내역 전체 삭제"),
+    ClearAllScrapHistory("즐겨찾기내역 전체 삭제"),
+    CrashlyticsCrash("강제 크래시"),
+    CrashlyticsReport("크래시리틱 리포트"),
+    ClearTutorialHistory("튜토리얼 보인 내역 삭제"),
+    TestAPI("Test서버로 접속"),
+    ShowEventLogging("이벤트 로깅 보이기"),
+    ShowProblem("문제가 잘나오나?"),
+    Flutter_INIT_TEST("[FLUTTER] 초기테스트 화면"),
+    SHOW_UPDATE_DIALOG("강제업데이트 UI확인하기"),
+    SHOW_ALWAYS_COMPLETE_TOAST("항상 문제 다풀었다 토스트 뜨도록하기"),
+    START_FREE("무료체험 시작하기"),
+    SNACKTEST_SETTING("스낵테스트 세팅하기"),
+    OffSpyMode("SPY 종료")
+}
+
+class MyMainPageFragment : Fragment() {
+    val settingCategory = mutableListOf(
+            SettingCategory.PRIVATE,
+            SettingCategory.SETTING,
+            SettingCategory.SUPPORT,
+            SettingCategory.ETC)
+
+    lateinit var typeReceiver: BroadcastReceiver
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        typeReceiver = object: BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {}
+        }
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(typeReceiver, IntentFilter(User.EVENT_STUDENT_TYPE_SETTING))
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(typeReceiver)
+        super.onDestroy()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_my_main_page, container, false)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
+        rv.layoutManager = LinearLayoutManager(context)
+
+        if(isSPYMode == true) {
+            settingCategory.add(SettingCategory.SPY)
+        }
+    }
+
+    fun onSettingClicked(setting: Setting) {
+        when (setting) {
+            SignUpInfo -> moveTo(MySignUpInfoFragment())
+            StudyInfo -> moveTo(MyStudyInfoFragment())
+            Recommend -> moveTo(MyRecommendFragement())
+
+            AppSetting -> moveTo(MyAppSettingFragment())
+            Guide -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","활용가이드보기")
+                intent.data = Uri.parse(URL.풀리활용가이드_마이페이지)
+                startActivity(intent)
+            }
+            Notice -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(URL.공지사항)
+                startActivity(intent)
+            }
+            FAQ -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(URL.FAQ)
+                startActivity(intent)
+            }
+            Contact -> moveTo(MyContactFragment())
+            Policy -> moveTo(MyPolicyFragment())
+            Version -> moveTo(MyVersionFragment())
+
+            Customer -> moveTo(MyCustomerFragment())
+
+            Logout -> {
+                DialogUtils.DaebakDialog(requireContext(), true).apply {
+                    title = "로그아웃하시겠습니까?"
+                    type = DialogType.alert
+                    leftBtn.text = "아니요"
+                    rightBtn.text = "로그아웃"
+                    rightBtn.setOnClickListener {
+                        this.dismiss()
+                        MyApplication.user?.logout { errorMsg ->
+                            activity?.finish()
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            activity?.startActivity(intent)
+                        }
+                    }
+                }.show()
+
+            }
+
+            InitSetting -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "초기설정화면으로 돌아갑니다."
+                    contents = "초기설정을 완료해야 다시 Main으로 돌아갈 수 있어요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        activity?.finish()
+                        val user = requireActivity().application!!.user!!
+                        user.initSettingCompleted = false
+                        user.commit("MyMainPageFragment.onSettingClicked:InitSetting")
+                        val intent = InitSettingActivity.getIntent(context)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
+                }.show()
+            }
+
+            ClearMockExam -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "모의고사 풀이 내역을 모두 삭제합니다"
+                    contents = "나의모의고사에서 전부 지워져요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        MockExamManager.clearExam(context, user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+
+            ClearBooks -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "유형학습 풀이 내역을 모두 삭제합니다"
+                    contents = "유형학습 탭에서 전부 지워져요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        BookManager.clearBooks(context,user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+
+            ClearTests -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "테스트 풀이 내역을 모두 삭제합니다"
+                    contents = "전부 지워져요 초기설정까지도"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        TestManager.clearTests(context,user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+            ClearAllClearHistory -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "클리어 내역을 모두 삭제합니다"
+                    contents = "복구 할 수 없어요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        ProblemManager.clearAllClear(context, user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+
+            ClearAllStudy -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "채점 내역을 모두 삭제합니다"
+                    contents = "복구 할 수 없어요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        ProblemManager.clearAllScoring(context, user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+            ClearAllScrapHistory -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "즐겨찾기 내역을 모두 삭제합니다"
+                    contents = "복구 할 수 없어요"
+                    type = DialogType.alert
+                    leftBtn.text = "취소"
+                    rightBtn.text = "확인"
+                    rightBtn.setOnClickListener {
+                        ProblemManager.clearAllScrap(context, user!!) {
+                            dismiss()
+                        }
+                    }
+                }.show()
+            }
+
+            CrashlyticsCrash -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "강제로 크래시를 냅니다"
+                    contents = "앱은 종료되고, 크래시리틱에 보고가 가야해요"
+                    type = DialogType.alert
+                    leftBtn.text ="취소"
+                    rightBtn.text="확인"
+                    rightBtn.setOnClickListener {
+                        throw RuntimeException("Firebase Test Crash")
+                    }
+                }.show()
+            }
+
+            CrashlyticsReport -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "강제로 크래시를 냅니다"
+                    contents = "개발용이면 앱이 꺼지고, 배포용이면 앱의 로그가 남습니다"
+                    type = DialogType.alert
+                    leftBtn.text ="취소"
+                    rightBtn.text="확인"
+                    rightBtn.setOnClickListener {
+                        dismiss()
+                        LogUtils.assert(false, "SPY에서 심각하지 않은 에러")
+                    }
+                }.show()
+            }
+
+            EventSignUp -> {
+                LogUtils.logSignUpEvent(requireContext(), user?.studentID?:"None")
+            }
+
+            ClearTutorialHistory -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title = "튜토리얼 내역을 모두 삭제합니다"
+                    contents = "앱이 종료되었다 다시 켜져야 적용됩니다"
+                    type = DialogType.alert
+                    leftBtn.text ="취소"
+                    rightBtn.text="확인"
+                    rightBtn.setOnClickListener {
+                        Preferences.tooltipShowingCntTakeNoteScroll.set(0)
+                        Preferences.tooltipShowingCntAddSimilar.set(0)
+                        Preferences.tooltipShowingCntChangeSimilar.set(0)
+                        Preferences.tooltipShowingCntAdditionalStudyInAnalysis.set(0)
+                        Preferences.tooltipShowingCntAdditionalStudyInWrongNote.set(0)
+                        Preferences.tooltipShowingCntMail.set(0)
+                        Preferences.tooltipShowingCntAnalysisMain.set(0)
+                        Preferences.galleryClickCnt.set(0)
+                        Preferences.tooltipShowingCntRecommendPlan.set(0)
+
+                        val intent = Intent(context, SplashActivity::class.java)
+                        val mPendingIntentId = 123456
+                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                        val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                        System.exit(0)
+                    }
+                }.show()
+            }
+
+            TestAPI -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("현재 테스트 URL")
+
+                val input = EditText(requireContext())
+                input.setText(Preferences.testBaseURL.get())
+                builder.setView(input)
+
+                builder.setPositiveButton("OK") { _, _ ->
+                    Preferences.testBaseURL.set(input.text.toString())
+                }
+                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+                builder.show()
+            }
+            Flutter_INIT_TEST -> {
+                startActivity(InitSettingActivity.getIntent(requireContext()))
+            } 
+
+            ShowProblem -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("문제ID들을 입력해봐바,\n,로 구분해서..\n 이렇게 만들어진건 [나의학습] 추가될거임!!")
+
+                val input = EditText(requireContext())
+                builder.setView(input)
+
+                builder.setPositiveButton("OK") { _, _ ->
+                    var ids = input.text.toString().split(",")
+                    ids = ids.map { it.trim() }
+                    PieceManager.spyMakePiece(requireContext(), user!!, ids,
+                            successCB = {
+                                val intent = SolveActivity.getIntent(requireContext(), it)
+                                startActivity(intent)
+                            },
+                            failCB = {
+                                Toast.makeText(requireContext(), "실패애", Toast.LENGTH_LONG).show()
+                            })
+                }
+
+                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+                builder.show()
+            }
+            
+            SHOW_UPDATE_DIALOG -> {
+                val dialog = UpdateDialog(requireContext())
+                dialog.show()
+            }
+            START_FREE -> {
+                user?.startFreeMembership(requireContext()) {
+                    Toast.makeText(requireContext(), "성고옹", Toast.LENGTH_LONG).show()
+                }
+            }
+            SNACKTEST_SETTING -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("SPY-어떤타입??")
+                builder.setItems(listOf(
+                        "레모네이드",
+                        "파이",
+                        "솜사탕",
+                        "바나나우유",
+                        "마카롱",
+                        "치즈볼"
+                ).toTypedArray()) { dialog, position ->
+                    val type = when (position) {
+                        0 -> DessertType.LEMONADE
+                        1 -> DessertType.PIE
+                        2 -> DessertType.CANDY
+                        3 -> DessertType.BANANA
+                        4 -> DessertType.MACAROON
+                        else -> DessertType.CHEESE_BALL
+                    }
+
+                    user?.setUserType(requireContext(),
+                            type,
+                            10,
+                            10,
+                            10,
+                            10) {
+                        dialog.dismiss()
+                    }
+                }.show()
+
+            }
+            OffSpyMode -> {
+                DialogUtils.DaebakDialog(requireContext()).apply {
+                    title="스파이모드를 종료합니다"
+                    contents="다시 키려면.. 봉인을 푸셔야해요"
+                    type = DialogType.alert
+                    leftBtn.text ="취소"
+                    rightBtn.text="확인"
+                    rightBtn.setOnClickListener {
+                        dismiss()
+                        spyOff()
+                        (activity as LearningTabActivity).spyOff()
+
+                    }
+                }.show()
+            }
+        }
+    }
+
+    fun spyOn() {
+        isSPYMode = true
+        settingCategory.add(SettingCategory.SPY)
+        rv.adapter?.notifyDataSetChanged()
+    }
+
+    fun spyOff() {
+        isSPYMode = false
+        settingCategory.remove(SettingCategory.SPY)
+        rv.adapter?.notifyDataSetChanged()
+    }
+
+    fun moveTo(frag: Fragment) {
+        (activity as LearningTabActivity).moveTo(frag)
+    }
+
+    fun onCheckChanged(setting: Setting, value: Boolean) {
+        when (setting) {
+            TestAPI -> {
+                MyApplication.user?.logout { errorMsg ->
+                    Preferences.onTestAPI.set(value)
+                    val intent = Intent(context, SplashActivity::class.java)
+                    val mPendingIntentId = 123456
+                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                    val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                    System.exit(0)
+                }
+            }
+            ShowEventLogging -> {
+                Preferences.onLoggingEvent.set(value)
+            }
+            SHOW_ALWAYS_COMPLETE_TOAST -> {
+                Preferences.onSuccessToast.set(value)
+            }
+
+        }
+    }
+    inner class MenuAdapter : SectionAdapter<RecyclerView.ViewHolder>() {
+
+        override fun numberOfSection(): Int {
+            return settingCategory.size
+        }
+
+        override fun numberOfRows(section: Int): Int {
+            return settingCategory[section].setting.size
+        }
+
+        override fun getItemViewType(indexPath: IndexPath): Int {
+            return when (indexPath.type) {
+                Type.header -> 0
+                else -> 1
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return if (viewType == 0) {
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_header, parent, false)
+                HeaderHolder(view)
+            } else {
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_list, parent, false)
+                ListHolder(view)
+            }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, indexPath: IndexPath) {
+            (holder as? HeaderHolder)?.apply {
+                val category = settingCategory[indexPath.section]
+
+                set(category)
+            }
+
+            (holder as? ListHolder)?.apply {
+                val setting = settingCategory[indexPath.section].setting[indexPath.row]
+                set(setting, getSubText(setting))
+
+                if(setting == Setting.Notice && NoticeManager.isNeedUpdateTag()) {
+                    titleTv.typeface = Theme.bold(requireContext())
+                    updateTag.visibility = View.VISIBLE
+                } else if (setting == Setting.Version && VersionManager.isNeedToUpdate() == true) {
+                    titleTv.typeface = Theme.bold(requireContext())
+                    updateTag.visibility = View.VISIBLE
+
+                } else if (setting == TestAPI || setting == ShowEventLogging || setting == SHOW_ALWAYS_COMPLETE_TOAST) {
+                    updateTag.visibility = View.GONE
+                    switch.setOnCheckedChangeListener { compoundButton, value ->
+                        onCheckChanged(setting, value)
+                    }
+                } else {
+                    titleTv.typeface = Theme.regular(requireContext())
+                    updateTag.visibility = View.GONE
+                }
+
+                itemView.setOnClickListener {
+                    onSettingClicked(setting)
+                }
+            }
+        }
+    }
+
+    private fun getSubText(setting: Setting): String {
+        val user = requireActivity().application.user!!
+
+        return when(setting) {
+            AppSetting -> {
+                val pushStr = if(user.agreeAppPush) "동의" else "끔"
+                val eventStr = if(user.agreeMarketing) "동의" else "끔"
+                "PUSH 알림 : $pushStr / 이벤트, 혜택 알림 : $eventStr"
+            }
+            Version -> {
+                val isNeedUpdate = VersionManager.isNeedToUpdate()
+                when (isNeedUpdate) {
+                    true -> "V ${VersionManager.appVersion}"
+                    false -> "최신 버전입니다."
+                    else -> ""
+                }
+            }
+            else -> ""
+        }
+    }
+}
+
+class ListHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    val titleTv = view.titleTv
+    val updateTag = view.updateTag
+    val subTitleTv = view.subTitleTv
+    val clampIv = view.clampIv
+    val switch = view.onOffSwitch
+
+    fun set(setting: Setting, subText: String) {
+        titleTv.text = setting.title
+        subTitleTv.text = subText
+
+        when(setting) {
+            Guide, Notice -> clampIv.setImageResource(R.drawable.ic_new_window)
+            else -> clampIv.setImageResource(R.drawable.ic_clamp)
+        }
+
+        clampIv.visibility = if(setting != Logout) View.VISIBLE else View.GONE
+
+        when(setting){
+            TestAPI -> {
+                titleTv.text = v1.base
+                switch.visibility = View.VISIBLE
+                switch.isChecked = Preferences.onTestAPI.get()
+            }
+            ShowEventLogging -> {
+                switch.visibility = View.VISIBLE
+                switch.isChecked = Preferences.onLoggingEvent.get()
+            }
+            SHOW_ALWAYS_COMPLETE_TOAST -> {
+                switch.visibility = View.VISIBLE
+                switch.isChecked = Preferences.onSuccessToast.get()
+            }
+            else -> switch.visibility = View.GONE
+        }
+    }
+}

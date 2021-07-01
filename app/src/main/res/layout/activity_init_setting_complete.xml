@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp80"
+        android:paddingBottom="@dimen/dp64">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/box_colorful" />
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/guideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/sp24"
+            android:lineSpacingExtra="@dimen/sp12"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="기본정보가 제출되었습니다!\n이제 ㅇㅇ님의 공부 스타일을 진단해드릴게요 :)"/>
+
+        <TextView
+            style="@style/TextGrey_c0c0c0.ExtraBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="center_horizontal"
+            android:text="P.S. 겁먹지 마세요! 아주 쉬워요 :)"
+            android:layout_marginTop="@dimen/dp24"/>
+
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/startBtn"
+            android:layout_width="@dimen/primaryBtn_width_200dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="진단 시작"
+            app:buttonTheme="blue" />
+
+    </LinearLayout>
+
+</ScrollView>

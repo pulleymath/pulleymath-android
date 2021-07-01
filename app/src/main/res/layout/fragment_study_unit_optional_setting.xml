@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white_fafafa"
+    android:clickable="true"
+    tools:context=".activities.mypage.MySignUpInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ffffff">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp32"
+            android:paddingStart="@dimen/dp32"
+            android:paddingEnd="@dimen/dp32"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            android:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            android:text="추천 과목 (선택 과목)"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment">
+
+            <TextView
+                android:id="@+id/titleLabel"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/sp24"
+                android:layout_marginTop="@dimen/sp24"
+                android:text="공부할 선택 과목을 골라주세요.\n선택하지 않은 과목은 추천에서 제외됩니다."
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineHeight="@dimen/sp24" />
+
+
+
+            <TextView
+                android:id="@+id/guideBottomLabel"
+                style="@style/TextGrey_9f9f9f.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:text="아직 고민 중이라면, 추천받고 싶은 선택과목을 여러 개 골라도 좋아요!"
+                app:layout_constraintStart_toStartOf="@+id/titleLabel"
+                app:layout_constraintTop_toBottomOf="@+id/titleLabel" />
+
+
+            <LinearLayout
+                android:id="@+id/selectionContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginEnd="@dimen/dp24"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guideBottomLabel">
+
+                <com.freewheelin.pulley.views.SelectionButton
+                    android:id="@+id/noneSelection"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp36"
+                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:text="나중에 선택할게요"
+                    android:textSize="@dimen/sp16" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/probAnsStatSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="확률과 통계" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/calculusSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="미적분" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/geometrySelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="기하" />
+            </LinearLayout>
+
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                android:id="@+id/modifyBtn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp56"
+                android:layout_marginStart="@dimen/sp24"
+                android:layout_marginTop="@dimen/sp24"
+                android:layout_marginEnd="@dimen/sp24"
+                android:text="@string/text_change"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectionContainer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

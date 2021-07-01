@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerCl"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_white_ffffff_round"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/itemTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="40dp"
+        android:text="아이템"
+        android:textSize="@dimen/sp16"
+        android:textColor="@color/grey_9f9f9f"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/updateTag"/>
+
+    <TextView
+        style="@style/TextRed_fe7b67.ExtraBold"
+        android:id="@+id/updateTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp14"
+        android:layout_marginEnd="@dimen/dp16"
+        android:text="UPDATE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/itemTv"
+        app:layout_constraintBottom_toBottomOf="@+id/itemTv"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

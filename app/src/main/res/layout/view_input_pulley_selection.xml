@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/TextBlack_4c4c4c"
+        android:id="@+id/labelTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp18"
+        android:text="확률과 통계"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelTv">
+
+        <com.freewheelin.pulley.views.SelectionButton
+            android:id="@+id/btn1"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+            android:text="이차곡선"
+            android:textSize="@dimen/sp16" />
+
+        <com.freewheelin.pulley.views.SelectionButton
+            android:id="@+id/btn2"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+            android:text="이차곡선"
+            android:textSize="@dimen/sp16"/>
+
+        <com.freewheelin.pulley.views.SelectionButton
+            android:id="@+id/btn3"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/dp48"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+            android:text="이차곡선"
+            android:textSize="@dimen/sp16" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

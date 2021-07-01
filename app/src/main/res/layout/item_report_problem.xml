@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="320dp"
+    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/resultIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_result_incorrect"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        style="@style/TextRed_fe7b67"
+        android:id="@+id/scoreTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="-2점"
+        android:textSize="@dimen/sp14"
+        app:layout_constraintStart_toEndOf="@+id/resultIv"
+        app:layout_constraintTop_toTopOf="@+id/resultIv"
+        app:layout_constraintBottom_toBottomOf="@id/resultIv"/>
+
+
+    <TextView
+        style="@style/TextGrey_818181.Bold"
+        android:id="@+id/correctRateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp14"
+        android:text="정답률 : 38%"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/scoreTv"
+        app:layout_constraintTop_toTopOf="@+id/resultIv"
+        app:layout_constraintBottom_toBottomOf="@+id/resultIv"/>
+
+    <TextView
+        style="@style/TextGrey_818181.Bold"
+        android:id="@+id/numberTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="@dimen/sp14"
+        android:text="16번"
+        app:layout_constraintStart_toStartOf="@+id/resultIv"
+        app:layout_constraintTop_toBottomOf="@+id/resultIv" />
+
+
+    <TextView
+        style="@style/TextGrey_818181.Bold"
+        android:id="@+id/unitTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="@dimen/sp14"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="무한 등비 급수의 활용"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@+id/numberTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/numberTv"
+        app:layout_constraintBottom_toBottomOf="@+id/numberTv"/>
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        android:id="@+id/topBorder"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/unitTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBorder">
+
+        <ImageView
+            android:id="@+id/problemIv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="55dp"
+            android:scaleType="fitStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/reviewBtn"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="16dp"
+            android:text="문제 리뷰"
+            app:buttonTheme="blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+        </com.freewheelin.pulley.views.Buttons.SecondaryButton>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

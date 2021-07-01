@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_top_padding">3dp</dimen>
+    <dimen name="button_left_padding">12dp</dimen>
+    <dimen name="stroke_width">1dp</dimen>
+
+    <dimen name="toolbar_title_start_margin">3dp</dimen>
+    <dimen name="toolbar_nav_inset">0dp</dimen>
+
+    <!-- sp to dp -->
+    <dimen name="sp104">104dp</dimen>
+    <dimen name="sp48">48dp</dimen>
+    <dimen name="sp40">40dp</dimen>
+    <dimen name="sp36">36dp</dimen>
+    <dimen name="sp32">32dp</dimen>
+    <dimen name="sp24">24dp</dimen>
+    <dimen name="sp20">20dp</dimen>
+    <dimen name="sp18">18dp</dimen>
+    <dimen name="sp16">16dp</dimen>
+    <dimen name="sp14">14dp</dimen>
+    <dimen name="sp12">12dp</dimen>
+    <dimen name="sp8">8dp</dimen>
+    <dimen name="sp7">7dp</dimen>
+    <dimen name="sp6">6dp</dimen>
+
+    <dimen name="dp640">640dp</dimen>
+    <dimen name="dp560">560dp</dimen>
+    <dimen name="dp450">450dp</dimen>
+    <dimen name="dp400">400dp</dimen>
+    <dimen name="dp328">328dp</dimen>
+    <dimen name="dp280">280dp</dimen>
+    <dimen name="dp264">264dp</dimen>
+    <dimen name="dp248">248dp</dimen>
+    <dimen name="dp200">200dp</dimen>
+    <dimen name="dp184">184dp</dimen>
+    <dimen name="dp168">168dp</dimen>
+    <dimen name="dp144">144dp</dimen>
+    <dimen name="dp120">120dp</dimen>
+    <dimen name="dp104">104dp</dimen>
+    <dimen name="dp100">100dp</dimen>
+    <dimen name="dp96">96dp</dimen>
+    <dimen name="dp90">90dp</dimen>
+    <dimen name="dp80">80dp</dimen>
+    <dimen name="dp72">72dp</dimen>
+    <dimen name="dp68">68dp</dimen>
+    <dimen name="dp64">64dp</dimen>
+    <dimen name="dp60">60dp</dimen>
+    <dimen name="dp56">56dp</dimen>
+    <dimen name="dp48">48dp</dimen>
+    <dimen name="dp40">40dp</dimen>
+    <dimen name="dp36">36dp</dimen>
+    <dimen name="dp32">32dp</dimen>
+    <dimen name="dp28">28dp</dimen>
+    <dimen name="dp24">24dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+    <dimen name="dp18">18dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp14">14dp</dimen>
+    <dimen name="dp12">12dp</dimen>
+    <dimen name="dp8">8dp</dimen>
+
+    <dimen name="borderThickness">1dp</dimen>
+
+    <dimen name="primaryBtn_width_200dp">200dp</dimen>
+    <dimen name="primaryBtn_width_160dp">160dp</dimen>
+    <dimen name="primaryBtn_width_132dp">132dp</dimen>
+    <dimen name="primaryBtn_width_96dp">96dp</dimen>
+
+    <dimen name="omr_margin_top">120dp</dimen>
+    <dimen name="omr_margin_start">64dp</dimen>
+    <dimen name="omr_margin_end">64dp</dimen>
+    <dimen name="omr_margin_bottom">48dp</dimen>
+    <dimen name="omr_button_textSize">16sp</dimen>
+    <dimen name="omr_button_margin">36dp</dimen>
+    <dimen name="omr_button_stroke_width">1.5dp</dimen>
+    <dimen name="omr_answer_borderWidth">2dp</dimen>
+
+    <dimen name="omrActivity_keypad_width">300dp</dimen>
+    <dimen name="omrActivity_keypad_height">386dp</dimen>
+
+    <dimen name="psv_answerSheet_width">208dp</dimen>
+    <dimen name="psv_answerSheet_answerLabel_top">81dp</dimen>
+    <dimen name="psv_answerSheet_answerLabel_bottom">32dp</dimen>
+    <dimen name="psv_answerSheet_singleAnswer_1_5_guide">30dp</dimen>
+    <dimen name="psv_answerSheet_singleAnswer_2_4_guide">90dp</dimen>
+    <dimen name="psv_answerSheet_customContainer_height">232dp</dimen>
+    <dimen name="psv_answerSheet_customContainer_unitStudy_paddingLeft">44dp</dimen>
+
+    <dimen name="psv_solveView_topContainer_height">84dp</dimen>
+    <dimen name="psv_solveView_problemAndSolution_space">16dp</dimen>
+
+    <dimen name="psv_problemListView_height_unfold">234dp</dimen>
+    <dimen name="psv_problemListView_height_fold">72dp</dimen>
+
+    <dimen name="psv_thumbnailHolder_width">142dp</dimen>
+    <dimen name="psv_thumbnailHolder_height">126dp</dimen>
+
+    <dimen name="psv_arrow_clickArea_width">80dp</dimen>
+
+    <dimen name="learning_unitStudy_addPieceBtn_height">48dp</dimen>
+    <dimen name="learning_unitStudy_pager_top_margin">0.22222</dimen>
+    <dimen name="learning_unitStudy_pager_bottom_margin">0.86</dimen>
+    <dimen name="learning_unitStudy_black_area_percent">0.41818</dimen>
+
+    <dimen name="learning_myExam_list_end_margin">240dp</dimen>
+    <dimen name="learning_myExam_problemCnt_start_margin">8dp</dimen>
+
+    <dimen name="learning_wrongNote_filter_width">344dp</dimen>
+    <dimen name="learning_book_filter_width">376dp</dimen>
+
+    <dimen name="MyPage_width">560dp</dimen>
+    <dimen name="MyPage_main_header_height">88dp</dimen>
+    <dimen name="MyPage_page_contents_start_margin_71dp">71dp</dimen>
+    <dimen name="MyPage_page_contents_start_margin_90dp">90dp</dimen>
+
+    <dimen name="Report_tab_width">176dp</dimen>
+    <dimen name="Report_Unit_tripleBarChart_margin">70dp</dimen>
+    <dimen name="Report_Unit_achieveTab_width">200dp</dimen>
+    <dimen name="Report_Unit_penBarChart_end_margin">20dp</dimen>
+    <dimen name="Report_Unit_list_correctRate_width">284dp</dimen>
+
+    <dimen name="Report_StudyAmount_ringChart_width">370dp</dimen>
+    <dimen name="Report_StudyAmount_ringChart_top_margin">88dp</dimen>
+    <dimen name="Report_StudyAmount_ringChart_start_margin">106dp</dimen>
+    
+    <dimen name="Report_level_subject_tab_width">120dp</dimen>
+
+    <dimen name="dialog_wrong_manage_width">592dp</dimen>
+
+
+    <!--NOTE: VIEW-->
+    <dimen name="triple_vertical_bar_width">45dp</dimen>
+    <dimen name="triple_vertical_bar_space">3dp</dimen>
+
+    <dimen name="doubly_side_bar_width">240dp</dimen>
+    <!--NOTE: DIALOG-->
+    <dimen name="dialog_addPlan_width">1024dp</dimen>
+    <dimen name="dialog_addPlan_height">592dp</dimen>
+
+    <dimen name="triple_pen_bar_space">60dp</dimen>
+    <dimen name="triple_pen_container_height">274dp</dimen>
+
+    <dimen name="dialog_note_width">960dp</dimen>
+    <dimen name="dialog_note_height">592dp</dimen>
+
+    <dimen name="dialog_test_report_top_margin">80dp</dimen>
+    <dimen name="dialog_test_report_bottom_margin">64dp</dimen>
+
+    <dimen name="speed_answer_number_dp56">80dp</dimen>
+</resources>

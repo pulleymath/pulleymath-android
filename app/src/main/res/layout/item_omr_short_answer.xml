@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yellow_fffbef">
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/numberTv"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:background="@color/red_ffe8e8"
+            android:gravity="center"
+            android:text="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            style="@style/OMR_Vertical_border"
+            android:id="@+id/verticalBorder"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/numberTv" />
+
+        <View
+            android:id="@+id/topHorizontalBorder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/omr_answer_borderWidth"
+            android:background="@color/red_ffe8e8"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="@id/verticalBorder"
+            app:layout_constraintStart_toEndOf="@id/verticalBorder"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/omr_answer_borderWidth"
+            android:background="@color/red_ffe8e8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/verticalBorder"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            style="@style/OMR_horizontal_border"
+            android:id="@+id/horizontalBorder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+<!--        <View-->
+<!--            style="@style/OMR_Vertical_border"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"/>-->
+
+        <EditText
+            android:id="@+id/answerEt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:maxLength="3"
+            android:paddingStart="16dp"
+            android:hint="@string/text_hint_please_input_answer"
+            android:textColorHint="@color/red_ffc6bc"
+            android:singleLine="true"
+            android:textSelectHandle="@drawable/bg_empty"
+            android:textCursorDrawable="@drawable/cursor_omr_short_answer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/verticalBorder"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

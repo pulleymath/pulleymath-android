@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/minusBtn"
+        android:src="@drawable/ic_minus"
+        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.ExtraBold"
+        android:id="@+id/cntTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp24"
+        android:text="5"
+        app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+        app:layout_constraintTop_toTopOf="@+id/minusBtn"
+        app:layout_constraintStart_toStartOf="@+id/minusBtn"
+        app:layout_constraintEnd_toEndOf="@+id/plusBtn"/>
+
+
+    <ImageButton
+        android:id="@+id/plusBtn"
+        android:src="@drawable/ic_plus_grey"
+        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginStart="@dimen/dp48"
+        app:layout_constraintTop_toTopOf="@+id/minusBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+        app:layout_constraintStart_toEndOf="@+id/minusBtn"/>
+</merge>

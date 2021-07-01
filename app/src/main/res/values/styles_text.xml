@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Light">
+        <item name="android:fontFamily">@font/font_nanum_square_light</item>
+    </style>
+
+    <style name="Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExtraBold">
+        <item name="android:fontFamily">@font/font_nanum_square_extra_bold</item>
+    </style>
+
+
+    <style name="TextBlue_64bbff">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextBlue_64bbff.Bold" parent="Bold">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextBlue_64bbff.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextBlue_64bbff.Light" parent="Light">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextPurple_acacff">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextPurple_acacff.Bold" parent="Bold">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextPurple_acacff.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextPurple_acacff.Light" parent="Light">
+        <item name="android:textColor">@color/purple_ACACFF</item>
+    </style>
+
+    <style name="TextPurple_6d6dff">
+        <item name="android:textColor">@color/purple_6D6DFF</item>
+    </style>
+
+    <style name="TextPurple_6d6dff.Bold" parent="Bold">
+        <item name="android:textColor">@color/purple_6D6DFF</item>
+    </style>
+
+    <style name="TextPurple_6d6dff.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/purple_6D6DFF</item>
+    </style>
+
+    <style name="TextPurple_6d6dff.Light" parent="Light">
+        <item name="android:textColor">@color/purple_6D6DFF</item>
+    </style>
+
+
+    <style name="TextBlack_4c4c4c">
+        <item name="android:textColor">@color/black_4c4c4c</item>
+    </style>
+
+    <style name="TextBlack_4c4c4c.Bold"  parent="Bold">
+        <item name="android:textColor">@color/black_4c4c4c</item>
+    </style>
+
+    <style name="TextBlack_4c4c4c.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/black_4c4c4c</item>
+    </style>
+
+    <style name="TextBlack_4c4c4c.Light" parent="Light">
+        <item name="android:textColor">@color/black_4c4c4c</item>
+    </style>
+
+    <style name="TextBlack_333333.Bold"  parent="Bold">
+        <item name="android:textColor">@color/black_333333</item>
+    </style>
+
+    <style name="TextBlack_333333.ExtraBold"  parent="ExtraBold">
+        <item name="android:textColor">@color/black_333333</item>
+    </style>
+
+
+    <style name="TextGrey_c0c0c0">
+        <item name="android:textColor">@color/grey_c0c0c0</item>
+    </style>
+
+    <style name="TextGrey_c0c0c0.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_c0c0c0</item>
+    </style>
+
+    <style name="TextGrey_c0c0c0.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/grey_c0c0c0</item>
+    </style>
+
+
+    <style name="Textwhite_f2f2f2.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_f2f2f2</item>
+    </style>
+
+
+    <style name="TextWhite_ffffff">
+        <item name="android:textColor">@color/white_ffffff</item>
+    </style>
+
+    <style name="TextWhite_ffffff.Bold" parent="Bold">
+        <item name="android:textColor">@color/white_ffffff</item>
+    </style>
+
+    <style name="TextWhite_ffffff.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/white_ffffff</item>
+    </style>
+
+    <style name="TextBlue_30a4ff">
+        <item name="android:textColor">@color/blue_30a4ff</item>
+    </style>
+
+    <style name="TextBlue_30a4ff.Bold" parent="Bold">
+        <item name="android:textColor">@color/blue_30a4ff</item>
+    </style>
+
+    <style name="TextBlue_30a4ff.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/blue_30a4ff</item>
+    </style>
+
+    <style name="TextBlue_2287ef">
+        <item name="android:textColor">@color/blue_2287ef</item>
+    </style>
+
+    <style name="TextBlue_2287ef.Bold" parent="Bold">
+        <item name="android:textColor">@color/blue_2287ef</item>
+    </style>
+
+    <style name="TextBlue_2287ef.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/blue_2287ef</item>
+    </style>
+
+    <style name="TextGrey_9f9f9f">
+        <item name="android:textColor">@color/grey_9f9f9f</item>
+    </style>
+
+    <style name="TextGrey_9f9f9f.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_9f9f9f</item>
+    </style>
+
+    <style name="TextGrey_9f9f9f.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/grey_9f9f9f</item>
+    </style>
+
+    
+    <style name="TextRed_fe7b67">
+        <item name="android:textColor">@color/red_fe7b67</item>
+    </style>
+
+    <style name="TextRed_fe7b67.Bold" parent="Bold">
+        <item name="android:textColor">@color/red_fe7b67</item>
+    </style>
+
+    <style name="TextRed_fe7b67.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/red_fe7b67</item>
+    </style>
+
+    <style name="TextGrey_818181">
+        <item name="android:textColor">@color/grey_818181</item>
+    </style>
+
+    <style name="TextGrey_818181.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_818181</item>
+    </style>
+
+    <style name="TextGrey_818181.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/grey_818181</item>
+    </style>
+
+    <style name="TextGrey_e0e0e0">
+        <item name="android:textColor">@color/grey_e0e0e0</item>
+    </style>
+
+    <style name="TextGrey_e0e0e0.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/grey_e0e0e0</item>
+    </style>
+
+
+    <style name="TextGreen_70d000">
+        <item name="android:textColor">@color/green_70d000</item>
+    </style>
+
+    <style name="TextGreen_70d000.Bold" parent="Bold">
+        <item name="android:textColor">@color/green_70d000</item>
+    </style>
+
+    <style name="TextGreen_70d000.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/green_70d000</item>
+    </style>
+
+    <style name="Text_DaebakCalendar_WeekDay" parent="TextGrey_c0c0c0">
+        <item name="android:fontFamily">@font/font_nanum_square</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextYellow_ffb300">
+        <item name="android:textColor">@color/yellow_ffb300</item>
+    </style>
+
+    <style name="TextYellow_ffb300.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/yellow_ffb300</item>
+    </style>
+
+    <style name="TextBrown_8f5f00.Bold" parent="Bold">
+        <item name="android:textColor">@color/brown_8f5f00</item>
+    </style>
+
+    <style name="TextBrown_8f5f00.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/brown_8f5f00</item>
+    </style>
+</resources>

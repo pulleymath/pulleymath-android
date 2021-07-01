@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingEnd="32dp"
+    android:paddingStart="32dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"/>
+
+    <TextView
+        android:id="@+id/contentsTv"
+        style="@style/TextWhite_ffffff.ExtraBold"
+        android:textSize="@dimen/sp16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="@dimen/sp8"
+        android:text="이 문제와 같은 유형의 문제를 추가해\n
+취약점을 채워보세요 :)"/>
+
+</LinearLayout>

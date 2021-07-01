@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:src="@drawable/shadow_wrong_manage"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerCl"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_white_ffffff_round_top_only_10"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/studyWrongBtn"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="32dp"
+            android:text="오답학습하기"
+            android:textSize="16sp"
+            app:buttonTheme="orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/reviewBtn"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:text="문제 리뷰하기"
+            app:buttonTheme="blue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/studyWrongBtn"/>
+
+        <TextView
+            style="@style/TextGrey_c0c0c0"
+            android:id="@+id/guideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginEnd="16dp"
+            android:text="설명 텍스트"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/reviewBtn" />
+
+        <LinearLayout
+            android:id="@+id/btnContainerLl"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</merge>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="guide_empty_mock">조건에 맞는 모의고사가 없습니다.\n다른 조건으로 찾아주세요 :)</string>
+
+</resources>

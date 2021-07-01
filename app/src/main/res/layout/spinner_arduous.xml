@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Button
+        android:id="@+id/mainBtn"
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:textSize="@dimen/sp16"
+        android:text="계열 선"
+        android:background="@null"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/arrowIv"
+        android:layout_width="10dp"
+        android:layout_height="7dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/arrow_bottom_arduous_spinner"
+        android:tint="@color/black_4c4c4c"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</merge>

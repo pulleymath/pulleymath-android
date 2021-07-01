@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerCl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingStart="@dimen/dp32"
+        android:paddingEnd="@dimen/dp24"
+        android:background="@color/white_ffffff"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="대박이 공지에요"
+            android:textSize="@dimen/sp16"
+            android:maxLines="1"
+            android:layout_gravity="center_vertical"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/updateTag"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            style="@style/TextRed_fe7b67.ExtraBold"
+            android:id="@+id/updateTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="UPDATE"
+            android:textSize="@dimen/sp14"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/titleTv"
+            app:layout_constraintEnd_toStartOf="@+id/dateTv"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            style="@style/TextGrey_c0c0c0"
+            android:id="@+id/dateTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019.11.10"
+            android:textSize="@dimen/sp14"
+            android:layout_marginEnd="@dimen/dp16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/collapseIndicateIv" />
+
+        <ImageView
+            android:id="@+id/collapseIndicateIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_clamp_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View style="@style/Border_Grey_f2f2f2_Horizontal"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/collapseContainerCl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:padding="@dimen/dp32">
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/headlineTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019.11.07 대박이 OPEN!"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/contentsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp16"
+            android:lineSpacingExtra="@dimen/sp8"
+            android:text="여러분 안녕하세오. 대박이에오.
+그렇습니다. 이것은 공지이구요.
+
+공지사항 리스트는 스크롤이 되어야 해요!
+현태쌤 화이또..S2"
+            android:layout_marginTop="@dimen/dp24"
+            app:layout_constraintTop_toBottomOf="@+id/headlineTv"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="440dp"
+            android:layout_marginTop="@dimen/dp24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contentsTv"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

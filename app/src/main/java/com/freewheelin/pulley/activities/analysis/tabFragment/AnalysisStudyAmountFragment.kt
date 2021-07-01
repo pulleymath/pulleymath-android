@@ -1,0 +1,233 @@
+package com.freewheelin.pulley.activities.analysis.tabFragment
+
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
+import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
+import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.model.Analysis
+import com.freewheelin.pulley.model.NumberAnalysis
+import com.freewheelin.pulley.model.curation.MyCuration
+import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.utils.partialFont
+import com.freewheelin.pulley.views.TextViews.UpDownTextView
+import com.freewheelin.pulley.views.charts.OneBarChart
+import kotlinx.android.synthetic.main.activity_analysis_tab.*
+import kotlinx.android.synthetic.main.fragment_analysis_study_amount.*
+import org.joda.time.LocalDate
+
+
+class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
+
+    override val tabTitle = "학습량 분석"
+    override var scrollPosition: Int = 0
+    override var from: LocalDate = LocalDate.now().minusDays(6)
+    override var to: LocalDate = LocalDate.now()
+
+    override val analysis: Analysis?
+        get() = (activity as AnalysisTabActivity).analysis
+
+    val numberAnalysis: NumberAnalysis?
+        get() {
+            return analysis?.numberAnalysis
+        }
+
+    val notExistDataText: String
+        get() {
+            return (activity as AnalysisTabActivity).notExistDataText
+        }
+
+    val curation: MyCuration
+        get() = MyCuration(context!!)
+
+    override fun getFragment(): Fragment {
+        return this
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = AnalysisStudyAmountFragment()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_analysis_study_amount, container, false)
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
+        configUI(from, to)
+        (activity as AnalysisTabActivity).scrollView.scrollTo(0, scrollPosition)
+        unitChart.post {
+           val itemCnt = unitChart.adapter?.itemCount
+            if(itemCnt != null)
+                (unitChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
+        }
+        dailyChart.post {
+            val itemCnt = dailyChart.adapter?.itemCount
+            if(itemCnt != null)
+                (dailyChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
+        }
+    }
+
+    private fun initUI() {
+        (0 until 6).forEach { getLegendViewComp(it).first.background.setTint(ringChart.legendColors[it]) }
+        unitChart.isHighlightMaxAndMin = true
+        dailyChart.isHighlightMaxAndMin = true
+    }
+
+    private fun configUI(from: LocalDate, to: LocalDate) {
+        configSummaryUI(from, to)
+        configUnitAmountUI()
+        configDailyAmountUI(from, to)
+    }
+
+    private fun configSummaryUI(from: LocalDate, to: LocalDate) {
+        val period = DateTimeUtils.getPeriod(from, to)
+        periodLabel.text = "지난 ${period}일 학습량"
+        lastPeriodLabel.text = "지난 ${period}일 대비"
+
+        if(numberAnalysis == null) {
+            ringChart.visibility = View.INVISIBLE
+            legendContainerLl.visibility = View.INVISIBLE
+            summaryEmptyGuideTv.visibility = View.VISIBLE
+            subjectGuideTv.text = notExistDataText
+            testCntTv.text = "0개"
+            unitCntTv.text = "0개"
+            mockCntTv.text = "0개"
+            wrongCntTv.text = "0개"
+
+            periodTotalCntTv.text = "0문제"
+            lastPeriodCompCntUtv.change = UpDownTextView.Change.noChange
+            lastPeriodCompCntUtv.text = "0문제"
+            return
+        }
+
+        periodTotalCntTv.text = "${numberAnalysis!!.problemTotalCount}문제"
+        lastPeriodCompCntUtv.change = if(numberAnalysis!!.changeAmount >= 0) UpDownTextView.Change.increase else UpDownTextView.Change.decrease
+        if(numberAnalysis!!.changeAmount < 0)
+            lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount * -1}문제"
+        else
+            lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount}문제"
+
+        val categoryAnalysis = numberAnalysis?.categoryAnalysis
+        if(categoryAnalysis != null) {
+            testCntTv.text = "${categoryAnalysis.testProblemCount}개"
+            unitCntTv.text = "${categoryAnalysis.bookProblemCount}개"
+            mockCntTv.text = "${categoryAnalysis.moProblemCount}개"
+            wrongCntTv.text = "${categoryAnalysis.weakProblemCount}개"
+        } else {
+            testCntTv.text = "0개"
+            unitCntTv.text = "0개"
+            mockCntTv.text = "0개"
+            wrongCntTv.text = "0개"
+        }
+
+        (0 until 6).forEach { hideLegend(it) }
+        val subjectAnalysis = numberAnalysis!!.getArrangedSubjectAnalysis()
+
+        for(i in 0 until subjectAnalysis.size) {
+            showLegend(i)
+            val legend = getLegendViewComp(i)
+            legend.second.text = subjectAnalysis[i].chapterName
+            legend.third.text = "${subjectAnalysis[i].problemTotalNumber}개"
+        }
+
+        val guideAnalysis = subjectAnalysis.getOrNull(0)
+        subjectGuideTv.text = curation.getStudyAmountSummaryQ(subjectAnalysis)
+
+        if(guideAnalysis != null) {
+            legendContainerLl.visibility = View.VISIBLE
+            ringChart.setData(subjectAnalysis.map { it.problemTotalNumber })
+            ringChart.visibility = View.VISIBLE
+            summaryEmptyGuideTv.visibility = View.INVISIBLE
+        } else {
+            legendContainerLl.visibility = View.INVISIBLE
+            ringChart.visibility = View.INVISIBLE
+            summaryEmptyGuideTv.visibility = View.VISIBLE
+        }
+    }
+
+    private fun configUnitAmountUI() {
+        if (numberAnalysis == null) {
+            unitGuideTv.text = notExistDataText
+            unitChart.visibility = View.INVISIBLE
+            bigUnitEmptyGuideTv.visibility = View.VISIBLE
+            return
+        }
+        val chapterBigAnalysis = numberAnalysis!!.chatperBigAnalysis
+
+        unitGuideTv.text = curation.getStudyAmountCompareByUnitQ(chapterBigAnalysis)
+        val data = chapterBigAnalysis.map { OneBarChart.BarData(it.chapterName, it.problemTotalNumber) }
+
+        if(data.isNotEmpty()) {
+            bigUnitEmptyGuideTv.visibility = View.GONE
+            unitChart.visibility = View.VISIBLE
+            unitChart.setData(data)
+        } else {
+            bigUnitEmptyGuideTv.visibility = View.VISIBLE
+            unitChart.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun configDailyAmountUI(from: LocalDate, to: LocalDate) {
+
+        dailyChart.setData(getDailyAnalysis(from, to))
+    }
+
+    private fun getDailyAnalysis(from: LocalDate, to: LocalDate): List<OneBarChart.BarData> {
+        val period = DateTimeUtils.getPeriod(from, to)
+        return (0 until period).map {
+            val date = from.plusDays(it).toDate()
+            val dateKey = DateTimeUtils.yyyyMMdd.format(date).toInt()
+            val data = numberAnalysis?.problemCountByEachDailyAnalysis?.filter { it.chapterCode == dateKey }?.firstOrNull()
+            OneBarChart.BarData(
+                    DateTimeUtils.mMddFormat.format(date), data?.problemTotalNumber ?: 0
+            )
+        }
+    }
+
+    private fun hideLegend(position: Int) {
+        val legend = getLegendViewComp(position)
+        legend.first.visibility = View.INVISIBLE
+        legend.second.visibility = View.INVISIBLE
+        legend.third.visibility = View.INVISIBLE
+    }
+
+    private fun showLegend(position: Int) {
+        val legend = getLegendViewComp(position)
+        legend.first.visibility = View.VISIBLE
+        legend.second.visibility = View.VISIBLE
+        legend.third.visibility = View.VISIBLE
+    }
+
+    private fun getLegendViewComp(position: Int): Triple<View, TextView, TextView> {
+        val legends = listOf(
+                Triple(firstLegend, firstLegendTv, firstLegendCntTv),
+                Triple(secondLegend, secondLegendTv, secondLegendCntTv),
+                Triple(thirdLegend, thirdLegendTv, thirdLegendCntTv),
+                Triple(fourthLegend, fourthLegendTv, fourthLegendCntTv),
+                Triple(fifthLegend, fifthLegendTv, fifthLegendCntTv),
+                Triple(sixthLegend, sixthLegendTv, sixthLegendCntTv)
+
+        )
+        return legends[position]
+    }
+
+    override fun onPeriodSelected(from: LocalDate, to: LocalDate, period: Int) {
+        super.onPeriodSelected(from, to, period)
+        configUI(from, to)
+    }
+}
+

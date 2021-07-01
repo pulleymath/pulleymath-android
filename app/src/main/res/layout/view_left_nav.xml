@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navContainerCl"
+        android:layout_width="@dimen/MyPage_width"
+        android:layout_height="0dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:elevation="20dp"
+        android:clickable="true"
+        android:background="@color/black_4c4c4c"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/studyNameContainerCl"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp80"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                style="@style/TextGrey_818181.Bold"
+                android:id="@+id/studyNameTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:textSize="@dimen/sp14"
+                android:text="플랜 이름 : 지수함수"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+
+        <LinearLayout
+            android:id="@+id/topViewTypeContainerLl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp80"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/studyNameContainerCl"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/TextGrey_818181.Bold"
+                android:id="@+id/viewTypeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="보기 방식"
+                android:textSize="@dimen/sp14"
+                android:layout_marginStart="24dp"/>
+
+            <com.freewheelin.pulley.views.Buttons.DarkRadioButton
+                android:id="@+id/timeOrderBtn"
+                android:layout_width="@dimen/dp120"
+                android:layout_height="36dp"
+                android:layout_marginStart="12dp"
+                android:text="시간별"/>
+
+            <com.freewheelin.pulley.views.Buttons.DarkRadioButton
+                android:id="@+id/unitOrderBtn"
+                android:layout_width="@dimen/dp120"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:text="단원별"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topViewTypeContainerLl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_transparent_stroke_black_333333"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/navRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/foldBtn"
+        android:layout_width="32dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_nav_fold"
+        android:background="@drawable/ic_nav_container"
+        android:elevation="20dp"
+        app:layout_constraintStart_toEndOf="@+id/navContainerCl"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

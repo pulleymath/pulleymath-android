@@ -1,0 +1,376 @@
+package com.freewheelin.pulley.activities.learning.tabFragment
+
+import android.animation.Animator
+import android.animation.LayoutTransition
+import android.animation.ValueAnimator
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.core.manage.BookManager
+import com.freewheelin.pulley.core.manage.BookManager.ARG_BOOK
+import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.dialogs.EmailInputDialog
+import com.freewheelin.pulley.dialogs.EmailInputDialogListener
+import com.freewheelin.pulley.dialogs.UnitPlanAddDialog
+import com.freewheelin.pulley.dialogs.UnitPlanAddDialogListener
+import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.model.contents.BookType
+import com.freewheelin.pulley.model.contents.PieceCategory
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.views.*
+import com.freewheelin.pulley.views.Tooltip.TutorWindow
+import com.ht.balloonwindow.BalloonWindow
+import com.ht.balloonwindow.BalloonWindowListener
+import com.ht.balloonwindow.toPx
+import kotlinx.android.synthetic.main.fragment_unit_study.*
+import kotlinx.android.synthetic.main.item_piece_learned_in_four.*
+import kotlinx.android.synthetic.main.item_piece_learned_in_four.view.*
+import kotlinx.android.synthetic.main.view_studyplan_learned.view.*
+import java.lang.Math.PI
+import java.util.*
+import kotlin.math.sin
+
+class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPlanTemplateInteface, UnitPlanAddDialogListener, EmailInputDialogListener {
+
+    override var screenName = "유형학습"
+    var books: ArrayList<Book>? = null
+    var filteredBooks: List<Book> = listOf()
+
+    val filterList = listOf("플랜 전체", "학습중인 플랜", "완료한 플랜")
+
+    var isStartWithInitTest = false
+    var isNeedLeading = false
+
+    val cntPerPage: Int
+        get() {
+            val config = requireActivity().resources.configuration
+            return if (config.screenWidthDp >= 1280)
+                4
+            else
+                3
+        }
+
+    lateinit var clearReceiver: BroadcastReceiver
+    lateinit var scoreReceiver: BroadcastReceiver
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = UnitStudyFragment()
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        clearReceiver = object: BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                this@UnitStudyFragment.initUI()
+            }
+        }
+
+        scoreReceiver = object: BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val book = intent.getSerializableExtra(ARG_BOOK) as Book
+
+                books?.filter { it.id == book.id }?.forEach {
+                    it.markingState = book.markingState
+                    it.markedNumber = book.markedNumber
+                    it.updateDateTime = Date()
+                }
+                filteredBooks.filter { it.id == book.id }.forEach {
+                    it.markingState = book.markingState
+                    it.markedNumber = book.markedNumber
+                    it.updateDateTime = Date()
+                }
+
+                books?.sortByDescending { it.updateDateTime }
+                filteredBooks?.sortedByDescending { it.updateDateTime }
+                onItemClicked(viewTypeSpinner, viewTypeSpinner.position ?: 0)
+
+            }
+        }
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver, IntentFilter(BookManager.EVENT_BOOK_CLEAR))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(scoreReceiver, IntentFilter(BookManager.EVENT_BOOK_SCORING))
+
+        if(isStartWithInitTest) {
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "페이지뷰", "유형학습")
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if(isStartWithInitTest) {
+            initUI()
+            wasInitUI = true
+        }
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(scoreReceiver)
+        super.onDestroy()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_unit_study, container, false)
+    }
+
+    override fun initUI() {
+        guideTv.text = "학습 플랜이 없습니다.\n우측 상단의 <플랜 추가하기>로 플랜을 추가해보세요."
+        addPieceBtn.setOnClickListener {
+            onAddBookBtnClicked()
+        }
+        pieceVp.adapter = Adapter()
+        pieceVp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {}
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                setPageText(position + 1)
+            }
+        })
+        viewTypeSpinner.items = filterList
+        viewTypeSpinner.listener = this
+        configureUI()
+
+        BookManager.getMyBookList(requireContext(), user!!) {
+//            this.books = ArrayList(it)
+//            this.filteredBooks = it
+//            configureUI()
+//            pieceVp.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun configureUI() {
+        if(books?.isEmpty() == true) {
+            guideView.visibility = View.VISIBLE
+        } else {
+            guideView.visibility = View.GONE
+            setPageText(1)
+        }
+    }
+
+    override fun onItemClicked(view: ArduousSpinner, position: Int) {
+        filteredBooks = when(position) {
+            0 -> this.books ?: listOf()
+            1 -> this.books?.filter { !it.isCompleted() } ?: listOf()
+            2 -> this.books?.filter { it.isCompleted() } ?: listOf()
+            else -> {
+                LogUtils.assert(false, "불가능한 선택 in ${UnitStudyFragment}")
+                listOf()
+            }
+        }
+
+        pieceVp.adapter?.notifyDataSetChanged()
+        pieceVp.setCurrentItem(0, false)
+        setPageText(1)
+    }
+
+    override fun onBookAdded(book: Book) {
+        books?.add(0, book)
+        configureUI()
+        onItemClicked(viewTypeSpinner, viewTypeSpinner.position ?: 0)
+    }
+
+    fun onAddBookBtnClicked() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"유형학습","새로풀기")
+        val dialog = UnitPlanAddDialog(requireContext(), user!!)
+        dialog.listener = this
+        dialog.show()
+    }
+
+    private fun setPageText(page: Int) {
+        val remainder = filteredBooks.size % cntPerPage
+        pageTv.text = "${page} / ${(filteredBooks.size / cntPerPage) + if (remainder > 0) 1 else 0}"
+    }
+
+    override fun onHidden(view: StudyPlanTemplateView, position: Int) {}
+
+
+    override fun onSolveBtnClicked(book: Book) {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "플랜풀기")
+        val intent = SolveActivity.getIntent(requireContext(), book)
+        startActivity(intent)
+    }
+
+    override fun onMailBtnClicked(book: Book) {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일")
+        val dialog = EmailInputDialog(requireContext(), listOf(book), user!!, this)
+        dialog.show()
+    }
+
+    override fun onReviewBtnClicked(book: Book) {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기")
+        val intent = SolveActivity.getReviewIntent(requireContext(), book)
+        startActivity(intent)
+    }
+
+    override fun onSendEmailBtnClicked() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일 보내기")
+    }
+    override fun onSentEmail() {
+        DaebakToast.show(requireContext(), "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
+    }
+
+    inner class Adapter : PagerAdapter() {
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            val layout = LayoutInflater.from(context).inflate(R.layout.item_piece_learned_in_four, container, false)
+            layout.tag = "page"
+            container.addView(layout)
+            val books = filteredBooks
+
+            layout.template1.set(books[(position * cntPerPage)])
+            layout.template1.listener = this@UnitStudyFragment
+            layout.template1.position = (position * cntPerPage)
+            (layout as ViewGroup).layoutTransition = null
+
+            if (position == 0 && isNeedLeading == false) {
+                Tutor.showToolTipIfNeed(layout.template1.mailBtn, Tutor.TooltipType.mailInUnitStudy)
+            }
+
+            if(isNeedLeading) {
+                step7(template1)
+                isNeedLeading = false
+            }
+
+            val secondPlan = books.getOrNull((position * cntPerPage) + 1)
+            val thirdPlan = books.getOrNull((position * cntPerPage) + 2)
+            if (secondPlan != null) {
+                layout.template2.set(secondPlan)
+                layout.template2.visibility = View.VISIBLE
+                layout.template2.listener = this@UnitStudyFragment
+                layout.template2.position = (position * cntPerPage) + 1
+
+            } else {
+                layout.template2.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+            }
+
+            if (thirdPlan != null) {
+                layout.template3.set(thirdPlan)
+                layout.template3.visibility = View.VISIBLE
+                layout.template3.listener = this@UnitStudyFragment
+                layout.template3.position = (position * cntPerPage) + 2
+            } else {
+                layout.template3.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+            }
+
+
+            if(cntPerPage == 4) {
+                val fourthPlan = books.getOrNull((position * cntPerPage) + 3)
+
+                if (fourthPlan != null) {
+                    layout.template4.set(fourthPlan)
+                    layout.template4.visibility = View.VISIBLE
+                    layout.template4.listener = this@UnitStudyFragment
+                    layout.template4.position = (position * cntPerPage) + 3
+                } else {
+                    layout.template4.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+                }
+
+            }
+
+            layout.layoutTransition = LayoutTransition()
+            return layout
+        }
+
+        override fun getCount(): Int {
+            val remainder = filteredBooks.size % cntPerPage
+            return (filteredBooks.size / cntPerPage) + if (remainder > 0) 1 else 0
+        }
+
+        override fun isViewFromObject(view: View, obj: Any): Boolean {
+            return view == obj
+        }
+
+        override fun destroyItem(container: ViewGroup, position: Int, view: Any) {
+            container.removeView((view as View))
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            return POSITION_NONE
+        }
+
+    }
+
+    fun step7(targetView: View) {
+        val window = TutorWindow(requireContext(), targetView, BalloonWindow.Position.right)
+        window.balloonColor = ContextCompat.getColor(requireContext(), R.color.yellow_f79b00)
+        window.setPadding(
+                resources.getDimensionPixelSize(R.dimen.dp32),
+                resources.getDimensionPixelSize(R.dimen.dp24),
+                resources.getDimensionPixelSize(R.dimen.dp32),
+                resources.getDimensionPixelSize(R.dimen.dp24)
+        )
+
+        val textView = TextView(requireContext())
+        textView.text = "${user!!.fullName}님께\n" +
+                "딱 맞는 플랜을 추가했어요 :)"
+        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_ffffff))
+        textView.typeface = Theme.extraBold(requireContext())
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
+        textView.setLineSpacing(8f.toPx(),1f)
+
+        val anim = ValueAnimator.ofFloat(0f, PI.toFloat())
+        anim.duration = 1200
+        anim.repeatCount = 3
+        anim.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    window.dismiss()
+                }, 1000)
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+        })
+        window.setBalloonListener(object: BalloonWindowListener {
+            override fun didAppear(window: BalloonWindow) {
+                anim.addUpdateListener {
+                    val value = it.animatedValue as Float
+                    val sign = sin(value)
+                    val position = window.position
+
+                    val x = if (position == BalloonWindow.Position.right || position == BalloonWindow.Position.left) window.x + (20 * sign).toInt() else window.x
+                    val y = if (position == BalloonWindow.Position.above || position == BalloonWindow.Position.below) window.y + (20 * sign).toInt() else window.y
+                    window.update(x, y, window.width, window.height)
+                }
+                anim.start()
+            }
+
+            override fun didDisappear(window: BalloonWindow) {
+            }
+        })
+        window.show(textView)
+    }
+}
+
+
+
+

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/psv_thumbnailHolder_width"
+    android:layout_height="@dimen/psv_thumbnailHolder_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/bridgeView"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="@color/purple_6D6DFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/selectLl"
+        android:layout_width="@dimen/psv_thumbnailHolder_height"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_purple_6d6dff_round_2"
+        app:layout_constraintStart_toStartOf="parent">
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/thumbnailIv"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_white_ffffff_round_2"
+        android:scaleType="fitStart"
+        android:layout_margin="3dp"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/coverLl"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="match_parent"
+        android:background="@color/black50_000000"
+        android:layout_margin="3dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent">
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/gradientCoverView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/gradient_shape_transparent_white"
+        app:layout_constraintEnd_toEndOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toTopOf="@+id/thumbnailIv"
+        app:layout_constraintStart_toStartOf="@+id/thumbnailIv"
+        app:layout_constraintBottom_toBottomOf="@+id/thumbnailIv"/>
+
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/numTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginBottom="4dp"
+        android:textSize="@dimen/sp16"
+        android:padding="0dp"
+        android:text="26번"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/levelTv"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/levelTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp16"
+        android:textSize="@dimen/sp14"
+        android:padding="0dp"
+        android:text="난이도 중"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/resultIv"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:padding="4dp"
+        android:layout_marginStart="@dimen/dp12"
+        android:layout_marginTop="@dimen/dp12"
+        android:src="@drawable/ic_result_correct"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clearContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#c0ffffff"
+        app:layout_constraintStart_toStartOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toTopOf="@+id/thumbnailIv"
+        app:layout_constraintBottom_toBottomOf="@+id/thumbnailIv"
+        app:layout_constraintEnd_toEndOf="@+id/thumbnailIv">
+
+        <ImageView
+            android:id="@+id/clearIv"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:src="@drawable/ic_check_green_circle_w48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/similarTagIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_triangle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/tagIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp12"
+        android:src="@drawable/ic_tag_yellow_w16_h23"
+        app:layout_constraintTop_toTopOf="@+id/selectLl"
+        app:layout_constraintEnd_toEndOf="@+id/selectLl"/>
+
+
+    <ImageView
+        android:id="@+id/statusIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_siren_white"
+        app:layout_constraintStart_toStartOf="@+id/selectLl"
+        app:layout_constraintEnd_toEndOf="@+id/selectLl"
+        app:layout_constraintBottom_toBottomOf="@+id/selectLl"
+        app:layout_constraintTop_toTopOf="@+id/selectLl">
+    </ImageView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

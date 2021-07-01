@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ColorTagView">
+        <attr name="themeColor" format="reference|color" />
+        <attr name="fullMode" format="reference|boolean" />
+        <attr name="textThemeColor" format="reference|color" />
+        <attr name="textThemeColorEnabled" format="reference|boolean" />
+        <attr name="enableGradient" format="reference|boolean" />
+        <attr name="gradientStartColor" format="reference|color" />
+        <attr name="gradientEndColor" format="reference|color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="OMRNumberButton">
+        <attr name="number" format="reference|integer" />
+        <attr name="isChecked" format="reference|boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="OMRView">
+        <attr name="singleCount" format="reference|integer" />
+        <attr name="shortCount" format="reference|integer" />
+    </declare-styleable>
+
+    <declare-styleable name="FreeDrawView">
+        <attr name="paintColor" format="color" />
+        <attr name="paintWidth" format="dimension" />
+        <attr name="paintAlpha" format="integer" />
+        <attr name="resizeBehaviour" format="enum">
+            <enum name="clear" value="0" />
+            <enum name="fitXY" value="1" />
+            <enum name="crop" value="2" />
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="TimerView">
+        <attr name="orientation" format="enum">
+            <enum name="vertical" value="0" />
+            <enum name="horizontal" value="1" />
+            <enum name="solve" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ArduousSpinner">
+        <attr name="defaultStr" format="string" />
+        <attr name="Arduous_itemHeight" format="dimension" />
+        <attr name="Arduous_listMaxHeight" format="dimension"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="NumberingButton">
+        <attr name="NumberingTheme" format="enum">
+            <enum name="white" value="0" />
+            <enum name="dark" value="1" />
+            <enum name="omr" value="2" />
+            <enum name="grey" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SnackBarView">
+        <attr name="contentText" format="string" />
+        <attr name="actionText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AnswerSelectionView">
+        <attr name="buttonMargin" format="dimension" />
+        <attr name="buttonWidth" format="dimension" />
+        <attr name="buttonHeight" format="dimension" />
+        <attr name="textSize" format="dimension" />
+
+        <attr name="answerType" format="enum">
+            <enum name="single" value="0" />
+            <enum name="multi" value="1" />
+        </attr>
+        <attr name="selectionTheme" format="enum">
+            <enum name="white" value="0" />
+            <enum name="dark" value="1" />
+            <enum name="omr" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="UpDownTextView">
+        <attr name="udTv_textSize" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="DaebakTabRadio">
+        <attr name="tabWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="SortableTextView">
+        <attr name="label" format="string"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="Bar">
+        <attr name="progressColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+
+    </declare-styleable>
+
+    <declare-styleable name="PenBar" parent="Bar">
+        <attr name="value" format="float" />
+        <attr name="progressColorCase">
+            <enum name="grey" value="0" />
+            <enum name="red" value="1" />
+            <enum name="yellow" value="2" />
+            <enum name="green" value="3" />
+            <enum name="blue" value="4" />
+        </attr>
+        <attr name="progressColor" />
+        <attr name="valueLabelColor" format="color"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="TriplePenChart">
+        <attr name="isGoneLast" format="boolean" />
+        <attr name="focusIndex" format="integer" />
+    </declare-styleable>
+
+
+    <declare-styleable name="LearningProgressView" parent="Bar">
+        <attr name="progressColor" />
+        <attr name="completeColor" format="color" />
+        <attr name="backgroundColor" />
+    </declare-styleable>
+
+
+    <declare-styleable name="Theme">
+        <attr name="screenTheme" format="enum">
+            <enum name="bright" value="0" />
+            <enum name="dark" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PrimaryButton" parent="Theme">
+        <attr name="buttonTheme" format="enum">
+            <enum name="blue" value="0" />
+            <enum name="orange" value="1" />
+            <enum name="black" value="2" />
+            <enum name="grey" value="4" />
+        </attr>
+        <attr name="screenTheme" />
+        <attr name="ButtonTextSize" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="SecondaryButton" parent="PrimaryButton">
+        <attr name="buttonTheme" />
+        <attr name="screenTheme" />
+        <attr name="ButtonTextSize"/>
+    </declare-styleable>
+
+    <declare-styleable name="DaebakSwitch">
+        <attr name="DaebakSwitch_Label" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="DaebakInputField">
+        <attr name="DaebakInputField_Label" format="string" />
+        <attr name="DaebakInputField_Hint" format="string" />
+        <attr name="DaebakInputField_isVisibleLabel" format="boolean" />
+        <attr name="DaebakInputField_maxLength" format="integer" />
+        <attr name="DaebakInputField_editType" format="enum">
+            <enum name="editText" value="0"/>
+            <enum name="spinner" value = "1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CodeConfirmView">
+        <attr name="title" format="string" />
+        <attr name="hint" format="string" />
+        <attr name="request_button" format="string" />
+        <attr name="confirm_button" format="string" />
+        <attr name="max_length" format="integer" />
+
+        <attr name="input_type" format="enum">
+            <enum name="text" value="0" />
+            <enum name="email" value="1" />
+            <enum name="phone" value="2" />
+            <enum name="number" value="3" />
+            <enum name="password" value="4" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="DaebakPasswordField">
+        <attr name="DaebakPasswordField_Label" format="string" />
+        <attr name="DaebakPasswordField_Hint" format="string" />
+        <attr name="DaebakPasswordField_maxLength" format="integer" />
+        <attr name="DaebakPasswordField_isVisibleLabel" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="PulleyTextField">
+        <attr name="PulleyTextField_placeholderSize" format="float"/>
+    </declare-styleable>
+    
+    <declare-styleable name="DaebakInputSelection">
+        <attr name="DaebakInputSelection_Label" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="DaebakInputRadio">
+        <attr name="DaebakInputRadio_Label" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AnalysisCompareTextView">
+        <attr name="AnalysisCompareTextView_TopLabel" format="string"/>
+        <attr name="AnalysisCompareTextView_BottomLabel" format="string"/>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/guideTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0ㄴㄱㄴㄷㅎㄱㄴㅎㄱㄷㅎㄴㄱㄷㅎㄱㄷㅎㄱㄷㅎㄴㄷㄱㅎㄷㄴㅎㄲㄷㅎㄷ"
+        android:textColor="@color/white_ffffff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:lineSpacingExtra="8sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/cancelBtn"
+        android:layout_width="112dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_transparent_stroke_white_ffffff_round"
+        android:fontFamily="@font/font_nanum_square_extra_bold"
+        android:textColor="@color/color_white_ffffff"
+        android:textSize="16sp"
+        android:text="취소"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+        app:layout_constraintTop_toBottomOf="@+id/guideTv" />
+
+    <Button
+        android:id="@+id/deleteBtn"
+        android:layout_width="112dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_white_ffffff_round"
+        android:fontFamily="@font/font_nanum_square_extra_bold"
+        android:textColor="@color/purple_6D6DFF"
+        android:textSize="16sp"
+        android:text="삭제하기"
+        app:layout_constraintBottom_toBottomOf="@+id/cancelBtn"
+        app:layout_constraintStart_toEndOf="@+id/cancelBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cancelBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

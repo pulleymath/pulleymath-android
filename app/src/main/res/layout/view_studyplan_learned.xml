@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blackCl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/dp32"
+        android:background="@color/black_333333"
+        app:layout_constraintHeight_percent="@dimen/learning_unitStudy_black_area_percent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/bookNameTv"
+            style="@style/TextWhite_ffffff.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="고3"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TextWhite_ffffff.Bold"
+            android:id="@+id/subjectTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EBS 수완"
+            android:textSize="@dimen/sp16"
+            android:layout_marginTop="@dimen/dp16"
+            android:maxWidth="170dp"
+            app:layout_constraintStart_toStartOf="@+id/bookNameTv"
+            app:layout_constraintTop_toBottomOf="@+id/bookNameTv"/>
+
+        <TextView
+            style="@style/TextRed_fe7b67.ExtraBold"
+            android:id="@+id/newTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:text="NEW"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/subjectTv"
+            app:layout_constraintBottom_toBottomOf="@+id/subjectTv"
+            app:layout_constraintStart_toEndOf="@+id/subjectTv"/>
+
+
+
+        <TextView
+            style="@style/TextWhite_ffffff.Bold"
+            android:id="@+id/chapterTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="미분과 적분"
+            android:textSize="@dimen/sp16"
+            android:maxWidth="170dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toStartOf="@+id/bookNameTv"
+            app:layout_constraintTop_toBottomOf="@+id/subjectTv"/>
+
+
+        <TextView
+            android:id="@+id/dateTv"
+            style="@style/TextGrey_818181.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="최근 학습일 01월 08일"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bookNameTv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/descTv"
+        style="@style/TextBlack_4c4c4c"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:lineSpacingExtra="@dimen/sp8"
+        android:maxLines="2"
+        android:text="문제집설명"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blackCl" />
+
+    <TextView
+        android:id="@+id/progressTitleTv"
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginBottom="8dp"
+        android:text="학습량"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/problemCntTv"
+        style="@style/TextGrey_c0c0c0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginBottom="8dp"
+        android:text="140/14"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.freewheelin.pulley.views.LearningProgressView
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="6dp"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp32"
+        app:backgroundColor="@color/grey_f2f2f2"
+        app:cardCornerRadius="3dp"
+        app:completeColor="@color/purple_6D6DFF"
+        app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:progressColor="@color/grey_c0c0c0">
+
+    </com.freewheelin.pulley.views.LearningProgressView>
+
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        android:id="@+id/solveBtn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp48"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp32"
+        android:text="풀기"
+        app:buttonTheme="blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        android:id="@+id/reviewBtn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp48"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp32"
+        android:text="문제 리뷰"
+        app:buttonTheme="blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/completeIv"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/ic_check_green_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/mailBtn"
+        android:layout_width="56dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_grey_f2f2f2_round"
+        android:src="@drawable/ic_mail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

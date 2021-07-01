@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white_fafafa"
+    android:clickable="true"
+    tools:context=".activities.mypage.MySignUpInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ffffff">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp32"
+            android:paddingStart="@dimen/dp32"
+            android:paddingEnd="@dimen/dp32"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            android:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            android:text="개인 정보"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="풀리 구독 정보"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:background="@color/white_ffffff"
+                android:padding="@dimen/dp24">
+
+                <TextView
+                    android:id="@+id/serviceNameLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="구독 서비스명"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/availableDurationLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="구독 기간"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/serviceNameLabel" />
+
+
+                <TextView
+                    android:id="@+id/serviceTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="대박이 고3용 (프로모션)"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/serviceNameLabel"
+                    app:layout_constraintStart_toEndOf="@+id/serviceNameLabel"
+                    app:layout_constraintTop_toTopOf="@+id/serviceNameLabel" />
+
+                <TextView
+                    android:id="@+id/availableDurationTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="2019.11.01 - 2020.11.15 (152일 남음)"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/availableDurationLabel"
+                    app:layout_constraintStart_toEndOf="@+id/serviceNameLabel"
+                    app:layout_constraintTop_toTopOf="@+id/availableDurationLabel" />
+
+                <TextView
+                    android:id="@+id/noSeviceLabel"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지금 구독 중인 서비스가 없네요!\n노력이 결과로 이어지는 수학 공부, 해 보실래요? :)"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/serviceNameLabel"
+                    app:lineHeight="@dimen/sp24" />
+
+                <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                    android:id="@+id/membershipBtn"
+                    android:layout_width="160dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="@string/text_study_start_with_pulley"
+                    app:buttonTheme="blue"
+                    app:layout_constraintStart_toStartOf="@+id/noSeviceLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/noSeviceLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:text="내 정보"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_ffffff"
+                android:paddingStart="@dimen/dp24"
+                android:paddingBottom="@dimen/dp32">
+
+                <TextView
+                    android:id="@+id/nameLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:text="@string/text_name"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/emailLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp40"
+                    android:text="@string/text_email"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+
+                <TextView
+                    android:id="@+id/phoneLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp40"
+                    android:text="@string/text_phone"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+
+                <TextView
+                    android:id="@+id/resetPasswordLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp40"
+                    android:text="@string/text_modify_password"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
+
+                <TextView
+                    android:id="@+id/nameTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:text="대박이"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/nameLabel" />
+
+                <TextView
+                    android:id="@+id/emailTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:ellipsize="end"
+                    android:maxLength="30"
+                    android:text="daebak44435554545478@gmail.com"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/emailLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/emailLabel" />
+
+                <TextView
+                    android:id="@+id/phoneTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:text="010-90**-4355"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/nameModifyBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/nameTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/nameTv" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/emailModifyBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/emailTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/emailTv" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/phoneModifyBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/phoneTv" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/passwordModifyBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/resetPasswordLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />
+
+                <ImageView
+                    android:id="@+id/ivConfirmEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_check_green_circle_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/emailTv"
+                    app:layout_constraintStart_toEndOf="@+id/emailTv"
+                    app:layout_constraintTop_toTopOf="@+id/emailTv" />
+
+                <ImageView
+                    android:id="@+id/ivConfirmPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_check_green_circle_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
+                    app:layout_constraintStart_toEndOf="@+id/phoneTv"
+                    app:layout_constraintTop_toTopOf="@+id/phoneTv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:text="@string/text_manage_devices"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/deviceBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/white_ffffff"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingStart="@dimen/dp24">
+
+                <TextView
+                    android:id="@+id/deviceText"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/sp8"
+                    android:text="@string/text_manage_devices"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/clampIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:src="@drawable/ic_clamp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/deviceCount"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="등록 기기 : 1 대"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/clampIv"
+                    app:layout_constraintEnd_toStartOf="@+id/clampIv"
+                    app:layout_constraintTop_toTopOf="@+id/clampIv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    
+
+</LinearLayout>

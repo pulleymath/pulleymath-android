@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white_fafafa"
+    android:clickable="true"
+    tools:context=".activities.mypage.MySignUpInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ffffff">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp32"
+            android:paddingStart="@dimen/dp32"
+            android:paddingEnd="@dimen/dp32"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            android:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="학습 정보"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:text="학업 정보"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_ffffff"
+                android:padding="@dimen/dp24">
+
+                <TextView
+                    android:id="@+id/schoolLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="학교"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/gradeLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="학년"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/schoolLabel" />
+
+                <TextView
+                    android:id="@+id/majorLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="계열"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gradeLabel" />
+
+                <TextView
+                    android:id="@+id/ratingLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="등급"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/majorLabel" />
+
+                <TextView
+                    android:id="@+id/schoolTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp56"
+                    android:text="-"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/nameLabel" />
+
+                <TextView
+                    android:id="@+id/gradeTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp56"
+                    android:text="고등학교 3학년"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/gradeLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gradeLabel" />
+
+                <TextView
+                    android:id="@+id/majorTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp56"
+                    android:text="이과"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/majorLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/majorLabel" />
+
+                <TextView
+                    android:id="@+id/ratingTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp56"
+                    android:text="1등급"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/ratingLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ratingLabel" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/modifyBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingLabel" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp24"
+                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:text="추천 과목"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_ffffff"
+                android:paddingStart="@dimen/dp24">
+
+                <TextView
+                    android:id="@+id/mathTopLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp36"
+                    android:text="공통 과목"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/mathBottomLabel"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp36"
+                    android:layout_marginBottom="@dimen/dp36"
+                    android:text="선택 과목"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mathTopLabel" />
+
+
+                <TextView
+                    android:id="@+id/commonSubjectTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:singleLine="false"
+                    android:text="-"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/mathTopLabel"
+                    app:layout_constraintEnd_toStartOf="@+id/modifyCommonBtn"
+                    app:layout_constraintStart_toEndOf="@+id/mathTopLabel"
+                    app:layout_constraintTop_toTopOf="@+id/mathTopLabel" />
+
+                <TextView
+                    android:id="@+id/optionalSubjectTv"
+                    style="@style/TextBlack_4c4c4c"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:singleLine="false"
+                    android:text="-"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/mathBottomLabel"
+                    app:layout_constraintEnd_toStartOf="@+id/modifySelectBtn"
+                    app:layout_constraintStart_toStartOf="@+id/commonSubjectTv"
+                    app:layout_constraintTop_toTopOf="@+id/mathBottomLabel" />
+
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/modifyCommonBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/mathTopLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/mathTopLabel" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/modifySelectBtn"
+                    android:layout_width="96dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:buttonTheme="grey"
+                    app:layout_constraintBottom_toBottomOf="@+id/mathBottomLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/mathBottomLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            <TextView-->
+<!--                style="@style/TextGrey_c0c0c0"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/dp24"-->
+<!--                android:layout_marginTop="@dimen/dp24"-->
+<!--                android:layout_marginBottom="@dimen/dp12"-->
+<!--                android:text="학습 내역 삭제"-->
+<!--                android:textSize="@dimen/sp16" />-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/white_ffffff"-->
+<!--                android:padding="@dimen/dp24">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/label"-->
+<!--                    style="@style/TextGrey_c0c0c0"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="학습내역을 전체 삭제하시겠습니까?"-->
+<!--                    android:textSize="@dimen/sp16"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                <com.freewheelin.pulley.views.Buttons.SecondaryButton-->
+<!--                    android:id="@+id/deleteAllBtn"-->
+<!--                    android:layout_width="96dp"-->
+<!--                    android:layout_height="36dp"-->
+<!--                    android:text="@string/text_to_delete"-->
+<!--                    app:buttonTheme="grey"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/label"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/label" />-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

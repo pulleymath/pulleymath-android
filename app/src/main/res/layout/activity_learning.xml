@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.learning.LearningTabActivity"
+    tools:openDrawer="start">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/AppTheme.TabToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp56"
+            android:paddingEnd="0dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:tabPaddingStart="@dimen/dp24"
+                app:tabPaddingEnd="@dimen/dp24"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabSelectedTextColor="@color/white_ffffff"
+                app:tabTextAppearance="@style/AppTheme.TabBar.TabText"
+                app:tabTextColor="@color/grey_818181" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="40dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="32dp">
+
+                <ImageButton
+                    android:id="@+id/mypageBtn"
+                    style="@style/TextBlack_333333.Bold"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_main_setting"
+                    android:background="@null"
+                    app:autoSizeStepGranularity="2sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <View
+                    android:id="@+id/updateSignView"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@drawable/bg_red_fe7b67_circle"
+                    app:layout_constraintTop_toTopOf="@+id/mypageBtn"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/spyBtn"
+                style="@style/TextBlack_333333.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:background="@drawable/bg_grey_9f9f9f_round"
+                android:maxLines="1"
+                android:text="SPY"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                tools:layout_editor_absoluteX="563dp"
+                tools:layout_editor_absoluteY="6dp" />
+
+            <Button
+                android:id="@+id/loadStudentBtn"
+                style="@style/TextBlack_333333.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/dp16"
+                android:background="@drawable/bg_grey_9f9f9f_round"
+                android:maxLines="1"
+                android:paddingStart="@dimen/dp16"
+                android:paddingEnd="@dimen/dp16"
+                android:text="선생님"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                tools:layout_editor_absoluteX="522dp"
+                tools:layout_editor_absoluteY="6dp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <com.freewheelin.pulley.views.TabViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+<!--        <androidx.viewpager2.widget.ViewPager2-->
+<!--            android:id="@+id/viewPager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="@dimen/MyPage_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fitsSystemWindows="true">
+
+    </FrameLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
+    
+

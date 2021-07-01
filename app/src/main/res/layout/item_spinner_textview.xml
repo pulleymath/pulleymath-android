@@ -1,0 +1,10 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TextBlack_4c4c4c.Bold"
+    android:id="@+id/spinnerTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/dp16"
+    android:gravity="center"
+    android:minHeight="@dimen/dp48"
+    android:paddingStart="@dimen/dp16"
+    android:paddingEnd="@dimen/dp32"/>

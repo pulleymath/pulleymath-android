@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="960dp"
+    android:layout_height="600dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/bg_white_fafafa_round">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topContainerCl"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_white_ffffff_round_top_only"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="문의 글 작성하기"
+            android:layout_marginStart="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/xBtn"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@null"
+            android:src="@drawable/ic_x_grey_19dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/topContainerCl"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.freewheelin.pulley.views.ArduousSpinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="160dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                app:defaultStr="문의 유형 선택"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/categoryErrorLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="@+id/categorySpinner"
+                app:layout_constraintBottom_toBottomOf="@+id/categorySpinner"
+                app:layout_constraintStart_toEndOf="@+id/categorySpinner">
+
+                <ImageView
+                    android:id="@+id/exclamation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_exclamation_red"
+                    app:layout_constraintTop_toTopOf="@+id/categorySpinner"
+                    app:layout_constraintBottom_toBottomOf="@+id/categorySpinner"
+                    app:layout_constraintStart_toEndOf="@+id/categorySpinner"/>
+
+                <TextView
+                    style="@style/TextRed_fe7b67.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp"
+                    android:text="문의 유형을 선택해주세요."/>
+            </LinearLayout>
+
+            <com.freewheelin.pulley.views.EditText.DaebakInputField
+                android:id="@+id/titleDif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                app:DaebakInputField_Label="제목"
+                app:layout_constraintTop_toBottomOf="@+id/categorySpinner"/>
+
+            <TextView
+                style="@style/TextBlack_4c4c4c"
+                android:id="@+id/contentsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="내용 입력"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleDif"/>
+
+
+            <EditText
+                style="@style/TextBlack_4c4c4c"
+                android:id="@+id/contentsEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="196dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:padding="16dp"
+                android:gravity="top"
+                android:textSize="16sp"
+                android:textColorHint="@color/grey_c0c0c0"
+                android:hint="문의 내역을 입력해주세요.(10자 이상)\n최대한 빠르게 답변드릴게요 :)"
+                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                app:layout_constraintTop_toBottomOf="@+id/contentsLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/contentsErrorLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/contentsEt"
+                app:layout_constraintStart_toStartOf="@+id/contentsEt">
+
+                <ImageView
+                    android:id="@+id/exclamation2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_exclamation_red"
+                    app:layout_constraintTop_toTopOf="@+id/categorySpinner"
+                    app:layout_constraintBottom_toBottomOf="@+id/categorySpinner"
+                    app:layout_constraintStart_toEndOf="@+id/categorySpinner"/>
+
+                <TextView
+                    style="@style/TextRed_fe7b67.Bold"
+                    android:id="@+id/contentsErrorTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp"
+                    android:text="내용을 입력해주세요"/>
+            </LinearLayout>
+
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                android:id="@+id/completeBtn"
+                android:layout_width="200dp"
+                android:layout_height="56dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="25dp"
+                android:text="작성 완료"
+                app:ButtonTextSize="18sp"
+                app:buttonTheme="blue"
+                app:layout_constraintTop_toBottomOf="@+id/contentsErrorLl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

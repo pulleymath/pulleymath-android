@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/dragIv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_dot_6"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/resultIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_incorrect_new"
+        android:layout_marginStart="@dimen/dp16"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/dragIv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.freewheelin.pulley.views.AnswerSelectionView
+        android:id="@+id/selectionAnswerView"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        app:buttonHeight="28dp"
+        app:buttonMargin="@dimen/dp28"
+        app:buttonWidth="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/resultIv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:selectionTheme="dark"/>
+
+    <LinearLayout
+        android:id="@+id/focusContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/shortAnswerView"
+        android:layout_width="160dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        android:gravity="center_vertical"
+        android:hint="정답 입력"
+        android:maxLength="9"
+        android:paddingStart="@dimen/dp16"
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"
+        android:textSize="@dimen/sp14"
+        android:digits="1234567890-+"
+        app:layout_constraintBottom_toBottomOf="@+id/selectionAnswerView"
+        app:layout_constraintStart_toStartOf="@+id/selectionAnswerView"
+        app:layout_constraintTop_toTopOf="@+id/selectionAnswerView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/markingBtn"
+        android:layout_width="@dimen/primaryBtn_width_132dp"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginStart="@dimen/dp24"
+        android:background="@drawable/bg_purple_6d6dff_round_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/selectionAnswerView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/markingLabel"
+            style="@style/TextWhite_ffffff.ExtraBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="채점하기"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/answeredCntTv"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/answeredCntTv"
+            style="@style/TextPurple_6d6dff.ExtraBold"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:background="@drawable/bg_white_ffffff_circle"
+            android:gravity="center"
+            android:textSize="@dimen/sp12"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/markingLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/markingLabel"
+            app:layout_constraintTop_toTopOf="@+id/markingLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/submitBtn"
+        style="@style/TextWhite_ffffff.ExtraBold"
+        android:layout_width="@dimen/primaryBtn_width_132dp"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginStart="@dimen/dp24"
+        android:background="@drawable/bg_purple_6d6dff_round_40"
+        android:text="제출하기"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/selectionAnswerView"
+        app:layout_constraintTop_toTopOf="parent" />
+</merge>
