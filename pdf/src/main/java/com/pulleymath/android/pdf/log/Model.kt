@@ -10,6 +10,6 @@ abstract class BaseSingleResponseNode<T> : Serializable {
     var message: Any? = null
 }
 
-data class PdfReadLogInsertResult(val id:Int, val pdf_id:Int, val cm_book_id: Int, val student_id: Int)
+data class PdfReadLogInsertResult(val id:Int, val pdf_id:Int, val cm_book_id: Int, val student_id: String)
 class PdfReadLogInsertResponse : BaseSingleResponseNode<PdfReadLogInsertResult>()
 class PdfReadLogUpdateResponse : BaseSingleResponseNode<Boolean>()

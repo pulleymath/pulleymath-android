@@ -1,5 +1,6 @@
 package com.pulleymath.android.pdf.log
 
+import android.util.Log
 import com.pulleymath.android.pdf.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -49,11 +50,16 @@ object Network {
         return if(body != null) {
             pdfLogService.postLog(body).enqueue(object: Callback<PdfReadLogInsertResponse> {
                 override fun onResponse(call: Call<PdfReadLogInsertResponse>, response: Response<PdfReadLogInsertResponse>) {
+
+                    Log.d(javaClass.simpleName, "read after=${response.body()}")
+
                     response.body()?.let { body ->
+                        Log.d(javaClass.simpleName, "read logId=${body.data?.id}")
                         body.data?.id?.let { callback(it) }
                     }
                 }
                 override fun onFailure(call: Call<PdfReadLogInsertResponse>, t: Throwable) {
+                    Log.e(javaClass.simpleName, "read error=${t.localizedMessage}")
                     callback(0) // error
                 }
             })

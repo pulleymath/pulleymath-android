@@ -159,7 +159,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         Handler(Looper.getMainLooper()).postDelayed({
             getMyPlanList {
                 getRecommendList {
-                    Tutor.showToolTipIfNeed(recommendLabel, Tutor.TooltipType.recommendPlan)
+//                    Tutor.showToolTipIfNeed(recommendLabel, Tutor.TooltipType.recommendPlan)
                     getTotalList()
                 }
             }
@@ -335,9 +335,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             val book = myBooks?.myPieceStorageList!![position]
             holder.listener = this@BookFragment
             holder.set(book)
-            if (position == 0) {
-                Tutor.showToolTipIfNeed(holder.actionBtn, Tutor.TooltipType.mailInUnitStudy)
-            }
+//            if (position == 0) {
+//                Tutor.showToolTipIfNeed(holder.actionBtn, Tutor.TooltipType.mailInUnitStudy)
+//            }
         }
     }
 
