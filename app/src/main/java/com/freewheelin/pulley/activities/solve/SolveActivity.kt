@@ -19,10 +19,8 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -1394,9 +1392,11 @@ class SolveActivity : BaseActivity(),
                 Log.d("포커스", "autoFocus=$autoFocus, keyPad=${answerView.keyPad}, isShow=${answerView.keyPad?.isShowing}")
                 Log.d("포커스", "galleryCloser.visibility=${galleryCloser.visibility}")
 //                answerView.keyPad?.dismiss()
-                if(galleryCloser.visibility != View.VISIBLE) {
-                    answerView.postDelayed({ answerView.requestFocusOnShortAnswer() }, 100)
-                }
+
+                // 210513 채점버튼 관련 QA 수정사항으로 '문제 진입시 focus 해제'에 해당함
+//                if(galleryCloser.visibility != View.VISIBLE) {
+//                    answerView.postDelayed({ answerView.requestFocusOnShortAnswer() }, 100)
+//                }
             } else {
                 answerView.clearFocusOnShortAnswer()
             }

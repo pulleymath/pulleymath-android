@@ -86,7 +86,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:elevation="5dp"
-            android:background="@drawable/bg_grey_f2f2f2_round_2"
+            android:background="@drawable/bg_grey_f2f2f2_round_2_no_ripple"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
             android:paddingEnd="8dp"
@@ -100,7 +100,7 @@
             android:id="@+id/imgDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{item.downloaded ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading ? View.VISIBLE : View.INVISIBLE }"
             android:elevation="6dp"
             app:layout_constraintBottom_toTopOf="@+id/textTitle"
             app:layout_constraintEnd_toEndOf="@+id/imgCover"
@@ -108,18 +108,47 @@
             app:layout_constraintTop_toTopOf="@+id/imgCover"
             app:srcCompat="@drawable/ic_download_file" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp80"
-            android:indeterminateTint="@color/purple_6D6DFF"
+        <ImageView
+            android:id="@+id/imgDownloadCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
             android:elevation="6dp"
+            app:layout_constraintBottom_toTopOf="@+id/textTitle"
+            app:layout_constraintEnd_toEndOf="@+id/imgCover"
+            app:layout_constraintStart_toStartOf="@+id/imgCover"
+            app:layout_constraintTop_toTopOf="@+id/imgCover"
+            app:srcCompat="@drawable/ic_download_cancel" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/dp72"
+            android:layout_height="@dimen/dp72"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:background="@drawable/circle_shape"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:elevation="6dp"
+            android:indeterminateTint="@color/purple_6D6DFF"
+            android:max="100"
+            android:progress="@{item.downloadProgress}"
+            android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
             app:layout_constraintEnd_toEndOf="@+id/imgDownload"
             app:layout_constraintStart_toStartOf="@+id/imgDownload"
             app:layout_constraintTop_toTopOf="@+id/imgDownload" />
 
+        <ProgressBar
+            android:id="@+id/openingProgress"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/dp72"
+            android:layout_height="@dimen/dp72"
+            android:indeterminateTint="@color/purple_6D6DFF"
+            android:visibility="@{item.opening ? View.VISIBLE : View.INVISIBLE}"
+            android:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
+            app:layout_constraintEnd_toEndOf="@+id/imgDownload"
+            app:layout_constraintStart_toStartOf="@+id/imgDownload"
+            app:layout_constraintTop_toTopOf="@+id/imgDownload" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

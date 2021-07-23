@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
+import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.NumberAnalysis
@@ -33,7 +34,7 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
     override var to: LocalDate = LocalDate.now()
 
     override val analysis: Analysis?
-        get() = (activity as AnalysisTabActivity).analysis
+        get() = (activity as AnanlysisTabActivityInterface).analysis
 
     val numberAnalysis: NumberAnalysis?
         get() {
@@ -42,11 +43,11 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
 
     val notExistDataText: String
         get() {
-            return (activity as AnalysisTabActivity).notExistDataText
+            return (activity as AnanlysisTabActivityInterface).notExistDataText
         }
 
     val curation: MyCuration
-        get() = MyCuration(context!!)
+        get() = MyCuration(requireContext())
 
     override fun getFragment(): Fragment {
         return this
@@ -68,7 +69,8 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         configUI(from, to)
-        (activity as AnalysisTabActivity).scrollView.scrollTo(0, scrollPosition)
+        activity?.scrollView?.scrollTo(0, scrollPosition)
+
         unitChart.post {
            val itemCnt = unitChart.adapter?.itemCount
             if(itemCnt != null)

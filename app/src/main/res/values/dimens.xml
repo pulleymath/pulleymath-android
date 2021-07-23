@@ -57,6 +57,7 @@
     <dimen name="dp16">12dp</dimen>
     <dimen name="dp14">10dp</dimen>
     <dimen name="dp12">8dp</dimen>
+    <dimen name="dp10">8dp</dimen>
     <dimen name="dp8">5dp</dimen>
     
     <dimen name="borderThickness">1.5dp</dimen>

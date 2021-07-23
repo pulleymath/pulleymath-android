@@ -54,7 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#ffffff"
-            android:text="오늘 다시 보지 않기"
+            android:text="7일동안 보지 않기"
             android:textSize="@dimen/dp18" />
 
         <Button

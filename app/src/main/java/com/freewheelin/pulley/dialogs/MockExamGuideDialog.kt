@@ -2,6 +2,7 @@ package com.freewheelin.pulley.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -12,11 +13,13 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.MockExamManager
+import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.model.contents.MockExamSummary
 import com.freewheelin.pulley.model.contents.SubjectSummary
@@ -369,8 +372,9 @@ class MockExamGuideDialog(
     }
 
     override fun onSentEmail() {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "메일보내기")
-        DaebakToast.show(context!!, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.", overDialog = true)
+        LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "메일보내기")
+        DaebakToast.show(context, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.", overDialog = true)
+        val intent = Intent(MockExamManager.EVENT_MOCK_EXAM_CLEAR)
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
-
 }

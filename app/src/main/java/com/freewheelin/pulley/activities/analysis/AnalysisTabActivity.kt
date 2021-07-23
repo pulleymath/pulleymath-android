@@ -48,13 +48,20 @@ interface AnalysisTabDelegate {
         this.to = to
     }
 }
+
+interface AnanlysisTabActivityInterface {
+    var analysis:Analysis?
+    var notExistDataText:String
+}
+
 class AnalysisTabActivity : BaseNavActivity(),
         TabLayout.OnTabSelectedListener,
         View.OnScrollChangeListener,
-        DateRangePickerDialogListener {
+        DateRangePickerDialogListener,
+        AnanlysisTabActivityInterface {
 
-    var analysis: Analysis? = null
-    val notExistDataText = "분석을 위한 학습 내역이 부족해요."
+    override var analysis: Analysis? = null
+    override var notExistDataText = "분석을 위한 학습 내역이 부족해요."
 
     val dialog: DateRangePickerDialog by lazy {
         val to = LocalDate.now()

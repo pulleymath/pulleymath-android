@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
+import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.curation.MyCuration
@@ -27,7 +28,7 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
     override var to: LocalDate = LocalDate.now()
 
     override val analysis: Analysis?
-        get() = (activity as AnalysisTabActivity).analysis
+        get() = (activity as AnanlysisTabActivityInterface).analysis
 
     val levelAnalysis: List<ChapterAnalysis>
         get() {
@@ -40,7 +41,7 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
         }
 
     val curation: MyCuration
-        get() = MyCuration(context!!)
+        get() = MyCuration(requireContext())
 
     override fun getFragment(): Fragment {
         return this
@@ -72,9 +73,9 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
         }
         subjectChart.setEmptyGuideText("조금 더 학습을 진행하시면,\n각 난이도별로 '나의 정답률'과 '같은 등급 정답률'을 비교해 볼 수 있습니다.")
 
-        myPb.font = Theme.extraBold(context!!)
+        myPb.font = Theme.extraBold(requireContext())
         configureUI()
-        (activity as AnalysisTabActivity).scrollView.scrollTo(0, scrollPosition)
+        activity?.scrollView?.scrollTo(0, scrollPosition)
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {

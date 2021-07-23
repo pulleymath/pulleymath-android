@@ -21,13 +21,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import java.text.SimpleDateFormat
+import java.util.*
 
 object MarketingManager {
 
     const val PREF_NAME = "marketing_pref"
     const val KEY_PREFIX = "no_show_"
 
-    val sdf by lazy { SimpleDateFormat("yyyy-MM-dd") }
+    val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm") }
 
     val URL = "https://pulleymath.com/marketing/marketing.json"
     val URL_BETA = "https://pulleymath.com/marketing/marketing_beta.json"
@@ -56,13 +57,17 @@ object MarketingManager {
         }
     }
 
-    fun isShow(context: Context, mainProfile:MainProfile, marketing:Marketing) : Boolean{
+    fun isShow(context: Context, mainProfile:MainProfile, marketing:Marketing) : Boolean {
         val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val today = sdf.format(System.currentTimeMillis())
-        val key = KEY_PREFIX + marketing.marketingCode + today
-        val no_show = pref.getBoolean(key, false)
-        if(no_show) return false
+        var nowDate = Calendar.getInstance()
 
+        val key = "$KEY_PREFIX@@${marketing.marketingCode}"
+        val saveDate = pref.getString(key, null)
+        if (!saveDate.isNullOrEmpty()) {
+            val saveDateParsed = sdf.parse(saveDate)
+            val dateDiff = (nowDate.time.time - saveDateParsed.time).toFloat() / (60 * 60 * 24 * 1000).toFloat()
+            if (dateDiff < 7) return false
+        }
         filterBanner(mainProfile, marketing)
         return marketing.banners.isNotEmpty()
     }
@@ -70,7 +75,10 @@ object MarketingManager {
     fun filterBanner(mainProfile:MainProfile, marketing:Marketing) {
         val studentSegment = getStudentSegment(user?.grade)
         val userSegment = if(mainProfile.isPaidUser()) UserSegment.Paid else UserSegment.Free
+        val tz = TimeZone.getTimeZone("Asia/Seoul")
+        sdf.timeZone = tz
         val current = sdf.format(System.currentTimeMillis())
+        Log.d("마케팅", "현재시간 $current")
 
         var limit = marketing.banners.size
 
@@ -79,6 +87,7 @@ object MarketingManager {
             val studentCheck = banner.studentSegment.contains(studentSegment) || banner.studentSegment.contains(StudentSegment.All)
             val userCheck = banner.userSegment.contains(userSegment) || banner.userSegment.contains(UserSegment.All)
             val dateCheck = current <= banner.endDate && current >= banner.startDate
+            Log.d("마케팅", "banner.endDate = ${banner.endDate}, banner.startDate = ${banner.startDate}")
 
             if(!studentCheck || !userCheck || !dateCheck) {
                 marketing.banners.remove(banner)
@@ -99,13 +108,13 @@ object MarketingManager {
     fun setNoShow(context: Context, marketing:Marketing){
         val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val today = sdf.format(System.currentTimeMillis())
-        val key = KEY_PREFIX + marketing.marketingCode + today
-        pref.edit().putBoolean(key, true).commit()
+        val key = "$KEY_PREFIX@@${marketing.marketingCode}"
+        pref.edit().putString(key, today).apply()
     }
 
     fun setMarketingBanner(context: Context, mainProfile: MainProfile) {
-        getInfo(context!!, mainProfile) { marketing ->
-            if(marketing != null && isShow(context!!, mainProfile, marketing)) {
+        getInfo(context, mainProfile) { marketing ->
+            if(marketing != null && isShow(context, mainProfile, marketing)) {
                 val dialog = MarketingDialog(context, marketing)
                 dialog.setCancelable(false)
                 dialog.show()

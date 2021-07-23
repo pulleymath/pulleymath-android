@@ -59,54 +59,79 @@
             app:layout_constraintTop_toTopOf="@+id/yearFilter" />
 
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/yearSl"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp56"
             android:layout_marginStart="@dimen/dp60"
             android:layout_marginTop="@dimen/dp32"
-            app:label="연도"
+            android:paddingEnd="@dimen/dp12"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="연도"
+            style="@style/TextGrey_9f9f9f.Bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yearFilter"/>
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/monthSl"
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
             android:layout_marginStart="@dimen/dp20"
-            app:label="월"
+            android:text="월"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:paddingEnd="@dimen/dp12"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="@+id/yearSl"
             app:layout_constraintBottom_toBottomOf="@+id/yearSl"
             app:layout_constraintStart_toEndOf="@+id/yearSl" />
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/gradeSl"
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
             android:layout_marginStart="@dimen/dp16"
-            app:label="학년"
+            android:text="학년"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:paddingEnd="@dimen/dp12"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="@+id/yearSl"
             app:layout_constraintBottom_toBottomOf="@+id/yearSl"
             app:layout_constraintStart_toEndOf="@+id/monthSl" />
 
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/typeSl"
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
             android:layout_marginStart="@dimen/dp20"
-            app:label="계열"
+            android:text="계열"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:paddingEnd="@dimen/dp12"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textAlignment="center"
             app:layout_constraintStart_toEndOf="@+id/gradeSl"
             app:layout_constraintTop_toTopOf="@+id/yearSl"
             app:layout_constraintBottom_toBottomOf="@+id/yearSl"/>
 
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleSl"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp56"
             android:layout_marginStart="@dimen/dp16"
-            app:label="제목"
+            android:text="제목"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:paddingEnd="@dimen/dp12"
+            android:textSize="@dimen/sp16"
+            android:gravity="center"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="@+id/yearSl"
             app:layout_constraintBottom_toBottomOf="@+id/yearSl"
             app:layout_constraintStart_toEndOf="@+id/typeSl" />

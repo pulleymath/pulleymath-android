@@ -22,6 +22,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisActivity" />
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity" />
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserHistoryActivity" />
+
         <activity android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity" />
         <activity android:name=".activities.learning.tabFragment.usertest.StudentMockReportActivity" />
         <activity

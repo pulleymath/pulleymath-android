@@ -2,9 +2,10 @@ package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
+import android.widget.SearchView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
@@ -22,6 +23,23 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
     var categoryFilter: String? = ""
     var subjectFilter: String? = ""
+    var searchTextFilter: String = ""
+    var searchText = MutableLiveData("")
+    var currSearchText = MutableLiveData("")
+
+    val stickyAppBarShow by lazy { MutableLiveData(false) }
+    val stickyAppBarAlpha by lazy { MutableLiveData(0f) }
+    val scrollShadowShow by lazy { MutableLiveData(false) }
+
+    val subjectItems by lazy { ArrayList(PdfListFilter.subjectList) }
+    val categoryItems by lazy { ArrayList(PdfListFilter.categoryList) }
+
+    val categorySelectedPosition = MutableLiveData(0)
+    val subjectSelectedPosition = MutableLiveData(0)
+
+    val pdfListLength = MutableLiveData("0")
+
+    var ySum: Int = 0
 
     init {
         listPdf()
@@ -36,7 +54,10 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                 // 원본
                 pdfOrgList.postValue(response.data.content)
                 // 필터된거
-                pdfList.postValue(response.data.content)
+
+                val headerPdf = Pdf()
+                val finalPdfList = listOf(headerPdf) + response.data.content;
+                pdfList.postValue(finalPdfList)
                 showEmpty.postValue(response.data.content.isEmpty())
             }, { error ->
                 Log.e(javaClass.simpleName, "listPdf error=${error.localizedMessage}")
@@ -49,6 +70,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
             Log.d(javaClass.simpleName, "Filter subject=$subjectFilter")
             Log.d(javaClass.simpleName, "Filter category=$categoryFilter")
+            Log.d(javaClass.simpleName, "Filter searchText=$searchTextFilter")
 
             if(subjectFilter?.isNotEmpty() == true) {
                 Log.d(javaClass.simpleName, "Filter subject=isNotEmpty")
@@ -60,26 +82,22 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                 result = result.filter { it.category == categoryFilter }
             }
 
-            result.forEach { println("${it.category} : ${it.subject_code} - ${it.title} (${it.subject})" ) }
+            if(searchTextFilter.isNotEmpty()) {
+                Log.d(javaClass.simpleName, "Filter searchText=isNotEmpty")
+                result = result.filter {
+                    val upperTitle = it.title.toUpperCase()
+                    val upperSearchText = searchTextFilter.toUpperCase()
+                    upperTitle.contains(upperSearchText)
+                }
+            }
 
-            pdfList.postValue(result)
             showEmpty.postValue(result.isEmpty())
-        }
-    }
 
-    val subjectListener = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            subjectFilter = if(position > 0) PdfListFilter.subject.keys.toList().get(position) else ""
-            filter()
-        }
-    }
+            pdfListLength.postValue(result.size.toString())
+            val headerPdf = Pdf()
+            val finalResult = listOf(headerPdf) + result
 
-    val categoryListener = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            categoryFilter = if(position > 0) PdfListFilter.category.keys.toList().get(position) else ""
-            filter()
+            pdfList.postValue(finalResult)
         }
     }
 
@@ -92,6 +110,80 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             }, { error ->
                 Log.e(javaClass.simpleName, "answer=${error.localizedMessage}")
             })
+    }
+
+    val searchViewTextQueryListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            if (query != null) {
+                searchTextFilter = query
+                searchText.value = query
+            }
+            filter()
+            ySum = 0
+            return false
+        }
+        override fun onQueryTextChange(newText: String?): Boolean {
+            newText?.let {
+                currSearchText.value = newText
+                if (newText == "") {
+                    searchTextFilter = newText
+                    searchText.value = newText
+                    filter()
+                    ySum = 0
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
+    val searchViewCloseListener = object: SearchView.OnCloseListener {
+        override fun onClose(): Boolean {
+            isSearchViewIconified.postValue(true)
+            return false
+        }
+    }
+    val headerSearchViewCloseListener = object: SearchView.OnCloseListener {
+        override fun onClose(): Boolean {
+            isHeaderSearchViewIconified.postValue(true)
+            return false
+        }
+    }
+
+    val isSearchViewIconified by lazy { MutableLiveData(true) }
+
+    val isHeaderSearchViewIconified by lazy { MutableLiveData(true) }
+    val searchViewQueryTextFocusChangeListener = object : View.OnFocusChangeListener {
+        override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            if (hasFocus) {
+                isSearchViewIconified.postValue(!hasFocus)
+            }
+        }
+    }
+
+    val headerSearchViewQueryTextFocusChangeListener = object : View.OnFocusChangeListener {
+        override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            if (hasFocus) {
+                isHeaderSearchViewIconified.postValue(!hasFocus)
+            }
+        }
+    }
+
+    val onScrollListener = object: RecyclerView.OnScrollListener() {
+        val threshold: Int = 158
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (ySum < 0) ySum = 0
+            ySum += dy
+            if (ySum >= threshold && stickyAppBarShow.value == false ) {
+                stickyAppBarAlpha.postValue(0f)
+                stickyAppBarShow.postValue(true)
+                scrollShadowShow.postValue(true)
+            } else if (ySum < threshold && stickyAppBarShow.value == true) {
+                stickyAppBarShow.postValue(false)
+                scrollShadowShow.postValue(false)
+            }
+        }
     }
 }
 
@@ -111,10 +203,11 @@ object PdfListFilter {
     val category = mapOf<String, String>(
         "" to "학습 유형 전체",
         "개념서" to "개념서",
-        "기출서" to "기출서",
+        "유형서" to "유형서",
         "심화서" to "심화서",
+        "내신서" to "내신서",
+        "기출서" to "기출서",
 // TODO:       "연산서" to "연산서", 소정쌤이 빼라고 함
-        "유형서" to "유형서"
         )
 
     val categoryList = category.values.toList()

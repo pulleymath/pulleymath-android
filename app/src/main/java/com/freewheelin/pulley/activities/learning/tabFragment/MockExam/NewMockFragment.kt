@@ -30,13 +30,11 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.TextViews.SortableListener
-import com.freewheelin.pulley.views.TextViews.SortableTextView
 import kotlinx.android.synthetic.main.fragment_new_mock.*
 import kotlinx.android.synthetic.main.item_new_test.view.*
 import java.util.*
 
-class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, EmailInputDialogListener, MockExamGuideDialogListener {
+class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogListener, MockExamGuideDialogListener {
     var examList: List<MockExam>? = null
     var filteredMockList: List<MockExam>? = null
     var typeTreeSet = TreeSet<MockExam.Type>()
@@ -46,9 +44,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
     var listener: MockTabListener? = null
     lateinit var receiver: BroadcastReceiver
     lateinit var clearReceiver: BroadcastReceiver
-
-    private val sortableTextViews
-        get() = listOf(typeSl, gradeSl, yearSl, monthSl, titleSl)
 
     companion object {
         @JvmStatic
@@ -70,13 +65,8 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
                     tests = testFilter(ArrayList(tests), monthFilter)
 
                     filteredMockList = ArrayList(tests)
-                    val selectedSortView = sortableTextViews.filter { it.isSelected }.firstOrNull()
-                    if (selectedSortView != null) {
-                        onOrderChanged(selectedSortView, selectedSortView.order)
-                    } else {
-                        mockRv.adapter?.notifyDataSetChanged()
-                        setVisibilityEmptyGuide()
-                    }
+                    mockRv.adapter?.notifyDataSetChanged()
+                    setVisibilityEmptyGuide()
                 }
             }
         }
@@ -87,9 +77,11 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
             }
         }
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_SCORING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_CLEAR))
     }
 
     override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearReceiver)
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         super.onDestroy()
     }
@@ -103,15 +95,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
-    }
-
-    fun setInitOrder() {
-        yearSl.isSelected = true
-        yearSl.order = SortableTextView.Order.descend
-        val selectedSortView = sortableTextViews.filter { it.isSelected }.firstOrNull()
-        if (selectedSortView != null) {
-            onOrderChanged(selectedSortView, selectedSortView.order)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -139,11 +122,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
         tests = testFilter(ArrayList(tests), monthFilter)
 
         filteredMockList = ArrayList(tests)
-        val selectedSortView = sortableTextViews.filter { it.isSelected }.firstOrNull()
-        if (selectedSortView != null) {
-            onOrderChanged(selectedSortView, selectedSortView.order)
-            return
-        }
 
         mockRv.adapter?.notifyDataSetChanged()
     }
@@ -185,8 +163,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
         gradeFilter.listener = this
         yearFilter.listener = this
 
-        sortableTextViews.forEach { it.listener = this }
-
         typeTreeSet = TreeSet(MockExam.Type.list)
         gradeTreeSet = TreeSet(listOf(1, 2, 3))
 
@@ -206,7 +182,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
         MockExamManager.getNewMockExamList(requireContext(), user) {
             this@NewMockFragment.examList = it
             this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
-            setInitOrder()
+            mockRv.adapter?.notifyDataSetChanged()
 
             examList?.let{ list ->
                 yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
@@ -231,42 +207,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
                 view2.visibility = View.INVISIBLE
             }
         }
-    }
-
-    override fun onOrderChanged(view: SortableTextView, order: SortableTextView.Order) {
-        sortableTextViews.forEach { it.isSelected = false }
-        view.isSelected = true
-        
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기-정렬", view.label)
-
-        if (order == SortableTextView.Order.ascend) {
-            filteredMockList = when (view) {
-                typeSl -> filteredMockList?.sortedBy { it.type.sortPriority() }
-                gradeSl -> filteredMockList?.sortedBy { it.grade }
-                yearSl -> filteredMockList?.sortedWith(compareBy<MockExam> {it.year}.thenBy{it.month}.thenBy { it.grade }.thenBy { it.type.sortPriority() })
-                monthSl -> filteredMockList?.sortedBy { it.month }
-                titleSl -> filteredMockList?.sortedWith(compareBy<MockExam> {it.year}.thenBy{it.month}.thenBy { it.title }.thenBy { it.type.sortPriority() })
-                else -> {
-                    LogUtils.assert(false, "Unexpected view")
-                    listOf()
-                }
-            }
-        } else {
-            filteredMockList = when (view) {
-                typeSl -> filteredMockList?.sortedByDescending { it.type.sortPriority() }
-                gradeSl -> filteredMockList?.sortedByDescending { it.grade }
-                yearSl -> filteredMockList?.sortedWith(compareByDescending<MockExam> {it.year}.thenByDescending{it.month}.thenByDescending { it.grade }.thenBy { it.type.sortPriority() })
-                monthSl -> filteredMockList?.sortedByDescending { it.month }
-                titleSl -> filteredMockList?.sortedWith(compareByDescending<MockExam> {it.year}.thenByDescending{it.month}.thenByDescending { it.title }.thenBy { it.type.sortPriority() })
-                else -> {
-                    LogUtils.assert(false, "Unexpected view")
-                    listOf()
-                }
-            }
-        }
-
-        mockRv.adapter?.notifyDataSetChanged()
-        setVisibilityEmptyGuide()
     }
 
     private fun testFilter(exams: List<MockExam>, filter: ArduousSpinner): List<MockExam> {
@@ -320,17 +260,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, SortableListener, Em
                 }
 
             }
-            // 시험지 메일 발송은 그대로 사용할거임
-//            holder.mailBtn.setPermissionClickListener {
-//                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "메일")
-//                val dialog = EmailInputDialog(requireContext(), listOf(test), user!!, this@NewMockFragment)
-//                dialog.show()
-//            }
             holder.set(test)
-
-//            if (position == 0) {
-//                Tutor.showToolTipIfNeed(holder.mailBtn, Tutor.TooltipType.mailInMockExam)
-//            }
         }
     }
 }

@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.pulleymath.android.pdf.ReaderView.ViewMapper
 import com.pulleymath.android.pdf.log.Network
+import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
 import java.io.*
 import java.security.MessageDigest
@@ -481,9 +482,6 @@ open class PdfViewerActivity : Activity() {
                 mPageSlider?.progress = targetPageNo - 1
             } else {
                 Intent(this, PdfViewerActivity::class.java).apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-                    ) else addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 
                     action = Intent.ACTION_VIEW
                     data = Uri.parse(answerPath)
@@ -664,8 +662,13 @@ open class PdfViewerActivity : Activity() {
 
     private fun updatePageNumView(index: Int) {
         if (core == null) return
+        val originPageNo = pageNo
         pageNo = index + 1
         mPageNumberView?.setText(String.format(Locale.ROOT, "%d / %d", pageNo, core!!.countPages()))
+        if (index + 1 != originPageNo && index != 0) {
+            // updatePageNumView는 액티비티 내에서 화면 탭만 해도 pageNo가 바뀌지 않고 호출된다.
+            sendPageLog()
+        }
         showAnswerButton()
     }
     /** 페이지 변경 시 해설 버튼 showing */
@@ -734,6 +737,11 @@ open class PdfViewerActivity : Activity() {
     }
 
     override fun onBackPressed() {
+        if (mSearchText?.hasFocus() == true) {
+            searchModeOff()
+            mSearchText?.clearFocus()
+            return
+        }
         if (mDocView?.popHistory() != true) super.onBackPressed()
     }
 
@@ -742,12 +750,17 @@ open class PdfViewerActivity : Activity() {
     var timer:Timer? = null
 
     private fun startReadLogger() {
-        val handler = Handler(Looper.getMainLooper())
-        timer = Timer(false)
-        val timerTask: TimerTask = object : TimerTask() {
-            override fun run() { handler.post { sendLog() } }
+        if (timer == null) {
+            val handler = Handler(Looper.getMainLooper())
+
+            timer = Timer(false)
+            val timerTask: TimerTask = object : TimerTask() {
+                override fun run() {
+                    handler.post { sendLog() }
+                }
+            }
+            timer?.scheduleAtFixedRate(timerTask, 0, 5000)
         }
-        timer?.scheduleAtFixedRate(timerTask, 0, 5000)
     }
 
     private fun stopReadLogger() {
@@ -760,9 +773,22 @@ open class PdfViewerActivity : Activity() {
         Log.d(javaClass.simpleName, "readLogId=$readLogId")
         if(readLogId == null || readLogId!! < 1) {
             val request = PdfReadLog(pdfId, bookId, studentId)
-            Network.sendLog(request, readLogId) { readLogId = it }
+            Network.sendLog(request, readLogId) {
+                readLogId = it
+                sendPageLog()
+            }
         } else {
             Network.sendLog(null, readLogId) { /** do nothing */ }
+        }
+    }
+
+    private fun sendPageLog() {
+        Log.d(javaClass.simpleName, "sendPageLog LogId=$readLogId , $pageNo")
+
+        readLogId?.let{ logId ->
+            val pageNo = if (this.pageNo == 0) 1 else this.pageNo
+            val request = PdfPageLog(pdfId, bookId, studentId, pageNo, logId)
+            Network.sendPageLog(request)
         }
     }
 
@@ -772,6 +798,7 @@ open class PdfViewerActivity : Activity() {
     }
 
     override fun onStop() {
+        sendPageLog()
         stopReadLogger()
         super.onStop()
     }

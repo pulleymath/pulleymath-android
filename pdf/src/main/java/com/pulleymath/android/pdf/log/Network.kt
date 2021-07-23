@@ -50,16 +50,9 @@ object Network {
         return if(body != null) {
             pdfLogService.postLog(body).enqueue(object: Callback<PdfReadLogInsertResponse> {
                 override fun onResponse(call: Call<PdfReadLogInsertResponse>, response: Response<PdfReadLogInsertResponse>) {
-
-                    Log.d(javaClass.simpleName, "read after=${response.body()}")
-
-                    response.body()?.let { body ->
-                        Log.d(javaClass.simpleName, "read logId=${body.data?.id}")
-                        body.data?.id?.let { callback(it) }
-                    }
+                    response.body()?.let { body -> body.data?.id?.let { callback(it) } }
                 }
                 override fun onFailure(call: Call<PdfReadLogInsertResponse>, t: Throwable) {
-                    Log.e(javaClass.simpleName, "read error=${t.localizedMessage}")
                     callback(0) // error
                 }
             })
@@ -74,6 +67,13 @@ object Network {
             })
         }
     }
+
+    fun sendPageLog(request:PdfPageLog) {
+        pdfLogService.pageLog(request).enqueue(object: Callback<PdfPageLogResponse>{
+            override fun onResponse(p0: Call<PdfPageLogResponse>, p1: Response<PdfPageLogResponse>) {}
+            override fun onFailure(p0: Call<PdfPageLogResponse>, p1: Throwable) {}
+        })
+    }
 }
 
 interface PdfLogService {
@@ -82,4 +82,7 @@ interface PdfLogService {
 
     @PATCH("/v1/pdf/reading/{logId}")
     fun patchLog(@Path("logId") logId: Int?) : Call<PdfReadLogUpdateResponse>
+
+    @POST("/v1/pdf/page-log")
+    fun pageLog(@Body body:PdfPageLog) : Call<PdfPageLogResponse>
 }

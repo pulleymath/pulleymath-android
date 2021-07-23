@@ -67,10 +67,16 @@ import com.freewheelin.pulley.views.SnackBar.SnackBar
 import com.freewheelin.pulley.views.SnackBar.SnackBarView
 import com.freewheelin.pulley.views.SnackBar.SnackBarViewListener
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_learning.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.android.synthetic.main.fragment_my_main_page.*
 import kotlinx.android.synthetic.main.fragment_signup_student_info.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -234,11 +240,39 @@ class LearningTabActivity : BaseActivity(),
     }
 
     private fun userTest() {
-        val teachears = listOf("mingzai57@gmail.com","dhko@mathflat.com","kodonho@mathflat.com", "kmj@eskr.kr")
-        if(teachears.contains(user?.email)) {
+        val url = "https://pulleymath.com/user_test/teachers_v2.json"
+        CoroutineScope(Dispatchers.IO).launch {
+            val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
+            if(data != null && data.isNotEmpty()) {
+                try {
+                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java).let {
+                        runOnUiThread {
+                            checkTeachers(it) }
+                    }
+                }catch (e:Exception) {
+                    Log.d("마케팅에러", "error=${e.localizedMessage}")
+                }
+            }
+        }
+    }
+
+    private fun checkTeachers(response: StudentManagerDialog.StudentManagerResponse) {
+        var isRegisteredTeacherEmail = false
+        if (response.admins.contains(user?.email)) isRegisteredTeacherEmail = true
+        for (item in response.group) {
+            item.teachers.forEach { teacher ->
+                if (teacher.email == user?.email) {
+                    isRegisteredTeacherEmail = true
+                    return@forEach
+                }
+            }
+            if (isRegisteredTeacherEmail) break
+        }
+
+        if(isRegisteredTeacherEmail) {
             loadStudentBtn.visibility = View.VISIBLE
             loadStudentBtn.setOnClickListener {
-                StudentManagerDialog(this,{},{}).show()
+                StudentManagerDialog(this, response, {},{}).show()
             }
         }
     }
@@ -258,6 +292,9 @@ class LearningTabActivity : BaseActivity(),
             updateSignView.visibility = View.VISIBLE
         } else {
             updateSignView.visibility = View.GONE
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
         }
     }
 
@@ -431,6 +468,9 @@ class LearningTabActivity : BaseActivity(),
             fragment.wasInitUI = true
         }
         fragment.onFragmentSelected()
+        CoroutineScope(Dispatchers.IO).launch {
+            ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
+        }
     }
 
     override fun onBackPressed() {

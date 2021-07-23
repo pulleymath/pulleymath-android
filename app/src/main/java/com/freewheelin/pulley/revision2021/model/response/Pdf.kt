@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2021.model.response
 
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableInt
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponseNode
@@ -27,7 +28,10 @@ class Pdf : BaseDiffItem, Serializable {
     lateinit var updated_at: String
     // use in local
     var filepath: String = ""
+
+    val opening: ObservableBoolean = ObservableBoolean(false)
     val downloading: ObservableBoolean = ObservableBoolean(false)
+    val downloadProgress: ObservableInt = ObservableInt(0)
     val downloaded: ObservableBoolean = ObservableBoolean(false)
 
     override fun equals(other: Any?): Boolean {

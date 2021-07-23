@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_ffffff_round_4"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialogBody"
+            android:layout_width="505dp"
+            android:layout_height="467dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/serverInspectionImg"
+                android:layout_width="212dp"
+                android:layout_height="@dimen/dp144"
+                android:layout_marginTop="@dimen/dp48"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/img_server_inspection" />
+
+            <TextView
+                android:id="@+id/dialogTitleTv"
+                android:layout_width="@dimen/dp144"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginTop="@dimen/dp24"
+                android:fontFamily="@font/nanum_square_extra_bold"
+                android:text="시스템 점검중"
+                android:textAlignment="center"
+                android:textSize="@dimen/sp24"
+                android:textColor="@color/black_4c4c4c"
+                android:lineSpacingExtra="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/serverInspectionImg" />
+
+            <TextView
+                android:id="@+id/dialogContentTv"
+                android:layout_width="@dimen/dp328"
+                android:layout_height="@dimen/dp72"
+                android:layout_marginTop="@dimen/dp16"
+                android:fontFamily="@font/nanum_square_bold"
+                android:lineSpacingExtra="8sp"
+                android:text="더욱 안정적인 서비스 제공을 위해\n풀리 시스템을 점검하고 있습니다.\n 더 좋은 서비스로 보답하는 풀리가 되겠습니다."
+                android:textAlignment="center"
+                android:textSize="@dimen/sp16"
+                android:textColor="@color/black_4c4c4c"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialogTitleTv" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="441dp"
+                android:layout_height="@dimen/dp80"
+                android:layout_marginTop="@dimen/dp16"
+                android:background="#f2f2f2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialogContentTv">
+
+                <TextView
+                    android:id="@+id/dialogInfomationTv"
+                    android:layout_width="330dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="점검시간\n2021년 07월 20일 00:00 ~ 07월 21일 00:00"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/sp16"
+                    android:textColor="@color/black_4c4c4c"
+                    android:lineSpacingExtra="8sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/inspectionButtonLayout"
+            android:layout_width="505dp"
+            android:layout_height="@dimen/dp72"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialogBody">
+
+            <TextView
+                android:id="@+id/inspectionTextBtn"
+                android:layout_width="392dp"
+                android:layout_height="@dimen/dp48"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
+                android:gravity="center"
+                android:text="확인"
+                android:textAlignment="center"
+                android:textColor="#6d6dff"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

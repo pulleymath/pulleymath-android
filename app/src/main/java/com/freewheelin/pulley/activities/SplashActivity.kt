@@ -9,7 +9,9 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.InitTestActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
 import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.core.manage.VersionManager
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
@@ -45,8 +47,18 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
         CoroutineScope(Dispatchers.IO).launch {
             delay(800)
-            withContext(Dispatchers.Main) {
-                start()
+            val status = ServerStatusManager.requestInspectionFlag()
+
+            if (status != null) {
+                withContext(Dispatchers.Main) {
+                    val dialog = ServerInspectionDialog(this@SplashActivity, status)
+                    dialog.setCancelable(false)
+                    dialog.show()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    start()
+                }
             }
         }
     }

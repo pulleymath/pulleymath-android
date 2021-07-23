@@ -16,6 +16,7 @@ object URL {
     val 풀리활용가이드_마이페이지 = "https://pulleymath.com/notice/tip/guide/main/4433?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=main-mypage"
 
     val PULLEY_API = "https://api-live.pulleymath.com"
+    val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
 
     val 구매촉구 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=init&utm_content=intro_pay#part03"
     val 구매촉구_메인 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-main"

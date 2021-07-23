@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
+import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ContentManager
@@ -50,7 +51,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
     override var to: LocalDate = LocalDate.now()
 
     val template: MyCuration
-        get() = MyCuration(context!!)
+        get() = MyCuration(requireContext())
 
     var selectedChapter: ObservableHashSet<ChapterAnalysis> = ObservableHashSet()
 
@@ -60,7 +61,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
     override val analysis: Analysis?
         get() {
-            return (activity as AnalysisTabActivity).analysis
+            return (activity as AnanlysisTabActivityInterface).analysis
         }
 
     val chapterAnalysis: List<ChapterAnalysis>
@@ -70,7 +71,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
     val notExistDataText: String
         get() {
-            return (activity as AnalysisTabActivity).notExistDataText
+            return (activity as AnanlysisTabActivityInterface).notExistDataText
         }
 
     override fun getFragment(): Fragment {
@@ -100,7 +101,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         configureUI(from, to, DateTimeUtils.getPeriod(from, to))
         unitRv.layoutManager = LinearLayoutManager(context)
         unitRv.isFocusable = false
-        (activity as AnalysisTabActivity).scrollView.scrollTo(0, scrollPosition)
+        activity?.scrollView?.scrollTo(0, scrollPosition)
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
@@ -135,12 +136,12 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         selectedChapter.clear()
         learnBtn.setPermissionClickListener {
             if(learnBtn.isEnableUI()) {
-                LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
-                val dialog = WrongManagementDialog(context!!, WrongManagementDialog.Type.scrap)
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
+                val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
                 dialog.configureUIByChapter(selectedChapter)
                 dialog.show()
                 dialog.makeBtn.setOnClickListener {
-                    LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "단원 학습지 만들기")
+                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "단원 학습지 만들기")
                     dialog.makeBtn.startLoding()
                     val cntPerProblem = dialog.cnt
                     val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
@@ -148,7 +149,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
                     val isIncludeClearProblem = dialog.isClearInclude
 
-                    PieceManager.makeWeakPieceUsingChapters(context!!, user!!, selectedChapter.toList(),
+                    PieceManager.makeWeakPieceUsingChapters(requireContext(), user!!, selectedChapter.toList(),
                             isSimilar, level, cntPerProblem, isIncludeClearProblem,
                             from.toDate(),
                             to.toDate(),
@@ -156,7 +157,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                                 dialog.dismiss()
 
                                 if (dialog.checkbox.isChecked) {
-                                    val intent = SolveActivity.getIntent(context!!, it)
+                                    val intent = SolveActivity.getIntent(requireContext(), it)
                                     startActivity(intent)
                                 } else {
                                     val text: String
@@ -172,7 +173,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                             },
                             failCB = {
                                 dialog.dismiss()
-                                DaebakToast.showFailedMakePiece(context!!)
+                                DaebakToast.showFailedMakePiece(requireContext())
                             }
                     )
                 }
@@ -181,8 +182,8 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
         reviewBtn.setPermissionClickListener {
             if(reviewBtn.isEnableUI()) {
-                ContentManager.getReview(context!!, user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
-                    val intent = SolveActivity.getReviewIntent(context!!, it, false)
+                ContentManager.getReview(requireContext(), user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
+                    val intent = SolveActivity.getReviewIntent(requireContext(), it, false)
                     startActivity(intent)
                 }
             }
@@ -332,7 +333,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         }
 
         if (snackBar == null) {
-            val snackBarWindow = SnackBar(context!!, text, buttonText)
+            val snackBarWindow = SnackBar(requireContext(), text, buttonText)
             snackBarWindow.setSnackBarViewListener(object : SnackBarViewListener {
                 override fun onXBtnClicked(view: SnackBarView) {
                     snackBarWindow.dismiss()
