@@ -85,6 +85,9 @@ open class Content: Serializable {
     var publicData:PublicData? = null
     var mockID:Int = 0
 
+    // Book 과 Mock에서 사용함
+    var chapter: String = ""
+
     val category: PieceCategory
         get() {
             if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.mockExam))
@@ -126,6 +129,8 @@ open class Content: Serializable {
         this.pieceCategoryTag = content.pieceCategoryTag
         // mockID 추가
         this.mockID = content.mockID
+        // book과 mock에서 사용함
+        this.chapter = content.chapter
     }
 
     fun addSimilarProblem(problem: Problem) {

@@ -31,6 +31,7 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
+import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
@@ -106,13 +107,13 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
             }
         }
 
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(clearReceiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_CLEAR))
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(receiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_SCORING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_CLEAR))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_SCORING))
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(clearReceiver)
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         super.onDestroy()
     }
 
@@ -154,12 +155,12 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     }
 
     override fun onSolveWithPrint(mockExam: MockExam, makeNew: Boolean) {
-        val intent = OMRActivity.getIntent(context!!, mockExam, makeNew)
+        val intent = OMRActivity.getIntent(requireContext(), mockExam, makeNew)
         startActivityForResult(intent, REQUEST_MOCK_TEST)
     }
 
     override fun onSolveWithoutPrint(mockExam: MockExam, makeNew: Boolean) {
-        val intent = SolveActivity.getIntent(context!!, mockExam, makeNew)
+        val intent = SolveActivity.getIntent(requireContext(), mockExam, makeNew)
         startActivityForResult(intent, REQUEST_MOCK_TEST)
     }
 
@@ -171,11 +172,11 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
         wrongManageView.hide(false)
 
         newExamBtn.setOnClickListener {
-            LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
             listener?.onNewExamBtnClicked()
         }
 
-        MockExamManager.getMyMockExamList(context!!, user!!) {
+        MockExamManager.getMyMockExamList(requireContext(), user!!) {
             it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
             this@MyMockFragment.exams = it
             this@MyMockFragment.sortedExams = exams
@@ -199,6 +200,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                     this@MyMockFragment.onOrderChanged(holder, view, order)
                 }
             })
+            it.order = SortableTextView.Order.descend
         }
     }
 
@@ -217,24 +219,26 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     }
 
     private fun onSolveBtnClicked(exam: MockExam) {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "이어풀기", "나의모의고사")
-        MockExamGuideDialog(context!!, exam, true, this@MyMockFragment).show()
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "이어풀기", "나의모의고사")
+        MockExamGuideDialog(requireContext(), exam, true, this@MyMockFragment).show()
     }
 
     private fun onReportBtnClicked(exam: MockExam) {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "보고서", "나의모의고사")
-        val intent = MockReportActivity.getIntent(context!!, exam)
-        startActivity(intent)
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "보고서", "나의모의고사")
+        getMockWithOptionalSubjects(exam) { mock ->
+            val intent = MockReportActivity.getIntent(requireContext(), mock)
+            startActivity(intent)
+        }
     }
 
     private fun onReviewBtnClicked(exam: MockExam) {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "리뷰하기", "나의모의고사")
-        val intent = SolveActivity.getReviewIntent(context!!, exam)
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "리뷰하기", "나의모의고사")
+        val intent = SolveActivity.getReviewIntent(requireContext(), exam)
         startActivity(intent)
     }
 
     fun onOrderChanged(holder: MyMockHeadHolder, view: SortableTextView, order: SortableTextView.Order) = holder.apply {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기-정렬", view.label)
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기-정렬", view.label)
         when (view) {
             typeSl -> selectedSort = SortType.category
             gradeSl -> selectedSort = SortType.grade
@@ -334,6 +338,30 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyMockHolder {
             return MyMockHolder(LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, parent, false))
+        }
+    }
+
+    private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
+        val mock = MockExam(content)
+        MockExamManager.getMockSummary(requireContext(), content.mockID, user!!) { mockExamSummery ->
+            val optionResult = mutableListOf<CommercialSubject>()
+            mockExamSummery?.let {
+                val optionalSubjects = mockExamSummery.optionalSubjectSummary
+
+                for(subject in optionalSubjects?: arrayOf()) {
+                    if (subject.isSelected) {
+                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
+                    }
+                }
+                mock.selectOptional = optionResult
+                mock.examType = mockExamSummery.examType.let {
+                    MockExam.ExamType.valueOnString(it)
+                }
+                mock.grade = mockExamSummery.grade
+            }
+
+
+            cb(mock)
         }
     }
 }

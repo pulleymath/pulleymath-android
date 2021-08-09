@@ -67,7 +67,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
 
         val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
 
-        user = MyApplication.user?: User()
+        user = User()
         user.studentID = studentID
         user.firstDate = Date(Date().time - 604800000L)
 

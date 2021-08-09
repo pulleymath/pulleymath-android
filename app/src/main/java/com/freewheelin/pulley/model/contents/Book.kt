@@ -65,7 +65,7 @@ class Book: Content {
 
     var bookPage: List<BookPage>? = null
 
-    var chapter: String = ""
+//    var chapter: String = "" // Mock에서도 사용하기 때문에 Content로 올라감
 
     var activeRecommendTag: String? = null
     var bookCategoryList: BookCategoryList? = null

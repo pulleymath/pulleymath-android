@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -127,11 +128,18 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     private fun sort() {
         var list = commercialBooks
         if(subjectSl.isSelected) {
-          val subjectList = listOf("수학(상)", "수학(하)", "수학1", "수학2", "미적분", "확률과 통계", "기하")
-          val indexComparatorAscend = Comparator { cbook1: CommercialBook, cbook2: CommercialBook -> subjectList.indexOf(cbook1.subjectType?.text) - subjectList.indexOf(cbook2.subjectType?.text) }
-          val indexComparatorDescend = Comparator { cbook1: CommercialBook, cbook2: CommercialBook -> subjectList.indexOf(cbook2.subjectType?.text) - subjectList.indexOf(cbook1.subjectType?.text) }
+            val subjectList = listOf("수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
+            val indexComparatorAscend =
+                Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
+                    subjectList.indexOf(cbook1.subjectType?.text) - subjectList.indexOf(cbook2.subjectType?.text)
+                }
+            val indexComparatorDescend =
+                Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
+                    subjectList.indexOf(cbook2.subjectType?.text) - subjectList.indexOf(cbook1.subjectType?.text)
+                }
 
-          list = when(subjectSl.order) {
+
+            list = when (subjectSl.order) {
                 SortableTextView.Order.ascend -> list?.sortedWith(indexComparatorAscend)
                 SortableTextView.Order.descend -> list?.sortedWith(indexComparatorDescend)
             }
@@ -173,7 +181,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     private fun initUI() {
 //        setCancelable(false)
-        subjectTab.labels = listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "미적분", "확률과 통계", "기하")
+        subjectTab.labels = listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
         subjectTab.listener = this
         step2Container.visibility = View.GONE
         nowCheckbox.visibility = View.GONE

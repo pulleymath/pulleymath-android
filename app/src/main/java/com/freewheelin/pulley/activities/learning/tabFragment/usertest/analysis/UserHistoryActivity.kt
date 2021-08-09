@@ -72,7 +72,7 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
         val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
         val name = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_NAME)?:"none"
 
-        user = MyApplication.user?:User()
+        user = User()
         user.studentID = studentID
         user.fullName = name
 
@@ -165,73 +165,78 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
                 holder.borderView.visibility = View.VISIBLE
             }
 
-            holder.reportBtn.setOnClickListener {
-                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
-                when(content.pieceCategoryTag) {
-                    BookType.MO -> {
-                        val intent = MockReportActivity.getIntent(this@UserHistoryActivity, MockExam(content))
-                        startActivity(intent)
-                    }
-                    BookType.TEST -> {
-                        val test = Test(content)
-                        when(test.getTestType()) {
-                            Test.TestType.weekly ->  {
-                                val intent = WeeklyTestReportActivity.getIntent(this@UserHistoryActivity, test)
-                                startActivity(intent)
-                            }
-                            Test.TestType.wrong -> {
-                                val intent = WrongTestReportActivity.getIntent(this@UserHistoryActivity, test)
-                                startActivity(intent)
-                            }
-                            else -> {
-                                LogUtils.assert(false, "예상치 못한 테스트 타입 ${test.getTestType()}")
-                            }
-                        }
-                    }
-                    else -> {
-                        LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
-                    }
-                }
-            }
+//            holder.reportBtn.setOnClickListener {
+//                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
+//                when(content.pieceCategoryTag) {
+//                    BookType.MO -> {
+//                        val intent = MockReportActivity.getIntent(this@UserHistoryActivity, MockExam(content))
+//                        startActivity(intent)
+//                    }
+//                    BookType.TEST -> {
+//                        val test = Test(content)
+//                        when(test.getTestType()) {
+//                            Test.TestType.weekly ->  {
+//                                val intent = WeeklyTestReportActivity.getIntent(this@UserHistoryActivity, test)
+//                                startActivity(intent)
+//                            }
+//                            Test.TestType.wrong -> {
+//                                val intent = WrongTestReportActivity.getIntent(this@UserHistoryActivity, test)
+//                                startActivity(intent)
+//                            }
+//                            else -> {
+//                                LogUtils.assert(false, "예상치 못한 테스트 타입 ${test.getTestType()}")
+//                            }
+//                        }
+//                    }
+//                    else -> {
+//                        LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
+//                    }
+//                }
+//            }
 
-            holder.solveBtn.setPermissionClickListener {
-                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
-                when(content.pieceCategoryTag) {
-                    BookType.MO -> {
-                        if(content.isCompleted()) {
-                            val intent = SolveActivity.getReviewIntent(this@UserHistoryActivity, MockExam(content))
-                            startActivity(intent)
-                        } else {
-                            val exam = MockExam(content)
-                            MockExamGuideDialog(this@UserHistoryActivity, exam, true, this@UserHistoryActivity).show()
-                        }
-                    }
-                    BookType.BOOK, BookType.CUSTOM_BOOK -> {
-                        val intent = if(content.isCompleted())
-                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Book(content))
-                        else
-                            SolveActivity.getIntent(this@UserHistoryActivity, Book(content))
-                        startActivity(intent)
-                    }
+//            holder.solveBtn.setPermissionClickListener {
+//                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
+//                when(content.pieceCategoryTag) {
+//                    BookType.MO -> {
+//                        if(content.isCompleted()) {
+//                            val intent = SolveActivity.getReviewIntent(this@UserHistoryActivity, MockExam(content))
+//                            startActivity(intent)
+//                        } else {
+//                            val exam = MockExam(content)
+//                            MockExamGuideDialog(this@UserHistoryActivity, exam, true, this@UserHistoryActivity).show()
+//                        }
+//                    }
+//                    BookType.BOOK, BookType.CUSTOM_BOOK -> {
+//                        val intent = if(content.isCompleted())
+//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Book(content))
+//                        else
+//                            SolveActivity.getIntent(this@UserHistoryActivity, Book(content))
+//                        startActivity(intent)
+//                    }
+//
+//                    BookType.NOTE, BookType.RECOMMEND -> {
+//                        val intent = if(content.isCompleted()) {
+//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Piece(content))
+//                        } else {
+//                            SolveActivity.getIntent(this@UserHistoryActivity, Piece(content))
+//                        }
+//                        startActivity(intent)
+//                    }
+//
+//                    BookType.TEST -> {
+//                        val intent = if(content.isCompleted())
+//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Test(content))
+//                        else
+//                            SolveActivity.getIntent(this@UserHistoryActivity, Test(content))
+//                        startActivity(intent)
+//                    }
+//                }
+//            }
 
-                    BookType.NOTE, BookType.RECOMMEND -> {
-                        val intent = if(content.isCompleted()) {
-                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Piece(content))
-                        } else {
-                            SolveActivity.getIntent(this@UserHistoryActivity, Piece(content))
-                        }
-                        startActivity(intent)
-                    }
-
-                    BookType.TEST -> {
-                        val intent = if(content.isCompleted())
-                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Test(content))
-                        else
-                            SolveActivity.getIntent(this@UserHistoryActivity, Test(content))
-                        startActivity(intent)
-                    }
-                }
-            }
+            // TODO 이부분 기획이 안되어있고 리포트나 솔브나 토큰 권한문제로 에러가 나기때문에
+            // 제대로하려면 기획 + 서버 api 와의 협의가 필요함
+            holder.reportBtn.visibility = View.INVISIBLE
+            holder.solveBtn.visibility = View.INVISIBLE
         }
     }
 }

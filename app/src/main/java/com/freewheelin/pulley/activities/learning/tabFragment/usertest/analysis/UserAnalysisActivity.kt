@@ -57,6 +57,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Math.abs
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 
@@ -81,7 +82,8 @@ class UserAnalysisActivity : AppCompatActivity(),
         val studentID = intent.getStringExtra(KEY_STUDENT_ID)?:"none"
         val name = intent.getStringExtra(KEY_STUDENT_NAME)?:"none"
 
-        user = MyApplication.user?:User()
+        // 액티비티 내에서 api 호출할때 쓰는 값은 studentID, fullName
+        user = User()
         user.studentID = studentID
         user.fullName = name
 
@@ -136,6 +138,7 @@ class UserAnalysisActivity : AppCompatActivity(),
 
     private fun setUpPieceUI(pieces: List<Content>) {
         try {
+            todayStudyView.setUpUIByUserAnalysis()
             todayStudyView.setUpUI(pieces)
             todayStudyView.findViewById<View>(R.id.studyBtn).visibility = View.INVISIBLE
         }catch(e:Exception) {

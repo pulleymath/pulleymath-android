@@ -7,8 +7,8 @@ enum class CommercialSubject {
     MATH_BOTTOM,
     MATH_ONE,
     MATH_TWO,
-    CALCULUS,
     PROBABILITY_AND_STATISTICS,
+    CALCULUS,
     GEOMETRY;
 
     val text: String

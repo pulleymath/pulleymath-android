@@ -36,6 +36,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     lateinit var examAnalysis: MockExamAnalysis
     lateinit var adapter: MockReportProblemAdapter
     lateinit var mockExam: MockExam
+
     val filteredProblemList: MutableList<MockExamProblem> = mutableListOf()
     var subjectTreeSet = HashSet<String>()
     var scoreTreeSet = HashSet<Int>()
@@ -139,6 +140,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
         val correctCount = examAnalysis.summaryAnalysis?.correctCount?:0
 
         titleTv.text = mockExam.getMockTitle()
+        twinsSupportTv.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
         ratingGuideTv2.text = template.getSummaryP(correctRate)
 
         scorePercentTv2.text = "${correctRate}%"
@@ -177,6 +179,8 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
             scoreCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
             titleTv.text = mockExam.getMockTitle()
+            twinsSupportTv.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
+
             scoreTv.text = it.score.toString() + "점"
             percentageTv.text = "${it.percent}%"
             ratingTv.text = it.rating.toString() + "등급"

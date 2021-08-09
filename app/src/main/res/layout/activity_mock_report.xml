@@ -27,6 +27,20 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="모의고사 보고서" />
 
+        <TextView
+            android:id="@+id/twinsSupportTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_light"
+            android:textSize="@dimen/sp14"
+            android:text="* 원본 모의고사 등급컷을 활용한 보고서입니다."
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/titleTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toEndOf="@+id/titleTv"
+            app:layout_constraintTop_toTopOf="@+id/titleTv" />
+
         <ImageButton
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"

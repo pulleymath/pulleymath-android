@@ -18,7 +18,7 @@ object Preferences {
     var onTestAPI = APPreference(false)
     var onLoggingEvent = APPreference(false)
     var onSuccessToast = APPreference(false)
-    var testBaseURL = APPreference("http://15.165.134.177:9000")
+    var testBaseURL = APPreference("https://api-dev.pulleymath.com")
     var userDataString =  APPreference("")
 
     var versionDataString = APPreference("")

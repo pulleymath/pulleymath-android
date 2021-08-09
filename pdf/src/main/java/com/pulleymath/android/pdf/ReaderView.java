@@ -27,6 +27,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -35,9 +36,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.Scroller;
 
 import com.artifex.mupdf.fitz.Link;
+import com.pulleymath.android.pdf.memo.MemoView;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -45,7 +48,9 @@ import java.util.Stack;
 
 public class ReaderView
 		extends AdapterView<Adapter>
-		implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener, Runnable {
+		implements GestureDetector.OnGestureListener,
+			ScaleGestureDetector.OnScaleGestureListener,
+			Runnable {
 	private Context mContext;
 	private boolean mLinksEnabled = false;
 	private boolean tapDisabled = false;
@@ -61,7 +66,7 @@ public class ReaderView
 	private static final int GAP               = 20;
 
 	private static final float MIN_SCALE        = 1.0f;
-	private static final float MAX_SCALE        = 64.0f;
+	private static final float MAX_SCALE        = 4.0f;
 
 	private static final boolean HORIZONTAL_SCROLLING = true;
 
@@ -377,8 +382,8 @@ public class ReaderView
 		return mChildViews.get(i);
 	}
 
-	public View getDisplayedView() {
-		return mChildViews.get(mCurrent);
+	public FrameLayout getDisplayedView() {
+		return (FrameLayout) mChildViews.get(mCurrent);
 	}
 
 	public void run() {
@@ -409,6 +414,9 @@ public class ReaderView
 
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
+
+		Log.d(getClass().getSimpleName(), "scale onFling()");
+
 		if (mScaling)
 			return true;
 
@@ -488,7 +496,8 @@ public class ReaderView
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		PageView pageView = (PageView)getDisplayedView();
+		FrameLayout container = getDisplayedView();
+		PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
 		if (!tapDisabled)
 			onDocMotion();
 		if (!mScaling) {
@@ -509,6 +518,7 @@ public class ReaderView
 			float factor = mScale/previousScale;
 
 			View v = mChildViews.get(mCurrent);
+
 			if (v != null) {
 				float currentFocusX = detector.getFocusX();
 				float currentFocusY = detector.getFocusY();
@@ -526,6 +536,7 @@ public class ReaderView
 
 				mLastScaleFocusX=currentFocusX;
 				mLastScaleFocusY=currentFocusY;
+
 				requestLayout();
 			}
 		}
@@ -540,11 +551,14 @@ public class ReaderView
 		// only confuse the user
 		mXScroll = mYScroll = 0;
 		mLastScaleFocusX = mLastScaleFocusY = -1;
+
+		Log.d(getClass().getSimpleName(), "scale onScaleBegin()");
 		return true;
 	}
 
 	public void onScaleEnd(ScaleGestureDetector detector) {
 		mScaling = false;
+		Log.d(getClass().getSimpleName(), "scale onScaleEnd()");
 	}
 
 	@Override
@@ -580,6 +594,8 @@ public class ReaderView
 			}
 		}
 
+		Log.d(getClass().getSimpleName(), "scale onTouchEvent()");
+
 		requestLayout();
 		return true;
 	}
@@ -587,6 +603,8 @@ public class ReaderView
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		Log.d(getClass().getSimpleName(), "scale onMeasure()");
 
 		int n = getChildCount();
 		for (int i = 0; i < n; i++)
@@ -607,6 +625,8 @@ public class ReaderView
 
 	private void onLayout2(boolean changed, int left, int top, int right,
 			int bottom) {
+
+		Log.d(getClass().getSimpleName(), "scale onLayout2()");
 
 		// "Edit mode" means when the View is being displayed in the Android GUI editor. (this class
 		// is instantiated in the IDE, so we need to be a bit careful what we do).
@@ -835,6 +855,8 @@ public class ReaderView
 		// Use the fitting values scaled by our current scale factor
 		v.measure(MeasureSpec.EXACTLY | (int)(v.getMeasuredWidth()*scale*mScale),
 				MeasureSpec.EXACTLY | (int)(v.getMeasuredHeight()*scale*mScale));
+
+		Log.d(getClass().getSimpleName(), "scale measureView()");
 	}
 
 	private Rect getScrollBounds(int left, int top, int right, int bottom) {
@@ -847,6 +869,8 @@ public class ReaderView
 		// constrain it to be central
 		if (xmin > xmax) xmin = xmax = (xmin + xmax)/2;
 		if (ymin > ymax) ymin = ymax = (ymin + ymax)/2;
+
+		Log.d(getClass().getSimpleName(), "scale getScrollBounds()");
 
 		return new Rect(xmin, ymin, xmax, ymax);
 	}
@@ -931,7 +955,10 @@ public class ReaderView
 	public boolean onSingleTapUp(MotionEvent e) {
 		Link link = null;
 		if (!tapDisabled) {
-			PageView pageView = (PageView) getDisplayedView();
+
+			FrameLayout container = getDisplayedView();
+			PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+
 			if (mLinksEnabled && pageView != null) {
 				int page = pageView.hitLink(e.getX(), e.getY());
 				if (page > 0) {
@@ -954,13 +981,13 @@ public class ReaderView
 	}
 
 	protected void onChildSetup(int i, View v) {
-		if (com.pulleymath.android.pdf.SearchTaskResult.get() != null
-				&& com.pulleymath.android.pdf.SearchTaskResult.get().pageNumber == i)
-			((PageView) v).setSearchBoxes(com.pulleymath.android.pdf.SearchTaskResult.get().searchBoxes);
-		else
-			((PageView) v).setSearchBoxes(null);
-
-		((PageView) v).setLinkHighlighting(mLinksEnabled);
+		PageView pageView = v.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+		if (com.pulleymath.android.pdf.SearchTaskResult.get() != null && com.pulleymath.android.pdf.SearchTaskResult.get().pageNumber == i) {
+			pageView.setSearchBoxes(com.pulleymath.android.pdf.SearchTaskResult.get().searchBoxes);
+		} else {
+			pageView.setSearchBoxes(null);
+		}
+		pageView.setLinkHighlighting(mLinksEnabled);
 	}
 
 	protected void onMoveToChild(int i) {
@@ -977,16 +1004,20 @@ public class ReaderView
 	protected void onSettle(View v) {
 		// When the layout has settled ask the page to render
 		// in HQ
-		((PageView) v).updateHq(false);
+		Log.d(getClass().getSimpleName(), "scale onSettle()");
+		PageView pageView = v.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+		pageView.updateHq(false);
 	}
 
 	protected void onUnsettle(View v) {
 		// When something changes making the previous settled view
 		// no longer appropriate, tell the page to remove HQ
-		((PageView) v).removeHq();
+		PageView pageView = v.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+		pageView.removeHq();
 	}
 
 	protected void onNotInUse(View v) {
-		((PageView) v).releaseResources();
+		PageView pageView = v.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+		pageView.releaseResources();
 	}
 }

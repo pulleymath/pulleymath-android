@@ -30,6 +30,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.MockReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.core.manage.MockExamManager.ARG_MOCK_IS_RESTART
 import com.freewheelin.pulley.core.manage.MockExamManager.ARG_START_PROBLEM
@@ -826,10 +827,12 @@ class SolveActivity : BaseActivity(),
                     dialog.setCancelable(false)
                     dialog.showFor {
                         ContentManager.score(this, user!!, exam, exam.problems.toSet(), time) {
-                            val intent = MockReportActivity.getIntent(this@SolveActivity, exam, it)
-                            startActivity(intent)
-                            setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
-                            finish()
+                            getMockWithOptionalSubjects(exam) { mock ->
+                                val intent = MockReportActivity.getIntent(this@SolveActivity, mock)
+                                startActivity(intent)
+                                setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                                finish()
+                            }
                         }
                     }
                 }
@@ -1770,6 +1773,28 @@ class SolveActivity : BaseActivity(),
 
 
 //        Log.d("MONITOR", "[SOLVE] TICK - ${AppUsageMonitor.accumulatedStudyTime}")
+    }
+    private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
+        val mock = MockExam(content)
+        MockExamManager.getMockSummary(this, content.mockID, user!!) { mockExamSummery ->
+            val optionResult = mutableListOf<CommercialSubject>()
+            mockExamSummery?.let {
+                val optionalSubjects = mockExamSummery.optionalSubjectSummary
+
+                for(subject in optionalSubjects?: arrayOf()) {
+                    if (subject.isSelected) {
+                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
+                    }
+                }
+                mock.selectOptional = optionResult
+                mock.examType = mockExamSummery.examType.let {
+                    MockExam.ExamType.valueOnString(it)
+                }
+                mock.grade = mockExamSummery.grade
+            }
+
+            cb(mock)
+        }
     }
 }
 

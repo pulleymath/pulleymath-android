@@ -1,7 +1,7 @@
 package com.pulleymath.android.pdf.log
 
-import android.util.Log
 import com.pulleymath.android.pdf.BuildConfig
+import com.pulleymath.android.pdf.memo.storage.PdfMemo
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,10 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 object Network {
@@ -23,9 +20,11 @@ object Network {
     private val retrofit = Retrofit.Builder().baseUrl(BASE_URL).apply {
         val client = OkHttpClient.Builder().apply {
             // add logging
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-            addInterceptor(interceptor)
+            if(BuildConfig.DEBUG) { // 개발모드에서만 로깅처리
+                val interceptor = HttpLoggingInterceptor()
+                interceptor.level = HttpLoggingInterceptor.Level.BODY
+                addInterceptor(interceptor)
+            }
             // add bearer token
             addInterceptor(
                 Interceptor { chain ->
@@ -74,6 +73,26 @@ object Network {
             override fun onFailure(p0: Call<PdfPageLogResponse>, p1: Throwable) {}
         })
     }
+
+    private val pdfMemoService = retrofit.create(PdfMemoService::class.java)
+
+    fun uploadMemo(request:List<PdfMemo>) {
+        pdfMemoService.uploadMemo(request).enqueue(object: Callback<PdfMemoPostResponse>{
+            override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {}
+            override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {}
+        })
+    }
+
+    fun downloadMemo(studentId:String, pdfId:Int?=null, pageNo:Int?=null, updatedAt:Long?=null, onResponse:(PdfMemoResponse?)->Unit, onFailure:(String)->Unit) {
+        pdfMemoService.downloadMemo(studentId, pdfId, pageNo, updatedAt).enqueue(object: Callback<PdfMemoResponse>{
+            override fun onResponse(call: Call<PdfMemoResponse>, response: Response<PdfMemoResponse>) {
+                onResponse(response?.body())
+            }
+            override fun onFailure(call: Call<PdfMemoResponse>, t: Throwable) {
+                onFailure(t.localizedMessage)
+            }
+        })
+    }
 }
 
 interface PdfLogService {
@@ -85,4 +104,15 @@ interface PdfLogService {
 
     @POST("/v1/pdf/page-log")
     fun pageLog(@Body body:PdfPageLog) : Call<PdfPageLogResponse>
+}
+
+interface PdfMemoService {
+    @POST("/v1/memo/pdf")
+    fun uploadMemo(@Body body:List<PdfMemo>) : Call<PdfMemoPostResponse>
+
+    @GET("/v1/memo/pdf")
+    fun downloadMemo(@Query("student_id") studentId:String,
+                     @Query("pdf_id") pdfId:Int?=null,
+                     @Query("page_no") pageNo:Int?=null,
+                     @Query("updated_at") updatedAt:Long?=null) : Call<PdfMemoResponse>
 }

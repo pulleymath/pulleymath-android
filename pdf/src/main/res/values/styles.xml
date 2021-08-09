@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextGrey_c0c0c0.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_c0c0c0</item>
+    </style>
+
+    <style name="TextGrey_818181.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_818181</item>
+    </style>
+
+    <style name="TextGrey_9f9f9f.Bold" parent="Bold">
+        <item name="android:textColor">@color/grey_9f9f9f</item>
+    </style>
+
+    <style name="Border_Grey_e8e8e8_Horizontal">
+        <item name="android:background">@color/grey_e8e8e8</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+
+
+    <style name="Switch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
+        <item name="android:track">@drawable/switch_track</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+    </style>
+
+    <style name="Switch.Light" parent="Switch">
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
+        <item name="android:track">@drawable/switch_track_light</item>
+        <item name="android:thumb">@drawable/switch_thumb_light</item>
+    </style>
+
+    <style name="Switch.Grey" parent="Switch">
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
+        <item name="android:track">@drawable/switch_track_grey</item>
+        <item name="android:thumb">@drawable/switch_thumb_light</item>
+    </style>
+</resources>

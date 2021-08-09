@@ -24,6 +24,7 @@ package com.pulleymath.android.pdf;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -38,14 +39,22 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.artifex.mupdf.fitz.Cookie;
 import com.artifex.mupdf.fitz.Link;
 import com.artifex.mupdf.fitz.Quad;
+import com.pulleymath.android.pdf.memo.MemoView;
+
+import java.lang.reflect.InvocationTargetException;
 
 // Make our ImageViews opaque to optimize redraw
 class OpaqueImageView extends androidx.appcompat.widget.AppCompatImageView {
@@ -96,6 +105,9 @@ public class PageView extends ViewGroup {
 	private       ProgressBar mBusyIndicator;
 	private final Handler   mHandler = new Handler();
 
+	public        MemoView  memoView = null;
+	private int bottomBarHeight = 0;
+
 	public PageView(Context c, MuPDFCore core, Point parentSize, Bitmap sharedHqBm) {
 		super(c);
 		mContext = c;
@@ -105,6 +117,62 @@ public class PageView extends ViewGroup {
 		mEntireBm = Bitmap.createBitmap(parentSize.x, parentSize.y, Config.ARGB_8888);
 		mPatchBm = sharedHqBm;
 		mEntireMat = new Matrix();
+
+		bottomBarHeight = getNavigationBarSize(mContext).y;
+		Log.d(getClass().getSimpleName(), "bottomBarHeight="+bottomBarHeight);
+	}
+
+//	private int getBottomNavigationHeight() {
+//		int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+//
+//		if (resourceId > 0) {
+//			return getResources().getDimensionPixelSize(resourceId);
+//		}
+//		return 0;
+//	}
+
+	public Point getNavigationBarSize(Context context) {
+		Point appUsableSize = getAppUsableScreenSize(context);
+		Point realScreenSize = getRealScreenSize(context);
+
+		// navigation bar on the right
+		if (appUsableSize.x < realScreenSize.x) {
+			return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
+		}
+
+		// navigation bar at the bottom
+		if (appUsableSize.y < realScreenSize.y) {
+			return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
+		}
+
+		// navigation bar is not present
+		return new Point();
+	}
+
+	public Point getAppUsableScreenSize(Context context) {
+//		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//		Display display = windowManager.getDefaultDisplay();
+//		Point size = new Point();
+//		display.getSize(size);
+//		return size;
+		return mParentSize;
+	}
+
+	public Point getRealScreenSize(Context context) {
+		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = windowManager.getDefaultDisplay();
+		Point size = new Point();
+
+		if (Build.VERSION.SDK_INT >= 17) {
+			display.getRealSize(size);
+		} else if (Build.VERSION.SDK_INT >= 14) {
+			try {
+				size.x = (Integer)     Display.class.getMethod("getRawWidth").invoke(display);
+				size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+			} catch (IllegalAccessException e) {} catch     (InvocationTargetException e) {} catch (NoSuchMethodException e) {}
+		}
+
+		return size;
 	}
 
 	private void reinit() {
@@ -227,7 +295,7 @@ public class PageView extends ViewGroup {
 		mGetLinkInfo.execute();
 
 		// Render the page in the background
-		mDrawEntire = new com.pulleymath.android.pdf.CancellableAsyncTask<Void, Void>(getDrawPageTask(mEntireBm, mSize.x, mSize.y, 0, 0, mSize.x, mSize.y)) {
+		mDrawEntire = new CancellableAsyncTask<Void, Void>(getDrawPageTask(mEntireBm, mSize.x, mSize.y, 0, 0, mSize.x, mSize.y)) {
 
 			@Override
 			public void onPreExecute() {
@@ -338,6 +406,9 @@ public class PageView extends ViewGroup {
 		}
 	}
 
+	/** 메모 뷰의 가로 세로 최초 값 */
+	float ratio = 0;
+
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		int w = right-left;
@@ -376,10 +447,65 @@ public class PageView extends ViewGroup {
 
 			mBusyIndicator.layout((w-bw)/2, (h-bh)/2, (w+bw)/2, (h+bh)/2);
 		}
+
+		/** scale memoView */
+		if(memoView != null) {
+
+			float scale = (float) h / (float) mSize.y;
+
+			if(mParentSize.x > mParentSize.y  && w < h) {   // 가로모드에서 scale 다시 계산 및 가로 세로 사이즈 변경
+															// 최초 한번은 전체 사이즈로 호출되기 때문에 가로가 더 작을 때만 실행해야 한다
+				// 세로모드에서의 넓이
+				float xOfVertical = h + bottomBarHeight;
+				// 세로모드에서의 높이
+				float yOfVertical = mParentSize.x - bottomBarHeight;
+
+				// 가로와 세로였을때의 비율 최초 한번 설정
+				if(ratio == 0) {
+
+					float ratioVertical   = xOfVertical / yOfVertical;
+					float ratioHorizontal = (float) w / (float) h;
+
+					if(ratioVertical > ratioHorizontal) {
+						ratio = (float) h / yOfVertical;
+					} else {
+						ratio = (float) w / xOfVertical;
+					}
+
+					// 사이즈 변경도 최초 한번만
+					float rescale = scale * ratio;
+					int resizedW = (int) (w / rescale);
+					int resizedH = (int) (h / rescale);
+					setSizeMemoView(resizedW, resizedH);
+				}
+
+				float rescale = scale * ratio;
+				setScaleMemoView(rescale);
+			} else {
+				setScaleMemoView(scale);
+			}
+		}
+	}
+
+	private void setScaleMemoView(float scale) {
+		memoView.setPivotX(0);
+		memoView.setPivotY(0);
+		memoView.setScaleX(scale);
+		memoView.setScaleY(scale);
+	}
+
+	private void setSizeMemoView(int width, int height) {
+		LayoutParams layoutParams = memoView.getLayoutParams();
+		layoutParams.width = width;
+		layoutParams.height = height;
+		memoView.setLayoutParams(layoutParams);
 	}
 
 	public void updateHq(boolean update) {
-		Rect viewArea = new Rect(getLeft(),getTop(),getRight(),getBottom());
+
+		FrameLayout container = (FrameLayout) getParent();
+		Rect viewArea = new Rect( container.getLeft(), container.getTop(), container.getRight(), container.getBottom());
+
 		if (viewArea.width() == mSize.x || viewArea.height() == mSize.y) {
 			// If the viewArea's size matches the unzoomed size, there is no need for an hq patch
 			if (mPatch != null) {
@@ -413,13 +539,18 @@ public class PageView extends ViewGroup {
 
 			// Create and add the image view if not already done
 			if (mPatch == null) {
-				mPatch = new com.pulleymath.android.pdf.OpaqueImageView(mContext);
+				mPatch = new OpaqueImageView(mContext);
 				mPatch.setScaleType(ImageView.ScaleType.MATRIX);
 				addView(mPatch);
 				mSearchView.bringToFront();
 			}
 
-			com.pulleymath.android.pdf.CancellableTaskDefinition<Void, Void> task;
+			CancellableTaskDefinition<Void, Void> task;
+
+//			Log.d(getClass().getSimpleName(), "completeRedraw ===> "+completeRedraw);
+//			Log.d(getClass().getSimpleName(), "mPatch ===> "+mPatch);
+//			Log.d(getClass().getSimpleName(), "patchArea ===> "+patchArea);
+//			Log.d(getClass().getSimpleName(), "patchViewSize ===> "+patchViewSize);
 
 			if (completeRedraw)
 				task = getDrawPageTask(mPatchBm, patchViewSize.x, patchViewSize.y,
@@ -430,14 +561,14 @@ public class PageView extends ViewGroup {
 						patchArea.left, patchArea.top,
 						patchArea.width(), patchArea.height());
 
-			mDrawPatch = new com.pulleymath.android.pdf.CancellableAsyncTask<Void,Void>(task) {
+			mDrawPatch = new CancellableAsyncTask<Void,Void>(task) {
 
 				public void onPostExecute(Void result) {
 					mPatchViewSize = patchViewSize;
 					mPatchArea = patchArea;
 					mPatch.setImageBitmap(mPatchBm);
 					mPatch.invalidate();
-					//requestLayout();
+					// requestLayout();
 					// Calling requestLayout here doesn't lead to a later call to layout. No idea
 					// why, but apparently others have run into the problem.
 					mPatch.layout(mPatchArea.left, mPatchArea.top, mPatchArea.right, mPatchArea.bottom);
@@ -461,7 +592,7 @@ public class PageView extends ViewGroup {
 		}
 
 		// Render the page in the background
-		mDrawEntire = new com.pulleymath.android.pdf.CancellableAsyncTask<Void, Void>(getUpdatePageTask(mEntireBm, mSize.x, mSize.y, 0, 0, mSize.x, mSize.y)) {
+		mDrawEntire = new CancellableAsyncTask<Void, Void>(getUpdatePageTask(mEntireBm, mSize.x, mSize.y, 0, 0, mSize.x, mSize.y)) {
 
 			public void onPostExecute(Void result) {
 				mEntire.setImageBitmap(mEntireBm);
@@ -526,7 +657,7 @@ public class PageView extends ViewGroup {
 		return 0;
 	}
 
-	protected com.pulleymath.android.pdf.CancellableTaskDefinition<Void, Void> getDrawPageTask(final Bitmap bm, final int sizeX, final int sizeY,
+	protected CancellableTaskDefinition<Void, Void> getDrawPageTask(final Bitmap bm, final int sizeX, final int sizeY,
                                                                                              final int patchX, final int patchY, final int patchWidth, final int patchHeight) {
 		return new MuPDFCancellableTaskDefinition<Void, Void>() {
 			@Override
@@ -543,7 +674,7 @@ public class PageView extends ViewGroup {
 
 	}
 
-	protected com.pulleymath.android.pdf.CancellableTaskDefinition<Void, Void> getUpdatePageTask(final Bitmap bm, final int sizeX, final int sizeY,
+	protected CancellableTaskDefinition<Void, Void> getUpdatePageTask(final Bitmap bm, final int sizeX, final int sizeY,
                                                                                                final int patchX, final int patchY, final int patchWidth, final int patchHeight)
 	{
 		return new MuPDFCancellableTaskDefinition<Void, Void>() {

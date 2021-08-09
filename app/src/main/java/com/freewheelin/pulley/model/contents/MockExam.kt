@@ -44,6 +44,33 @@ class MockExam: Content {
     var isRestart = false
     var selectOptional = mutableListOf<CommercialSubject>()
 
+    enum class ExamType {
+        ksat, // 수능
+        mock, // 모의고사
+        mock_twins; // 쌍둥이모의고사
+
+        companion object {
+            fun valueOnString(text: String) = values().find{ it.text == text }
+        }
+
+        val text: String
+            get() {
+                return when(this) {
+                    ksat -> "수능"
+                    mock -> "모의고사"
+                    mock_twins -> "모의고사 (쌍둥이)"
+                }
+            }
+        val isTwins: Boolean
+            get() {
+                return when(this) {
+                    mock_twins -> true
+                    else -> false
+                }
+            }
+    }
+    var examType: ExamType? = null
+
     fun isPersonalCompleted() : Boolean {
         return personalData?.markingState == "COMPLETED"
     }
@@ -55,14 +82,17 @@ class MockExam: Content {
                 2 -> Type.ns
                 else -> Type.nd
             }
-//            if ("문과" in subject)
-//                return Type.la
-//            else if ("이과" in subject)
-//                return Type.ns
-//            else
-//                return Type.nd
         }
     var grade: Int = 1
+        get() {
+            return if (chapter.length > 1 && field == 1) {
+                val grade = chapter[1].toString().toIntOrNull()
+                grade ?: field
+            } else {
+                field
+            }
+        }
+
     var percent: Int? = null
 
     var pdfFile: String = ""
@@ -89,13 +119,6 @@ class MockExam: Content {
     val title: String
         get() {
             return subject
-//            val willDeleteText = when(type) {
-//                Type.la -> " 고${grade} 문과"
-//                Type.ns -> " 고${grade} 이과"
-//                else -> " 고${grade} 공통"
-//            }
-//
-//            return subject.replace(willDeleteText, "")
         }
 
     var updated: Boolean = false

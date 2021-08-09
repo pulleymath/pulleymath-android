@@ -27,6 +27,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     var contents: List<Content> = emptyList()
+    var isUserAnalysis: Boolean = false
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_analysis_today_study_list, this)
@@ -57,6 +58,10 @@ class AnalysisTodayStudyListView: ConstraintLayout {
         }
     }
 
+    fun setUpUIByUserAnalysis() {
+        isUserAnalysis = true
+    }
+
     var newOne = false
     fun setList() {
         recyclerView.removeAllViews()
@@ -66,6 +71,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
             val view = LayoutInflater.from(context).inflate(R.layout.item_study_list, recyclerView, false)
             holder = StudyListViewHolder(view)
             holder.set(piece)
+            if (isUserAnalysis) holder.setUserAnalysisUI()
 
             holder.solveBtn.setPermissionClickListener {
                 listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
@@ -139,6 +145,11 @@ class StudyListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         } else {
             reportBtn.visibility = View.INVISIBLE
         }
+
+    }
+
+    fun setUserAnalysisUI() {
+        solveBtn.visibility = View.INVISIBLE
     }
 
     fun setHighlight() {

@@ -32,12 +32,10 @@ import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component
 import com.freewheelin.pulley.activities.solve.CustomBarChartRender
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API.ResponseModel.DailyRecommend
-import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
-import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
-import com.freewheelin.pulley.core.API.ResponseModel.WeekStudyData
+import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.ContentManager
+import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
@@ -351,8 +349,10 @@ class AnalysisFragment : LearningTabFragment(),
         when(content.pieceCategoryTag) {
             BookType.MO -> {
                 if (content.isCompleted()) {
-                    val intent = SolveActivity.getReviewIntent(context!!, MockExam(content))
-                    startActivity(intent)
+                    getMockWithOptionalSubjects(content) { mock ->
+                        val intent = SolveActivity.getReviewIntent(requireContext(), mock)
+                        startActivity(intent)
+                    }
                 } else {
                     val exam = MockExam(content)
                     MockExamGuideDialog(context!!, exam, true, this).show()
@@ -389,8 +389,10 @@ class AnalysisFragment : LearningTabFragment(),
         LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
         when(content.pieceCategoryTag) {
             BookType.MO -> {
-                val intent = MockReportActivity.getIntent(context!!, MockExam(content))
-                startActivity(intent)
+                getMockWithOptionalSubjects(content) { mock ->
+                    val intent = MockReportActivity.getIntent(requireContext(), mock)
+                    startActivity(intent)
+                }
             }
             BookType.TEST -> {
                 val test = Test(content)
@@ -492,5 +494,26 @@ class AnalysisFragment : LearningTabFragment(),
         }
         getDeepChildOffset(mainParent, parentGroup.parent, parentGroup, accumulatedOffset)
     }
+    private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
+        val mock = MockExam(content)
+        MockExamManager.getMockSummary(requireContext(), content.mockID, user!!) { mockExamSummery ->
+            val optionResult = mutableListOf<CommercialSubject>()
+            mockExamSummery?.let {
+                val optionalSubjects = mockExamSummery.optionalSubjectSummary
 
+                for(subject in optionalSubjects?: arrayOf()) {
+                    if (subject.isSelected) {
+                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
+                    }
+                }
+                mock.selectOptional = optionResult
+                mock.examType = mockExamSummery.examType.let {
+                    MockExam.ExamType.valueOnString(it)
+                }
+                mock.grade = mockExamSummery.grade
+            }
+
+            cb(mock)
+        }
+    }
 }

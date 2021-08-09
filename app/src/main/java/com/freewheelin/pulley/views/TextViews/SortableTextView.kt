@@ -2,6 +2,7 @@ package com.freewheelin.pulley.views.TextViews
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,10 +32,10 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
             field = value
             when(value) {
                 Order.ascend -> {
-                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_bottom)
+                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_top)
                 }
                 Order.descend -> {
-                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_top)
+                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_bottom)
                 }
             }
             isSelected = isSelected
@@ -63,10 +64,11 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
             isSelected = true
 
         } else {
-            if (order == Order.descend)
-                order = Order.ascend
-            else
-                order = Order.descend
+            order = if (order == Order.descend) {
+                Order.ascend
+            } else {
+                Order.descend
+            }
         }
 
         listener?.onOrderChanged(this, this.order)

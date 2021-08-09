@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -31,7 +30,11 @@ import com.pulleymath.android.pdf.ReaderView.ViewMapper
 import com.pulleymath.android.pdf.log.Network
 import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
-import java.io.*
+import com.pulleymath.android.pdf.memo.PencilcaseView
+import com.pulleymath.android.pdf.memo.storage.DatabaseHelper
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
 import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
@@ -86,7 +89,7 @@ open class PdfViewerActivity : Activity() {
     private var mLayoutButton: View? = null
     private var mLayoutPopupMenu: PopupMenu? = null
 
-    private val CACHE_DIR by lazy {"$filesDir/pdfs"}
+//    private val CACHE_DIR by lazy {"$filesDir/pdfs"}
     lateinit var mBackButton: View
     lateinit var mAnswerButton: View
 
@@ -101,6 +104,8 @@ open class PdfViewerActivity : Activity() {
     private var answerPageLink: MutableMap<Int,Int> = mutableMapOf()
 
     private var studentId: String = ""
+
+    lateinit var db:DatabaseHelper
 
     private fun toHex(digest: ByteArray): String {
         val builder = StringBuilder(2 * digest.size)
@@ -138,12 +143,14 @@ open class PdfViewerActivity : Activity() {
         return core
     }
 
-    /** Called when the activity is first created.  */
+    /** Called when the activity is first created. */
     lateinit var rootLayout:FrameLayout
     lateinit var bgPdfLoading:ImageView
     lateinit var bgPdfProgress:ProgressBar
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        db = DatabaseHelper.get(this)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -157,18 +164,18 @@ open class PdfViewerActivity : Activity() {
         bgPdfLoading = findViewById(R.id.pdfLoading)
         bgPdfProgress = findViewById(R.id.pdfProgress)
 
-        createCacheDir()
+//        createCacheDir()
 
         loadFile(savedInstanceState)
     }
 
-    private fun createCacheDir() {
-        File(CACHE_DIR)?.let { outputDir ->
-            if (!outputDir.exists()) {
-                outputDir.mkdirs()
-            }
-        }
-    }
+//    private fun createCacheDir() {
+//        File(CACHE_DIR)?.let { outputDir ->
+//            if (!outputDir.exists()) {
+//                outputDir.mkdirs()
+//            }
+//        }
+//    }
 
     private fun loadFile(savedInstanceState: Bundle?) {
         if (core == null) {
@@ -218,9 +225,9 @@ open class PdfViewerActivity : Activity() {
     }
 
     private fun openLocalFile(uri: Uri, savedInstanceState: Bundle?) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST)
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST)
+//        }
         val path = uri.path
         core = openFile(path)
         SearchTaskResult.set(null)
@@ -244,15 +251,18 @@ open class PdfViewerActivity : Activity() {
                 val decodedBase64 = MuPDFCrypto.decrypt(byteString, getString(R.string.publisher_key))
                 val decodedByteArray = android.util.Base64.decode(decodedBase64, android.util.Base64.NO_PADDING)
                 val magic = "application/pdf"
+
                 core = openBuffer(decodedByteArray, magic)
                 SearchTaskResult.set(null)
 
                 if (core != null && core!!.needsPassword()) {
                     requestPassword(savedInstanceState)
                 }
+
                 if (core != null && core!!.countPages() == 0) {
                     core = null
                 }
+
                 runOnUiThread {
                     fileLoaded(savedInstanceState)
                 }
@@ -287,7 +297,7 @@ open class PdfViewerActivity : Activity() {
             alert.setOnCancelListener { finish() }
             alert.show()
         } else {
-            createUI(savedInstanceState)
+            loadMemo(savedInstanceState)
         }
     }
 
@@ -310,12 +320,20 @@ open class PdfViewerActivity : Activity() {
         alert.show()
     }
 
-    fun relayoutDocument() {
-        val loc = core!!.layout(mDocView!!.mCurrent, mLayoutW, mLayoutH, mLayoutEM)
-        mFlatOutline = null
-        mDocView!!.mHistory.clear()
-        mDocView!!.refresh()
-        mDocView!!.displayedViewIndex = loc
+    fun loadMemo(savedInstanceState: Bundle?) {
+        thread(start=true) {
+            val latest = db.pdfWritingDao().getLatestTimestamp(studentId)
+            Log.d(javaClass.simpleName, "latest timestamp=$latest")
+            Network.downloadMemo(studentId, pdfId, null, latest, { response ->
+                thread(start=true) {
+                    db.pdfWritingDao().upsert(response?.data?: listOf())
+                    runOnUiThread { createUI(savedInstanceState) }
+                }
+            },{ error ->
+                Log.e(javaClass.simpleName, "download memo -> $error")
+                runOnUiThread { createUI(savedInstanceState) }
+            })
+        }
     }
 
     fun createUI(savedInstanceState: Bundle?) {
@@ -344,7 +362,7 @@ open class PdfViewerActivity : Activity() {
                 }
             }
         }
-        mDocView?.setAdapter(PageAdapter(this, core))
+
         mSearchTask = object : SearchTask(this, core) {
             override fun onTextFound(result: SearchTaskResult) {
                 SearchTaskResult.set(result)
@@ -358,6 +376,15 @@ open class PdfViewerActivity : Activity() {
 
         makeButtonsView()
         setButtons(mButtonsView!!)
+
+        /** set drawingId */
+        val adapter = PageAdapter(this, core)
+        adapter.setDrawingId("memo_${studentId}_${pdfId}_")
+        /** set pencilcase */
+        val pencilcase = mButtonsView!!.findViewById(R.id.pencilcase) as PencilcaseView
+        adapter.setPencilcase(pencilcase)
+
+        mDocView?.adapter = adapter
 
         // Set up the page slider
         val smax = Math.max(core!!.countPages() - 1, 1)
@@ -438,8 +465,16 @@ open class PdfViewerActivity : Activity() {
         rootLayout.addView(mButtonsView)
 
         setProgressAnimation()
-        preventScreeShot()
+        preventScreenShot()
         loadTargetPage()
+    }
+
+    fun relayoutDocument() {
+        val loc = core!!.layout(mDocView!!.mCurrent, mLayoutW, mLayoutH, mLayoutEM)
+        mFlatOutline = null
+        mDocView!!.mHistory.clear()
+        mDocView!!.refresh()
+        mDocView!!.displayedViewIndex = loc
     }
 
     private fun setProgressAnimation() {
@@ -457,7 +492,7 @@ open class PdfViewerActivity : Activity() {
         animator.start()
     }
 
-    fun preventScreeShot() {
+    fun preventScreenShot() {
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
 
@@ -495,9 +530,7 @@ open class PdfViewerActivity : Activity() {
                     putExtra(KEY_STUDENT_ID, studentId)
                     putExtra(KEY_TOKEN, token)
 
-                    runOnUiThread {
-                        startActivity(this)
-                    }
+                    startActivity(this)
                 }
             }
         }
@@ -546,7 +579,8 @@ open class PdfViewerActivity : Activity() {
         if (mDocView != null) {
             mDocView!!.applyToChildren(object : ViewMapper() {
                 public override fun applyToView(view: View) {
-                    (view as PageView).releaseBitmaps()
+                    val pageView = view.findViewWithTag<PageView>(PageAdapter.TAG_PAGEVIEW)
+                    pageView.releaseBitmaps()
                 }
             })
         }
@@ -618,7 +652,7 @@ open class PdfViewerActivity : Activity() {
                 override fun onAnimationStart(animation: Animation) {}
                 override fun onAnimationRepeat(animation: Animation) {}
                 override fun onAnimationEnd(animation: Animation) {
-                    mTopBarSwitcher!!.visibility = View.INVISIBLE
+                    mTopBarSwitcher!!.visibility = View.GONE
                 }
             })
             mTopBarSwitcher!!.startAnimation(anim)

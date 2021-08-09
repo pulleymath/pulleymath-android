@@ -287,7 +287,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp32"
                     android:layout_marginTop="@dimen/dp32"
-                    android:text="풀이 방식을 선택해 주세요."
+                    android:text="풀이 방식을 선택해주세요."
                     android:textSize="@dimen/sp16" />
 
                 <RadioGroup
