@@ -16,7 +16,7 @@ import kotlin.concurrent.thread
 object FileHelper {
 
     fun eraseMemo(context: Context, fileName: String) {
-        Log.d(javaClass.simpleName, "saveMemo() fileName=$fileName")
+        Log.d(javaClass.simpleName, "eraseMemo() fileName=$fileName")
 
         thread(start = true) {
             val db = DatabaseHelper.get(context)
@@ -75,7 +75,9 @@ object FileHelper {
             val pdfMemo = db.pdfWritingDao().get(fileName)
             if (pdfMemo != null) {
                 val state = Gson().fromJson(pdfMemo.file, FreeDrawSerializableState::class.java)
-                completion(state)
+                if(state != null) {
+                    completion(state)
+                }
             } else {
                 errorCompletion?.let { it("error") }
             }

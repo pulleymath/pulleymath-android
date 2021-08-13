@@ -1,7 +1,9 @@
 package com.freewheelin.pulley.activities
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -105,16 +107,29 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         val task = appUpdateManager?.appUpdateInfo
         Log.d("테스트", "task=${task}")
         task?.addOnSuccessListener { appUpdateInfo ->
-            Log.d("테스트", "updateAvailability=${appUpdateInfo.updateAvailability()}")
+            val isUpdateAvailable = appUpdateInfo.updateAvailability()
+            Log.d("테스트", "updateAvailability=${isUpdateAvailable}")
             Log.d("테스트", "installStatus=${appUpdateInfo.installStatus()}")
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE || appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+            if(isUpdateAvailable == UpdateAvailability.UPDATE_AVAILABLE ||
+                isUpdateAvailable == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateForResult(appUpdateInfo, updateType)
             } else {
+                // 여기도 없애야 할수도 있음
                 checkSign()
             }
         }?.addOnFailureListener { ex ->
+            // 여기서 걍 앱스토어로 보내야함
+            try {
+                // BETA 앱은 앱스토어에 없기 때문에 제대로 동작하지 않음
+                // BETA앱으로 테스트 시 packageName에 com.freewheelin.pulley 를 입력해야한다.
+
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${packageName}")))
+            } catch (e: ActivityNotFoundException) {
+                Log.d("테스트", "activity not found exception")
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.freewheelin.pulley")))
+            }
             Log.e("테스트", "appUpdateInfo error=${ex.localizedMessage}")
-            checkSign()
+//            checkSign()
         }
     }
 

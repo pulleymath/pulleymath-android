@@ -25,6 +25,7 @@
 
     <dimen name="dp640">640dp</dimen>
     <dimen name="dp560">560dp</dimen>
+    <dimen name="dp510">510dp</dimen>
     <dimen name="dp450">450dp</dimen>
     <dimen name="dp400">400dp</dimen>
     <dimen name="dp328">328dp</dimen>

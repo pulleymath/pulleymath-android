@@ -238,7 +238,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MockListHolder {
             return MockListHolder(LayoutInflater.from(context).inflate(R.layout.item_new_test, parent, false))
-
         }
 
         override fun getItemCount(): Int {
