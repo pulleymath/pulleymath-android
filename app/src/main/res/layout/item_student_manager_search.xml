@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingBottom="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/studentName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="학생이름"
+            android:paddingEnd="@dimen/dp18"
+            android:gravity="center"
+            android:layout_weight="3" />
+        <TextView
+            android:id="@+id/studentPhoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="핸드폰번호"
+            android:paddingEnd="@dimen/dp18"
+            android:gravity="center"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/btnReport"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:text="모의고사 보고서" />
+
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/btnAnalysis"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
+            android:text="분석" />
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/btnRemove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginStart="10dp"
+            android:text="삭제" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

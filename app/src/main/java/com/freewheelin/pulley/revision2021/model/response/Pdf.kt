@@ -29,6 +29,12 @@ class Pdf : BaseDiffItem, Serializable {
     // use in local
     var filepath: String = ""
 
+    // pdflist에 표기되는 new 마크를 표시할 pdf id 로직
+    val newMarkAppear: Boolean
+        get() {
+            return id > 102
+        }
+
     val opening: ObservableBoolean = ObservableBoolean(false)
     val downloading: ObservableBoolean = ObservableBoolean(false)
     val downloadProgress: ObservableInt = ObservableInt(0)

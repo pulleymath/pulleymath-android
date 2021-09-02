@@ -19,14 +19,14 @@ android {
         }
     }
 
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 172
-        versionName '1.2.172'
+        targetSdkVersion 31
+        versionCode 175
+        versionName '1.2.175'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

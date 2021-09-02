@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.core.API
 
+import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
 import com.freewheelin.pulley.core.API.RequestModel.*
 import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.Parameter
@@ -165,6 +166,8 @@ interface  ServiceV2 {
     @GET("daily-summary/{studentID}")
     fun getDailySummary(@Path("studentID") studentID: String): Call<DailySummary>
 
+    @GET("search/user")
+    fun getUserListByUserName(@Query("name") value: String): Call<Template<List<StudentManagerDialog.Student>>>
 
     @GET("daily-summary/{studentID}/pieces/all")
     fun getStudyList(@Path("studentID") studentID: String): Call<List<Content>>

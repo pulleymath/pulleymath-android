@@ -241,15 +241,14 @@ class LearningTabActivity : BaseActivity(),
 
     private fun userTest() {
         val url = "https://pulleymath.com/user_test/teachers_v2.json"
+        // 작업하고있던 곳 맞음
         CoroutineScope(Dispatchers.IO).launch {
             val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
-            if(data != null && data.isNotEmpty()) {
+            if (data != null && data.isNotEmpty()) {
                 try {
-                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java).let {
-                        runOnUiThread {
-                            checkTeachers(it) }
-                    }
-                }catch (e:Exception) {
+                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java)
+                        .let { runOnUiThread { checkTeachers(it) } }
+                } catch (e: Exception) {
                     Log.d("마케팅에러", "error=${e.localizedMessage}")
                 }
             }
@@ -257,22 +256,12 @@ class LearningTabActivity : BaseActivity(),
     }
 
     private fun checkTeachers(response: StudentManagerDialog.StudentManagerResponse) {
-        var isRegisteredTeacherEmail = false
-        if (response.admins.contains(user?.email)) isRegisteredTeacherEmail = true
-        for (item in response.group) {
-            item.teachers.forEach { teacher ->
-                if (teacher.email == user?.email) {
-                    isRegisteredTeacherEmail = true
-                    return@forEach
-                }
-            }
-            if (isRegisteredTeacherEmail) break
-        }
+        val isRegisteredTeacherEmail = response.admins.contains(user?.email)
 
         if(isRegisteredTeacherEmail) {
             loadStudentBtn.visibility = View.VISIBLE
             loadStudentBtn.setOnClickListener {
-                StudentManagerDialog(this, response, {},{}).show()
+                StudentManagerDialog(this, {},{}).show()
             }
         }
     }

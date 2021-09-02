@@ -9,7 +9,7 @@
         <activity
             android:name=".PdfViewerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|fontScale|density"
-            >
+            android:exported="true" >
             <intent-filter>
                 <!-- match content and file requests with known mime-type -->
                 <action android:name="android.intent.action.VIEW" />
@@ -95,7 +95,7 @@
         <activity
             android:name=".OutlineActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|fontScale|density"
-            >
+            android:exported="true">
         </activity>
     </application>
 

@@ -8,7 +8,7 @@
     </data>
 
     <LinearLayout
-        android:layout_width="@dimen/dp560"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
@@ -19,21 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp">
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="@dimen/dp16"
-                android:visibility="visible"
-                android:layout_marginLeft="@dimen/dp12"
-                android:layout_marginRight="@dimen/dp12"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_black_left"
-                app:tint="@color/color_grey_818181" />
-
             <TextView
                 android:id="@+id/labelSelectSchool"
                 style="@style/TextBlack_4c4c4c.ExtraBold"
@@ -43,7 +28,7 @@
                 android:text="학생 관리"
                 android:textSize="@dimen/sp16"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnBack"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
@@ -67,7 +52,7 @@
             android:background="@color/grey_e8e8e8" />
 
         <LinearLayout
-            android:layout_width="@dimen/dp560"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -82,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp8"
-                    android:text="선생님을 선택해주세요."
+                    android:text="학생 이름으로 검색하세요."
                     android:textSize="@dimen/sp18"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -90,26 +75,50 @@
 
                 <SearchView
                     android:id="@+id/searchView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dp280"
                     android:layout_height="wrap_content"
-                    android:queryHint="이름으로 검색하세요."
                     android:visibility="visible"
+                    android:iconifiedByDefault="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/teacherListRv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"/>
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/teacherListRv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:visibility="visible"/>-->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/studentListRv"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:orientation="horizontal">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchListRv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:paddingBottom="@dimen/dp8"
+                    android:visibility="visible"/>
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:background="@color/grey_e8e8e8" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/studentListRv"
+                    android:layout_width="0dp"
+                    android:minWidth="@dimen/dp400"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:paddingTop="@dimen/dp8"
+                    android:visibility="visible"/>
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </layout>

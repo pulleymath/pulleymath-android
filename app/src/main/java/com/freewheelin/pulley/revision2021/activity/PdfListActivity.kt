@@ -34,6 +34,7 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
 import com.freewheelin.pulley.utils.DialogUtils
+import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.DaebakToast
 import com.pulleymath.android.pdf.PdfViewerActivity
 import java.io.ByteArrayOutputStream
@@ -283,6 +284,9 @@ class PdfListActivity : AppCompatActivity() {
             /** 다운로드 체크 */
             item.downloaded.set(File(makeLocalPdfName(item)).exists())
             item.subject = PdfListFilter.subject.get(item.subject_code)?:""
+            if (item.subject == "과목 전체") {
+                item.subject = ""
+            }
 
             binding.listener = this
             binding.item = item
@@ -316,7 +320,11 @@ class PdfListActivity : AppCompatActivity() {
                 viewModel.answer(pdf.cm_book_id) { answerLinks ->
                     thread(start=true) {
                         val answerPath = if(pdf.answer != null) checkDownloaded(pdf.answer!!) else ""
-                        openPdf(context, pdf, answerPath, answerLinks)
+                        if (answerLinks != null) {
+                            openPdf(context, pdf, answerPath, answerLinks)
+                        } else {
+                            openPdf(context, pdf, answerPath, listOf())
+                        }
                         pdf.opening.set(false)
                     }
                 }
@@ -352,12 +360,16 @@ class PdfListActivity : AppCompatActivity() {
                 putExtra(PdfViewerActivity.KEY_STUDENT_ID, user!!.studentID)
                 putExtra(PdfViewerActivity.KEY_TOKEN, user!!.token)
 
+                putExtra(PdfViewerActivity.KEY_TEST_API_FLAG, Preferences.onTestAPI.get())
+
                 var linkString = ""
                 for(link in answerLinks) {
                     val item = "${link.pdf_page_no}:${link.answer_page_no}"
                     linkString += "/$item"
                 }
-                putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
+                if (linkString.isNotEmpty()) {
+                    putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
+                }
 
                 runOnUiThread {
                     context.startActivity(this)

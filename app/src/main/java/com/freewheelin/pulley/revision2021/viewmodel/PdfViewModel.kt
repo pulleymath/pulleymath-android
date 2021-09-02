@@ -101,13 +101,14 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>)->Unit){
+    fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit){
         pdfRepository.answer(cmBookId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
                 response.data?.let { callback(it) }
             }, { error ->
+                callback(null)
                 Log.e(javaClass.simpleName, "answer=${error.localizedMessage}")
             })
     }
@@ -202,12 +203,16 @@ object PdfListFilter {
 
     val category = mapOf<String, String>(
         "" to "학습 유형 전체",
+        "고등예비" to "고등예비",
         "개념서" to "개념서",
         "유형서" to "유형서",
         "심화서" to "심화서",
         "내신서" to "내신서",
         "기출서" to "기출서",
-// TODO:       "연산서" to "연산서", 소정쌤이 빼라고 함
+        "기출서" to "기출서",
+        "실전모의고사" to "실전모의고사",
+        "공식집" to "공식집",
+        // TODO:       "연산서" to "연산서", 소정쌤이 빼라고 함
         )
 
     val categoryList = category.values.toList()

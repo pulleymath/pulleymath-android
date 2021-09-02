@@ -23,24 +23,33 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
 
-        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisActivity" />
-        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity" />
-        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserHistoryActivity" />
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisActivity"
+            android:exported="true" />
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity"
+            android:exported="true" />
+        <activity android:name=".activities.learning.tabFragment.usertest.analysis.UserHistoryActivity"
+            android:exported="true" />
 
-        <activity android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity" />
-        <activity android:name=".activities.learning.tabFragment.usertest.StudentMockReportActivity" />
+        <activity android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity"
+            android:exported="true" />
+        <activity android:name=".activities.learning.tabFragment.usertest.StudentMockReportActivity"
+            android:exported="true" />
         <activity
             android:name=".activities.learning.tabFragment.analysis.StudyHistoryActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.InitSettingCompleteActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.InitSettingActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.learning.tabFragment.main.component.SnackReportActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -54,64 +63,78 @@
 
         <activity
             android:name=".activities.auth.InitTestActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.StudyReportActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.StartActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.mobile.MStartActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true" />
         <activity
             android:name=".activities.OnboardingActivity"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.signup.SignupActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.findEmailAndPw.FindEmailAndPwActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize|stateUnchanged" />
+            android:windowSoftInputMode="adjustResize|stateUnchanged"
+            android:exported="true" />
         <activity
             android:name=".activities.auth.login.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:exported="true" />
         <activity
             android:name=".activities.WrongTestReportActivity"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent"
+            android:exported="true" />
         <activity
             android:name=".activities.DailyTestReportActivity"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent"
+            android:exported="true" />
         <activity
             android:name=".activities.WeeklyTestReportActivity"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent"
+            android:exported="true" />
         <activity
             android:name=".activities.analysis.AnalysisTabActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.MockReportActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
         <activity
             android:name=".activities.SplashActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -122,33 +145,39 @@
             android:name=".activities.OMRActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:exported="true" />
         <activity
             android:name=".activities.learning.LearningTabActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:exported="true" />
         <activity
             android:name=".activities.solve.SolveActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:exported="true" />
         <activity
             android:name=".activities.learning.tabFragment.main.mypage.MyPageActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:exported="true" />
         <activity
             android:name=".activities.mypage.MyRecommendSettingActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
+            android:exported="true" />
 
         <receiver
             android:name=".bases.UpdateReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
@@ -161,7 +190,8 @@
         <!-- 2021 revision -->
         <activity
             android:name=".revision2021.activity.PdfListActivity"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
 
     </application>
 

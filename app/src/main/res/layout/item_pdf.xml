@@ -96,6 +96,25 @@
             app:layout_constraintBottom_toBottomOf="@+id/imgCover"
             app:layout_constraintEnd_toEndOf="@+id/imgCover" />
 
+        <TextView
+            android:id="@+id/textNewMark"
+            style="@style/TextWhite_ffffff.ExtraBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_red_fe7b67_round_2_no_ripple"
+            android:elevation="5dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp"
+            android:text="NEW"
+            android:textSize="@dimen/dp14"
+            android:visibility="@{ item.newMarkAppear ? View.VISIBLE : View.INVISIBLE }"
+            app:layout_constraintBottom_toBottomOf="@+id/textCategory"
+            app:layout_constraintEnd_toStartOf="@+id/textCategory"
+            app:layout_constraintTop_toTopOf="@+id/textCategory" />
+
         <ImageView
             android:id="@+id/imgDownload"
             android:layout_width="wrap_content"

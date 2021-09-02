@@ -23,6 +23,7 @@
     <dimen name="sp7">5dp</dimen>
     <dimen name="sp6">4dp</dimen>
 
+    <dimen name="dp768">691dp</dimen>
     <dimen name="dp640">576dp</dimen>
     <dimen name="dp560">450dp</dimen>
     <dimen name="dp510">418dp</dimen>
