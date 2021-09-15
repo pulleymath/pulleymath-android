@@ -22,18 +22,13 @@ class Pdf : BaseDiffItem, Serializable {
     lateinit var publisher: Publisher
     lateinit var publish_date: String
     var is_contain_answer: Boolean = false
+    var is_new_mark: Boolean = false
     val edition: Int = 0
     var answer: Pdf? = null
     lateinit var created_at: String
     lateinit var updated_at: String
     // use in local
     var filepath: String = ""
-
-    // pdflist에 표기되는 new 마크를 표시할 pdf id 로직
-    val newMarkAppear: Boolean
-        get() {
-            return id > 102
-        }
 
     val opening: ObservableBoolean = ObservableBoolean(false)
     val downloading: ObservableBoolean = ObservableBoolean(false)
