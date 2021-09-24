@@ -14,6 +14,7 @@ package com.pulleymath.android.pdf.memo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Riccardo on 23/05/2017.
@@ -23,8 +24,8 @@ public class FreeDrawSerializableState implements Serializable {
 
     static final long serialVersionUID = 40L;
 
-    private ArrayList<HistoryPath> mCanceledPaths;
-    private ArrayList<HistoryPath> mPaths;
+    private CopyOnWriteArrayList<HistoryPath> mCanceledPaths;
+    private CopyOnWriteArrayList<HistoryPath> mPaths;
 
     private int mPaintColor;
     private int mPaintAlpha;
@@ -35,13 +36,13 @@ public class FreeDrawSerializableState implements Serializable {
     private int mLastDimensionW;
     private int mLastDimensionH;
 
-    public FreeDrawSerializableState(ArrayList<HistoryPath> canceledPaths,
-                                     ArrayList<HistoryPath> paths, int paintColor, int paintAlpha,
+    public FreeDrawSerializableState(CopyOnWriteArrayList<HistoryPath> canceledPaths,
+                                     CopyOnWriteArrayList<HistoryPath> paths, int paintColor, int paintAlpha,
                                      float paintWidth, ResizeBehaviour resizeBehaviour,
                                      int lastW, int lastH) {
 
-        setCanceledPaths(canceledPaths != null ? canceledPaths : new ArrayList<HistoryPath>());
-        setPaths(paths != null ? paths : new ArrayList<HistoryPath>());
+        setCanceledPaths(canceledPaths != null ? canceledPaths : new CopyOnWriteArrayList<HistoryPath>());
+        setPaths(paths != null ? paths : new CopyOnWriteArrayList<HistoryPath>());
         setPaintWidth(paintWidth >= 0 ? paintWidth : 0);
         setPaintColor(paintColor);
         setPaintAlpha(paintAlpha);
@@ -50,19 +51,19 @@ public class FreeDrawSerializableState implements Serializable {
         setLastDimensionH(lastH >= 0 ? lastH : 0);
     }
 
-    public ArrayList<HistoryPath> getCanceledPaths() {
+    public CopyOnWriteArrayList<HistoryPath> getCanceledPaths() {
         return mCanceledPaths;
     }
 
-    public void setCanceledPaths(ArrayList<HistoryPath> canceledPaths) {
+    public void setCanceledPaths(CopyOnWriteArrayList<HistoryPath> canceledPaths) {
         this.mCanceledPaths = canceledPaths;
     }
 
-    public ArrayList<HistoryPath> getPaths() {
+    public CopyOnWriteArrayList<HistoryPath> getPaths() {
         return mPaths;
     }
 
-    public void setPaths(ArrayList<HistoryPath> paths) {
+    public void setPaths(CopyOnWriteArrayList<HistoryPath> paths) {
         this.mPaths = paths;
     }
 

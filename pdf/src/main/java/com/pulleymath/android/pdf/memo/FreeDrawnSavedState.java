@@ -22,6 +22,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Riccardo Moro on 11/4/2016.
@@ -29,8 +30,8 @@ import java.util.ArrayList;
 
 class FreeDrawSavedState extends View.BaseSavedState {
 
-    private ArrayList<HistoryPath> mPaths = new ArrayList<>();
-    private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
+    private CopyOnWriteArrayList<HistoryPath> mPaths = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<HistoryPath> mCanceledPaths = new CopyOnWriteArrayList<>();
 
     private int mPaintColor;
     private int mPaintAlpha;
@@ -41,8 +42,8 @@ class FreeDrawSavedState extends View.BaseSavedState {
     private int mLastDimensionW;
     private int mLastDimensionH;
 
-    FreeDrawSavedState(Parcelable superState, ArrayList<HistoryPath> paths,
-                       ArrayList<HistoryPath> canceledPaths, float paintWidth,
+    FreeDrawSavedState(Parcelable superState, CopyOnWriteArrayList<HistoryPath> paths,
+                       CopyOnWriteArrayList<HistoryPath> canceledPaths, float paintWidth,
                        int paintColor, int paintAlpha, ResizeBehaviour resizeBehaviour,
                        int lastDimensionW, int lastDimensionH) {
         super(superState);
@@ -60,11 +61,11 @@ class FreeDrawSavedState extends View.BaseSavedState {
         mLastDimensionH = lastDimensionH;
     }
 
-    ArrayList<HistoryPath> getPaths() {
+    CopyOnWriteArrayList<HistoryPath> getPaths() {
         return mPaths;
     }
 
-    ArrayList<HistoryPath> getCanceledPaths() {
+    CopyOnWriteArrayList<HistoryPath> getCanceledPaths() {
         return mCanceledPaths;
     }
 

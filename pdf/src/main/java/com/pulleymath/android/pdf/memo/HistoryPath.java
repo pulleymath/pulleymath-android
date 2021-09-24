@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Riccardo Moro on 9/27/2016.
@@ -38,7 +39,7 @@ class HistoryPath implements Parcelable, Serializable {
 
     private static transient PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
-    private ArrayList<Point> points = new ArrayList<>();
+    private CopyOnWriteArrayList<Point> points = new CopyOnWriteArrayList<>();
     private int paintColor;
     private int paintAlpha;
     private float paintWidth;
@@ -50,8 +51,8 @@ class HistoryPath implements Parcelable, Serializable {
 
     private boolean isErase = false;
 
-    HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint) {
-        this.points = new ArrayList<>(points);
+    HistoryPath(@NonNull CopyOnWriteArrayList<Point> points, @NonNull Paint paint) {
+        this.points = new CopyOnWriteArrayList<>(points);
         this.paintColor = paint.getColor();
         this.paintAlpha = paint.getAlpha();
         this.paintWidth = paint.getStrokeWidth();
@@ -160,11 +161,11 @@ class HistoryPath implements Parcelable, Serializable {
         return paint;
     }
 
-    public ArrayList<Point> getPoints() {
+    public CopyOnWriteArrayList<Point> getPoints() {
         return points;
     }
 
-    public void setPoints(ArrayList<Point> points) {
+    public void setPoints(CopyOnWriteArrayList<Point> points) {
         this.points = points;
     }
 

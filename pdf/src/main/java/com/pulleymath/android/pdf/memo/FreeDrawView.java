@@ -38,6 +38,7 @@ import com.pulleymath.android.pdf.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Riccardo Moro on 9/10/2016.
@@ -54,9 +55,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     private ResizeBehaviour mResizeBehaviour;
 
-    public ArrayList<Point> mPoints = new ArrayList<>();
-    public ArrayList<HistoryPath> mPaths = new ArrayList<>();
-    private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
+    public CopyOnWriteArrayList<Point> mPoints = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<HistoryPath> mPaths = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<HistoryPath> mCanceledPaths = new CopyOnWriteArrayList<>();
 
     @ColorInt
     private int mPaintColor = DEFAULT_COLOR;
@@ -317,7 +318,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     public void undoAll() {
         Collections.reverse(mPaths);
         mCanceledPaths.addAll(mPaths);
-        mPaths = new ArrayList<>();
+        mPaths = new CopyOnWriteArrayList<>();
         invalidate();
 
         notifyRedoUndoCountChanged();
@@ -330,7 +331,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         if (mCanceledPaths.size() > 0) {
             mPaths.addAll(mCanceledPaths);
-            mCanceledPaths = new ArrayList<>();
+            mCanceledPaths = new CopyOnWriteArrayList<>();
             invalidate();
 
             notifyRedoUndoCountChanged();
@@ -398,8 +399,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     private void clearDraw(boolean invalidate) {
-        mPoints = new ArrayList<>();
-        mPaths = new ArrayList<>();
+        mPoints = new CopyOnWriteArrayList<>();
+        mPaths = new CopyOnWriteArrayList<>();
 
         notifyRedoUndoCountChanged();
 
@@ -416,7 +417,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     private void clearHistory(boolean invalidate) {
-        mCanceledPaths = new ArrayList<>();
+        mCanceledPaths = new CopyOnWriteArrayList<>();
 
         notifyRedoUndoCountChanged();
 
@@ -616,7 +617,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private void createHistoryPathFromPoints() {
         mPaths.add(new HistoryPath(mPoints, new Paint(mCurrentPaint)));
 
-        mPoints = new ArrayList<>();
+        mPoints = new CopyOnWriteArrayList<>();
 
         notifyPathDrawn();
         notifyRedoUndoCountChanged();
@@ -625,7 +626,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     public void saveHistoryPathFromPoints() {
         if (mPoints.size() > 0) {
             mPaths.add(new HistoryPath(mPoints, new Paint(mCurrentPaint)));
-            mPoints = new ArrayList<>();
+            mPoints = new CopyOnWriteArrayList<>();
         }
     }
 
@@ -640,7 +641,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         // Clear all the history when restarting to draw
-        mCanceledPaths = new ArrayList<>();
+        mCanceledPaths = new CopyOnWriteArrayList<>();
 
         if ( motionEvent.getAction() == MotionEvent.ACTION_MOVE &&
                 motionEvent.getButtonState() != MotionEvent.BUTTON_STYLUS_PRIMARY &&
@@ -711,9 +712,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         if (mResizeBehaviour == ResizeBehaviour.CLEAR) {// If clear, clear all and return
-            mPaths = new ArrayList<>();
-            mCanceledPaths = new ArrayList<>();
-            mPoints = new ArrayList<>();
+            mPaths = new CopyOnWriteArrayList<>();
+            mCanceledPaths = new CopyOnWriteArrayList<>();
+            mPoints = new CopyOnWriteArrayList<>();
             return;
         } else if (mResizeBehaviour == ResizeBehaviour.CROP) {
             xMultiplyFactor = yMultiplyFactor = 1;
