@@ -1009,10 +1009,12 @@ class SolveActivity : BaseActivity(),
         animator.duration = 150
         animator.start()
 
-        answerView.configureUI(this.selectedProblem!!, true)
+        selectedProblem?.let { selected ->
+            answerView?.configureUI(selected, true)
 
-        if(speedyScoreSwitch.isChecked) {
-            speedAnswerView.scrollTo(selectedProblem)
+            if (speedyScoreSwitch.isChecked) {
+                speedAnswerView.scrollTo(selected)
+            }
         }
     }
 

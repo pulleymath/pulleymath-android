@@ -3,6 +3,7 @@ package com.pulleymath.android.pdf.memo.storage
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.pulleymath.android.pdf.PdfViewerActivity
 import com.pulleymath.android.pdf.log.Network
 
 import com.pulleymath.android.pdf.memo.FreeDrawSerializableState
@@ -36,7 +37,8 @@ object FileHelper {
             )
 
             db.pdfWritingDao().delete(memo)
-            Network.uploadMemo(listOf(memo))
+//            Network.uploadMemo(listOf(memo))
+            PdfViewerActivity.memos.set(memo.id, memo)
         }
     }
 
@@ -60,7 +62,8 @@ object FileHelper {
                     updated_at = updatedAt
                 )
                 db.pdfWritingDao().upsert(listOf(memo))
-                Network.uploadMemo(listOf(memo))
+//                Network.uploadMemo(listOf(memo))
+                PdfViewerActivity.memos.set(memo.id, memo)
             }
         }
     }

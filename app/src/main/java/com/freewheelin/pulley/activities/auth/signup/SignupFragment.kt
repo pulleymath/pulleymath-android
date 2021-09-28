@@ -67,8 +67,9 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
     }
 
     fun isAllEmpty(): Boolean {
-        return fullNameDet.text.isEmpty() && emailDet.text.isEmpty()
-                && pwDet.text.isEmpty() && pwConfirmDet.text.isEmpty() && phoneNumDet.text.isEmpty()
+        return fullNameDet?.text?.isEmpty() == true && emailDet?.text?.isEmpty() == true
+                && pwDet?.text?.isEmpty() == true && pwConfirmDet?.text?.isEmpty() == true
+                && phoneNumDet?.text?.isEmpty() == true
     }
 
     fun isAvailableToSecondStep(): Boolean {

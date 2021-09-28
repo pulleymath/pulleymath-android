@@ -70,7 +70,9 @@ object VersionManager {
                 dialog.rightBtn.setOnClickListener {
                     activity.finishAndRemoveTask()
                 }
-                dialog.show()
+                if(!activity.isFinishing) {
+                    dialog.show()
+                }
             }
 
             override fun onResponse(call: Call<Template<VersionInfo>>, response: Response<Template<VersionInfo>>) {

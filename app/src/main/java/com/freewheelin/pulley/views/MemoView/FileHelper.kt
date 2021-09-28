@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.LogUtils
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
@@ -78,23 +79,27 @@ public class FileHelper {
             val fileName: String) : Runnable {
 
         override fun run() {
-            var fis: FileInputStream? = null
+            try {
+                var fis: FileInputStream? = null
 
-            val file = mContext.getFileStreamPath(fileName)
-            if (file.exists() == false) {
-                mListener?.onStateExtractionError()
-                return
+                val file = mContext.getFileStreamPath(fileName)
+                if (file.exists() == false) {
+                    mListener?.onStateExtractionError()
+                    return
+                }
+
+                fis = mContext.openFileInput(fileName)
+                val `is` = ObjectInputStream(fis)
+
+                val state = `is`.readObject() as FreeDrawSerializableState
+
+                fis!!.close()
+                `is`.close()
+
+                mListener?.onStateExtracted(state)
+            } catch (e:Exception) {
+                Log.e(javaClass.simpleName, "state Extractor error:${e.localizedMessage}")
             }
-
-            fis = mContext.openFileInput(fileName)
-            val `is` = ObjectInputStream(fis)
-
-            val state = `is`.readObject() as FreeDrawSerializableState
-
-            fis!!.close()
-            `is`.close()
-
-            mListener?.onStateExtracted(state)
         }
     }
 

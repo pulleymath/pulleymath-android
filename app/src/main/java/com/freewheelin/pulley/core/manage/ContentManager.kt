@@ -19,6 +19,7 @@ import com.freewheelin.pulley.utils.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.util.*
 
 
@@ -118,8 +119,11 @@ object ContentManager {
         param["scoringProblemRequest"] = problems.map {
 
             // 멀티 선택 처리
-            if(it.userAnswer?.contains(",") == false) {
-                it.userAnswer = if(it.userAnswer != null) it.userAnswer!!.toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
+            if(it.userAnswer?.contains(",") == false && it.userAnswer?.contains("-") == false) { // - 입력 시 처리 추가
+                try {
+                    it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toInt()
+                        .toString() else null // 답 앞에 0 들어가는 것 전처리
+                } catch (e:Exception) { LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")}
             }
 
             val problemParam = Parameter(
@@ -166,7 +170,7 @@ object ContentManager {
                     if(problems.isNotEmpty()) {
                         content.score = problems.filter { it.getResultByUserAnswer() == Result.correct }.size * 100 / problems.size
                     } else {
-                        LogUtils.assert(false, "err: problem is not exist in score\n" +
+                        LogUtils.errorEvent(PulleyEvent.PROBLEM_NOT_EXIST, user,"err: problem is not exist in score\n" +
                                 "pieceID: ${content.id}" +
                                 "assignID: ${content.assignID}" +
                                 "studentID: ${user.studentID}")

@@ -39,6 +39,8 @@ object APHelper {
         handler = null
     }
 
+    fun getContext() = AppContext
+
     fun px2dp(pixel: Int): Float = pixel / Resources.getSystem().displayMetrics.density
 
     fun toast(message: String) = Toast.makeText(AppContext, message, Toast.LENGTH_SHORT).show()

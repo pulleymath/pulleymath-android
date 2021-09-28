@@ -99,7 +99,8 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             dialog.rightBtn.setOnClickListener {
                 requestAppUpdate(AppUpdateType.IMMEDIATE)
             }
-            dialog.show()
+
+            if(!isFinishing) dialog.show()
         }
     }
 
@@ -134,12 +135,16 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     fun appUpdateForResult(appUpdateInfo: AppUpdateInfo, updateType:Int) {
         val requestCode = if(updateType == AppUpdateType.IMMEDIATE) UPDATE_IMMEDIATE else UPDATE_FLEXIBLE
-        appUpdateManager?.startUpdateFlowForResult(
+        try {
+            appUpdateManager?.startUpdateFlowForResult(
                 appUpdateInfo,
                 updateType,
                 this,
                 requestCode
-        )
+            )
+        } catch (e:Exception) {
+            LogUtils.errorEvent(PulleyEvent.ERROR, user, "appUpdateForResult:${e.localizedMessage}")
+        }
     }
 
     override fun onStateUpdate(state: InstallState) {

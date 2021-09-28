@@ -32,6 +32,7 @@ import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
 import com.pulleymath.android.pdf.memo.PencilcaseView
 import com.pulleymath.android.pdf.memo.storage.DatabaseHelper
+import com.pulleymath.android.pdf.memo.storage.PdfMemo
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -577,20 +578,6 @@ open class PdfViewerActivity : Activity() {
         }
     }
 
-    public override fun onDestroy() {
-        if (mDocView != null) {
-            mDocView!!.applyToChildren(object : ViewMapper() {
-                public override fun applyToView(view: View) {
-                    val pageView = view.findViewWithTag<PageView>(PageAdapter.TAG_PAGEVIEW)
-                    pageView.releaseBitmaps()
-                }
-            })
-        }
-        if (core != null) core!!.onDestroy()
-        core = null
-        super.onDestroy()
-    }
-
     private fun setButtonEnabled(button: ImageButton?, enabled: Boolean) {
         button!!.isEnabled = enabled
         button.setColorFilter(if (enabled) Color.argb(255, 255, 255, 255) else Color.argb(255, 128, 128, 128))
@@ -836,7 +823,30 @@ open class PdfViewerActivity : Activity() {
     override fun onStop() {
         sendPageLog()
         stopReadLogger()
+        uploadMemos()
         super.onStop()
+    }
+
+    public override fun onDestroy() {
+        if (mDocView != null) {
+            mDocView!!.applyToChildren(object : ViewMapper() {
+                public override fun applyToView(view: View) {
+                    val pageView = view.findViewWithTag<PageView>(PageAdapter.TAG_PAGEVIEW)
+                    pageView.releaseBitmaps()
+                }
+            })
+        }
+        if (core != null) core!!.onDestroy()
+        core = null
+        super.onDestroy()
+    }
+
+    private fun uploadMemos() {
+        if(memos.isNotEmpty()) {
+            Network.uploadMemo(memos.values.toList()) {
+                memos.clear()
+            }
+        }
     }
 
     companion object {
@@ -858,5 +868,6 @@ open class PdfViewerActivity : Activity() {
         var token: String = ""
 
         var onTestApi = false
+        var memos = mutableMapOf<String, PdfMemo>()
     }
 }

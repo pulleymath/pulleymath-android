@@ -15,14 +15,13 @@ object ServerStatusManager {
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm") }
 
     fun requestInspectionFlag(): ServerStatus? {
-        val data = Jsoup
-            .connect(URL.SERVER_INSPECTION)
-            .ignoreContentType(true)
-            .execute()
-            .body()
-        if (data != null && data.isNotEmpty()) {
-
-            try {
+        try {
+            val data = Jsoup
+                .connect(URL.SERVER_INSPECTION)
+                .ignoreContentType(true)
+                .execute()
+                .body()
+            if (data != null && data.isNotEmpty()) {
                 Gson().fromJson(data, ServerStatus::class.java).let { status ->
                     return if (isServerUnderInspection(status)) {
                         status
@@ -30,9 +29,9 @@ object ServerStatusManager {
                         null
                     }
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return null
     }

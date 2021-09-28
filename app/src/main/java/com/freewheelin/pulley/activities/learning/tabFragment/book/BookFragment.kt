@@ -182,15 +182,15 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         BookManager.getMyBookList(requireContext(), user!!) {
             this.myBooks = it
 
-            myPlanCntTv.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
-            pinCntTv.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
+            myPlanCntTv?.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
+            pinCntTv?.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
             if (it == null || it.myPieceStorageList.size == 0) {
-                myBookEmptyContainer.visibility = View.VISIBLE
-                myPlanRv.visibility = View.INVISIBLE
+                myBookEmptyContainer?.visibility = View.VISIBLE
+                myPlanRv?.visibility = View.INVISIBLE
             } else {
-                myBookEmptyContainer.visibility = View.INVISIBLE
-                myPlanRv.visibility = View.VISIBLE
-                myPlanRv.adapter?.notifyDataSetChanged()
+                myBookEmptyContainer?.visibility = View.INVISIBLE
+                myPlanRv?.visibility = View.VISIBLE
+                myPlanRv?.adapter?.notifyDataSetChanged()
             }
 
             cb()
@@ -208,9 +208,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     view?.set(bookList.toMutableList(), title, i + 1, this@BookFragment)
                     view?.show { }
                 }
-                recommendLabel.showIfNeed()
-                planLoadingView.cancelAnimation()
-                planLoadingView.visibility = View.INVISIBLE
+                recommendLabel?.showIfNeed()
+                planLoadingView?.cancelAnimation()
+                planLoadingView?.visibility = View.INVISIBLE
                 cb()
             }
         }
@@ -226,9 +226,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     val view = recommendBookListViews.getOrNull(i)
                     view?.set(bookList.toList())
                 }
-                recommendLabel.showIfNeed()
-                planLoadingView.cancelAnimation()
-                planLoadingView.visibility = View.INVISIBLE
+                recommendLabel?.showIfNeed()
+                planLoadingView?.cancelAnimation()
+                planLoadingView?.visibility = View.INVISIBLE
                 cb()
             }
         }

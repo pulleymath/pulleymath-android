@@ -77,9 +77,11 @@ object Network {
 
     private val pdfMemoService = retrofit.create(PdfMemoService::class.java)
 
-    fun uploadMemo(request:List<PdfMemo>) {
+    fun uploadMemo(request:List<PdfMemo>, callback: (() -> Unit)? = null) {
         pdfMemoService.uploadMemo(request).enqueue(object: Callback<PdfMemoPostResponse>{
-            override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {}
+            override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {
+                callback?.let{ it() }
+            }
             override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {}
         })
     }

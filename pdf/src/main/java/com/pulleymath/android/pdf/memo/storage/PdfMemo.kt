@@ -13,4 +13,12 @@ data class PdfMemo (
     var page_no: Int = 0,
     var file: String = "",
     var updated_at: Long = 0
-)
+) {
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return hashCode() == other?.hashCode()
+    }
+}

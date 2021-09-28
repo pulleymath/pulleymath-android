@@ -308,7 +308,9 @@ class PdfListActivity : AppCompatActivity() {
                 }
                 downloadThreads.clear()
                 downloadConnections.forEach {
-                    it.disconnect()
+                    thread(start=true) {
+                        it.disconnect()
+                    }
                 }
                 downloadConnections.clear()
             }
@@ -367,7 +369,7 @@ class PdfListActivity : AppCompatActivity() {
                     val item = "${link.pdf_page_no}:${link.answer_page_no}"
                     linkString += "/$item"
                 }
-                if (linkString.isNotEmpty()) {
+                if (linkString.isNotEmpty() && linkString.length > 1) {
                     putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
                 }
 

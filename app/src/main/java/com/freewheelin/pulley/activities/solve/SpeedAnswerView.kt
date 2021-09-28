@@ -239,14 +239,15 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
 
         shortAnswerView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            // holder 세팅시에 호출됨 일단 호출되는 메서드 막기
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (problem.getResultByScoring() == Result.yet) {
                     if (p0?.isEmpty() == true && problem.userAnswer?.isEmpty() == true) return
                     if (p0?.toString() == problem.userAnswer) return
                     if (p0?.toString() == "-") return
-                    delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString(), problem)
+//                    delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString(), problem)
                     ignoreFocus = true
-                    shortAnswerView.requestFocus()
+//                    shortAnswerView.requestFocus()
                 }
             }
             override fun afterTextChanged(p0: Editable?) {}

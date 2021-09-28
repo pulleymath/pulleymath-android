@@ -496,8 +496,8 @@ public class ReaderView
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		FrameLayout container = getDisplayedView();
-		PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+//		FrameLayout container = getDisplayedView();
+//		PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
 		if (!tapDisabled)
 			onDocMotion();
 		if (!mScaling) {

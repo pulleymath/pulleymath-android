@@ -28,7 +28,9 @@ enum class PulleyEvent {
     BUTTON_CLICK,
     INIT_TEST,
     INDUCE,
-    DIALOG;
+    DIALOG,
+    ERROR,
+    PROBLEM_NOT_EXIST;
 
     companion object {
         fun init(value: String): PulleyEvent {
@@ -40,6 +42,8 @@ enum class PulleyEvent {
                 "INIT_TEST" -> return INIT_TEST
                 "DIALOG" -> return DIALOG
                 "INDUCE" -> return INDUCE
+                "ERROR" -> return ERROR
+                "PROBLEM_NOT_EXIST" -> return PROBLEM_NOT_EXIST
                 else -> {
                     LogUtils.assert(false, "unexpected Case ${value}")
                     return BUTTON_CLICK
@@ -58,6 +62,12 @@ object LogUtils {
             else
                 FirebaseCrashlytics.getInstance().recordException(AssertionError(msg))
 //                Crashlytics.logException(AssertionError(msg))
+        }
+    }
+
+    fun errorEvent(event: PulleyEvent, user:User?, msg: String? = null, item_category: String? = null, item_name: String? = null, item_value: String? = null) {
+        APHelper.getContext()?.let { context ->
+            LogUtils.logEvent(context, user, event,)
         }
     }
 
