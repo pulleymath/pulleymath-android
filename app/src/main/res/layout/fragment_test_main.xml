@@ -1,162 +1,169 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingStart="@dimen/dp64"
-    android:paddingEnd="@dimen/dp64"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainDailyFragment">
-
-    <TextView
-        android:id="@+id/headerTv"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp120"
-        android:text="데일리 테스트"
-        android:textSize="@dimen/sp24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/titleTv"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:text="데일리 TEST"
-        android:textSize="@dimen/sp36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerTv" />
-
-    <TextView
-        android:id="@+id/contentTv"
-        style="@style/TextGrey_c0c0c0"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp40"
-        android:lineSpacingExtra="8sp"
-        android:text="데일리 테스트는 아래의 기준에 따라 추천됩니다."
-        android:textSize="@dimen/sp18"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTv" />
-
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settingContainerCl"
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp24"
-        android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contentTv">
+        android:layout_height="match_parent"
+
+        android:paddingStart="@dimen/dp64"
+        android:paddingEnd="@dimen/dp64"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainDailyFragment">
 
         <TextView
-            android:id="@+id/levelLabel"
-            style="@style/TextGrey_c0c0c0.Bold"
+            android:id="@+id/headerTv"
+            style="@style/TextBlack_4c4c4c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp32"
-            android:text="난이도 :"
-            android:textSize="@dimen/sp16"
+            android:layout_marginTop="@dimen/dp120"
+            android:text="데일리 테스트"
+            android:textSize="@dimen/sp24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/levelTv"
-            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/titleTv"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="고난도 위주"
-            android:textSize="@dimen/sp16"
-            app:layout_constraintBottom_toBottomOf="@+id/levelLabel"
-            app:layout_constraintStart_toEndOf="@+id/levelLabel"
-            app:layout_constraintTop_toTopOf="@+id/levelLabel" />
-
-        <TextView
-            android:id="@+id/rangeLabel"
-            style="@style/TextGrey_c0c0c0.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp32"
-            android:text="출제 범위 :"
-            android:textSize="@dimen/sp16"
+            android:layout_marginTop="@dimen/dp12"
+            android:text="데일리 TEST"
+            android:textSize="@dimen/sp36"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/levelLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/headerTv" />
 
         <TextView
-            android:id="@+id/rangeTv"
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
+            android:id="@+id/contentTv"
+            style="@style/TextGrey_c0c0c0"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="선행 단원 함께"
-            android:textSize="@dimen/sp16"
-            app:layout_constraintBottom_toBottomOf="@+id/rangeLabel"
-            app:layout_constraintStart_toEndOf="@+id/rangeLabel"
-            app:layout_constraintTop_toTopOf="@+id/rangeLabel" />
-
-        <ImageButton
-            android:id="@+id/settingBtn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="@dimen/dp16"
-            android:layout_marginEnd="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
-            android:src="@drawable/ic_gear"
+            android:layout_marginTop="@dimen/dp40"
+            android:lineSpacingExtra="8sp"
+            android:text="데일리 테스트는 아래의 기준에 따라 추천됩니다."
+            android:textSize="@dimen/sp18"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTv" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingContainerCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contentTv">
+
+            <TextView
+                android:id="@+id/levelLabel"
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="@dimen/dp32"
+                android:text="난이도 :"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/levelTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="고난도 위주"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toBottomOf="@+id/levelLabel"
+                app:layout_constraintStart_toEndOf="@+id/levelLabel"
+                app:layout_constraintTop_toTopOf="@+id/levelLabel" />
+
+            <TextView
+                android:id="@+id/rangeLabel"
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp32"
+                android:layout_marginTop="@dimen/dp32"
+                android:text="출제 범위 :"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/levelLabel" />
+
+            <TextView
+                android:id="@+id/rangeTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="선행 단원 함께"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toBottomOf="@+id/rangeLabel"
+                app:layout_constraintStart_toEndOf="@+id/rangeLabel"
+                app:layout_constraintTop_toTopOf="@+id/rangeLabel" />
+
+            <ImageButton
+                android:id="@+id/settingBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp16"
+                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+                android:src="@drawable/ic_gear"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subjectTv"
+                style="@style/TextGrey_9f9f9f.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="여기 과목 표시"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/rangeTv"
+                app:layout_constraintTop_toBottomOf="@+id/rangeTv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/subjectTv"
-            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/timerGuideTv"
+            style="@style/TextRed_fe7b67.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:text="여기 과목 표시"
+            android:layout_marginTop="@dimen/dp24"
+            android:text="이 시간이 지나면 풀 수 없어요!"
             android:textSize="@dimen/sp16"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/rangeTv"
-            app:layout_constraintTop_toBottomOf="@+id/rangeTv" />
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/startBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp24"
+            android:text="시작하기"
+            android:visibility="invisible"
+            app:ButtonTextSize="@dimen/sp18"
+            app:buttonTheme="blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timerGuideTv"
+            app:layout_constraintVertical_chainStyle="packed" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/timerGuideTv"
-        style="@style/TextRed_fe7b67.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp24"
-        android:text="이 시간이 지나면 풀 수 없어요!"
-        android:textSize="@dimen/sp16"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
-        android:id="@+id/startBtn"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp56"
-        android:layout_marginTop="@dimen/dp24"
-        android:text="시작하기"
-        android:visibility="invisible"
-        app:ButtonTextSize="@dimen/sp18"
-        app:buttonTheme="blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerGuideTv"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

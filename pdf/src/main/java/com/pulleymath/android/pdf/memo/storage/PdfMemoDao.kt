@@ -18,4 +18,7 @@ interface PdfMemoDao {
 
     @Delete
     fun delete(memo: PdfMemo)
+
+    @Query("DELETE FROM pdf_memo WHERE id=:memoId")
+    fun delete(memoId: String)
 }

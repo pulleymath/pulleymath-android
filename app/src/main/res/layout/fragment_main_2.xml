@@ -14,363 +14,388 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/profileContainer"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp32"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginBottom="@dimen/dp24"
-        android:background="@drawable/shadow"
-        app:layout_constraintWidth_percent="0.38"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/goalContainer"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+    <ScrollView
+        android:id="@+id/mainScroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/profileIv"
-            android:layout_width="@dimen/dp144"
-            android:layout_height="@dimen/dp144"
-            android:layout_marginTop="@dimen/dp64"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/nameTv"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp32"
-            android:textSize="@dimen/dp36"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileIv" />
-        
-<!--        <ImageView-->
-<!--            android:id="@+id/nameArrowIv"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:padding="8dp"-->
-<!--            android:src="@drawable/ic_arrow_right_w_7"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/nameTv"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/nameTv"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/nameTv"/>-->
-
-        <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
-            android:id="@+id/reportTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp16"
-            android:text=""
-            android:layout_marginTop="@dimen/dp16"
-            app:layout_constraintTop_toBottomOf="@+id/nameTv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@color/purple_6D6DFF"
-            app:layout_constraintStart_toStartOf="@+id/reportTv"
-            app:layout_constraintEnd_toEndOf="@+id/reportTv"
-            app:layout_constraintBottom_toBottomOf="@+id/reportTv"/>
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/tagFl"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/sp16"
-            app:alignContent="flex_start"
-            app:alignItems="flex_start"
-            app:dividerDrawable="@drawable/hashtag_divider"
-            app:flexDirection="row"
-            app:flexWrap="wrap"
-            app:justifyContent="center"
-            app:layout_constraintTop_toBottomOf="@+id/reportTv"
-            app:showDivider="middle">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/freeUserContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagFl">
-
-            <TextView
-                android:id="@+id/freeGuideTv"
-                style="@style/TextGrey_c0c0c0.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:lineSpacingExtra="8sp"
-                android:textColor="@color/grey_c0c0c0"
-                android:textSize="@dimen/dp16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.freewheelin.pulley.views.Buttons.PrimaryButton
-                android:id="@+id/startBtn"
-                android:layout_width="@dimen/primaryBtn_width_160dp"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginTop="@dimen/dp24"
-                android:text="@string/text_study_start_with_pulley"
-                app:ButtonTextSize="@dimen/dp16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/freeGuideTv" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/payUserContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagFl">
-
-
-            <ImageView
-                android:id="@+id/problemCntIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_paper"
-                app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
-                app:layout_constraintEnd_toStartOf="@+id/problemCntLabel"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/problemCntLabel"
-                style="@style/TextGrey_c0c0c0.ExtraBold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="푼 문제 수(오답학습 수)"
-                android:textColor="@color/grey_c0c0c0"
-                android:textSize="@dimen/dp14"
-                app:layout_constraintBottom_toBottomOf="@+id/problemCntIv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/problemCntIv"
-                app:layout_constraintTop_toTopOf="@+id/problemCntIv" />
-
-            <TextView
-                android:id="@+id/problemCntTv"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black_4c4c4c"
-                android:textSize="@dimen/dp36"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-        <ImageButton
-            android:id="@+id/shareBtn"
-            android:layout_width="@dimen/dp36"
-            android:layout_height="@dimen/dp36"
-            android:src="@drawable/ic_share"
-            android:layout_marginTop="@dimen/dp24"
-            android:layout_marginEnd="@dimen/dp24"
-            android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/targetTv"
-        style="@style/TextRed_fe7b67.ExtraBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/red_fe7b67"
-        android:textSize="@dimen/dp14"
-        app:layout_constraintBottom_toTopOf="@+id/dDayTv"
-        app:layout_constraintStart_toStartOf="@+id/dDayTv" />
-
-    <TextView
-        android:id="@+id/dDayTv"
-        style="@style/TextRed_fe7b67.ExtraBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp64"
-        android:layout_marginBottom="@dimen/dp16"
-        android:textSize="@dimen/dp36"
-        app:layout_constraintBottom_toTopOf="@+id/guideTv"
-        app:layout_constraintStart_toEndOf="@+id/profileContainer" />
-
-    <ImageView
-        android:id="@+id/dDayErrowIv"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:padding="8dp"
-        android:tint="@color/red_fe7b67"
-        android:src="@drawable/ic_arrow_right_w_7"
-        app:layout_constraintStart_toEndOf="@+id/dDayTv"
-        app:layout_constraintTop_toTopOf="@+id/dDayTv"
-        app:layout_constraintBottom_toBottomOf="@+id/dDayTv"/>
-
-    <TextView
-        android:id="@+id/guideTv"
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp48"
-        android:lineSpacingExtra="8sp"
-        android:textColor="@color/black_4c4c4c"
-        android:textSize="@dimen/dp18"
-        app:layout_constraintBottom_toTopOf="@+id/goalContainer"
-        app:layout_constraintStart_toStartOf="@+id/dDayTv" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/goalContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shadow"
-        android:layout_marginEnd="@dimen/dp16"
-        app:layout_constraintBottom_toBottomOf="@+id/profileContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profileContainer">
-
-        <TextView
-            android:id="@+id/phraseTv"
-            style="@style/TextGrey_c0c0c0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:lineSpacingExtra="8sp"
-            android:text="계획 없는 목표는\n한낱 꿈에 불과하다\n-생텍쥐페리"
-            android:textSize="@dimen/dp16"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/continuousDayTv"
-            style="@style/TextGrey_c0c0c0.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp48"
-            android:layout_marginTop="@dimen/dp48"
-            android:text="연속달성 0일째 🔥"
-            android:textSize="@dimen/dp14"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/dailyProblemGuideTv"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:lineSpacingExtra="8sp"
-            android:textSize="@dimen/dp18"
-            app:layout_constraintStart_toStartOf="@+id/continuousDayTv"
-            app:layout_constraintTop_toBottomOf="@+id/continuousDayTv" />
-
-        <TextView
-            style="@style/TextGrey_c0c0c0.ExtraBold"
-            android:id="@+id/targetSettingBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp14"
-            android:text="목표 수정하기"
-            android:background="@null"
-            android:layout_marginTop="@dimen/dp48"
-            android:layout_marginEnd="@dimen/dp48"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <View
-            style="@style/Border_Grey_c0c0c0_Vertical"
-            android:id="@+id/targetSettingBtnBorder"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            app:layout_constraintStart_toStartOf="@+id/targetSettingBtn"
-            app:layout_constraintEnd_toEndOf="@+id/targetSettingBtn"
-            app:layout_constraintTop_toBottomOf="@+id/targetSettingBtn"/>
-
-        <com.freewheelin.pulley.views.Bars.HorizontalWithCircleBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp48"
-            android:layout_marginTop="@dimen/dp60"
-            android:layout_marginStart="@dimen/dp48"
-            android:layout_marginEnd="@dimen/dp48"
-            app:layout_constraintTop_toBottomOf="@+id/dailyProblemGuideTv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        <View
-            android:id="@+id/progressStarter"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintEnd_toStartOf="@+id/progressBar"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar"/>
-
-        <View
-            android:id="@+id/progressIndicator"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@+id/progressStarter"
-            app:layout_constraintEnd_toStartOf="@+id/progressEnder"
-            app:layout_constraintBottom_toBottomOf="@+id/progressStarter"/>
-
-        <View
-            android:id="@+id/progressEnder"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintStart_toEndOf="@+id/progressBar"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar"/>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/labelContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/progressIndicator"
-            app:layout_constraintEnd_toEndOf="@+id/progressIndicator"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar">
-
-            <ImageView
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dDayContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_goal_label"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp">
 
-            <TextView
-                style="@style/TextWhite_ffffff.ExtraBold"
-                android:id="@+id/countTv"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/targetTv"
+                    style="@style/TextRed_fe7b67.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="targetTv"
+                    android:textColor="@color/red_fe7b67"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintBottom_toTopOf="@+id/dDayTv"
+                    app:layout_constraintStart_toStartOf="@+id/dDayTv" />
+
+                <TextView
+                    android:id="@+id/dDayTv"
+                    style="@style/TextRed_fe7b67.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="64dp"
+                    android:text="dDayTv"
+                    android:textSize="@dimen/dp36"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/dDayErrowIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_right_w_7"
+                    app:layout_constraintBottom_toBottomOf="@+id/dDayTv"
+                    app:layout_constraintStart_toEndOf="@+id/dDayTv"
+                    app:layout_constraintTop_toTopOf="@+id/dDayTv"
+                    app:tint="@color/red_fe7b67" />
+
+                <TextView
+                    android:id="@+id/guideTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:lineSpacingExtra="8sp"
+                    android:text="guideTv"
+                    android:textColor="@color/black_4c4c4c"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/dDayTv"
+                    app:layout_constraintTop_toBottomOf="@+id/dDayTv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/goalContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="0"
-                android:layout_marginTop="3dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/shadow">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/phraseTv"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="8sp"
+                    android:text="계획 없는 목표는\n한낱 꿈에 불과하다\n-생텍쥐페리"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/continuousDayTv"
+                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp48"
+                    android:layout_marginTop="24dp"
+                    android:text="연속달성 0일째 🔥"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/dailyProblemGuideTv"
+                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="8sp"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintStart_toStartOf="@+id/continuousDayTv"
+                    app:layout_constraintTop_toBottomOf="@+id/continuousDayTv" />
+
+                <TextView
+                    android:id="@+id/targetSettingBtn"
+                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="@dimen/dp48"
+                    android:background="@null"
+                    android:text="목표 수정하기"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/targetSettingBtnBorder"
+                    style="@style/Border_Grey_c0c0c0_Vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintEnd_toEndOf="@+id/targetSettingBtn"
+                    app:layout_constraintStart_toStartOf="@+id/targetSettingBtn"
+                    app:layout_constraintTop_toBottomOf="@+id/targetSettingBtn" />
+
+                <com.freewheelin.pulley.views.Bars.HorizontalWithCircleBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp48"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="@dimen/dp48"
+                    android:layout_marginBottom="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dailyProblemGuideTv" />
+
+
+                <View
+                    android:id="@+id/progressStarter"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintEnd_toStartOf="@+id/progressBar" />
+
+                <View
+                    android:id="@+id/progressIndicator"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progressStarter"
+                    app:layout_constraintEnd_toStartOf="@+id/progressEnder"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@+id/progressStarter" />
+
+                <View
+                    android:id="@+id/progressEnder"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintStart_toEndOf="@+id/progressBar" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/labelContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintEnd_toEndOf="@+id/progressIndicator"
+                    app:layout_constraintStart_toStartOf="@+id/progressIndicator">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_goal_label"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/countTv"
+                        style="@style/TextWhite_ffffff.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="0"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/shadow">
+
+                <ImageView
+                    android:id="@+id/profileIv"
+                    android:layout_width="@dimen/dp144"
+                    android:layout_height="@dimen/dp144"
+                    android:layout_marginTop="@dimen/dp64"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/nameTv"
+                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:textSize="@dimen/dp36"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileIv" />
+
+                <!--        <ImageView-->
+                <!--            android:id="@+id/nameArrowIv"-->
+                <!--            android:layout_width="wrap_content"-->
+                <!--            android:layout_height="0dp"-->
+                <!--            android:padding="8dp"-->
+                <!--            android:src="@drawable/ic_arrow_right_w_7"-->
+                <!--            app:layout_constraintStart_toEndOf="@+id/nameTv"-->
+                <!--            app:layout_constraintTop_toTopOf="@+id/nameTv"-->
+                <!--            app:layout_constraintBottom_toBottomOf="@+id/nameTv"/>-->
+
+                <TextView
+                    android:id="@+id/reportTv"
+                    style="@style/TextPurple_6d6dff.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text=""
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/purple_6D6DFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/reportTv"
+                    app:layout_constraintEnd_toEndOf="@+id/reportTv"
+                    app:layout_constraintStart_toStartOf="@+id/reportTv" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/tagFl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sp16"
+                    app:alignContent="flex_start"
+                    app:alignItems="flex_start"
+                    app:dividerDrawable="@drawable/hashtag_divider"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center"
+                    app:layout_constraintTop_toBottomOf="@+id/reportTv"
+                    app:showDivider="middle">
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/freeUserContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tagFl">
+
+                    <TextView
+                        android:id="@+id/freeGuideTv"
+                        style="@style/TextGrey_c0c0c0.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="8sp"
+                        android:textColor="@color/grey_c0c0c0"
+                        android:textSize="@dimen/dp16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                        android:id="@+id/startBtn"
+                        android:layout_width="@dimen/primaryBtn_width_160dp"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:text="@string/text_study_start_with_pulley"
+                        app:ButtonTextSize="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/freeGuideTv" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/payUserContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tagFl">
+
+
+                    <ImageView
+                        android:id="@+id/problemCntIv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_paper"
+                        app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
+                        app:layout_constraintEnd_toStartOf="@+id/problemCntLabel"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/problemCntLabel"
+                        style="@style/TextGrey_c0c0c0.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="푼 문제 수(오답학습 수)"
+                        android:textColor="@color/grey_c0c0c0"
+                        android:textSize="@dimen/dp14"
+                        app:layout_constraintBottom_toBottomOf="@+id/problemCntIv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/problemCntIv"
+                        app:layout_constraintTop_toTopOf="@+id/problemCntIv" />
+
+                    <TextView
+                        android:id="@+id/problemCntTv"
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/dp36"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <ImageButton
+                    android:id="@+id/shareBtn"
+                    android:layout_width="@dimen/dp36"
+                    android:layout_height="@dimen/dp36"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                    android:src="@drawable/ic_share"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/loadingContainer"

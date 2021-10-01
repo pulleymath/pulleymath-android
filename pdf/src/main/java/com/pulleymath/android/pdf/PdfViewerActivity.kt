@@ -251,8 +251,10 @@ open class PdfViewerActivity : Activity() {
             try {
                 val byteArray = readFileByteArray(path)
                 val byteString = String(byteArray)
-                val decodedBase64 = MuPDFCrypto.decrypt(byteString, getString(R.string.publisher_key))
-                val decodedByteArray = android.util.Base64.decode(decodedBase64, android.util.Base64.NO_PADDING)
+                val decodedBase64 =
+                    MuPDFCrypto.decrypt(byteString, getString(R.string.publisher_key))
+                val decodedByteArray =
+                    android.util.Base64.decode(decodedBase64, android.util.Base64.NO_PADDING)
                 val magic = "application/pdf"
 
                 core = openBuffer(decodedByteArray, magic)
@@ -269,9 +271,26 @@ open class PdfViewerActivity : Activity() {
                 runOnUiThread {
                     fileLoaded(savedInstanceState)
                 }
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+            } catch (e:OutOfMemoryError) {
+                showErrorMessage("파일 용량이 커서 열 수 없습니다. 메모리를 정리해야 합니다.")
+            } catch (e: Exception) {
+                showErrorMessage("다음과 같은 오류로 파일을 열 수 없습니다 : ${e.localizedMessage}")
             }
+        }
+    }
+
+    fun showErrorMessage(msg:String?=null) {
+        runOnUiThread {
+            val alert = mAlertBuilder!!.create()
+            alert.setTitle(R.string.cannot_open_document)
+            if (msg != null)
+                alert.setMessage(msg)
+            alert.setButton(
+                AlertDialog.BUTTON_POSITIVE,
+                getString(R.string.dismiss)
+            ) { dialog, which -> finish() }
+            alert.setOnCancelListener { finish() }
+            alert.show()
         }
     }
 

@@ -50,6 +50,16 @@
                     android:layout_weight="2"
                     android:background="#ced9ff">
 
+                    <ImageView
+                        android:id="@+id/imgPublisher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_publisher_workbook_w"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/textReadPulleyBook"
                         style="@style/TextPurple_6d6dff.ExtraBold"
@@ -87,15 +97,6 @@
                         app:layout_constraintBottom_toTopOf="@+id/textPublisherDescr"
                         app:layout_constraintStart_toStartOf="@+id/textPublisherDescr" />
 
-                    <ImageView
-                        android:id="@+id/imgPublisher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="200dp"
-                        android:src="@drawable/img_publisher_workbook_w"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -124,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="24dp"
-                        android:text="문제집으로\n나만의 워크북을 만들어보세요"
+                        android:text="문제집으로\n나만의 워크북을\n만들어보세요"
                         android:textSize="@dimen/dp18"
                         app:layout_constraintBottom_toTopOf="@+id/textMakeWorkbook"
                         app:layout_constraintStart_toStartOf="@+id/textMakeWorkbook"
@@ -383,19 +384,20 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dp32"
                 app:layout_constraintTop_toBottomOf="@+id/totalLabel"/>
-            
-            
+
+
             <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
                 android:id="@+id/filterView"
                 android:layout_width="@dimen/learning_wrongNote_filter_width"
                 android:layout_height="0dp"
+                android:clipToPadding="false"
                 android:paddingStart="@dimen/dp64"
                 android:paddingEnd="@dimen/dp32"
                 android:paddingBottom="@dimen/dp24"
-                android:clipToPadding="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topBorder"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/topBorder" />
 
             <View
                 style="@style/Border_Grey_e8e8e8_Vertical"
@@ -412,9 +414,9 @@
                 android:layout_marginStart="1dp"
                 android:padding="@dimen/dp32"
                 android:clipToPadding="false"
-                app:layout_constraintTop_toTopOf="@+id/filterView"
+                app:layout_constraintTop_toBottomOf="@+id/topBorder"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/filterView"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
             </com.freewheelin.pulley.views.GridRecyclerView>

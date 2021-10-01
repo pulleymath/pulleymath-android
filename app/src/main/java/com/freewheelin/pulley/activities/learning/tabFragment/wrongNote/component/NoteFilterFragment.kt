@@ -44,7 +44,7 @@ class NoteFilterFragment : Fragment() {
     var type = DateRangePickerDialog.Type.RECENT7
 
     val dialog: DateRangePickerDialog by lazy {
-        val pickerDialog = DateRangePickerDialog(context!!, from, to, LocalDate(user!!.firstDate))
+        val pickerDialog = DateRangePickerDialog(requireContext(), from, to, LocalDate(user!!.firstDate))
         pickerDialog.listener = object: DateRangePickerDialogListener {
             override fun onUpdateClicked(picker: DateRangePickerDialog, from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
                 this@NoteFilterFragment.from = from
@@ -58,7 +58,7 @@ class NoteFilterFragment : Fragment() {
         pickerDialog
     }
 
-    lateinit var filterAdapter: FilterAdapter
+    var filterAdapter: FilterAdapter? = null
 
     companion object {
         const val ARG_FILTERS = "FILTER_TYPES"
@@ -120,21 +120,25 @@ class NoteFilterFragment : Fragment() {
 
     private fun initUI() {
         filterAdapter = FilterAdapter()
-        filterAdapter.sectionType = SectionType.header
+        filterAdapter?.sectionType = SectionType.header
         filterRv.adapter = filterAdapter
         filterRv.addItemDecoration(SpaceItemDecoration())
         filterRv.layoutManager = GridLayoutManager(context, 6, GridLayoutManager.VERTICAL, false).also {
             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    val indexPath = filterAdapter.getIndexPath(position)
-                    return if (indexPath.type == Type.header) {
-                        6
+                    val indexPath = filterAdapter?.getIndexPath(position)
+                    if(indexPath != null) {
+                        return if (indexPath.type == Type.header) {
+                            6
+                        } else {
+                            val filter = filters[indexPath.section - 1].second[indexPath.row]
+                            return if (filter == FilterType.exceptClear || filter == FilterType.includeClear)
+                                3
+                            else
+                                2
+                        }
                     } else {
-                        val filter = filters[indexPath.section - 1].second[indexPath.row]
-                        return if (filter == FilterType.exceptClear || filter == FilterType.includeClear)
-                            3
-                        else
-                            2
+                        return 0
                     }
                 }
             }
@@ -147,7 +151,7 @@ class NoteFilterFragment : Fragment() {
         // 현재 필터 조건에 새로운 공통을 추가
         selectedFilterTypes.addAll(filters.filter { it.commonSet.contains(it) })
 
-        filterAdapter.notifyDataSetChanged()
+        filterAdapter?.notifyDataSetChanged()
     }
 
     fun selectCommonFilters() : List<FilterType> {

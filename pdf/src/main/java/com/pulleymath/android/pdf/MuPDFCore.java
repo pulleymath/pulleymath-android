@@ -105,7 +105,7 @@ public class MuPDFCore
 		return oldPage;
 	}
 
-	private synchronized void gotoPage(int pageNum) {
+	private synchronized void gotoPage(int pageNum) throws Exception {
 		/* TODO: page cache */
 		if (pageNum > pageCount-1)
 			pageNum = pageCount-1;
@@ -126,7 +126,7 @@ public class MuPDFCore
 		}
 	}
 
-	public synchronized PointF getPageSize(int pageNum) {
+	public synchronized PointF getPageSize(int pageNum) throws Exception {
 		gotoPage(pageNum);
 		return new PointF(pageWidth, pageHeight);
 	}
@@ -148,8 +148,11 @@ public class MuPDFCore
 			int patchX, int patchY,
 			int patchW, int patchH,
 			Cookie cookie) {
-		gotoPage(pageNum);
-
+		try {
+			gotoPage(pageNum);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		if (displayList == null)
 			displayList = page.toDisplayList();
 
@@ -175,7 +178,11 @@ public class MuPDFCore
 	}
 
 	public synchronized Link[] getPageLinks(int pageNum) {
-		gotoPage(pageNum);
+		try {
+			gotoPage(pageNum);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return page.getLinks();
 	}
 
@@ -184,7 +191,11 @@ public class MuPDFCore
 	}
 
 	public synchronized Quad[] searchPage(int pageNum, String text) {
-		gotoPage(pageNum);
+		try {
+			gotoPage(pageNum);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return page.search(text);
 	}
 

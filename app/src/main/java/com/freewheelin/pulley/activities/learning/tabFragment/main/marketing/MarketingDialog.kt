@@ -40,7 +40,7 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
         Log.d("마케팅", "screen height=${context!!.resources.configuration.screenHeightDp}")
 
         if(context!!.underMinHeight) {
-            val ratio = 0.8f
+            val ratio = 0.5f
 
             var pagerParams = marketingPager.layoutParams
             pagerParams.width = (720 * ratio).toPx().toInt()

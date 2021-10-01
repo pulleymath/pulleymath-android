@@ -16,21 +16,21 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
         android:id="@+id/problemCntTV"
+        style="@style/TextBlack_4c4c4c.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="@dimen/sp24"
+        android:layout_marginTop="4dp"
         android:text="56개의 문제가 있습니다."
+        android:textSize="@dimen/sp24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clearGuideTv"/>
+        app:layout_constraintTop_toBottomOf="@+id/clearGuideTv" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/columnView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="@dimen/dp32"
+        android:layout_marginTop="8dp"
         android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round"
         app:layout_constraintTop_toBottomOf="@+id/problemCntTV">
 
@@ -38,88 +38,89 @@
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:button="@drawable/checkbox_blue_white_bg"
             android:layout_marginStart="12dp"
+            android:button="@drawable/checkbox_blue_white_bg"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             style="@style/TextBlack_4c4c4c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:textSize="@dimen/sp16"
             android:text="전체 선택"
-            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            android:textSize="@dimen/sp16"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-            app:layout_constraintStart_toEndOf="@+id/checkBox"/>
+            app:layout_constraintStart_toEndOf="@+id/checkBox"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
         <Button
-            style="@style/TextBlack_4c4c4c"
             android:id="@+id/levelOrder"
+            style="@style/TextBlack_4c4c4c"
             android:layout_width="72dp"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:padding="0dp"
-            android:textSize="@dimen/sp16"
-            android:text="난이도순"
             android:layout_marginEnd="12dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:background="@null"
+            android:padding="0dp"
+            android:text="난이도순"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <View
             style="@style/Border_Grey_e8e8e8_Vertical"
             android:layout_height="16dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/levelOrder"/>
+            app:layout_constraintEnd_toStartOf="@+id/levelOrder"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            style="@style/TextBlack_4c4c4c"
             android:id="@+id/subjectOrder"
+            style="@style/TextBlack_4c4c4c"
             android:layout_width="72dp"
             android:layout_height="match_parent"
             android:background="@null"
             android:padding="0dp"
-            android:textSize="@dimen/sp16"
             android:text="과목순"
-            app:layout_constraintEnd_toStartOf="@+id/levelOrder"/>
+            android:textSize="@dimen/sp16"
+            app:layout_constraintEnd_toStartOf="@+id/levelOrder" />
 
         <View
             style="@style/Border_Grey_e8e8e8_Vertical"
             android:layout_height="16dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
+            app:layout_constraintEnd_toStartOf="@+id/subjectOrder"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            style="@style/TextBlack_4c4c4c"
             android:id="@+id/oldOrder"
+            style="@style/TextBlack_4c4c4c"
             android:layout_width="72dp"
             android:layout_height="match_parent"
             android:background="@null"
             android:padding="0dp"
-            android:textSize="@dimen/sp16"
             android:text="오래된순"
-            app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
+            android:textSize="@dimen/sp16"
+            app:layout_constraintEnd_toStartOf="@+id/subjectOrder" />
 
         <View
             style="@style/Border_Grey_e8e8e8_Vertical"
             android:layout_height="16dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/oldOrder"/>
+            app:layout_constraintEnd_toStartOf="@+id/oldOrder"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            style="@style/TextBlack_4c4c4c"
             android:id="@+id/recentOrder"
+            style="@style/TextBlack_4c4c4c"
             android:layout_width="72dp"
             android:layout_height="match_parent"
             android:background="@null"
             android:padding="0dp"
-            android:textSize="@dimen/sp16"
             android:text="최신순"
-            app:layout_constraintEnd_toStartOf="@+id/oldOrder"/>
+            android:textSize="@dimen/sp16"
+            app:layout_constraintEnd_toStartOf="@+id/oldOrder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -136,29 +137,29 @@
         <ImageView
             android:id="@+id/guideIv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:src="@drawable/guide_empty_wrong"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/guideTv"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
             android:id="@+id/guideTv"
+            style="@style/TextGrey_c0c0c0.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp16"
             android:layout_marginTop="@dimen/dp24"
             android:gravity="center"
+            android:lineSpacingExtra="4sp"
             android:text="즐겨찾기한 문제가 이곳에 모여요!\n다시 보고 싶거나, 중요하다고 생각한 문제를 모아보세요 :)"
-            android:lineSpacingExtra="8sp"
-            app:layout_constraintTop_toBottomOf="@+id/guideIv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/sp12"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideIv"
+            app:layout_constraintVertical_chainStyle="packed" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

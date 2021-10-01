@@ -125,17 +125,23 @@ public class PageAdapter extends BaseAdapter {
 			AsyncTask<Void,Void,PointF> sizingTask = new AsyncTask<Void,Void,PointF>() {
 				@Override
 				protected PointF doInBackground(Void... arg0) {
-					return mCore.getPageSize(position);
+					try {
+						return mCore.getPageSize(position);
+					} catch (Exception e) {
+						return null;
+					}
 				}
 
 				@Override
 				protected void onPostExecute(PointF result) {
 					super.onPostExecute(result);
-					// We now know the page size
-					mPageSizes.put(position, result);
-					// Check that this view hasn't been reused for another page since we started
-					if (pageView.getPage() == position)
-						pageView.setPage(position, result);
+					if(result != null) {
+						// We now know the page size
+						mPageSizes.put(position, result);
+						// Check that this view hasn't been reused for another page since we started
+						if (pageView.getPage() == position)
+							pageView.setPage(position, result);
+					}
 				}
 			};
 			sizingTask.execute((Void)null);

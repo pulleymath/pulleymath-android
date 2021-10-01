@@ -1,0 +1,490 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.book.BookFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_fafafa"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_ffffff">
+
+            <TextView
+                android:id="@+id/publisherLabel"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp64"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="출판사 문제집"
+                android:textColor="@color/black_4c4c4c"
+                android:textSize="@dimen/sp36"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="@dimen/dp64"
+                android:layout_marginBottom="48dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/publisherLabel"
+                app:layout_constraintTop_toBottomOf="@+id/publisherLabel">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/commercialBookLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="2"
+                    android:background="#ced9ff">
+
+                    <TextView
+                        android:id="@+id/textReadPulleyBook"
+                        style="@style/TextPurple_6d6dff.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginBottom="35dp"
+                        android:text="출판사 문제집 보기 >"
+                        android:textSize="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textPublisherDescr"
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:text="풀리에서\n출판사 문제집을 만나보세요!"
+                        android:textSize="@dimen/dp18"
+                        app:layout_constraintBottom_toTopOf="@+id/textReadPulleyBook"
+                        app:layout_constraintStart_toStartOf="@+id/textReadPulleyBook"
+                        app:lineHeight="@dimen/dp24" />
+
+                    <TextView
+                        android:id="@+id/textNew"
+                        style="@style/TextWhite_ffffff.ExtraBold"
+                        android:layout_width="44dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/bg_red_fe7b67_round"
+                        android:gravity="center"
+                        android:text="New"
+                        android:textSize="@dimen/dp12"
+                        app:layout_constraintBottom_toTopOf="@+id/textPublisherDescr"
+                        app:layout_constraintStart_toStartOf="@+id/textPublisherDescr" />
+
+                    <ImageView
+                        android:id="@+id/imgPublisher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:src="@drawable/img_publisher_workbook_w"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/workbookBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="#f2f2f2">
+
+                    <TextView
+                        android:id="@+id/textMakeWorkbook"
+                        style="@style/TextPurple_6d6dff.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginBottom="35dp"
+                        android:text="워크북 만들기 >"
+                        android:textSize="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textWorkbookDescr"
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:text="문제집으로\n나만의 워크북을 만들어보세요"
+                        android:textSize="@dimen/dp18"
+                        app:layout_constraintBottom_toTopOf="@+id/textMakeWorkbook"
+                        app:layout_constraintStart_toStartOf="@+id/textMakeWorkbook"
+                        app:lineHeight="@dimen/dp24" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/myBookContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_8D8Db3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/myPlanLabel"
+                style="@style/TextWhite_ffffff.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp64"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="나의 플랜"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/sp36"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextWhite_ffffff.Bold"
+                android:id="@+id/myPlanCntTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:text="총 12개"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintStart_toEndOf="@+id/myPlanLabel"
+                app:layout_constraintBottom_toBottomOf="@+id/myPlanLabel"/>
+
+            <TextView
+                style="@style/TextWhite_ffffff.Bold"
+                android:id="@+id/myPlanCntBorder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:text="|"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/myPlanCntTv"
+                app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
+
+            <TextView
+                style="@style/TextWhite_ffffff.Bold"
+                android:id="@+id/pinCntTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:text="핀 설정 nn개"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@+id/myPlanCntBorder"
+                app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
+
+
+            <TextView
+                style="@style/TextWhite_ffffff.Bold"
+                android:id="@+id/myPlanGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:text="이런 플랜은 자동으로 삭제돼요!"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/myPlanDeleteGuideTv"
+                app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
+
+            <TextView
+                style="@style/TextWhite_ffffff.ExtraBold"
+                android:id="@+id/myPlanDeleteGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp14"
+                android:textColor="@color/white_ffffff"
+                android:layout_marginEnd="@dimen/dp32"
+                android:text="기준보기"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1.6dp"
+                android:background="@color/white_ffffff"
+                app:layout_constraintStart_toStartOf="@+id/myPlanDeleteGuideTv"
+                app:layout_constraintEnd_toEndOf="@+id/myPlanDeleteGuideTv"
+                app:layout_constraintTop_toBottomOf="@+id/myPlanDeleteGuideTv"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/myPlanRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp64"
+                android:paddingTop="@dimen/dp32"
+                android:paddingBottom="@dimen/dp64"
+                android:paddingEnd="@dimen/dp32"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                app:layout_constraintTop_toBottomOf="@+id/myPlanLabel"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/myBookEmptyContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp328"
+                android:visibility="invisible"
+                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginBottom="@dimen/dp64"
+                app:layout_constraintTop_toBottomOf="@+id/myPlanLabel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/emptyBookIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/empty_my_plan"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/emptyBookLabel"
+                    app:layout_constraintVertical_chainStyle="packed"/>
+
+                <TextView
+                    android:id="@+id/emptyBookLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:textSize="@dimen/sp16"
+                    android:textColor="#88ffffff"
+                    android:lineSpacingExtra="8sp"
+                    android:gravity="center_horizontal"
+                    android:text="내가 공부하는 플랜이 여기에 모여요 :)\n아래에서 원하는 플랜을 골라볼까요?"
+                    app:layout_constraintTop_toBottomOf="@+id/emptyBookIv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recommendBookContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_ffffff"
+            app:layout_constraintTop_toBottomOf="@+id/myBookContainer">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/planLoadingView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="@dimen/dp64"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="recommend_plan_loading.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:id="@+id/recommendLabel"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp64"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="추천 플랜"
+                android:textColor="@color/black_4c4c4c"
+                android:textSize="@dimen/sp36"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp48"
+                app:layout_constraintTop_toBottomOf="@+id/recommendLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                    android:id="@+id/firstRecommendList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                    android:id="@+id/secondRecommendList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                    android:id="@+id/thirdRecommendList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                    android:id="@+id/fourthRecommendList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/totalPlanContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8">
+
+            <TextView
+                android:id="@+id/totalLabel"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp64"
+                android:layout_marginTop="@dimen/dp48"
+                android:text="전체 플랜"
+                android:textColor="@color/black_4c4c4c"
+                android:textSize="@dimen/sp36"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:id="@+id/topBorder"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp32"
+                app:layout_constraintTop_toBottomOf="@+id/totalLabel"/>
+            
+            
+            <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
+                android:id="@+id/filterView"
+                android:layout_width="@dimen/learning_wrongNote_filter_width"
+                android:layout_height="0dp"
+                android:paddingStart="@dimen/dp64"
+                android:paddingEnd="@dimen/dp32"
+                android:paddingBottom="@dimen/dp24"
+                android:clipToPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topBorder"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/topBorder"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/filterView"/>
+
+            <com.freewheelin.pulley.views.GridRecyclerView
+                android:id="@+id/totalRv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="1dp"
+                android:padding="@dimen/dp32"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toTopOf="@+id/filterView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/filterView"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            </com.freewheelin.pulley.views.GridRecyclerView>
+
+            <FrameLayout
+                android:id="@+id/totalPlanCover"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="1dp"
+                android:clickable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </FrameLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/totalLoadingView"
+                android:layout_width="@dimen/dp200"
+                android:layout_height="@dimen/dp200"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/totalRv"
+                app:layout_constraintStart_toStartOf="@+id/totalRv"
+                app:layout_constraintTop_toTopOf="@+id/totalRv"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="circle_loading.json"
+                app:lottie_loop="true" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/totalEmptyContainer"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/totalRv"
+                app:layout_constraintStart_toStartOf="@+id/totalRv"
+                app:layout_constraintEnd_toEndOf="@+id/totalRv"
+                app:layout_constraintBottom_toBottomOf="@+id/totalRv">
+
+                <ImageView
+                    android:id="@+id/emptyIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_plan_empty"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="@dimen/dp24"
+                    app:layout_constraintBottom_toTopOf="@+id/emptyTv"/>
+
+
+                <TextView
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:id="@+id/emptyTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp16"
+                    android:textColor="@color/grey_c0c0c0"
+                    android:lineSpacingExtra="8sp"
+                    android:gravity="center_horizontal"
+                    android:text="조건에 맞는 플랜이 없네요ㅠㅠ\n조건을 바꿔볼까요?"
+                    app:layout_constraintTop_toBottomOf="@+id/emptyIv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>

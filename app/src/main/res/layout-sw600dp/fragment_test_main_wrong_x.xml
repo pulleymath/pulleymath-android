@@ -1,0 +1,57 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainWrongXFragment">
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:id="@+id/headerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="7월 30일 - 8월 4일의\n오답 문항이 없어요!"
+        android:lineSpacingExtra="@dimen/sp16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/contentsTv"
+        android:textSize="@dimen/sp32"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextGrey_9f9f9f"
+        android:id="@+id/contentsTv"
+        android:layout_width="wrap_content"
+        android:layout_height="78dp"
+        android:textSize="@dimen/sp18"
+        android:text="대단해요! :)\n문제를 모두 클리어했군요?\n지난 주 외 다른 기간의 오답도 확인해볼까요?"
+        android:lineSpacingExtra="@dimen/sp8"
+        android:layout_marginTop="@dimen/dp48"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerTv"
+        app:layout_constraintBottom_toTopOf="@+id/moveTv"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextPurple_6d6dff.ExtraBold"
+        android:id="@+id/moveTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp18"
+        android:text="오답노트로 가기 >"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginBottom="28dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contentsTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

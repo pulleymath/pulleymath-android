@@ -35,6 +35,8 @@ object MuPDFCrypto {
             null // you'd better know about padding oracle attacks
         } catch (e: GeneralSecurityException) {
             throw IllegalStateException("Unexpected exception during decryption", e)
+        } catch (e:Exception) {
+            throw e
         }
     }
 }

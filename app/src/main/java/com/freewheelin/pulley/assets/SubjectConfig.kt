@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.assets
 
 import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import java.lang.IllegalStateException
 
 enum class Subject(val id: Int) {
@@ -126,7 +127,7 @@ enum class BigUnit(val subject: Subject, val title: String, val suffixId: Int) {
                 벡터.id -> 벡터
                 공간도형.id -> 공간도형
                 else -> {
-                    LogUtils.assert(IllegalStateException("예상하지 못한 ID: ${id}"))
+                    LogUtils.errorEvent(PulleyEvent.ERROR, null, msg="\"예상하지 못한 ID: ${id}\"")
                     공간도형
                 }
             }

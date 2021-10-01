@@ -8,6 +8,7 @@ import com.pulleymath.android.pdf.log.Network
 
 import com.pulleymath.android.pdf.memo.FreeDrawSerializableState
 import java.io.*
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 /**
@@ -74,15 +75,20 @@ object FileHelper {
             errorCompletion:((String)->Unit)?=null) {
 
         thread(start = true) {
-            val db = DatabaseHelper.get(context)
-            val pdfMemo = db.pdfWritingDao().get(fileName)
-            if (pdfMemo != null) {
-                val state = Gson().fromJson(pdfMemo.file, FreeDrawSerializableState::class.java)
-                if(state != null) {
-                    completion(state)
+            DatabaseHelper.get(context)?.let { db ->
+                try {
+                    val pdfMemo = db.pdfWritingDao().get(fileName)
+                    if (pdfMemo != null) {
+                        val state = Gson().fromJson(pdfMemo.file, FreeDrawSerializableState::class.java)
+                        if (state != null) {
+                            completion(state)
+                        }
+                    } else {
+                        errorCompletion?.let { it("error") }
+                    }
+                }catch (e:Exception) {
+                    Log.e(javaClass.simpleName, "${e.localizedMessage}")
                 }
-            } else {
-                errorCompletion?.let { it("error") }
             }
         }
     }

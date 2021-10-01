@@ -90,9 +90,9 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
             }
         }
 
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(scoringReceiver!!, IntentFilter(TestManager.EVENT_TEST_SCORING))
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(settingReceiver!!, IntentFilter(TestManager.EVENT_TEST_SETTING))
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(clearRecevier!!, IntentFilter(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(scoringReceiver!!, IntentFilter(TestManager.EVENT_TEST_SCORING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(settingReceiver!!, IntentFilter(TestManager.EVENT_TEST_SETTING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearRecevier!!, IntentFilter(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -111,59 +111,59 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override fun onDestroy() {
         if(scoringReceiver != null)
-            LocalBroadcastManager.getInstance(context!!).unregisterReceiver(scoringReceiver!!)
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(scoringReceiver!!)
         if(settingReceiver != null)
-            LocalBroadcastManager.getInstance(context!!).unregisterReceiver(settingReceiver!!)
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(settingReceiver!!)
         if(clearRecevier != null)
-            LocalBroadcastManager.getInstance(context!!).unregisterReceiver(clearRecevier!!)
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearRecevier!!)
         super.onDestroy()
         deinitTimer()
     }
 
     override fun onReviewBtnClicked(test: Test) {
-        val intent = SolveActivity.getReviewIntent(context!!, test)
+        val intent = SolveActivity.getReviewIntent(requireContext(), test)
         startActivity(intent)
     }
 
     override fun onSolveBtnClicked(test: Test) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "테스트 시작하기", test.getTestType().eventItemValue)
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "테스트 시작하기", test.getTestType().eventItemValue)
         if(Date() > test.endDate && (test.getTestType() == Test.TestType.weekly || test.getTestType() == Test.TestType.daily)) {
-            val dialog = DialogUtils.makeDialog(context!!, "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
+            val dialog = DialogUtils.makeDialog(requireContext(), "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
             dialog.rightBtn.visibility = View.GONE
             dialog.show()
 
         } else {
-            val intent = SolveActivity.getIntent(context!!, test)
+            val intent = SolveActivity.getIntent(requireContext(), test)
             startActivity(intent)
         }
     }
 
     override fun onSettingBtnClicked(test: Test) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "추천설정")
-//        val dialog = MyRecommendSettingDialog(context!!, user!!, this)
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "추천설정")
+//        val dialog = MyRecommendSettingDialog(requireContext(), user!!, this)
 //        dialog.show()
 
-        val intent = MyRecommendSettingActivity.getIntent(context!!)
+        val intent = MyRecommendSettingActivity.getIntent(requireContext())
         startActivity(intent)
     }
 
     override fun onReportBtnClicked(test: Test, fromGift: Boolean) {
         if(fromGift)
-            LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "결과 상세보기", "선물상자화면")
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "결과 상세보기", "선물상자화면")
         else
-            LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "결과 상세보기", test.getTestType().eventItemValue)
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "결과 상세보기", test.getTestType().eventItemValue)
 
         when(test.getTestType()) {
             Test.TestType.daily, Test.TestType.initial -> {
-                val intent = DailyTestReportActivity.getIntent(context!!, test)
+                val intent = DailyTestReportActivity.getIntent(requireContext(), test)
                 startActivity(intent)
             }
             Test.TestType.weekly -> {
-                val intent = WeeklyTestReportActivity.getIntent(context!!, test)
+                val intent = WeeklyTestReportActivity.getIntent(requireContext(), test)
                 startActivity(intent)
             }
             Test.TestType.wrong -> {
-                val intent = WrongTestReportActivity.getIntent(context!!, test)
+                val intent = WrongTestReportActivity.getIntent(requireContext(), test)
                 startActivity(intent)
             }
         }
@@ -176,16 +176,16 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override fun onMoveBtnClikced(test: Test) {
         if(test.wrongInfo.totalProblemCount == 0) {
-            LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "유형학습")
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "유형학습")
             (activity as LearningTabActivity).setSelectedTab(3)
         } else {
-            LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "오답노트")
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "오답노트")
             (activity as LearningTabActivity).setSelectedTab(5)
         }
     }
 
     override fun onModifyCompleted(user: User) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK,"테스트","추천설정","수정하기")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK,"테스트","추천설정","수정하기")
     }
 
     override fun initUI() {
@@ -196,7 +196,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     private fun syncTestList(reStudyTest: Test? = null) {
-        TestManager.getTestList(context!!, user!!) {
+        TestManager.getTestList(requireContext(), user!!) {
             tests = it.filter { it.isPossibleTest() }
 
             if(reStudyTest == null) {
@@ -225,11 +225,11 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     private fun onSelectorContainerClicked(view: View) {
-        dailyContainer.background = ContextCompat.getDrawable(context!!, R.drawable.shadow)
-        weeklyContainer.background = ContextCompat.getDrawable(context!!, R.drawable.shadow)
-        wrongContainer.background = ContextCompat.getDrawable(context!!, R.drawable.shadow)
+        dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
+        weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
+        wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
 
-        view.background = ContextCompat.getDrawable(context!!, R.drawable.shadow_border_purple)
+        view.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_border_purple)
 
         val set = ConstraintSet()
         set.clone(rootView)
@@ -243,7 +243,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 setUserRecentSubject(test)
 
                 setMainFragment(test, Test.TestType.daily)
-                LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "데일리테스트")
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "데일리테스트")
 
             }
             weeklyContainer -> {
@@ -251,14 +251,14 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 set.connect(arrowIv.id, BOTTOM, weeklyContainer.id, BOTTOM)
                 val test = tests.filter { it.getTestType() == Test.TestType.weekly }.firstOrNull()
                 setMainFragment(test, Test.TestType.weekly)
-                LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "주간테스트")
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "주간테스트")
             }
             wrongContainer -> {
                 set.connect(arrowIv.id, TOP, wrongContainer.id, TOP)
                 set.connect(arrowIv.id, BOTTOM, wrongContainer.id, BOTTOM)
                 val test = tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()
                 setMainFragment(test, Test.TestType.wrong)
-                LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트")
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트")
             }
         }
         set.applyTo(rootView)

@@ -134,7 +134,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 onFragmentSelected()
             }
         }
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(changeRecevier, IntentFilter(ProblemManager.EVENT_WRONG_NOTE_CHANGED))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(changeRecevier, IntentFilter(ProblemManager.EVENT_WRONG_NOTE_CHANGED))
     }
 
     override fun onResume() {
@@ -150,7 +150,7 @@ class WrongNoteFragment : LearningTabFragment(),
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(changeRecevier)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(changeRecevier)
         super.onDestroy()
     }
 
@@ -194,12 +194,12 @@ class WrongNoteFragment : LearningTabFragment(),
         super.onFragmentSelected()
         val tabPosition = tabLayout.selectedTabPosition
         if (tabPosition == 0) {
-            ProblemManager.getWrongProblems(context!!, user!!, from.toDate(), to.toDate()) {
+            ProblemManager.getWrongProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
                 wrongProblems = it
                 setGroupedProblem(tabPosition)
             }
         } else {
-            ProblemManager.getScrapProblems(context!!, user!!, from.toDate(), to.toDate()) {
+            ProblemManager.getScrapProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
                 scrapProblems = it
                 setGroupedProblem(tabPosition)
             }
@@ -227,12 +227,12 @@ class WrongNoteFragment : LearningTabFragment(),
         Log.d("날짜설정", "from=$fromDate, to=$toDate")
 
         if (tabPosition == 0) {
-            ProblemManager.getWrongProblems(context!!, user!!, fromDate.toDate(), toDate.toDate()) {
+            ProblemManager.getWrongProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
                 wrongProblems = it
                 setGroupedProblem(tabPosition)
             }
         } else if (tabPosition == 1) {
-            ProblemManager.getScrapProblems(context!!, user!!, fromDate.toDate(), toDate.toDate()) {
+            ProblemManager.getScrapProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
                 scrapProblems = it
                 setGroupedProblem(tabPosition)
             }
@@ -265,21 +265,21 @@ class WrongNoteFragment : LearningTabFragment(),
 
     override fun onStudyBtnClicked(view: WrongManageView) {
         if(tabLayout.selectedTabPosition == 0)
-            LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답학습하기")
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답학습하기")
         else
-            LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "추가학습하기")
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "추가학습하기")
 
         val dialogType = if(tabLayout.selectedTabPosition == 0) WrongManagementDialog.Type.wrongProblem
                         else WrongManagementDialog.Type.scrap
-        val dialog = WrongManagementDialog(context!!, dialogType)
+        val dialog = WrongManagementDialog(requireContext(), dialogType)
         dialog.wrongCnt = selectedProblem.size
         dialog.show()
 
         dialog.makeBtn.setOnClickListener {
             if(tabLayout.selectedTabPosition == 0)
-                LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
             else
-                LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
             dialog.makeBtn.startLoding()
             val problems = selectedProblem.toList()
             val cntPerProblem = dialog.cnt
@@ -288,13 +288,13 @@ class WrongNoteFragment : LearningTabFragment(),
 
             val isIncludeClearProblem = dialog.isClearInclude
 
-            PieceManager.makeWeakPiece(context!!, user!!, problems, isSimilar, level, cntPerProblem, isIncludeClearProblem,
+            PieceManager.makeWeakPiece(requireContext(), user!!, problems, isSimilar, level, cntPerProblem, isIncludeClearProblem,
                     if(dialogType == WrongManagementDialog.Type.wrongProblem) "WRONG_NOTE" else "SCRAP",
                     successCB = {
                         dialog.dismiss()
 
                         if(dialog.checkbox.isChecked) {
-                            val intent = SolveActivity.getIntent(context!!, it)
+                            val intent = SolveActivity.getIntent(requireContext(), it)
                             startActivity(intent)
                         } else {
                             var text = if(dialogType == WrongManagementDialog.Type.wrongProblem) "오답문제" else "즐겨찾기 문제"
@@ -305,16 +305,16 @@ class WrongNoteFragment : LearningTabFragment(),
                         contentsRv.adapter?.notifyDataSetChanged()
                     }, failCB = {
                         dialog.dismiss()
-                        DaebakToast.showFailedMakePiece(context!!)
+                        DaebakToast.showFailedMakePiece(requireContext())
                     }
             )
         }
     }
 
     override fun onReviewBtnClicked(view: WrongManageView) {
-        LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "리뷰하기")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "리뷰하기")
         val subject = if (tabLayout.selectedTabPosition == 0) "오답노트 리뷰" else "즐겨찾기 리뷰"
-        val intent = SolveActivity.getReviewIntent(context!!, subject, selectedProblem.toList())
+        val intent = SolveActivity.getReviewIntent(requireContext(), subject, selectedProblem.toList())
         startActivity(intent)
     }
 
@@ -324,8 +324,8 @@ class WrongNoteFragment : LearningTabFragment(),
         viewPager.setPagingEnabled(false)
 
         tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.customView = TabTextView(context!!, "오답노트")
-        tabLayout.getTabAt(1)?.customView = TabTextView(context!!, "즐겨찾기")
+        tabLayout.getTabAt(0)?.customView = TabTextView(requireContext(), "오답노트")
+        tabLayout.getTabAt(1)?.customView = TabTextView(requireContext(), "즐겨찾기")
 
         viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
@@ -344,15 +344,15 @@ class WrongNoteFragment : LearningTabFragment(),
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 if(tab.position == 0) {
-                    ProblemManager.getWrongProblems(context!!, user!!, from.toDate(), to.toDate()) {
+                    ProblemManager.getWrongProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
                         wrongProblems = it
                         setGroupedProblem(tab.position)
                     }
                 }
 
                 if(tab.position == 1) {
-                    LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기")
-                    ProblemManager.getScrapProblems(context!!, user!!, from.toDate(), to.toDate()) {
+                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기")
+                    ProblemManager.getScrapProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
                         scrapProblems = it
                         setGroupedProblem(tab.position)
                     }
@@ -369,7 +369,7 @@ class WrongNoteFragment : LearningTabFragment(),
         contentsRv.addItemDecoration(SpaceItemDecoration())
 
 
-        val spanCount = if (context!!.is10InchUI) 4 else 3
+        val spanCount = if (requireContext().is10InchUI) 4 else 3
         contentsRv.layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -644,7 +644,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 }
 
                 detailBtn.setOnClickListener {
-                    val dialog = NoteDetailDialog(context!!, problem, user!!)
+                    val dialog = NoteDetailDialog(requireContext(), problem, user!!)
                     dialog.nextProblem = this@NoteAdapter.getNextProblem(problem)
                     dialog.prevProblem = this@NoteAdapter.getPrevProblem(problem)
                     dialog.show()
@@ -662,7 +662,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
                     dialog.clearBtn.setOnClickListener {
                         val isClear = !dialog.isClear
-                        ProblemManager.clear(context!!, user!!, dialog.problem, isClear) {
+                        ProblemManager.clear(requireContext(), user!!, dialog.problem, isClear) {
                             dialog.problem.isClear = isClear
                             dialog.problem.clearDateTime = Date()
                             dialog.configureUI(dialog.problem)
@@ -675,7 +675,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
                     dialog.scrapBtn.setOnClickListener {
                         val isScrap = !dialog.isScrap
-                        ProblemManager.scrap(context!!, user!!, dialog.problem, isScrap) {
+                        ProblemManager.scrap(requireContext(), user!!, dialog.problem, isScrap) {
                             dialog.problem.isScrap = isScrap
                             dialog.problem.scrapDateTime = Date()
                             dialog.configureUI(dialog.problem)
@@ -695,18 +695,18 @@ class WrongNoteFragment : LearningTabFragment(),
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if (viewType == 0) {
-                val view = LayoutInflater.from(context!!).inflate(R.layout.item_note_contents_header, parent, false)
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_note_contents_header, parent, false)
                 val holder =  HeaderHolder(view)
                 holder.listener = this@WrongNoteFragment
                 return holder
             } else if (viewType == 1) {
                 val textView = TextView(context)
-                textView.setTextColor(ContextCompat.getColor(context!!, R.color.black_4c4c4c))
+                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
-                textView.typeface = Theme.regular(context!!)
+                textView.typeface = Theme.regular(requireContext())
                 return GroupHeaderHolder(textView)
             } else {
-                val view = LayoutInflater.from(context!!).inflate(R.layout.item_note_contents_problem, parent, false)
+                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_note_contents_problem, parent, false)
                 val holder = ProblemHolder(view)
                 return holder
             }
@@ -740,7 +740,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 Type.row -> {
                     val space = resources.getDimension(R.dimen.dp24)
                     outRect.top = space.toInt()
-                    if(context!!.is10InchUI) {
+                    if(requireContext().is10InchUI) {
                         when {
                             indexPath.row % 4 == 0 -> {
                                 outRect.right = (space * (2f / 3f)).toInt()
@@ -938,10 +938,10 @@ private class TabTextView: androidx.appcompat.widget.AppCompatTextView {
 
         if(selected) {
             typeface = Theme.extraBold(context)
-            setTextColor(ContextCompat.getColor(context!!, R.color.purple_6D6DFF))
+            setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
         } else {
             typeface = Theme.bold(context)
-            setTextColor(ContextCompat.getColor(context!!, R.color.black_4c4c4c))
+            setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
         }
     }
 }

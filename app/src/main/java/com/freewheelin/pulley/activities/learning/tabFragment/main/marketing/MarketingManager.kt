@@ -40,9 +40,9 @@ object MarketingManager {
         Log.d("마케팅", "url=$url")
 
         CoroutineScope(Dispatchers.IO).launch {
-            val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
-            if(data != null && data.isNotEmpty()) {
-                try {
+            try {
+                val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
+                if(data != null && data.isNotEmpty()) {
                     Gson().fromJson(data, Marketing::class.java).let { marketing ->
                         if(isShow(context, mainProfile, marketing)) {
                             withContext(Dispatchers.Main) {
@@ -50,9 +50,9 @@ object MarketingManager {
                             }
                         }
                     }
-                }catch (e:Exception) {
-                    Log.d("마케팅에러", "error=${e.localizedMessage}")
                 }
+            }catch (e:Exception) {
+                Log.d("마케팅에러", "error=${e.localizedMessage}")
             }
         }
     }

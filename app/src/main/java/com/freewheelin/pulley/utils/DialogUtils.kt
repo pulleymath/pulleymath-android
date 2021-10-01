@@ -5,8 +5,11 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.facebook.appevents.AppEventsLogger
@@ -79,7 +82,8 @@ class DialogUtils {
 
         fun showNetworkErr(context: Context) {
             val dialog = networkErrDialog(context)
-            dialog.show()
+            if (context is Activity && !context.isFinishing)
+                dialog.show()
         }
 
         fun networkErrDialog(context: Context): Dialog {
@@ -468,10 +472,17 @@ class DialogUtils {
             }
 
         init {
-            if(isTitleOnly)
-                setContentView(R.layout.dialog_daebak_title_only)
+
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val inflater: LayoutInflater = LayoutInflater.from(getContext())
+
+            val view = if(isTitleOnly)
+                inflater.inflate(R.layout.dialog_daebak_title_only,null)
             else
-                setContentView(R.layout.dialog_daebak)
+                inflater.inflate(R.layout.dialog_daebak, null)
+
+            setContentView(view)
 
             leftBtn.setOnClickListener {
                 cancel()

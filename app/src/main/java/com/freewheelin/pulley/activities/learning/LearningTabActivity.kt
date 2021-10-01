@@ -243,14 +243,14 @@ class LearningTabActivity : BaseActivity(),
         val url = "https://pulleymath.com/user_test/teachers_v2.json"
         // 작업하고있던 곳 맞음
         CoroutineScope(Dispatchers.IO).launch {
-            val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
-            if (data != null && data.isNotEmpty()) {
-                try {
-                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java)
-                        .let { runOnUiThread { checkTeachers(it) } }
-                } catch (e: Exception) {
-                    Log.d("마케팅에러", "error=${e.localizedMessage}")
+            try {
+                val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
+                if (data != null && data.isNotEmpty()) {
+                        Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java)
+                            .let { runOnUiThread { checkTeachers(it) } }
                 }
+            } catch (e: Exception) {
+                Log.d("마케팅에러", "error=${e.localizedMessage}")
             }
         }
     }
