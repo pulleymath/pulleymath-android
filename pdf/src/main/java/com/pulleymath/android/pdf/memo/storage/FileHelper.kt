@@ -47,24 +47,28 @@ object FileHelper {
         Log.d(javaClass.simpleName, "saveMemo() fileName=$fileName")
         state?.let { memoObject ->
             thread(start = true) {
-                val db = DatabaseHelper.get(context)
-                val valueArray = fileName.split("_")
-                val studentId = valueArray[1]
-                val pdfId = valueArray[2].toInt()
-                val pageNo = valueArray[3].toInt()
-                val updatedAt = System.currentTimeMillis()
-                val fileData = Gson().toJson(memoObject)
-                val memo = PdfMemo(
-                    id = fileName,
-                    student_id = studentId,
-                    pdf_id = pdfId,
-                    page_no = pageNo,
-                    file = fileData,
-                    updated_at = updatedAt
-                )
-                db.pdfWritingDao().upsert(listOf(memo))
+                try {
+                    val db = DatabaseHelper.get(context)
+                    val valueArray = fileName.split("_")
+                    val studentId = valueArray[1]
+                    val pdfId = valueArray[2].toInt()
+                    val pageNo = valueArray[3].toInt()
+                    val updatedAt = System.currentTimeMillis()
+                    val fileData = Gson().toJson(memoObject) // 숫자 값에 NaN 넘어오는 경우 있음
+                    val memo = PdfMemo(
+                        id = fileName,
+                        student_id = studentId,
+                        pdf_id = pdfId,
+                        page_no = pageNo,
+                        file = fileData,
+                        updated_at = updatedAt
+                    )
+                    db.pdfWritingDao().upsert(listOf(memo))
 //                Network.uploadMemo(listOf(memo))
-                PdfViewerActivity.memos.set(memo.id, memo)
+                    PdfViewerActivity.memos.set(memo.id, memo)
+                } catch (e:Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }

@@ -482,13 +482,17 @@ class MyMainPageFragment : Fragment() {
     fun spyOn() {
         isSPYMode = true
         settingCategory.add(SettingCategory.SPY)
-        rv.adapter?.notifyDataSetChanged()
+        try {
+            rv?.adapter?.notifyDataSetChanged()
+        }catch (e:Exception) {}
     }
 
     fun spyOff() {
         isSPYMode = false
         settingCategory.remove(SettingCategory.SPY)
-        rv.adapter?.notifyDataSetChanged()
+        try {
+            rv?.adapter?.notifyDataSetChanged()
+        }catch (e:Exception) {}
     }
 
     fun moveTo(frag: Fragment) {

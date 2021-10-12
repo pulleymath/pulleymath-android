@@ -114,9 +114,9 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
     }
 
     private fun setNextBtn() {
-        val grade = grades.getOrNull(gradeRadio.selectedIndex)
-        val major = majors.getOrNull(majorRadio.selectedIndex)
-        val rating = ratings.getOrNull(ratingRadio.selectedIndex)
+        val grade = grades.getOrNull(gradeRadio?.selectedIndex?:-1)
+        val major = majors.getOrNull(majorRadio?.selectedIndex?:-1)
+        val rating = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
 
         if(grade == Grade.BeforeHigh
                 || (grade == Grade.High_1 && rating != null)
@@ -126,7 +126,7 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
             nextBtn.toDisableUI()
     }
 
-    fun getGrade() = grades.getOrNull(gradeRadio.selectedIndex)
-    fun getMajor() : Major? = majors.getOrNull(majorRadio.selectedIndex)
-    fun getRating() = ratings.getOrNull(ratingRadio.selectedIndex)
+    fun getGrade() = grades.getOrNull(gradeRadio?.selectedIndex?:-1)
+    fun getMajor() : Major? = majors.getOrNull(majorRadio?.selectedIndex?:-1)
+    fun getRating() = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
 }

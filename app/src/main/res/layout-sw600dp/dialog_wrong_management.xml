@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/dialog_wrong_manage_width"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp48"
+        android:paddingStart="@dimen/dp56"
+        android:paddingEnd="@dimen/dp56"
+        android:paddingBottom="@dimen/dp48"
+        android:background="@drawable/bg_white_fafafa_round"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            style="@style/TextGrey_c0c0c0.Bold"
+            android:id="@+id/testTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="‘2019년 고3 3월 모의고사’ 외 1건"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/wrongCntTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오답문제 19개로 학습지를 만듭니다."
+            android:layout_marginTop="@dimen/dp12"
+            android:textSize="@dimen/sp24"
+            app:layout_constraintStart_toStartOf="@+id/testTitleTv"
+            app:layout_constraintTop_toBottomOf="@+id/testTitleTv"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/configCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round"
+            app:layout_constraintTop_toBottomOf="@+id/wrongCntTv">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/typeSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:id="@+id/typeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:textSize="@dimen/sp16"
+                    android:text="문제 구성"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <RadioGroup
+                    android:id="@+id/typeRg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/typeTv"
+                    app:layout_constraintStart_toEndOf="@+id/typeTv">
+
+                    <RadioButton
+                        android:id="@+id/customRadioBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오답 유사문제로 만들기"
+                        android:textColor="@color/black_4c4c4c"
+                        android:checked="true"
+                        android:textSize="@dimen/sp16"/>
+
+                    <RadioButton
+                        android:id="@+id/originRadioBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오답 그대로 만들기"
+                        android:textSize="@dimen/sp16"
+                        android:textColor="@color/black_4c4c4c"
+                        android:layout_marginTop="26dp"/>
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cntSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/typeSection">
+                <View
+                    android:id="@+id/firstBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/white_ffffff"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:id="@+id/problemCntTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:textSize="@dimen/sp16"
+                    android:text="문제 수"
+                    app:layout_constraintTop_toBottomOf="@+id/firstBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c"
+                    android:id="@+id/cntGuideTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="44dp"
+                    android:textSize="@dimen/sp16"
+                    android:text="오답 하나당"
+                    app:layout_constraintTop_toBottomOf="@+id/problemCntTv"
+                    app:layout_constraintStart_toEndOf="@+id/problemCntTv"
+                    app:layout_constraintTop_toTopOf="@+id/problemCntTv"
+                    app:layout_constraintBottom_toBottomOf="@+id/problemCntTv"/>
+
+
+                <ImageButton
+                    android:id="@+id/minusBtn"
+                    android:src="@drawable/ic_minus"
+                    android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp24"
+                    app:layout_constraintTop_toBottomOf="@+id/firstBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cntGuideTv"/>
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    android:id="@+id/cntTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp18"
+                    android:text="5"
+                    app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+                    app:layout_constraintTop_toTopOf="@+id/minusBtn"
+                    app:layout_constraintStart_toStartOf="@+id/minusBtn"
+                    app:layout_constraintEnd_toEndOf="@+id/plusBtn"/>
+
+
+                <ImageButton
+                    android:id="@+id/plusBtn"
+                    android:src="@drawable/ic_plus_grey"
+                    android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginStart="40dp"
+                    app:layout_constraintTop_toTopOf="@+id/minusBtn"
+                    app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+                    app:layout_constraintStart_toEndOf="@+id/minusBtn"/>
+
+                <TextView
+                    android:id="@+id/cntGuide2Tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textSize="@dimen/sp16"
+                    android:textColor="@color/black_4c4c4c"
+                    android:text="개씩 만들기"
+                    app:layout_constraintStart_toEndOf="@+id/plusBtn"
+                    app:layout_constraintTop_toTopOf="@+id/cntGuideTv"
+                    app:layout_constraintBottom_toBottomOf="@+id/cntGuideTv"/>
+
+                <LinearLayout
+                    android:id="@+id/firstHider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="#ccf5f5f5"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    app:layout_constraintTop_toBottomOf="@+id/firstBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/levelSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/cntSection">
+                <View
+                    android:id="@+id/secondBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/white_ffffff"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:id="@+id/levelTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginBottom="@dimen/dp32"
+                    android:textSize="@dimen/sp16"
+                    android:text="난이도"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/secondBorder"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <ImageButton
+                    android:id="@+id/levelQuestionIb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_question"
+                    android:background="@null"
+                    app:layout_constraintStart_toEndOf="@+id/levelTitleTv"
+                    app:layout_constraintTop_toTopOf="@+id/levelTitleTv"
+                    app:layout_constraintBottom_toBottomOf="@+id/levelTitleTv"/>
+
+                <RadioGroup
+                    android:id="@+id/levelRg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="144dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/levelTitleTv"
+                    app:layout_constraintBottom_toBottomOf="@+id/levelTitleTv">
+                    <RadioButton
+                        android:id="@+id/easyRb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="더 쉽게"
+                        android:textSize="@dimen/sp16"
+                        android:textColor="@color/black_4c4c4c"/>
+                    <RadioButton
+                        android:id="@+id/originRb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:checked="true"
+                        android:text="그대로"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/sp16"/>
+                    <RadioButton
+                        android:id="@+id/hardRb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="26dp"
+                        android:text="더 어렵게"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/sp16"/>
+                </RadioGroup>
+
+                <LinearLayout
+                    android:id="@+id/secondHider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="#ccf5f5f5"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    app:layout_constraintTop_toBottomOf="@+id/secondBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clearSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/levelSection">
+                <View
+                    android:id="@+id/thirdBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/white_ffffff"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:id="@+id/clearIncludeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="클리어한 문제"
+                    android:textSize="@dimen/sp16"
+                    android:layout_marginBottom="@dimen/dp32"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginStart="@dimen/dp24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/thirdBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <RadioGroup
+                    android:id="@+id/clearRg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="144dp"
+                    app:layout_constraintTop_toTopOf="@+id/clearIncludeLabel"
+                    app:layout_constraintBottom_toBottomOf="@+id/clearIncludeLabel"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/includeRb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="포함"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/sp16"/>
+                    <RadioButton
+                        android:id="@+id/excludeRb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:text="미포함"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/sp16"/>
+
+                </RadioGroup>
+
+                <View
+                    android:id="@+id/clearHider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#ccf5f5f5"
+                    android:clickable="true"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="3dp"
+                    app:layout_constraintTop_toBottomOf="@+id/thirdBorder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/configCl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/black_4c4c4c"
+                android:fontFamily="@font/font_nanum_square"
+                android:textSize="@dimen/sp16" />
+
+            <TextView
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="만들고 바로 풀기"
+                android:textSize="@dimen/sp16"/>
+        </LinearLayout>
+
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/makeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="17dp"
+            android:text="오답 학습지 만들기"
+            app:buttonTheme="blue"
+            app:layout_constraintTop_toBottomOf="@+id/ll"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

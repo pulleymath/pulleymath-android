@@ -98,10 +98,14 @@ class GalleryView : ConstraintLayout {
                 }
             }
             else -> {
-                val contentAdapter = ContentAdapter(content, delegate)
-                this.adapter = contentAdapter
-                val selectedProblem = content.problems[contentAdapter.selectedIndexPath.row]
-                delegate?.onProblemSelected(selectedProblem)
+                try {
+                    val contentAdapter = ContentAdapter(content, delegate)
+                    this.adapter = contentAdapter
+                    val selectedProblem = content.problems[contentAdapter.selectedIndexPath.row]
+                    delegate?.onProblemSelected(selectedProblem)
+                }catch (e:Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 

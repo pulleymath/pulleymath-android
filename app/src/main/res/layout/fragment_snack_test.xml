@@ -8,7 +8,6 @@
     android:background="@drawable/bg_white_fafafa"
     tools:context=".activities.learning.tabFragment.snackTest.SnackTestFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContentsCl"
         android:layout_width="0dp"
@@ -25,23 +24,23 @@
         android:id="@+id/dailyContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shadow"
-        android:layout_marginTop="@dimen/dp32"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/dp20"
+        android:background="@drawable/bg_common_white_stroke_grey"
         app:layout_constraintBottom_toTopOf="@+id/weeklyContainer"
-        app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
-    </com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView>
+        app:layout_constraintEnd_toStartOf="@+id/mainContentsCl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView>
 
     <com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView
         android:id="@+id/weeklyContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shadow"
+        android:background="@drawable/bg_common_white_stroke_grey"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dailyContainer"
         app:layout_constraintBottom_toTopOf="@+id/wrongContainer"
@@ -52,10 +51,11 @@
         android:id="@+id/wrongContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shadow"
+        android:background="@drawable/bg_common_white_stroke_grey"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
-        android:layout_marginBottom="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp20"
         app:layout_constraintTop_toBottomOf="@+id/weeklyContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

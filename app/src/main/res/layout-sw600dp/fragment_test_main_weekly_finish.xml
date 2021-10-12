@@ -184,7 +184,7 @@
             android:layout_marginStart="@dimen/dp32"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/secondLabelTv"
+            app:layout_constraintBottom_toTopOf="@+id/durationLabel"
             android:text="이번주 주간테스트 범위"
             app:layout_constraintVertical_chainStyle="packed"/>
 

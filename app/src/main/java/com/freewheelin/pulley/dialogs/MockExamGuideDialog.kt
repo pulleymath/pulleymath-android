@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.Theme
@@ -180,7 +181,7 @@ class MockExamGuideDialog(
                     else
                         bottomContainerShadow.visibility = View.VISIBLE
 
-                    Toast.makeText(context,"다이얼로그 diff=$diff, visibility=${bottomContainerShadow.visibility}",Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(context,"다이얼로그 diff=$diff, visibility=${bottomContainerShadow.visibility}",Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -278,15 +279,25 @@ class MockExamGuideDialog(
     }
 
     fun setTabletModeUi() {
-        sendEmailBtn.visibility = View.GONE
-        solveOnOMR.visibility = View.GONE
+//        sendEmailBtn.visibility = View.GONE
+//        solveOnOMR.visibility = View.GONE
+//        solveOnTabletBtn.visibility = View.VISIBLE
+
+        printButtonsContainer.visibility = View.GONE
         solveOnTabletBtn.visibility = View.VISIBLE
     }
 
     fun setPrintModeUi() {
-        sendEmailBtn.visibility = View.VISIBLE
-        solveOnOMR.visibility = View.VISIBLE
+
+        printButtonsContainer.visibility = View.VISIBLE
         solveOnTabletBtn.visibility = View.GONE
+
+
+        // 핸드폰 ui에서는 지원안함
+        if(context.isTablet)
+            solveOnOMR.visibility = View.VISIBLE
+        else
+            solveOnOMR.visibility = View.GONE
     }
 
     fun setDisableOptionalUi() {

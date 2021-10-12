@@ -16,25 +16,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View
+            style="@style/Border_Grey_e8e8e8_Horizontal"
             android:layout_height="2dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/tabLayout"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp56"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tabIndicatorHeight="2dp"
-            app:tabIndicatorColor="@color/purple_6D6DFF"
-            app:tabMaxWidth="0dp"
             app:tabGravity="fill"
-            app:tabMode="fixed"/>
+            app:tabIndicatorColor="@color/purple_6D6DFF"
+            app:tabIndicatorHeight="2dp"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <com.freewheelin.pulley.views.TabViewPager
         android:id="@+id/viewPager"
@@ -42,6 +44,5 @@
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/tabContainerCl"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

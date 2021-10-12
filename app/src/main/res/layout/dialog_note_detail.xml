@@ -9,8 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContainerCl"
-        android:layout_width="@dimen/dialog_note_width"
-        android:layout_height="@dimen/dialog_note_height"
+        android:layout_width="560dp"
+        android:layout_height="350dp"
         android:background="@drawable/bg_white_fafafa_round"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
 
         <ScrollView
             android:id="@+id/problemSdvLayout"
-            android:layout_width="400dp"
+            android:layout_width="260dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginTop="@dimen/dp24"
@@ -146,10 +146,10 @@
                 android:id="@+id/resultIv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_result_incorrect"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 style="@style/Border_Grey_e8e8e8_Vertical"
@@ -180,7 +180,7 @@
                 app:layout_constraintStart_toEndOf="@+id/levelTv"
                 app:layout_constraintTop_toTopOf="@+id/resultIv"
                 app:layout_constraintBottom_toBottomOf="@+id/resultIv"/>
-            
+
             <TextView
                 style="@style/TextBlack_4c4c4c.Bold"
                 android:id="@+id/categoryTv"
@@ -193,38 +193,55 @@
                 app:layout_constraintBottom_toBottomOf="@+id/resultIv"
                 app:layout_constraintStart_toEndOf="@+id/secondVerticalBorder"/>
 
-            <TextView
-                style="@style/TextBlack_4c4c4c"
-                android:id="@+id/unitTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textSize="@dimen/sp16"
-                android:lineSpacingExtra="@dimen/sp8"
-                android:text=""
-                app:layout_constraintTop_toBottomOf="@+id/resultIv"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
-                android:id="@+id/horizontalBorder"
-                android:layout_marginTop="250dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/historyTv"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:scrollbars="vertical"
-                android:lineSpacingExtra="@dimen/sp6"
-                android:text=""
-                android:textSize="@dimen/sp14"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalBorder"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/resultIv">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/unitTv"
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:lineSpacingExtra="@dimen/sp8"
+                        android:text=""
+                        android:textSize="@dimen/sp16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/resultIv" />
+
+                    <View
+                        android:id="@+id/horizontalBorder"
+                        style="@style/Border_Grey_e8e8e8_Horizontal"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/historyTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/sp6"
+                        android:text=""
+                        android:textSize="@dimen/sp14"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/horizontalBorder" />
+                </LinearLayout>
+
+            </ScrollView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.freewheelin.pulley.views.DaebakToastView
@@ -243,25 +260,21 @@
         android:id="@+id/leftArrowIb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_left_arrow"
-        android:layout_marginEnd="64dp"
-        android:layout_marginStart="72dp"
         android:background="@null"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_left_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContainerCl"
         app:layout_constraintEnd_toStartOf="@+id/mainContainerCl"
-        app:layout_constraintTop_toTopOf="@+id/mainContainerCl"
-        app:layout_constraintBottom_toBottomOf="@+id/mainContainerCl"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mainContainerCl" />
 
     <ImageButton
         android:id="@+id/rightArrowIb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_right_arrow"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="72dp"
         android:background="@null"
+        android:src="@drawable/ic_right_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/mainContainerCl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mainContainerCl"
-        app:layout_constraintTop_toTopOf="@+id/mainContainerCl"
-        app:layout_constraintBottom_toBottomOf="@+id/mainContainerCl"/>
+        app:layout_constraintTop_toTopOf="@+id/mainContainerCl" />
 </androidx.constraintlayout.widget.ConstraintLayout>

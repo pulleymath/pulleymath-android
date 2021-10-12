@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_white_fafafa_round">
@@ -52,7 +52,7 @@
 <!--        app:layout_constraintHeight_default="wrap"-->
         <ScrollView
             android:id="@+id/scrollView"
-            android:layout_width="wrap_content"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
@@ -292,7 +292,7 @@
 
                 <RadioGroup
                     android:id="@+id/radioMethod"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp32"
                     android:layout_marginTop="@dimen/dp16"
@@ -302,8 +302,9 @@
                     <RadioButton
                         android:id="@+id/radioOnTablet"
                         style="@style/MFRadioButton.Box"
-                        android:layout_width="250dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:checked="true"
                         android:drawableBottom="@drawable/bg_check_img_solve_tablet"
                         android:drawablePadding="@dimen/dp16"
@@ -314,9 +315,10 @@
                     <RadioButton
                         android:id="@+id/radioOnPrint"
                         style="@style/MFRadioButton.Box"
-                        android:layout_width="250dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         android:drawableBottom="@drawable/bg_check_img_omr"
                         android:drawablePadding="@dimen/dp16"
                         android:paddingTop="@dimen/dp24"
@@ -360,31 +362,38 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <com.freewheelin.pulley.views.Buttons.SecondaryButton
-                android:id="@+id/sendEmailBtn"
-                android:layout_width="250dp"
-                android:layout_height="@dimen/dp48"
-                android:text="시험지 메일 발송"
-                android:visibility="gone"
-                app:buttonTheme="blue"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.Buttons.PrimaryButton
-                android:id="@+id/solveOnOMR"
-                android:layout_width="250dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_marginStart="8dp"
-                android:text="OMR에 정답 입력하기"
+            <LinearLayout
+                android:id="@+id/printButtonsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                app:buttonTheme="blue"
-                app:layout_constraintBottom_toBottomOf="@id/sendEmailBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/sendEmailBtn"
-                app:layout_constraintTop_toTopOf="@id/sendEmailBtn" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                    android:id="@+id/solveOnOMR"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_weight="1"
+                    android:text="OMR에 정답 입력하기"
+                    app:buttonTheme="blue" />
+
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    android:id="@+id/sendEmailBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="시험지 메일 발송"
+                    app:buttonTheme="blue">
+
+                </com.freewheelin.pulley.views.Buttons.SecondaryButton>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

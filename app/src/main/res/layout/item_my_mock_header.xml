@@ -10,20 +10,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp32"
-        android:paddingStart="@dimen/dp36"
-        android:paddingEnd="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp16"
+        android:paddingStart="@dimen/dp16"
+        android:paddingEnd="@dimen/dp16"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/dateSl"
-            android:paddingTop="@dimen/dp16"
-            android:paddingBottom="@dimen/dp16"
             android:layout_width="@dimen/dp64"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp16"
+            android:paddingBottom="@dimen/dp16"
             app:label="날짜"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/gradeSl"
@@ -31,9 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
             app:label="학년"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintStart_toEndOf="@+id/dateSl" />
+            app:layout_constraintStart_toEndOf="@+id/dateSl"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/typeSl"
@@ -41,9 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
             app:label="계열"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintStart_toEndOf="@+id/gradeSl" />
+            app:layout_constraintStart_toEndOf="@+id/gradeSl"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/examTitleSl"
@@ -51,19 +51,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp16"
             app:label="제목"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintStart_toEndOf="@+id/typeSl"/>
+            app:layout_constraintStart_toEndOf="@+id/typeSl"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/percentSl"
             android:layout_width="@dimen/dp80"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp16"
+            android:visibility="gone"
             app:label="정답률"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintEnd_toStartOf="@+id/scoreSl"/>
+            app:layout_constraintEnd_toStartOf="@+id/scoreSl"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/scoreSl"
@@ -71,34 +72,36 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp16"
             app:label="점수"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintEnd_toStartOf="@+id/percentageSl"/>
+            app:layout_constraintEnd_toStartOf="@+id/percentageSl"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/percentageSl"
             android:layout_width="@dimen/dp64"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp16"
+            android:visibility="gone"
             app:label="백분위"
-            app:layout_constraintTop_toTopOf="@+id/ratingSl"
             app:layout_constraintBottom_toBottomOf="@+id/ratingSl"
-            app:layout_constraintEnd_toStartOf="@+id/ratingSl"/>
+            app:layout_constraintEnd_toStartOf="@+id/ratingSl"
+            app:layout_constraintTop_toTopOf="@+id/ratingSl" />
 
         <com.freewheelin.pulley.views.TextViews.SortableTextView
             android:id="@+id/ratingSl"
             android:layout_width="@dimen/dp64"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp16"
-            app:label="등급"
             android:textColor="@color/grey_818181"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
+            android:visibility="gone"
+            app:label="등급"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintEnd_toStartOf="@+id/reportContainer"/>
+            app:layout_constraintEnd_toStartOf="@+id/reportContainer"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
         <View
             android:id="@+id/reportContainer"
-            android:layout_width="@dimen/dp80"
+            android:layout_width="70dp"
             android:layout_height="@dimen/dp36"
             android:layout_marginEnd="@dimen/dp16"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
@@ -107,11 +110,11 @@
 
         <View
             android:id="@+id/reviewContainer"
-            android:layout_width="@dimen/dp80"
+            android:layout_width="60dp"
             android:layout_height="@dimen/dp36"
-            app:layout_constraintTop_toTopOf="@+id/dateSl"
             app:layout_constraintBottom_toBottomOf="@+id/dateSl"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -24,6 +24,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamF
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.RESULT_MOCK_FINISH
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.is10InchUI
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.MockExamManager
@@ -471,16 +472,18 @@ class MyMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
                 it.score = -1
                 it.correctRate = -1
 
-                ratingIv.visibility = View.INVISIBLE
-                ratingTv.visibility = View.VISIBLE
-                reportBtn.visibility = View.INVISIBLE
-                remainBtn.visibility = View.VISIBLE
-                reviewBtn.visibility = View.INVISIBLE
+                if(view.context.isTablet) {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    reportBtn.visibility = View.INVISIBLE
+                    remainBtn.visibility = View.VISIBLE
+                    reviewBtn.visibility = View.INVISIBLE
 
-                remainCountText.text = "${it.totalNumber-it.markedNumber}문항"
+                    remainCountText.text = "${it.totalNumber - it.markedNumber}문항"
 
-                correctPercentTv.visibility = View.VISIBLE
-                correctCountTv.visibility = View.GONE
+                    correctPercentTv.visibility = View.VISIBLE
+                    correctCountTv.visibility = View.GONE
+                }
             }
 
             // 백분위가 null 이면 점수와 백분위 "-"
@@ -523,26 +526,28 @@ class MyMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     private fun setRating(rating: Int?) {
-        when (rating) {
-            1 -> {
-                ratingTv.visibility = View.INVISIBLE
-                ratingIv.visibility = View.VISIBLE
-                ratingIv.setImageResource(R.drawable.ic_rating_1)
-            }
-            2 -> {
-                ratingTv.visibility = View.INVISIBLE
-                ratingIv.visibility = View.VISIBLE
-                ratingIv.setImageResource(R.drawable.ic_rating_2)
-            }
-            in 3..9 -> {
-                ratingIv.visibility = View.INVISIBLE
-                ratingTv.visibility = View.VISIBLE
-                ratingTv.text = "$rating"
-            }
-            else -> {
-                ratingIv.visibility = View.INVISIBLE
-                ratingTv.visibility = View.VISIBLE
-                ratingTv.text = "-"
+        if(view.context.isTablet) {
+            when (rating) {
+                1 -> {
+                    ratingTv.visibility = View.INVISIBLE
+                    ratingIv.visibility = View.VISIBLE
+                    ratingIv.setImageResource(R.drawable.ic_rating_1)
+                }
+                2 -> {
+                    ratingTv.visibility = View.INVISIBLE
+                    ratingIv.visibility = View.VISIBLE
+                    ratingIv.setImageResource(R.drawable.ic_rating_2)
+                }
+                in 3..9 -> {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    ratingTv.text = "$rating"
+                }
+                else -> {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    ratingTv.text = "-"
+                }
             }
         }
     }

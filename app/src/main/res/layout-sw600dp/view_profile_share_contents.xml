@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        style="@style/TextGrey_c0c0c0"
+        android:id="@+id/dateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp12"
+        android:layout_marginTop="@dimen/dp20"
+        android:layout_marginStart="@dimen/dp20"
+        android:text="2020.08.10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/profileIv"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:layout_marginTop="@dimen/dp48"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.ExtraBold"
+        android:id="@+id/nameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp24"
+        android:textColor="@color/black_4c4c4c"
+        android:text="김풀리"
+        android:layout_marginTop="@dimen/dp16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileIv"/>
+
+    <TextView
+        style="@style/TextPurple_6d6dff.ExtraBold"
+        android:id="@+id/typeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp12"
+        android:text="치즈볼 타입"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/tagFl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp16"
+        app:layout_constraintTop_toBottomOf="@+id/typeLabel"
+        app:layout_constraintBottom_toTopOf="@+id/cntLabel"
+        app:flexWrap="wrap"
+        app:alignContent="flex_start"
+        app:alignItems="flex_start"
+        app:justifyContent="center"
+        app:flexDirection="row"
+        app:showDivider="middle"
+        app:dividerDrawable="@drawable/hashtag_divider">
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <TextView
+        style="@style/TextGrey_c0c0c0.ExtraBold"
+        android:id="@+id/cntLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp12"
+        android:textColor="@color/grey_c0c0c0"
+        android:text="푼 문제 수(오답학습 수)"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/problemCntTv"/>
+
+
+    <TextView
+        style="@style/TextGrey_818181.ExtraBold"
+        android:id="@+id/problemCntTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp18"
+        android:textColor="@color/grey_818181"
+        android:text="1230(245)"
+        android:layout_marginBottom="@dimen/dp48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

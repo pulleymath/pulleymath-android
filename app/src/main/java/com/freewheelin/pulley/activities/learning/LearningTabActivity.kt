@@ -154,13 +154,17 @@ class LearningTabActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         AppUsageMonitor.startAppUsage()
 
-        if(savedInstanceState != null) {
-            tabFragment[0] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MAIN) as LearningTabFragment
-            tabFragment[1] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_TEST) as LearningTabFragment
-            tabFragment[2] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_UNIT) as LearningTabFragment
-            tabFragment[3] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MOCK) as LearningTabFragment
-            tabFragment[4] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_WRONG) as LearningTabFragment
-            tabFragment[5] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_LIST) as LearningTabFragment
+        try {
+            if (savedInstanceState != null) {
+                tabFragment[0] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MAIN) as LearningTabFragment
+                tabFragment[1] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_TEST) as LearningTabFragment
+                tabFragment[2] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_UNIT) as LearningTabFragment
+                tabFragment[3] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MOCK) as LearningTabFragment
+                tabFragment[4] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_WRONG) as LearningTabFragment
+                tabFragment[5] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_LIST) as LearningTabFragment
+            }
+        } catch (e:IllegalStateException) {
+            e.printStackTrace()
         }
 
         setContentView(R.layout.activity_learning)

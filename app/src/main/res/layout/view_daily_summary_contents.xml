@@ -1,134 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/greyContainer"
-        android:layout_width="match_parent"
-        android:layout_height="244dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_grey_f2f2f2_round_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/summaryTitleLabel">
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
             android:id="@+id/dateTv"
+            style="@style/TextPurple_6d6dff.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
             android:text="2020.07.21"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/guideTv"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
             android:id="@+id/guideTv"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/black_4c4c4c"
-            android:lineSpacingExtra="6sp"
-            android:gravity="center"
             android:layout_marginTop="8dp"
-            android:text="나란 녀석... (코쓱)"
+            android:gravity="center"
+            android:lineSpacingExtra="6sp"
             android:maxLines="2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="나란 녀석... (코쓱)"
+            android:textColor="@color/black_4c4c4c"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/mainContainerCl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateTv"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainContainerCl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guideTv"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideTv"
             app:layout_constraintVertical_chainStyle="packed">
 
             <TextView
-                style="@style/TextGrey_c0c0c0.ExtraBold"
                 android:id="@+id/studyTimeLabel"
+                style="@style/TextGrey_c0c0c0.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="10sp"
                 android:text="공부한 시간"
-                app:layout_constraintStart_toStartOf="@+id/studyTimeTv"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/studyTimeTv"
                 app:layout_constraintEnd_toEndOf="@+id/studyTimeTv"
-                app:layout_constraintBottom_toTopOf="@+id/studyTimeTv"/>
+                app:layout_constraintStart_toStartOf="@+id/studyTimeTv" />
 
             <TextView
-                style="@style/TextGrey_c0c0c0.ExtraBold"
                 android:id="@+id/percentageLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:textSize="10sp"
-                android:text="백분위"
-                app:layout_constraintStart_toStartOf="@+id/percentageTv"
-                app:layout_constraintEnd_toEndOf="@+id/percentageTv"
-                app:layout_constraintBottom_toTopOf="@+id/percentageTv"/>
-
-            <TextView
                 style="@style/TextGrey_c0c0c0.ExtraBold"
-                android:id="@+id/problemCntLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
+                android:text="백분위"
                 android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/percentageTv"
+                app:layout_constraintEnd_toEndOf="@+id/percentageTv"
+                app:layout_constraintStart_toStartOf="@+id/percentageTv" />
+
+            <TextView
+                android:id="@+id/problemCntLabel"
+                style="@style/TextGrey_c0c0c0.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:text="푼 문제"
-                app:layout_constraintStart_toStartOf="@+id/problemCntTv"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
                 app:layout_constraintEnd_toEndOf="@+id/problemCntTv"
-                app:layout_constraintBottom_toTopOf="@+id/problemCntTv"/>
+                app:layout_constraintStart_toStartOf="@+id/problemCntTv" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:id="@+id/studyTimeTv"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
                 android:text="01:01"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/percentageTv"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/percentageTv" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:id="@+id/percentageTv"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="100%"
                 android:layout_marginEnd="32dp"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                android:text="100%"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/problemCntTv"
-                app:layout_constraintEnd_toStartOf="@+id/studyTimeTv"/>
+                app:layout_constraintEnd_toStartOf="@+id/studyTimeTv"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/problemCntTv" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:id="@+id/problemCntTv"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="100"
                 android:layout_marginEnd="32dp"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                android:text="100"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/percentageTv"/>
+                app:layout_constraintEnd_toStartOf="@+id/percentageTv"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     
@@ -147,23 +150,24 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
+        android:id="@+id/textView5"
         style="@style/TextPurple_6d6dff.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="8sp"
+        android:layout_marginTop="24dp"
         android:text="나만의 수학 큐레이션"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/pulleyLogo"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/greyContainer" />
 
     <ImageView
         android:id="@+id/pulleyLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:src="@drawable/pulley_logo_78"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

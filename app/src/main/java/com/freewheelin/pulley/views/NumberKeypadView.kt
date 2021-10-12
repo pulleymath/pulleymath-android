@@ -11,6 +11,7 @@ import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.utils.toPx
 import kotlinx.android.synthetic.main.view_number_keypad.view.*
 import kotlinx.android.synthetic.main.view_number_keypad.view.deleteBtn
@@ -76,8 +77,10 @@ class PlusMinusKeypadView : ConstraintLayout {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_plus_minus_keypad, this)
-        val paddingVal = resources.getDimension(R.dimen.dp32)
-        setPadding(paddingVal.toInt())
+//        if(context.contextisTablet) {
+//            val paddingVal = resources.getDimension(R.dimen.dp32)
+//            setPadding(paddingVal.toInt())
+//        }
         background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
         isClickable = true
         number0Btn.setOnClickListener {

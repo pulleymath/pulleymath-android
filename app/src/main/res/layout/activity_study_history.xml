@@ -9,58 +9,58 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp64"
+        android:layout_height="@dimen/dp48"
         android:background="@color/white_ffffff"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_black_left"
-            android:padding="@dimen/dp32"
             android:background="@null"
+            android:padding="@dimen/dp32"
+            android:src="@drawable/ic_arrow_black_left"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             style="@style/TextBlack_4c4c4c.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp18"
             android:text="학습 내역"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             style="@style/Border_Grey_e8e8e8_Horizontal"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/shadow"
-        android:layout_margin="@dimen/dp16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navBar">
-        
+
         <com.freewheelin.pulley.views.DaebakTabRadio
             android:id="@+id/categoryTab"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
-            android:layout_marginTop="@dimen/dp48"
             android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabWidth="@dimen/dp96" />
@@ -69,10 +69,9 @@
             android:id="@+id/ingTab"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp32"
-            app:layout_constraintStart_toEndOf="@+id/categoryTab"
-            app:layout_constraintTop_toTopOf="@+id/categoryTab"
-            app:layout_constraintBottom_toBottomOf="@+id/categoryTab"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/categoryTab"
+            app:layout_constraintTop_toBottomOf="@+id/categoryTab"
             app:tabWidth="@dimen/dp96" />
 
 
@@ -80,21 +79,20 @@
             android:id="@+id/topHeaderView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp32"
-            android:layout_marginStart="@dimen/dp48"
-            android:layout_marginEnd="@dimen/dp48"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/categoryTab">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ingTab">
 
             <TextView
                 style="@style/TextGrey_9f9f9f.Bold"
                 android:layout_width="@dimen/dp72"
-                android:layout_height="@dimen/dp56"
+                android:layout_height="@dimen/dp48"
                 android:gravity="center"
-                android:layout_marginStart="8dp"
-                android:textSize="@dimen/sp16"
-                android:text="날짜" />
+                android:text="날짜"
+                android:textSize="@dimen/sp16" />
 
             <TextView
                 style="@style/TextGrey_9f9f9f.Bold"
@@ -109,16 +107,17 @@
                 style="@style/TextGrey_9f9f9f.Bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="제목"
+                android:layout_marginStart="@dimen/dp16"
                 android:layout_weight="1"
-                android:textSize="@dimen/sp16"
-                android:layout_marginStart="@dimen/dp16"/>
+                android:text="제목"
+                android:textSize="@dimen/sp16" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/problemCntContainer"
                 android:layout_width="@dimen/dp144"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/dp16">
+                android:layout_marginEnd="@dimen/dp16"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/problemCntLabel"
@@ -146,12 +145,12 @@
             <View
                 android:layout_width="@dimen/dp36"
                 android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp16"/>
+                android:layout_marginStart="@dimen/dp8" />
 
             <View
-                android:layout_width="@dimen/dp120"
+                android:layout_width="100dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp16"/>
+                android:layout_marginStart="@dimen/dp8" />
         </LinearLayout>
 
         <View
@@ -165,26 +164,29 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingStart="@dimen/dp48"
             android:paddingEnd="@dimen/dp48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topHeaderView"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            tools:listitem="@layout/item_study_list" />
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
             android:id="@+id/emptyGuideTv"
+            style="@style/TextGrey_c0c0c0.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp16"
-            android:lineSpacingExtra="8sp"
             android:gravity="center"
+            android:lineSpacingExtra="8sp"
             android:text="학습 데이터가 없습니다.\n&lt;테스트&gt; &lt;유형학습&gt; &lt;모의고사&gt; 탭에서 학습을 진행할 수 있어요."
-            app:layout_constraintStart_toStartOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+            android:textSize="@dimen/sp16"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-            app:layout_constraintTop_toTopOf="@+id/recyclerView"/>
+            app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+            app:layout_constraintStart_toStartOf="@+id/recyclerView"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
         <View
             android:id="@+id/viewShadow"

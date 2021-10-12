@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
@@ -248,11 +249,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             val tests = filteredMockList ?: examList
             val test = tests!![position]
 
-            if (tests.last() == test)
-                holder.horizontalBorder.visibility = View.GONE
-            else
-                holder.horizontalBorder.visibility = View.VISIBLE
-
             holder.testBtn.setPermissionClickListener {
                 if (holder.testBtn.isEnableUI()) {
                     MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
@@ -260,6 +256,12 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
             }
             holder.set(test)
+
+            if (tests.last() == test)
+                holder.setLastHolderUI()
+            else
+                holder.setMidHolderUI()
+
         }
     }
 }
@@ -274,6 +276,7 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
     var testBtn = view.testBtn
     var horizontalBorder = view.findViewById<View>(R.id.horizontalBorder)
     var updateTag = view.findViewById<TextView>(R.id.updateTag)
+    var outContainer = view.findViewById<View>(R.id.outContainer)
 //    val mailBtn = view.mailBtn
 
     fun set(exam: MockExam) {
@@ -316,5 +319,23 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
             monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
             titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
         }
+    }
+
+    fun setMidHolderUI() {
+        horizontalBorder.visibility = View.VISIBLE
+        outContainer.layoutParams.apply {
+            height = view.context.resources.getDimension(R.dimen.dp64).toInt()
+        }
+        outContainer.background =
+            ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_middle)
+    }
+
+    fun setLastHolderUI() {
+        horizontalBorder.visibility = View.GONE
+        outContainer.layoutParams.apply {
+            height = 112.toPx()
+        }
+        outContainer.background =
+            ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_bottom)
     }
 }

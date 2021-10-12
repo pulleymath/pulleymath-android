@@ -47,7 +47,7 @@
                     style="@style/TextRed_fe7b67.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="64dp"
                     android:text="dDayTv"
                     android:textSize="@dimen/dp36"
@@ -296,11 +296,11 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/freeUserContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tagFl">
 
                     <TextView
@@ -322,6 +322,7 @@
                         android:layout_width="@dimen/primaryBtn_width_160dp"
                         android:layout_height="@dimen/dp40"
                         android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/text_study_start_with_pulley"
                         app:ButtonTextSize="@dimen/dp16"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -333,23 +334,27 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/payUserContainer"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tagFl">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/freeUserContainer">
 
 
                     <ImageView
                         android:id="@+id/problemCntIv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"
                         android:src="@drawable/ic_paper"
                         app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
                         app:layout_constraintEnd_toStartOf="@+id/problemCntLabel"
                         app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/problemCntLabel"

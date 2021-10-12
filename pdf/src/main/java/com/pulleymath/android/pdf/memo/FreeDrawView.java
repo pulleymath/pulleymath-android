@@ -316,12 +316,16 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Remove all the paths and redraw (can be undone with {@link #redoLast()})
      */
     public void undoAll() {
-        Collections.reverse(mPaths);
-        mCanceledPaths.addAll(mPaths);
-        mPaths = new CopyOnWriteArrayList<>();
-        invalidate();
+        try {
+            Collections.reverse(mPaths);
+            mCanceledPaths.addAll(mPaths);
+            mPaths = new CopyOnWriteArrayList<>();
+            invalidate();
 
-        notifyRedoUndoCountChanged();
+            notifyRedoUndoCountChanged();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -6,16 +6,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialBook
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialBookPage
@@ -90,6 +88,14 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     constructor(context: Context): super(context) {
         setContentView(R.layout.dialog_book_customize)
+        // fullscreen dialog
+        if(!context.isTablet) {
+            window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            )
+        }
+
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
     }

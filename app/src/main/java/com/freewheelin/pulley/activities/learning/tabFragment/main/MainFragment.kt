@@ -216,7 +216,9 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
             thread(start=true) {
                 Thread.sleep(500)
                 activity?.runOnUiThread {
-                    loadingContainer.visibility = View.GONE
+                    try {
+                        loadingContainer?.visibility = View.GONE
+                    }catch(e:Exception){}
                 }
             }
         }
@@ -224,7 +226,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     private fun setAvailableUI() {
         phraseTv.visibility = View.INVISIBLE
-        freeUserContainer.visibility = View.INVISIBLE
+        freeUserContainer.visibility = View.GONE
         payUserContainer.visibility = View.VISIBLE
 
         phraseTv.visibility = View.INVISIBLE

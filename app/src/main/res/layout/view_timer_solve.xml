@@ -81,30 +81,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/secTv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/secTv"
-        app:layout_constraintBottom_toBottomOf="@+id/secTv">
+        app:layout_constraintTop_toTopOf="@+id/secTv">
 
         <RadioButton
-            style="@style/TextPurple_6d6dff"
             android:id="@+id/strictRb"
+            style="@style/TextPurple_6d6dff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:button="@drawable/radio_timer_solve"
             android:checked="true"
             android:text="100분 후 자동 제출"
-            android:textSize="@dimen/sp16"
-            android:button="@drawable/radio_timer_solve" />
+            android:textSize="@dimen/sp16" />
 
         <RadioButton
             android:id="@+id/lenientRb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="@dimen/dp28"
+            android:layout_weight="1"
+            android:button="@drawable/radio_timer_solve"
             android:text="시간 제한 없음"
             android:textColor="@color/white_ffffff"
             android:textSize="@dimen/sp16"
-            android:button="@drawable/radio_timer_solve" />
+            android:visibility="visible" />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

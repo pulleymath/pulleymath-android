@@ -12,7 +12,7 @@
     tools:context="com.freewheelin.pulley.activities.WeeklyTestReportActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="960dp"
+        android:layout_width="600dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_fafafa_round"
         app:layout_constraintTop_toTopOf="parent"
@@ -171,48 +171,48 @@
                 </com.github.mikephil.charting.charts.BarChart>
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f"
                     android:id="@+id/lowestLabel"
+                    style="@style/TextGrey_9f9f9f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:text="성취도 최저"
                     android:textSize="@dimen/sp18"
-                    android:layout_marginTop="@dimen/dp48"
-                    app:layout_constraintStart_toStartOf="@+id/lowestContainerCl"
-                    app:layout_constraintTop_toBottomOf="@+id/scoreResultContainerCl"/>
+                    app:layout_constraintBottom_toTopOf="@+id/lowestContainerCl"
+                    app:layout_constraintStart_toStartOf="@+id/lowestContainerCl" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/lowestContainerCl"
                     android:layout_width="245dp"
                     android:layout_height="214dp"
-                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="64dp"
                     android:background="@color/white_ffffff"
-                    app:layout_constraintStart_toEndOf="@+id/historyChart"
-                    app:layout_constraintTop_toTopOf="@+id/historyChart">
+                    app:layout_constraintStart_toStartOf="@+id/historyChart"
+                    app:layout_constraintTop_toBottomOf="@+id/historyChart">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
                         android:id="@+id/lowestSubjectTv"
+                        style="@style/TextBlack_4c4c4c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp32"
                         android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginTop="@dimen/dp32"
                         android:text="확률과 통계"
                         android:textSize="@dimen/sp14"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
                         android:id="@+id/lowestUnitTv"
+                        style="@style/TextBlack_4c4c4c.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginTop="8dp"
                         android:text="함수의 극한과 연속"
                         android:textSize="@dimen/sp18"
-                        app:layout_constraintTop_toBottomOf="@+id/lowestSubjectTv"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lowestSubjectTv" />
 
                     <com.freewheelin.pulley.views.charts.TriplePenChart
                         android:id="@+id/lowestPenChart"
@@ -220,68 +220,67 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="@dimen/dp24"
                         android:layout_marginTop="16dp"
-                        app:isGoneLast="true"
                         app:focusIndex="0"
-                        app:layout_constraintTop_toBottomOf="@+id/lowestUnitTv"
-                        app:layout_constraintBottom_toBottomOf="parent">
-                    </com.freewheelin.pulley.views.charts.TriplePenChart>
+                        app:isGoneLast="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lowestUnitTv"></com.freewheelin.pulley.views.charts.TriplePenChart>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
                         android:id="@+id/lowestNothingGuideTv"
+                        style="@style/TextBlack_4c4c4c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="해당 항목이 없습니다"
                         android:textSize="@dimen/sp14"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f"
                     android:id="@+id/highestLabel"
+                    style="@style/TextGrey_9f9f9f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:text="성취도 최고"
                     android:textSize="@dimen/sp18"
-                    android:layout_marginTop="@dimen/dp48"
-                    app:layout_constraintStart_toStartOf="@+id/highestContainerCl"
-                    app:layout_constraintTop_toBottomOf="@+id/scoreResultContainerCl"/>
+                    app:layout_constraintBottom_toTopOf="@+id/highestContainerCl"
+                    app:layout_constraintStart_toStartOf="@+id/highestContainerCl" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/highestContainerCl"
                     android:layout_width="245dp"
                     android:layout_height="214dp"
-                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="64dp"
                     android:background="@color/white_ffffff"
-                    app:layout_constraintStart_toEndOf="@+id/lowestContainerCl"
-                    app:layout_constraintTop_toTopOf="@+id/historyChart">
+                    app:layout_constraintStart_toStartOf="@+id/lowestContainerCl"
+                    app:layout_constraintTop_toBottomOf="@+id/lowestContainerCl">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
                         android:id="@+id/highestSubjectTv"
+                        style="@style/TextBlack_4c4c4c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp32"
                         android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginTop="@dimen/dp32"
                         android:text="확률과 통계"
                         android:textSize="@dimen/sp14"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
                         android:id="@+id/highestUnitTv"
+                        style="@style/TextBlack_4c4c4c.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginTop="8dp"
                         android:text="함수의 극한과 연속"
                         android:textSize="@dimen/sp18"
-                        app:layout_constraintTop_toBottomOf="@+id/highestSubjectTv"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/highestSubjectTv" />
 
                     <com.freewheelin.pulley.views.charts.TriplePenChart
                         android:id="@+id/highestPenChart"
@@ -289,36 +288,35 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="@dimen/dp24"
                         android:layout_marginTop="16dp"
-                        app:isGoneLast="true"
                         app:focusIndex="0"
-                        app:layout_constraintTop_toBottomOf="@+id/highestUnitTv"
-                        app:layout_constraintBottom_toBottomOf="parent">
-                    </com.freewheelin.pulley.views.charts.TriplePenChart>
+                        app:isGoneLast="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/highestUnitTv"></com.freewheelin.pulley.views.charts.TriplePenChart>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
                         android:id="@+id/highestNothingGuideTv"
+                        style="@style/TextBlack_4c4c4c"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="해당 항목이 없습니다"
                         android:textSize="@dimen/sp14"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f"
                     android:id="@+id/problemResultLabel"
+                    style="@style/TextGrey_9f9f9f"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
                     android:text="출제 문항별 정오 현황"
                     android:textSize="@dimen/sp18"
-                    android:layout_marginTop="@dimen/dp48"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/historyChart"/>
+                    app:layout_constraintTop_toBottomOf="@+id/highestContainerCl" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

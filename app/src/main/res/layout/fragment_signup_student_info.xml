@@ -19,171 +19,190 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/infoScrollContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/infoConatiner"
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout3"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/textLabel"
-                style="@style/TextBlack_4c4c4c.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp48"
-                android:textSize="@dimen/sp24"
-                android:lineSpacingExtra="12sp"
-                android:text="마지막으로,\n추천에 필요한 정보를 알려주세요!"/>
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/infoConatiner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textToLogin"
+                    android:id="@+id/textLabel"
                     style="@style/TextBlack_4c4c4c.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="현재 학교를 다니지 않습니다"
-                    android:textSize="@dimen/sp14" />
-
-                <Switch
-                    android:id="@+id/switchNoStudent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutSchoolSelect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                android:gravity="bottom"
-                android:orientation="vertical">
+                    android:layout_marginTop="@dimen/dp56"
+                    android:layout_marginBottom="@dimen/dp48"
+                    android:lineSpacingExtra="12sp"
+                    android:text="마지막으로,\n추천에 필요한 정보를 알려주세요!"
+                    android:textSize="@dimen/sp24" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/selectSchool"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp56"
-                        android:background="@drawable/bg_white_f2f2f2_stroke_grey_c0c0c0"
-                        android:paddingStart="@dimen/sp16"
-                        android:textSize="@dimen/sp16"
-                        android:singleLine="true"
-                        android:gravity="center_vertical"
-                        android:layout_weight="3"/>
+                        android:id="@+id/textToLogin"
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="현재 학교를 다니지 않습니다"
+                        android:textSize="@dimen/sp14" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
-                        android:id="@+id/findSchoolBtn"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp56"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="검색하기"
-                        app:buttonTheme="blue"/>
+                    <Switch
+                        android:id="@+id/switchNoStudent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp" />
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutCitySelect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.freewheelin.pulley.views.PulleySpinner
-                    android:id="@+id/selectCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layoutInfoOption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <com.freewheelin.pulley.views.PulleySpinner
-                    android:id="@+id/selectGrade"
+                <LinearLayout
+                    android:id="@+id/layoutSchoolSelect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="@dimen/dp24"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
 
-                <com.freewheelin.pulley.views.PulleySpinner
-                    android:id="@+id/selectMajor"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/selectSchool"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp56"
+                            android:layout_weight="3"
+                            android:background="@drawable/bg_white_f2f2f2_stroke_grey_c0c0c0"
+                            android:gravity="center_vertical"
+                            android:paddingStart="@dimen/sp16"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp16" />
+
+                        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                            android:id="@+id/findSchoolBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp56"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="검색하기"
+                            app:buttonTheme="blue" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutCitySelect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/selectGrade" />
+                    android:layout_marginTop="@dimen/dp24"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <com.freewheelin.pulley.views.PulleySpinner
-                    android:id="@+id/selectRate"
+                    <com.freewheelin.pulley.views.PulleySpinner
+                        android:id="@+id/selectCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutInfoOption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/selectMajor"/>
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.freewheelin.pulley.views.PulleySpinner
+                        android:id="@+id/selectGrade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/layoutButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <com.freewheelin.pulley.views.PulleySpinner
+                        android:id="@+id/selectMajor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/selectGrade" />
 
+                    <com.freewheelin.pulley.views.PulleySpinner
+                        android:id="@+id/selectRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/selectMajor" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
-                    android:id="@+id/backBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp56"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:layout_weight="1"
-                    android:text="뒤로"
-                    app:ButtonTextSize="@dimen/sp18"
-                    app:buttonTheme="grey" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.freewheelin.pulley.views.Buttons.PrimaryButton
-                    android:id="@+id/registBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp56"
-                    android:layout_weight="3"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:text="회원가입하기"
-                    app:ButtonTextSize="@dimen/sp18"
-                    app:buttonTheme="blue" />
 
             </LinearLayout>
 
         </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/layoutButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/infoScrollContainer"
+        app:layout_constraintStart_toStartOf="@+id/infoScrollContainer">
+
+
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_weight="1"
+            android:text="뒤로"
+            app:ButtonTextSize="@dimen/sp18"
+            app:buttonTheme="grey" />
+
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            android:id="@+id/registBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp24"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_weight="3"
+            android:text="회원가입하기"
+            app:ButtonTextSize="@dimen/sp18"
+            app:buttonTheme="blue" />
 
     </LinearLayout>
 

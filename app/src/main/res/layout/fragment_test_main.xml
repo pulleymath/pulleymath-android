@@ -4,13 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:paddingStart="@dimen/dp64"
-        android:paddingEnd="@dimen/dp64"
         tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainDailyFragment">
 
         <TextView
@@ -18,10 +17,10 @@
             style="@style/TextBlack_4c4c4c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp120"
+            android:layout_marginTop="24dp"
             android:text="데일리 테스트"
             android:textSize="@dimen/sp24"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/settingContainerCl"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -32,7 +31,7 @@
             android:layout_marginTop="@dimen/dp12"
             android:text="데일리 TEST"
             android:textSize="@dimen/sp36"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/settingContainerCl"
             app:layout_constraintTop_toBottomOf="@+id/headerTv" />
 
         <TextView
@@ -45,17 +44,19 @@
             android:text="데일리 테스트는 아래의 기준에 따라 추천됩니다."
             android:textSize="@dimen/sp18"
             android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/settingContainerCl"
 
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/settingContainerCl"
             app:layout_constraintTop_toBottomOf="@+id/titleTv" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/settingContainerCl"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="@dimen/dp24"
+            android:layout_marginEnd="24dp"
             android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -160,8 +161,9 @@
             android:visibility="invisible"
             app:ButtonTextSize="@dimen/sp18"
             app:buttonTheme="blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/settingContainerCl"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/settingContainerCl"
             app:layout_constraintTop_toBottomOf="@+id/timerGuideTv"
             app:layout_constraintVertical_chainStyle="packed" />
 

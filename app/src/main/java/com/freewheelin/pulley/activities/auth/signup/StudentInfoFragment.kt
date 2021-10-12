@@ -152,7 +152,11 @@ class StudentInfoFragment : Fragment() {
                             selectedCity = null
                             layoutInfoOption.visibility = View.GONE
                         } else {
-                            selectedCity = cityList.get(position)
+                            if(position >= cityList.size) {
+                                selectedCity = cityList.get(cityList.size - 1)
+                            } else {
+                                selectedCity = cityList.get(position)
+                            }
                             layoutInfoOption.visibility = View.VISIBLE
                         }
                         checkRegist()

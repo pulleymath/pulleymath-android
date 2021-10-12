@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.freewheelin.pulley.activities.WrongTestReportActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="960dp"
+        android:layout_width="600dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_fafafa_round"
         app:layout_constraintTop_toTopOf="parent"

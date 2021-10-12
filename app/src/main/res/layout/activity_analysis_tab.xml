@@ -34,23 +34,23 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:src="@drawable/ic_toolbar_back"
-        android:tint="@color/black_4c4c4c"
         app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
         app:layout_constraintStart_toStartOf="@+id/tabLayout"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+        app:layout_constraintTop_toTopOf="@+id/tabLayout"
+        app:tint="@color/black_4c4c4c" />
 
     <Button
-        style="@style/TextGrey_9f9f9f.Bold"
         android:id="@+id/myAnalysisGuideBtn"
-        android:layout_width="153dp"
+        style="@style/TextGrey_9f9f9f.Bold"
+        android:layout_width="36dp"
         android:layout_height="36dp"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
-        app:layout_constraintEnd_toEndOf="@+id/tabLayout"
         android:layout_marginEnd="@dimen/dp32"
         android:background="@drawable/bg_grey_f2f2f2_round"
-        android:text="내 전체 분석이란?"/>
+        android:text="?"
+        android:textSize="@dimen/sp16"
+        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="@+id/tabLayout"
+        app:layout_constraintTop_toTopOf="@+id/tabLayout" />
 
     <View
         android:id="@+id/horizontalBorder"

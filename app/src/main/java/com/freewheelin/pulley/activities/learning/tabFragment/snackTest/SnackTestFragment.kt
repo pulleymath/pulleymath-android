@@ -27,6 +27,7 @@ import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.activities.mypage.MyRecommendSettingActivity
 import com.freewheelin.pulley.activities.mypage.MyRecommendSettingDialog
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.manage.TestManager
@@ -225,12 +226,20 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     private fun onSelectorContainerClicked(view: View) {
-        dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
-        weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
-        wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
 
-        view.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_border_purple)
+        if(requireContext().isTablet) {
+            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
+            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
+            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
 
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_border_purple)
+        } else {
+            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
+            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
+            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
+
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round)
+        }
         val set = ConstraintSet()
         set.clone(rootView)
 

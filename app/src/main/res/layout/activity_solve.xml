@@ -43,11 +43,11 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:src="@drawable/ic_toolbar_back"
-                    android:tint="@color/grey_9f9f9f"
                     android:focusable="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/grey_9f9f9f" />
 
                 <TextView
                     style="@style/TextGrey_9f9f9f.Bold"
@@ -234,6 +234,40 @@
                 </com.freewheelin.pulley.views.TimerView>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/mainFormatTool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/dp24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <com.freewheelin.pulley.views.DaebakSwitch
+                        android:id="@+id/solutionSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:padding="8dp"
+                        android:focusable="false"
+                        app:DaebakSwitch_Label="정답/해설 표시"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/speedyScoreSwitch"/>
+
+                    <com.freewheelin.pulley.views.DaebakSwitch
+                        android:id="@+id/speedyScoreSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:DaebakSwitch_Label="빠른 채점"
+                        android:padding="8dp"
+                        android:focusable="false"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/addSimilarProblemCl"
                     android:layout_width="@dimen/dp120"
                     android:layout_height="@dimen/dp36"
@@ -249,12 +283,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_plus_white"
-                        android:tint="@color/black_333333"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/similarTv"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/black_333333" />
 
                     <TextView
                         style="@style/TextBlack_333333.ExtraBold"
@@ -288,12 +322,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_problem_change"
-                        android:tint="@color/black_333333"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/changeTv"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/black_333333" />
 
                     <TextView
                         style="@style/TextBlack_333333.ExtraBold"
@@ -308,41 +342,6 @@
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toEndOf="@+id/changeIv"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/mainFormatTool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/dp24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                    <com.freewheelin.pulley.views.DaebakSwitch
-                        android:id="@+id/solutionSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dp16"
-                        android:padding="8dp"
-                        android:focusable="false"
-                        app:DaebakSwitch_Label="정답/해설 표시"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/speedyScoreSwitch"/>
-
-                    <com.freewheelin.pulley.views.DaebakSwitch
-                        android:id="@+id/speedyScoreSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:DaebakSwitch_Label="빠른 채점"
-                        android:padding="8dp"
-                        android:focusable="false"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

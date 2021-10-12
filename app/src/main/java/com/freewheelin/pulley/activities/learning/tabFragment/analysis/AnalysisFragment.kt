@@ -88,13 +88,13 @@ class AnalysisFragment : LearningTabFragment(),
     override fun onResume() {
         super.onResume()
 
-        user!!.getDailyStudy(context!!) { setUpStudyUI(it) }
-        user!!.getDailyRecommend(context!!, callback = {
+        user!!.getDailyStudy(requireContext()) { setUpStudyUI(it) }
+        user!!.getDailyRecommend(requireContext(), callback = {
             setUpRecommendUI(it)
         }, failCB = {
             setUpRecommendUI(null)
         })
-        user!!.getDailyPiece(context!!) {
+        user!!.getDailyPiece(requireContext()) {
             setUpPieceUI(it)
         }
     }
@@ -124,13 +124,13 @@ class AnalysisFragment : LearningTabFragment(),
             timeCompareTv.valueText = DateTimeUtils.getHourMinSpentTimeStr(study.totalStudyTime)
             timeCompareTv.diffText = DateTimeUtils.getHourMinSpentTimeStr(study.onlyStudyTime)
             if (study.onlyStudyTime < 60) {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(context!!, R.color.grey_9f9f9f))
+                timeCompareTv.setDiffTextColor(ContextCompat.getColor(requireContext(), R.color.grey_9f9f9f))
             } else {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(context!!, R.color.blue_2287ef))
+                timeCompareTv.setDiffTextColor(ContextCompat.getColor(requireContext(), R.color.blue_2287ef))
             }
 
             shareBtn.setOnClickListener {
-                LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공유하기")
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공유하기")
                 val dialog = ShareAnalysisDialog(requireContext(), study)
                 dialog.listener = this
                 dialog.show()
@@ -171,8 +171,8 @@ class AnalysisFragment : LearningTabFragment(),
             recommendStudyView.listener = this
             initChart(timeCountChart)
             mainAnalysisBtn.setOnClickListener {
-                LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
-                val intent = Intent(context!!, AnalysisTabActivity::class.java)
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
+                val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
                 startActivity(intent)
             }
         }catch(e:Exception) {
@@ -182,13 +182,13 @@ class AnalysisFragment : LearningTabFragment(),
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        user!!.getDailyStudy(context!!) { setUpStudyUI(it) }
-        user!!.getDailyRecommend(context!!, callback = {
+        user!!.getDailyStudy(requireContext()) { setUpStudyUI(it) }
+        user!!.getDailyRecommend(requireContext(), callback = {
             setUpRecommendUI(it)
         }, failCB = {
             setUpRecommendUI(null)
         })
-        user!!.getDailyPiece(context!!) { setUpPieceUI(it) }
+        user!!.getDailyPiece(requireContext()) { setUpPieceUI(it) }
     }
 
     private fun setUpUI(summary: DailySummary) {
@@ -221,14 +221,14 @@ class AnalysisFragment : LearningTabFragment(),
         chart.axisLeft.setDrawGridLines(true)
         chart.axisLeft.labelCount = 3
         chart.axisLeft.axisMinimum = 0f
-        chart.axisLeft.gridColor = ContextCompat.getColor(context!!, R.color.grey_e8e8e8)
-        chart.axisLeft.textColor = ContextCompat.getColor(context!!, R.color.grey_c0c0c0)
+        chart.axisLeft.gridColor = ContextCompat.getColor(requireContext(), R.color.grey_e8e8e8)
+        chart.axisLeft.textColor = ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0)
         chart.axisLeft.textSize = 14f
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.axisLineColor = Color.TRANSPARENT
         chart.xAxis.textSize = resources.getDimension(R.dimen.sp14).pxToSp()
-        chart.xAxis.typeface = Theme.bold(context!!)
-        chart.xAxis.textColor = ContextCompat.getColor(context!!, R.color.grey_9f9f9f)
+        chart.xAxis.typeface = Theme.bold(requireContext())
+        chart.xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.grey_9f9f9f)
         chart.xAxis.setDrawAxisLine(true)
         chart.xAxis.setDrawGridLines(false)
         chart.xAxis.setValueFormatter { value, axis ->
@@ -259,8 +259,8 @@ class AnalysisFragment : LearningTabFragment(),
             isHighlightEnabled = false
             setDrawValues(false)
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
-            setValueTextColor(ContextCompat.getColor(context!!, R.color.purple_ACACFF))
-            setValueTypeface(Theme.bold(context!!))
+            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_ACACFF))
+            setValueTypeface(Theme.bold(requireContext()))
         }
         val renderer = CustomBarChartRender(timeCountChart, timeCountChart.animator, timeCountChart.viewPortHandler)
         renderer.setRadius(16f.toPx())
@@ -283,22 +283,22 @@ class AnalysisFragment : LearningTabFragment(),
         timeCountChart.axisLeft.axisMinimum = 0f
         timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
         val colors = mutableListOf(
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0),
-                ContextCompat.getColor(context!!, R.color.grey_e0e0e0)
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
+                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0)
         )
         when(Date().dayOfWeek()) {
-            Calendar.MONDAY -> colors[0] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.TUESDAY -> colors[1] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.WEDNESDAY -> colors[2] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.THURSDAY -> colors[3] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.FRIDAY -> colors[4] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.SATURDAY -> colors[5] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
-            Calendar.SUNDAY -> colors[6] = ContextCompat.getColor(context!!, R.color.blue_b9defe)
+            Calendar.MONDAY -> colors[0] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.TUESDAY -> colors[1] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.WEDNESDAY -> colors[2] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.THURSDAY -> colors[3] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.FRIDAY -> colors[4] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.SATURDAY -> colors[5] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.SUNDAY -> colors[6] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
         }
 
         barDataSet.colors = colors
@@ -308,8 +308,8 @@ class AnalysisFragment : LearningTabFragment(),
             isHighlightEnabled = false
             setDrawValues(false)
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
-            setValueTextColor(ContextCompat.getColor(context!!, R.color.purple_ACACFF))
-            setValueTypeface(Theme.bold(context!!))
+            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_ACACFF))
+            setValueTypeface(Theme.bold(requireContext()))
         }
 
         timeCountChart.notifyDataSetChanged()
@@ -340,12 +340,12 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보기")
-        val intent = StudyHistoryActivity.getIntent(context!!)
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보기")
+        val intent = StudyHistoryActivity.getIntent(requireContext())
         startActivity(intent)
     }
     override fun onSolveBtnClicked(view: AnalysisTodayStudyListView, content: Content) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
         when(content.pieceCategoryTag) {
             BookType.MO -> {
                 if (content.isCompleted()) {
@@ -355,38 +355,38 @@ class AnalysisFragment : LearningTabFragment(),
                     }
                 } else {
                     val exam = MockExam(content)
-                    MockExamGuideDialog(context!!, exam, true, this).show()
+                    MockExamGuideDialog(requireContext(), exam, true, this).show()
                 }
             }
             BookType.BOOK, BookType.CUSTOM_BOOK -> {
                 val intent = if (content.isCompleted())
-                    SolveActivity.getReviewIntent(context!!, Book(content))
+                    SolveActivity.getReviewIntent(requireContext(), Book(content))
                 else
-                    SolveActivity.getIntent(context!!, Book(content))
+                    SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
 
             BookType.NOTE, BookType.RECOMMEND -> {
                 val intent = if (content.isCompleted()) {
-                    SolveActivity.getReviewIntent(context!!, Piece(content))
+                    SolveActivity.getReviewIntent(requireContext(), Piece(content))
                 } else {
-                    SolveActivity.getIntent(context!!, Piece(content))
+                    SolveActivity.getIntent(requireContext(), Piece(content))
                 }
                 startActivity(intent)
             }
 
             BookType.TEST -> {
                 val intent = if (content.isCompleted())
-                    SolveActivity.getReviewIntent(context!!, Test(content))
+                    SolveActivity.getReviewIntent(requireContext(), Test(content))
                 else
-                    SolveActivity.getIntent(context!!, Test(content))
+                    SolveActivity.getIntent(requireContext(), Test(content))
                 startActivity(intent)
             }
         }
     }
 
     override fun onReportBtnClicked(view: AnalysisTodayStudyListView, content: Content) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
         when(content.pieceCategoryTag) {
             BookType.MO -> {
                 getMockWithOptionalSubjects(content) { mock ->
@@ -398,11 +398,11 @@ class AnalysisFragment : LearningTabFragment(),
                 val test = Test(content)
                 when (test.getTestType()) {
                     Test.TestType.weekly -> {
-                        val intent = WeeklyTestReportActivity.getIntent(context!!, test)
+                        val intent = WeeklyTestReportActivity.getIntent(requireContext(), test)
                         startActivity(intent)
                     }
                     Test.TestType.wrong -> {
-                        val intent = WrongTestReportActivity.getIntent(context!!, test)
+                        val intent = WrongTestReportActivity.getIntent(requireContext(), test)
                         startActivity(intent)
                     }
                     else -> {
@@ -417,12 +417,12 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onSolveWithPrint(mockExam: MockExam, makeNew: Boolean) {
-        val intent = OMRActivity.getIntent(context!!, mockExam, makeNew)
+        val intent = OMRActivity.getIntent(requireContext(), mockExam, makeNew)
         startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
     }
 
     override fun onSolveWithoutPrint(mockExam: MockExam, makeNew: Boolean) {
-        val intent = SolveActivity.getIntent(context!!, mockExam, makeNew)
+        val intent = SolveActivity.getIntent(requireContext(), mockExam, makeNew)
         startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
     }
 
@@ -452,23 +452,23 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onWrongStudyBtnClicked(view: AnalysisStudyRateView) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천문제버튼")
-        ContentManager.makeWrongPiece(context!!, user!!) {
-            val intent = SolveActivity.getIntent(context!!, it)
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천문제버튼")
+        ContentManager.makeWrongPiece(requireContext(), user!!) {
+            val intent = SolveActivity.getIntent(requireContext(), it)
             startActivity(intent)
         }
     }
 
     override fun onRecommendBtnClicked(view: AnalysisRecommendStudyView) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천플랜버튼")
-        ContentManager.makeRecommendPiece(context!!, user!!) {
-            val intent = SolveActivity.getIntent(context!!, it)
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천플랜버튼")
+        ContentManager.makeRecommendPiece(requireContext(), user!!) {
+            val intent = SolveActivity.getIntent(requireContext(), it)
             startActivity(intent)
         }
     }
 
     override fun onStudyBtnClicked(view: AnalysisTodayStudyListView) {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공부하기버튼")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공부하기버튼")
         (activity as? LearningTabActivity)?.setSelectedTab(3)
 
     }

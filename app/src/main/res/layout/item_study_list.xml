@@ -17,7 +17,6 @@
             style="@style/TextBlack_4c4c4c.Bold"
             android:layout_width="@dimen/dp72"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:gravity="center"
             android:text="03-29"
             android:textColor="@color/black_4c4c4c"
@@ -28,7 +27,6 @@
             style="@style/TextGrey_9f9f9f.ExtraBold"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp24"
-            android:layout_marginStart="@dimen/dp16"
             android:background="@drawable/bg_grey_e8e8e8_round"
             android:gravity="center"
             android:text="03-29"
@@ -39,7 +37,7 @@
             style="@style/TextBlack_4c4c4c.Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp8"
             android:layout_weight="1"
             android:text="2019년 11월 수능 고3 가형(2) 오답문제(5)"
             android:textSize="@dimen/sp16" />
@@ -50,7 +48,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingEnd="8dp">
+            android:paddingEnd="8dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/problemCntTv"
@@ -75,9 +74,9 @@
         <TextView
             android:id="@+id/scoreTv"
             style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="@dimen/dp64"
+            android:layout_width="@dimen/dp40"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp8"
             android:gravity="center"
             android:text="19점"
             android:textSize="@dimen/sp16" />
@@ -86,7 +85,7 @@
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/dp36"
             android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp8"
             android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round">
 
             <ImageView
@@ -102,10 +101,10 @@
 
         <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/solveBtn"
-            android:layout_width="@dimen/dp120"
+            android:layout_width="@dimen/dp100"
             android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp16"
-            android:text="풀기 &amp; 리뷰"
+            android:layout_marginStart="@dimen/dp8"
+            android:text="풀기/리뷰"
             app:buttonTheme="blue" />
 
     </LinearLayout>

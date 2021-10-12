@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="704dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="600dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_fafafa_round"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/bg_white_fafafa_round">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleContainer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp64"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp48"
         android:background="@drawable/bg_white_ffffff_round_top_only"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -17,22 +19,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
-            android:textSize="@dimen/sp18"
             android:text="공유화면 미리보기"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="@dimen/sp18"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/xBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_x_grey_19dp"
             android:layout_marginEnd="@dimen/dp24"
             android:background="@null"
+            android:src="@drawable/ic_x_grey_19dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -41,38 +43,38 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dp32"
         android:paddingBottom="@dimen/dp48"
-        app:layout_constraintTop_toBottomOf="@+id/titleContainer"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleContainer">
 
         <com.freewheelin.pulley.activities.learning.tabFragment.main.component.ProfileShareContentsView
             android:id="@+id/shareContents"
-            android:layout_width="368dp"
-            android:layout_height="368dp"
+            android:layout_width="250dp"
+            android:layout_height="280dp"
             android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageButton
             android:id="@+id/downloadBtn"
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp32"
             android:background="@drawable/bg_purple_ecebff_round"
             android:src="@drawable/ic_download"
-            android:layout_marginStart="@dimen/dp32"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/shareContents"/>
+            app:layout_constraintBottom_toBottomOf="@+id/shareContents"
+            app:layout_constraintStart_toEndOf="@+id/shareContents" />
 
         <com.freewheelin.pulley.views.Buttons.PrimaryButton
             android:id="@+id/shareBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:text="공유하기"
             android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@+id/downloadBtn"
+            android:text="공유하기"
+            app:layout_constraintBottom_toBottomOf="@+id/downloadBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/shareContents"/>
+            app:layout_constraintStart_toEndOf="@+id/downloadBtn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,8 @@
         android:id="@+id/containerCl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp64"
-        android:paddingStart="@dimen/dp32"
-        android:paddingEnd="@dimen/dp32"
+        android:paddingStart="@dimen/dp16"
+        android:paddingEnd="@dimen/dp16"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -82,8 +82,8 @@
             android:id="@+id/optionContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginStart="@dimen/dp16"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/titleTv"
             app:layout_constraintTop_toTopOf="parent" />
@@ -95,6 +95,7 @@
             android:layout_marginEnd="@dimen/dp16"
             android:gravity="center"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/scoreTv"
             app:layout_constraintTop_toTopOf="parent">
@@ -142,6 +143,7 @@
             android:gravity="center"
             android:text="백분위"
             android:textSize="@dimen/sp16"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ratingTv"
             app:layout_constraintTop_toTopOf="parent" />
@@ -149,12 +151,13 @@
         <TextView
             android:id="@+id/ratingTv"
             style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="@dimen/dp64"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp16"
             android:gravity="center"
             android:text="등급"
             android:textSize="@dimen/sp16"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/reportBtn"
             app:layout_constraintTop_toTopOf="parent" />
@@ -163,6 +166,7 @@
             android:id="@+id/ratingIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/ratingTv"
             app:layout_constraintEnd_toEndOf="@+id/ratingTv"
             app:layout_constraintStart_toStartOf="@+id/ratingTv"
@@ -170,7 +174,7 @@
 
         <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/reportBtn"
-            android:layout_width="@dimen/dp80"
+            android:layout_width="70dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp16"
             android:text="보고서"
@@ -181,7 +185,7 @@
 
         <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/reviewBtn"
-            android:layout_width="@dimen/dp80"
+            android:layout_width="60dp"
             android:layout_height="36dp"
             android:text="리뷰"
             app:buttonTheme="blue"

@@ -145,6 +145,12 @@ val Context.is10InchUI: Boolean
         return (config.screenWidthDp >= 1280)
     }
 
+val Context.isTablet: Boolean
+    get() {
+        val config = resources.configuration
+        return (config.smallestScreenWidthDp >= 600)
+    }
+
 val Context.underMinHeight:Boolean
     get() {
         val config = resources.configuration

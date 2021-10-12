@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_white_fafafa_round"
-    android:layout_width="@dimen/dialog_note_width"
-    android:layout_height="@dimen/dialog_note_height">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/step1Container"
@@ -43,7 +43,7 @@
                 android:id="@+id/subjectTab"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:tabWidth="@dimen/dp96"
+                app:tabWidth="@dimen/dp80"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -178,7 +178,7 @@
             android:id="@+id/step2Header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp48"
+            android:paddingTop="@dimen/dp12"
             android:paddingStart="@dimen/dp48">
 
             <TextView
@@ -207,15 +207,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="@dimen/dp24"
+            android:paddingTop="@dimen/dp12"
             android:paddingStart="@dimen/dp48"
             android:paddingEnd="@dimen/dp48">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/pageSelectorContainer"
-                android:layout_width="320dp"
+                android:layout_width="250dp"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/dp32"
+                android:layout_marginBottom="@dimen/dp12"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -287,37 +287,34 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <LinearLayout
                 android:id="@+id/configCl"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round"
                 android:layout_marginStart="@dimen/dp24"
+                android:layout_marginBottom="16dp"
                 android:orientation="vertical"
-                android:layout_marginBottom="@dimen/dp40"
-                app:layout_constraintTop_toTopOf="@+id/pageSelectorContainer"
                 app:layout_constraintBottom_toTopOf="@+id/totalCntTv"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pageSelectorContainer"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="@+id/pageSelectorContainer">
+
+                <TextView
+                    android:id="@+id/problemCntTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="문제 수"
+                    android:textSize="@dimen/sp16" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cntSection"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round"
                     app:layout_constraintTop_toBottomOf="@+id/typeSection">
-
-                    <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
-                        android:id="@+id/problemCntTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp24"
-                        android:textSize="@dimen/sp16"
-                        android:text="문제 수"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
                         android:id="@+id/cntGuideTv"
@@ -327,58 +324,57 @@
                         android:layout_marginStart="32dp"
                         android:text="문제 하나당"
                         android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/problemCntTv"
-                        app:layout_constraintStart_toEndOf="@+id/problemCntTv"
-                        app:layout_constraintTop_toBottomOf="@+id/problemCntTv"
-                        app:layout_constraintTop_toTopOf="@+id/problemCntTv" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                     <ImageButton
                         android:id="@+id/minusBtn"
-                        android:src="@drawable/ic_minus"
-                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
                         android:layout_marginStart="12dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                        android:src="@drawable/ic_minus"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cntGuideTv"/>
+                        app:layout_constraintStart_toEndOf="@+id/cntGuideTv"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
                         android:id="@+id/cntTv"
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp18"
                         android:text="1"
+                        android:textSize="@dimen/sp18"
                         app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
-                        app:layout_constraintTop_toTopOf="@+id/minusBtn"
+                        app:layout_constraintEnd_toEndOf="@+id/plusBtn"
                         app:layout_constraintStart_toStartOf="@+id/minusBtn"
-                        app:layout_constraintEnd_toEndOf="@+id/plusBtn"/>
+                        app:layout_constraintTop_toTopOf="@+id/minusBtn" />
 
 
                     <ImageButton
                         android:id="@+id/plusBtn"
-                        android:src="@drawable/ic_plus_grey"
-                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
                         android:layout_marginStart="40dp"
-                        app:layout_constraintTop_toTopOf="@+id/minusBtn"
+                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                        android:src="@drawable/ic_plus_grey"
                         app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
-                        app:layout_constraintStart_toEndOf="@+id/minusBtn"/>
+                        app:layout_constraintStart_toEndOf="@+id/minusBtn"
+                        app:layout_constraintTop_toTopOf="@+id/minusBtn" />
 
                     <TextView
                         android:id="@+id/cntGuide2Tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:textSize="@dimen/sp16"
-                        android:textColor="@color/black_4c4c4c"
                         android:text="개씩 만들기"
+                        android:textColor="@color/black_4c4c4c"
+                        android:textSize="@dimen/sp16"
+                        app:layout_constraintBottom_toBottomOf="@+id/cntGuideTv"
                         app:layout_constraintStart_toEndOf="@+id/plusBtn"
-                        app:layout_constraintTop_toTopOf="@+id/cntGuideTv"
-                        app:layout_constraintBottom_toBottomOf="@+id/cntGuideTv"/>
+                        app:layout_constraintTop_toTopOf="@+id/cntGuideTv" />
 
                     <LinearLayout
                         android:id="@+id/firstHider"
@@ -388,38 +384,27 @@
                         android:layout_marginEnd="1dp"
                         android:layout_marginBottom="3dp"
                         android:background="#ccf5f5f5"
-                        android:orientation="vertical"
                         android:clickable="true"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-                    </LinearLayout>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    android:id="@+id/firstEditBorder"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/white_ffffff"
-                    app:layout_constraintTop_toBottomOf="@+id/configCl"/>
+                <TextView
+                    android:id="@+id/levelTitleTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="난이도"
+                    android:textSize="@dimen/sp16" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-                    <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
-                        android:id="@+id/levelTitleTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp24"
-                        android:layout_marginTop="@dimen/dp32"
-                        android:layout_marginBottom="@dimen/dp32"
-                        android:textSize="@dimen/sp16"
-                        android:text="난이도"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round">
 
                     <ImageButton
                         android:id="@+id/levelQuestionIb"
@@ -429,19 +414,19 @@
                         android:background="@null"
                         android:src="@drawable/ic_question"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/levelTitleTv"
-                        app:layout_constraintStart_toEndOf="@+id/levelTitleTv"
-                        app:layout_constraintTop_toTopOf="@+id/levelTitleTv" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <RadioGroup
                         android:id="@+id/levelRg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="36dp"
+                        android:layout_marginStart="32dp"
                         android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="@+id/levelTitleTv"
-                        app:layout_constraintStart_toEndOf="@+id/levelQuestionIb"
-                        app:layout_constraintTop_toTopOf="@+id/levelTitleTv">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <RadioButton
                             android:id="@+id/easyRb"
@@ -455,7 +440,7 @@
                             android:id="@+id/originRb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="30dp"
+                            android:layout_marginStart="20dp"
                             android:checked="true"
                             android:text="그대로"
                             android:textColor="@color/black_4c4c4c"
@@ -479,36 +464,27 @@
                         android:layout_marginEnd="1dp"
                         android:layout_marginBottom="3dp"
                         android:background="#ccf5f5f5"
-                        android:orientation="vertical"
                         android:clickable="true"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-                    </LinearLayout>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    android:id="@+id/secondEditBorder"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/white_ffffff"
-                    app:layout_constraintTop_toBottomOf="@+id/configCl"/>
+                <TextView
+                    android:id="@+id/clearIncludeLabel"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="클리어한 문제"
+                    android:textSize="@dimen/sp16" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
-                        android:id="@+id/clearIncludeLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="클리어한 문제"
-                        android:textSize="@dimen/sp16"
-                        android:layout_marginStart="@dimen/dp24"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round">
 
                     <RadioGroup
                         android:id="@+id/clearRg"
@@ -516,9 +492,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="@+id/clearIncludeLabel"
-                        app:layout_constraintStart_toEndOf="@+id/clearIncludeLabel"
-                        app:layout_constraintTop_toTopOf="@+id/clearIncludeLabel">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <RadioButton
                             android:id="@+id/includeRb"
@@ -630,23 +606,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp80"
+        android:layout_height="@dimen/dp60"
+        android:background="@drawable/bg_white_ffffff_round_bottom_only"
         android:paddingStart="@dimen/dp48"
         android:paddingEnd="@dimen/dp48"
-        android:background="@drawable/bg_white_ffffff_round_bottom_only"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
             android:id="@+id/selectGuideLabel"
+            style="@style/TextGrey_c0c0c0.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
-            android:text=""
             android:layout_marginEnd="@dimen/dp16"
-            app:layout_constraintTop_toTopOf="parent"
+            android:text=""
+            android:textSize="@dimen/sp14"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/actionBtn"/>
+            app:layout_constraintEnd_toStartOf="@+id/actionBtn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/cancelBtn"
@@ -654,21 +630,21 @@
             android:layout_height="@dimen/dp48"
             android:text="취소"
             app:buttonTheme="grey"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
-            style="@style/TextBlack_4c4c4c.Bold"
             android:id="@+id/nowCheckbox"
+            style="@style/TextBlack_4c4c4c.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="만들고 바로 풀기"
-            android:paddingLeft="8dp"
             android:layout_marginEnd="@dimen/dp16"
-            app:layout_constraintTop_toTopOf="parent"
+            android:paddingLeft="8dp"
+            android:text="만들고 바로 풀기"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/actionBtn"/>
+            app:layout_constraintEnd_toStartOf="@+id/actionBtn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.freewheelin.pulley.views.Buttons.PrimaryButton
             android:id="@+id/actionBtn"
@@ -676,9 +652,9 @@
             android:layout_height="@dimen/dp48"
             android:text="다음"
             app:buttonTheme="blue"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
