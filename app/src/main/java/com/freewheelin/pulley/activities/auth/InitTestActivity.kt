@@ -216,7 +216,7 @@ class InitTestActivity : AppCompatActivity() {
         val type = object : TypeToken<HashMap<Int, Int>>(){}.type
         val savedData = gson.fromJson<HashMap<Int, Int>>(prefStr, type)
         selected = savedData
-        stage = selected.keys.max()?.let { if (it == 12) it else it + 1 } ?: 1
+        stage = selected.keys.maxOrNull()?.let { if (it == 12) it else it + 1 } ?: 1
         configure(stage)
     }
 

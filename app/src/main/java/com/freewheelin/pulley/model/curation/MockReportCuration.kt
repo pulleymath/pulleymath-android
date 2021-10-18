@@ -90,7 +90,7 @@ class MockReportCuration(val context: Context) {
             return perfectText
         }
 
-        val guideSubject = subjectAnalysis.maxBy {
+        val guideSubject = subjectAnalysis.maxByOrNull {
             abs(it.averageCorrectRateSameGrade - it.myCorrectRate)
         }
 

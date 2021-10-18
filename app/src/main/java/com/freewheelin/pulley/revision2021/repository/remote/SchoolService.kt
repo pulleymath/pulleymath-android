@@ -3,19 +3,19 @@ package com.freewheelin.pulley.revision2021.repository.remote
 import com.freewheelin.pulley.core.Version
 import com.freewheelin.pulley.core.retrofit
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+//import dagger.Module
+//import dagger.Provides
+//import dagger.hilt.InstallIn
+//import dagger.hilt.android.components.ApplicationComponent
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-@Module
-@InstallIn(ApplicationComponent::class)
+//@Module
+//@InstallIn(ApplicationComponent::class)
 object SchoolApi {
 
-    @Provides
+//    @Provides
     fun schoolService(): SchoolService = retrofit(Version.v2).create(SchoolService::class.java)
 }
 

@@ -52,8 +52,8 @@ class OneBarChart: RecyclerView {
             this.data = data
             this.adapter?.notifyDataSetChanged()
         } else {
-            max = data.filter { it.value != 0 }.maxBy { it.value }?.value ?: -1
-            min = data.filter { it.value != 0 }.minBy { it.value }?.value ?: -1
+            max = data.filter { it.value != 0 }.maxByOrNull { it.value }?.value ?: -1
+            min = data.filter { it.value != 0 }.minByOrNull { it.value }?.value ?: -1
             this.data = data
             this.adapter = OneBarChartAdapter()
         }

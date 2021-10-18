@@ -22,11 +22,11 @@ import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
-import dagger.hilt.android.HiltAndroidApp
+//import dagger.hilt.android.HiltAndroidApp
 import io.realm.Realm
 import net.danlew.android.joda.JodaTimeAndroid
 
-@HiltAndroidApp
+//@HiltAndroidApp
 class MyApplication: Application(), LifecycleObserver {
 
     companion object {

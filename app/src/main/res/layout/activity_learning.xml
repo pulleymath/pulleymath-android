@@ -32,7 +32,45 @@
                 app:tabIndicatorHeight="0dp"
                 app:tabSelectedTextColor="@color/white_ffffff"
                 app:tabTextAppearance="@style/AppTheme.TabBar.TabText"
-                app:tabTextColor="@color/grey_818181" />
+                app:tabTextColor="@color/grey_818181" >
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="메인" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="분석" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="테스트" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유형학습" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="모의고사" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오답노트" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="과외" />
+
+            </com.google.android.material.tabs.TabLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="40dp"

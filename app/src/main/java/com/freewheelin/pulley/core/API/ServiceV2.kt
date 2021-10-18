@@ -259,4 +259,7 @@ interface  ServiceV2 {
     @PUT("me/agree")
     fun updateAgreeInfo(@Body request: RequestAgreeInfo): Single<Template<String?>>
 
+    @GET("lesson/check")
+    fun isPurchasedLesson(@Query("studentID") studentID:String)
+
 }

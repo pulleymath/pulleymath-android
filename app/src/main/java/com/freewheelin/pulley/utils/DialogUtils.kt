@@ -41,6 +41,7 @@ class DialogUtils {
                        leftBtnText: String = "취소",
                        rightBtnText: String = "완료") {
             var dialog = makeDialog(context, title, content, leftBtnText, rightBtnText)
+
             dialog.show()
         }
 
@@ -274,7 +275,8 @@ class DialogUtils {
                 activity.finishAffinity()
                 activity.startActivity(Intent(activity, SplashActivity::class.java))
             }
-            dialog.show()
+            if(!activity.isFinishing)
+                dialog.show()
         }
 
         fun expiredSessionDialog(activity: Activity, callback:(()->Unit)?=null) {
@@ -292,8 +294,9 @@ class DialogUtils {
                 activity.startActivity(Intent(activity, SplashActivity::class.java))
                 callback?.run { this() }
             }
-            dialog.show()
-            Log.d(javaClass.simpleName, "expiredSessionDialog opened!")
+            if(!activity.isFinishing)
+                dialog.show()
+//            Log.d(javaClass.simpleName, "expiredSessionDialog opened!")
         }
 
         fun toLoginDialog(activity:Activity, rightCallback: (() -> Unit), leftCallback:()->Unit) {
@@ -312,7 +315,8 @@ class DialogUtils {
                 dialog.dismiss()
                 leftCallback()
             }
-            dialog.show()
+            if(!activity.isFinishing)
+                dialog.show()
         }
 
         fun showExpiredDDayDialog(context: Context, dday: Int, memberType: String) {
@@ -410,7 +414,8 @@ class DialogUtils {
                 dialog.dismiss()
                 callback()
             }
-            dialog.show()
+            if(!activity.isFinishing)
+                dialog.show()
         }
 
         fun confirmDeleteAllStudy(activity: Activity, callback:()->Unit) {
@@ -426,7 +431,8 @@ class DialogUtils {
                 dialog.dismiss()
                 callback()
             }
-            dialog.show()
+            if(!activity.isFinishing)
+                dialog.show()
         }
 
         fun confirmExceedDevice(activity: Activity, callback:()->Unit) {
@@ -442,7 +448,8 @@ class DialogUtils {
                 dialog.dismiss()
                 callback()
             }
-            dialog.show()
+            if(!activity.isFinishing)
+                dialog.show()
         }
     }
 

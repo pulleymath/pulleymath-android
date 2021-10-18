@@ -41,7 +41,7 @@ class MyCuration(val context: Context) {
 
     fun getUnitSummaryQ(period: Int, improvement: Int?, summaryAnalysis: List<ChapterAnalysis>): CharSequence {
         if(improvement == null) {
-            val guideAnalysis = summaryAnalysis.maxBy { abs(it.averageCorrectRateSameGrade - it.myCorrectRate) }
+            val guideAnalysis = summaryAnalysis.maxByOrNull { abs(it.averageCorrectRateSameGrade - it.myCorrectRate) }
             if(guideAnalysis == null)
                 return dataNotExistText
             else {
@@ -93,14 +93,14 @@ class MyCuration(val context: Context) {
     }
 
     fun getUnitChapterQ(chapterAnalysis: List<ChapterAnalysis>?): CharSequence {
-        val minChapter = chapterAnalysis?.minBy { it.myRate } ?: return dataNotExistText
+        val minChapter = chapterAnalysis?.minByOrNull { it.myRate } ?: return dataNotExistText
 
         return unitChpaterQ.format(minChapter.name).partialFont(Theme.extraBold(context), 0, minChapter.name.length)
     }
 
     fun getLevelSummaryQ(chapters: List<ChapterAnalysis>?): CharSequence {
 
-        val guideAnalysis = chapters?.maxBy {
+        val guideAnalysis = chapters?.maxByOrNull {
             abs(it.averageCorrectRateSameGrade - it.myCorrectRate)
         }
 
@@ -133,7 +133,7 @@ class MyCuration(val context: Context) {
         if(amountAnalysis == null || amountAnalysis.isEmpty())
             return dataNotExistText
         else {
-            val value = amountAnalysis.maxBy { it.problemTotalNumber }?.problemTotalNumber
+            val value = amountAnalysis.maxByOrNull { it.problemTotalNumber }?.problemTotalNumber
             val list = amountAnalysis.filter { it.problemTotalNumber == value }
             val text = list.joinToString { it.chapterName }
             return studyAmountSummaryQ.format(text).partialFont(Theme.extraBold(context), text)
@@ -144,7 +144,7 @@ class MyCuration(val context: Context) {
         if(amountAnalysis == null || amountAnalysis.isEmpty())
             return dataNotExistText
         else {
-            val value = amountAnalysis.maxBy { it.problemTotalNumber }?.problemTotalNumber
+            val value = amountAnalysis.maxByOrNull { it.problemTotalNumber }?.problemTotalNumber
             val list = amountAnalysis.filter { it.problemTotalNumber == value }
             val text = list.joinToString { it.chapterName }
             return studyAmountCompareByUnitQ.format(text).partialFont(Theme.extraBold(context), text)

@@ -158,7 +158,7 @@ class LevelRatioAnalysis {
                 problemLevel_5 - problemLevel_SameGrade_5
         )
 
-        val sameMaxCompareValue = sameCompareValues.maxBy { abs(it) }!!
+        val sameMaxCompareValue = sameCompareValues.maxByOrNull { abs(it) }!!
         var sameIndex = 0
         for (value in sameCompareValues) {
             if(value == sameMaxCompareValue || value == sameMaxCompareValue * -1)

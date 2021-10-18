@@ -957,24 +957,26 @@ public class ReaderView
 		if (!tapDisabled) {
 
 			FrameLayout container = getDisplayedView();
-			PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
+			if(container != null) {
+				PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
 
-			if (mLinksEnabled && pageView != null) {
-				int page = pageView.hitLink(e.getX(), e.getY());
-				if (page > 0) {
-					pushHistory();
-					setDisplayedViewIndex(page);
+				if (mLinksEnabled && pageView != null) {
+					int page = pageView.hitLink(e.getX(), e.getY());
+					if (page > 0) {
+						pushHistory();
+						setDisplayedViewIndex(page);
+					}
+				} else if (e.getX() < tapPageMargin) {
+					smartMoveBackwards();
+				} else if (e.getX() > super.getWidth() - tapPageMargin) {
+					smartMoveForwards();
+				} else if (e.getY() < tapPageMargin) {
+					smartMoveBackwards();
+				} else if (e.getY() > super.getHeight() - tapPageMargin) {
+					smartMoveForwards();
+				} else {
+					onTapMainDocArea();
 				}
-			} else if (e.getX() < tapPageMargin) {
-				smartMoveBackwards();
-			} else if (e.getX() > super.getWidth() - tapPageMargin) {
-				smartMoveForwards();
-			} else if (e.getY() < tapPageMargin) {
-				smartMoveBackwards();
-			} else if (e.getY() > super.getHeight() - tapPageMargin) {
-				smartMoveForwards();
-			} else {
-				onTapMainDocArea();
 			}
 		}
 		return true;

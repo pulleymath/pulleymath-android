@@ -6,7 +6,7 @@ apply plugin: 'realm-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
-apply plugin: 'dagger.hilt.android.plugin'
+//apply plugin: 'dagger.hilt.android.plugin'
 
 android {
 
@@ -25,8 +25,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 193
-        versionName '1.2.193'
+        versionCode 194
+        versionName '1.2.194'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -167,9 +167,9 @@ dependencies {
     implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
 
     //hilt
-    def dagger_version = "2.28-alpha"
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
+//    def dagger_version = "2.28-alpha"
+//    implementation "com.google.dagger:hilt-android:$dagger_version"
+//    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
 
     // lifecycle
     def lifecycle_version = "2.2.0"
@@ -181,9 +181,9 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    def hilt_version = "1.0.0-alpha01"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_version"
+//    def hilt_version = "1.0.0-alpha01"
+//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+//    kapt "androidx.hilt:hilt-compiler:$hilt_version"
 
 //    //hilt
 //    def dagger_version = "2.28-alpha"

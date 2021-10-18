@@ -8,7 +8,7 @@ object NoticeManager {
     var notices = listOf<Notice>()
 
     fun isNeedUpdateTag(): Boolean {
-        val recentNotice = notices.maxWith(Comparator { a, b ->
+        val recentNotice = notices.maxWithOrNull(Comparator { a, b ->
             a.dateTime.compareTo(b.dateTime)
         })
 

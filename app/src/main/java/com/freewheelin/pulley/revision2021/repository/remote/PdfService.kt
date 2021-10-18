@@ -1,17 +1,17 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
 import com.freewheelin.pulley.revision2021.model.response.*
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+//import dagger.Module
+//import dagger.Provides
+//import dagger.hilt.InstallIn
+//import dagger.hilt.android.components.ApplicationComponent
 import io.reactivex.Observable
 import retrofit2.http.*
 
-@Module
-@InstallIn(ApplicationComponent::class)
+//@Module
+//@InstallIn(ApplicationComponent::class)
 object PdfApi {
-    @Provides
+//    @Provides
     fun pdfService() : PdfService  = Network.retrofit().create(PdfService::class.java)
 }
 

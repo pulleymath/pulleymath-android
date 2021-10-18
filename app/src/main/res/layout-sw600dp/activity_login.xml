@@ -19,110 +19,108 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.43">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.43"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/greetingLabel"
                     style="@style/TextBlack_4c4c4c.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4sp"
-                    android:text="풀리에 오신 것을 환영합니다 :)"
-                    android:textSize="16sp" />
+                    android:lineSpacingExtra="12sp"
+                    android:text="안녕하세요.\n풀리에 오신 것을 환영합니다 :)"
+                    android:textSize="@dimen/dp24" />
 
                 <com.freewheelin.pulley.views.EditText.DaebakInputField
                     android:id="@+id/emailDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/dp48"
                     app:DaebakInputField_Hint="name@naver.com"
-                    app:DaebakInputField_Label="아이디(이메일)"
-                    app:DaebakInputField_maxLength="350" />
+                    app:DaebakInputField_maxLength="350"
+                    app:DaebakInputField_Label="아이디(이메일)" />
 
                 <com.freewheelin.pulley.views.EditText.DaebakPasswordField
                     android:id="@+id/pwDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    app:DaebakInputField_maxLength="15"
+                    android:layout_marginTop="24dp"
                     app:DaebakPasswordField_Hint="비밀번호 입력"
-                    app:DaebakPasswordField_Label="비밀번호" />
+                    app:DaebakInputField_maxLength="15"
+                    app:DaebakPasswordField_Label="비밀번호"/>
 
                 <com.freewheelin.pulley.views.Buttons.PrimaryButton
                     android:id="@+id/loginBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_height="@dimen/dp56"
+                    android:layout_marginTop="@dimen/dp48"
                     android:text="학습 시작하기"
-                    app:ButtonTextSize="18sp"
+                    app:ButtonTextSize="@dimen/dp18"
                     app:buttonTheme="blue" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center">
-
                     <TextView
-                        android:id="@+id/findIdPwTv"
                         style="@style/TextPurple_6d6dff.Bold"
+                        android:gravity="center"
+                        android:id="@+id/findIdPwTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp48"
-                        android:gravity="center"
-                        android:text="이메일 또는 비밀번호를 잊으셨나요?"
                         android:textSize="@dimen/dp14"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginTop="@dimen/dp48"
+                        android:text="이메일 또는 비밀번호를 잊으셨나요?"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <View
                         style="@style/Border_Blue_30a4ff_Horizontal"
                         android:layout_width="0dp"
-                        app:layout_constraintEnd_toEndOf="@+id/findIdPwTv"
                         app:layout_constraintStart_toStartOf="@+id/findIdPwTv"
-                        app:layout_constraintTop_toBottomOf="@+id/findIdPwTv" />
+                        app:layout_constraintEnd_toEndOf="@+id/findIdPwTv"
+                        app:layout_constraintTop_toBottomOf="@+id/findIdPwTv"/>
 
                     <TextView
-                        android:id="@+id/signupGuideTv"
                         style="@style/TextBlack_4c4c4c"
+                        android:id="@+id/signupGuideTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp24"
                         android:text="풀리가 처음이신가요?"
                         android:textSize="@dimen/sp14"
+                        android:layout_marginTop="@dimen/dp24"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/findIdPwTv" />
 
                     <TextView
-                        android:id="@+id/signupTv"
                         style="@style/TextPurple_6d6dff.Bold"
+                        android:gravity="center"
+                        android:id="@+id/signupTv"
+                        android:padding="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="회원가입"
                         android:textSize="@dimen/sp14"
-                        app:layout_constraintBottom_toBottomOf="@+id/signupGuideTv"
+                        android:text="회원가입"
+                        app:layout_constraintTop_toTopOf="@+id/signupGuideTv"
                         app:layout_constraintStart_toEndOf="@+id/signupGuideTv"
-                        app:layout_constraintTop_toTopOf="@+id/signupGuideTv" />
+                        app:layout_constraintBottom_toBottomOf="@+id/signupGuideTv"/>
 
                     <View
                         style="@style/Border_Blue_30a4ff_Horizontal"
                         android:layout_width="0dp"
+                        android:layout_marginBottom="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/signupTv"
+                        app:layout_constraintStart_toStartOf="@+id/signupTv"
                         app:layout_constraintEnd_toEndOf="@+id/signupTv"
-                        app:layout_constraintStart_toStartOf="@+id/signupTv" />
+                        app:layout_constraintBottom_toBottomOf="@+id/signupTv"/>
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -28,6 +29,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
@@ -48,16 +50,14 @@ import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoSettingDialog
 import com.freewheelin.pulley.assets.Grade
-import com.freewheelin.pulley.bases.BaseActivity
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.isSPYMode
-import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
+import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.core.API_LESSON_DOMAIN
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
@@ -66,6 +66,7 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.SnackBar.SnackBar
 import com.freewheelin.pulley.views.SnackBar.SnackBarView
 import com.freewheelin.pulley.views.SnackBar.SnackBarViewListener
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -172,9 +173,12 @@ class LearningTabActivity : BaseActivity(),
         requestNotice()
 
         viewPager.adapter = TabAdapter(supportFragmentManager)
+
         viewPager.setPagingEnabled(false)
         viewPager.offscreenPageLimit = 5
-        tabLayout.setupWithViewPager(viewPager)
+
+//        tabLayout.setupWithViewPager(viewPager)
+
         val isFromInitTest = intent.getBooleanExtra(ARG_FROM_INIT_TEST, false)
         if(isFromInitTest) {
 //            viewPager.currentItem = 3
@@ -182,6 +186,24 @@ class LearningTabActivity : BaseActivity(),
         }
 
         viewPager.addOnPageChangeListener(this)
+
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.let { position ->
+                    when(position) {
+                        6 -> { startActivity(Intent(baseContext, LessonActivity::class.java)) }
+                        else -> { viewPager.currentItem = position }
+                    }
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+            override fun onTabReselected(tab: TabLayout.Tab?) { }
+        })
+
+        // 핸드폰이면 과외 메뉴 숨기기
+        if(!isTablet) {
+            if(tabLayout.tabCount > 6) tabLayout.removeTabAt(6)
+        }
 
         drawerView.addDrawerListener(this)
         drawerView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -334,12 +356,18 @@ class LearningTabActivity : BaseActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
-        supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[1])
-        supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
-        supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[3])
-        supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[4])
-        supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[5])
+        if(tabFragment[0].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
+        if(tabFragment[1].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[1])
+        if(tabFragment[2].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
+        if(tabFragment[3].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[3])
+        if(tabFragment[4].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[4])
+        if(tabFragment[5].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[5])
     }
 
     fun showSnackBar(text: String, buttonText: String, action: (() -> Unit)? = null) {
@@ -538,7 +566,7 @@ class LearningTabActivity : BaseActivity(),
 //            tran?.setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
 //        tran?.remove(frag)
 //        tran?.commit()
-        mypageFragment.rv.adapter?.notifyDataSetChanged()
+        mypageFragment.rv?.adapter?.notifyDataSetChanged()
     }
 
     fun getSelectedTab(): LearningTabFragment {
@@ -563,16 +591,16 @@ class LearningTabActivity : BaseActivity(),
             return tabFragment[position]
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
-            return when (position) {
-                0 -> "메인"
-                1 -> "분석"
-                2 -> "테스트"
-                3 -> "유형학습"
-                4 -> "모의고사"
-                else -> "오답노트"
-            }
-        }
+//        override fun getPageTitle(position: Int): CharSequence? {
+//            return when (position) {
+//                0 -> "메인"
+//                1 -> "분석"
+//                2 -> "테스트"
+//                3 -> "유형학습"
+//                4 -> "모의고사"
+//                else -> "오답노트"
+//            }
+//        }
     }
 
     private fun isNeedToRushDialog(): Boolean {
