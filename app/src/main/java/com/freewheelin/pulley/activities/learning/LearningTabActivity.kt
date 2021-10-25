@@ -1,8 +1,7 @@
 package com.freewheelin.pulley.activities.learning
 
-//import com.microsoft.appcenter.AppCenter
-//import com.microsoft.appcenter.distribute.Distribute
 
+import android.Manifest
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,7 +20,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -29,7 +27,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.LessonActivity
+import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
@@ -57,7 +55,6 @@ import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
 import com.freewheelin.pulley.bases.*
-import com.freewheelin.pulley.core.API_LESSON_DOMAIN
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
@@ -69,7 +66,6 @@ import com.freewheelin.pulley.views.SnackBar.SnackBarViewListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_learning.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.android.synthetic.main.fragment_my_main_page.*
@@ -82,6 +78,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.concurrent.thread
 
 
 abstract class LearningTabFragment : Fragment() {
@@ -99,7 +96,7 @@ abstract class LearningTabFragment : Fragment() {
     }
 }
 
-class LearningTabActivity : BaseActivity(),
+class LearningTabActivity : PermissionActivity(),
         ViewPager.OnPageChangeListener,
         DrawerLayout.DrawerListener,
         LifecycleObserver,
@@ -129,6 +126,11 @@ class LearningTabActivity : BaseActivity(),
     var doubleBackToExitPressedOnce = false
 
     lateinit var tabMoveReceiver: BroadcastReceiver
+
+    var currentPagePosition = 0
+
+    val lessonPermissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+    val lessonRequest = 1001
 
     companion object {
         const val LEARNING_MAIN = "LEARNING_MAIN"
@@ -191,8 +193,11 @@ class LearningTabActivity : BaseActivity(),
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.position?.let { position ->
                     when(position) {
-                        6 -> { startActivity(Intent(baseContext, LessonActivity::class.java)) }
-                        else -> { viewPager.currentItem = position }
+                        6 -> { openLesson() }
+                        else -> {
+                            viewPager.currentItem = position
+                            currentPagePosition = position
+                        }
                     }
                 }
             }
@@ -263,6 +268,20 @@ class LearningTabActivity : BaseActivity(),
         registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
 
         userTest()
+    }
+
+
+    private fun openLesson() {
+        requirePermissions(lessonPermissions, lessonRequest)
+    }
+
+    private fun processLesson() {
+        startActivity(Intent(baseContext, LessonActivity::class.java))
+        thread(start=true) {
+            Thread.sleep(500)
+            runOnUiThread { tabLayout.getTabAt(currentPagePosition)?.select() }
+        }
+
     }
 
     private fun userTest() {
@@ -680,6 +699,18 @@ class LearningTabActivity : BaseActivity(),
             return false
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    override fun permissionGranted(requestCode: Int) {
+        when(requestCode) {
+            lessonRequest -> processLesson()
+        }
+    }
+
+    override fun permissionDenied(requestCode: Int) {
+        when(requestCode) {
+            lessonRequest -> DaebakToast.show(this, "카메라와 마이크 권한요청을 수락해야지만 과외서비스를 사용할 수 있습니다.")
+        }
     }
 }
 

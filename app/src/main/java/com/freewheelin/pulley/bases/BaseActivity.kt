@@ -2,13 +2,16 @@ package com.freewheelin.pulley.bases
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.freewheelin.pulley.model.User
 import io.reactivex.disposables.CompositeDisposable
 
@@ -16,7 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 val Activity.user: User?
     get() = MyApplication.user
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     protected val disposables by lazy { CompositeDisposable() }
 

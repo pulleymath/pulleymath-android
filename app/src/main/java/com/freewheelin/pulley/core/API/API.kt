@@ -61,12 +61,6 @@ val API_V3: ServiceV3 by lazy {
     retrofit(Version.v3).create(ServiceV3::class.java)
 }
 
-val API_LESSON_DOMAIN =
-    if(Preferences.onTestAPI.get() || BuildConfig.DEBUG)
-        "https://dev.pulleymath.com"
-    else
-        "https://pulleymath.com"
-
 fun retrofit(apiVersion: Version): Retrofit {
     return Retrofit.Builder().baseUrl(apiVersion.url).apply {
 

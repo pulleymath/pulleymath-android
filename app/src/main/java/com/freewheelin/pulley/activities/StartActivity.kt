@@ -13,24 +13,22 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.auth.signup.SignupActivity
-import com.freewheelin.pulley.activities.mobile.MStartActivity
 import com.freewheelin.pulley.bases.BaseActivity
-import com.freewheelin.pulley.bases.isMobileUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.*
 import kotlinx.android.synthetic.main.activity_start.*
 
 class StartActivity : BaseActivity(), LifecycleObserver {
 
-
-
     companion object {
         fun getIntent(context: Context): Intent {
-            val intent = if(context.isMobileUI)
-                Intent(context, MStartActivity::class.java)
-            else
-                Intent(context, StartActivity::class.java)
-            return intent
+//            val intent = if(context.isMobileUI)
+//                Intent(context, MStartActivity::class.java)
+//            else
+//                Intent(context, StartActivity::class.java)
+//            return intent
+
+            return Intent(context, StartActivity::class.java)
         }
     }
 
