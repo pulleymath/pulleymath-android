@@ -283,21 +283,21 @@ class MockExamGuideDialog(
 //        solveOnOMR.visibility = View.GONE
 //        solveOnTabletBtn.visibility = View.VISIBLE
 
-        printButtonsContainer.visibility = View.GONE
-        solveOnTabletBtn.visibility = View.VISIBLE
+        printButtonsContainer?.visibility = View.GONE
+        solveOnTabletBtn?.visibility = View.VISIBLE
     }
 
     fun setPrintModeUi() {
 
-        printButtonsContainer.visibility = View.VISIBLE
-        solveOnTabletBtn.visibility = View.GONE
+        printButtonsContainer?.visibility = View.VISIBLE
+        solveOnTabletBtn?.visibility = View.GONE
 
 
         // 핸드폰 ui에서는 지원안함
         if(context.isTablet)
-            solveOnOMR.visibility = View.VISIBLE
+            solveOnOMR?.visibility = View.VISIBLE
         else
-            solveOnOMR.visibility = View.GONE
+            solveOnOMR?.visibility = View.GONE
     }
 
     fun setDisableOptionalUi() {

@@ -13,6 +13,7 @@ import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookPage
 import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
 import com.google.gson.Gson
@@ -125,7 +126,7 @@ object BookManager {
                     book.problems = responseProblems
                     book.arrangeProblem()
                     book.arrangeChapter()
-                    LogUtils.assert(book.problems.isNotEmpty(), "Err: 문항개수 0개\n" +
+                    LogUtils.logEvent(context, user, PulleyEvent.INIT_TEST, "문제풀기", "유형학습 세팅","Log: 문항개수 0개\n" +
                             "param: ${"studentID: ${user.studentID}, id: ${book.assignID ?: book.id}"}\n" +
                             "response: ${response.raw()}\n")
                     cb(book)

@@ -93,8 +93,10 @@ class GalleryView : ConstraintLayout {
                     delegate?.onProblemSelected(selectedProblem)
                 } else {
                     // Toast 문제가 없습니다.
-                    val selectedProblem = content.problems[contentAdapter.selectedIndexPath.row]
-                    delegate?.onProblemSelected(selectedProblem)
+                    if(content.problems.isNotEmpty()) {
+                        val selectedProblem = content.problems[contentAdapter.selectedIndexPath.row]
+                        delegate?.onProblemSelected(selectedProblem)
+                    }
                 }
             }
             else -> {
