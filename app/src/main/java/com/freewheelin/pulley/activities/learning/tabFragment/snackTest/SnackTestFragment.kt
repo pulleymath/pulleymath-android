@@ -265,8 +265,9 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
             wrongContainer -> {
                 set.connect(arrowIv.id, TOP, wrongContainer.id, TOP)
                 set.connect(arrowIv.id, BOTTOM, wrongContainer.id, BOTTOM)
-                val test = tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()
-                setMainFragment(test, Test.TestType.wrong)
+                tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()?.let { test ->
+                    setMainFragment(test, Test.TestType.wrong)
+                }
                 LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트")
             }
         }
@@ -307,7 +308,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 if(test?.wrongInfo?.isNeedMoreProblem() == true)
                     addMainFragment(TestMainWrongXFragment.newInstance(test))
                 else
-                    addMainFragment(TestMainWrongFragment.newInstance(test!!))
+                    addMainFragment(TestMainWrongFragment.newInstance(test))
             }
         }
     }

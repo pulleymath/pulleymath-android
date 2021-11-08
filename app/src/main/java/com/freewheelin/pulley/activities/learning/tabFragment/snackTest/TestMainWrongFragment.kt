@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_test_main_wrong.*
 
 class TestMainWrongFragment : TestMainBaseFragment() {
     companion object {
-        fun newInstance(test: Test): TestMainWrongFragment {
+        fun newInstance(test: Test?): TestMainWrongFragment {
             val fragment = TestMainWrongFragment()
             val args = Bundle()
             args.putSerializable(TestManager.ARG_TEST, test)
@@ -35,9 +35,11 @@ class TestMainWrongFragment : TestMainBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureUI(test!!)
-        startBtn.setPermissionClickListener { listener?.onSolveBtnClicked(test!!) }
-        reportTv.setOnClickListener { listener?.onReportBtnClicked(test!!) }
+        test?.let { test ->
+            configureUI(test)
+            startBtn.setPermissionClickListener { listener?.onSolveBtnClicked(test) }
+            reportTv.setOnClickListener { listener?.onReportBtnClicked(test) }
+        }
     }
 
     override fun configureUI(test: Test) {

@@ -134,8 +134,13 @@ class OMRView: RecyclerView {
 
         if (length == 0 || length == 1)
             selectedAnswer.answer = null
-        else
-            selectedAnswer.answer = shortAnswerHolder.answerEt.text.toString().toInt()
+        else {
+            try {
+                selectedAnswer.answer = shortAnswerHolder.answerEt.text.toString().toInt()
+            } catch(e:Exception) {
+                selectedAnswer.answer = null
+            }
+        }
     }
 
     private fun getSelectedHolder(): OMRShortAnswer? {

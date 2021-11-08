@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.bases
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -11,10 +12,12 @@ import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.freewheelin.pulley.R
 //import com.facebook.drawee.backends.pipeline.Fresco
 //import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
@@ -147,8 +150,7 @@ val Context.is10InchUI: Boolean
 
 val Context.isTablet: Boolean
     get() {
-        val config = resources.configuration
-        return (config.smallestScreenWidthDp >= 600)
+        return resources.getBoolean(R.bool.isTablet)
     }
 
 val Context.underMinHeight:Boolean

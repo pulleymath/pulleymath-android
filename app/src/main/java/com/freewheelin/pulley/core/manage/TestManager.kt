@@ -13,6 +13,7 @@ import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
 import com.freewheelin.pulley.views.DaebakToast
@@ -54,7 +55,8 @@ object TestManager {
 
         API_V2.getDailyTest(user!!.studentID).enqueue(object: Callback<Template<Test>>{
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
-                onFailure(call, t)
+                // 데이터를 가져올 수 없습니다.
+                responseFailed(context, t)
             }
 
             override fun onResponse(call: Call<Template<Test>>, response: Response<Template<Test>>) {

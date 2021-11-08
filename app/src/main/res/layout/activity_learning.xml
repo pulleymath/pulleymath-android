@@ -125,7 +125,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/dp16"
                 android:background="@drawable/bg_grey_9f9f9f_round"
                 android:maxLines="1"
                 android:paddingStart="@dimen/dp16"
