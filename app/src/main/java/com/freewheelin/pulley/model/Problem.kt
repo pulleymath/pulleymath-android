@@ -330,13 +330,17 @@ open class Problem: Serializable {
 
     fun mark() {
         // 멀티선택 아닐경우
-        if(userAnswer?.contains(",") == false)
-            userAnswer = userAnswer?.let { it.toInt().toString() } // 앞에 0 있을 때 처리만
+        try {
+            if (userAnswer?.contains(",") == false)
+                userAnswer = userAnswer?.let { it.toInt().toString() } // 앞에 0 있을 때 처리만
 
-        rawResult = if ( userAnswer == answerData)
-            Result.correct.rawValue
-        else
-            Result.incorrect.rawValue
+            rawResult = if (userAnswer == answerData)
+                Result.correct.rawValue
+            else
+                Result.incorrect.rawValue
+        } catch (e:Exception) {
+            /* 오타처리 */
+        }
     }
 
 

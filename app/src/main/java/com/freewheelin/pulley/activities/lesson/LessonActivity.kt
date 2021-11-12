@@ -2,6 +2,7 @@ package com.freewheelin.pulley.activities.lesson
 
 import android.app.Activity
 import android.content.Intent
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -54,11 +55,17 @@ class LessonActivity : BaseActivity() {
             _filePathCallback = null
         }
 
+    lateinit var audioManager: AudioManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson)
 
         setWebView()
+
+        // Declare an audio manager
+        volumeControlStream = AudioManager.STREAM_MUSIC
+        audioManager = applicationContext.getSystemService(AUDIO_SERVICE) as AudioManager
     }
 
     private fun setWebView() {
@@ -121,20 +128,23 @@ class LessonActivity : BaseActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
 
-        Log.d(javaClass.simpleName,"host check =========> ${webView.url}")
+        Log.d(javaClass.simpleName, "host check =========> ${webView.url}")
 
-        return if (keyCode == KeyEvent.KEYCODE_BACK && webView.url?.startsWith(lessonPath) == true) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            return super.onKeyDown(keyCode, event)
+//            audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND)
+//        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+//            audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND)
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && webView.url?.startsWith(lessonPath) == true) {
             finish()
-            true
         } else if (keyCode == KeyEvent.KEYCODE_BACK && webView.url?.contains("pagecall.net") == true){
             webView.loadUrl(lessonLink)
-            true
         } else if (keyCode == KeyEvent.KEYCODE_BACK)  {
             webView.goBack()
-            true
-        } else true
+        }
 
-        return super.onKeyDown(keyCode, event)
+        return true
+//        return super.onKeyDown(keyCode, event)
     }
 
     inner class LessonClient : WebViewClient() {

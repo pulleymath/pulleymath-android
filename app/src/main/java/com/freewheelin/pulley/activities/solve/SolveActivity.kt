@@ -53,6 +53,7 @@ import kotlinx.android.synthetic.main.activity_solve.container
 import kotlinx.android.synthetic.main.activity_solve.spyBtn
 import kotlinx.android.synthetic.main.activity_solve.titleTv
 import kotlinx.android.synthetic.main.dialog_daebak.*
+import kotlinx.android.synthetic.main.dialog_mock_exam_guide.*
 import kotlinx.android.synthetic.main.view_answer.view.*
 import kotlinx.android.synthetic.main.view_answer.view.markingBtn
 import kotlinx.android.synthetic.main.view_answer.view.submitBtn
@@ -851,7 +852,7 @@ class SolveActivity : BaseActivity(),
 //        return super.onKeyDown(keyCode, event)
 //    }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         Log.d("키보드", "솔브액티비티 event=$event")
 
         if( event?.keyCode == KeyEvent.KEYCODE_DPAD_LEFT
@@ -863,18 +864,20 @@ class SolveActivity : BaseActivity(),
                 || event?.keyCode == KeyEvent.KEYCODE_DPAD_UP
                 || event?.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             when (event?.keyCode) {
+
                 KeyEvent.KEYCODE_1 -> inputNumber(1)
                 KeyEvent.KEYCODE_2 -> inputNumber(2)
                 KeyEvent.KEYCODE_3 -> inputNumber(3)
                 KeyEvent.KEYCODE_4 -> inputNumber(4)
                 KeyEvent.KEYCODE_5 -> inputNumber(5)
+
                 KeyEvent.KEYCODE_DPAD_LEFT -> if (speedAnswerView.visibility != View.VISIBLE) prev()
                 KeyEvent.KEYCODE_DPAD_RIGHT -> if (speedAnswerView.visibility != View.VISIBLE) next()
                 KeyEvent.KEYCODE_ENTER -> if (speedAnswerView.visibility != View.VISIBLE) onEnter()
                 KeyEvent.KEYCODE_DEL -> if (speedAnswerView.visibility != View.VISIBLE) inputBack()
-                KeyEvent.KEYCODE_TAB -> speedAnswerViewNext()
-                KeyEvent.KEYCODE_DPAD_DOWN -> speedAnswerViewNext()
-                KeyEvent.KEYCODE_DPAD_UP -> speedAnswerViewPrev()
+                KeyEvent.KEYCODE_TAB -> next()
+                KeyEvent.KEYCODE_DPAD_DOWN -> next()
+                KeyEvent.KEYCODE_DPAD_UP -> prev()
             }
             return true
         }
@@ -885,22 +888,15 @@ class SolveActivity : BaseActivity(),
         if (speedAnswerView.visibility == View.VISIBLE) {
             val problems = content?.problems ?: return
             val index = problems.indexOf(selectedProblem)
-
-            if (index < problems.size - 1) {
-                speedAnswerView.changedFocus(focusIndex = index + 1, prevIndex = index)
-            } else {
-                DaebakToast.show(this, "마지막 문제입니다 :)")
-            }
+            speedAnswerView.changedFocus(focusIndex = index, prevIndex = index-1)
         }
     }
 
     private fun speedAnswerViewPrev() {
         if (speedAnswerView.visibility == View.VISIBLE) {
             val problems = content?.problems ?: return
-            if (selectedProblem == problems.firstOrNull()) return
-
             val index = problems.indexOf(selectedProblem)
-            speedAnswerView.changedFocus(focusIndex = index - 1, prevIndex = index)
+            speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
         }
     }
 
@@ -925,7 +921,9 @@ class SolveActivity : BaseActivity(),
             galleryView.select(problem)
 
         galleryView.clearFocus()
-        speedAnswerView.clearFocus()
+        if(speedAnswerView.visibility != View.VISIBLE) {
+            speedAnswerView.clearFocus()
+        }
 
         if(view == answerView) {
             speedAnswerView.update(problem)
@@ -956,8 +954,8 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onEnter() {
-        Log.d("키보드", "enter scoring=${selectedProblem?.getResultByScoring()}, type=${selectedProblem?.problemType}")
-        Log.d("키보드", "submit=${answerView.isShowSubmit}")
+//        Log.d("키보드", "enter scoring=${selectedProblem?.getResultByScoring()}, type=${selectedProblem?.problemType}")
+//        Log.d("키보드", "submit=${answerView.isShowSubmit}")
 
         if(selectedProblem?.getResultByScoring() == Result.yet) { // 아직 채점하지 않았을 때만
             answerView.releasePad()
@@ -973,11 +971,15 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun next() {
-        if(galleryCloser.visibility != View.VISIBLE) onNextBtnClicked() // 갤러리가 닫혀 있을 때만
+        if(galleryCloser.visibility != View.VISIBLE) {
+            onNextBtnClicked()
+        } // 갤러리가 닫혀 있을 때만
     }
 
     override fun prev() {
-        if(galleryCloser.visibility != View.VISIBLE) onPrevBtnClicked() // 갤러리가 닫혀 있을 때만
+        if(galleryCloser.visibility != View.VISIBLE) {
+            onPrevBtnClicked()
+        } // 갤러리가 닫혀 있을 때만
     }
 
     override fun onFoldBtnClicked() {
@@ -1013,7 +1015,7 @@ class SolveActivity : BaseActivity(),
             answerView?.configureUI(selected, true)
 
             if (speedyScoreSwitch.isChecked) {
-                speedAnswerView.scrollTo(selected)
+                speedAnswerView.scrollTo(selected, "onFoldBtnClicked()")
             }
         }
     }
@@ -1076,8 +1078,19 @@ class SolveActivity : BaseActivity(),
     fun onAppBackground() {
         AppUsageMonitor.finishStudy(this)
     }
+    // 키보드로 입력시 주관식 정답 저장 안되는 현상
+    private fun checkShortAnswer() {
+        if(selectedProblem?.problemType == ProblemType.short) {
+            val textValue = answerView.getShortAnswerText()
+            if(textValue?.length > 0 && selectedProblem?.userAnswer?.length ?:0 < 1) {
+                selectedProblem?.userAnswer = textValue
+            }
+        }
+    }
 
     private fun prevAnim() {
+        checkShortAnswer()
+
         problemContainer.setOnTouchListener(null)
         solutionContainer.setOnTouchListener(null)
         val anim = ValueAnimator.ofFloat(0f, 1f)
@@ -1098,7 +1111,8 @@ class SolveActivity : BaseActivity(),
                 anim.addUpdateListener {
                     var value = it.animatedValue as Float
                     value = value.pow(2)
-                    container.x = -problemContainer.width.toFloat() + problemContainer.measuredWidth.toFloat() * value
+                    container.x =
+                        -problemContainer.width.toFloat() + problemContainer.measuredWidth.toFloat() * value
                     container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
@@ -1116,6 +1130,14 @@ class SolveActivity : BaseActivity(),
                     override fun onAnimationStart(p0: Animator?) {
                     }
                 })
+                if (speedAnswerView.visibility == View.VISIBLE) {
+                    val problems = content?.problems ?: return
+                    val index = problems.indexOf(selectedProblem)
+
+                    if (index > 0) {
+                        speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
+                    }
+                }
                 galleryView.prev()
                 anim.start()
             }
@@ -1130,6 +1152,9 @@ class SolveActivity : BaseActivity(),
     }
 
     private fun nextAnim() {
+        // shortAnswer 체크 후 editField에 값이 있는데, answer 에 값이 없을 경우 입력
+        checkShortAnswer()
+
         problemContainer.setOnTouchListener(null)
         solutionContainer.setOnTouchListener(null)
         val anim = ValueAnimator.ofFloat(0f, 1f)
@@ -1141,9 +1166,7 @@ class SolveActivity : BaseActivity(),
             container.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-
+            override fun onAnimationRepeat(p0: Animator?) {}
             override fun onAnimationEnd(p0: Animator?) {
                 val anim = ValueAnimator.ofFloat(0f, 1f)
                 anim.duration = 100
@@ -1154,30 +1177,20 @@ class SolveActivity : BaseActivity(),
                     container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {
-                    }
-
+                    override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationEnd(p0: Animator?) {
                         problemContainer.setOnTouchListener(problemGesture)
                         solutionContainer.setOnTouchListener(solutionGesture)
                     }
-
-                    override fun onAnimationCancel(p0: Animator?) {
-                    }
-
-                    override fun onAnimationStart(p0: Animator?) {
-                    }
-
+                    override fun onAnimationCancel(p0: Animator?) {}
+                    override fun onAnimationStart(p0: Animator?) {}
                 })
                 anim.start()
                 galleryView.next()
+                speedAnswerViewNext()
             }
-
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-
-            override fun onAnimationStart(p0: Animator?) {
-            }
+            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator?) {}
         })
         anim.start()
     }
@@ -1193,23 +1206,15 @@ class SolveActivity : BaseActivity(),
             val value = it.animatedValue as Int
             rootView.scrollTo(value, 0)
         }
-
         animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {
-
-            }
-
+            override fun onAnimationRepeat(p0: Animator?) {}
             override fun onAnimationEnd(p0: Animator?) {
                 galleryCloser.visibility = View.VISIBLE
             }
-
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-
-            override fun onAnimationStart(p0: Animator?) {
-
-            }
+            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator?) {}
         })
+        speedAnswerViewPrev()
         animator.duration = 150
         animator.start()
 
@@ -1277,7 +1282,7 @@ class SolveActivity : BaseActivity(),
             CoroutineScope(Dispatchers.Default).launch {
                 delay(100)
                 withContext(Dispatchers.Main) {
-                    speedAnswerView.scrollTo(selectedProblem)
+                    speedAnswerView.scrollTo(selectedProblem,"onSpeedyScoringCheckChanged")
                 }
             }
 
@@ -1391,7 +1396,7 @@ class SolveActivity : BaseActivity(),
         selectedProblem = problem
         onSetProblem()
         if(problem != null) {
-            speedAnswerView.scrollTo(problem)
+            speedAnswerView.scrollTo(problem, "onProblemSelected")
             galleryView.scrollTo(problem)
             if(selectedProblem?.getResultByScoring() == Result.yet && selectedProblem?.problemType == ProblemType.short && !speedyScoreSwitch.isChecked && !solutionSwitch.isChecked) { // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
                 Log.d("포커스", "autoFocus=$autoFocus, keyPad=${answerView.keyPad}, isShow=${answerView.keyPad?.isShowing}")

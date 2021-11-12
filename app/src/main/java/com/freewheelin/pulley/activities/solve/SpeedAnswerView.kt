@@ -24,6 +24,7 @@ import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
+import kotlinx.android.synthetic.main.activity_solve.*
 import kotlinx.android.synthetic.main.item_problem_gallery.view.numberTv
 import kotlinx.android.synthetic.main.item_problem_gallery.view.resultIv
 import kotlinx.android.synthetic.main.item_speedy_scoring.view.*
@@ -142,12 +143,15 @@ class SpeedAnswerView: ConstraintLayout {
         submitBtn.visibility = View.VISIBLE
     }
 
-    fun scrollTo(problem: Problem?) {
+    fun scrollTo(problem: Problem?, from:String) {
         val index = getProblems().indexOf(problem)
 
-        if(index >= 0)
+        Log.d(javaClass.simpleName, "scrollTo(from:$from) ===> index = $index")
+
+        if(index > 0)
             recyclerView.scrollToPosition(index)
-//            recyclerView.smoothScrollToPosition(index)
+        else
+            recyclerView.scrollToPosition(0)
     }
 
     fun changedFocus(focusIndex: Int, prevIndex: Int) {
@@ -237,6 +241,25 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
             if (ignoreFocus) ignoreFocus = false
         }
 
+        shortAnswerView.setOnKeyListener { view, i, keyEvent ->
+            Log.d(javaClass.simpleName, "speed key =====> $keyEvent")
+            if (keyEvent?.action == KeyEvent.ACTION_UP) {
+                when (keyEvent?.keyCode) {
+                    KeyEvent.KEYCODE_DPAD_LEFT -> prev()
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> next()
+                    KeyEvent.KEYCODE_DEL -> del()
+                    KeyEvent.KEYCODE_TAB -> next()
+                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
+                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
+                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
+                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
+                    KeyEvent.KEYCODE_DPAD_DOWN -> next()
+                    KeyEvent.KEYCODE_DPAD_UP -> prev()
+                }
+            }
+            true
+        }
+
         shortAnswerView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             // holder 세팅시에 호출됨 일단 호출되는 메서드 막기
@@ -246,7 +269,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
                     if (p0?.toString() == problem.userAnswer) return
                     if (p0?.toString() == "-") return
 //                    delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString(), problem)
-                    ignoreFocus = true
+//                    ignoreFocus = true
 //                    shortAnswerView.requestFocus()
                 }
             }
@@ -254,6 +277,27 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
         })
 
         selectionAnswerView.listener = this
+    }
+
+    fun enterNumberBtnClicked() {
+        delegate?.onAnswerChanged(view, shortAnswerView.text.toString())
+    }
+
+    fun next() {
+        delegate?.next()
+    }
+
+    fun prev() {
+        delegate?.prev()
+    }
+
+    fun del() {
+        val answer = shortAnswerView.text.toString()
+        if(answer.isNotEmpty()) {
+            val deleted = answer.substring(0, answer.length - 1)
+            shortAnswerView.setText(deleted)
+            shortAnswerView.setSelection(deleted.length)
+        }
     }
 
     fun set(problem: Problem, isShowAnswer: Boolean) {

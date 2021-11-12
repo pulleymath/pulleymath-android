@@ -151,5 +151,7 @@
     <dimen name="dialog_test_report_top_margin">0dp</dimen>
     <dimen name="dialog_test_report_bottom_margin">0dp</dimen>
 
+    <dimen name="dialog_mock_exam_width">530dp</dimen>
+
     <dimen name="speed_answer_number_dp56">48dp</dimen>
 </resources>

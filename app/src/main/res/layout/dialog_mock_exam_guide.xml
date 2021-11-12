@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="500dp"
+        android:layout_width="@dimen/dialog_mock_exam_width"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_white_fafafa_round">
@@ -52,7 +52,7 @@
 <!--        app:layout_constraintHeight_default="wrap"-->
         <ScrollView
             android:id="@+id/scrollView"
-            android:layout_width="500dp"
+            android:layout_width="@dimen/dialog_mock_exam_width"
             android:layout_height="wrap_content"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomContainer"

@@ -52,30 +52,33 @@ class AnswerView : ConstraintLayout,
         background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_32)
 
         shortAnswerView.removeKeyboard()
-        shortAnswerView.setTextSize(
-                resources.getDimension(R.dimen.sp24),
-                resources.getDimension(R.dimen.sp14)
-        )
+        shortAnswerView.setTextSize( resources.getDimension(R.dimen.sp24), resources.getDimension(R.dimen.sp14))
 
         shortAnswerView.setOnKeyListener { v, keyCode, event ->
 
-            if (event?.action == KeyEvent.ACTION_DOWN) {
+            Log.d(javaClass.simpleName, "AnswerView -> $event")
+
+            if (event?.action == KeyEvent.ACTION_UP) {
                 when (event.keyCode) {
                     KeyEvent.KEYCODE_ENTER -> {
                         if (shortAnswerView?.text?.isNotBlank() == true) delegate?.onEnter()
                     }
                     KeyEvent.KEYCODE_DEL -> deleteBtnClicked()
                     KeyEvent.KEYCODE_MINUS -> enterMinusBtnClicked()
-                    KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
-                    KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
-                    KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
-                    KeyEvent.KEYCODE_3 -> enterNumberBtnClicked("3")
-                    KeyEvent.KEYCODE_4 -> enterNumberBtnClicked("4")
-                    KeyEvent.KEYCODE_5 -> enterNumberBtnClicked("5")
-                    KeyEvent.KEYCODE_6 -> enterNumberBtnClicked("6")
-                    KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
-                    KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
-                    KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
+//                    KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
+//                    KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
+//                    KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
+//                    KeyEvent.KEYCODE_3 -> enterNumberBtnClicked("3")
+//                    KeyEvent.KEYCODE_4 -> enterNumberBtnClicked("4")
+//                    KeyEvent.KEYCODE_5 -> enterNumberBtnClicked("5")
+//                    KeyEvent.KEYCODE_6 -> enterNumberBtnClicked("6")
+//                    KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
+//                    KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
+//                    KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
+                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
+                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
+                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
+                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
                     KeyEvent.KEYCODE_DPAD_LEFT -> {
                         delegate?.prev()
                     }
@@ -89,8 +92,6 @@ class AnswerView : ConstraintLayout,
             }
             true
         }
-
-
 
         shortAnswerView.setOnFocusChangeListener { view, isFocused ->
             if (isFocused) {
@@ -213,6 +214,10 @@ class AnswerView : ConstraintLayout,
         }
     }
 
+    fun getShortAnswerText() : String {
+        return shortAnswerView?.text.toString() ?: ""
+    }
+
     fun disableMarking() {
         answeredCntTv.visibility = View.GONE
         markingBtn.isEnabled = false
@@ -271,6 +276,10 @@ class AnswerView : ConstraintLayout,
         shortAnswerView.setText(answerText)
         Log.d("키보드", "answerText=${answerText}")
         delegate?.onAnswerChanged(this, answerText)
+    }
+
+    fun enterNumberBtnClicked() {
+        delegate?.onAnswerChanged(this, shortAnswerView.text.toString())
     }
 
     fun enterNumberBtnClicked(text: String) {
