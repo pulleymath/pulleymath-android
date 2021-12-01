@@ -45,11 +45,11 @@ class LessonActivity : BaseActivity() {
                         results = arrayOf(Uri.parse(dataString))
                     }
                 }
-                _filePathCallback!!.onReceiveValue(results)
+                _filePathCallback?.onReceiveValue(results)
             } else {
                 // 에러 또는 선택된 파일이 없더라도 반드시 초기화 해주어야 한다.
                 // 그렇지 않으면 다시 파일 선택자가 열리지 않는다.
-                _filePathCallback!!.onReceiveValue(null)
+                _filePathCallback?.onReceiveValue(null)
             }
 
             _filePathCallback = null
@@ -92,7 +92,7 @@ class LessonActivity : BaseActivity() {
                     // 파일 업로드를 위한 설정
                     override fun onShowFileChooser(
                         webView: WebView?,
-                        filePathCallback: ValueCallback<Array<Uri>>?,
+                        filePathCallback: ValueCallback<Array<Uri>>?, // 여기 null 넘어오는 케이스 있음
                         fileChooserParams: FileChooserParams?
                     ): Boolean {
                         if (_filePathCallback != null) {

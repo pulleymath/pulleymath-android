@@ -18,10 +18,7 @@ import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.GlideApp
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_note_detail.*
 import kotlinx.coroutines.*
@@ -166,7 +163,8 @@ class NoteDetailDialog: Dialog {
 
                 if(historyList.isEmpty()) {
                     historyTv.visibility = View.GONE
-                    LogUtils.assert(false, "NoteDetail no history ${user.studentID}, ${problem.id}")
+//                    LogUtils.assert(false, "NoteDetail no history ${user.studentID}, ${problem.id}")
+                    LogUtils.errorEvent(PulleyEvent.ERROR, user, "NoteDetail no history ${user.studentID}")
                 } else {
                     historyTv.visibility = View.VISIBLE
                     historyTv.text = historyList.let {

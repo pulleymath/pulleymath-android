@@ -12,6 +12,7 @@ import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
@@ -65,20 +66,20 @@ class AnswerView : ConstraintLayout,
                     }
                     KeyEvent.KEYCODE_DEL -> deleteBtnClicked()
                     KeyEvent.KEYCODE_MINUS -> enterMinusBtnClicked()
-//                    KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
-//                    KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
-//                    KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
-//                    KeyEvent.KEYCODE_3 -> enterNumberBtnClicked("3")
-//                    KeyEvent.KEYCODE_4 -> enterNumberBtnClicked("4")
-//                    KeyEvent.KEYCODE_5 -> enterNumberBtnClicked("5")
-//                    KeyEvent.KEYCODE_6 -> enterNumberBtnClicked("6")
-//                    KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
-//                    KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
-//                    KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
-                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
-                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
-                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
-                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
+                    KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
+                    KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
+                    KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
+                    KeyEvent.KEYCODE_3 -> enterNumberBtnClicked("3")
+                    KeyEvent.KEYCODE_4 -> enterNumberBtnClicked("4")
+                    KeyEvent.KEYCODE_5 -> enterNumberBtnClicked("5")
+                    KeyEvent.KEYCODE_6 -> enterNumberBtnClicked("6")
+                    KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
+                    KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
+                    KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
+//                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
+//                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
+//                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
+//                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
                     KeyEvent.KEYCODE_DPAD_LEFT -> {
                         delegate?.prev()
                     }
@@ -103,10 +104,10 @@ class AnswerView : ConstraintLayout,
                         }
                     })
 
-                val height = minOf(
-                        ((DisplayUtils.getScrenHeight(context) - this.height) * 0.5f).toInt() - 32.toPx(),
-                        resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height)
-                )
+                val height = if(context.isTablet) minOf(
+                                ((DisplayUtils.getScrenHeight(context) - this.height) * 0.5f).toInt() - 32.toPx(),
+                                resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height))
+                            else ((DisplayUtils.getScrenHeight(context) - this.height) * 0.8f).toInt() - 32.toPx()
                 val width = height * 232 / 296
 
                 val position = getTargetAbsolutePosition(false)

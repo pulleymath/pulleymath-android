@@ -344,7 +344,7 @@ open class PdfViewerActivity : Activity() {
 
     fun loadMemo(savedInstanceState: Bundle?) {
         thread(start=true) {
-            val latest = db.pdfWritingDao().getLatestTimestamp(studentId)
+            val latest:Long? = if(db.pdfWritingDao().countPdf(studentId, pdfId) < 1) null else db.pdfWritingDao().getLatestTimestamp(studentId)
             Log.d(javaClass.simpleName, "latest timestamp=$latest")
             Network.downloadMemo(studentId, pdfId, null, latest, { response ->
                 thread(start=true) {
@@ -861,11 +861,11 @@ open class PdfViewerActivity : Activity() {
     }
 
     private fun uploadMemos() {
-        if(memos.isNotEmpty()) {
-            Network.uploadMemo(memos.values.toList()) {
-                memos.clear()
-            }
-        }
+//        if(memos.isNotEmpty()) {
+//            Network.uploadMemo(memos.values.toList()) {
+//                memos.clear()
+//            }
+//        }
     }
 
     companion object {

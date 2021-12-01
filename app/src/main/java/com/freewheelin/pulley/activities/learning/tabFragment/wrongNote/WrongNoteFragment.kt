@@ -388,19 +388,25 @@ class WrongNoteFragment : LearningTabFragment(),
     private fun setGroupedProblem(tabPosition: Int, withSelectedClear: Boolean = true) {
         var problems = filterProblems((if (tabPosition == 0) wrongProblems else scrapProblems) ?: listOf(), tabPosition)
 
+
+
         problems = when(selectedOrder) {
-            OrderType.recent -> problems.sortedByDescending { it.updateDateTime }
-            OrderType.old -> problems.sortedBy { it.updateDateTime }
+            OrderType.recent -> problems.sortedByDescending { if(tabPosition == 0) it.updateDateTime else it.scrapDateTime }
+            OrderType.old -> problems.sortedBy { if(tabPosition == 0) it.updateDateTime else it.scrapDateTime }
             OrderType.level -> problems.sortedBy { it.problemLevel }
             OrderType.subject -> problems.sortedBy { it.unitCode }
         }
 
         val mapper = LinkedHashMap<String, MutableList<Problem>>()
+
         for (problem in problems) {
-            var headerStr = DateTimeUtils.yyyyMMddFormat.format(problem.updateDateTime ?: Date())
+            var targetTime = if(tabPosition == 0 ) problem.updateDateTime ?: Date() else problem.scrapDateTime ?: Date()
+
+            var headerStr = DateTimeUtils.yyyyMMddFormat.format(targetTime)
+
             when(selectedOrder) {
-                OrderType.recent -> headerStr = DateTimeUtils.yyyyMMddFormat.format(problem.updateDateTime)
-                OrderType.old -> headerStr = DateTimeUtils.yyyyMMddFormat.format(problem.updateDateTime)
+                OrderType.recent -> headerStr = DateTimeUtils.yyyyMMddFormat.format(targetTime)
+                OrderType.old -> headerStr = DateTimeUtils.yyyyMMddFormat.format(targetTime)
                 OrderType.level -> headerStr = problem.getProblemLevel()
                 OrderType.subject -> headerStr = problem.getSubject().filterText
             }
@@ -434,6 +440,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
                 clearCondition
             }
+            //스크랩 필터는 초기화
             scrapNoteFilterFragment.setFiltersStatus(filters)
         } else {
             filteredProblem = filteredProblem.filter { LocalDate(it.scrapDateTime) in from..to }

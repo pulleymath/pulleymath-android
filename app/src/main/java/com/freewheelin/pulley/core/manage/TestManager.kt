@@ -79,7 +79,7 @@ object TestManager {
 
         API_V1.getTest(param).enqueue(object: Callback<Template<Test>>{
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
-                onFailure(call, t)
+                responseFailed(context, t)
             }
 
             override fun onResponse(call: Call<Template<Test>>, response: Response<Template<Test>>) {

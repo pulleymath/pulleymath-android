@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.is10InchUI
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemErrorStatus
 import com.freewheelin.pulley.model.ProblemType
@@ -222,10 +223,13 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
             if(isFocused && ignoreFocus.not()) {
                 speedAnswerDelegate?.onSpeedNumberClicked(problem)
                 if (keypadWindow.isShowing.not()) {
-                    val height = minOf(
-                            ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx(),
-                            context.resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height)
-                    )
+//                    val height = minOf(
+//                            ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx(),
+//                            context.resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height)
+//                    )
+
+                    val height = if(context.isTablet) ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx()
+                                else ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.8f).toInt() - 32.toPx()
 
                     val width = height * 232 / 296
                     var x = this.view.getTargetAbsolutePosition().first.toInt()
@@ -249,10 +253,20 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
                     KeyEvent.KEYCODE_DPAD_RIGHT -> next()
                     KeyEvent.KEYCODE_DEL -> del()
                     KeyEvent.KEYCODE_TAB -> next()
-                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
-                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
-                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
-                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
+                    KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
+                    KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
+                    KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
+                    KeyEvent.KEYCODE_3 -> enterNumberBtnClicked("3")
+                    KeyEvent.KEYCODE_4 -> enterNumberBtnClicked("4")
+                    KeyEvent.KEYCODE_5 -> enterNumberBtnClicked("5")
+                    KeyEvent.KEYCODE_6 -> enterNumberBtnClicked("6")
+                    KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
+                    KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
+                    KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
+//                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
+//                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
+//                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
+//                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
                     KeyEvent.KEYCODE_DPAD_DOWN -> next()
                     KeyEvent.KEYCODE_DPAD_UP -> prev()
                 }
@@ -298,6 +312,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
             shortAnswerView.setText(deleted)
             shortAnswerView.setSelection(deleted.length)
         }
+        delegate?.onAnswerChanged(view, shortAnswerView.text.toString())
     }
 
     fun set(problem: Problem, isShowAnswer: Boolean) {
@@ -426,7 +441,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
             shortAnswerView.append(text)
         else
             shortAnswerView.text.insert(shortAnswerView.selectionStart, text)
-
+        delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString())
     }
 
     override fun onNumberBtnClicked(button: Button, text: String) {
@@ -440,7 +455,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
                     shortAnswerView.selectionStart - 1,
                     shortAnswerView.selectionStart
             )
-
+        delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString())
     }
 
 //    fun deleteBtnClicked() {
@@ -465,6 +480,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
                 shortAnswerView.text.delete(length - 1, length)
             shortAnswerView.text.insert(0, "-")
         }
+        delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString())
     }
 
     override fun onPlusMinusBtnClicked(button: ImageButton) {

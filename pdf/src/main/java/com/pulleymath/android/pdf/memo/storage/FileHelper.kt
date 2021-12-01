@@ -38,7 +38,7 @@ object FileHelper {
             )
 
             db.pdfWritingDao().delete(memo)
-//            Network.uploadMemo(listOf(memo))
+            Network.uploadMemo(listOf(memo))
             PdfViewerActivity.memos.set(memo.id, memo)
         }
     }
@@ -64,7 +64,7 @@ object FileHelper {
                         updated_at = updatedAt
                     )
                     db.pdfWritingDao().upsert(listOf(memo))
-//                Network.uploadMemo(listOf(memo))
+                    Network.uploadMemo(listOf(memo))
                     PdfViewerActivity.memos.set(memo.id, memo)
                 } catch (e:Exception) {
                     e.printStackTrace()

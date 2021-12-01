@@ -32,9 +32,6 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".activities.lesson.LessonActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisActivity"
             android:exported="true" />
         <activity
@@ -204,6 +201,12 @@
         <activity
             android:name=".revision2021.activity.PdfListActivity"
             android:exported="true"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".activities.lesson.LessonActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
     </application>
 

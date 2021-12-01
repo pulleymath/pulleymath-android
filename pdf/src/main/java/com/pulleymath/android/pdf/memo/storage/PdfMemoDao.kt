@@ -10,6 +10,9 @@ interface PdfMemoDao {
     @Query("select * from pdf_memo where id=:memoId limit 1")
     fun get(memoId:String): PdfMemo?
 
+    @Query("select count(*) from pdf_memo where student_id=:studentId and pdf_id=:pdfId")
+    fun countPdf(studentId:String, pdfId:Int): Int
+
     @Query("select max(updated_at) from pdf_memo where student_id=:studentId")
     fun getLatestTimestamp(studentId:String): Long?
 

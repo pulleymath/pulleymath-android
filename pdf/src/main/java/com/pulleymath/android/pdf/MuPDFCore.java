@@ -150,23 +150,26 @@ public class MuPDFCore
 			Cookie cookie) {
 		try {
 			gotoPage(pageNum);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if (displayList == null)
 			displayList = page.toDisplayList();
 
-		float zoom = resolution / 72;
-		Matrix ctm = new Matrix(zoom, zoom);
-		RectI bbox = new RectI(page.getBounds().transform(ctm));
-		float xscale = (float)pageW / (float)(bbox.x1-bbox.x0);
-		float yscale = (float)pageH / (float)(bbox.y1-bbox.y0);
-		ctm.scale(xscale, yscale);
+		if (displayList != null) {
+			float zoom = resolution / 72;
+			Matrix ctm = new Matrix(zoom, zoom);
+			RectI bbox = new RectI(page.getBounds().transform(ctm));
+			float xscale = (float) pageW / (float) (bbox.x1 - bbox.x0);
+			float yscale = (float) pageH / (float) (bbox.y1 - bbox.y0);
+			ctm.scale(xscale, yscale);
 
-		AndroidDrawDevice dev = new AndroidDrawDevice(bm, patchX, patchY);
-		displayList.run(dev, ctm, cookie);
-		dev.close();
-		dev.destroy();
+			AndroidDrawDevice dev = new AndroidDrawDevice(bm, patchX, patchY);
+			displayList.run(dev, ctm, cookie);
+
+			dev.close();
+			dev.destroy();
+		}
 	}
 
 	public synchronized void updatePage(Bitmap bm, int pageNum,
@@ -183,7 +186,7 @@ public class MuPDFCore
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return page.getLinks();
+		return page != null ? page.getLinks() : new Link[]{};
 	}
 
 	public synchronized int resolveLink(Link link) {
@@ -196,7 +199,8 @@ public class MuPDFCore
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return page.search(text);
+
+		return page != null ? page.search(text) : new Quad[]{};
 	}
 
 	public synchronized boolean hasOutline() {

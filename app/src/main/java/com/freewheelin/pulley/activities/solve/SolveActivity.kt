@@ -876,8 +876,8 @@ class SolveActivity : BaseActivity(),
                 KeyEvent.KEYCODE_ENTER -> if (speedAnswerView.visibility != View.VISIBLE) onEnter()
                 KeyEvent.KEYCODE_DEL -> if (speedAnswerView.visibility != View.VISIBLE) inputBack()
                 KeyEvent.KEYCODE_TAB -> next()
-                KeyEvent.KEYCODE_DPAD_DOWN -> next()
-                KeyEvent.KEYCODE_DPAD_UP -> prev()
+//                KeyEvent.KEYCODE_DPAD_DOWN -> next()
+//                KeyEvent.KEYCODE_DPAD_UP -> prev()
             }
             return true
         }
@@ -1248,17 +1248,19 @@ class SolveActivity : BaseActivity(),
     }
 
     fun onSirenBtnClicked() {
-        val dialog = ProblemReportDialog(this, selectedProblem!!)
-        dialog.listener = object: ProblemReportDialogListener {
-            override fun onReportCompleted(problem: Problem) {
-                problem.problemErrorStatus = ProblemErrorStatus.REPORT
-                onProblemSelected(selectedProblem)
-                galleryView.update(problem)
-                speedAnswerView.updateAll()
+        if(selectedProblem != null) {
+            val dialog = ProblemReportDialog(this, selectedProblem!!)
+            dialog.listener = object : ProblemReportDialogListener {
+                override fun onReportCompleted(problem: Problem) {
+                    problem.problemErrorStatus = ProblemErrorStatus.REPORT
+                    onProblemSelected(selectedProblem)
+                    galleryView.update(problem)
+                    speedAnswerView.updateAll()
+                }
             }
-        }
 
-        dialog.show()
+            dialog.show()
+        }
     }
 
     fun onShowSolutionCheckChanged(isChecked: Boolean) {

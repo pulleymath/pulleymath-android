@@ -386,7 +386,18 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
                     timerView.runTimer()
                 },
                 onSubmitClicked = {
+                    val answerList = omrViewLeft.getAnswers().plus(omrViewRight.getAnswers())
+
+                    for (i in answerList.indices) {
+                        val answer = answerList[i]
+                        if(answer != null)
+                            problems[i].userAnswer = answer.toString()
+                        else
+                            problems[i].userAnswer = null
+                    }
+
                     val time = timerView.elapsedTime
+
                     ContentManager.score(this, user!!, mockExam, problems.toSet(), time) {
                         val intent = MockReportActivity.getIntent(this, mockExam, it)
                         startActivity(intent)

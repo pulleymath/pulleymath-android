@@ -68,7 +68,7 @@ class MainProfile {
         if(user.grade == Grade.BeforeHigh) {
             return "더 나은 나를 위한 도전!\n하루 ${goalProblemCount}문제 꼬박꼬박"
         } else {
-            val ratingText = if (rating == 1) "1등급" else "${rating - 1}등급"
+            val ratingText = if (rating <= 1) "1등급" else "${rating - 1}등급"
             return "${ratingText}을 위하여\n하루 ${goalProblemCount}문제 꼬박꼬박"
         }
     }

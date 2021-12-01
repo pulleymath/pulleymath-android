@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
 import android.widget.PopupWindow
@@ -46,7 +47,6 @@ class DaebakToast: PopupWindow() {
 
         var alreadyShownWindow: PopupWindow? = null
 
-
         fun showFailedMakePiece(context: Context) {
             show(context, "해당 유형의 유사문제는 준비 중입니다.ㅠㅠ")
         }
@@ -67,7 +67,6 @@ class DaebakToast: PopupWindow() {
 
             toastView.measure(0,0)
             val popupWindow = makeWindow(context, toastView, leftOffset, bottomOffset, overDialog)
-
 
             alreadyShownWindow = popupWindow
 
@@ -97,7 +96,12 @@ class DaebakToast: PopupWindow() {
 
             popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, android.R.color.transparent)))
             val screenHeight = DisplayUtils.getScrenHeight(context)
-            popupWindow.showAtLocation(toastView, Gravity.NO_GRAVITY, 0, screenHeight - toastView.measuredHeight - bottomOffset)
+
+            try {
+                popupWindow.showAtLocation(toastView, Gravity.NO_GRAVITY, 0, screenHeight - toastView.measuredHeight - bottomOffset)
+            } catch (error: Exception) {
+                Log.e(javaClass.simpleName, "error=$error")
+            }
 
             return popupWindow
         }

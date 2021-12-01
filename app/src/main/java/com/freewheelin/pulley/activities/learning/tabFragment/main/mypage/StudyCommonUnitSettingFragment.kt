@@ -21,7 +21,9 @@ import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.*
+import kotlinx.android.synthetic.main.fragment_study_unit_common_setting.*
+
+//import kotlinx.android.synthetic.main.fragment_study_unit_setting.*
 
 
 class StudyCommonUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
