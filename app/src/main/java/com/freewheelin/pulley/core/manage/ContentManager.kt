@@ -121,9 +121,11 @@ object ContentManager {
             // 멀티 선택 처리
             if(it.userAnswer?.contains(",") == false && it.userAnswer?.contains("-") == false) { // - 입력 시 처리 추가
                 try {
-                    it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toInt()
-                        .toString() else null // 답 앞에 0 들어가는 것 전처리
-                } catch (e:Exception) { LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")}
+                    it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toFloat().toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
+                } catch (e:Exception) {
+                    LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
+                    it.userAnswer = null
+                }
             }
 
             val problemParam = Parameter(
@@ -146,7 +148,12 @@ object ContentManager {
             param["addSimilarProblemRequest"] = similarProblems.map {
                 // 멀티 선택 아닐 경우만
                 if(it.userAnswer?.contains(",") == false) {
-                    it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
+                    try {
+                        it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toFloat().toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
+                    } catch (e:Exception) {
+                        LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
+                        it.userAnswer = null
+                    }
                 }
                 val similarParam = Parameter(
                         "userAnswer" to it.userAnswer,

@@ -1,8 +1,5 @@
 package com.freewheelin.pulley.utils
 
-import com.freewheelin.pulley.model.User
-import java.util.*
-
 object Preferences {
 
     val isNovice: Boolean
@@ -14,23 +11,16 @@ object Preferences {
             _appLaunchCount.set(value)
         }
 
-
     var onTestAPI = APPreference(false)
     var onLoggingEvent = APPreference(false)
     var onSuccessToast = APPreference(false)
-//    var testBaseURL = APPreference("https://api-staging.pulleymath.com")
-    var testBaseURL = APPreference("https://api-dev.pulleymath.com")
+    var testBaseURL = APPreference("https://api-staging.pulleymath.com")
+//    var testBaseURL = APPreference("https://api-dev.pulleymath.com")
     var userDataString =  APPreference("")
-
     var versionDataString = APPreference("")
-
-
     val isSpyMode = APPreference(false)
-
     val isNeedOnboarding = APPreference(true)
-
     val lastExpiredShowingDate = APPreference(0L)
-
     val initTestData = APPreference("")
 
     val tooltipShowingCntTakeNoteScroll = APPreference(0)
@@ -43,7 +33,6 @@ object Preferences {
     val tooltipShowingCntRecommendPlan = APPreference(0)
     val galleryClickCnt = APPreference(0)
 
-
     val answerXPosition = APPreference(-1f)
     val answerYPosition = APPreference(-1f)
 
@@ -52,6 +41,7 @@ object Preferences {
     val targetDate = APPreference(0L)
     val targetDateTitle = APPreference("")
     val targetID = APPreference(-1)
+
 }
 
 
