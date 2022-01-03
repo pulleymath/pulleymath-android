@@ -106,7 +106,7 @@ class DailyTestReportActivity : AppCompatActivity() {
             }
         })
 
-        reviewBtn.setPermissionClickListener { onReviewBtnClikced() }
+        reviewBtn.setOnClickListener { onReviewBtnClikced() }
         scoreTv.visibility = View.INVISIBLE
         scoreLabel.visibility = View.INVISIBLE
         reviewBtn.visibility = View.INVISIBLE

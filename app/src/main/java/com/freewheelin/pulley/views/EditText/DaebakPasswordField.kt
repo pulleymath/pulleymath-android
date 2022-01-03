@@ -9,14 +9,16 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
 import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import kotlinx.android.synthetic.main.view_input_password.view.*
 import kotlinx.android.synthetic.main.view_input_password.view.editText
-import kotlinx.android.synthetic.main.view_input_password.view.errorContainerLl
 import kotlinx.android.synthetic.main.view_input_password.view.errorTv
 import kotlinx.android.synthetic.main.view_input_password.view.labelTv
 
@@ -66,61 +68,74 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
 
     var isShownError: Boolean
          get() {
-             return errorContainerLl.visibility == View.VISIBLE
+             val container = findViewById<LinearLayout>(R.id.errorContainerLl)
+             return container.visibility == View.VISIBLE
          }
         set(value) {
+            val container = findViewById<LinearLayout>(R.id.errorContainerLl)
+            val edit = findViewById<EditText>(R.id.editText)
+
             if (value) {
-                errorContainerLl.visibility = View.VISIBLE
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                container.visibility = View.VISIBLE
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
             } else {
-                errorContainerLl.visibility = View.GONE
-                if(editText.isFocused)
-                    editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                container.visibility = View.GONE
+                if(edit.isFocused)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
                 else
-                    editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
             }
         }
 
     var isVisbleLabel: Boolean
         get() {
-            return labelTv.visibility == View.VISIBLE
+            val label = findViewById<TextView>(R.id.labelTv)
+            return label.visibility == View.VISIBLE
         }
         set(value) {
+            val label = findViewById<TextView>(R.id.labelTv)
             if(value) {
-                labelTv.visibility = View.VISIBLE
+                label.visibility = View.VISIBLE
             } else {
-                labelTv.visibility = View.INVISIBLE
+                label.visibility = View.INVISIBLE
             }
         }
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
+        val container = findViewById<LinearLayout>(R.id.errorContainerLl)
+        val edit = findViewById<EditText>(R.id.editText)
+        val label = findViewById<TextView>(R.id.labelTv)
 
         if(enabled) {
-            labelTv.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            label.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
 
-            editText.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
-            editText.setHintTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-            if(editText.isFocused)
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            edit.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            edit.setHintTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+            if(edit.isFocused)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
             else
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
         } else {
-            labelTv.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            label.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
 
-            editText.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            editText.setHintTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0)
+            edit.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            edit.setHintTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0)
         }
 
-        editText.isEnabled = enabled
+        edit.isEnabled = enabled
     }
 
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_input_password, this)
-        this.editText.onFocusChangeListener = this
-        this.editText.addTextChangedListener(object: TextWatcher{
+
+        val edit = findViewById<EditText>(R.id.editText)
+        val check = findViewById<CheckBox>(R.id.checkEye)
+
+        edit.onFocusChangeListener = this
+        edit.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
                 isShownError = false
                 listener?.onFieldValueChanged(this@DaebakPasswordField)
@@ -131,32 +146,34 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
 
             override fun onTextChanged(sequence: CharSequence, p1: Int, p2: Int, p3: Int) {
                 if(sequence.isEmpty()) {
-                    editText.textSize = 16f
+                    edit.textSize = 16f
                 } else {
-                    editText.textSize = 18f
+                    edit.textSize = 18f
                 }
             }
         })
-        checkEye.setOnCheckedChangeListener { buttonView, isChecked ->
+        check.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked)
-                editText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                edit.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             else
-                editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                edit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
-            editText.setSelection(editText.length())
+            edit.setSelection(edit.length())
         }
         isShownError = false
     }
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
+        val edit = findViewById<EditText>(R.id.editText)
+
         if(hasFocus)
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
         else
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
 
         listener?.onFieldFocusChanged(this, hasFocus)
 
-        editText.setOnKeyListener { _, keyCode, event ->
+        edit.setOnKeyListener { _, keyCode, event ->
             if(event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 enterListener?.onEnter(this)
                 true
@@ -166,17 +183,21 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
     }
 
     private fun setTypedArray(attrs: AttributeSet) {
+        val edit = findViewById<EditText>(R.id.editText)
+
         val array = context.obtainStyledAttributes(attrs, R.styleable.DaebakPasswordField)
         this.label = array.getString(R.styleable.DaebakPasswordField_DaebakPasswordField_Label)
-        editText.hint = array.getString(R.styleable.DaebakPasswordField_DaebakPasswordField_Hint)
+        edit.hint = array.getString(R.styleable.DaebakPasswordField_DaebakPasswordField_Hint)
         this.isVisbleLabel = array.getBoolean(R.styleable.DaebakPasswordField_DaebakPasswordField_isVisibleLabel, true)
         setMaxLength(array.getInt(R.styleable.DaebakPasswordField_DaebakPasswordField_maxLength, 0))
         array.recycle()
     }
 
     fun setMaxLength(length:Int) {
+        val edit = findViewById<EditText>(R.id.editText)
+
         if(length > 0)
-            editText.filters = arrayOf( InputFilter.LengthFilter(length) )
+            edit.filters = arrayOf( InputFilter.LengthFilter(length) )
     }
 
     fun showErrorMsg(errorMsg: String) {

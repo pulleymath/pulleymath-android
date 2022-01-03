@@ -53,4 +53,7 @@
     <color name="very_light_pink">#ffe8e8</color>
     <color name="light_peach">#ffc6bc</color>
 
+    <color name="dim_black_333333">#4c333333</color>
+    <color name="dim_white_ffffff">#4cffffff</color>
+
 </resources>

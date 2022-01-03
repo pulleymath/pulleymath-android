@@ -4,9 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.CompoundButton
+import android.widget.Switch
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.view_switch_daebak.view.*
 
 class DaebakSwitch : ConstraintLayout {
     constructor(context: Context) : super(context)
@@ -32,8 +33,15 @@ class DaebakSwitch : ConstraintLayout {
     val isChecked: Boolean
         get() = daebakSwitch.isChecked
 
+    var labelTv: TextView
+    var daebakSwitch: Switch
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_switch_daebak, this)
+
+        labelTv = findViewById(R.id.labelTv)
+        daebakSwitch = findViewById(R.id.daebakSwitch)
+
         this.setOnClickListener {
             daebakSwitch.isChecked = !daebakSwitch.isChecked
         }

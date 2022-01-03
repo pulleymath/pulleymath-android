@@ -1,10 +1,7 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.snackTest
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +10,8 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
 import kotlinx.android.synthetic.main.fragment_test_main.*
 import kotlinx.android.synthetic.main.fragment_test_main.contentTv
 import kotlinx.android.synthetic.main.fragment_test_main.levelLabel
@@ -184,7 +183,8 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             configureFinishUI(test)
         }
 
-        startBtn.setPermissionClickListener {
+        startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
+        startBtn.setOnClickListener {
             listener?.onSolveBtnClicked(test)
         }
 

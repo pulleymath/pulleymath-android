@@ -40,6 +40,8 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.TextViews.UpDownTextView.Change.*
 import com.github.mikephil.charting.charts.BarChart
@@ -170,11 +172,21 @@ class AnalysisFragment : LearningTabFragment(),
             studyRateView.listener = this
             recommendStudyView.listener = this
             initChart(timeCountChart)
+
+            mainAnalysisBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
+
             mainAnalysisBtn.setOnClickListener {
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
+                LogUtils.logEvent(
+                    requireContext(),
+                    user,
+                    PulleyEvent.BUTTON_CLICK,
+                    "데일리서머리",
+                    "전체분석보기"
+                )
                 val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
                 startActivity(intent)
             }
+
         }catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
         }

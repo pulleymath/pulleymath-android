@@ -67,7 +67,6 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         loginBorder?.visibility = View.INVISIBLE
         balloonCl?.visibility = View.INVISIBLE
 
-
         startBtn?.setOnClickListener {
             onStartBtnClicked()
         }

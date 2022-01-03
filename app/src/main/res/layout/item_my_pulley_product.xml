@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/prodNameLabel"
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="상품명"
+                android:textSize="@dimen/sp16" />
+            <TextView
+                android:id="@+id/prodNameTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="풀리수학+"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/usePeriodLabel"
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="이용기간"
+                android:textSize="@dimen/sp16" />
+            <TextView
+                android:id="@+id/usePeriodTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2021.01.06 ~ 2021.02.05"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/nextPayDateContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/paymentLabel"
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="다음 결제 예정일"
+                android:textSize="@dimen/sp16" />
+            <TextView
+                android:id="@+id/paymentTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="뭘로결제?"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+        <!--LinearLayout
+            android:id="@+id/btnOpenRefund"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white_ffffff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
+
+            <TextView
+                style="@style/TextRed_fe7b67.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="환불신청하기"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_new_window" />
+        </LinearLayout-->
+    </LinearLayout>
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+
+</LinearLayout>

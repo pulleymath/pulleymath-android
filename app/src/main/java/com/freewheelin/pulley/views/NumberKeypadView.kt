@@ -13,19 +13,6 @@ import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_number_keypad.view.*
-import kotlinx.android.synthetic.main.view_number_keypad.view.deleteBtn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number0Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number1Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number2Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number3Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number4Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number5Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number6Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number7Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number8Btn
-import kotlinx.android.synthetic.main.view_number_keypad.view.number9Btn
-import kotlinx.android.synthetic.main.view_plus_minus_keypad.view.*
 import java.lang.ref.WeakReference
 
 
@@ -75,14 +62,39 @@ class PlusMinusKeypadView : ConstraintLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
+    var number0Btn: Button
+    var number1Btn: Button
+    var number2Btn: Button
+    var number3Btn: Button
+    var number4Btn: Button
+    var number5Btn: Button
+    var number6Btn: Button
+    var number7Btn: Button
+    var number8Btn: Button
+    var number9Btn: Button
+
+    var deleteBtn: ImageButton
+    var plusMinusBtn: ImageButton
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_plus_minus_keypad, this)
-//        if(context.contextisTablet) {
-//            val paddingVal = resources.getDimension(R.dimen.dp32)
-//            setPadding(paddingVal.toInt())
-//        }
         background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
         isClickable = true
+
+        number0Btn = findViewById(R.id.number0Btn)
+        number1Btn = findViewById(R.id.number1Btn)
+        number2Btn = findViewById(R.id.number2Btn)
+        number3Btn = findViewById(R.id.number3Btn)
+        number4Btn = findViewById(R.id.number4Btn)
+        number5Btn = findViewById(R.id.number5Btn)
+        number6Btn = findViewById(R.id.number6Btn)
+        number7Btn = findViewById(R.id.number7Btn)
+        number8Btn = findViewById(R.id.number8Btn)
+        number9Btn = findViewById(R.id.number9Btn)
+
+        deleteBtn = findViewById(R.id.deleteBtn)
+        plusMinusBtn = findViewById(R.id.plusMinusBtn)
+
         number0Btn.setOnClickListener {
             listener?.get()?.onNumberBtnClicked(number0Btn, "0")
         }
@@ -166,12 +178,43 @@ class NumberKeypadView : ConstraintLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
+    var number0Btn: Button
+    var number1Btn: Button
+    var number2Btn: Button
+    var number3Btn: Button
+    var number4Btn: Button
+    var number5Btn: Button
+    var number6Btn: Button
+    var number7Btn: Button
+    var number8Btn: Button
+    var number9Btn: Button
+
+    var deleteBtn: ImageButton
+    var nextBtn: Button
+    var finishBtn: Button
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_number_keypad, this)
         val paddingVal = resources.getDimension(R.dimen.dp32)
         setPadding(paddingVal.toInt())
         background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
         isClickable = true
+
+        number0Btn = findViewById(R.id.number0Btn)
+        number1Btn = findViewById(R.id.number1Btn)
+        number2Btn = findViewById(R.id.number2Btn)
+        number3Btn = findViewById(R.id.number3Btn)
+        number4Btn = findViewById(R.id.number4Btn)
+        number5Btn = findViewById(R.id.number5Btn)
+        number6Btn = findViewById(R.id.number6Btn)
+        number7Btn = findViewById(R.id.number7Btn)
+        number8Btn = findViewById(R.id.number8Btn)
+        number9Btn = findViewById(R.id.number9Btn)
+
+        deleteBtn = findViewById(R.id.deleteBtn)
+        nextBtn = findViewById(R.id.nextBtn)
+        finishBtn = findViewById(R.id.finishBtn)
+
         number0Btn.setOnClickListener {
             listener?.get()?.onNumberBtnClicked(number0Btn, "0")
         }

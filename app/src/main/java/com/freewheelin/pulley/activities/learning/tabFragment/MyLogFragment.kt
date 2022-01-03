@@ -303,8 +303,8 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                 holder.checkbox.isChecked = !holder.checkbox.isChecked
             }
 
-            holder.solveBtn.setPermissionClickListener { onSolveBtnClicked(content) }
-            holder.reviewBtn.setPermissionClickListener { onReviewBtnClicked(content) }
+            holder.solveBtn.setOnClickListener { onSolveBtnClicked(content) }
+            holder.reviewBtn.setOnClickListener { onReviewBtnClicked(content) }
             holder.reportBtn.setOnClickListener { onReportBtnClicked(content) }
 
             if(position == itemCount - 1)

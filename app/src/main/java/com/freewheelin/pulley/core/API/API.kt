@@ -7,6 +7,7 @@ import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.API.AppService
 import com.freewheelin.pulley.core.API.ServiceV1
 import com.freewheelin.pulley.core.API.ServiceV2
 import com.freewheelin.pulley.core.API.ServiceV3
@@ -32,7 +33,7 @@ typealias Parameter = HashMap<String, Any>
 fun <K, V> Parameter(vararg pairs: Pair<K, V>): HashMap<K, V> = HashMap<K, V>().apply { putAll(pairs) }
 
 enum class Version {
-    v1, v2, v3;
+    v1, v2, v3, app;
 
     val base = if(Preferences.onTestAPI.get() || BuildConfig.DEBUG)
         Preferences.testBaseURL.get()
@@ -45,6 +46,7 @@ enum class Version {
             v1 -> base
             v2 -> "$base/v2/"
             v3 -> "$base/v3/"
+            app -> base
         }
     }
 }
@@ -59,6 +61,10 @@ val API_V2: ServiceV2 by lazy {
 
 val API_V3: ServiceV3 by lazy {
     retrofit(Version.v3).create(ServiceV3::class.java)
+}
+
+val API_APP: AppService by lazy {
+    retrofit(Version.app).create(AppService::class.java)
 }
 
 fun retrofit(apiVersion: Version): Retrofit {

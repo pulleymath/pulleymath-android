@@ -30,8 +30,8 @@ object MarketingManager {
 
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm") }
 
-    val URL = "https://pulleymath.com/marketing/marketing.json"
-    val URL_BETA = "https://pulleymath.com/marketing/marketing_beta.json"
+    val URL = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing.json"
+    val URL_BETA = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing_beta.json"
 
     fun getInfo(context: Context, mainProfile: MainProfile, callback:(marketing: Marketing?)->Unit) {
 

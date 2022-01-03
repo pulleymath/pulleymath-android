@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
 object Network {
-
+    var shopUrl     = Preferences.shopUrl.get()
     val baseNodeUrl = if(BuildConfig.DEBUG || Preferences.onTestAPI.get()) "http://3.36.127.47:3000" else "https://pdf-live.pulleymath.net"
     var token = ""
 
@@ -26,9 +26,9 @@ object Network {
 
             val client = OkHttpClient.Builder().apply {
 
-//                val interceptor = HttpLoggingInterceptor()
-//                interceptor.level = HttpLoggingInterceptor.Level.BODY
-//                addInterceptor(interceptor)
+                val interceptor = HttpLoggingInterceptor()
+                interceptor.level = HttpLoggingInterceptor.Level.BODY
+                addInterceptor(interceptor)
 
                 addInterceptor(
                         Interceptor { chain ->

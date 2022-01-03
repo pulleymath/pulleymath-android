@@ -2,9 +2,9 @@ package com.freewheelin.pulley.utils
 
 import org.joda.time.Days
 import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 enum class DateUnit(var unit: Long) {
     Month(86400000 * 30),
@@ -14,6 +14,12 @@ enum class DateUnit(var unit: Long) {
 
 class DateTimeUtils {
     companion object {
+
+        fun convertServerStr(datetime: String?) : String {
+            if(datetime == null) return ""
+            val datetime = LocalDateTime.parse(datetime)
+            return yyyyMMddFormat.format(datetime.toDate())
+        }
 
         fun rand(): Date {
             // NOTE: (hyuntae) generate dateTime from 2018.01.01

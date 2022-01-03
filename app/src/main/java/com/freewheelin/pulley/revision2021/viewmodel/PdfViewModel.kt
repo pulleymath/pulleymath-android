@@ -12,7 +12,6 @@ import com.freewheelin.pulley.revision2021.repository.PdfRepository
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-
 class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
     private val pdfRepository: PdfRepository by lazy { PdfRepository() }
@@ -40,10 +39,6 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     val pdfListLength = MutableLiveData("0")
 
     var ySum: Int = 0
-
-    init {
-        listPdf()
-    }
 
     fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "") {
         pdfRepository.pdfList(title, page, size, subjectCode, category)
@@ -189,6 +184,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 }
 
 object PdfListFilter {
+
     val subject = mapOf<String, String>(
         "" to "과목 전체",
         "311" to "수학(상)",

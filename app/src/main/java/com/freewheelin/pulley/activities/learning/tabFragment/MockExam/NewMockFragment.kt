@@ -25,11 +25,14 @@ import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
+import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
 import kotlinx.android.synthetic.main.fragment_new_mock.*
 import kotlinx.android.synthetic.main.item_new_test.view.*
@@ -249,11 +252,21 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             val tests = filteredMockList ?: examList
             val test = tests!![position]
 
-            holder.testBtn.setPermissionClickListener {
+            holder.testBtn.setOnClickListener {
                 if (holder.testBtn.isEnableUI()) {
-                    MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
+                    if(test.needPulleyPlus && user?.hasPulleyPlus != true) {
+                        DialogUtils.confirmHasPulleyPlus(requireContext()) {
+                            PulleyPlusPriceDialog(requireContext()).show()
+                        }
+                    } else {
+                        MockExamGuideDialog(
+                            requireContext(),
+                            test,
+                            false,
+                            this@NewMockFragment
+                        ).show()
+                    }
                 }
-
             }
             holder.set(test)
 
@@ -291,10 +304,13 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
         else
             updateTag.visibility = View.GONE
 
+        setNormalButton()
+
         when (exam.getMakringState()) {
             MarkingState.YET -> {
                 testBtn.text = "풀기"
                 testBtn.toEnableUI()
+                setPulleyPlusButton(exam)
             }
             MarkingState.ING -> {
                 testBtn.text = "푸는 중"
@@ -306,6 +322,7 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
                 testBtn.toEnableUI()
             }
         }
+
         if (exam.getMakringState() == MarkingState.ING) {
             typeTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
             gradeTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
@@ -319,6 +336,18 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
             monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
             titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
         }
+    }
+
+    fun setPulleyPlusButton(exam: MockExam) {
+        if(exam.needPulleyPlus) {
+            testBtn.setLock(user?.hasPulleyPlus ?: false, ButtonLockImage.small16, ButtonMode.pulley_plus)
+        } else {
+            testBtn.setUnlock()
+        }
+    }
+
+    fun setNormalButton() {
+        testBtn.setUnlock()
     }
 
     fun setMidHolderUI() {

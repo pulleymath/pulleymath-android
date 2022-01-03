@@ -115,11 +115,23 @@
             app:layout_constraintEnd_toStartOf="@+id/textCategory"
             app:layout_constraintTop_toTopOf="@+id/textCategory" />
 
+<!--        <ImageView-->
+<!--            android:id="@+id/imgDownload"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading ? View.VISIBLE : View.INVISIBLE }"-->
+<!--            android:elevation="6dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/textTitle"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/imgCover"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/imgCover"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/imgCover"-->
+<!--            app:srcCompat="@drawable/ic_download_file" />-->
+
         <ImageView
             android:id="@+id/imgDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading ? View.VISIBLE : View.INVISIBLE }"
+            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; item.is_purchased ? View.VISIBLE : View.INVISIBLE }"
             android:elevation="6dp"
             app:layout_constraintBottom_toTopOf="@+id/textTitle"
             app:layout_constraintEnd_toEndOf="@+id/imgCover"
@@ -127,13 +139,35 @@
             app:layout_constraintTop_toTopOf="@+id/imgCover"
             app:srcCompat="@drawable/ic_download_file" />
 
+        <!-- lock -->
+        <FrameLayout
+            android:id="@+id/imgLock"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="6dp"
+            android:background="@color/dim_black_333333"
+            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.is_purchased ? View.VISIBLE : View.INVISIBLE }"
+            app:layout_constraintEnd_toEndOf="@+id/imgCover"
+            app:layout_constraintStart_toStartOf="@+id/imgCover"
+            app:layout_constraintTop_toTopOf="@+id/imgCover"
+            app:layout_constraintBottom_toBottomOf="@+id/imgCover">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="7dp"
+                app:srcCompat="@drawable/ic_lock_48_white" />
+
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/imgDownloadCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
             android:elevation="6dp"
-            app:layout_constraintBottom_toTopOf="@+id/textTitle"
+            app:layout_constraintBottom_toTopOf="@+id/imgCover"
             app:layout_constraintEnd_toEndOf="@+id/imgCover"
             app:layout_constraintStart_toStartOf="@+id/imgCover"
             app:layout_constraintTop_toTopOf="@+id/imgCover"

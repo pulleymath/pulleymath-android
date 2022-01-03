@@ -90,7 +90,7 @@ class UnitPlanAddDialog: Dialog {
 
         override fun onBindViewHolder(holder: StudyPlanViewHolder, position: Int) {
             val book = selectedBooksByGroup[position]
-            holder.addBtn.setPermissionClickListener {
+            holder.addBtn.setOnClickListener {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "유형학습", "추가하기")
                 BookManager.assign(context, book, this@UnitPlanAddDialog.user) {
                     book.assignID = it.assignID

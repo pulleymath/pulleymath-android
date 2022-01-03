@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.views.TooltipWindow
 import com.ht.balloonwindow.BalloonWindow
 import com.squareup.picasso.Callback
@@ -134,10 +135,13 @@ fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
 
 fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
     this.setOnClickListener {
-        if(user?.isExpiredUser() == true) {
-            DialogUtils.showExpiredDialog(context)
-        } else {
+        if(user?.hasPulleyPlus == true) {
             cb(it)
+    //            DialogUtils.showExpiredDialog(context)
+        } else {
+            DialogUtils.confirmHasPulleyPlus(context) {
+                PulleyPlusPriceDialog(context).show()
+            }
         }
     }
 }

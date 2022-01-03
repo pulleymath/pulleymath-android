@@ -36,8 +36,25 @@ class TriplePenChart : ConstraintLayout {
             }
         }
 
+    var firstLabelTv: TextView
+    var secondLabelTv: TextView
+    var thirdLabelTv: TextView
+
+    var firstPen: PenBar_R
+    var secondPen: PenBar_R
+    var thirdPen: PenBar_R
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_chart_triple_pen, this, true)
+
+        firstLabelTv = findViewById(R.id.firstLabelTv)
+        secondLabelTv = findViewById(R.id.secondLabelTv)
+        thirdLabelTv = findViewById(R.id.thirdLabelTv)
+
+        firstPen = findViewById(R.id.firstPen)
+        secondPen = findViewById(R.id.secondPen)
+        thirdPen = findViewById(R.id.thirdPen)
+
         labelTvs = listOf(
                 firstLabelTv,
                 secondLabelTv,

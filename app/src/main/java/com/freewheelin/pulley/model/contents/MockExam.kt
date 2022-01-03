@@ -43,6 +43,7 @@ class MockExam: Content {
     var createDate: Date = Date()
     var isRestart = false
     var selectOptional = mutableListOf<CommercialSubject>()
+    var needPulleyPlus: Boolean = false
 
     enum class ExamType {
         ksat, // 수능

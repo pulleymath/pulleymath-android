@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -12,7 +13,6 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.MemoView.MemoView
-import kotlinx.android.synthetic.main.view_pencilcase.view.*
 
 interface Pencilcase {
     enum class Thickness(val width: Float) {
@@ -96,8 +96,50 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
     var itemValue = ""
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
+    var pencilBtn: ImageButton
+    var eraserBtn: ImageButton
+    var lineBtn: ImageButton
+    var thinBtn: ImageButton
+    var mediumBtn: ImageButton
+    var thickBtn: ImageButton
+
+    var colorOption0Btn: LinearLayout
+    var colorOption1Btn: LinearLayout
+    var colorOption2Btn: LinearLayout
+    var colorOption3Btn: LinearLayout
+
+    var blackCheck: ImageView
+    var yellowCheck: ImageView
+    var redCheck: ImageView
+    var greenCheck: ImageView
+
+    var writeModeSwitch: Switch
+    var clearAllBtn: Button
+    var pencilOptionLl: LinearLayout
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pencilcase, this)
+
+        pencilBtn = findViewById(R.id.pencilBtn)
+        eraserBtn = findViewById(R.id.eraserBtn)
+        lineBtn = findViewById(R.id.lineBtn)
+        thinBtn = findViewById(R.id.thinBtn)
+        mediumBtn = findViewById(R.id.mediumBtn)
+        thickBtn = findViewById(R.id.thickBtn)
+
+        colorOption0Btn = findViewById(R.id.colorOption0Btn)
+        colorOption1Btn = findViewById(R.id.colorOption1Btn)
+        colorOption2Btn = findViewById(R.id.colorOption2Btn)
+        colorOption3Btn = findViewById(R.id.colorOption3Btn)
+
+        blackCheck = findViewById(R.id.blackCheck)
+        yellowCheck = findViewById(R.id.yellowCheck)
+        redCheck = findViewById(R.id.redCheck)
+        greenCheck = findViewById(R.id.greenCheck)
+
+        writeModeSwitch = findViewById(R.id.writeModeSwitch)
+        clearAllBtn = findViewById(R.id.clearAllBtn)
+        pencilOptionLl = findViewById(R.id.pencilOptionLl)
 
         pencilBtn.setOnClickListener {
 

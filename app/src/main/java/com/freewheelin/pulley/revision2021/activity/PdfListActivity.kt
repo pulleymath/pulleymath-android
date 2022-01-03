@@ -98,6 +98,12 @@ class PdfListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.listPdf()
+    }
+
     private fun initUI() {
         with(binding) {
             subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.subjectItems)
@@ -291,15 +297,21 @@ class PdfListActivity : AppCompatActivity() {
             binding.listener = this
             binding.item = item
             binding.vm = viewModel
+
+            println("피디에프 ${item.title} ${item.subject} ${item.id} downloaded=${item.downloaded.get()}, downloading=${item.downloading.get()}, is_purchased=${item.is_purchased}")
         }
 
         override fun onItemClick(pdf: Pdf) {
             if (pdf.opening.get()) return // pdf 여는중일때 클릭방지
 
+//            Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}")
+
+            if(!pdf.downloaded.get() && !pdf.downloading.get() && !pdf.is_purchased) { // 다운로드 안했는데 구매 안했으면
+                openShop(pdf)
+            } else
             if(!pdf.downloading.get()) { // 다운로드 중이면 disabled
                 if (pdf.downloaded.get()) { open(pdf) } else { download(pdf) }
-            }
-            else {
+            } else {
                 showDownloadCancelMsg()
                 downloadThreads.forEach {
                     it.interrupt()
@@ -330,6 +342,15 @@ class PdfListActivity : AppCompatActivity() {
                         pdf.opening.set(false)
                     }
                 }
+            }
+        }
+
+        private fun openShop(pdf: Pdf) {
+            DialogUtils.confirmBuyPulleyBooks(this@PdfListActivity, "${pdf.title} ${pdf.subject}") {
+                val intent = Intent(Intent.ACTION_VIEW)
+                val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books"
+                intent.data = Uri.parse(url)
+                startActivity(intent)
             }
         }
 
@@ -423,8 +444,10 @@ class PdfListActivity : AppCompatActivity() {
             val url = URL(uri.toString())
             (url.openConnection() as HttpURLConnection).run {
                 downloadConnections.add(this)
-                setRequestProperty ("Authorization", "bearer ${user?.token}")
+                Log.d(javaClass.simpleName, "pdf token=${user?.token}")
+                setRequestProperty ("Authorization", "Bearer ${user?.token}")
                 requestMethod = "GET"
+                Log.d(javaClass.simpleName, "response=$responseCode, $responseMessage")
                 val buffer = receiveFileByteArray(this, pdf)
                 val filepath = makeLocalPdfName(pdf)
                 saveFile(filepath, buffer).let {

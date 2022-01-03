@@ -4,25 +4,41 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil.setContentView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.setImageURL
-import com.freewheelin.pulley.utils.spToPx
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.TextViews.HashTagTextView
-import kotlinx.android.synthetic.main.view_profile_share_contents.view.*
+import com.google.android.flexbox.FlexboxLayout
 import java.util.*
 
 class ProfileShareContentsView : ConstraintLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet)
 
+    var dateTv: TextView
+    var nameTv: TextView
+    var typeLabel: TextView
+    var profileIv: ImageView
+    var problemCntTv: TextView
+    var tagFl: FlexboxLayout
+
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_profile_share_contents, this)
+
+        dateTv = findViewById(R.id.dateTv)
+        nameTv = findViewById(R.id.nameTv)
+        typeLabel = findViewById(R.id.typeLabel)
+        profileIv = findViewById(R.id.profileIv)
+        problemCntTv = findViewById(R.id.problemCntTv)
+        tagFl = findViewById(R.id.tagFl)
+
         dateTv.text = DateTimeUtils.yyyyMMddFormat.format(Date())
     }
 

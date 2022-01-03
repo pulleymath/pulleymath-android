@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:minWidth="424dp"
         android:paddingTop="48dp"
-        android:background="@drawable/bg_white_ffffff_round"
-        >
+        android:background="@drawable/bg_white_ffffff_round">
 
         <TextView
             android:id="@+id/titleTv"

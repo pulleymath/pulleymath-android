@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.Theme
-import kotlinx.android.synthetic.main.view_input_daebak_selection.view.*
+
 interface DaebakInputSelectionListener {
     fun onSelectionChanged(view:DaebakInputSelection)
 }
@@ -48,11 +48,23 @@ class DaebakInputSelection: ConstraintLayout, View.OnClickListener {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
         setTypedArray(attrs)
-
     }
+
+    var labelTv: TextView
+    var btn0: SelectionButton
+    var btn1: SelectionButton
+    var btn2: SelectionButton
+    var btn3: SelectionButton
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_input_daebak_selection, this)
+
+        labelTv = findViewById(R.id.labelTv)
+        btn0 = findViewById(R.id.btn0)
+        btn1 = findViewById(R.id.btn1)
+        btn2 = findViewById(R.id.btn2)
+        btn3 = findViewById(R.id.btn3)
+
         buttonTitles = listOf("A","B","C")
         btn0.setOnClickListener {
             it.isSelected = !it.isSelected

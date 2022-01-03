@@ -1,13 +1,21 @@
 package com.freewheelin.pulley.assets
 
-import com.freewheelin.pulley.utils.Preferences
-
 object URL {
     val 홈페이지 = "https://pulleymath.com?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
     val 이용약관 = "https://pulleymath.com/policy/service?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=servicelaw"
     val 개인정보취급방침 = "https://pulleymath.com/policy/personal?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=private"
     val 마케팅활용동의방안 = "https://pulleymath.com/policy/marketing?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=marketinglaw"
     val 모바일무료체험 = "https://pulleymath.com?utm_source=pulley_app&utm_medium=social&utm_campaign=phone_install"
+
+    // TODO : URL 수정 필요
+    val 결제정보 = "https://pulleymath.com"
+    val 구매내역 = "https://pulleymath.com"
+    val 환불신청 = "https://pulleymath.com"
+    val 풀리플러스가격이미지 = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/app/images/image_popup_pulleymathplus.png"
+
+    val 풀리플러스구매 = "https://pulleymath.com/math_plus"
+    val 풀리과외구매 = "https://pulleymath.com/remote_class"
+    val 풀리북스구매 = "https://pulleymath.com/books"
 
     val 공지사항 = "https://pulleymath.com/notice?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=notice"
     val FAQ = "https://pulleymath.com/mypages/help/main"

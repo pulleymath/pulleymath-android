@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -12,8 +14,7 @@ import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.setPermissionClickListener
-import kotlinx.android.synthetic.main.item_study_list.view.*
-import kotlinx.android.synthetic.main.view_analysis_today_study_list.view.*
+import com.freewheelin.pulley.views.Buttons.SecondaryButton
 
 interface AnalysisTodayStudyListViewListener {
     fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView)
@@ -29,11 +30,20 @@ class AnalysisTodayStudyListView: ConstraintLayout {
     var contents: List<Content> = emptyList()
     var isUserAnalysis: Boolean = false
 
+    var viewAllListBtn: TextView
+    var studyBtn: SecondaryButton
+
+    var emptyGuideTv: TextView
+    var recyclerView: LinearLayout
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_analysis_today_study_list, this)
-//        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.adapter = StudyListAdapter()
-//        val adapter = StudyListAdapter()
+
+        viewAllListBtn = findViewById(R.id.viewAllListBtn)
+        studyBtn = findViewById(R.id.studyBtn)
+        emptyGuideTv = findViewById(R.id.emptyGuideTv)
+        recyclerView = findViewById(R.id.recyclerView)
+
         setList()
         viewAllListBtn.setOnClickListener {
             listener?.onStudyHistoryBtnClicked(this)
@@ -73,7 +83,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
             holder.set(piece)
             if (isUserAnalysis) holder.setUserAnalysisUI()
 
-            holder.solveBtn.setPermissionClickListener {
+            holder.solveBtn.setOnClickListener {
                 listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
             }
             holder.reportBtn.setOnClickListener {
@@ -115,15 +125,15 @@ class AnalysisTodayStudyListView: ConstraintLayout {
 }
 
 class StudyListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val dateTv = view.dateTv
-    val categoryTv = view.categoryTv
-    val titleTv = view.titleTv
-    val problemCntTv = view.problemCntTv
-    val problemTotalCntTv = view.problemTotalCntTv
-    val scoreTv = view.scoreTv
-    val reportBtn = view.reportBtn
-    val solveBtn = view.solveBtn
-    val borderView = view.borderView
+    val dateTv: TextView = view.findViewById(R.id.dateTv)
+    val categoryTv: TextView = view.findViewById(R.id.categoryTv)
+    val titleTv: TextView = view.findViewById(R.id.titleTv)
+    val problemCntTv: TextView = view.findViewById(R.id.problemCntTv)
+    val problemTotalCntTv: TextView = view.findViewById(R.id.problemTotalCntTv)
+    val scoreTv: TextView = view.findViewById(R.id.scoreTv)
+    val reportBtn: ConstraintLayout = view.findViewById(R.id.reportBtn)
+    val solveBtn: SecondaryButton = view.findViewById(R.id.solveBtn)
+    val borderView: View = view.findViewById(R.id.borderView)
 
     fun set(piece: Content) {
         dateTv.text = DateTimeUtils.mMDashddFormat.format(piece.updateDateTime)

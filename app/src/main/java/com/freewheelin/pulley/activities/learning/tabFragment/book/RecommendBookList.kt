@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,6 @@ import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.MarginDecoration
-import kotlinx.android.synthetic.main.view_recommend_book_list.view.*
 
 class RecommendBookList: ConstraintLayout {
     constructor(context: Context): super(context)
@@ -22,8 +22,18 @@ class RecommendBookList: ConstraintLayout {
     var index = 0
     var books: MutableList<Book>? = null
     var planListener: PlanListener? = null
+
+    var recyclerView: RecyclerView
+    var indexLabel: TextView
+    var guideTv: TextView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_recommend_book_list, this)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        indexLabel = findViewById(R.id.indexLabel)
+        guideTv = findViewById(R.id.guideTv)
+
         recyclerView.adapter = PlanAdapter()
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val itemSpace = resources.getDimension(R.dimen.dp16).toInt()

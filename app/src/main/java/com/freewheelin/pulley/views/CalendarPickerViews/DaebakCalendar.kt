@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -71,9 +72,20 @@ class DaebakCalendar : ConstraintLayout,
 
     var monthChangeBehavior: MonthChangeUISetter? = null
 
+    var calendar: CalendarView
+    var yearMonthTv: TextView
+    var nextBtn: ImageButton
+    var prevBtn: ImageButton
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_daebak_calendar, this)
         val today = Date()
+
+        calendar = findViewById(R.id.calendar)
+        yearMonthTv = findViewById(R.id.yearMonthTv)
+        nextBtn = findViewById(R.id.nextBtn)
+        prevBtn = findViewById(R.id.prevBtn)
+
         calendar.setRange(2019,1,1, today.year(),today.month(),today.day())
         calendar.setOnMonthChangeListener(this)
         calendar.setOnCalendarRangeSelectListener(this)

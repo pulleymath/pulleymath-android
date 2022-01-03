@@ -25,6 +25,11 @@ class Pdf : BaseDiffItem, Serializable {
     var is_new_mark: Boolean = false
     val edition: Int = 0
     var answer: Pdf? = null
+
+    var landscape_cover_url: String = ""
+    var is_purchased: Boolean = true
+    var shop_id: Long = 0
+
     lateinit var created_at: String
     lateinit var updated_at: String
     // use in local

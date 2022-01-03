@@ -125,6 +125,12 @@
         <item name="android:layout_width">1dp</item>
     </style>
 
+    <style name="Border_Purple_6e6cff_Vertical">
+        <item name="android:background">@color/purple_6e6cff</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">1dp</item>
+    </style>
+
     <style name="Border_Grey_c0c0c0_Vertical">
         <item name="android:background">@color/grey_c0c0c0</item>
         <item name="android:layout_height">match_parent</item>

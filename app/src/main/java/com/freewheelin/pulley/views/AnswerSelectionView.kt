@@ -13,7 +13,6 @@ import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.spToPx
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.NumberingButton.Companion.THEME_WHITE
-import kotlinx.android.synthetic.main.view_answer_selection.view.*
 
 interface AnswerSelectionListener {
     fun onAnswerChanged(view: AnswerSelectionView, answerStr: String?)
@@ -123,10 +122,22 @@ class AnswerSelectionView: LinearLayout, NumberingButtonListener {
         setTypedArray(attrs)
     }
 
+    var number1Btn: NumberingButton
+    var number2Btn: NumberingButton
+    var number3Btn: NumberingButton
+    var number4Btn: NumberingButton
+    var number5Btn: NumberingButton
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_answer_selection, this)
-
         gravity = Gravity.CENTER
+
+        number1Btn = findViewById(R.id.number1Btn)
+        number2Btn = findViewById(R.id.number2Btn)
+        number3Btn = findViewById(R.id.number3Btn)
+        number4Btn = findViewById(R.id.number4Btn)
+        number5Btn = findViewById(R.id.number5Btn)
+
         number1Btn.listener = this
         number2Btn.listener = this
         number3Btn.listener = this

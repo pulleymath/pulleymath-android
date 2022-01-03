@@ -114,10 +114,10 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             false
         }
 
-        reviewBtn.setPermissionClickListener {
+        reviewBtn.setOnClickListener {
             listener?.onReviewBtnClikced(this, book)
         }
-        makingCustomBookBtn.setPermissionClickListener {
+        makingCustomBookBtn.setOnClickListener {
             listener?.onMakeCustomBookClicked(this, book)
         }
 
@@ -157,7 +157,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         } else {
             reviewBtn.visibility = View.INVISIBLE
             finishContainer.visibility = View.INVISIBLE
-            itemView.setPermissionClickListener {
+            itemView.setOnClickListener {
                 startScaleAnim {
                     startExpandAnim {
                         listener?.onSolveClicked(this, book)
@@ -229,7 +229,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         } else {
             reviewBtn.visibility = View.INVISIBLE
             finishContainer.visibility = View.INVISIBLE
-            itemView.setPermissionClickListener {
+            itemView.setOnClickListener {
                 startScaleAnim {
                     startExpandAnim {
                         listener?.onSolveClicked(this, book)
@@ -326,7 +326,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
                 }
             }
             if (action == ActionType.mail) {
-                holder.button.setPermissionClickListener {
+                holder.button.setOnClickListener {
                     popupWindow?.dismiss()
                     listener?.onActionBtnClicked(action, book, this@PlanHolder)
                 }

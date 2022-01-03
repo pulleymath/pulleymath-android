@@ -328,9 +328,9 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                 holder.setMiddleHolderUI()
 
             holder.set(exam)
-            holder.remainBtn.setPermissionClickListener { onSolveBtnClicked(exam) }
+            holder.remainBtn.setOnClickListener { onSolveBtnClicked(exam) }
             holder.reportBtn.setOnClickListener { onReportBtnClicked(exam) }
-            holder.reviewBtn.setPermissionClickListener { onReviewBtnClicked(exam) }
+            holder.reviewBtn.setOnClickListener { onReviewBtnClicked(exam) }
         }
 
         override fun getItemCount(): Int {

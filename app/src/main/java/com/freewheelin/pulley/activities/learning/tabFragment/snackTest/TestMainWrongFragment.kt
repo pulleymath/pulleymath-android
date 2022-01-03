@@ -37,7 +37,7 @@ class TestMainWrongFragment : TestMainBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         test?.let { test ->
             configureUI(test)
-            startBtn.setPermissionClickListener { listener?.onSolveBtnClicked(test) }
+            startBtn.setOnClickListener { listener?.onSolveBtnClicked(test) }
             reportTv.setOnClickListener { listener?.onReportBtnClicked(test) }
         }
     }

@@ -192,7 +192,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                 }
             }
 
-            holder.solveBtn.setPermissionClickListener {
+            holder.solveBtn.setOnClickListener {
                 LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
                 when(content.pieceCategoryTag) {
                     BookType.MO -> {

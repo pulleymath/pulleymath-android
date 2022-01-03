@@ -32,6 +32,7 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.isSPYMode
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.Version.v1
 import com.freewheelin.pulley.core.manage.*
@@ -42,13 +43,16 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.android.synthetic.main.fragment_my_main_page.*
 import kotlinx.android.synthetic.main.item_mypage_list.view.*
 
 
 enum class SettingCategory(val title: String) {
-    PRIVATE("개인 설정"),
+    PRIVATE("개인정보 설정"),
+    SERVICE("서비스 이용"),
     SETTING("설정"),
     SUPPORT("지원"),
     ETC(""),
@@ -59,8 +63,9 @@ enum class SettingCategory(val title: String) {
         get() {
             return when (this) {
                 PRIVATE -> listOf(SignUpInfo, StudyInfo)
+                SERVICE -> listOf(PulleyPlus, PulleyLesson, PulleyBooks, CouponBox)
                 SETTING -> listOf(AppSetting)
-                SUPPORT -> listOf(Guide, Notice, Customer, Version) // 고객지원 -> , FAQ, Contact, Policy
+                SUPPORT -> listOf(Home, Guide, Notice, Customer, Version) // 고객지원 -> , FAQ, Contact, Policy
                 ETC -> listOf(Logout)
                 SPY -> {
                     listOf(InitSetting, ClearMockExam, ClearBooks, ClearTests, Recommend,
@@ -86,10 +91,17 @@ enum class SettingCategory(val title: String) {
 enum class Setting(val title: String) {
     SignUpInfo("개인 정보"),
     StudyInfo("학습 정보"),
-    Recommend("추천 설정"),
 
+    PulleyPlus("풀리수학+"),
+    PulleyLesson("풀리과외"),
+    PulleyBooks("풀리북스"),
+    CouponBox("쿠폰함"),
+//    PaymentMethod("결제정보"),
+
+    Recommend("추천 설정"),
     AppSetting("알림 설정"),
 
+    Home("풀리수학 홈페이지 바로가기"),
     Guide("풀리 200% 활용가이드"),
     Notice("풀리 새소식"),
     Customer("고객 지원"),
@@ -126,6 +138,7 @@ enum class Setting(val title: String) {
 class MyMainPageFragment : Fragment() {
     val settingCategory = mutableListOf(
             SettingCategory.PRIVATE,
+            SettingCategory.SERVICE,
             SettingCategory.SETTING,
             SettingCategory.SUPPORT,
             SettingCategory.ETC)
@@ -137,7 +150,6 @@ class MyMainPageFragment : Fragment() {
         typeReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {}
         }
-
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(typeReceiver, IntentFilter(User.EVENT_STUDENT_TYPE_SETTING))
     }
 
@@ -151,7 +163,6 @@ class MyMainPageFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_main_page, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -167,9 +178,25 @@ class MyMainPageFragment : Fragment() {
         when (setting) {
             SignUpInfo -> moveTo(MySignUpInfoFragment())
             StudyInfo -> moveTo(MyStudyInfoFragment())
-            Recommend -> moveTo(MyRecommendFragement())
 
+            PulleyPlus   -> moveTo(MyPulleyPlusFragment())
+            PulleyLesson -> moveTo(MyPulleyLessonFragment())
+            PulleyBooks  -> moveTo(MyPulleyBooksFragment())
+            CouponBox    -> moveTo(MyPulleyCouponFragment())
+//            PaymentMethod -> {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(URL.결제정보)
+//                startActivity(intent)
+//            }
+
+            Recommend -> moveTo(MyRecommendFragement())
             AppSetting -> moveTo(MyAppSettingFragment())
+            Home -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","홈페이지 바로 가기")
+                intent.data = Uri.parse(URL.홈페이지)
+                startActivity(intent)
+            }
             Guide -> {
                 val intent = Intent(Intent.ACTION_VIEW)
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","활용가이드보기")
@@ -415,9 +442,7 @@ class MyMainPageFragment : Fragment() {
                                 Toast.makeText(requireContext(), "실패애", Toast.LENGTH_LONG).show()
                             })
                 }
-
                 builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
                 builder.show()
             }
             
@@ -588,9 +613,17 @@ class MyMainPageFragment : Fragment() {
 
         return when(setting) {
             AppSetting -> {
-                val pushStr = if(user.agreeAppPush) "동의" else "끔"
-                val eventStr = if(user.agreeMarketing) "동의" else "끔"
-                "PUSH 알림 : $pushStr / 이벤트, 혜택 알림 : $eventStr"
+                var agrees: MutableList<String> = mutableListOf()
+                if(user.agreeAlimtalk) agrees.add("알림톡(문자)")
+                if(user.agreeAppPush) agrees.add("푸시")
+                if(user.agreeEmail) agrees.add("이메일")
+                if(user.agreeMarketing) agrees.add("마케팅")
+
+                if(agrees.isEmpty()) {
+                    "수신 거부"
+                } else {
+                    "${agrees.joinToString(",")} 알림 허용"
+                }
             }
             Version -> {
                 val isNeedUpdate = VersionManager.isNeedToUpdate()
@@ -611,13 +644,21 @@ class ListHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val subTitleTv = view.subTitleTv
     val clampIv = view.clampIv
     val switch = view.onOffSwitch
+    val textDescription = view.textDescription
 
     fun set(setting: Setting, subText: String) {
         titleTv.text = setting.title
         subTitleTv.text = subText
 
+        textDescription.visibility = View.GONE
+
         when(setting) {
             Guide, Notice -> clampIv.setImageResource(R.drawable.ic_new_window)
+            Home -> {
+                textDescription.visibility = View.VISIBLE
+                textDescription.text = "결제수단 변경 및 주문 취소는 풀리수학 홈페이지에서 가능합니다."
+                clampIv.setImageResource(R.drawable.ic_new_window)
+            }
             else -> clampIv.setImageResource(R.drawable.ic_clamp)
         }
 

@@ -9,15 +9,15 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
 import com.freewheelin.pulley.utils.setPaddingTop
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
-import kotlinx.android.synthetic.main.view_code_confirm.view.*
-import kotlinx.android.synthetic.main.view_input_daebak.view.*
 
 interface DaebakInputFieldListener {
     fun onFieldFocusChanged(view: DaebakInputField, hasFocus: Boolean)
@@ -69,30 +69,35 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
 
     var isShownError: Boolean
          get() {
-             return errorContainerLl.visibility == View.VISIBLE
+             val container = findViewById<LinearLayout>(R.id.errorContainerLl)
+             return container.visibility == View.VISIBLE
          }
         set(value) {
+            val container = findViewById<LinearLayout>(R.id.errorContainerLl)
+            val edit = findViewById<EditText>(R.id.editText)
             if (value) {
-                errorContainerLl.visibility = View.VISIBLE
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                container.visibility = View.VISIBLE
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
             } else {
-                errorContainerLl.visibility = View.GONE
-                if(editText.isFocused)
-                    editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                container.visibility = View.GONE
+                if(edit.isFocused)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
                 else
-                    editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
             }
         }
 
     var isVisbleLabel: Boolean
         get() {
-            return labelTv.visibility == View.VISIBLE
+            val label = findViewById<TextView>(R.id.labelTv)
+            return label.visibility == View.VISIBLE
         }
         set(value) {
+            val label = findViewById<TextView>(R.id.labelTv)
             if(value) {
-                labelTv.visibility = View.VISIBLE
+                label.visibility = View.VISIBLE
             } else {
-                labelTv.visibility = View.GONE
+                label.visibility = View.GONE
             }
         }
 
@@ -100,14 +105,17 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
         set(value) {
             field = value
 
+            val edit = findViewById<EditText>(R.id.editText)
+            val spin = findViewById<ArduousSpinner>(R.id.spinner)
+
             when(value) {
                 DAEBAK_EDITTEXT -> {
-                    editText.visibility = View.VISIBLE
-                    spinner.visibility = View.GONE
+                    edit.visibility = View.VISIBLE
+                    spin.visibility = View.GONE
                 }
                 DAEBAK_SPNNER -> {
-                    editText.visibility = View.GONE
-                    spinner.visibility = View.VISIBLE
+                    edit.visibility = View.GONE
+                    spin.visibility = View.VISIBLE
                 }
             }
         }
@@ -115,33 +123,49 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
     override fun setEnabled(enabled: Boolean) {
 //        super.setEnabled(enabled)
 
+        val edit = findViewById<EditText>(R.id.editText)
+        val label = findViewById<TextView>(R.id.labelTv)
+        val spin = findViewById<ArduousSpinner>(R.id.spinner)
+
         if(enabled) {
-            labelTv.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            label.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
 
-            editText.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
-            editText.setHintTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-            if(editText.isFocused)
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            edit.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            edit.setHintTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+            if(edit.isFocused)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
             else
-                editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
         } else {
-            labelTv.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            label.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
 
-            editText.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            editText.setHintTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0)
+            edit.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            edit.setHintTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0)
         }
 
-        editText.isEnabled = enabled
-        spinner.isEnabled = enabled
+        edit.isEnabled = enabled
+        spin.isEnabled = enabled
     }
 
+    var editText: EditText
+    var labelTv: TextView
+    var spinner: ArduousSpinner
+    val containerCl: LinearLayout
+    var errorTv: TextView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_input_daebak, this)
         this.orientation = LinearLayout.VERTICAL
-        this.editText.onFocusChangeListener = this
-        this.editText.addTextChangedListener(object: TextWatcher{
+
+        editText = findViewById(R.id.editText)
+        labelTv = findViewById(R.id.labelTv)
+        spinner = findViewById(R.id.spinner)
+        containerCl = findViewById(R.id.containerLl)
+        errorTv = findViewById(R.id.errorTv)
+
+        editText.onFocusChangeListener = this
+        editText.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
                 isShownError = false
                 listener?.onFieldValueChanged(this@DaebakInputField)
@@ -158,11 +182,12 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
                 }
             }
         })
-        this.spinner.listener = this
+        spinner.listener = this
         isShownError = false
     }
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
+
         if(hasFocus)
             editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
         else
@@ -200,8 +225,9 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
     }
 
     fun setMaxLength(length:Int) {
-        if(length > 0)
-            editText.filters = arrayOf( InputFilter.LengthFilter(length) )
+        if(length > 0) {
+            editText.filters = arrayOf(InputFilter.LengthFilter(length))
+        }
     }
 
     fun showErrorMsg(errorMsg: String) {
@@ -211,8 +237,9 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
     }
 
     fun goneLabel() {
+
         labelTv.visibility = View.GONE
-        containerLl.setPaddingTop(0)
+        containerCl.setPaddingTop(0)
     }
 
 }

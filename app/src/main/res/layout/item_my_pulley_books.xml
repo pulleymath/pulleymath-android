@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/prodNameLabel"
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="상품명"
+                android:textSize="@dimen/sp16" />
+            <TextView
+                android:id="@+id/prodNameTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="풀리수학+"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/publisherLabel"
+                style="@style/TextGrey_c0c0c0"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="출판사"
+                android:textSize="@dimen/sp16" />
+
+            <TextView
+                android:id="@+id/publisherTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진학사"
+                android:textSize="@dimen/sp16" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+
+</LinearLayout>

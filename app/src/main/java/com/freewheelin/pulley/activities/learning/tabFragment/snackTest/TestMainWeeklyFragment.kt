@@ -12,8 +12,12 @@ import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.model.contents.Test
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.*
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
+import kotlinx.android.synthetic.main.fragment_test_main.*
 import kotlinx.android.synthetic.main.fragment_test_main_unavailable_test.*
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.contentTv
+import kotlinx.android.synthetic.main.fragment_test_main_weekly.headerTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.levelLabel
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.levelTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.rangeLabel
@@ -21,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_test_main_weekly.rangeTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.settingBtn
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.settingContainerCl
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.startBtn
+import kotlinx.android.synthetic.main.fragment_test_main_weekly.timerGuideTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.titleTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly_finish.*
 import java.util.*
@@ -84,7 +89,9 @@ class TestMainWeeklyFragment : TestMainBaseFragment() {
                 timerGuideTv.show(duration)
                 startBtn.show(duration)
             }
-            startBtn.setPermissionClickListener {
+
+            startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
+            startBtn.setOnClickListener {
                 listener?.onSolveBtnClicked(test!!)
             }
         }

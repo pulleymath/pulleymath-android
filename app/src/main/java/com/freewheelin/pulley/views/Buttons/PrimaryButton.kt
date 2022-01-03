@@ -7,12 +7,17 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.ScreenTheme
 import com.freewheelin.pulley.core.Theme
-import kotlinx.android.synthetic.main.button_primarybutton.view.*
+import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
+import com.freewheelin.pulley.utils.DialogUtils
 
 enum class ButtonTheme {
     Primary_Blue,
@@ -21,7 +26,6 @@ enum class ButtonTheme {
 
     Secondary_Blue,
     Secondary_Grey;
-
 
     fun getTextColor(context: Context): Int {
         return when(this) {
@@ -56,7 +60,38 @@ enum class ButtonTheme {
     }
 }
 
+enum class ButtonLockImage {
+    small16, mid20, mid24, big48
+}
+
+enum class ButtonMode {
+    normal, pulley_plus
+}
+
 open class PrimaryButton: ConstraintLayout {
+
+    constructor(context: Context): super(context)
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
+        setTypedArray(attrs)
+    }
+
+    var buttonText: TextView
+    var imageLock: ImageView
+    var button: Button
+    var lottie: LottieAnimationView
+
+    init {
+        LayoutInflater.from(context).inflate(R.layout.button_primarybutton, this)
+        theme = ButtonTheme.Primary_Blue
+
+        buttonText = findViewById(R.id.buttonText)
+        imageLock = findViewById(R.id.imageLock)
+        button = findViewById(R.id.button)
+        lottie = findViewById(R.id.lottie)
+    }
+
+    private var mode = ButtonMode.normal
+    private var hasPulleyPlus = false
 
     var screenTheme: ScreenTheme = ScreenTheme.Bright
         set(value) {
@@ -75,32 +110,51 @@ open class PrimaryButton: ConstraintLayout {
     var text: CharSequence = ""
         set(value) {
             field = value
-            button.text = field
+            buttonText.text = field
         }
 
     private var isEnableUI: Boolean = true
 
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
-        setTypedArray(attrs)
+    fun setLock(hasPulleyPlus:Boolean, lockImage:ButtonLockImage = ButtonLockImage.small16, mode: ButtonMode = ButtonMode.normal) {
+        this.hasPulleyPlus = hasPulleyPlus
+        this.mode = mode
+        when(mode) {
+            ButtonMode.pulley_plus -> {
+                if (!hasPulleyPlus) {
+                    imageLock.visibility = View.VISIBLE
+                    when (lockImage) {
+                        ButtonLockImage.mid20 -> imageLock.setImageResource(R.drawable.ic_lock_20_white)
+                        ButtonLockImage.mid24 -> imageLock.setImageResource(R.drawable.ic_lock_24_white)
+                        ButtonLockImage.big48 -> imageLock.setImageResource(R.drawable.ic_lock_48_white)
+                        else -> imageLock.setImageResource(R.drawable.ic_lock_16_white)
+                    }
+                    imageLock.setColorFilter(buttonText.currentTextColor)
+                } else {
+                    imageLock.visibility = View.GONE
+                }
+            }
+            else -> {
+                setUnlock()
+            }
+        }
     }
 
-    init {
-        LayoutInflater.from(context).inflate(R.layout.button_primarybutton, this)
-        theme = ButtonTheme.Primary_Blue
+    fun setUnlock() {
+        this.mode = ButtonMode.normal
+        imageLock.visibility = View.GONE
     }
 
     fun toDisableUI() {
         isEnableUI = false
-        button.typeface = Theme.bold(context)
+        buttonText.typeface = Theme.bold(context)
         when(screenTheme) {
             ScreenTheme.Bright -> {
-                button.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round)
             }
 
             ScreenTheme.Dark -> {
-                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
             }
         }
@@ -108,15 +162,15 @@ open class PrimaryButton: ConstraintLayout {
 
     fun toProcessingUI() {
         isEnableUI = true
-        button.typeface = Theme.bold(context)
+        buttonText.typeface = Theme.bold(context)
         when(screenTheme) {
             ScreenTheme.Bright -> {
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
                 button.background = ContextCompat.getDrawable(context, R.drawable.rp_bg_purple_ecebff_round)!!
-                button.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
             }
 
             ScreenTheme.Dark -> {
-                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
             }
         }
@@ -124,8 +178,8 @@ open class PrimaryButton: ConstraintLayout {
 
     fun toEnableUI() {
         isEnableUI = true
-        button.typeface = theme.getTextTypeface(context)
-        button.setTextColor(theme.getTextColor(context))
+        buttonText.typeface = theme.getTextTypeface(context)
+        buttonText.setTextColor(theme.getTextColor(context))
         button.background = theme.getBgDrawable(context)
     }
 
@@ -143,8 +197,7 @@ open class PrimaryButton: ConstraintLayout {
         val buttonTextSize: Float = array.getDimension(R.styleable.PrimaryButton_ButtonTextSize,
                 resources.getDimension(R.dimen.sp16))
 
-        button.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize)
-
+        buttonText.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonTextSize)
 
         val set = intArrayOf(
                 android.R.attr.background, // idx 0
@@ -173,12 +226,26 @@ open class PrimaryButton: ConstraintLayout {
     }
 
     override fun setOnClickListener(listener: OnClickListener?) {
-        button.setOnClickListener(listener)
+        when(mode) {
+            ButtonMode.pulley_plus -> {
+                if(hasPulleyPlus)
+                    button.setOnClickListener(listener)
+                else
+                    button.setOnClickListener{
+                        DialogUtils.confirmHasPulleyPlus(context) {
+                            PulleyPlusPriceDialog(context).show()
+                        }
+                    }
+            }
+            else -> {
+                button.setOnClickListener(listener)
+            }
+        }
     }
 
     fun startLoding() {
         button.isEnabled = false
-        button.text = ""
+        buttonText.text = ""
         lottie.setAnimation(theme.getLoadingAnim())
         lottie.visibility = View.VISIBLE
         lottie.playAnimation()
@@ -186,7 +253,7 @@ open class PrimaryButton: ConstraintLayout {
 
     fun completeLoading() {
         button.isEnabled = true
-        button.text = text
+        buttonText.text = text
         lottie.visibility = View.INVISIBLE
         lottie.pauseAnimation()
     }

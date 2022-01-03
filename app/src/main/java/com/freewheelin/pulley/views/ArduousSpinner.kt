@@ -14,15 +14,13 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.toPx
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
-import kotlinx.android.synthetic.main.item_arduous_spinner.view.*
-import kotlinx.android.synthetic.main.spinner_arduous.view.*
-import kotlinx.android.synthetic.main.view_arduous_list.view.*
 
 interface ArduousSpinnerListener {
     fun onItemClicked(view: ArduousSpinner, position: Int)
@@ -89,11 +87,19 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
         return minOf(listMaxheight, (itemHeight * items.size))
     }
 
+    var mainBtn: Button
+    var arrowIv: ImageView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.spinner_arduous, this, true)
         this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
         isFocusableInTouchMode = true
+
+        mainBtn = findViewById(R.id.mainBtn)
+        arrowIv = findViewById(R.id.arrowIv)
+
         mainBtn.setOnClickListener(this)
+
     }
 
     override fun onClick(view: View) {
@@ -130,10 +136,14 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
             setItem()
         }
 
+        var listRv:RecyclerView
+
         init {
             LayoutInflater.from(context).inflate(R.layout.view_arduous_list, this, true)
             this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
             orientation = VERTICAL
+
+            listRv = findViewById(R.id.listRv)
         }
 
         fun setItem() {
@@ -164,7 +174,7 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
 
             override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
                 val holder =  ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_arduous_spinner, p0, false))
-                holder.itemView.containerCl.layoutParams.height = itemHeight
+                holder.itemView.findViewById<ConstraintLayout>(R.id.containerCl).layoutParams.height = itemHeight
                 return holder
             }
 
@@ -189,6 +199,6 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var button = view.findViewById<Button>(R.id.listItem)
-        val containerCl = view.containerCl
+        val containerCl = view.findViewById<ConstraintLayout>(R.id.containerCl)
     }
 }

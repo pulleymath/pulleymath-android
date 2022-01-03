@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -13,7 +14,8 @@ import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.WeakChapterResult
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.utils.partialFontAndColored
-import kotlinx.android.synthetic.main.view_analysis_recommend_study.view.*
+import com.freewheelin.pulley.views.Bars.VerticalBar
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
 
 interface AnalysisRecommendStudyViewListener {
     fun onRecommendBtnClicked(view: AnalysisRecommendStudyView)
@@ -25,8 +27,28 @@ class AnalysisRecommendStudyView: ConstraintLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
+    var myCorrectRateBar: VerticalBar
+    var averageCorrectRateBar: VerticalBar
+    var averageBarLabel: TextView
+    var actionBtn: PrimaryButton
+
+    var guideTv: TextView
+    var unitTv: TextView
+    var recommendTv: TextView
+    var myBarLabel: TextView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_analysis_recommend_study, this)
+
+        myCorrectRateBar = findViewById(R.id.myCorrectRateBar)
+        averageCorrectRateBar = findViewById(R.id.averageCorrectRateBar)
+        averageBarLabel = findViewById(R.id.averageBarLabel)
+        actionBtn = findViewById(R.id.actionBtn)
+
+        guideTv = findViewById(R.id.guideTv)
+        unitTv = findViewById(R.id.unitTv)
+        recommendTv = findViewById(R.id.recommendTv)
+        myBarLabel = findViewById(R.id.myBarLabel)
 
         myCorrectRateBar.value = 0.3f
         myCorrectRateBar.barHeight = resources.getDimension(R.dimen.dp120)

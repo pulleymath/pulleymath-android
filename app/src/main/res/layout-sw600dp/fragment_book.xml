@@ -106,17 +106,33 @@
                     android:layout_weight="1"
                     android:background="#f2f2f2">
 
-                    <TextView
-                        android:id="@+id/textMakeWorkbook"
-                        style="@style/TextPurple_6d6dff.ExtraBold"
+                    <LinearLayout
+                        android:id="@+id/layoutMakeWorkbook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:layout_marginStart="48dp"
                         android:layout_marginBottom="35dp"
-                        android:text="워크북 만들기 >"
-                        android:textSize="@dimen/dp16"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/iconLock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_lock_16_white"
+                            android:visibility="gone"
+                            app:tint="@color/purple_6D6DFF" />
+
+                        <TextView
+                            android:id="@+id/textMakeWorkbook"
+                            style="@style/TextPurple_6d6dff.ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="워크북 만들기 >"
+                            android:textSize="@dimen/dp16" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textWorkbookDescr"
@@ -126,8 +142,8 @@
                         android:layout_marginBottom="24dp"
                         android:text="문제집으로\n나만의 워크북을 만들어보세요"
                         android:textSize="@dimen/dp18"
-                        app:layout_constraintBottom_toTopOf="@+id/textMakeWorkbook"
-                        app:layout_constraintStart_toStartOf="@+id/textMakeWorkbook"
+                        app:layout_constraintBottom_toTopOf="@+id/layoutMakeWorkbook"
+                        app:layout_constraintStart_toStartOf="@+id/layoutMakeWorkbook"
                         app:lineHeight="@dimen/dp24" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

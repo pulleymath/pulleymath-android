@@ -2,13 +2,13 @@ package com.freewheelin.pulley.views.TextViews
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.view_sortable_label.view.*
 
 interface SortableListener {
     fun onOrderChanged(view: SortableTextView, order: SortableTextView.Order)
@@ -46,11 +46,17 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
             labelTv.text = value
         }
 
+    var labelTv: TextView
+    var arrowIv:ImageView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_sortable_label, this)
+
+        labelTv = findViewById(R.id.labelTv)
+        arrowIv = findViewById(R.id.arrowIv)
+
         this.setOnClickListener(this)
         isSelected = false
-
     }
 
     private fun setTypedArray(attrs: AttributeSet) {

@@ -117,7 +117,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
         xBtn.setOnClickListener {
             this.onBackPressed()
         }
-        reviewBtn.setPermissionClickListener {
+        reviewBtn.setOnClickListener {
             onReviewBtnClicked()
         }
     }

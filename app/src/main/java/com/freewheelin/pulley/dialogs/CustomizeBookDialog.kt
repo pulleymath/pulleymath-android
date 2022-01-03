@@ -86,7 +86,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     // 체크박스 사용 막
     var blockCheck = false
 
-    constructor(context: Context): super(context) {
+    constructor(context: Context, listener: CustomizeBookDialogListener?): super(context) {
         setContentView(R.layout.dialog_book_customize)
         // fullscreen dialog
         if(!context.isTablet) {
@@ -98,9 +98,10 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
+        this.listener = listener
     }
 
-    constructor(context: Context, book: Book): super(context) {
+    constructor(context: Context, listener: CustomizeBookDialogListener?, book: Book): super(context) {
         setContentView(R.layout.dialog_book_customize)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
@@ -109,6 +110,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         step2Container.visibility = View.VISIBLE
         initStep2()
         step = 0
+        this.listener = listener
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {

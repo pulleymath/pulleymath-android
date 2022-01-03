@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -77,8 +78,13 @@ class VerticalBarView : ConstraintLayout {
             titleTv.text = value
         }
 
+    var detailBtn: Button
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_bar_vertical, this)
+
+        detailBtn = findViewById(R.id.detailBtn)
+
         isSelectedDetailBtn = false
         this.setOnClickListener {
             isSelectedDetailBtn = !isSelectedDetailBtn

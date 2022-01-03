@@ -134,7 +134,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         unitSelectGuideTv.text = ""
         selectedChapter.listener = this
         selectedChapter.clear()
-        learnBtn.setPermissionClickListener {
+        learnBtn.setOnClickListener {
             if(learnBtn.isEnableUI()) {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
                 val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
@@ -180,7 +180,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             }
         }
 
-        reviewBtn.setPermissionClickListener {
+        reviewBtn.setOnClickListener {
             if(reviewBtn.isEnableUI()) {
                 ContentManager.getReview(requireContext(), user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
                     val intent = SolveActivity.getReviewIntent(requireContext(), it, false)

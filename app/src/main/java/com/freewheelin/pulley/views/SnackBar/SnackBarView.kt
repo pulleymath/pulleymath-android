@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_snack_bar.view.*
-
 
 interface SnackBarViewListener {
     fun onXBtnClicked(view: SnackBarView)
@@ -35,11 +36,19 @@ class SnackBarView : ConstraintLayout {
         snackContentTv.text = contentText
     }
 
+    var xBtn: ImageButton
+    var snackActionBtn: Button
+    var snackContentTv: TextView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_snack_bar, this)
 
-        this.background = ContextCompat.getDrawable(context, R.drawable.bg_black_333333_round)
+        xBtn = findViewById(R.id.xBtn)
+        snackActionBtn = findViewById(R.id.snackActionBtn)
+        snackContentTv = findViewById(R.id.snackContentTv)
 
+
+        this.background = ContextCompat.getDrawable(context, R.drawable.bg_black_333333_round)
         val lParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, snackBarViewHeight.toPx())
         this.layoutParams = lParams
         xBtn.setOnClickListener {

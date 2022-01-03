@@ -8,12 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.setPermissionClickListener
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_wrong_manage.view.*
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.Buttons.SecondaryButton
 
 interface WrongManageViewListener {
     fun onTrashBtnClicked(view: WrongManageView) {}
@@ -46,18 +51,34 @@ class WrongManageView: ConstraintLayout {
     var isActive: Boolean = false
     var listener: WrongManageViewListener? = null
 
+    var containerCl: ConstraintLayout
+    var studyWrongBtn: PrimaryButton
+    var reviewBtn: SecondaryButton
+    var guideTv: TextView
+    var btnContainerLl: LinearLayout
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_wrong_manage, this, true)
+
+        containerCl = findViewById(R.id.containerCl)
+        studyWrongBtn = findViewById(R.id.studyWrongBtn)
+        reviewBtn = findViewById(R.id.reviewBtn)
+        guideTv = findViewById(R.id.guideTv)
+        btnContainerLl = findViewById(R.id.btnContainerLl)
+
         containerCl.isClickable = true
-        studyWrongBtn.setPermissionClickListener {
+        // setLock first
+        studyWrongBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus)
+        reviewBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus)
+
+        studyWrongBtn.setOnClickListener {
             if(isActive == false)
                 showInactiveToast()
             else {
                 listener?.onStudyBtnClicked(this)
             }
         }
-
-        reviewBtn.setPermissionClickListener {
+        reviewBtn.setOnClickListener {
             listener?.onReviewBtnClicked(this)
         }
 
@@ -129,7 +150,7 @@ class WrongManageView: ConstraintLayout {
         btn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round)
         btnContainerLl.addView(btn)
         btn.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
-        btn.setPermissionClickListener {
+        btn.setOnClickListener {
             if(!isActive)
                 showInactiveToast()
             else {

@@ -25,6 +25,11 @@ import com.freewheelin.pulley.dialogs.MockGuideDialog
 import com.freewheelin.pulley.dialogs.MockGuideDialogListener
 import com.freewheelin.pulley.model.User
 import kotlinx.android.synthetic.main.dialog_daebak.*
+import kotlinx.android.synthetic.main.dialog_daebak.contentTv
+import kotlinx.android.synthetic.main.dialog_daebak.leftBtn
+import kotlinx.android.synthetic.main.dialog_daebak.rightBtn
+import kotlinx.android.synthetic.main.dialog_daebak.titleTv
+import kotlinx.android.synthetic.main.dialog_daebak_v2_confirm.*
 import java.util.*
 
 enum class DialogType {
@@ -451,10 +456,23 @@ class DialogUtils {
             if(!activity.isFinishing)
                 dialog.show()
         }
+
+        fun confirmHasPulleyPlus(context: Context, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
+
+        fun confirmBuyPulleyBooks(context: Context, bookName:String?, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "문제집 구매 후 풀이가 가능합니다."
+            dialog.contentTv.text = "${bookName}\n출판사 문제집을 구매하시겠습니까?"
+            dialog.leftBtn.text = "더 고민해볼래요"
+            dialog.rightBtn.text = "구매하기"
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
     }
-
-
-
 
     class DaebakDialog(context: Context, isTitleOnly: Boolean = false) : Dialog(context) {
         var type: DialogType = DialogType.default
@@ -498,6 +516,38 @@ class DialogUtils {
             rightBtn.setOnClickListener {
                 dismiss()
             }
+        }
+    }
+
+    class DaebakDialogV2Confirm(context: Context, val callback: (() -> Unit)? = null) : Dialog(context) {
+
+        var title: String?
+            get() = titleTv.text.toString()
+            set(value) {
+                titleTv.text = value
+            }
+
+        var contents: String?
+            get() = contentTv.text.toString()
+            set(value) {
+                contentTv.text = value
+            }
+
+        init {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val inflater: LayoutInflater = LayoutInflater.from(getContext())
+            val view = inflater.inflate(R.layout.dialog_daebak_v2_confirm, null)
+
+            setContentView(view)
+            leftBtn.setOnClickListener { dismiss() }
+            rightBtn.setOnClickListener {
+                dismiss()
+                callback?.run { this() }
+            }
+        }
+
+        fun show(context: Context) {
+            if(context is Activity && !context.isFinishing) super.show()
         }
     }
 }

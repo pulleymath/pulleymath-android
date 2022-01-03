@@ -28,10 +28,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.manage.BookManager
 import com.freewheelin.pulley.core.tutorial.Tutor
-import com.freewheelin.pulley.dialogs.CustomizeBookDialog
-import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
-import com.freewheelin.pulley.dialogs.EmailInputDialog
-import com.freewheelin.pulley.dialogs.EmailInputDialogListener
+import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
 import com.freewheelin.pulley.utils.*
@@ -95,17 +92,22 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         myPlanRv.adapter = MyPlanAdapter()
         myPlanRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        commercialBookLayout.setPermissionClickListener {
+        commercialBookLayout.setOnClickListener {
             Intent(requireContext(), PdfListActivity::class.java).let {
                 startActivity(it)
             }
         }
 
-        workbookBtn.setPermissionClickListener {
+        iconLock.visibility = if(user!!.hasPulleyPlus) { View.GONE } else { View.VISIBLE }
+        workbookBtn.setOnClickListener {
             LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체-워크북만들기")
-            val dialog = CustomizeBookDialog(requireContext())
-            dialog.listener = this
-            dialog.show()
+            if(user!!.hasPulleyPlus) {
+                CustomizeBookDialog(requireContext(), this).show()
+            } else {
+                DialogUtils.confirmHasPulleyPlus(requireContext()) {
+                    PulleyPlusPriceDialog(requireContext()).show()
+                }
+            }
         }
 
         totalRv.layoutManager =  GridLayoutManager(context, 3)
@@ -169,7 +171,6 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         recommendLabel.visibility = View.INVISIBLE
         totalPlanContainer.layoutParams.height = DisplayUtils.getScrenHeight(requireContext())
         filterView.listener = this
-
     }
 
     override fun onResume() {
@@ -427,9 +428,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
 
     override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집선택버튼")
-        val dialog = CustomizeBookDialog(requireContext(), book)
-        dialog.listener = this
-        dialog.show()
+        CustomizeBookDialog(requireContext(), this, book).show()
     }
 
     override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {

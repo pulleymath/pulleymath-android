@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.ImageButton
+import android.widget.Switch
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +25,6 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
-import kotlinx.android.synthetic.main.view_gallery.view.*
 
 interface GalleryViewDelegate {
     fun onFoldBtnClicked()
@@ -44,8 +46,23 @@ class GalleryView : ConstraintLayout {
         }
     }
 
+    var foldBtn: ImageButton
+    var filterSwitch: Switch
+    var filterLabel: TextView
+    var recyclerView: RecyclerView
+    var galleryHeaderTv: TextView
+    var emptyFilterContainer: ConstraintLayout
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_gallery, this)
+
+        foldBtn = findViewById(R.id.foldBtn)
+        filterSwitch = findViewById(R.id.filterSwitch)
+        filterLabel = findViewById(R.id.filterLabel)
+        recyclerView = findViewById(R.id.recyclerView)
+        galleryHeaderTv = findViewById(R.id.galleryHeaderTv)
+        emptyFilterContainer = findViewById(R.id.emptyFilterContainer)
+
         foldBtn.setOnClickListener {
             LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "갤-갤러리꺽쇠닫기", itemValue)
             delegate?.onFoldBtnClicked()

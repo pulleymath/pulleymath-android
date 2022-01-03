@@ -6,9 +6,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.PopupWindow
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -18,7 +16,6 @@ import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import kotlinx.android.synthetic.main.view_answer.view.*
 
 
 interface AnswerDelegate {
@@ -46,8 +43,29 @@ class AnswerView : ConstraintLayout,
     var keyPad: PopupWindow? = null
     var isShowSubmit = false
 
+    var shortAnswerView: EditText
+    var dragIv: ImageView
+    var selectionAnswerView: AnswerSelectionView
+    var focusContainer: LinearLayout
+    var resultIv: ImageView
+
+    var answeredCntTv: TextView
+    var markingBtn: ConstraintLayout
+    var submitBtn: Button
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_answer, this)
+
+        shortAnswerView = findViewById(R.id.shortAnswerView)
+        dragIv = findViewById(R.id.dragIv)
+        selectionAnswerView = findViewById(R.id.selectionAnswerView)
+        focusContainer = findViewById(R.id.focusContainer)
+        resultIv = findViewById(R.id.resultIv)
+
+        answeredCntTv = findViewById(R.id.answeredCntTv)
+        markingBtn = findViewById(R.id.markingBtn)
+        submitBtn = findViewById(R.id.submitBtn)
+
         val paddingStartEnd = resources.getDimension(R.dimen.dp16).toInt()
         setPadding(paddingStartEnd, 0, paddingStartEnd, 0)
         background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_32)

@@ -557,7 +557,18 @@ class SolveActivity : BaseActivity(),
         clearBtn.setOnClickListener { onClearBtnClicked() }
         scrapBtn.setOnClickListener { onScrapBtnClicked() }
         reportBtn.setOnClickListener { onSirenBtnClicked() }
-        addSimilarProblemCl.setOnClickListener { onAddSimilarBtnClicked() }
+        // 풀리플러스 처리
+        lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
+        plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
+        addSimilarProblemCl.setOnClickListener {
+            if(user!!.hasPulleyPlus) {
+                onAddSimilarBtnClicked()
+            } else {
+                DialogUtils.confirmHasPulleyPlus(this@SolveActivity) {
+                    PulleyPlusPriceDialog(this@SolveActivity).show()
+                }
+            }
+        }
         changeSimilarProblemCl.setOnClickListener { onChangeSimilarBtnClicked() }
         answerView.markingBtn.setOnClickListener {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)

@@ -34,14 +34,14 @@ class StudyPlanTemplateView : CardView {
         radius = 5f.toPx()
         LayoutInflater.from(context).inflate(R.layout.view_studyplan_learned, this, true)
 
-        mailBtn.setPermissionClickListener {
+        mailBtn.setOnClickListener {
             listener?.onMailBtnClicked(book)
         }
 
-        solveBtn.setPermissionClickListener {
+        solveBtn.setOnClickListener {
             listener?.onSolveBtnClicked(book)
         }
-        reviewBtn.setPermissionClickListener {
+        reviewBtn.setOnClickListener {
             listener?.onReviewBtnClicked(book)
         }
         useCompatPadding = true

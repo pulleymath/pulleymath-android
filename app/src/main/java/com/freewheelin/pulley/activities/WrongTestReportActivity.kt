@@ -81,7 +81,7 @@ class WrongTestReportActivity : AppCompatActivity() {
             this.onBackPressed()
         }
 
-        reviewBtn.setPermissionClickListener { onReviewBtnClicked() }
+        reviewBtn.setOnClickListener { onReviewBtnClicked() }
     }
 
     fun onReviewBtnClicked() {

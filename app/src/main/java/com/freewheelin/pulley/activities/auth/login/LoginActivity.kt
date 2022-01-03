@@ -21,6 +21,7 @@ import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
+import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
@@ -30,7 +31,11 @@ import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.EditText.*
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import kotlinx.coroutines.*
@@ -152,9 +157,28 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
                     user?.connectToCrashlytics()
                     handleResponse(response, user)
                     hideProgress()
-
                     requested = false
                 }
+            })
+        }
+    }
+
+    fun putFcmToken(user: User?) {
+        if(user?.token?.isNotEmpty() == true) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+
+                API_APP.putToken(token)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ _ ->
+                        Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
+                    }, { })
             })
         }
     }
@@ -258,6 +282,9 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
     }
 
     private fun goLearningTab() {
+
+        putFcmToken(user)
+
         startActivity(Intent(this, LearningTabActivity::class.java))
         finishAffinity()
     }

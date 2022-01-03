@@ -13,13 +13,16 @@ import com.freewheelin.pulley.activities.auth.InitTestActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
 import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.core.manage.VersionManager
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
+import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -28,6 +31,9 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.messaging.FirebaseMessaging
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.coroutines.*
@@ -195,7 +201,11 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             isNeedOnboarding -> startActivity(OnboardingActivity::class.java)
             user?.initSettingCompleted != true -> { startActivity(InitSettingActivity.getIntent(this)) }
             user?.studentType == null -> { startActivity(InitTestActivity.getIntent(this)) }
-            else -> startActivity(LearningTabActivity::class.java)
+            else -> {
+                loadAlimSetting(user)
+                putFcmToken(user)
+                startActivity(LearningTabActivity::class.java)
+            }
         }
         finish()
     }
@@ -203,6 +213,38 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     override fun onResume() {
         super.onResume()
         continueUpdateProcess()
+    }
+
+    fun putFcmToken(user: User?) {
+        if(user?.token?.isNotEmpty() == true) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+                // Get new FCM registration token
+                val token = task.result
+
+                API_APP.putToken(token)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ _ ->
+                        Log.d(javaClass.simpleName, "토큰등록=$token")
+                    }, { })
+            })
+        }
+    }
+
+    fun loadAlimSetting(user: User?) {
+        API_APP.getNotificationSetting()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                response.data?.apply {
+                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing)
+                }
+            },{
+                /* do nothing */
+            })
     }
 
     fun continueUpdateProcess() {

@@ -285,7 +285,7 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     private fun userTest() {
-        val url = "https://pulleymath.com/user_test/teachers_v2.json"
+        val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/mes/teachers.json"
         // 작업하고있던 곳 맞음
         CoroutineScope(Dispatchers.IO).launch {
             try {

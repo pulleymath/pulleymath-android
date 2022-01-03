@@ -100,6 +100,9 @@ class User {
     var isValidPhone = false
     var isValidEmail = false
 
+    // 풀리플러스 사용여부
+    var hasPulleyPlus = false
+
     companion object {
         val TYPE_FREE_ING = "FREE_ING"
         val TYPE_PAID_ING = "PAID_ING"
@@ -170,8 +173,11 @@ class User {
     var recommendLevel: Int? = 0
     var recommendChapter: Int? = 0
     var recommendStudyPoint: Int? = 0
-    var agreeAppPush: Boolean = true
-    var agreeMarketing: Boolean = true
+
+    var agreeAlimtalk: Boolean = false
+    var agreeAppPush: Boolean = false
+    var agreeEmail: Boolean = false
+    var agreeMarketing: Boolean = false
 
     var serviceType: String = ""
 
@@ -279,6 +285,8 @@ class User {
 
             if (newUser.token != null) this.token = newUser.token
 
+            if (newUser.hasPulleyPlus != null) this.hasPulleyPlus = newUser.hasPulleyPlus
+
             commit("update")
         }
     }
@@ -301,9 +309,12 @@ class User {
             recommendChapter: Int? = null,
             recommendStudyPoint: Int? = null,
             grade: Int? = null,
-            agreeMarketing: Boolean? = null,
+            agreeAlimtalk: Boolean? = null,
             agreeAppPush: Boolean?= null,
-            token: String?= null
+            agreeEmail: Boolean?= null,
+            agreeMarketing: Boolean? = null,
+            token: String?= null,
+            hasPulleyPlus: Boolean?= null
     ) {
         if (email != null) this.email = email
 
@@ -339,11 +350,17 @@ class User {
 
         if (recommendStudyPoint != null) this.recommendStudyPoint = recommendStudyPoint
 
-        if(agreeMarketing != null) this.agreeMarketing = agreeMarketing
+        if(agreeAlimtalk != null) this.agreeAlimtalk = agreeAlimtalk
 
         if(agreeAppPush != null) this.agreeAppPush = agreeAppPush
 
+        if(agreeEmail != null) this.agreeEmail = agreeEmail
+
+        if(agreeMarketing != null) this.agreeMarketing = agreeMarketing
+
         if(token != null) this.token = token
+
+        if(hasPulleyPlus != null) this.hasPulleyPlus = hasPulleyPlus
 
         commit("update")
     }
