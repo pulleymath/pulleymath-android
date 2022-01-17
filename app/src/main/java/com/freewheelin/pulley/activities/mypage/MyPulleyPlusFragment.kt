@@ -41,6 +41,7 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
     lateinit var usePeriodTv: TextView
     lateinit var paymentLabel: TextView
     lateinit var paymentTv: TextView
+    lateinit var nextPayDateContainer: LinearLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +58,8 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
         usePeriodTv = view.findViewById(R.id.usePeriodTv)
         paymentLabel = view.findViewById(R.id.paymentLabel)
         paymentTv = view.findViewById(R.id.paymentTv)
+
+        nextPayDateContainer = view.findViewById(R.id.nextPayDateContainer)
 
         backBtn = view.findViewById(R.id.backBtn)
         btnOpenPulleyPlus = view.findViewById(R.id.btnOpenPulleyPlus)
@@ -100,8 +103,13 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
         val start = DateTimeUtils.convertServerStr(data.detail.startedAt)
         val end = DateTimeUtils.convertServerStr(data.detail.endAt)
         usePeriodTv.text = "$start ~ $end"
-        paymentLabel.text = "다음 결제 예정일"
-        paymentTv.text = DateTimeUtils.convertServerStr(data.detail.nextPaymentAt)
+
+        if(data.detail.nextPaymentAt != null) {
+            paymentLabel.text = "다음 결제 예정일"
+            paymentTv.text = DateTimeUtils.convertServerStr(data.detail.nextPaymentAt)
+        } else {
+            nextPayDateContainer.visibility = View.GONE
+        }
     }
 
     fun moveTo(frag: Fragment) {

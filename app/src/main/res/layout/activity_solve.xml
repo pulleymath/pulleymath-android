@@ -272,50 +272,45 @@
                     android:layout_width="@dimen/dp120"
                     android:layout_height="@dimen/dp36"
                     android:layout_marginStart="@dimen/dp24"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:background="@drawable/bg_yellow_ffb300_round_18"
                     app:layout_constraintBottom_toBottomOf="@+id/controlTool"
                     app:layout_constraintStart_toEndOf="@+id/controlTool"
                     app:layout_constraintTop_toTopOf="@+id/controlTool">
 
-                    <ImageView
-                        android:id="@+id/plusIv"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_plus_white"
+                        android:gravity="center_vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/similarTv"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black_333333" />
-
-                    <ImageView
-                        android:id="@+id/lockIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:src="@drawable/ic_lock_16_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/similarTv"
-                        app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black_333333" />
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                    <TextView
-                        style="@style/TextBlack_333333.ExtraBold"
-                        android:id="@+id/similarTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="유사 문제"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@+id/plusIv"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/plusIv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_plus_white"
+                            app:tint="@color/black_333333" />
+
+                        <ImageView
+                            android:id="@+id/lockIv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:src="@drawable/ic_lock_16_white"
+                            app:tint="@color/black_333333" />
+
+                        <TextView
+                            style="@style/TextBlack_333333.ExtraBold"
+                            android:id="@+id/similarTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="유사 문제"
+                            android:textSize="@dimen/sp16" />
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -433,6 +428,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent">
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">

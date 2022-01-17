@@ -324,6 +324,7 @@ class DialogUtils {
                 dialog.show()
         }
 
+        // deprecated
         fun showExpiredDDayDialog(context: Context, dday: Int, memberType: String) {
             val title = if(dday != 0) {
                 if(memberType == User.TYPE_FREE_ING)
@@ -385,8 +386,8 @@ class DialogUtils {
         fun updateGradeNoDialog(context: Context): Dialog {
             val dialog = DaebakDialog(context)
             dialog.type = DialogType.default
-            dialog.titleTv.text = "학년 정보가\n수정되지 않았어요!"
-            dialog.contentTv.text = "메인 > 이름을 눌러서 학년 수정이 가능합니다 :)"
+            dialog.titleTv.text = "학습 정보가\n수정되지 않았어요!"
+            dialog.contentTv.text = "설정 > 학습정보에서 수정이 가능합니다 :)"
             dialog.rightBtn.text = "확인"
             dialog.leftBtn.visibility = View.GONE
             return dialog

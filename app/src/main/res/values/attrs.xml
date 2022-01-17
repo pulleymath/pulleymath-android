@@ -186,6 +186,7 @@
         <attr name="DaebakPasswordField_Hint" format="string" />
         <attr name="DaebakPasswordField_maxLength" format="integer" />
         <attr name="DaebakPasswordField_isVisibleLabel" format="boolean" />
+        <attr name="showEye" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="PulleyTextField">

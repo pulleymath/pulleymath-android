@@ -112,33 +112,33 @@ class User {
 
         const val EVENT_STUDENT_TYPE_SETTING = "EVENT_STUDENT_TYPE_SETTING"
 
-        fun signup(context: Context, lastName: String, firstName: String, email: String, pw: String, phone: String,
-                   successCB:() -> Unit,
-                   failCB: (Response<Template<Map<String, String>>>) -> Unit) {
-            val param: Parameter = Parameter(
-                    "loginID" to email,
-                    "loginPW" to pw,
-                    "firstName" to firstName,
-                    "lastName" to lastName,
-                    "cellPhone" to phone,
-                    "agreeService" to true,
-                    "agreeMarketing" to true
-            )
-
-            API_V1.signup(param).enqueue(object: Callback<Template<Map<String, String>>> {
-                override fun onFailure(call: Call<Template<Map<String, String>>>, t: Throwable) {
-                    responseFailed(context, t)
-                }
-
-                override fun onResponse(call: Call<Template<Map<String, String>>>, response: Response<Template<Map<String, String>>>) {
-                    if(response.isSuccessful) {
-                        successCB()
-                    } else {
-                        failCB(response)
-                    }
-                }
-            })
-        }
+//        fun signup(context: Context, lastName: String, firstName: String, email: String, pw: String, phone: String,
+//                   successCB:() -> Unit,
+//                   failCB: (Response<Template<Map<String, String>>>) -> Unit) {
+//            val param: Parameter = Parameter(
+//                    "loginID" to email,
+//                    "loginPW" to pw,
+//                    "firstName" to firstName,
+//                    "lastName" to lastName,
+//                    "cellPhone" to phone,
+//                    "agreeService" to true,
+//                    "agreeMarketing" to true
+//            )
+//
+//            API_V1.signup(param).enqueue(object: Callback<Template<Map<String, String>>> {
+//                override fun onFailure(call: Call<Template<Map<String, String>>>, t: Throwable) {
+//                    responseFailed(context, t)
+//                }
+//
+//                override fun onResponse(call: Call<Template<Map<String, String>>>, response: Response<Template<Map<String, String>>>) {
+//                    if(response.isSuccessful) {
+//                        successCB()
+//                    } else {
+//                        failCB(response)
+//                    }
+//                }
+//            })
+//        }
     }
 
     val studiedUnit: Set<BigUnit>
@@ -179,7 +179,7 @@ class User {
     var agreeEmail: Boolean = false
     var agreeMarketing: Boolean = false
 
-    var serviceType: String = ""
+    var serviceType: String = "" // deprecated
 
     @Expose @SerializedName("grade")
     var rawGrade: Int = 0
@@ -449,8 +449,9 @@ class User {
     }
 
     fun isExpiredUser(): Boolean {
-        val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
-        return !availableSet.contains(serviceType)
+//        val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
+//        return !availableSet.contains(serviceType)
+        return !hasPulleyPlus
     }
 
     fun syncMyInfo(activity:Activity, cb: (user: User) -> Unit) {
@@ -525,11 +526,13 @@ class User {
         return DateTimeUtils.getDayDifferences(today, endDate!!)
     }
 
+    // deprecated
     fun isNeedToStartFreeMembership(): Boolean {
         return serviceType == TYPE_NONE ||
                 (serviceType == TYPE_FREE_ING && startDate == null)
     }
 
+    // deprecated
     fun isNeedToShowExpiredDialog(): Boolean {
         val dday = getExpiredDday() ?: return false
 

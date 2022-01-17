@@ -458,15 +458,15 @@ class LearningTabActivity : PermissionActivity(),
                 }
                 dialog.rightBtn.setOnClickListener { btn ->
                     dialog.dismiss()
-                    if (user.grade == Grade.BeforeHigh || user.grade == Grade.High_1) {
-                        MyStudyInfoSettingDialog(this@LearningTabActivity, user, object : MyPageSettingDialogListener {
-                            override fun onModifyCompleted(user: User) {
-                                user.updateGrade(this@LearningTabActivity, user.grade) { showCompleteAndConfirm() }
-                            }
-                        }).show()
-                    } else {
-                        user.updateGrade(this@LearningTabActivity, user.grade.nextGrade) { showCompleteAndConfirm() }
-                    }
+//                    if (user.grade == Grade.BeforeHigh || user.grade == Grade.High_1) {
+                    MyStudyInfoSettingDialog(this@LearningTabActivity, user, object : MyPageSettingDialogListener {
+                        override fun onModifyCompleted(user: User) {
+                            user.updateGrade(this@LearningTabActivity, user.grade) { showCompleteAndConfirm() }
+                        }
+                    }).show()
+//                    } else {
+//                        user.updateGrade(this@LearningTabActivity, user.grade.nextGrade) { showCompleteAndConfirm() }
+//                    }
                 }
             }
             /*

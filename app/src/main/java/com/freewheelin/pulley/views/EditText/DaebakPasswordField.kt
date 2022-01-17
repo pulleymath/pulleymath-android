@@ -66,6 +66,20 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
             isShownError = true
         }
 
+    var showEye: Boolean
+        get() {
+            val checkEye = findViewById<TextView>(R.id.checkEye)
+            return checkEye.visibility == View.VISIBLE
+        }
+        set(value) {
+            val checkEye = findViewById<TextView>(R.id.checkEye)
+            if(value) {
+                checkEye.visibility = View.VISIBLE
+            } else {
+                checkEye.visibility = View.GONE
+            }
+        }
+
     var isShownError: Boolean
          get() {
              val container = findViewById<LinearLayout>(R.id.errorContainerLl)
@@ -189,6 +203,7 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
         this.label = array.getString(R.styleable.DaebakPasswordField_DaebakPasswordField_Label)
         edit.hint = array.getString(R.styleable.DaebakPasswordField_DaebakPasswordField_Hint)
         this.isVisbleLabel = array.getBoolean(R.styleable.DaebakPasswordField_DaebakPasswordField_isVisibleLabel, true)
+        this.showEye = array.getBoolean(R.styleable.DaebakPasswordField_showEye, true)
         setMaxLength(array.getInt(R.styleable.DaebakPasswordField_DaebakPasswordField_maxLength, 0))
         array.recycle()
     }

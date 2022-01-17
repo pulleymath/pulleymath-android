@@ -90,7 +90,7 @@ class TestMainWeeklyFragment : TestMainBaseFragment() {
                 startBtn.show(duration)
             }
 
-            startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
+//            startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
             startBtn.setOnClickListener {
                 listener?.onSolveBtnClicked(test!!)
             }

@@ -167,10 +167,10 @@
             android:layout_height="wrap_content"
             android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
             android:elevation="6dp"
-            app:layout_constraintBottom_toTopOf="@+id/imgCover"
-            app:layout_constraintEnd_toEndOf="@+id/imgCover"
-            app:layout_constraintStart_toStartOf="@+id/imgCover"
-            app:layout_constraintTop_toTopOf="@+id/imgCover"
+            app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
+            app:layout_constraintEnd_toEndOf="@+id/imgDownload"
+            app:layout_constraintStart_toStartOf="@+id/imgDownload"
+            app:layout_constraintTop_toTopOf="@+id/imgDownload"
             app:srcCompat="@drawable/ic_download_cancel" />
 
         <ProgressBar

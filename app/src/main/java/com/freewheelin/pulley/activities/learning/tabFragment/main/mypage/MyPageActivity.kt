@@ -90,7 +90,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
 //        })
         optionalUnitTv.text = calcNoneText(user?.getOptionalSubjectText())
 
-        if (user.serviceType == User.TYPE_PAUSE || user.isExpiredUser() == false) {
+        if (user.hasPulleyPlus) {
             payUserContainer.visibility = View.VISIBLE
             freeUserContainer.visibility = View.GONE
         } else {

@@ -11,35 +11,49 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import kotlinx.android.synthetic.main.button_plus_minus.*
-import kotlinx.android.synthetic.main.dialog_problem_count_setting.*
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.PlusMinusButton
 
 interface ProblemCountSettingDialogListener {
     fun onModifyCompleted(cnt: Int)
 }
 
 class ProblemCountSettingDialog(context: Context, count: Int): Dialog(context) {
-    val cnt get() = plusMinusBtn.cnt
+
+    lateinit var plusMinusBtn: PlusMinusButton
+    var modifyBtn: PrimaryButton
+
     val maxCnt = 30
     val minCnt = 5
     val skipCnt = 5
     var listener: ProblemCountSettingDialogListener? = null
+
+    val cnt by lazy { plusMinusBtn.cnt }
+
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setContentView(R.layout.dialog_problem_count_setting)
+
+        plusMinusBtn = findViewById(R.id.plusMinusBtn)
+        modifyBtn = findViewById(R.id.modifyBtn)
+
         plusMinusBtn.cnt = count
-        plusBtn.setOnClickListener {
+
+        plusMinusBtn.plusBtn.setOnClickListener {
             if(cnt < maxCnt)
                 plusMinusBtn.cnt += skipCnt
         }
-        minusBtn.setOnClickListener {
+
+        plusMinusBtn.minusBtn.setOnClickListener {
             if(cnt > minCnt)
                 plusMinusBtn.cnt -= skipCnt
         }
-        plusBtn.setOnLongClickListener(null)
-        minusBtn.setOnLongClickListener(null)
-        plusBtn.setOnTouchListener(null)
-        minusBtn.setOnTouchListener(null)
+
+        plusMinusBtn.plusBtn.setOnLongClickListener(null)
+        plusMinusBtn.minusBtn.setOnLongClickListener(null)
+        plusMinusBtn.plusBtn.setOnTouchListener(null)
+        plusMinusBtn.minusBtn.setOnTouchListener(null)
+
         modifyBtn.setOnClickListener {
             onModifyBtnClicked()
         }

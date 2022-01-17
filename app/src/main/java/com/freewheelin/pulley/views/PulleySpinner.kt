@@ -80,4 +80,9 @@ class PulleySpinner : ConstraintLayout {
     override fun isSelected(): Boolean {
         return if(hintable) position > 0 else position > -1
     }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        spinner.isEnabled = enabled
+    }
 }

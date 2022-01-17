@@ -135,9 +135,11 @@ class MyStudyInfoSettingDialog(context: Context, override val user: User, listen
         if (!modifyBtn.isEnableUI() || grade == null || major == null || rating == null) return
 
         val param = Parameter(
-                "grade" to grade.value,
-                "majorType" to major.value,
-                "initMoGrade" to rating
+                "grade" to grade.value
+                ,"majorType" to major.value
+                ,"initMoGrade" to rating
+                ,"regionID" to user.regionID
+                ,"schoolID" to user.schoolID
         )
 
         API_V2.setUserInfo(user.studentID, param as Parameter).enqueue(object: Callback<Void> {

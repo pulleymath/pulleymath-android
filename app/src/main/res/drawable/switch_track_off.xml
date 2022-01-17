@@ -11,6 +11,6 @@
         android:height="24dp" />
 
     <solid
-        android:color="@color/grey_3d3d3d" />
+        android:color="@color/grey_c0c0c0" />
 
 </shape>

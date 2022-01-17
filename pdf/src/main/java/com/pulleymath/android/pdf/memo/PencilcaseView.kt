@@ -8,10 +8,13 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.pulleymath.android.pdf.R
-import kotlinx.android.synthetic.main.view_pencilcase.view.*
 
 interface Pencilcase {
     val ERASE_THICK: Float
@@ -107,10 +110,50 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
     var itemValue = ""
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
+    var pencilBtn: ImageButton
+    var clearAllBtn: Button
+    var eraserBtn: ImageButton
+
+    var pencilOptionLl: LinearLayout
+    var lineBtn: ImageButton
+    var thinBtn: ImageButton
+    var mediumBtn: ImageButton
+    var thickBtn: ImageButton
+
+    var colorOption0Btn: LinearLayout
+    var colorOption1Btn: LinearLayout
+    var colorOption2Btn: LinearLayout
+    var colorOption3Btn: LinearLayout
+
+    var blackCheck: ImageView
+    var redCheck: ImageView
+    var yellowCheck: ImageView
+    var greenCheck: ImageView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pencilcase, this)
-        pencilBtn.setOnClickListener {
 
+        pencilBtn = findViewById(R.id.pencilBtn)
+        clearAllBtn = findViewById(R.id.clearAllBtn)
+        eraserBtn = findViewById(R.id.eraserBtn)
+
+        pencilOptionLl = findViewById(R.id.pencilOptionLl)
+        lineBtn = findViewById(R.id.lineBtn)
+        thinBtn = findViewById(R.id.thinBtn)
+        mediumBtn = findViewById(R.id.mediumBtn)
+        thickBtn = findViewById(R.id.thickBtn)
+
+        colorOption0Btn = findViewById(R.id.colorOption0Btn)
+        colorOption1Btn = findViewById(R.id.colorOption1Btn)
+        colorOption2Btn = findViewById(R.id.colorOption2Btn)
+        colorOption3Btn = findViewById(R.id.colorOption3Btn)
+
+        blackCheck = findViewById(R.id.blackCheck)
+        redCheck = findViewById(R.id.redCheck)
+        yellowCheck = findViewById(R.id.yellowCheck)
+        greenCheck = findViewById(R.id.greenCheck)
+
+        pencilBtn.setOnClickListener {
             if (editType == Pencilcase.EditType.pencil) {
 
                 pencilOptionLl.visibility = View.GONE

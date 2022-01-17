@@ -57,7 +57,7 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@color/white_fafafa"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/imageView3"
@@ -98,8 +98,7 @@
                     <ImageView
                         android:src="@drawable/ic_new_window"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity=""/>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
 

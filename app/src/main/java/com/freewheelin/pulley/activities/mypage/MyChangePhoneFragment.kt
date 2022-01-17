@@ -9,8 +9,12 @@ import android.view.ViewGroup
 import com.freewheelin.pulley.R
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestChangePhone
+import com.freewheelin.pulley.core.API.RequestModel.sign.AuthPhoneRequest
+import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
+import com.freewheelin.pulley.core.API_ANONYMOUS
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.isValidPhoneNum
@@ -19,13 +23,20 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.dialog_confirm_phone.*
 import kotlinx.android.synthetic.main.fragment_my_change_email.*
+import kotlinx.android.synthetic.main.fragment_my_change_email.codeConfirm
 import retrofit2.HttpException
 
 class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmInterface {
 
     val user
         get() = requireActivity().application.user!!
+
+    lateinit var countryCodes:List<CountryCodeResponse.CountryCode>
+    var countryCode = "82"
+    var countryType = "KOR"
+    var purposeType = "SIGN_UP"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,11 +46,32 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        load()
     }
 
     fun initUI() {
         codeConfirm.codeInterface = this
         codeConfirm.setText(user.cellPhone)
+    }
+
+    private fun load() {
+        API_ANONYMOUS.listCountryCodes()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                countryCodes = result.data
+                setSpinner()
+            }, { /* */ })
+    }
+
+    private fun setSpinner() {
+        val items = countryCodes.map { "(+${it.code}) ${it.title}"}
+        countrySpinner.set(items) {
+            val country = countryCodes.get(it)
+            countryCode = country.code
+            countryType = country.type
+        }
+        countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
     }
 
     override fun requestCode(text: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
@@ -48,9 +80,17 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
             text.isEmpty() -> callback(CodeConfirmView.Status.Fail, "휴대폰 번호를 입력하세요!")
             !text.isValidPhoneNum() -> callback(CodeConfirmView.Status.Fail, "휴대폰 번호가 형식에 맞지 않습니다!")
             else -> {
-                API_V2.requestChangePhoneCode(text).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        requestCodeSuccess(callback)
+                val authRequest = AuthPhoneRequest("SMS", text, countryCode, countryType, purposeType )
+
+                API_ANONYMOUS.getAuthCode(authRequest)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ result ->
+                        if(result.error != null) {
+                            requestCodeFailed(Throwable(result.error), callback)
+                        } else {
+                            requestCodeSuccess(callback)
+                        }
                     }, {
                         requestCodeFailed(it, callback)
                     })
@@ -78,10 +118,14 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
             confirmCode.isEmpty() -> callback(CodeConfirmView.Status.Fail, "코드를 입력하세요!")
             confirmCode.length < 4 -> callback(CodeConfirmView.Status.Fail, "인증번호는 숫자 4자리입니다.")
             else -> {
-                val request = RequestChangePhone(requestText, confirmCode)
+                val request = RequestChangePhone(requestText, confirmCode, countryCode)
                 API_V2.requestChangePhone(request).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
-                        requestConfirmSuccess(requestText, callback)
+                        if(response.error != null) {
+                            requestCodeFailed(Throwable(response.message), callback)
+                        } else {
+                            requestConfirmSuccess(requestText, callback)
+                        }
                     }, {
                         requestCodeFailed(it, callback)
                     })

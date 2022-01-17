@@ -18,7 +18,7 @@ class MainProfile {
     var curation: String = ""
     var numberOfUserText: Int = 0
     var studentGoalInfo: StudentGoalInfo = StudentGoalInfo()
-    var memberType = ""
+    var memberType = "" // deprecated
     var defaultDDay: DDay = DDay()
 
     val continuousGoalCount: Int
@@ -77,19 +77,20 @@ class MainProfile {
         return "${numberOfUserText}명이 풀리로 열공 중!\n${studentName}님도 할 수 있어요!"
     }
 
-    fun getUserHashtag(): List<String> {
-        if(memberType == User.TYPE_NONE)
-            return emptyList()
-        else
-            return hashTag.filter { it.isNotEmpty() }
+    fun getUserHashtag(user: User?): List<String> {
+        user?.let { user
+            if (user.hasPulleyPlus) return hashTag.filter { it.isNotEmpty() }
+        }
+        return emptyList()
     }
 
+    // deprecated
     fun isExpiredUser(): Boolean {
         val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
-
         return !availableSet.contains(memberType)
     }
 
+    // deprecated
     fun isPaidUser(): Boolean {
         val availableSet = setOf(TYPE_PAID_ING)
         return availableSet.contains(memberType)

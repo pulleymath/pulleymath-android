@@ -187,11 +187,12 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
                     targetTv.text = mainProfile.getDDayTitle(existTarget?.second)
                     dDayTv.text = mainProfile.getDDayText(existTarget?.third)
                 }
-                mainProfile.getUserHashtag().forEach {
+                Log.d("tpehf", "has pulley plus ? : ${user!!.hasPulleyPlus})")
+                mainProfile.getUserHashtag(user).forEach {
                     tagFl.addView(HashTagTextView(requireContext(), "#${it}"))
                 }
 
-                if (mainProfile.getUserHashtag().isEmpty()) {
+                if (mainProfile.getUserHashtag(user).isEmpty()) {
                     tagFl.visibility = View.GONE
                     freeUserContainer.setPaddingTop(resources.getDimension(R.dimen.dp48).toInt())
                 } else {
@@ -199,10 +200,10 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
                     freeUserContainer.setPaddingTop(resources.getDimension(R.dimen.dp32).toInt())
                 }
 
-                if (mainProfile.isExpiredUser())
-                    setDisabailableUI()
-                else
+                if (user?.hasPulleyPlus == true)
                     setAvailableUI()
+                else
+                    setDisabailableUI()
 
                 // 여기서 마케팅 팝업처리
                 if(loadingContainer.visibility == View.VISIBLE) {

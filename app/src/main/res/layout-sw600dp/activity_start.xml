@@ -46,15 +46,25 @@
     </LinearLayout>
 
 
+    <!--    <ImageView-->
+    <!--        android:id="@+id/pulleyIv"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:src="@drawable/pulley"-->
+    <!--        android:layout_marginStart="2dp"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/topLabel"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/topLabel"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>-->
     <ImageView
         android:id="@+id/pulleyIv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/pulley"
+        android:layout_width="522dp"
+        android:layout_height="56dp"
+        android:src="@drawable/pulleymath"
         android:layout_marginStart="2dp"
         app:layout_constraintStart_toStartOf="@+id/topLabel"
         app:layout_constraintEnd_toEndOf="@+id/topLabel"
         app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -65,18 +75,19 @@
         app:layout_constraintGuide_percent="0.5" />
 
 
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+    <Button
         android:id="@+id/startBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"
         android:layout_marginTop="@dimen/dp64"
         android:text="가입하고 공부 시작하기"
-        app:buttonTheme="blue"
-        app:ButtonTextSize="@dimen/sp18"
+        android:fontFamily="@font/nanum_square_bold"
+        android:textColor="@color/white_ffffff"
         app:layout_constraintStart_toStartOf="@+id/topLabel"
         app:layout_constraintEnd_toEndOf="@+id/topLabel"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        android:background="@drawable/bg_purple_6d6dff_round_40"
+        />
 
     <TextView
         style="@style/TextBlack_4c4c4c"
@@ -122,10 +133,11 @@
         android:layout_width="136dp"
         android:layout_height="128dp"
         android:background="@drawable/ic_balloon_purple"
-        android:layout_marginBottom="@dimen/dp32"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@+id/startBtn"
-        app:layout_constraintBottom_toBottomOf="@+id/startBtn">
+        android:layout_marginBottom="@dimen/dp28"
+        android:layout_marginStart="28dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pulleyIv"
+        app:layout_constraintStart_toEndOf="@+id/pulleyIv"
+        app:layout_constraintTop_toBottomOf="@+id/topLabel">
 
         <TextView
             style="@style/TextPurple_6d6dff.ExtraBold"

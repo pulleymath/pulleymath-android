@@ -18,14 +18,18 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryBooksItem
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryCouponItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.CodeConfirmView
 import com.freewheelin.pulley.views.DaebakToast
+import com.google.gson.Gson
 import com.pulleymath.android.pdf.draw.Line
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 
 class MyPulleyCouponFragment : MyPageBaseFragment() {
 
@@ -68,15 +72,30 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                     .subscribe({ result ->
                         Log.d(javaClass.simpleName, "$result")
                         if (result.error != null) {
-                            DialogUtils.confirmDialog(requireContext(), "확인", "사용할 수 없는 쿠폰입니다.")
+                            val msg = if(result.error == "NOT_FOUND_DATA") {
+                                "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
+                            } else {
+                                "쿠폰을 사용할 수 없습니다."
+                            }
+                            DialogUtils.confirmDialog(requireContext(), "확인", msg)
                         } else {
                             DaebakToast.show(requireContext(), "쿠폰이 등록되었습니다.")
                             couponEt.setText("")
                             load()
                         }
                         registBtn.toEnableUI()
-                    }, {
-                        DialogUtils.confirmDialog(requireContext(), "확인", "사용할 수 없는 쿠폰입니다.")
+                    }, { throwable ->
+                        val msg = if (throwable is HttpException) {
+                            val result = Gson().fromJson(throwable.response()?.errorBody()?.string(), ResponseBody::class.java)
+                            if(result.error == "NOT_FOUND_DATA") {
+                                "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
+                            } else {
+                                "쿠폰을 사용할 수 없습니다."
+                            }
+                        } else {
+                            "알수 없는 오류가 발생하였습니다. 다시 시도하세요!"
+                        }
+                        DialogUtils.confirmDialog(requireContext(), "확인", msg)
                         registBtn.toEnableUI()
                     })
             }

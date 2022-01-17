@@ -12,7 +12,6 @@ interface  AppService {
     // FCM 토큰 등록
     @PUT("app/v1/users/devices/token")
     fun putToken(@Query("appPushToken") appPushToken: String): Single<ResponseBody<Any>>
-
     // 쿠폰
     @POST("app/v1/users/coupons")
     fun addCoupon(@Body coupon: NewCoupon): Single<ResponseBody<Any>>
@@ -22,7 +21,6 @@ interface  AppService {
 
     @GET("app/v1/users/coupons")
     fun summaryCoupon(): Single<SummaryCouponResponse>
-
     // 마이페이지
     @GET("app/v1/users/lesson/summary")
     fun summaryLesson(): Single<SummaryLessonResponse>
@@ -32,7 +30,6 @@ interface  AppService {
 
     @GET("app/v1/users/plus/summary")
     fun summaryPlus(): Single<SummaryPlusResponse>
-
     // 알림 설정
     @GET("app/v1/users/notification")
     fun getNotificationSetting(): Single<NotificationResponse>

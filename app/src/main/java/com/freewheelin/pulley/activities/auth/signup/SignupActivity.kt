@@ -18,6 +18,7 @@ import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
+import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.ResponseBody
@@ -102,7 +103,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
-            API_V2.signup(signup).enqueue(object: Callback<Template<String?>> {
+            API_V1.signup(signup).enqueue(object: Callback<Template<String?>> {
                 override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
                     when(response.code()) {
                         200 -> signupSuccess()

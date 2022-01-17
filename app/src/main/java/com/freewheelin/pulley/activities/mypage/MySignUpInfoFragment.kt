@@ -45,7 +45,7 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         phoneModifyBtn.setOnClickListener { moveTo(MyChangePhoneFragment()) }
         passwordModifyBtn.setOnClickListener { moveTo(MyChangePasswordFragment()) }
         deviceBtn.setOnClickListener { moveTo(MyDeviceManagerFragment()) }
-        membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
+//        membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
 
         val user = MyApplication.user ?: return
         configureUI(user)
@@ -72,24 +72,24 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
         emailModifyBtn.text = if(user.isValidEmail) "변경하기" else "인증하기"
 
-        if(user.isExpiredUser() || user.serviceName == null) {
-            noSeviceLabel.visibility = View.VISIBLE
-            membershipBtn.visibility = View.VISIBLE
-            serviceNameLabel.visibility = View.GONE
-            availableDurationLabel.visibility = View.GONE
-            serviceTv.visibility = View.GONE
-            availableDurationTv.visibility = View.GONE
-        } else {
-            noSeviceLabel.visibility = View.GONE
-            membershipBtn.visibility = View.GONE
-            serviceNameLabel.visibility = View.VISIBLE
-            availableDurationLabel.visibility = View.VISIBLE
-            serviceTv.visibility = View.VISIBLE
-            availableDurationTv.visibility = View.VISIBLE
-
-            serviceTv.text = user.serviceName
-            availableDurationTv.text = getDurationText(user)
-        }
+//        if(user.isExpiredUser() || user.serviceName == null) {
+//            noSeviceLabel.visibility = View.VISIBLE
+//            membershipBtn.visibility = View.VISIBLE
+//            serviceNameLabel.visibility = View.GONE
+//            availableDurationLabel.visibility = View.GONE
+//            serviceTv.visibility = View.GONE
+//            availableDurationTv.visibility = View.GONE
+//        } else {
+//            noSeviceLabel.visibility = View.GONE
+//            membershipBtn.visibility = View.GONE
+//            serviceNameLabel.visibility = View.VISIBLE
+//            availableDurationLabel.visibility = View.VISIBLE
+//            serviceTv.visibility = View.VISIBLE
+//            availableDurationTv.visibility = View.VISIBLE
+//
+//            serviceTv.text = user.serviceName
+//            availableDurationTv.text = getDurationText(user)
+//        }
 
         ivConfirmPhone.visibility = if(user.isValidPhone) View.VISIBLE else View.GONE
         ivConfirmEmail.visibility = if(user.isValidEmail) View.VISIBLE else View.GONE
@@ -126,7 +126,7 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         if(user.startDate == null || user.endDate == null) {
             Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
                     "studentID: ${user.studentID}, " +
-                    "mebership: ${user.serviceType}, " +
+                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
                     "startDate: ${user.startDate}, " +
                     "endDate: ${user.endDate}")
             return ""

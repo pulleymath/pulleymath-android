@@ -6,10 +6,10 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.button_plus_minus.view.*
-import kotlinx.android.synthetic.main.dialog_wrong_management.*
 
 class PlusMinusButton: ConstraintLayout {
     constructor(context: Context): super(context)
@@ -25,8 +25,16 @@ class PlusMinusButton: ConstraintLayout {
         cntTv.text = cnt.toString()
     }
 
+    var plusBtn: ImageButton
+    var cntTv: TextView
+    var minusBtn: ImageButton
+
     init {
         LayoutInflater.from(context).inflate(R.layout.button_plus_minus, this)
+
+        plusBtn = findViewById(R.id.plusBtn)
+        cntTv = findViewById(R.id.cntTv)
+        minusBtn = findViewById(R.id.minusBtn)
 
         plusBtn.setOnClickListener {
             increment()

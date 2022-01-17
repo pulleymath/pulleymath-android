@@ -80,17 +80,17 @@ class StudyReportActivity : BaseActivity() {
         })
         bottomActionButton.setOnClickListener {
             LogUtils.logEvent(this, user!!, PulleyEvent.INIT_TEST, "스낵보고서", "공부시작")
-            if(user!!.isNeedToStartFreeMembership())
+            if(!user!!.hasPulleyPlus)
                 FacebookEvent.log(this, FacebookEvent.TUTORIAL_FINISHED)
             moveToMain()
         }
 
         mailGuideText.setOnClickListener { onMailBtnClicked() }
         mailBtn.setOnClickListener { onMailBtnClicked() }
-        if(user!!.isNeedToStartFreeMembership())
-            bottomActionButton.text = "지금부터 풀리로 공부 시작하기"
-        else
+        if(user!!.hasPulleyPlus)
             bottomActionButton.text = "${user!!.fullName}님을 위한 첫 단계 시작하기"
+        else
+            bottomActionButton.text = "지금부터 풀리로 공부 시작하기"
     }
 
     override fun onBackPressed() {

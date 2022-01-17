@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.LinkMovementMethod
@@ -14,40 +16,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.core.*
 import com.freewheelin.pulley.core.API.RequestModel.RequestCheckCode
-import com.freewheelin.pulley.core.API_V1
-import com.freewheelin.pulley.core.API_V2
-import com.freewheelin.pulley.core.ServerCommunicator
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.core.API.RequestModel.sign.AuthPhoneRequest
+import com.freewheelin.pulley.core.API.RequestModel.sign.ConfirmCodeRequest
+import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.CodeConfirmView
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.EditText.DaebakInputField
 import com.freewheelin.pulley.views.EditText.DaebakInputFieldListener
 import com.freewheelin.pulley.views.EditText.DaebakPasswordField
 import com.freewheelin.pulley.views.EditText.DaebakPasswordFieldListener
 import com.google.gson.Gson
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.fragment_signup.emailDet
 import kotlinx.android.synthetic.main.fragment_signup.pwDet
 import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordFieldListener {
+class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordFieldListener, CompoundButton.OnCheckedChangeListener {
 
     var signupInterface: StudentInfoInterface? = null
+
+    lateinit var countryCodes:List<CountryCodeResponse.CountryCode>
+    var countryCode = "82"
+    var countryType = "KOR"
+    var purposeType = "SIGN_UP"
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,6 +77,7 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        load()
     }
 
     fun isAllEmpty(): Boolean {
@@ -216,8 +230,32 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         }
     }
 
+    private fun load() {
+        API_ANONYMOUS.listCountryCodes()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                countryCodes = result.data
+                setSpinner()
+            }, { /* */ })
+    }
+
+    private fun setSpinner() {
+        val items = countryCodes.map { "(+${it.code}) ${it.title}"}
+        countrySpinner.set(items) {
+            val country = countryCodes.get(it)
+            countryCode = country.code
+            countryType = country.type
+        }
+        countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
+    }
+
     private fun initUI() {
-        codeContainer.visibility = View.GONE
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            codeContainer.visibility = View.GONE
+        }, 100)
+
         emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         pwDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         pwConfirmDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -227,6 +265,8 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         fullNameDet.listener = this
         emailDet.listener = this
         pwDet.listener = this
+
+        phoneMessageSwitch.setOnCheckedChangeListener(this)
 
         codeDet.goneLabel()
         phoneNumDet.goneLabel()
@@ -323,32 +363,33 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
             return
         }
 
-        API_V2.requestPhoneCode(phone).enqueue(object:Callback<Template<String?>?>{
+        val authRequest = AuthPhoneRequest(authType, phone, countryCode, countryType, purposeType )
 
-            override fun onResponse(call: Call<Template<String?>?>, response: Response<Template<String?>?>) {
-                Log.d("회원가입", "request phone code ${response.code()}")
-                when(response.code()) {
-                    200 -> {
-                        startCodeConfirm()
-                        DaebakToast.show(requireContext(), "휴대폰 번호로 인증번호가 발송되었습니다. 메시지를 확인해주세요.", overDialog = true)
-                    }
-                    else -> {
-                        val errorTemplate = response?.errorBody()?.let { errorBody ->
-                            Gson().fromJson(errorBody.string(), ResponseBody::class.java)
-                        }
-                        phoneNumDet.showErrorMsg(errorTemplate?.message?:"전화번호 형식을 확인해주세요.")
-                    }
+        API_ANONYMOUS.getAuthCode(authRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                if(result.error != null) {
+                    phoneNumDet.showErrorMsg(result.error)
+                } else {
+                    startCodeConfirm()
+                    DaebakToast.show(
+                        requireContext(),
+                        "휴대폰 번호로 인증번호가 발송되었습니다. 메시지를 확인해주세요.",
+                        overDialog = true
+                    )
                 }
 
-                val imm =  context!!.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =  requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(codeDet.editText,0)
-            }
-
-            override fun onFailure(call: Call<Template<String?>?>, t: Throwable) {
-                Log.d("회원가입", "request phone code error:${t.localizedMessage}")
-                DialogUtils.showServerErr(context!!)
-            }
-        })
+            }, {
+                if (it is HttpException) {
+                    val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
+                    phoneNumDet.showErrorMsg(error.message?:"인증번호 오류입니다.")
+                } else {
+                    DialogUtils.showServerErr(requireContext())
+                }
+            })
     }
 
     private fun startCodeConfirm() {
@@ -356,6 +397,7 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         codeContainer.showIfNeed()
         timerTv.showIfNeed()
 
+        countrySpinner.isEnabled = false
         // 인증요청 버튼 비활성화
         phoneNumDet.isEnabled = false
         requestCodeBtn.toDisableUI()
@@ -367,12 +409,15 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         codeDet.editText.setText("")
         codeDet.editText.requestFocus()
         codeDet.isShownError = false
+        phoneMessageSwitch.isEnabled = false
+
     }
 
     private fun backToRequestCode() {
         codeContainer.visibility = View.GONE
         timerTv.visibility = View.GONE
 
+        countrySpinner.isEnabled = true
         // 인증요청 버튼 비활성화
         phoneNumDet.isEnabled = true
         requestCodeBtn.toEnableUI()
@@ -381,44 +426,37 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         codeDet.isEnabled = false
         codeDet.editText.setText("")
         codeDet.isShownError = false
+        phoneMessageSwitch.isEnabled = true
+
     }
 
     private fun onCodeConfirmBtnClicked() {
         val code = codeDet.text
         val phone = phoneNumDet.text
 
-        val checkCode = RequestCheckCode(code, phone)
-        API_V2.checkPhoneCode(checkCode).enqueue(object: Callback<Template<String?>>{
-            override fun onResponse(call: Call<Template<String?>?>, response: Response<Template<String?>>) {
+        val authCode = ConfirmCodeRequest(code, phone)
+        API_ANONYMOUS.confirmAuthCode(authCode)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                if(result.error != null) {
+                    codeDet.showErrorMsg(result.error)
+                } else {
+                    deinitTimer()
+                    codeConfirmIv.show()
+                    countrySpinner.isEnabled = false
+                    codeDet.isEnabled = false
+                    timerTv.visibility = View.INVISIBLE
 
-                when(response.code()) {
-                    200 -> {
-                        deinitTimer()
-                        codeConfirmIv.show()
-                        codeDet.isEnabled = false
-                        timerTv.visibility = View.INVISIBLE
+                    codeConfirmBtn.visibility = View.INVISIBLE
+                    confirmCompleteCl.show(200)
 
-                        codeConfirmBtn.visibility = View.INVISIBLE
-                        confirmCompleteCl.show(200)
-
-                        DaebakToast.show(requireContext(), "휴대폰 인증이 완료되었습니다.", overDialog = true)
-                    }
-                    else -> {
-                        val result = response?.errorBody()?.let { errorBody ->
-                            Gson().fromJson(errorBody.string(), ResponseBody::class.java)
-                        }
-                        codeDet.showErrorMsg(result?.message?:"예기치 못한 오류가 발생하였습니다.")
-                    }
-
+                    DaebakToast.show(requireContext(), "휴대폰 인증이 완료되었습니다.", overDialog = true)
                 }
                 verifyNextBtn()
-            }
-
-            override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
-                DialogUtils.showServerErr(context!!)
-            }
-        })
-
+            }, {
+                DialogUtils.showServerErr(requireContext())
+            })
     }
 
     private fun onNextBtnClicked() {
@@ -590,5 +628,10 @@ class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordField
         // 요청버튼 활성화
         requestCodeBtn.text = "재전송하기"
         backToRequestCode()
+    }
+
+    var authType: String = "ALIMTALK"
+    override fun onCheckedChanged(switch: CompoundButton?, flag: Boolean) {
+        authType = if (flag) "SMS" else "ALIMTALK"
     }
 }

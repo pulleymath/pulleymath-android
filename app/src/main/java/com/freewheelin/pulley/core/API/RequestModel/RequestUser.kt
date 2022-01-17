@@ -10,12 +10,14 @@ data class RequestCheckCode(val code:String, val channel:String)
 
 class RequestSignup {
 
+    var countryCode: String = "82"
     var name: String = ""
     var email: String = ""
     var password: String = ""
     var cellphone: String = ""
     var isAgreeMarketing: Boolean = true
     var schoolInfo: SchoolInfo
+    var recommendCode: String? = null
 
     init {
         schoolInfo = SchoolInfo()
@@ -30,6 +32,6 @@ class SchoolInfo {
     var majorType: String = "" }
 
 data class RequestChangeEmail(val email:String, val auth:String)
-data class RequestChangePhone(val cellphone:String, val auth:String)
+data class RequestChangePhone(val cellphone:String, val auth:String, val countryCode: String)
 data class RequestChangePassword(val current:String, val password:String)
 data class RequestAgreeInfo(val agreePush:Boolean, val agreeMarketing:Boolean)

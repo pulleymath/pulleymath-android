@@ -146,6 +146,12 @@
                     android:text="@string/text_phone_number"
                     android:textSize="@dimen/sp18" />
 
+                <com.freewheelin.pulley.views.PulleySpinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -257,6 +263,33 @@
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp32">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="문자로 인증번호 받기"
+                        android:layout_marginRight="@dimen/dp8"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/phoneMessageSwitch"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Switch
+                        android:id="@+id/phoneMessageSwitch"
+                        android:background="@null"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <!-- TextView
                 style="@style/TextGrey_c0c0c0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                     app:layout_constraintStart_toStartOf="@+id/noSeviceLabel"
                     app:layout_constraintTop_toBottomOf="@+id/noSeviceLabel" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout -->
 
             <TextView
                 style="@style/TextGrey_c0c0c0"

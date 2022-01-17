@@ -183,7 +183,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             configureFinishUI(test)
         }
 
-        startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
+//        startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
         startBtn.setOnClickListener {
             listener?.onSolveBtnClicked(test)
         }

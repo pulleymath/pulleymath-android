@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.core.API
 
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
+import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.core.API.ResponseModel.WeeklyProblemCount
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.ResponseBookInfo
@@ -91,8 +92,11 @@ fun ServiceV1.getProblemList(mock: MockExam, user: User): Call<Template<Map<Stri
 
 interface ServiceV1 {
 
-    @POST("/users/register")
-    fun signup(@Body params: Parameter): Call<Template<Map<String, String>>>
+//    @POST("/users/register")
+//    fun signup(@Body params: Parameter): Call<Template<Map<String, String>>>
+
+    @POST("/v1/users/signup/app")
+    fun signup(@Body request: RequestSignup): Call<Template<String?>>
 
     @GET("/users/check_id/{loginID}")
     fun checkID(@Path("loginID") email: String): Call<Template<Map<String, String>>>

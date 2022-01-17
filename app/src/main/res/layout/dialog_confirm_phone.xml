@@ -57,6 +57,12 @@
             android:text="가입하신 휴대폰 번호가 다른 계정에서 사용되었습니다.\n휴대폰 번호 변경 및 재 인증해 주시기 바랍니다."
             android:textSize="@dimen/sp18" />
 
+        <com.freewheelin.pulley.views.PulleySpinner
+            android:id="@+id/countrySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp24"/>
+
         <com.freewheelin.pulley.views.CodeConfirmView
             android:id="@+id/codeConfirm"
             android:layout_width="match_parent"

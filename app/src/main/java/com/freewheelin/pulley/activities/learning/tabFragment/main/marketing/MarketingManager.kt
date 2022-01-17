@@ -74,7 +74,7 @@ object MarketingManager {
 
     fun filterBanner(mainProfile:MainProfile, marketing:Marketing) {
         val studentSegment = getStudentSegment(user?.grade)
-        val userSegment = if(mainProfile.isPaidUser()) UserSegment.Paid else UserSegment.Free
+        val userSegment = if(user?.hasPulleyPlus == true) UserSegment.Paid else UserSegment.Free
         val tz = TimeZone.getTimeZone("Asia/Seoul")
         sdf.timeZone = tz
         val current = sdf.format(System.currentTimeMillis())

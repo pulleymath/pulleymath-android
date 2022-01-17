@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
+import kotlinx.android.synthetic.main.fragment_analysis.*
 import kotlinx.android.synthetic.main.fragment_test_main_wrong.*
 
 class TestMainWrongFragment : TestMainBaseFragment() {
@@ -37,6 +41,7 @@ class TestMainWrongFragment : TestMainBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         test?.let { test ->
             configureUI(test)
+            startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
             startBtn.setOnClickListener { listener?.onSolveBtnClicked(test) }
             reportTv.setOnClickListener { listener?.onReportBtnClicked(test) }
         }
