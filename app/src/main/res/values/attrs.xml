@@ -129,7 +129,6 @@
         <attr name="screenTheme" format="enum">
             <enum name="bright" value="0" />
             <enum name="dark" value="1" />
-            <enum name="brightOutside" value="2" />
         </attr>
     </declare-styleable>
 
@@ -165,16 +164,6 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="InputFieldV2">
-        <attr name="InputFieldV2_Hint" format="string" />
-        <attr name="InputFieldV2_ShowErrorIcon" format="boolean" />
-        <attr name="InputFieldV2_maxLength" format="integer" />
-        <attr name="InputFieldV2_editType" format="enum">
-            <enum name="editText" value="0"/>
-            <enum name="spinner" value = "1"/>
-        </attr>
-    </declare-styleable>
-
     <declare-styleable name="CodeConfirmView">
         <attr name="title" format="string" />
         <attr name="hint" format="string" />
@@ -200,12 +189,6 @@
         <attr name="showEye" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="PasswordFieldV2">
-        <attr name="PasswordFieldV2_Hint" format="string" />
-        <attr name="PasswordFieldV2_ShowErrorIcon" format="boolean" />
-        <attr name="PasswordFieldV2_maxLength" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="PulleyTextField">
         <attr name="PulleyTextField_placeholderSize" format="float"/>
     </declare-styleable>
@@ -221,24 +204,6 @@
     <declare-styleable name="AnalysisCompareTextView">
         <attr name="AnalysisCompareTextView_TopLabel" format="string"/>
         <attr name="AnalysisCompareTextView_BottomLabel" format="string"/>
-    </declare-styleable>
-
-    <declare-styleable name="PolicyLayoutV2">
-        <attr name="PolicyLayoutV2_ShowEssOpText" format="enum">
-            <enum name="VISIBLE" value="0"/>
-            <enum name="INVISIBLE" value = "4"/>
-            <enum name="GONE" value = "8"/>
-        </attr>
-        <attr name="PolicyLayoutV2_ShowAllDocuText" format="enum">
-            <enum name="VISIBLE" value="0"/>
-            <enum name="INVISIBLE" value = "4"/>
-            <enum name="GONE" value = "8"/>
-        </attr>
-        <attr name="PolicyLayoutV2_Checked" format="boolean" />
-        <attr name="PolicyLayoutV2_Type" format="enum">
-            <enum name="Essential" value="0"/>
-            <enum name="Optional" value = "1"/>
-        </attr>
     </declare-styleable>
 
 </resources>

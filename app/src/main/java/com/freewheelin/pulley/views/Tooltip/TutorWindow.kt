@@ -1,19 +1,24 @@
-package com.freewheelin.pulley.views.tooltip
+package com.freewheelin.pulley.views.Tooltip
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieDrawable
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.views.FocusedDimView
+import com.freewheelin.pulley.views.FocusedDimViewListener
 import com.ht.balloonwindow.BalloonWindow
 import com.ht.balloonwindow.BalloonWindowListener
+import com.ht.balloonwindow.toDp
 import com.ht.balloonwindow.toPx
 import kotlinx.android.synthetic.main.tooltip_img_horizontal.view.*
 import kotlinx.android.synthetic.main.tooltip_vertical.view.*

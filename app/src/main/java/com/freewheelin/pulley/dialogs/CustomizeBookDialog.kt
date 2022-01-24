@@ -5,7 +5,9 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +26,8 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.textViews.SortableListener
-import com.freewheelin.pulley.views.textViews.SortableTextView
+import com.freewheelin.pulley.views.TextViews.SortableListener
+import com.freewheelin.pulley.views.TextViews.SortableTextView
 import kotlinx.android.synthetic.main.dialog_book_customize.*
 import kotlinx.android.synthetic.main.dialog_book_customize.cntTv
 import kotlinx.android.synthetic.main.dialog_book_customize.minusBtn

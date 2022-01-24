@@ -353,7 +353,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
                 android:id="@+id/solveOnTabletBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
@@ -375,7 +375,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.views.Buttons.PrimaryButton
                     android:id="@+id/solveOnOMR"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
@@ -383,7 +383,7 @@
                     android:text="OMR에 정답 입력하기"
                     app:buttonTheme="blue" />
 
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
                     android:id="@+id/sendEmailBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
@@ -392,7 +392,7 @@
                     android:text="시험지 메일 발송"
                     app:buttonTheme="blue">
 
-                </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                </com.freewheelin.pulley.views.Buttons.SecondaryButton>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -1521,7 +1522,7 @@ class SolveActivity : BaseActivity(),
                 correctRateTv.text = "정답률 : ${TextUtils.percentFormat.format(problem.correctRate)}"
 
             lvTv.text = "난이도 : ${problem.getProblemLevel()}"
-            intentionTv.text = "${problem.unit}"
+            unitTv.text = "${problem.unit}"
             clearContainer.visibility = if(problem.isClear) View.VISIBLE else View.INVISIBLE
             setBtnSelected(clearBtn, problem.isClear)
             tag.visibility = if(problem.isScrap) View.VISIBLE else View.INVISIBLE

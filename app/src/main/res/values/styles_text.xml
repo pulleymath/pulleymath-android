@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Light">
-        <item name="android:fontFamily">@font/font_pretendard_light</item>
+        <item name="android:fontFamily">@font/font_nanum_square_light</item>
     </style>
 
     <style name="Bold">
@@ -10,7 +10,7 @@
     </style>
 
     <style name="ExtraBold">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:fontFamily">@font/font_nanum_square_extra_bold</item>
     </style>
 
 
@@ -201,7 +201,7 @@
     </style>
 
     <style name="Text_DaebakCalendar_WeekDay" parent="TextGrey_c0c0c0">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:fontFamily">@font/font_nanum_square</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -220,119 +220,4 @@
     <style name="TextBrown_8f5f00.ExtraBold" parent="ExtraBold">
         <item name="android:textColor">@color/brown_8f5f00</item>
     </style>
-
-
-    <style name="CustomFont">
-        <item name="android:textColor">@color/gray_800</item>
-    </style>
-
-    <style name="h1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp36</item>
-    </style>
-
-    <style name="h2" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp32</item>
-    </style>
-
-    <style name="h3" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp24</item>
-    </style>
-    <style name="h4" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp18</item>
-    </style>
-    <style name="h4_sb" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp18</item>
-    </style>
-    <style name="h5" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
-    <style name="mo_h1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp24</item>
-    </style>
-    <style name="mo_h2" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp20</item>
-    </style>
-    <style name="mo_h3" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp18</item>
-    </style>
-    <style name="mo_h4" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
-    <style name="mo_h4_sb" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
-    <style name="b1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
-    <style name="b1r" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
-        <item name="android:textSize">@dimen/sp16</item>
-    </style>
-    <style name="h6" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-
-    <style name="mo_h5" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="b2" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="mo_b1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="c1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="b2r" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="mo_b1r" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
-        <item name="android:textSize">@dimen/sp14</item>
-    </style>
-    <style name="mo_h6" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp12</item>
-    </style>
-    <style name="b3" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp12</item>
-    </style>
-    <style name="mo_b2" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp12</item>
-    </style>
-    <style name="mo_b2r" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
-        <item name="android:textSize">@dimen/sp12</item>
-    </style>
-    <style name="mo_b3" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp11</item>
-    </style>
-    <style name="mo_c1" parent="CustomFont">
-        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
-        <item name="android:textSize">@dimen/sp11</item>
-    </style>
-
-
 </resources>

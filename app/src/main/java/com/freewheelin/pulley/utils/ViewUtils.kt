@@ -324,8 +324,6 @@ fun ImageView.setImageURLBackground(url: String) {
 }
 
 fun ImageView.setProblemImageURL(url: String) {
-    if (url.isEmpty()) return
-
 //    val resizeVal = (maxWidth * 1.5).toInt()
     val resizeVal = maxWidth
 

@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.bars
+package com.freewheelin.pulley.views.Bars
 
 import android.content.Context
 import android.graphics.Canvas
@@ -63,7 +63,7 @@ class VerticalBar : View {
     private val spaceLabelAndBar = 8f.toPx()
     private val formatter = DecimalFormat("##%")
     private val topExtraSpace = 30f.toPx()
-    private val font = ResourcesCompat.getFont(context, R.font.pretendard_bold)
+    private val font = ResourcesCompat.getFont(context, R.font.nanum_square_extra_bold)
 
     init {
         paint = Paint()

@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:fontFamily="@font/font_pretendard_bold"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
                 android:text="풀이방법을 선택해주세요"
                 android:textColor="@color/black_4c4c4c"
                 android:textSize="24sp" />
@@ -62,7 +62,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/bg_purple_6d6dff_round"
-                android:fontFamily="@font/font_pretendard_bold"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
                 android:text="실전 OMR 모드"
                 android:textColor="@color/white_ffffff" />
 
@@ -75,7 +75,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="40dp"
                 android:background="@drawable/bg_transparent_stroke_grey_9f9f9f_round"
-                android:fontFamily="@font/font_pretendard_bold"
+                android:fontFamily="@font/font_nanum_square_extra_bold"
                 android:text="바로 풀기 모드"
                 android:textColor="@color/grey_9f9f9f" />
         </LinearLayout>

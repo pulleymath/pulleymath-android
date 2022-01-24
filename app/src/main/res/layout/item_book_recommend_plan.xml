@@ -100,7 +100,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
             android:id="@+id/reviewBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp40"

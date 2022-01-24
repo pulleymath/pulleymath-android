@@ -56,7 +56,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         initUI()
     }
 
-    private fun initUI() {
+    private fun initUI(){
         rootView.setOnTouchListener { view, motionEvent ->
             currentFocus?.let { hideKeyboard(it) }
             false
@@ -168,12 +168,12 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         }
         when(errorTemplate?.error){
             LoginActivity.NOT_MATCH_PW -> {
-                signupFragment.emailDet.isShownError = false
-                signupFragment.pwDet.showErrorMsg(errorTemplate.message?:"")
+                emailDet.isShownError = false
+                pwDet.showErrorMsg(errorTemplate.message?:"")
             }
             LoginActivity.LOCK_ACCOUNT, LoginActivity.LOGINID_INVALID -> {
-                signupFragment.emailDet.showErrorMsg(errorTemplate.message?:"")
-                signupFragment.pwDet.isShownError = false
+                emailDet.showErrorMsg(errorTemplate.message?:"")
+                pwDet.isShownError = false
             }
             else -> {
                 DialogUtils.showServerErr(this)

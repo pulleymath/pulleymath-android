@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.activities.mypage
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,15 +16,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
+import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryBooksItem
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryCouponItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.CodeConfirmView
 import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.SuccessToast
 import com.google.gson.Gson
+import com.pulleymath.android.pdf.draw.Line
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException

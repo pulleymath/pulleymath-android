@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.InputType
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.ContentManager
@@ -12,10 +13,13 @@ import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.isValidEmail
+import com.freewheelin.pulley.utils.isValidName
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.editText.DaebakInputField
-import com.freewheelin.pulley.views.editText.DaebakInputFieldListener
+import com.freewheelin.pulley.views.EditText.DaebakInputField
+import com.freewheelin.pulley.views.EditText.DaebakInputFieldListener
 import kotlinx.android.synthetic.main.dialog_email_input.*
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
+import androidx.core.content.ContextCompat.getSystemService
 import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.model.contents.MockExam
 

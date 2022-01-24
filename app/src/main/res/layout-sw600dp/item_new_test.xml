@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/testBtn"
         android:layout_width="@dimen/primaryBtn_width_96dp"
         android:layout_height="36dp"

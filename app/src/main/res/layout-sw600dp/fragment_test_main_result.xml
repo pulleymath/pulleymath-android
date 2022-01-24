@@ -157,7 +157,7 @@
 
 
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/startBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"

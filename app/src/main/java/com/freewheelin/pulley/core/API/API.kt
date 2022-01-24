@@ -12,7 +12,6 @@ import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.APHelper
-import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.Preferences
 import okhttp3.*
@@ -33,7 +32,10 @@ fun <K, V> Parameter(vararg pairs: Pair<K, V>): HashMap<K, V> = HashMap<K, V>().
 enum class Version {
     v1, v2, v3, app, anonymous;
 
-    val base = if(Preferences.onTestAPI.get()) Preferences.testBaseURL.get() else URL.PULLEY_API
+    val base = if(Preferences.onTestAPI.get())
+        Preferences.testBaseURL.get()
+    else
+        URL.PULLEY_API
 
     val url: String
     get() {

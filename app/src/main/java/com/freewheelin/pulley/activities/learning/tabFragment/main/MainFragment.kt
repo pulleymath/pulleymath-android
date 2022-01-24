@@ -32,7 +32,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.textViews.HashTagTextView
+import com.freewheelin.pulley.views.TextViews.HashTagTextView
 import kotlinx.android.synthetic.main.fragment_main_2.*
 import java.io.File
 import java.io.FileOutputStream
@@ -187,7 +187,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
                     targetTv.text = mainProfile.getDDayTitle(existTarget?.second)
                     dDayTv.text = mainProfile.getDDayText(existTarget?.third)
                 }
-
+                Log.d("tpehf", "has pulley plus ? : ${user!!.hasPulleyPlus})")
                 mainProfile.getUserHashtag(user).forEach {
                     tagFl.addView(HashTagTextView(requireContext(), "#${it}"))
                 }

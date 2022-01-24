@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
@@ -17,7 +16,6 @@ import com.freewheelin.pulley.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.*
-import com.pulleymath.android.pdf.PdfViewerActivity
 import kotlinx.android.synthetic.main.activity_start.*
 
 class StartActivity : BaseActivity(), LifecycleObserver {

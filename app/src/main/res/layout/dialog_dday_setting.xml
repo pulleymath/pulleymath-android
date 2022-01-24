@@ -46,7 +46,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleLabel" />
 
-            <com.freewheelin.pulley.views.editText.DaebakInputField
+            <com.freewheelin.pulley.views.EditText.DaebakInputField
                 android:id="@+id/customField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/customField" />
 
 
-            <com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendar
+            <com.freewheelin.pulley.views.CalendarPickerViews.DaebakCalendar
                 android:id="@+id/selectCalendar"
                 android:layout_width="356dp"
                 android:layout_height="280dp"
@@ -160,7 +160,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/actionBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"

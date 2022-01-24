@@ -36,7 +36,6 @@
     <color name="red_dd2c00">#dd2c00</color>
     <color name="red_ffc6bc">#ffc6bc</color>
     <color name="white_ffffff">#ffffff</color>
-    <color name="white_4cffffff">#4cffffff</color>
     <color name="white_f2f2f2">#f2f2f2</color>
     <color name="white_ccffffff">#ccffffff</color>
     <color name="white_c0ffffff">#c0ffffff</color>
@@ -46,8 +45,7 @@
     <color name="brown_8f5f00">#8f5f00</color>
 
 
-    <color name="colorPrimary">#6E6CFF</color>
-    <color name="controlHighlight">#6E6CFF</color>
+    <color name="colorPrimary">#0ddbf2</color>
     <color name="colorPrimaryDark">@color/black_4c4c4c</color>
     <color name="colorAccent">#ff766b</color>
 
@@ -57,40 +55,5 @@
 
     <color name="dim_black_333333">#4c333333</color>
     <color name="dim_white_ffffff">#4cffffff</color>
-
-    <color name="gray_100">#fafafa</color>
-    <color name="gray_150">#f6f6f6</color>
-    <color name="gray_200">#f2f2f2</color>
-    <color name="gray_300">#e8e8e8</color>
-    <color name="gray_400">#e0e0e0</color>
-    <color name="gray_500">#c0c0c0</color>
-    <color name="gray_600">#9f9f9f</color>
-    <color name="gray_700">#818181</color>
-    <color name="gray_800">#4c4c4c</color>
-
-    <color name="purple_100">#ecebff</color>
-    <color name="purple_200">#acacff</color>
-    <color name="purple_300">#6d6dff</color>
-
-    <color name="red_100">#ffe8e8</color>
-    <color name="red_200">#ffc6bc</color>
-    <color name="red_300">#fe7b67</color>
-
-    <color name="yellow_100">#fffbef</color>
-    <color name="yellow_200">#ffd545</color>
-    <color name="yellow_300">#ffb300</color>
-    <color name="yellow_400">#e19502</color>
-    <color name="yellow_500">#8f5f00</color>
-
-    <color name="blue_100">#e1f1fe</color>
-    <color name="blue_200">#b9defe</color>
-    <color name="blue_300">#78beff</color>
-    <color name="blue_400">#30a4ff</color>
-    <color name="green_300">#70d000</color>
-
-    <color name="black_100">#3d3d3d</color>
-    <color name="black_200">#333333</color>
-
-    <color name="mtrl_textinput_default_box_stroke_color">#c0c0c0</color>
 
 </resources>

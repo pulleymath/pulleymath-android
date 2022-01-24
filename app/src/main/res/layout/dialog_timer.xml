@@ -31,7 +31,7 @@
             android:layout_marginTop="16dp"
             android:textSize="32sp"
             android:textColor="@color/purple_6D6DFF"
-            android:fontFamily="@font/font_pretendard_bold"
+            android:fontFamily="@font/font_nanum_square_extra_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timerLottie"/>
@@ -43,7 +43,7 @@
             android:layout_marginTop="20dp"
             android:textSize="24sp"
             android:textColor="@color/purple_6D6DFF"
-            android:fontFamily="@font/font_pretendard_bold"
+            android:fontFamily="@font/font_nanum_square_extra_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timerLottie"/>

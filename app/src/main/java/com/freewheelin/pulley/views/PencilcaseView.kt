@@ -12,7 +12,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.memoView.MemoView
+import com.freewheelin.pulley.views.MemoView.MemoView
 
 interface Pencilcase {
     enum class Thickness(val width: Float) {

@@ -74,7 +74,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/closeBtn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"

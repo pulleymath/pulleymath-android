@@ -304,12 +304,11 @@ class PdfListActivity : AppCompatActivity() {
         override fun onItemClick(pdf: Pdf) {
             if (pdf.opening.get()) return // pdf 여는중일때 클릭방지
 
-//            Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}")
+            Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}")
 
-            if(!pdf.downloaded.get() && !pdf.downloading.get() && !pdf.is_purchased) { // 다운로드 안했는데 구매 안했으면
+            if (!pdf.is_purchased) {
                 openShop(pdf)
-            } else
-            if(!pdf.downloading.get()) { // 다운로드 중이면 disabled
+            } else if (!pdf.downloading.get() && pdf.is_purchased) { // 다운로드 중이면 disabled
                 if (pdf.downloaded.get()) { open(pdf) } else { download(pdf) }
             } else {
                 showDownloadCancelMsg()
@@ -348,7 +347,7 @@ class PdfListActivity : AppCompatActivity() {
         private fun openShop(pdf: Pdf) {
             DialogUtils.confirmBuyPulleyBooks(this@PdfListActivity, "${pdf.title} ${pdf.subject}") {
                 val intent = Intent(Intent.ACTION_VIEW)
-                val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=books_buy"
+                val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books"
                 intent.data = Uri.parse(url)
                 startActivity(intent)
             }

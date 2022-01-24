@@ -17,7 +17,7 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.utils.hide
 import com.freewheelin.pulley.utils.show
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.bars.VerticalBar
+import com.freewheelin.pulley.views.Bars.VerticalBar
 import kotlinx.android.synthetic.main.view_bar_vertical.view.*
 import java.io.Serializable
 

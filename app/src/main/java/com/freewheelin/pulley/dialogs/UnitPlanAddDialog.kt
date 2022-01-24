@@ -15,7 +15,7 @@ import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.MarginDecoration
-import com.freewheelin.pulley.views.textViews.TagTextView
+import com.freewheelin.pulley.views.TextViews.TagTextView
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType

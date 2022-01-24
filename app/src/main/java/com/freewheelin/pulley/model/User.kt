@@ -103,8 +103,6 @@ class User {
     // 풀리플러스 사용여부
     var hasPulleyPlus = false
 
-    var userUniversityMajorCode: String? = null
-
     companion object {
         val TYPE_FREE_ING = "FREE_ING"
         val TYPE_PAID_ING = "PAID_ING"
@@ -288,8 +286,6 @@ class User {
             if (newUser.token != null) this.token = newUser.token
 
             if (newUser.hasPulleyPlus != null) this.hasPulleyPlus = newUser.hasPulleyPlus
-
-            this.userUniversityMajorCode = newUser.userUniversityMajorCode
 
             commit("update")
         }

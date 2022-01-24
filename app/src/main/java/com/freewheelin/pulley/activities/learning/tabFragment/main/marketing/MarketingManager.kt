@@ -71,7 +71,7 @@ object MarketingManager {
         filterBanner(mainProfile, marketing)
         return marketing.banners.isNotEmpty()
     }
-//    1643026270780 - 1642987740000 = 38530780
+
     fun filterBanner(mainProfile:MainProfile, marketing:Marketing) {
         val studentSegment = getStudentSegment(user?.grade)
         val userSegment = if(user?.hasPulleyPlus == true) UserSegment.Paid else UserSegment.Free

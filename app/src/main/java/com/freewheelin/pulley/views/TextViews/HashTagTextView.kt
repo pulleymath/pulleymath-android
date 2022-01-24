@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.textViews
+package com.freewheelin.pulley.views.TextViews
 
 import android.content.Context
 import android.util.TypedValue
@@ -17,7 +17,7 @@ class HashTagTextView: TextView {
         background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_20)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-        typeface = ResourcesCompat.getFont(context, R.font.pretendard_semibold)
+        typeface = ResourcesCompat.getFont(context, R.font.nanum_square_bold)
         text = title
     }
 }

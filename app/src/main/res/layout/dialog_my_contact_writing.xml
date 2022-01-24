@@ -94,7 +94,7 @@
                     android:text="문의 유형을 선택해주세요."/>
             </LinearLayout>
 
-            <com.freewheelin.pulley.views.editText.DaebakInputField
+            <com.freewheelin.pulley.views.EditText.DaebakInputField
                 android:id="@+id/titleDif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                     android:text="내용을 입력해주세요"/>
             </LinearLayout>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
                 android:id="@+id/completeBtn"
                 android:layout_width="200dp"
                 android:layout_height="56dp"

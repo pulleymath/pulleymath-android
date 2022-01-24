@@ -69,11 +69,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="과외" />
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tab7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KU진단" />
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -88,7 +83,7 @@
                     style="@style/TextBlack_333333.Bold"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/ic_profile_default"
+                    android:src="@drawable/ic_main_setting"
                     android:background="@null"
                     app:autoSizeStepGranularity="2sp"
                     app:layout_constraintStart_toStartOf="parent"

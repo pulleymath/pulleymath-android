@@ -210,7 +210,7 @@
                     android:layout_marginStart="4dp" />
             </LinearLayout>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
                 android:id="@+id/submitBtn"
                 android:layout_width="@dimen/primaryBtn_width_200dp"
                 android:layout_height="@dimen/dp56"

@@ -5,17 +5,21 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_note_detail.*
 import kotlinx.coroutines.*
 
@@ -130,15 +134,15 @@ class NoteDetailDialog: Dialog {
         ProblemManager.getDetailInfo(context, user, this.problem) {responseProblem, detail, history ->
             if(problem == responseProblem) {
                 if(detail != null)  {
-                    intentionTv.visibility = View.VISIBLE
+                    unitTv.visibility = View.VISIBLE
                     val unitInfoText = "과목명 : ${this.problem.getSubject().filterText}" +
                             "\n대단원 : ${detail.chapterBig}" +
                             "\n중단원 : ${detail.chapterMiddle}" +
                             "\n소단원 : ${detail.chapterLittle}" +
                             "\n유형명 : ${detail.unitName}"
-                    intentionTv.text = unitInfoText
+                    unitTv.text = unitInfoText
                 } else {
-                    intentionTv.visibility = View.GONE
+                    unitTv.visibility = View.GONE
                 }
 
                 val historyList = history.filter { it.result == -2 }.map {

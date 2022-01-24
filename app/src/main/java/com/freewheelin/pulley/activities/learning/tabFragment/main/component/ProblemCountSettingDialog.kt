@@ -11,7 +11,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
 import com.freewheelin.pulley.views.PlusMinusButton
 
 interface ProblemCountSettingDialogListener {

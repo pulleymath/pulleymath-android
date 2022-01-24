@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.snackBar
+package com.freewheelin.pulley.views.SnackBar
 
 import android.content.Context
 import android.util.AttributeSet

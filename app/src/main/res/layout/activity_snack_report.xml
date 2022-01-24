@@ -105,7 +105,7 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
+            android:tint="@color/black_4c4c4c"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

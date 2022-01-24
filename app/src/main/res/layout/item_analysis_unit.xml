@@ -39,7 +39,7 @@
 
     <TextView
         style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/intentionTv"
+        android:id="@+id/unitTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp16"
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
         app:layout_constraintEnd_toEndOf="parent"/>
     
-    <com.freewheelin.pulley.views.bars.HorizontalBar
+    <com.freewheelin.pulley.views.Bars.HorizontalBar
         android:id="@+id/correctRateHb"
         android:layout_width="188dp"
         android:layout_height="24dp"
@@ -86,7 +86,7 @@
         app:layout_constraintStart_toEndOf="@+id/secondColumnBorder"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
-    </com.freewheelin.pulley.views.bars.HorizontalBar>
+    </com.freewheelin.pulley.views.Bars.HorizontalBar>
 
     <TextView
         style="@style/TextBlack_4c4c4c.Bold"

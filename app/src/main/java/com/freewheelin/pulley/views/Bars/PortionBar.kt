@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.bars
+package com.freewheelin.pulley.views.Bars
 
 import android.animation.ValueAnimator
 import android.content.Context

@@ -20,7 +20,7 @@
             android:layout_height="72dp"
             android:background="@null"
             android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
+            android:tint="@color/black_4c4c4c"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -156,7 +156,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/ratingLabel" />
 
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
                     android:id="@+id/modifyBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"
@@ -240,7 +240,7 @@
                     app:layout_constraintTop_toTopOf="@+id/mathBottomLabel" />
 
 
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
                     android:id="@+id/modifyCommonBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"
@@ -251,7 +251,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/mathTopLabel" />
 
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                <com.freewheelin.pulley.views.Buttons.SecondaryButton
                     android:id="@+id/modifySelectBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"

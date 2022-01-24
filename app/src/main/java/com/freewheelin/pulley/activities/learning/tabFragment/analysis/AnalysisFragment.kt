@@ -40,10 +40,10 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.ButtonLockImage
-import com.freewheelin.pulley.views.buttons.ButtonMode
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.textViews.UpDownTextView.Change.*
+import com.freewheelin.pulley.views.TextViews.UpDownTextView.Change.*
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

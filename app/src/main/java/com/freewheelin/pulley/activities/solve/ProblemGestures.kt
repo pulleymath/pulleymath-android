@@ -6,7 +6,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import com.freewheelin.pulley.views.memoView.MemoView
+import android.widget.Toast
+import com.freewheelin.pulley.views.MemoView.MemoView
+import java.lang.Math.abs
 
 interface ProblemGestureListener {
     fun onLeftSwipe()

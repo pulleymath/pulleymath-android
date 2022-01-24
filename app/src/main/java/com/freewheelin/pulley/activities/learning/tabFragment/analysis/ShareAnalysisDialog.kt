@@ -1,16 +1,31 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.analysis
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ScaleDrawable
+import android.provider.MediaStore
+import android.util.Log
 import android.view.MotionEvent
+import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
+import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
+import com.freewheelin.pulley.core.API.ResponseModel.DaySummary
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.editText.PulleyTextFieldListener
+import com.freewheelin.pulley.views.EditText.PulleyTextFieldListener
 import kotlinx.android.synthetic.main.dialog_analysis_share.*
+import kotlinx.android.synthetic.main.dialog_analysis_share.view.*
 
 interface ShareAnalysisDialogListener {
     fun onDownloadClicked(dialog: ShareAnalysisDialog, bitmap: Bitmap)

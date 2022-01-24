@@ -16,39 +16,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.*
+import com.freewheelin.pulley.core.API.RequestModel.RequestCheckCode
 import com.freewheelin.pulley.core.API.RequestModel.sign.AuthPhoneRequest
 import com.freewheelin.pulley.core.API.RequestModel.sign.ConfirmCodeRequest
 import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.CodeConfirmView
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.editText.*
-import com.freewheelin.pulley.views.v2.PolicyLayoutV2
-import com.freewheelin.pulley.views.v2.PolicyLayoutV2Listener
-import com.freewheelin.pulley.views.v2.SpinnerV2
+import com.freewheelin.pulley.views.EditText.DaebakInputField
+import com.freewheelin.pulley.views.EditText.DaebakInputFieldListener
+import com.freewheelin.pulley.views.EditText.DaebakPasswordField
+import com.freewheelin.pulley.views.EditText.DaebakPasswordFieldListener
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-//import kotlinx.android.synthetic.main.fragment_signup.*
-//import kotlinx.android.synthetic.main.fragment_signup.emailDet
-//import kotlinx.android.synthetic.main.fragment_signup.pwDet
-//import kotlinx.android.synthetic.main.view_input_daebak.view.*
-//import kotlinx.android.synthetic.main.view_input_daebak.view.editText
-//import kotlinx.android.synthetic.main.view_input_password_v2.view.*
-//import kotlinx.android.synthetic.main.view_policy_layout_v2.view.*
+import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.fragment_signup.emailDet
+import kotlinx.android.synthetic.main.fragment_signup.pwDet
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -57,7 +53,7 @@ import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
+class SignupFragment : Fragment(), DaebakInputFieldListener, DaebakPasswordFieldListener, CompoundButton.OnCheckedChangeListener {
 
     var signupInterface: StudentInfoInterface? = null
 
@@ -72,66 +68,10 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         if(context is StudentInfoInterface) signupInterface = context
     }
 
-    lateinit var codeContainer: ConstraintLayout
-    lateinit var emailDet: InputFieldV2
-    lateinit var pwDet: PasswordFieldV2
-    lateinit var pwConfirmDet: PasswordFieldV2
-    lateinit var phoneNumDet: InputFieldV2
-    lateinit var codeDet: InputFieldV2
-    lateinit var fullNameDet: InputFieldV2
-
-    lateinit var allCb: PolicyLayoutV2
-    lateinit var order14Cb: PolicyLayoutV2
-    lateinit var serviceAgreeCb: PolicyLayoutV2
-    lateinit var personalAgreeCb: PolicyLayoutV2
-    lateinit var marketingAgreeCb: PolicyLayoutV2
-    lateinit var phoneMessageSwitch: Switch
-
-    lateinit var buttonToLogin: Button
-    lateinit var backBtn: ImageButton
-    lateinit var requestCodeBtn: PrimaryButton
-    lateinit var nextBtn: PrimaryButton
-    lateinit var codeConfirmBtn: PrimaryButton
-    lateinit var codeConfirmIv: ImageView
-
-    lateinit var timerTv: TextView
-    lateinit var countrySpinner: SpinnerV2
-
-    lateinit var secureLevelLl: LinearLayout
-    lateinit var levelIv: ImageView
-    lateinit var levelTv: TextView
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_signup, container, false)
-        codeContainer = v.findViewById(R.id.codeContainer)
-        emailDet = v.findViewById(R.id.emailDet)
-        pwDet = v.findViewById(R.id.pwDet)
-        pwConfirmDet = v.findViewById(R.id.pwConfirmDet)
-        phoneNumDet = v.findViewById(R.id.phoneNumDet)
-        codeDet = v.findViewById(R.id.codeDet)
-        fullNameDet = v.findViewById(R.id.fullNameDet)
-        timerTv = v.findViewById(R.id.timerTv)
-        countrySpinner = v.findViewById(R.id.countrySpinner)
-        allCb = v.findViewById(R.id.allCb)
-        order14Cb = v.findViewById(R.id.order14Cb)
-        serviceAgreeCb = v.findViewById(R.id.serviceAgreeCb)
-        personalAgreeCb = v.findViewById(R.id.personalAgreeCb)
-        marketingAgreeCb = v.findViewById(R.id.marketingAgreeCb)
-        phoneMessageSwitch = v.findViewById(R.id.phoneMessageSwitch)
-//        confirmCompleteCl = v.findViewById(R.id.confirmCompleteCl)
-        buttonToLogin = v.findViewById(R.id.buttonToLogin)
-        backBtn = v.findViewById(R.id.backBtn)
-        requestCodeBtn = v.findViewById(R.id.requestCodeBtn)
-        nextBtn = v.findViewById(R.id.nextBtn)
-        codeConfirmBtn = v.findViewById(R.id.codeConfirmBtn)
-        codeConfirmIv = v.findViewById(R.id.codeConfirmIv)
-
-        secureLevelLl = v.findViewById(R.id.secureLevelLl)
-        levelIv = v.findViewById(R.id.levelIv)
-        levelTv = v.findViewById(R.id.levelTv)
-        return v
+        return inflater.inflate(R.layout.fragment_signup, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,20 +81,18 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
     }
 
     fun isAllEmpty(): Boolean {
-        return fullNameDet.text.isEmpty()
-            && emailDet.text.isEmpty()
-            && pwDet.text.isEmpty()
-            && pwConfirmDet.text.isEmpty()
-            && phoneNumDet.text.isEmpty()
+        return fullNameDet?.text?.isEmpty() == true && emailDet?.text?.isEmpty() == true
+                && pwDet?.text?.isEmpty() == true && pwConfirmDet?.text?.isEmpty() == true
+                && phoneNumDet?.text?.isEmpty() == true
     }
 
     fun isAvailableToSecondStep(): Boolean {
         return ((fullNameDet.text.isNotEmpty() && fullNameDet.text.isValidName()) && (emailDet.text.isValidEmail())
                 && (pwDet.text.isNotEmpty() && pwDet.text.isValidPW() && pwDet.text == pwConfirmDet.text)
-                && codeConfirmIv.visibility == View.VISIBLE && isAllCheckedEssentialBox())
+                && codeConfirmIv.visibility == View.VISIBLE)
     }
 
-    override fun onFieldFocusChanged(view: InputFieldV2, hasFocus: Boolean) {
+    override fun onFieldFocusChanged(view: DaebakInputField, hasFocus: Boolean) {
         if(view === fullNameDet && !hasFocus) {
             fullNameDet.text = fullNameDet.text.trim()
             if(fullNameDet.text.isEmpty()) {
@@ -186,7 +124,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         verifyNextBtn()
     }
 
-    override fun onFieldFocusChanged(view: PasswordFieldV2, hasFocus: Boolean) {
+    override fun onFieldFocusChanged(view: DaebakPasswordField, hasFocus: Boolean) {
         if(view === pwDet) {
             if (!hasFocus) {
                 if (!view.text.isValidPW()) {
@@ -220,23 +158,23 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         }
     }
 
-    override fun onFieldValueChanged(view: InputFieldV2) {
+    override fun onFieldValueChanged(view: DaebakInputField) {
 
         if(view === phoneNumDet) {
             codeConfirmBtn.visibility = View.VISIBLE
-//            confirmCompleteCl.visibility = View.INVISIBLE
-            codeConfirmIv.visibility = View.INVISIBLE
+            confirmCompleteCl.visibility = View.INVISIBLE
             requestCodeBtn.toEnableUI()
+            codeConfirmIv.visibility = View.INVISIBLE
         }
 
         verifyNextBtn()
     }
 
-    override fun onFieldValueChanged(view: PasswordFieldV2) {
+    override fun onFieldValueChanged(view: DaebakPasswordField) {
         if (view === pwDet) {
             secureLevelLl.visibility = View.VISIBLE
             if (view.text.length < 6) {
-                levelIv.setImageResource(R.drawable.bar_red)
+                levelIv.setImageResource(R.drawable.ic_x_red_circle)
                 levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_fe7b67))
                 levelTv.text = "비밀번호 안정성 : 위험"
             } else {
@@ -247,13 +185,13 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
 
                 when (score) {
                     3 -> {
-                        levelIv.setImageResource(R.drawable.bar_green)
+                        levelIv.setImageResource(R.drawable.ic_check_green_circle_w16)
                         levelTv.text = "비밀번호 안정성 : 강력"
                         levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_70d000))
                         view.isShownError = false
                     }
                     2 -> {
-                        levelIv.setImageResource(R.drawable.bar_orange)
+                        levelIv.setImageResource(R.drawable.ic_triangle_orange_circle)
                         levelTv.text = "비밀번호 안정성 : 보통"
                         levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow_ffb300))
                         view.isShownError = false
@@ -313,72 +251,56 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
     }
 
     private fun initUI() {
+
         Handler(Looper.getMainLooper()).postDelayed({
             codeContainer.visibility = View.GONE
         }, 100)
 
         emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-        pwDet.inputEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-        pwConfirmDet.inputEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        pwDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        pwConfirmDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         phoneNumDet.editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         codeDet.editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         fullNameDet.editText.toKoreanKeyboard()
         fullNameDet.listener = this
         emailDet.listener = this
         pwDet.listener = this
-        allCb.listener = this
-        order14Cb.listener = this
-        serviceAgreeCb.listener = this
-        personalAgreeCb.listener = this
-        marketingAgreeCb.listener = this
-        phoneMessageSwitch.setOnCheckedChangeListener(this)
 
         phoneMessageSwitch.setOnCheckedChangeListener(this)
 
         codeDet.goneLabel()
         phoneNumDet.goneLabel()
-//        confirmCompleteCl.visibility = View.INVISIBLE
-        codeConfirmIv.visibility = View.INVISIBLE
+        confirmCompleteCl.visibility = View.INVISIBLE
 
-        pwDet.inputEt.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
+        pwDet.editText.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
             source.toString().filterNot { it.isWhitespace() }
         })
         pwConfirmDet.listener = this
-        pwConfirmDet.inputEt.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
+        pwConfirmDet.editText.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
             source.toString().filterNot { it.isWhitespace() }
         })
         phoneNumDet.listener = this
-
-        serviceAgreeCb.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
-        serviceAgreeCb.isClickable = true
-        serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
-            .partialUnderline("전문 보기") {
+        policyTv.movementMethod = LinkMovementMethod.getInstance()
+        policyTv.isClickable = true
+        policyTv.text = policyTv.text
+            .partialUnderline("서비스 이용약관") {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(URL.이용약관)
                 startActivity(intent)
             }
-            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
-
-        personalAgreeCb.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
-        personalAgreeCb.isClickable = true
-        personalAgreeCb.allDocuText = personalAgreeCb.allDocuText
-            .partialUnderline("전문 보기") {
+            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "서비스 이용약관")
+            .partialUnderline("개인정보 취급방침") {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(URL.개인정보취급방침)
                 startActivity(intent)
             }
-            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
-
-        marketingAgreeCb.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
-        marketingAgreeCb.isClickable = true
-        marketingAgreeCb.allDocuText = marketingAgreeCb.allDocuText
-            .partialUnderline("전문 보기") {
+            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "개인정보 취급방침")
+            .partialUnderline("마케팅 활용 동의 약관") {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(URL.마케팅활용동의방안)
                 startActivity(intent)
             }
-            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
-
+            .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF),"마케팅 활용 동의 약관")
 
         buttonToLogin.paintFlags = buttonToLogin.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
@@ -413,9 +335,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         codeConfirmBtn.toDisableUI()
 
         phoneNumDet.editText.doAfterTextChanged { text ->
-            if(text.toString().isValidPhoneNum()) {
-                requestCodeBtn.toEnableUI()
-            } else requestCodeBtn.toDisableUI()
+            if(text.toString().isValidPhoneNum()) requestCodeBtn.toEnableUI() else requestCodeBtn.toDisableUI()
         }
 
         codeDet.editText.doAfterTextChanged { text ->
@@ -442,6 +362,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             phoneNumDet.showErrorMsg("전화번호 형식을 확인해주세요.")
             return
         }
+
         val authRequest = AuthPhoneRequest(authType, phone, countryCode, countryType, purposeType )
 
         API_ANONYMOUS.getAuthCode(authRequest)
@@ -480,8 +401,8 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         // 인증요청 버튼 비활성화
         phoneNumDet.isEnabled = false
         requestCodeBtn.toDisableUI()
-        // 인증확인 버튼은 기본 비활성화
         codeConfirmBtn.visibility = View.VISIBLE
+        // 인증확인 버튼은 기본 비활성화
         codeConfirmBtn.toDisableUI()
 
         codeDet.isEnabled = true
@@ -489,6 +410,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         codeDet.editText.requestFocus()
         codeDet.isShownError = false
         phoneMessageSwitch.isEnabled = false
+
     }
 
     private fun backToRequestCode() {
@@ -505,6 +427,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         codeDet.editText.setText("")
         codeDet.isShownError = false
         phoneMessageSwitch.isEnabled = true
+
     }
 
     private fun onCodeConfirmBtnClicked() {
@@ -524,10 +447,9 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
                     countrySpinner.isEnabled = false
                     codeDet.isEnabled = false
                     timerTv.visibility = View.INVISIBLE
-                    codeConfirmBtn.toDisableUI()
 
-//                    codeConfirmBtn.visibility = View.GONE
-//                    confirmCompleteCl.show(200)
+                    codeConfirmBtn.visibility = View.INVISIBLE
+                    confirmCompleteCl.show(200)
 
                     DaebakToast.show(requireContext(), "휴대폰 인증이 완료되었습니다.", overDialog = true)
                 }
@@ -706,42 +628,6 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
         // 요청버튼 활성화
         requestCodeBtn.text = "재전송하기"
         backToRequestCode()
-    }
-
-    override fun onCheckChangedListener(cb: CheckBox?, flag: Boolean) {
-        when (cb) {
-            allCb.checkBox -> {
-                setAllCheckBox(!isCheckBoxAllChecked())
-            }
-            order14Cb.checkBox -> {
-                allCb.checked = isCheckBoxAllChecked()
-            }
-            serviceAgreeCb.checkBox -> {
-                allCb.checked = isCheckBoxAllChecked()
-            }
-            personalAgreeCb.checkBox -> {
-                allCb.checked = isCheckBoxAllChecked()
-            }
-            marketingAgreeCb.checkBox -> {
-                allCb.checked = isCheckBoxAllChecked()
-            }
-        }
-        verifyNextBtn()
-    }
-
-    private fun isCheckBoxAllChecked (): Boolean {
-        return order14Cb.checked && serviceAgreeCb.checked && personalAgreeCb.checked && marketingAgreeCb.checked
-    }
-
-    private fun setAllCheckBox(flag: Boolean) {
-        order14Cb.checked = flag
-        serviceAgreeCb.checked = flag
-        personalAgreeCb.checked = flag
-        marketingAgreeCb.checked = flag
-    }
-
-    private fun isAllCheckedEssentialBox (): Boolean {
-        return order14Cb.checked && serviceAgreeCb.checked && personalAgreeCb.checked
     }
 
     var authType: String = "ALIMTALK"

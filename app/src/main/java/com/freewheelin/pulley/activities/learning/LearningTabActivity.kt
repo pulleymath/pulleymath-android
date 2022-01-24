@@ -2,7 +2,6 @@ package com.freewheelin.pulley.activities.learning
 
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -31,8 +30,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
-import com.freewheelin.pulley.activities.learning.tabFragment.UnitStudyFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.book.BookFragment
@@ -50,6 +47,7 @@ import com.freewheelin.pulley.activities.mypage.MyMainPageFragment
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoSettingDialog
+import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.manage.*
@@ -60,23 +58,15 @@ import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
-import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.snackBar.SnackBar
-import com.freewheelin.pulley.views.snackBar.SnackBarView
-import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
+import com.freewheelin.pulley.views.SnackBar.SnackBar
+import com.freewheelin.pulley.views.SnackBar.SnackBarView
+import com.freewheelin.pulley.views.SnackBar.SnackBarViewListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_learning.*
-import kotlinx.android.synthetic.main.activity_learning.container
-import kotlinx.android.synthetic.main.activity_learning.spyBtn
-import kotlinx.android.synthetic.main.activity_solve.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.android.synthetic.main.fragment_my_main_page.*
 import kotlinx.android.synthetic.main.fragment_signup_student_info.*
@@ -88,7 +78,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
 
@@ -116,8 +105,15 @@ class LearningTabActivity : PermissionActivity(),
 
     var snackBar: SnackBar? = null
     var mypageFragment = MyMainPageFragment()
-
-    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository() }
+    val tabFragment by lazy { arrayListOf(
+            MainFragment.newInstance(),
+            AnalysisFragment.newInstance(),
+            SnackTestFragment.newInstance(),
+            BookFragment.newInstance(),
+            MockExamFragment.newInstance(),
+            WrongNoteFragment.newInstance()
+    )
+    }
 
     var spySeal1 = 1
     var spySeal2 = 3
@@ -130,7 +126,6 @@ class LearningTabActivity : PermissionActivity(),
     var doubleBackToExitPressedOnce = false
 
     lateinit var tabMoveReceiver: BroadcastReceiver
-    lateinit var affiliatedReportViewReceiver: BroadcastReceiver
 
     var currentPagePosition = 0
 
@@ -140,7 +135,6 @@ class LearningTabActivity : PermissionActivity(),
     companion object {
         const val LEARNING_MAIN = "LEARNING_MAIN"
         const val LEARNING_TEST = "LEARNING_TEST"
-        const val LEARNING_AFFILIATED_TEST = "LEARNING_AFFILIATED_TEST"
         const val LEARNING_UNIT = "LEARNING_UNIT"
         const val LEARNING_MOCK = "LEARNING_MOCK"
         const val LEARNING_WRONG = "LEARNING_WRONG"
@@ -159,22 +153,9 @@ class LearningTabActivity : PermissionActivity(),
         var referActivity: Activity? = null
     }
 
-    var tabFragment: MutableList<LearningTabFragment> = mutableListOf(
-        MainFragment.newInstance(),
-        AnalysisFragment.newInstance(),
-        SnackTestFragment.newInstance(),
-        BookFragment.newInstance(),
-        MockExamFragment.newInstance(),
-        WrongNoteFragment.newInstance()
-    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppUsageMonitor.startAppUsage()
-
-        if (user?.userUniversityMajorCode != null) {
-            tabFragment.add(AffiliatedTestFragment.newInstance())
-        }
-
 
         try {
             if (savedInstanceState != null) {
@@ -184,7 +165,6 @@ class LearningTabActivity : PermissionActivity(),
                 tabFragment[3] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MOCK) as LearningTabFragment
                 tabFragment[4] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_WRONG) as LearningTabFragment
                 tabFragment[5] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_LIST) as LearningTabFragment
-                tabFragment[6] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_AFFILIATED_TEST) as LearningTabFragment
             }
         } catch (e:IllegalStateException) {
             e.printStackTrace()
@@ -278,32 +258,10 @@ class LearningTabActivity : PermissionActivity(),
                             (tabFragment[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
                         }
                     }
-
-                    val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
-                    if (!wantScroll) return
-
-                    when {
-                        intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
-                            val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
-                            (tabFragment[3] as BookFragment).scrollToTotalLabel(subject)
-                        }
-                        else -> {}
-                    }
                 }
             }
-        }
-
-        affiliatedReportViewReceiver = object : BroadcastReceiver() {
-            override fun onReceive(p0: Context?, intent: Intent?) {
-                intent?.let { intent ->
-                    val workbook = intent.getSerializableExtra(AffiliatedTestSolveActivity.SELECTED_WORKBOOK) as? AffiliatedTestWorkbook
-                    workbook?.let { (tabFragment[6] as AffiliatedTestFragment).showReportDialog(it) }
-                }
-            }
-
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
-        LocalBroadcastManager.getInstance(this).registerReceiver(affiliatedReportViewReceiver, IntentFilter(AffiliatedTestFragment.SHOW_REPORT))
 
         // for Api.class
         if(referActivity == null) referActivity = this
@@ -323,10 +281,12 @@ class LearningTabActivity : PermissionActivity(),
             Thread.sleep(500)
             runOnUiThread { tabLayout.getTabAt(currentPagePosition)?.select() }
         }
+
     }
 
     private fun userTest() {
         val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/mes/teachers.json"
+        // 작업하고있던 곳 맞음
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
@@ -370,33 +330,6 @@ class LearningTabActivity : PermissionActivity(),
         CoroutineScope(Dispatchers.IO).launch {
             ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
         }
-
-        checkAffiliatedTestExist()
-    }
-    @SuppressLint("CheckResult")
-    private fun checkAffiliatedTestExist() {
-        if (user?.userUniversityMajorCode == null) {
-            tabLayout.removeTabAt(7)
-        }
-        val majorCode = user?.userUniversityMajorCode ?: return
-        val studentId = user?.studentID ?: return
-        val schoolId = user?.schoolID ?: return
-        affiliatedTestRepository.getGroupList2(studentId, schoolId, majorCode)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ res ->
-                Log.d(javaClass.simpleName, "group list=>${res.data}")
-
-                res.data?.let {
-                    val groupList = it.group_list
-                    if (groupList.isEmpty()) {
-                        tabLayout.removeTabAt(7)
-                    }
-                }
-            }, { error ->
-                Log.e(javaClass.simpleName, "group error=${error.localizedMessage}")
-            })
-
     }
 
     private fun openStudyHistory(category: String, item_name: String) {
@@ -420,6 +353,7 @@ class LearningTabActivity : PermissionActivity(),
             }
             RESULT_SNACK_WRONG -> {
                 setSelectedTab(5)
+
             }
             RESULT_SNACK_ANALYSIS -> {
                 val intent = Intent(this, AnalysisTabActivity::class.java)
@@ -443,9 +377,8 @@ class LearningTabActivity : PermissionActivity(),
         super.onSaveInstanceState(outState)
         if(tabFragment[0].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
-        if(tabFragment[1].isAdded) {
+        if(tabFragment[1].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[1])
-        }
         if(tabFragment[2].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
         if(tabFragment[3].isAdded)
@@ -454,11 +387,6 @@ class LearningTabActivity : PermissionActivity(),
             supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[4])
         if(tabFragment[5].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[5])
-        if (user?.userUniversityMajorCode != null) {
-            if (tabFragment[6].isAdded) {
-                supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[6])
-            }
-        }
     }
 
     fun showSnackBar(text: String, buttonText: String, action: (() -> Unit)? = null) {

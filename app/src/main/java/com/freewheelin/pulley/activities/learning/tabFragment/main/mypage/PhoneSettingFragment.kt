@@ -3,6 +3,7 @@ package com.freewheelin.pulley.activities.learning.tabFragment.main.mypage
 
 import android.os.Bundle
 import android.text.InputType
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,11 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.ServerCommunicator
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.PrimaryButton
-import com.freewheelin.pulley.views.editText.DaebakInputField
-import com.freewheelin.pulley.views.editText.DaebakInputFieldListener
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.EditText.DaebakInputField
+import com.freewheelin.pulley.views.EditText.DaebakInputFieldListener
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
+import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.*
 import kotlinx.android.synthetic.main.fragment_phone_setting.*
 import kotlinx.android.synthetic.main.fragment_phone_setting.codeConfirmBtn
 import kotlinx.android.synthetic.main.fragment_phone_setting.codeConfirmIv
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_phone_setting.modifyBtn
 import kotlinx.android.synthetic.main.fragment_phone_setting.phoneTv
 import kotlinx.android.synthetic.main.fragment_phone_setting.requestCodeBtn
 import kotlinx.android.synthetic.main.fragment_phone_setting.timerTv
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import java.util.*
 import kotlin.concurrent.timerTask
 

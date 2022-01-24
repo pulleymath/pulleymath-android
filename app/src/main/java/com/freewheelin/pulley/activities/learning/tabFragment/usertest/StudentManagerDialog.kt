@@ -25,7 +25,7 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.databinding.DialogStudentManagerBinding
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.responseFailed
-import com.freewheelin.pulley.views.buttons.SecondaryButton
+import com.freewheelin.pulley.views.Buttons.SecondaryButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.dialog_marketing.*

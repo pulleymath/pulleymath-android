@@ -102,7 +102,7 @@
                             android:singleLine="true"
                             android:textSize="@dimen/sp16" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.views.Buttons.SecondaryButton
                             android:id="@+id/findSchoolBtn"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp56"
@@ -183,7 +183,7 @@
         app:layout_constraintStart_toStartOf="@+id/infoScrollContainer">
 
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/backBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
@@ -193,7 +193,7 @@
             app:ButtonTextSize="@dimen/sp18"
             app:buttonTheme="grey" />
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
             android:id="@+id/registBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

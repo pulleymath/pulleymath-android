@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.buttons
+package com.freewheelin.pulley.views.Buttons
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.ScreenTheme
+import kotlinx.android.synthetic.main.item_study_plan_add.view.*
 
 class DarkImageButton: ImageButton {
 
@@ -30,7 +31,7 @@ class DarkImageButton: ImageButton {
 
     fun getBackgroundDrawble(isSelected: Boolean): Drawable? {
         when(theme) {
-            ScreenTheme.Bright, ScreenTheme.BrightOutside-> {
+            ScreenTheme.Bright -> {
                 if(isSelected) {
                     return ContextCompat.getDrawable(context, R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_18)
                 } else  {

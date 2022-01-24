@@ -80,7 +80,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
 
-        <com.freewheelin.pulley.views.editText.DaebakInputField
+        <com.freewheelin.pulley.views.EditText.DaebakInputField
             android:id="@+id/phoneTv"
             android:layout_marginTop="8dp"
             android:layout_width="240dp"
@@ -88,9 +88,9 @@
             app:DaebakInputField_Hint="본인 또는 부모님 휴대폰 번호"
             app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
             app:layout_constraintStart_toStartOf="parent">
-        </com.freewheelin.pulley.views.editText.DaebakInputField>
+        </com.freewheelin.pulley.views.EditText.DaebakInputField>
 
-        <com.freewheelin.pulley.views.editText.DaebakInputField
+        <com.freewheelin.pulley.views.EditText.DaebakInputField
             android:id="@+id/codeTv"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
@@ -98,10 +98,10 @@
             app:DaebakInputField_Hint="인증번호 입력"
             app:layout_constraintTop_toBottomOf="@+id/phoneTv"
             app:layout_constraintStart_toStartOf="parent">
-        </com.freewheelin.pulley.views.editText.DaebakInputField>
+        </com.freewheelin.pulley.views.EditText.DaebakInputField>
 
         
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/requestCodeBtn"
             android:layout_width="160dp"
             android:layout_height="56dp"
@@ -112,7 +112,7 @@
             app:layout_constraintStart_toEndOf="@+id/phoneTv"
             app:layout_constraintTop_toTopOf="@+id/phoneTv" />
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/codeConfirmBtn"
             android:layout_width="160dp"
             android:layout_height="56dp"
@@ -181,7 +181,7 @@
             android:visibility="invisible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/modifyBtn"
         android:layout_width="160dp"
         android:layout_height="@dimen/dp56"

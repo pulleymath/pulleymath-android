@@ -62,14 +62,14 @@
                 android:textSize="@dimen/sp14"
                 android:layout_marginStart="24dp"/>
 
-            <com.freewheelin.pulley.views.buttons.DarkRadioButton
+            <com.freewheelin.pulley.views.Buttons.DarkRadioButton
                 android:id="@+id/timeOrderBtn"
                 android:layout_width="@dimen/dp120"
                 android:layout_height="36dp"
                 android:layout_marginStart="12dp"
                 android:text="시간별"/>
 
-            <com.freewheelin.pulley.views.buttons.DarkRadioButton
+            <com.freewheelin.pulley.views.Buttons.DarkRadioButton
                 android:id="@+id/unitOrderBtn"
                 android:layout_width="@dimen/dp120"
                 android:layout_height="36dp"

@@ -18,7 +18,7 @@
         android:paddingEnd="@dimen/dp48"
         android:paddingBottom="@dimen/dp24"
         android:background="@null"
-        app:tint="@color/black_4c4c4c"
+        android:tint="@color/black_4c4c4c"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleLabel"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.freewheelin.pulley.views.editText.DaebakInputField
+    <com.freewheelin.pulley.views.EditText.DaebakInputField
         android:id="@+id/phoneTv"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -55,9 +55,9 @@
         app:layout_constraintEnd_toStartOf="@+id/requestCodeBtn"
         app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
         app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-    </com.freewheelin.pulley.views.editText.DaebakInputField>
+    </com.freewheelin.pulley.views.EditText.DaebakInputField>
 
-    <com.freewheelin.pulley.views.editText.DaebakInputField
+    <com.freewheelin.pulley.views.EditText.DaebakInputField
         android:id="@+id/codeTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,10 +67,10 @@
         app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
         app:layout_constraintTop_toBottomOf="@+id/phoneTv"
         app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-    </com.freewheelin.pulley.views.editText.DaebakInputField>
+    </com.freewheelin.pulley.views.EditText.DaebakInputField>
 
 
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
         android:id="@+id/requestCodeBtn"
         android:layout_width="@dimen/primaryBtn_width_160dp"
         android:layout_height="56dp"
@@ -81,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/phoneTv" />
 
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
+    <com.freewheelin.pulley.views.Buttons.SecondaryButton
         android:id="@+id/codeConfirmBtn"
         android:layout_width="@dimen/primaryBtn_width_160dp"
         android:layout_height="56dp"
@@ -149,7 +149,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/timerTv"
         android:visibility="invisible"/>
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/modifyBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"

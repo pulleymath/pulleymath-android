@@ -21,7 +21,7 @@
         android:layout_marginTop="@dimen/dp32"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginBottom="@dimen/dp24"
-        android:background="@drawable/shadow_clear"
+        android:background="@drawable/shadow"
         app:layout_constraintWidth_percent="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/goalContainer"
@@ -115,9 +115,9 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
                 android:id="@+id/startBtn"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/primaryBtn_width_160dp"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginTop="@dimen/dp24"
                 android:text="@string/text_study_start_with_pulley"
@@ -214,7 +214,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:padding="8dp"
-        app:tint="@color/red_fe7b67"
+        android:tint="@color/red_fe7b67"
         android:src="@drawable/ic_arrow_right_w_7"
         app:layout_constraintStart_toEndOf="@+id/dDayTv"
         app:layout_constraintTop_toTopOf="@+id/dDayTv"
@@ -236,7 +236,7 @@
         android:id="@+id/goalContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/shadow_clear"
+        android:background="@drawable/shadow"
         android:layout_marginEnd="@dimen/dp16"
         app:layout_constraintBottom_toBottomOf="@+id/profileContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -302,7 +302,7 @@
             app:layout_constraintEnd_toEndOf="@+id/targetSettingBtn"
             app:layout_constraintTop_toBottomOf="@+id/targetSettingBtn"/>
 
-        <com.freewheelin.pulley.views.bars.HorizontalWithCircleBar
+        <com.freewheelin.pulley.views.Bars.HorizontalWithCircleBar
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

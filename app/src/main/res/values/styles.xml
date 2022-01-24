@@ -6,8 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/controlHighlight</item>
-
         <item name="android:textViewStyle">@style/DefaultTextViewStyle</item>
         <item name="android:buttonStyle">@style/DefaultButtonStyle</item>
         <item name='android:checkboxStyle'>@style/DefaultCheckBoxStyle</item>
@@ -16,23 +14,21 @@
     </style>
 
     <style name ="DefaultTextViewStyle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp18</item>
+        <item name="android:fontFamily">@font/font_nanum_square</item>
     </style>
 
     <style name="DefaultButtonStyle" parent="android:Widget.Holo.Button">
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize">@dimen/sp18</item>
+        <item name="android:fontFamily">@font/font_nanum_square</item>
+        <item name="android:textColor">@color/purple_6D6DFF</item>
     </style>
-<!--        <item name="android:textColor">@color/purple_6D6DFF</item>-->
 
     <style name="DefaultCheckBoxStyle" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:fontFamily">@font/font_nanum_square</item>
         <item name="android:button">@drawable/checkbox_blue</item>
     </style>
 
     <style name="DefaultRadioButtonStyle" parent="android:Widget.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:fontFamily">@font/font_nanum_square</item>
         <item name="android:button">@drawable/radio_default</item>
         <item name="android:paddingStart">8dp</item>
     </style>
@@ -44,7 +40,7 @@
 
     <style name="AppTheme.Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:fontFamily">@font/font_nanum_square_extra_bold</item>
         <item name="android:textColor">@color/black_4c4c4c</item>
     </style>
 
@@ -202,7 +198,6 @@
         <item name="android:track">@drawable/switch_track_grey</item>
         <item name="android:thumb">@drawable/switch_thumb_light</item>
     </style>
-<!--        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>-->
 
     <style name="Theme.Transparent" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
@@ -221,37 +216,6 @@
         <item name="android:switchStyle">@style/Switch</item>
         <item name="android:windowFullscreen">true</item>
     </style>
-<!--    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">-->
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-
-        <!--테두리 색상-->
-        <item name="colorPrimary">@color/purple_6D6DFF</item>
-<!--        <item name="boxStrokeColor">@color/purple_6D6DFF</item>-->
-        <!--cursor 색.-->
-        <item name="colorControlActivated">@color/purple_6D6DFF</item>
-
-        <!--        <item name="android:textCursorDrawable">@color/purple_6D6DFF</item>-->
-        <!--Counter-->
-        <item name="counterTextAppearance">@style/CounterTextAppearance</item>
-        <!--EditText에 있을때의 Hint-->
-        <item name="android:textColorHint">@color/grey_c0c0c0</item>
-        <!--상단에 있을때의 Hint-->
-        <item name="hintTextColor">@color/purple_6D6DFF</item>
-        <item name="hintTextAppearance">@style/HintTextAppearance</item>
-        <!--Helper-->
-        <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
-        <!--Error-->
-        <item name="errorEnabled">false</item>
-        <item name="colorError">@color/red_fe7b67</item>
-        <item name="errorIconDrawable">@android:color/transparent</item>
-        <item name="errorTextAppearance">@style/ErrorTextAppearance</item>
-
-        <item name="boxCornerRadiusBottomEnd">5dp</item>
-        <item name="boxCornerRadiusTopEnd">5dp</item>
-        <item name="boxCornerRadiusBottomStart">5dp</item>
-        <item name="boxCornerRadiusTopStart">5dp</item>
-
-    </style>
 
     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/white_ffffff</item>
@@ -263,39 +227,4 @@
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
-    <style name="ErrorTextAppearance">
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="HintTextAppearance">
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="HelperTextAppearance">
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">1sp</item>
-    </style>
-
-    <style name="CounterTextAppearance">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextInputEditTextStyle">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/black_4c4c4c </item>
-    </style>
-
 </resources>

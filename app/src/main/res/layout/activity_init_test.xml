@@ -152,7 +152,7 @@
             app:layout_constraintEnd_toEndOf="@+id/contentLl"
             app:layout_constraintTop_toBottomOf="@+id/contentLl">
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.views.Buttons.SecondaryButton
                 android:id="@+id/prevBtn"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
@@ -164,9 +164,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/nextBtn"
                 app:ButtonTextSize="18sp"
                 app:buttonTheme="grey">
-            </com.freewheelin.pulley.views.buttons.SecondaryButton>
+            </com.freewheelin.pulley.views.Buttons.SecondaryButton>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.views.Buttons.PrimaryButton
                 android:id="@+id/nextBtn"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
@@ -177,7 +177,7 @@
                 app:layout_constraintStart_toEndOf="@+id/prevBtn"
                 app:ButtonTextSize="18sp"
                 app:buttonTheme="blue" >
-            </com.freewheelin.pulley.views.buttons.PrimaryButton>
+            </com.freewheelin.pulley.views.Buttons.PrimaryButton>
         </LinearLayout>
         
 

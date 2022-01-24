@@ -100,7 +100,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.views.Buttons.SecondaryButton
             android:id="@+id/solveBtn"
             android:layout_width="@dimen/dp120"
             android:layout_height="@dimen/dp36"

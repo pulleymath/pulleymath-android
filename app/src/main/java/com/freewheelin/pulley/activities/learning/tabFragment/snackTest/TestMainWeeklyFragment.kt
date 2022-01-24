@@ -2,6 +2,7 @@ package com.freewheelin.pulley.activities.learning.tabFragment.snackTest
 
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,11 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.model.contents.Test
+import kotlinx.android.synthetic.main.fragment_test_main_weekly.*
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.ButtonLockImage
-import com.freewheelin.pulley.views.buttons.ButtonMode
+import com.freewheelin.pulley.views.Buttons.ButtonLockImage
+import com.freewheelin.pulley.views.Buttons.ButtonMode
+import kotlinx.android.synthetic.main.fragment_test_main.*
 import kotlinx.android.synthetic.main.fragment_test_main_unavailable_test.*
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.contentTv
 import kotlinx.android.synthetic.main.fragment_test_main_weekly.headerTv

@@ -122,7 +122,7 @@
         android:background="@drawable/bg_yellow_ffb300_radius_40_left_only"
         android:drawableLeft="@drawable/ic_plus_grey"
         android:drawableTint="@color/white_ffffff"
-        android:fontFamily="@font/font_pretendard_bold"
+        android:fontFamily="@font/font_nanum_square_extra_bold"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:text="플랜 추가하기"

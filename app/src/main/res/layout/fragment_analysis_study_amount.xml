@@ -89,7 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
 
-            <com.freewheelin.pulley.views.textViews.UpDownTextView
+            <com.freewheelin.pulley.views.TextViews.UpDownTextView
                 style="@style/TextBlue_30a4ff.Bold"
                 android:id="@+id/lastPeriodCompCntUtv"
                 android:layout_width="wrap_content"

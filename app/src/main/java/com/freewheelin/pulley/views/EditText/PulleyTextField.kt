@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.editText
+package com.freewheelin.pulley.views.EditText
 
 import android.content.Context
 import android.text.Editable
@@ -6,7 +6,9 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
 
 interface PulleyTextFieldListener {
     fun onTextChanged(text: String)

@@ -25,7 +25,7 @@
         android:layout_height="7dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/arrow_bottom_arduous_spinner"
-        app:tint="@color/black_4c4c4c"
+        android:tint="@color/black_4c4c4c"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -223,7 +223,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 }
                 // Get new FCM registration token
                 val token = task.result
-                if (token == null) return@OnCompleteListener
+
                 API_APP.putToken(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -9,7 +9,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.views.bars.PenBar_R
+import com.freewheelin.pulley.views.Bars.PenBar_R
+import kotlinx.android.synthetic.main.view_chart_triple_pen.view.*
 
 class TriplePenChart : ConstraintLayout {
 

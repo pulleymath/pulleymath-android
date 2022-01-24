@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.calendarPickerViews
+package com.freewheelin.pulley.views.CalendarPickerViews
 
 import android.content.Context
 import android.util.AttributeSet

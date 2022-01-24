@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.snackBar
+package com.freewheelin.pulley.views.SnackBar
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.PopupWindow
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.toPx
+import kotlinx.android.synthetic.main.view_snack_bar.view.*
 
 class SnackBar : PopupWindow {
 

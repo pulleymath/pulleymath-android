@@ -58,7 +58,7 @@
         app:orientation="solve">
     </com.freewheelin.pulley.views.TimerView>
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
+    <com.freewheelin.pulley.views.Buttons.PrimaryButton
         android:id="@+id/submitBtn"
         android:layout_width="160dp"
         android:layout_height="40dp"

@@ -58,7 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.freewheelin.pulley.views.editText.DaebakInputField
+        <com.freewheelin.pulley.views.EditText.DaebakInputField
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text" />
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.views.Buttons.PrimaryButton
             android:id="@+id/changeBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

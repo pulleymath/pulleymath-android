@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.bars
+package com.freewheelin.pulley.views.Bars
 
 import android.content.Context
 import android.util.AttributeSet

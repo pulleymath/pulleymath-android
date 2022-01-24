@@ -63,7 +63,7 @@
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="@dimen/dp32"
         android:background="@drawable/bg_purple_6d6dff_round"
-        android:fontFamily="@font/font_pretendard_bold"
+        android:fontFamily="@font/font_nanum_square_extra_bold"
         android:text="저장하기"
         android:textColor="@color/white_ffffff"
         app:layout_constraintBottom_toBottomOf="parent"

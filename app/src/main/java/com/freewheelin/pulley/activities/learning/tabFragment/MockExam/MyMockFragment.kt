@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,8 @@ import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.textViews.SortableListener
-import com.freewheelin.pulley.views.textViews.SortableTextView
+import com.freewheelin.pulley.views.TextViews.SortableListener
+import com.freewheelin.pulley.views.TextViews.SortableTextView
 import com.github.mikephil.charting.data.Entry
 import kotlinx.android.synthetic.main.dialog_wrong_management.*
 import kotlinx.android.synthetic.main.fragment_my_mock.*

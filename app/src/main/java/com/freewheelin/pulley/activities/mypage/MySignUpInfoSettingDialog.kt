@@ -9,15 +9,17 @@ import com.freewheelin.pulley.core.ServerCommunicator
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.PrimaryButton
-import com.freewheelin.pulley.views.editText.DaebakInputField
-import com.freewheelin.pulley.views.editText.DaebakInputFieldListener
+import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.EditText.DaebakInputField
+import com.freewheelin.pulley.views.EditText.DaebakInputFieldListener
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.*
+import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.view.*
 //import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.codeConfirmBtn
 //import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.codeConfirmIv
 //import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.requestCodeBtn
 //import kotlinx.android.synthetic.main.dialog_my_signup_info_setting.timerTv
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import java.util.*
 import kotlin.concurrent.timerTask
 
