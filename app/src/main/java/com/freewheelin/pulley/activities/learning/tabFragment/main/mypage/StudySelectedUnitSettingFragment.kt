@@ -8,19 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.assets.Subject
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.DaebakInputSelection
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.PulleyInputSelection
 import com.freewheelin.pulley.views.PulleyInputSelectionListener
-import kotlinx.android.synthetic.main.fragment_study_unit_selected_setting.*
 
 
 class StudySelectedUnitSettingFragment : MyPageBaseFragment(), PulleyInputSelectionListener {
@@ -34,16 +34,42 @@ class StudySelectedUnitSettingFragment : MyPageBaseFragment(), PulleyInputSelect
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpUI()
+        setUpUI(view)
     }
 
-    fun setUpUI() {
+    lateinit var mathTopSelection: PulleyInputSelection
+    lateinit var mathBottomSelection: PulleyInputSelection
+    lateinit var math1Selection: PulleyInputSelection
+    lateinit var math2Selection: PulleyInputSelection
+    lateinit var probAnsStatSelection: PulleyInputSelection
+    lateinit var calculusSelection: PulleyInputSelection
+    lateinit var geometrySelection: PulleyInputSelection
+    lateinit var modifyBtn: PrimaryButton
+    lateinit var guideTopLabel: TextView
+    lateinit var titleLabel: TextView
+    lateinit var backBtn: ImageButton
+
+    fun setUpUI(view: View) {
+        boilerUI(view)
         setButtonsAndListeners()
         setRecentUnit()
         setExcludedUnit()
         modifyBtn.setOnClickListener { onModifyBtnClicked() }
     }
 
+    fun boilerUI(v: View) {
+        mathTopSelection = v.findViewById(R.id.mathTopSelection)
+        mathBottomSelection = v.findViewById(R.id.mathBottomSelection)
+        math1Selection = v.findViewById(R.id.math1Selection)
+        math2Selection = v.findViewById(R.id.math2Selection)
+        probAnsStatSelection = v.findViewById(R.id.probAnsStatSelection)
+        calculusSelection = v.findViewById(R.id.calculusSelection)
+        geometrySelection = v.findViewById(R.id.geometrySelection)
+        modifyBtn = v.findViewById(R.id.modifyBtn)
+        guideTopLabel = v.findViewById(R.id.guideTopLabel)
+        titleLabel = v.findViewById(R.id.titleLabel)
+        backBtn = v.findViewById(R.id.backBtn)
+    }
     fun setButtonsAndListeners(){
         mathTopSelection.listener = this
         mathBottomSelection.listener = this

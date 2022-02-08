@@ -57,7 +57,7 @@
         tools:visibility="visible" />
 
 
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+    <com.freewheelin.pulley.views.buttons.PrimaryButton
         android:id="@+id/freeStartBtn"
         android:layout_width="0dp"
         android:layout_height="56dp"

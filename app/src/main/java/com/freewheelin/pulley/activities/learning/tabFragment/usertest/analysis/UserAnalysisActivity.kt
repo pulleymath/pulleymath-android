@@ -26,26 +26,22 @@ import com.freewheelin.pulley.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.activities.WrongTestReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.ShareAnalysisDialog
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.ShareAnalysisDialogListener
-import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.*
 import com.freewheelin.pulley.activities.solve.CustomBarChartRender
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API.ResponseModel.DailyRecommend
 import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
 import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
 import com.freewheelin.pulley.core.API.ResponseModel.WeekStudyData
 import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.core.manage.ContentManager
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.Buttons.SecondaryButton
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.TextViews.UpDownTextView.Change.*
+import com.freewheelin.pulley.views.textViews.UpDownTextView.Change.*
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -57,8 +53,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Math.abs
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.concurrent.thread
 
 
 class UserAnalysisActivity : AppCompatActivity(),

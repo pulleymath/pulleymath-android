@@ -32,12 +32,10 @@ import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.dialogs.UnitPlanAddDialog
 import com.freewheelin.pulley.dialogs.UnitPlanAddDialogListener
 import com.freewheelin.pulley.model.contents.Book
-import com.freewheelin.pulley.model.contents.BookType
-import com.freewheelin.pulley.model.contents.PieceCategory
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.*
-import com.freewheelin.pulley.views.Tooltip.TutorWindow
+import com.freewheelin.pulley.views.tooltip.TutorWindow
 import com.ht.balloonwindow.BalloonWindow
 import com.ht.balloonwindow.BalloonWindowListener
 import com.ht.balloonwindow.toPx

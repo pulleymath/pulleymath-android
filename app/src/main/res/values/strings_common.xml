@@ -2,8 +2,8 @@
 
     <string name="text_none">없음</string>
 
-    <string name="text_study_with_pulley">풀리로 공부하기</string>
-    <string name="text_study_start_with_pulley">풀리로 공부 시작</string>
+    <string name="text_study_with_pulley">풀리수학으로 공부하기</string>
+    <string name="text_study_start_with_pulley">풀리수학으로 공부 시작</string>
     <string name="text_to_regist_member">회원가입하기</string>
     <string name="text_name">이름</string>
     <string name="text_email">이메일</string>

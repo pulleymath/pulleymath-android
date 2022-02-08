@@ -12,7 +12,7 @@
         android:id="@+id/topLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="나에게 최적화된 수학 큐레이션"
+        android:text="수학 등급상승의 비밀"
         android:textSize="@dimen/sp18"
         android:letterSpacing="0.61"
         android:gravity="center_horizontal"
@@ -74,15 +74,12 @@
         app:layout_constraintGuide_begin="@dimen/primaryBtn_width_200dp"
         app:layout_constraintGuide_percent="0.5" />
 
-
     <Button
         android:id="@+id/startBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"
         android:layout_marginTop="@dimen/dp64"
         android:text="가입하고 공부 시작하기"
-        android:fontFamily="@font/nanum_square_bold"
-        android:textColor="@color/white_ffffff"
         app:layout_constraintStart_toStartOf="@+id/topLabel"
         app:layout_constraintEnd_toEndOf="@+id/topLabel"
         app:layout_constraintTop_toBottomOf="@+id/guideline"
@@ -95,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp14"
-        android:text="풀리 회원이신가요?"
+        android:text="풀리수학 회원이신가요?"
         android:layout_marginTop="@dimen/dp32"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startBtn"
@@ -132,9 +129,9 @@
         android:id="@+id/balloonCl"
         android:layout_width="136dp"
         android:layout_height="128dp"
-        android:background="@drawable/ic_balloon_purple"
         android:layout_marginBottom="@dimen/dp28"
         android:layout_marginStart="28dp"
+        android:background="@drawable/ic_balloon_purple"
         app:layout_constraintBottom_toBottomOf="@+id/pulleyIv"
         app:layout_constraintStart_toEndOf="@+id/pulleyIv"
         app:layout_constraintTop_toBottomOf="@+id/topLabel">
@@ -143,14 +140,14 @@
             style="@style/TextPurple_6d6dff.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="빠르게\n등급 상승하기!"
-            android:textSize="16sp"
             android:gravity="center"
             android:lineSpacingExtra="@dimen/sp8"
+            android:text="빠르게\n등급 상승하기!"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

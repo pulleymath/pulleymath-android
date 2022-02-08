@@ -15,7 +15,7 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 object Network {
-    private val BASE_URL = if(PdfViewerActivity.onTestApi || BuildConfig.DEBUG) "http://3.36.127.47:3000" else "https://pdf-live.pulleymath.net"
+    private val BASE_URL = if(PdfViewerActivity.onTestApi) "http://3.36.127.47:3000" else "https://pdf-live.pulleymath.net"
     var token = ""
 
     private val retrofit = Retrofit.Builder().baseUrl(BASE_URL).apply {

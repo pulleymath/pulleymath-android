@@ -102,8 +102,8 @@ enum class Setting(val title: String) {
     AppSetting("알림 설정"),
 
     Home("풀리수학 홈페이지 바로가기"),
-    Guide("풀리 200% 활용가이드"),
-    Notice("풀리 새소식"),
+    Guide("풀리수학 200% 활용가이드"),
+    Notice("풀리수학 새소식"),
     Customer("고객 지원"),
     FAQ("자주 묻는 질문"),
     Contact("1:1 문의하기"),

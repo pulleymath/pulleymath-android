@@ -182,7 +182,7 @@
         app:layout_constraintStart_toStartOf="@+id/solveBtn"/>
 
 
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+    <com.freewheelin.pulley.views.buttons.PrimaryButton
         android:id="@+id/solveBtn"
         android:layout_width="@dimen/primaryBtn_width_96dp"
         android:layout_height="36dp"
@@ -194,7 +194,7 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         style="@style/TextBlack_4c4c4c.Bold"
         android:id="@+id/reportBtn"
         android:layout_width="@dimen/primaryBtn_width_96dp"
@@ -216,7 +216,7 @@
         app:layout_constraintStart_toStartOf="@+id/reviewBtn"
         app:layout_constraintEnd_toEndOf="@+id/reviewBtn"/>
 
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/reviewBtn"
         android:layout_width="@dimen/primaryBtn_width_96dp"
         android:layout_height="36dp"

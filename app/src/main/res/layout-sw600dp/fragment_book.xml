@@ -68,7 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="24dp"
-                        android:text="풀리에서\n출판사 문제집을 만나보세요!"
+                        android:text="풀리수학에서\n출판사 문제집을 만나보세요!"
                         android:textSize="@dimen/dp18"
                         app:layout_constraintBottom_toTopOf="@+id/textReadPulleyBook"
                         app:layout_constraintStart_toStartOf="@+id/textReadPulleyBook"

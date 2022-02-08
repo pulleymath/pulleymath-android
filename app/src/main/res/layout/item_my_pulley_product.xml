@@ -77,7 +77,7 @@
                 style="@style/TextBlack_4c4c4c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="뭘로결제?"
+                android:text="null"
                 android:textSize="@dimen/sp16" />
         </LinearLayout>
 

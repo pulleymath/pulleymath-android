@@ -90,7 +90,7 @@ class StudyReportActivity : BaseActivity() {
         if(user!!.hasPulleyPlus)
             bottomActionButton.text = "${user!!.fullName}님을 위한 첫 단계 시작하기"
         else
-            bottomActionButton.text = "지금부터 풀리로 공부 시작하기"
+            bottomActionButton.text = "지금부터 풀리수학으로 공부 시작하기"
     }
 
     override fun onBackPressed() {

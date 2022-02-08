@@ -26,7 +26,7 @@
             android:layout_marginStart="@dimen/dp48"
             android:layout_marginTop="@dimen/dp48"
             android:textSize="@dimen/sp24"
-            tools:text="풀리님 안녕하세요!" />
+            tools:text="풀리수학님 안녕하세요!" />
 
 
         <ScrollView
@@ -118,7 +118,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
                         android:id="@+id/membershipBtn"
                         android:layout_width="@dimen/primaryBtn_width_160dp"
                         android:layout_height="@dimen/dp48"
@@ -207,7 +207,7 @@
                         app:layout_constraintTop_toTopOf="@+id/phoneLabel"
                         tools:text="010-90**-4355" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/phoneModifyBtn"
                         android:layout_width="@dimen/primaryBtn_width_96dp"
                         android:layout_height="@dimen/dp40"
@@ -230,7 +230,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/pwModifyBtn"
                         android:layout_width="@dimen/primaryBtn_width_160dp"
                         android:layout_height="@dimen/dp40"
@@ -301,7 +301,7 @@
                         tools:text="고등학교 3학년, 이과, 1등급" />
 
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/studyInfoSettingBtn"
                         android:layout_width="@dimen/primaryBtn_width_96dp"
                         android:layout_height="@dimen/dp40"
@@ -336,7 +336,7 @@
                         app:layout_constraintTop_toTopOf="@+id/recommendLabel"
                         tools:text="함수, 삼각함수" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/recommendUnitSettingBtn"
                         android:layout_width="@dimen/primaryBtn_width_96dp"
                         android:layout_height="@dimen/dp40"
@@ -370,7 +370,7 @@
                         app:layout_constraintTop_toTopOf="@+id/optionalLabel"
                         tools:text="확률, 벡터, 미분" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/optionalUnitSettingBtn"
                         android:layout_width="@dimen/primaryBtn_width_96dp"
                         android:layout_height="@dimen/dp40"

@@ -1,8 +1,8 @@
 package com.freewheelin.pulley.activities.mypage
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.assets.URL
-import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryBooksItem
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryCouponItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.views.Buttons.PrimaryButton
-import com.freewheelin.pulley.views.CodeConfirmView
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
-import com.pulleymath.android.pdf.draw.Line
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
@@ -177,6 +173,13 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             Log.d(javaClass.simpleName, "$result")
                             useBtnProgress.visibility = View.GONE
                             removeItemInList(adapterPosition)
+
+                            // 쿠폰적용을 위해 액티비티 재시작
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                val intent = requireActivity().intent
+                                requireActivity().finish()
+                                startActivity(intent)
+                            }, 1500)
                         }, {
                             DialogUtils.confirmDialog(requireContext(), "확인", "쿠폰을 사용할 수 없습니다.")
                             useBtnProgress.visibility = View.GONE

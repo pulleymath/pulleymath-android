@@ -146,7 +146,7 @@
             android:layout_height="0dp"
             android:elevation="6dp"
             android:background="@color/dim_black_333333"
-            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.is_purchased ? View.VISIBLE : View.INVISIBLE }"
+            android:visibility="@{ item.is_purchased ? View.INVISIBLE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="@+id/imgCover"
             app:layout_constraintStart_toStartOf="@+id/imgCover"
             app:layout_constraintTop_toTopOf="@+id/imgCover"

@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/nanum_square_light"
+                android:fontFamily="@font/pretendard_light"
                 android:text="* 원본 모의고사 등급컷을 활용한 보고서입니다."
                 android:textSize="@dimen/sp14"
                 android:visibility="gone"

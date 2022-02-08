@@ -1,14 +1,11 @@
 package com.freewheelin.pulley.activities.solve
 
 import android.content.Context
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.MemoView.MemoView
+import com.freewheelin.pulley.views.memoView.MemoView
 
 class SolveGestures: ProblemGestures {
     val context: Context

@@ -9,6 +9,7 @@ data class SummaryBooksResponse (
 data class SummaryBooksItem (
     var title: String,
     var publisher: String,
-    var pdfID: Long
+    var pdfID: Long,
+    var createdAt: String?
 )
 

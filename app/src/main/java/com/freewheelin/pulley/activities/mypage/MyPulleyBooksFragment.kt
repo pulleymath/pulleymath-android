@@ -79,7 +79,9 @@ class MyPulleyBooksFragment : MyPageBaseFragment() {
                 } else {
                     freeContainer.visibility = View.GONE
                     paidContainer.visibility = View.VISIBLE
-                    setList(result.data!!)
+                    val sortedList = result.data!!.sortedByDescending { it.createdAt }
+
+                    setList(sortedList)
                 }
             }, {
 

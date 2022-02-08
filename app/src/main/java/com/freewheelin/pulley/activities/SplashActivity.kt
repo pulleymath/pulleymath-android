@@ -94,7 +94,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         if (info == null) {
             checkSign()
         } else {
-            val dialogTitle = info.updateTitle ?: "보다 나은 풀리 이용을 위해 지금 업데이트 해주세요 :)"
+            val dialogTitle = info.updateTitle ?: "보다 나은 풀리수학 이용을 위해 지금 업데이트 해주세요 :)"
             val dialogContents = info.updateContent ?: "서비스 안정화"
             val dialog = DialogUtils.makeDialog(this, dialogTitle, dialogContents, "종료", "확인")
             dialog.leftBtn.setOnClickListener { finishAndRemoveTask() }
@@ -223,7 +223,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 }
                 // Get new FCM registration token
                 val token = task.result
-
+                if (token == null) return@OnCompleteListener
                 API_APP.putToken(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -4,7 +4,7 @@ import android.view.View
 import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.FocusedDimView
-import com.freewheelin.pulley.views.Tooltip.TutorWindow
+import com.freewheelin.pulley.views.tooltip.TutorWindow
 import com.ht.balloonwindow.BalloonWindow
 
 class Tutor {

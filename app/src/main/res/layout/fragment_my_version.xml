@@ -113,7 +113,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/currentVersionLabel"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                <com.freewheelin.pulley.views.buttons.PrimaryButton
                     android:id="@+id/updateBtn"
                     android:layout_width="160dp"
                     android:layout_height="40dp"

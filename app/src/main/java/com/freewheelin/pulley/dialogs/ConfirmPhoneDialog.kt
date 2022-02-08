@@ -82,7 +82,7 @@ class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val fai
         successCB()
     }
 
-    override fun requestCode(text: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
+    override fun requestCode(text: String, type: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
         if(text.isEmpty()) {
             callback(CodeConfirmView.Status.Fail, "휴대폰 번호를 입력하세요!")
         } else if(!text.isValidPhoneNum()) {
@@ -93,7 +93,7 @@ class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val fai
 //        }
         else {
 
-            val authRequest = AuthPhoneRequest("SMS", text, countryCode, countryType, purposeType )
+            val authRequest = AuthPhoneRequest(type, text, countryCode, countryType, purposeType )
 
             API_ANONYMOUS.getAuthCode(authRequest)
                 .subscribeOn(Schedulers.io())

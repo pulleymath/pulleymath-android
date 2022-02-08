@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    android:text="풀리 서비스는 최대 3개의 기기에서만 이용이 가능합니다.\n새로운 기기에서 이용을 원하시면 등록된 기기를 삭제해주세요."
+                    android:text="풀리수학 서비스는 최대 3개의 기기에서만 이용이 가능합니다.\n새로운 기기에서 이용을 원하시면 등록된 기기를 삭제해주세요."
                     android:textSize="@dimen/sp16"
                     app:lineHeight="@dimen/sp24" />
 

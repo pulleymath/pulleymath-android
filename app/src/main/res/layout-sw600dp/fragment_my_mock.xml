@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/dp16"
-        android:background="@drawable/shadow"
+        android:background="@drawable/shadow_clear"
         android:visibility="gone"
         tools:layout_editor_absoluteX="12dp"
         tools:layout_editor_absoluteY="12dp">
@@ -62,7 +62,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/newExamBtn"
             android:layout_width="@dimen/primaryBtn_width_200dp"
             android:layout_height="48dp"

@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/sp12"
-                android:text="공부할 선택 과목을 골라주세요.\n선택하지 않은 과목은 풀리의 추천에서 제외됩니다."
+                android:text="공부할 선택 과목을 골라주세요.\n선택하지 않은 과목은 풀리수학의 추천에서 제외됩니다."
                 android:textSize="@dimen/sp24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp48">
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/prevBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp56"
@@ -173,7 +173,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                <com.freewheelin.pulley.views.buttons.PrimaryButton
                     android:id="@+id/completeBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp56"

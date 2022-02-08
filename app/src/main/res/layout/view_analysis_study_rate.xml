@@ -51,12 +51,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp24"
         android:lineSpacingExtra="8sp"
-        android:text="문제풀면서 긴가민가... 했던 그 문제!\n확실히 알 수 있도록 풀리가 도와줄게요!"
+        android:text="문제풀면서 긴가민가... 했던 그 문제!\n확실히 알 수 있도록 풀리수학이 도와줄게요!"
         android:textSize="@dimen/sp16"
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/guideTv" />
 
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/actionBtn"
         android:layout_width="@dimen/primaryBtn_width_200dp"
         android:layout_height="@dimen/dp56"

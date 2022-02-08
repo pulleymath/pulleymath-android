@@ -5,11 +5,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
-import kotlinx.android.synthetic.main.view_input_daebak_selection.view.*
 
 interface PulleyInputSelectionListener {
     fun onSelectionChanged(view:PulleyInputSelection)
@@ -50,9 +51,19 @@ class PulleyInputSelection: ConstraintLayout, View.OnClickListener {
         setTypedArray(attrs)
     }
 
+    var btn1: SelectionButton
+    var btn2: SelectionButton
+    var btn3: SelectionButton
+    var labelTv: TextView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_input_pulley_selection, this)
+        btn1 = findViewById(R.id.btn1)
+        btn2 = findViewById(R.id.btn2)
+        btn3 = findViewById(R.id.btn3)
+        labelTv = findViewById(R.id.labelTv)
         buttonTitles = listOf("A","B","C")
+
         btn1.setOnClickListener(this)
         btn2.setOnClickListener(this)
         btn3.setOnClickListener(this)

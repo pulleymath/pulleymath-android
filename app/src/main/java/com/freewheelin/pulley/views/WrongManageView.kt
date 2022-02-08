@@ -13,12 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.utils.setPermissionClickListener
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.Buttons.ButtonLockImage
-import com.freewheelin.pulley.views.Buttons.ButtonMode
-import com.freewheelin.pulley.views.Buttons.PrimaryButton
-import com.freewheelin.pulley.views.Buttons.SecondaryButton
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
+import com.freewheelin.pulley.views.buttons.ButtonMode
+import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.buttons.SecondaryButton
 
 interface WrongManageViewListener {
     fun onTrashBtnClicked(view: WrongManageView) {}

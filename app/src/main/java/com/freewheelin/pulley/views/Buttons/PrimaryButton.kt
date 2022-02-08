@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.Buttons
+package com.freewheelin.pulley.views.buttons
 
 import android.content.Context
 import android.graphics.Typeface
@@ -84,9 +84,9 @@ open class PrimaryButton: ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.button_primarybutton, this)
         theme = ButtonTheme.Primary_Blue
 
-        buttonText = findViewById(R.id.buttonText)
         imageLock = findViewById(R.id.imageLock)
         button = findViewById(R.id.button)
+        buttonText = findViewById(R.id.buttonText)
         lottie = findViewById(R.id.lottie)
     }
 
@@ -114,6 +114,11 @@ open class PrimaryButton: ConstraintLayout {
         }
 
     private var isEnableUI: Boolean = true
+    var enableFlag: Boolean = true
+    set(value) {
+        field = value
+        if (value) toEnableUI() else toDisableUI()
+    }
 
     fun setLock(hasPulleyPlus:Boolean, lockImage:ButtonLockImage = ButtonLockImage.small16, mode: ButtonMode = ButtonMode.normal) {
         this.hasPulleyPlus = hasPulleyPlus
@@ -128,7 +133,7 @@ open class PrimaryButton: ConstraintLayout {
                         ButtonLockImage.big48 -> imageLock.setImageResource(R.drawable.ic_lock_48_white)
                         else -> imageLock.setImageResource(R.drawable.ic_lock_16_white)
                     }
-                    imageLock.setColorFilter(buttonText.currentTextColor)
+                    imageLock.setColorFilter(button.currentTextColor)
                 } else {
                     imageLock.visibility = View.GONE
                 }
@@ -146,14 +151,21 @@ open class PrimaryButton: ConstraintLayout {
 
     fun toDisableUI() {
         isEnableUI = false
-        buttonText.typeface = Theme.bold(context)
+//        button.typeface = Theme.bold(context)
+
         when(screenTheme) {
             ScreenTheme.Bright -> {
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
-                button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round)
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_non_ripple)
+            }
+
+            ScreenTheme.BrightOutside -> {
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.white_4cffffff))
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_non_ripple)
             }
 
             ScreenTheme.Dark -> {
+//                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
             }
@@ -162,14 +174,16 @@ open class PrimaryButton: ConstraintLayout {
 
     fun toProcessingUI() {
         isEnableUI = true
-        buttonText.typeface = Theme.bold(context)
+//        button.typeface = Theme.bold(context)
         when(screenTheme) {
-            ScreenTheme.Bright -> {
+            ScreenTheme.Bright, ScreenTheme.BrightOutside -> {
+//                button.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
                 button.background = ContextCompat.getDrawable(context, R.drawable.rp_bg_purple_ecebff_round)!!
             }
 
             ScreenTheme.Dark -> {
+//                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
             }
@@ -178,7 +192,8 @@ open class PrimaryButton: ConstraintLayout {
 
     fun toEnableUI() {
         isEnableUI = true
-        buttonText.typeface = theme.getTextTypeface(context)
+//        button.typeface = theme.getTextTypeface(context)
+//        button.setTextColor(theme.getTextColor(context))
         buttonText.setTextColor(theme.getTextColor(context))
         button.background = theme.getBgDrawable(context)
     }
@@ -221,7 +236,8 @@ open class PrimaryButton: ConstraintLayout {
     fun getScreenTheme(rawValue: Int): ScreenTheme {
         return when(rawValue) {
             0 -> ScreenTheme.Bright
-            else -> ScreenTheme.Dark
+            1 -> ScreenTheme.Dark
+            else -> ScreenTheme.BrightOutside
         }
     }
 

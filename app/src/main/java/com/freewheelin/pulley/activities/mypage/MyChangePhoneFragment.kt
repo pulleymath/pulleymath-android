@@ -74,13 +74,13 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
         countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
     }
 
-    override fun requestCode(text: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
+    override fun requestCode(text: String, type: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
         when {
             text == user.cellPhone -> callback(CodeConfirmView.Status.Fail, "기존 휴대폰 번호와 동일한 번호는 사용할 수 없습니다.")
             text.isEmpty() -> callback(CodeConfirmView.Status.Fail, "휴대폰 번호를 입력하세요!")
             !text.isValidPhoneNum() -> callback(CodeConfirmView.Status.Fail, "휴대폰 번호가 형식에 맞지 않습니다!")
             else -> {
-                val authRequest = AuthPhoneRequest("SMS", text, countryCode, countryType, purposeType )
+                val authRequest = AuthPhoneRequest(type, text, countryCode, countryType, purposeType )
 
                 API_ANONYMOUS.getAuthCode(authRequest)
                     .subscribeOn(Schedulers.io())

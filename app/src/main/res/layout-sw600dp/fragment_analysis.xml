@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:background="@drawable/shadow">
+                android:background="@drawable/shadow_clear">
 
                 <TextView
                     android:id="@+id/mainCurationTv"
@@ -45,7 +45,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-                <com.freewheelin.pulley.views.TextViews.AnalysisCompareTextView
+                <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
                     android:id="@+id/percentCompareTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                     app:layout_constraintStart_toEndOf="@+id/cntCompareTv"
                     app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                <com.freewheelin.pulley.views.TextViews.AnalysisCompareTextView
+                <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
                     android:id="@+id/cntCompareTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/percentCompareTv"
                     app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                <com.freewheelin.pulley.views.TextViews.AnalysisCompareTextView
+                <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
                     android:id="@+id/timeCompareTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     app:layout_constraintStart_toEndOf="@+id/percentCompareTv"
                     app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                <com.freewheelin.pulley.views.buttons.PrimaryButton
                     android:id="@+id/mainAnalysisBtn"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp56"
@@ -115,7 +115,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:background="@drawable/shadow">
+                android:background="@drawable/shadow_clear">
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/timeCountChart"
@@ -150,19 +150,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:background="@drawable/shadow" />
+            android:background="@drawable/shadow_clear" />
 
         <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.AnalysisStudyRateView
             android:id="@+id/studyRateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:background="@drawable/shadow" />
+            android:background="@drawable/shadow_clear" />
 
         <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListView
             android:id="@+id/todayStudyView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shadow"/>
+            android:background="@drawable/shadow_clear"/>
     </LinearLayout>
 </ScrollView>

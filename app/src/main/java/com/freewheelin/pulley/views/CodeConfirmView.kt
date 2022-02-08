@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import com.freewheelin.pulley.R
+import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.view_code_confirm.view.*
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -23,6 +24,7 @@ class CodeConfirmView : LinearLayout {
 
     var requestText = ""
     var confirmCode = ""
+    var phoneAuthType: String = "ALIMTALK"
 
     /**
      * requestCode : Api에 [코드] 요청 후 콜백
@@ -30,7 +32,7 @@ class CodeConfirmView : LinearLayout {
      * confirmSuccess : 결과 성공시만 호출, 에러시는 내부 처리
      */
     interface CodeConfirmInterface {
-        fun requestCode(text:String, callback:(status:Status, msg:String?)->Unit)
+        fun requestCode(text:String, type: String, callback:(status:Status, msg:String?)->Unit)
         fun requestConfirm(requestText:String, confirmCode:String, callback:(status:Status, msg:String?)->Unit)
         fun confirmSuccess()
     }
@@ -84,7 +86,10 @@ class CodeConfirmView : LinearLayout {
     fun setInputType(type:Int) {
         when(type) {
             1 -> editValue.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            2 -> editValue.inputType = InputType.TYPE_CLASS_PHONE
+            2 -> {
+                editValue.inputType = InputType.TYPE_CLASS_PHONE
+                phoneAuthTypeCl.visibility = View.VISIBLE
+            }
             else -> editValue.inputType = InputType.TYPE_CLASS_TEXT
         }
     }
@@ -103,6 +108,9 @@ class CodeConfirmView : LinearLayout {
         editCodeConfirm.doAfterTextChanged { text ->
             if(text?.length?:0 == 4) btnCodeConfirm.toEnableUI() else btnCodeConfirm.toDisableUI()
         }
+        phoneMessageSwitch.setOnCheckedChangeListener { cb, flag ->
+            phoneAuthType = if (flag) "SMS" else "ALIMTALK"
+        }
         initReqeust()
     }
 
@@ -117,6 +125,8 @@ class CodeConfirmView : LinearLayout {
         containerCodeConfirmError.visibility = View.GONE
         // 컨펌 버튼 비활성화
         btnCodeConfirm.toDisableUI()
+
+        phoneMessageSwitch.isEnabled = true
     }
 
     fun requestCode() {
@@ -129,7 +139,7 @@ class CodeConfirmView : LinearLayout {
         // 구현체로 코드요청 후 콜백처리
         requestText = editValue.text.toString().trim()
         editValue.setText(requestText)
-        codeInterface?.requestCode(requestText) { status, msg ->
+        codeInterface?.requestCode(requestText, phoneAuthType) { status, msg ->
 
             btnRequestCode.completeLoading()
             requestResult(status, msg)
@@ -154,6 +164,7 @@ class CodeConfirmView : LinearLayout {
         containerCodeConfirm.visibility = View.VISIBLE
         containerCodeConfirmError.visibility = View.GONE
         editCodeConfirm.requestFocus()
+        phoneMessageSwitch.isEnabled = false
 
         startTimer()
     }

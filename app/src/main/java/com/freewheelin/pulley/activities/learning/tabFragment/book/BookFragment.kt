@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.solve.SolveActivity
@@ -37,7 +40,10 @@ import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
 import com.ht.balloonwindow.BalloonWindow
 import kotlinx.android.synthetic.main.fragment_book.*
+import kotlinx.android.synthetic.main.fragment_book.rootView
+import kotlinx.android.synthetic.main.fragment_unit_study.*
 import kotlinx.android.synthetic.main.tooltip_analysis.view.*
+import java.lang.Math.abs
 
 class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
 
@@ -457,4 +463,67 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             getTotalList()
         }
     }
+    fun scrollToTotalLabel(subject: String) {
+        val targetHashSet = when (subject) {
+            "미적분" -> hashSetOf(
+                FilterType.워크북_미포함,
+                FilterType.핀_포함,
+                FilterType.계열_전체,
+                FilterType.과목_미적분,
+                FilterType.과목_수학2,
+                FilterType.단계_문제풀이,
+                FilterType.문항_전체,
+                FilterType.추천_2_3등급
+            )
+            "확률과 통계" -> hashSetOf(
+                FilterType.워크북_미포함,
+                FilterType.핀_포함,
+                FilterType.계열_전체,
+                FilterType.과목_확통,
+                FilterType.단계_문제풀이,
+                FilterType.문항_전체,
+                FilterType.추천_2_3등급
+            )
+            else -> hashSetOf(
+                FilterType.워크북_미포함,
+                FilterType.핀_포함,
+                FilterType.계열_전체,
+                FilterType.과목_확통,
+                FilterType.단계_문제풀이,
+                FilterType.문항_전체,
+                FilterType.추천_2_3등급
+            )
+        }
+
+        filterView.selectedFilterTypes = targetHashSet
+        filterView.adapter?.notifyDataSetChanged()
+
+        getTotalList()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            rootView.scrollToView(totalLabel)
+
+        }, 1000)
+    }
+}
+
+// TODO 어디론가 옮겨야할것같음
+internal fun ScrollView.computeDistanceToView(view: View): Int {
+    return abs(calculateRectOnScreen(this).top - (this.scrollY + calculateRectOnScreen(view).top))
+}
+
+internal fun calculateRectOnScreen(view: View): Rect {
+    val location = IntArray(2)
+    view.getLocationOnScreen(location)
+    return Rect(
+        location[0],
+        location[1],
+        location[0] + view.measuredWidth,
+        location[1] + view.measuredHeight
+    )
+}
+
+fun ScrollView.scrollToView(view: View) {
+    val y = computeDistanceToView(view)
+    this.scrollTo(0, y)
 }

@@ -26,8 +26,8 @@ import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import com.freewheelin.pulley.views.TextViews.SortableListener
-import com.freewheelin.pulley.views.TextViews.SortableTextView
+import com.freewheelin.pulley.views.textViews.SortableListener
+import com.freewheelin.pulley.views.textViews.SortableTextView
 import kotlinx.android.synthetic.main.dialog_wrong_management.*
 import kotlinx.android.synthetic.main.fragment_my_log.*
 import kotlinx.android.synthetic.main.item_learning_tab_list.view.*

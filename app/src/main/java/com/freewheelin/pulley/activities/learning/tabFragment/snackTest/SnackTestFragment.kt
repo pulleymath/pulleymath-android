@@ -12,11 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
 import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.viewpager.widget.ViewPager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.DailyTestReportActivity
 import com.freewheelin.pulley.activities.WeeklyTestReportActivity
@@ -25,7 +21,6 @@ import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.activities.mypage.MyRecommendSettingActivity
-import com.freewheelin.pulley.activities.mypage.MyRecommendSettingDialog
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
@@ -228,11 +223,11 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     private fun onSelectorContainerClicked(view: View) {
 
         if(requireContext().isTablet) {
-            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
-            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
-            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow)
+            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
+            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
+            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
 
-            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_border_purple)
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.snack_shadow_border_purple)
         } else {
             dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
             weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)

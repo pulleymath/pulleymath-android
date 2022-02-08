@@ -48,7 +48,7 @@ class MyChangeEmailFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
         textTitle.text = if(user.isValidEmail) "이메일 변경" else "이메일 인증"
     }
 
-    override fun requestCode(text: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
+    override fun requestCode(text: String, type: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {
         when {
             text.isEmpty() -> callback(CodeConfirmView.Status.Fail, "이메일을 입력하세요!")
             !text.isValidEmail() -> callback(CodeConfirmView.Status.Fail, "이메일이 형식에 맞지 않습니다!")

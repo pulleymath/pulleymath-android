@@ -71,7 +71,7 @@
             android:layout_marginTop="@dimen/dp32"
             android:orientation="horizontal">
 
-            <com.freewheelin.pulley.views.Buttons.SecondaryButton
+            <com.freewheelin.pulley.views.buttons.SecondaryButton
                 android:id="@+id/cancelBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
@@ -79,7 +79,7 @@
                 app:buttonTheme="grey"
                 android:text="@string/text_cancel"/>
 
-            <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/deleteBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"

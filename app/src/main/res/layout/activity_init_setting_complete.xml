@@ -37,7 +37,7 @@
             android:text="P.S. 겁먹지 마세요! 아주 쉬워요 :)"
             android:layout_marginTop="@dimen/dp24"/>
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/startBtn"
             android:layout_width="@dimen/primaryBtn_width_200dp"
             android:layout_height="@dimen/dp56"

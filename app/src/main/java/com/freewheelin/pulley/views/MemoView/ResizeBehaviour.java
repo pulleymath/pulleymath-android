@@ -10,7 +10,7 @@
  * The modifications are distributed as part of this program under the
  * GNU Affero General Public License v3.0; see LICENSE.
  */
-package com.freewheelin.pulley.views.MemoView;
+package com.freewheelin.pulley.views.memoView;
 
 /**
  * Created by Riccardo Moro on 11/6/2016.

@@ -2,7 +2,6 @@ package com.freewheelin.pulley.activities.learning.tabFragment.analysis.componen
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -14,8 +13,8 @@ import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.WeakChapterResult
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.utils.partialFontAndColored
-import com.freewheelin.pulley.views.Bars.VerticalBar
-import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.bars.VerticalBar
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 
 interface AnalysisRecommendStudyViewListener {
     fun onRecommendBtnClicked(view: AnalysisRecommendStudyView)
@@ -46,7 +45,7 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         actionBtn = findViewById(R.id.actionBtn)
 
         guideTv = findViewById(R.id.guideTv)
-        unitTv = findViewById(R.id.unitTv)
+        unitTv = findViewById(R.id.intentionTv)
         recommendTv = findViewById(R.id.recommendTv)
         myBarLabel = findViewById(R.id.myBarLabel)
 

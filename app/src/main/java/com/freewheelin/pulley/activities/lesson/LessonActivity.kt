@@ -22,10 +22,7 @@ import java.lang.Exception
 class LessonActivity : BaseActivity() {
 
     val API_LESSON_DOMAIN =
-        if(Preferences.onTestAPI.get() || BuildConfig.DEBUG)
-            "https://dev.pulleymath.com"
-        else
-            "https://pulleymath.com"
+        if(Preferences.onTestAPI.get()) "https://dev.pulleymath.com" else "https://pulleymath.com"
 
     val lessonPath = "$API_LESSON_DOMAIN/pplink"
     val lessonLink = "$lessonPath?token=${user?.token}"

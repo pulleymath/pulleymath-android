@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.freewheelin.pulley.views.Bars.PenBar_R
+    <com.freewheelin.pulley.views.bars.PenBar_R
         android:id="@+id/firstPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/firstLabelTv"
         app:layout_constraintStart_toEndOf="@+id/firstLabelTv">
 <!--        app:valueLabelColor="@color/grey_c0c0c0"-->
-    </com.freewheelin.pulley.views.Bars.PenBar_R>
+    </com.freewheelin.pulley.views.bars.PenBar_R>
 
     <TextView
         style="@style/TextBlack_4c4c4c"
@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/firstLabelTv"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.freewheelin.pulley.views.Bars.PenBar_R
+    <com.freewheelin.pulley.views.bars.PenBar_R
         android:id="@+id/secondPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/secondLabelTv"
         app:layout_constraintStart_toEndOf="@+id/secondLabelTv">
 
-    </com.freewheelin.pulley.views.Bars.PenBar_R>
+    </com.freewheelin.pulley.views.bars.PenBar_R>
 
     <TextView
         style="@style/TextGrey_c0c0c0"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/secondLabelTv"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.freewheelin.pulley.views.Bars.PenBar_R
+    <com.freewheelin.pulley.views.bars.PenBar_R
         android:id="@+id/thirdPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
@@ -76,6 +76,6 @@
         app:layout_constraintStart_toEndOf="@+id/thirdLabelTv">
 
 <!--        app:valueLabelColor="@color/grey_c0c0c0"-->
-    </com.freewheelin.pulley.views.Bars.PenBar_R>
+    </com.freewheelin.pulley.views.bars.PenBar_R>
 
 </merge>

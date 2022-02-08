@@ -14,6 +14,7 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 
@@ -234,7 +235,7 @@ class AnswerView : ConstraintLayout,
     }
 
     fun getShortAnswerText() : String {
-        return shortAnswerView?.text.toString() ?: ""
+        return shortAnswerView.text.toString() ?: ""
     }
 
     fun disableMarking() {

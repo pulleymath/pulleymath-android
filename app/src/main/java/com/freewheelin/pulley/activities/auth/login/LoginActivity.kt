@@ -7,8 +7,11 @@ import android.text.InputType
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
@@ -22,29 +25,28 @@ import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API_APP
-import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.EditText.*
+import com.freewheelin.pulley.views.editText.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import com.pulleymath.android.pdf.PdfViewerActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnterListener, DaebakPasswordFieldListener, DaebakPasswordEnterListener, LifecycleObserver {
+class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener, PasswordFieldV2EnterListener, LifecycleObserver {
 
     companion object {
 
@@ -66,52 +68,62 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
         }
     }
 
+    private val binding: ActivityLoginBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_login, null, false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-        greetingLabel.text = "안녕하세요.\n풀리에 오신 것을 환영합니다 :)"
-        val content = SpannableString(findIdPwTv.text)
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        loginBtn.setOnClickListener {
-            if(loginBtn.isEnableUI()) this.onLoginBtnClicked()
-        }
-        findIdPwTv.setOnClickListener {
-            this.onFindIdPwTvClicked()
-        }
-        signupTv.setOnClickListener {
-            onSignupBtnClicked()
-        }
-        findIdPwTv.extensionTouchArea(12.toPx())
-        emailDet.text = user?.email?: ""
-        emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-        emailDet.listener = this
-        pwDet.enterListener = this
+        setContentView(binding.root)
+        binding.run {
+            greetingLabel.text = "안녕하세요.\n풀리수학에 오신 것을 환영합니다 :)"
+            val content = SpannableString(findIdPwTv.text)
+            content.setSpan(UnderlineSpan(), 0, content.length, 0)
+            loginBtn.setOnClickListener {
+                if (loginBtn.isEnableUI()) this@LoginActivity.onLoginBtnClicked()
+            }
+            findIdPwTv.setOnClickListener {
+                this@LoginActivity.onFindIdPwTvClicked()
+            }
+            signupTv.setOnClickListener {
+                onSignupBtnClicked()
+            }
+            findIdPwTv.extensionTouchArea(12.toPx())
+            emailField.text = user?.email ?: ""
+            emailField.editText.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            emailField.listener = this@LoginActivity
+            pwField.enterListener = this@LoginActivity
 
-        rootView.setOnTouchListener { view, motionEvent ->
-            currentFocus?.let { hideKeyboard(it) }
-            false
+            rootView.setOnTouchListener { view, motionEvent ->
+                currentFocus?.let { hideKeyboard(it) }
+                false
+            }
+            ProcessLifecycleOwner.get().lifecycle.addObserver(this@LoginActivity)
+            loginBtn.toDisableUI()
+
+            setListener()
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-        loginBtn.toDisableUI()
-
-        setListener()
     }
 
     fun setListener() {
-        emailDet.editText.doAfterTextChanged { text ->
-            if(isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
-        }
-        pwDet.editText.doAfterTextChanged { text ->
-            if(isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
+        binding.apply {
+            emailField.editText.doAfterTextChanged { text ->
+                if (isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
+            }
+            pwField.inputEt.doAfterTextChanged {
+                if (isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
+            }
         }
     }
 
     fun isValid() : Boolean{
-        if(emailDet.text.isEmpty() || pwDet.text.isEmpty()) {
-            return false
+        binding.apply {
+            if (emailField.text.isEmpty() == true || pwField.text.isEmpty() == true) {
+                return false
+            }
+            return emailField.text.isValidEmail() == true && pwField.text.isValidPW() == true
         }
-        return emailDet.text.isValidEmail() && pwDet.text.isValidPW()
     }
 
     override fun onDestroy() {
@@ -122,44 +134,51 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
     var requested = false
 
     fun onLoginBtnClicked() {
-        val email = emailDet.text
-        val pw = pwDet.text
+        binding.apply {
+            val email = emailField.text
+            val pw = pwField.text
 
-        if(email.isEmpty() || pw.isEmpty()) {
-            if(email.isEmpty()) emailDet.showErrorMsg("이메일을 입력해주세요.")
-            if(pw.isEmpty()) pwDet.showErrorMsg("비밀번호를 입력해주세요.")
-            return
-        }
 
-        // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
+            if (email.isEmpty() == true || pw.isEmpty() == true) {
+                if (email.isEmpty() == true) emailField.showErrorMsg("이메일을 입력해주세요.")
+                if (pw.isEmpty() == true) pwField.showErrorMsg("비밀번호를 입력해주세요.")
+                return
+            }
+
+            // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
 //        if(!email.isValidEmail() ) {
 //            emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
 //            return
 //        }
 
-        emailDet.isShownError = false
-        pwDet.isShownError = false
+            emailField.isShownError = false
+            pwField.isShownError = false
 
-        if(!requested) { // 요청이 동시에 날라가는 케이스 방지
-            requested = true
-            showProgress()
+            if (!requested) { // 요청이 동시에 날라가는 케이스 방지
+                requested = true
+                showProgress()
 
-            API_V2.loginApp(RequestLogin(email, pw)).enqueue(object : Callback<Template<User?>> {
-                override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
-                    responseFailed(this@LoginActivity, t)
-                    hideProgress()
-                    requested = false
-                }
+                API_V2.loginApp(RequestLogin(email, pw))
+                    .enqueue(object : Callback<Template<User?>> {
+                        override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
+                            responseFailed(this@LoginActivity, t)
+                            hideProgress()
+                            requested = false
+                        }
 
-                override fun onResponse(call: Call<Template<User?>>, response: Response<Template<User?>>) {
-                    Preferences.isAvailableRushDialog.set(true)
-                    val user = response.body()?.data
-                    user?.connectToCrashlytics()
-                    handleResponse(response, user)
-                    hideProgress()
-                    requested = false
-                }
-            })
+                        override fun onResponse(
+                            call: Call<Template<User?>>,
+                            response: Response<Template<User?>>
+                        ) {
+                            Preferences.isAvailableRushDialog.set(true)
+                            val user = response.body()?.data
+                            user?.connectToCrashlytics()
+                            handleResponse(response, user)
+                            hideProgress()
+                            requested = false
+                        }
+                    })
+            }
         }
     }
 
@@ -172,7 +191,7 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
 
                 // Get new FCM registration token
                 val token = task.result
-
+                if (token == null) return@OnCompleteListener
                 API_APP.putToken(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -228,36 +247,37 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
             else -> {
                 clearToken()
 
-                val errorTemplate = response?.errorBody()?.let { errorBody ->
+                val errorTemplate = response.errorBody()?.let { errorBody ->
                     Gson().fromJson(errorBody.string(), ResponseBody::class.java)
                 }
 
                 Log.d(javaClass.simpleName, "errorTemplate=$errorTemplate")
-
-                when(errorTemplate?.error){
-                    WRONG_LOGINID -> {
-                        emailDet.showErrorMsg(errorTemplate.message?:"")
-                        pwDet.isShownError = false
-                    }
-                    WRONG_LOGINPW, NOT_MATCH_PW -> {
-                        emailDet.isShownError = false
-                        pwDet.showErrorMsg(errorTemplate.message?:"")
-                    }
-                    NOT_FOUND_DATA -> {
-                        pwDet.isShownError = false
-                        emailDet.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
-                    }
-                    LOGINID_INVALID -> {
-                        pwDet.isShownError = false
-                        emailDet.showErrorMsg(errorTemplate.message?:"")
-                    }
-                    LOCK_ACCOUNT -> {
-                        DialogUtils.lockAccountDialog(this) {
-                            openResetPassword()
-                        }.show()
-                    }
-                    else -> {
-                        DialogUtils.showServerErr(this)
+                binding.apply {
+                    when (errorTemplate?.error) {
+                        WRONG_LOGINID -> {
+                            emailField.showErrorMsg(errorTemplate.message ?: "")
+                            pwField.isShownError = false
+                        }
+                        WRONG_LOGINPW, NOT_MATCH_PW -> {
+                            emailField.isShownError = false
+                            pwField.showErrorMsg(errorTemplate.message ?: "")
+                        }
+                        NOT_FOUND_DATA -> {
+                            pwField.isShownError = false
+                            emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+                        }
+                        LOGINID_INVALID -> {
+                            pwField.isShownError = false
+                            emailField.showErrorMsg(errorTemplate.message ?: "")
+                        }
+                        LOCK_ACCOUNT -> {
+                            DialogUtils.lockAccountDialog(this@LoginActivity) {
+                                openResetPassword()
+                            }.show()
+                        }
+                        else -> {
+                            DialogUtils.showServerErr(this@LoginActivity)
+                        }
                     }
                 }
             }
@@ -283,7 +303,7 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
 
     private fun goLearningTab() {
 
-        putFcmToken(user)
+//        putFcmToken(user)
 
         startActivity(Intent(this, LearningTabActivity::class.java))
         finishAffinity()
@@ -302,22 +322,22 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
     }
 
     private fun showProgress() {
-        loadingContainer.visibility = View.VISIBLE
+        binding.loadingContainer.visibility = View.VISIBLE
     }
 
     private fun hideProgress() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(1000)
             withContext(Dispatchers.Main) {
-                loadingContainer.visibility = View.GONE
+                binding.loadingContainer.visibility = View.GONE
             }
         }
     }
 
-    override fun onFieldFocusChanged(view: DaebakInputField, hasFocus: Boolean) {
+    override fun onFieldFocusChanged(view: InputFieldV2, hasFocus: Boolean) {
         if(!hasFocus) {
             if(view.text.isEmpty())
-                emailDet.showErrorMsg("이메일을 입력해주세요.")
+                binding.emailField.showErrorMsg("이메일을 입력해주세요.")
             else {
                 API_V2.existId(view.text).enqueue(object: Callback<Template<String?>> {
                     override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
@@ -338,9 +358,9 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
         when(httpCode) {
             200 -> {
                 when(statusCode) {
-                    AVAILABLE -> emailDet.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
-                    LOGINID_INVALID -> emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
-                    ALREADY_WITHDRAW, LOGINID_EXIST -> emailDet.isShownError = false
+                    AVAILABLE -> binding.emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+                    LOGINID_INVALID -> binding.emailField.showErrorMsg("이메일 형식을 확인해주세요.")
+                    ALREADY_WITHDRAW, LOGINID_EXIST -> binding.emailField.isShownError = false
                 }
 
             }
@@ -351,15 +371,15 @@ class LoginActivity : BaseActivity(), DaebakInputFieldListener, DaebakInputEnter
     }
 
     override fun onEnter(view: View) {
-        if(view.id == R.id.pwDet) // 이메일에서 엔터 쳤을때만 동작
+        if(view.id == R.id.pwField) // 이메일에서 엔터 쳤을때만 동작
             onLoginBtnClicked()
     }
 
-    override fun onFieldValueChanged(view: DaebakInputField) {
+    override fun onFieldValueChanged(view: InputFieldV2) {
 
     }
 
-    override fun onFieldFocusChanged(view: DaebakPasswordField, hasFocus: Boolean) {
+    override fun onFieldFocusChanged(view: PasswordFieldV2, hasFocus: Boolean) {
 
     }
 }

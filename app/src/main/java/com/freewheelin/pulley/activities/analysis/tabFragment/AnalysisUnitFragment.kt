@@ -13,7 +13,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
 import com.freewheelin.pulley.activities.solve.SolveActivity
@@ -31,9 +30,9 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.SnackBar.SnackBar
-import com.freewheelin.pulley.views.SnackBar.SnackBarView
-import com.freewheelin.pulley.views.SnackBar.SnackBarViewListener
+import com.freewheelin.pulley.views.snackBar.SnackBar
+import com.freewheelin.pulley.views.snackBar.SnackBarView
+import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.views.charts.TriplePenChart
 import com.ht.RecyclerAdapters.ExpandableAdapter.ExpandableAdapter
 import com.ht.RecyclerAdapters.ExpandableAdapter.ExpandableItem
@@ -394,7 +393,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
 class UnitHolder(val view: View): RecyclerView.ViewHolder(view) {
     val expandableIndicator = view.expandableIndictor
-    val unitTv = view.unitTv
+    val unitTv = view.intentionTv
     val problemCntTv= view.problemCntTv
     val correctRateHb = view.correctRateHb
     val correctRateTv = view.correctRateTv

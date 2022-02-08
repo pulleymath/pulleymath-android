@@ -15,12 +15,12 @@ class MainCuration {
         const val MOCK = "mo"
         const val NOTE = "note"
         const val MY_STUDY = "mystudy"
-        const val wifiErrorMsg = "앗! 풀리와 접속이 끊겼어요!\n" +
+        const val wifiErrorMsg = "앗! 풀리수학과 접속이 끊겼어요!\n" +
                 "Wifi 연결이 필요해요!"
-        const val errorAnalysisDefaultMsg = "풀리와 공부하러 오셨군요!\n" +
+        const val errorAnalysisDefaultMsg = "풀리수학과 공부하러 오셨군요!\n" +
                 "오늘은 어떤 문제를 풀어볼까요?! :)"
 
-        const val errorGuideDefaultMsg = "풀리 200% 활용방법의 첫 단계!"
+        const val errorGuideDefaultMsg = "풀리수학 200% 활용방법의 첫 단계!"
         const val errorDoSomethingDefaultText = "유형학습 바로가기"
     }
 

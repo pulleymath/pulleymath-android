@@ -1,8 +1,7 @@
-package com.freewheelin.pulley.views.CalendarPickerViews
+package com.freewheelin.pulley.views.calendarPickerViews
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.utils.*
 import com.haibin.calendarview.*
 import com.haibin.calendarview.Calendar
-import kotlinx.android.synthetic.main.view_daebak_calendar.view.*
 import org.joda.time.LocalDate
 import java.util.*
 

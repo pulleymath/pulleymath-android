@@ -84,7 +84,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/guideTv"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/reviewBtn"
             android:layout_width="@dimen/primaryBtn_width_160dp"
             android:layout_height="@dimen/dp56"
@@ -97,7 +97,7 @@
             app:layout_constraintStart_toStartOf="@+id/contentsCl"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/testBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

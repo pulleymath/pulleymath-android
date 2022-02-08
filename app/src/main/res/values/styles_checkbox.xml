@@ -2,7 +2,7 @@
 <resources>
 
     <style name="CheckBoxStyle8dp" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font_nanum_square</item>
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
         <item name="android:button">@drawable/checkbox_blue</item>
         <item name="android:paddingStart">8dp</item>
         <item name="textSize">@dimen/sp16</item>

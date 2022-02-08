@@ -348,7 +348,7 @@ class PdfListActivity : AppCompatActivity() {
         private fun openShop(pdf: Pdf) {
             DialogUtils.confirmBuyPulleyBooks(this@PdfListActivity, "${pdf.title} ${pdf.subject}") {
                 val intent = Intent(Intent.ACTION_VIEW)
-                val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books"
+                val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=books_buy"
                 intent.data = Uri.parse(url)
                 startActivity(intent)
             }
