@@ -29,6 +29,13 @@ object PieceManager {
     const val EVENT_MOVE_TAB = "EVENT_MOVE_TAB"
     const val EVENT_MOVE_TAB_INDEX = "EVENT_MOVE_TAB_INDEX"
 
+    // 탭 스크롤
+    const val EVENT_SCROLL = "EVENT_SCROLL"
+    // 스크롤 타겟
+    const val EVENT_SCROLL_UNIT_TOTAL_LABEL = "EVENT_SCROLL_UNIT_TOTAL_LABEL"
+    // 스크롤 후 필터 설정
+    const val EVENT_FILTER = "EVENT_FILTER"
+
     fun getReviewInfo(context: Context, subject: String, problems: List<Problem>, user: User, cb:(piece: Piece) -> Unit) {
         val params: Parameter = Parameter(
                 "studentID" to user.studentID,

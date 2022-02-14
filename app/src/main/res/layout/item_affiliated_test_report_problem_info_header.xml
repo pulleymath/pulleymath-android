@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="32dp"
+    android:paddingHorizontal="@dimen/dp40"
+    android:paddingBottom="@dimen/dp40"
+    android:background="@color/gray_100">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/baseCl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/resultTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="채점 결과"
+            style="@style/mo_h4_sb"
+            android:textColor="@color/gray_600"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/resultCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_ffffff_round_20"
+            android:layout_marginTop="@dimen/dp16"
+            android:padding="@dimen/dp24"
+            app:layout_constraintTop_toBottomOf="@+id/resultTv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/scoreStandardTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="점수 기준 보기"
+                style="@style/mo_h4_sb"
+                android:textColor="@color/gray_500"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <ImageView
+                android:id="@+id/tooltipIv"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/icon_question_round"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/scoreStandardTv"
+                app:layout_constraintTop_toTopOf="@+id/scoreStandardTv"
+                app:layout_constraintStart_toEndOf="@+id/scoreStandardTv"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stepScoreCl"
+                android:layout_width="288dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                app:layout_constraintTop_toBottomOf="@+id/scoreStandardTv"
+                app:layout_constraintStart_toStartOf="parent">
+                <TextView
+                    android:id="@+id/scoreTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0점"
+                    android:fontFamily="@font/font_pretendard_bold"
+                    android:textSize="32sp"
+                    android:textColor="@color/gray_800"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <View
+                    android:id="@+id/stepStick1"
+                    android:layout_width="96dp"
+                    android:layout_height="4dp"
+                    android:background="@color/gray_300"
+                    app:layout_constraintBottom_toBottomOf="@+id/stepPointIv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/stepPointIv"
+                    app:layout_constraintVertical_bias="0.85"/>
+                <View
+                    android:id="@+id/stepStick2"
+                    android:layout_width="96dp"
+                    android:layout_height="4dp"
+                    android:background="@color/purple_300"
+                    app:layout_constraintStart_toEndOf="@+id/stepStick1"
+                    app:layout_constraintTop_toTopOf="@+id/stepPointIv"
+                    app:layout_constraintBottom_toBottomOf="@+id/stepPointIv"
+                    app:layout_constraintEnd_toStartOf="@+id/stepStick3"
+                    app:layout_constraintVertical_bias="0.85"/>
+                <View
+                    android:id="@+id/stepStick3"
+                    android:layout_width="96dp"
+                    android:layout_height="4dp"
+                    android:background="@color/gray_300"
+                    app:layout_constraintTop_toTopOf="@+id/stepPointIv"
+                    app:layout_constraintBottom_toBottomOf="@+id/stepPointIv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/stepStick2"
+                    app:layout_constraintVertical_bias="0.85"/>
+
+                <ImageView
+                    android:id="@+id/stepPointIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/icon_aff_step_point"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scoreTv" />
+                <TextView
+                    android:id="@+id/step1Tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1단계"
+                    style="@style/h6"
+                    android:textColor="@color/gray_600"
+                    app:layout_constraintTop_toBottomOf="@id/stepStick1"
+                    app:layout_constraintStart_toStartOf="@id/stepStick1"
+                    app:layout_constraintEnd_toEndOf="@id/stepStick1"
+                    />
+                <TextView
+                    android:id="@+id/step2Tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2단계"
+                    style="@style/h6"
+                    android:textColor="@color/gray_600"
+                    app:layout_constraintTop_toBottomOf="@id/stepStick2"
+                    app:layout_constraintStart_toStartOf="@id/stepStick2"
+                    app:layout_constraintEnd_toEndOf="@id/stepStick2"
+                    />
+                <TextView
+                    android:id="@+id/step3Tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3단계"
+                    style="@style/h6"
+                    android:textColor="@color/gray_600"
+                    app:layout_constraintTop_toBottomOf="@id/stepStick3"
+                    app:layout_constraintStart_toStartOf="@id/stepStick3"
+                    app:layout_constraintEnd_toEndOf="@id/stepStick3"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/resultBodyTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:maxLines="3"
+                android:text="많이 어려웠나요? 😢\n원활한 전공과목 이수를 위해 1학점 연계 교과목을 필수로 이수해주세요!\n필수 이수가 어렵다면, 보완학습을 진행해볼까요?"
+                style="@style/b1r"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toRightOf="@id/stepScoreCl"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
+                android:id="@+id/reviewStartBtn"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="리뷰하기"
+                android:layout_marginTop="@dimen/dp18"
+                android:layout_marginStart="48dp"
+                app:layout_constraintTop_toBottomOf="@id/resultBodyTv"
+                app:layout_constraintLeft_toRightOf="@id/stepScoreCl"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/label2Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="보완 학습하기"
+            style="@style/mo_h4_sb"
+            android:layout_marginTop="@dimen/dp32"
+            android:textColor="@color/gray_600"
+            app:layout_constraintTop_toBottomOf="@id/resultCl"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/supportLearnCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/bg_white_ffffff_round_20"
+            app:layout_constraintTop_toBottomOf="@+id/label2Tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/supportLearnIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_tablet"
+                android:layout_marginVertical="26dp"
+                android:layout_marginStart="112dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/supportLearnTitleTv"
+                />
+
+            <TextView
+                android:id="@+id/supportLearnTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:layout_marginStart="112dp"
+                style="@style/h5"
+                android:text="KU진단 결과에 맞는 보완학습을 진행해보세요."
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/supportLearnIv"/>
+
+            <TextView
+                android:id="@+id/supportLearnContentTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                style="@style/b1r"
+                android:text="나의 부족한 부분이 어디인지 알아낼 수 있게 작은 틈새부터 채우는 \n공부를 진행해봐요!"
+                android:layout_marginStart="112dp"
+                android:layout_marginTop="@dimen/dp8"
+                app:layout_constraintTop_toBottomOf="@id/supportLearnTitleTv"
+                app:layout_constraintStart_toEndOf="@id/supportLearnIv"/>
+
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
+                android:id="@+id/addtionalLearningBtn"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="보완학습하기"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginStart="112dp"
+                android:layout_marginBottom="@dimen/dp40"
+                app:layout_constraintTop_toBottomOf="@+id/supportLearnContentTv"
+                app:layout_constraintLeft_toRightOf="@id/supportLearnIv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/label3Tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="출제 문항별 정오현황"
+            style="@style/mo_h4_sb"
+            android:layout_marginTop="@dimen/dp32"
+            android:textColor="@color/gray_600"
+            app:layout_constraintTop_toBottomOf="@id/supportLearnCl"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+        <include
+            android:id="@+id/tooltipView"
+            layout="@layout/tooltip_affilaited_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/resultCl" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/problemRv"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_marginTop="@dimen/dp12"/>-->
+
+</LinearLayout>

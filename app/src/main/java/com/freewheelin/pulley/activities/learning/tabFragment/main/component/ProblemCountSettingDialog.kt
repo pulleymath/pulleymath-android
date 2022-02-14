@@ -11,7 +11,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.Buttons.PrimaryButton
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.PlusMinusButton
 
 interface ProblemCountSettingDialogListener {
@@ -28,8 +28,6 @@ class ProblemCountSettingDialog(context: Context, count: Int): Dialog(context) {
     val skipCnt = 5
     var listener: ProblemCountSettingDialogListener? = null
 
-    val cnt by lazy { plusMinusBtn.cnt }
-
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setContentView(R.layout.dialog_problem_count_setting)
@@ -40,12 +38,12 @@ class ProblemCountSettingDialog(context: Context, count: Int): Dialog(context) {
         plusMinusBtn.cnt = count
 
         plusMinusBtn.plusBtn.setOnClickListener {
-            if(cnt < maxCnt)
+            if(plusMinusBtn.cnt < maxCnt)
                 plusMinusBtn.cnt += skipCnt
         }
 
         plusMinusBtn.minusBtn.setOnClickListener {
-            if(cnt > minCnt)
+            if(plusMinusBtn.cnt > minCnt)
                 plusMinusBtn.cnt -= skipCnt
         }
 
@@ -60,12 +58,12 @@ class ProblemCountSettingDialog(context: Context, count: Int): Dialog(context) {
     }
 
     private fun onModifyBtnClicked() {
-        LogUtils.logEvent(context!!, user, PulleyEvent.BUTTON_CLICK, "메인", "목표설정")
-        UserManager.setUserGoalCount(context, user!!, cnt) {
+        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "메인", "목표설정")
+        UserManager.setUserGoalCount(context, user!!, plusMinusBtn.cnt) {
             dismiss()
             val intent = Intent(UserManager.EVENT_USER_MODIFYING)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-            listener?.onModifyCompleted(cnt)
+            listener?.onModifyCompleted(plusMinusBtn.cnt)
         }
     }
 }

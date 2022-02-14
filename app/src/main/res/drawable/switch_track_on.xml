@@ -11,6 +11,9 @@
         android:height="24dp" />
 
     <solid
-        android:color="@color/purple_ACACFF" />
+        android:color="@color/purple_100" />
+    <stroke
+        android:width="1dip"
+        android:color="@color/purple_300" />
 
 </shape>

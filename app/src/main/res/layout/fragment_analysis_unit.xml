@@ -611,7 +611,7 @@
         app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
         app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
 
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/reviewBtn"
         style="@style/Btn_Orange.Primary.M"
         android:layout_width="160dp"
@@ -624,7 +624,7 @@
         app:layout_constraintEnd_toStartOf="@+id/learnBtn"
         app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
 
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+    <com.freewheelin.pulley.views.buttons.PrimaryButton
         android:id="@+id/learnBtn"
         style="@style/Btn_Orange.Primary.M"
         android:layout_width="160dp"

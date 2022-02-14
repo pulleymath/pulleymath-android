@@ -78,7 +78,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/servicePolicyBtn"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
@@ -88,7 +88,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/contactTv" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/personalPolicyBtn"
                     android:layout_width="200dp"
                     android:layout_height="40dp"

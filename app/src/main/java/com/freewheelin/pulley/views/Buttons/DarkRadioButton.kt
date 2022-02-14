@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.Buttons
+package com.freewheelin.pulley.views.buttons
 
 import android.content.Context
 import android.util.AttributeSet

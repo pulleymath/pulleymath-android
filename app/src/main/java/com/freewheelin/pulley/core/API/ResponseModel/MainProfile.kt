@@ -18,7 +18,7 @@ class MainProfile {
     var curation: String = ""
     var numberOfUserText: Int = 0
     var studentGoalInfo: StudentGoalInfo = StudentGoalInfo()
-    var memberType = "" // deprecated
+//    var memberType = "" // deprecated
     var defaultDDay: DDay = DDay()
 
     val continuousGoalCount: Int
@@ -85,16 +85,16 @@ class MainProfile {
     }
 
     // deprecated
-    fun isExpiredUser(): Boolean {
-        val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
-        return !availableSet.contains(memberType)
-    }
+//    fun isExpiredUser(): Boolean {
+//        val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
+//        return !availableSet.contains(memberType)
+//    }
 
     // deprecated
-    fun isPaidUser(): Boolean {
-        val availableSet = setOf(TYPE_PAID_ING)
-        return availableSet.contains(memberType)
-    }
+//    fun isPaidUser(): Boolean {
+//        val availableSet = setOf(TYPE_PAID_ING)
+//        return availableSet.contains(memberType)
+//    }
 }
 
 class DDay {

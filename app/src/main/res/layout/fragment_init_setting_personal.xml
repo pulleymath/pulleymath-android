@@ -162,7 +162,7 @@
                 android:layout_marginTop="8dp"
                 app:tabWidth="58dp" />
 
-            <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/nextBtn"
                 android:layout_width="@dimen/dp280"
                 android:layout_height="@dimen/dp56"

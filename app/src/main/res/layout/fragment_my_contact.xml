@@ -102,7 +102,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/contactTv"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/contactBtn"
                     android:layout_width="160dp"
                     android:layout_height="40dp"

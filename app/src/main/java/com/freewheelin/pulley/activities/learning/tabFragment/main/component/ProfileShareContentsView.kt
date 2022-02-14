@@ -13,7 +13,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.setImageURL
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.TextViews.HashTagTextView
+import com.freewheelin.pulley.views.textViews.HashTagTextView
 import com.google.android.flexbox.FlexboxLayout
 import java.util.*
 

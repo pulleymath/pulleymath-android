@@ -46,7 +46,7 @@
             android:id="@+id/inputAnswerEt"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fontFamily="@font/font_nanum_square"
+            android:fontFamily="@font/font_pretendard_regular"
             android:textAppearance="@style/TextBlack_4c4c4c.Bold"
             android:textSize="16sp"
             android:background="@null"

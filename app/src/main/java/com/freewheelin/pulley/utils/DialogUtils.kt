@@ -9,8 +9,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import com.facebook.appevents.AppEventsLogger
 import com.freewheelin.pulley.R
@@ -24,6 +28,7 @@ import com.freewheelin.pulley.dialogs.BannerDialog
 import com.freewheelin.pulley.dialogs.MockGuideDialog
 import com.freewheelin.pulley.dialogs.MockGuideDialogListener
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.views.WrongManageView
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.android.synthetic.main.dialog_daebak.contentTv
 import kotlinx.android.synthetic.main.dialog_daebak.leftBtn
@@ -325,32 +330,32 @@ class DialogUtils {
         }
 
         // deprecated
-        fun showExpiredDDayDialog(context: Context, dday: Int, memberType: String) {
-            val title = if(dday != 0) {
-                if(memberType == User.TYPE_FREE_ING)
-                    "${dday}일 뒤 풀리수학 체험이 끝나요!"
-                else
-                    "${dday}일 뒤 풀리수학 이용기간이 만료됩니다!"
-            } else {
-                if(memberType == User.TYPE_FREE_ING)
-                    "오늘 풀리수학 체험이 끝나요!"
-                else
-                    "오늘 풀리수학 이용기간이 만료됩니다!"
-            }
-
-            val content = "풀리수학을 더 이용하고 싶다면\n서비스 이용권을 구매해주세요!"
-
-            val dialog = makeDialog(context, title, content, "닫기", "구입하러가기")
-            dialog.rightBtn.setOnClickListener {
-                dialog.dismiss()
-                FacebookEvent.log(context, FacebookEvent.TUTORIAL_FINISHED)
-
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.홈페이지)
-                context.startActivity(intent)
-            }
-            dialog.show()
-        }
+//        fun showExpiredDDayDialog(context: Context, dday: Int, memberType: String) {
+//            val title = if(dday != 0) {
+//                if(memberType == User.TYPE_FREE_ING)
+//                    "${dday}일 뒤 풀리수학 체험이 끝나요!"
+//                else
+//                    "${dday}일 뒤 풀리수학 이용기간이 만료됩니다!"
+//            } else {
+//                if(memberType == User.TYPE_FREE_ING)
+//                    "오늘 풀리수학 체험이 끝나요!"
+//                else
+//                    "오늘 풀리수학 이용기간이 만료됩니다!"
+//            }
+//
+//            val content = "풀리수학을 더 이용하고 싶다면\n서비스 이용권을 구매해주세요!"
+//
+//            val dialog = makeDialog(context, title, content, "닫기", "구입하러가기")
+//            dialog.rightBtn.setOnClickListener {
+//                dialog.dismiss()
+//                FacebookEvent.log(context, FacebookEvent.TUTORIAL_FINISHED)
+//
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(URL.홈페이지)
+//                context.startActivity(intent)
+//            }
+//            dialog.show()
+//        }
 
         fun showReluctanceDialog(context: Context, leftBtnCB: () -> Unit, rightBtnCB: (() -> Unit)? = null) {
             val title = "그냥 종료하시는 거예요?\uD83D\uDE22"
@@ -473,6 +478,46 @@ class DialogUtils {
             dialog.setCancelable(false)
             dialog.show(context)
         }
+
+        fun v2SubmitDialog (context: Context, callback: (()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "검토까지 끝났나요?"
+            dialog.contentTv.text = "제출하시면 시험은 종료됩니다."
+            dialog.leftBtn.text = "취소"
+            dialog.rightBtn.text = "제출하기"
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
+        fun v2SubmitUnCompletedDialog (context: Context, remainingCount: Int, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "풀지 않은 문제: ${remainingCount}개"
+            dialog.contentTv.text = "제출하시면 풀지 않은 문제는 모두 오답처리되며 시험이 종료됩니다."
+            dialog.leftBtn.text = "취소"
+            dialog.rightBtn.text = "제출하기"
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
+
+        fun v2GetOutSolveViewDialog (context: Context, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "화면을 나가도 시험은 진행됩니다."
+            dialog.contentTv.text = "푼 문제는 시험시간이 끝나거나\n제출할 때까지 채점되지 않습니다."
+            dialog.leftBtn.text = "계속 응시하기"
+            dialog.rightBtn.text = "나가기"
+            dialog.isConfirmBtnRed = true
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
+        fun v2FinishTestDialog (context: Context, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "테스트가 종료되었습니다."
+            dialog.contentTv.text = "수고하셨습니다 :)\n보고서로 시험결과를 확인해볼까요?"
+            dialog.leftBtn.text = ""
+            dialog.rightBtn.text = "보고서 보기"
+            dialog.isOneBtn = true
+            dialog.setCancelable(false)
+            dialog.show(context)
+        }
     }
 
     class DaebakDialog(context: Context, isTitleOnly: Boolean = false) : Dialog(context) {
@@ -532,6 +577,32 @@ class DialogUtils {
             get() = contentTv.text.toString()
             set(value) {
                 contentTv.text = value
+            }
+        var isConfirmBtnRed: Boolean = false
+            set(value) {
+                if (value) {
+                    rightBtn.setBackgroundResource(R.drawable.bg_red_fe7b67_round_ripple)
+//                leftBtn.setTextColor(Color.parseColor(R.color.gray_800.toString()))
+                    leftBtn.setTextColor(context.getColor(R.color.gray_800))
+
+                } else {
+                    rightBtn.setBackgroundResource(R.drawable.bg_purple_6d6dff_round)
+                    leftBtn.setTextColor(context.getColor(R.color.purple_300))
+                }
+                field = value
+            }
+
+        var isOneBtn: Boolean = false
+            set(value) {
+                if (value) {
+                    leftBtn.visibility = View.GONE
+                    val height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36F, context.resources.displayMetrics).toInt()
+                    val params = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, height, 10f)
+                    rightBtn.layoutParams = params
+                } else {
+                    leftBtn.visibility = View.VISIBLE
+                }
+                field = value
             }
 
         init {

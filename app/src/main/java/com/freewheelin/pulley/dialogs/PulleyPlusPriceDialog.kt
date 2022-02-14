@@ -24,7 +24,7 @@ class PulleyPlusPriceDialog: Dialog {
 
         buyBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(URL.풀리플러스구매)
+            intent.data = Uri.parse(URL.풀리플러스다이얼로그구매)
             context.startActivity(intent)
         }
     }

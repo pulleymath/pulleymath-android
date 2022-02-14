@@ -1,12 +1,9 @@
-package com.freewheelin.pulley.views.MemoView
+package com.freewheelin.pulley.views.memoView
 
 import android.content.Context
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.utils.LogUtils
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import java.io.*
 

@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.EditText
+package com.freewheelin.pulley.views.editText
 
 import android.content.Context
 import android.text.Editable

@@ -133,7 +133,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         workbookIv.visibility = View.INVISIBLE
         seriesTv.visibility = View.VISIBLE
         backgroudCl.setBackgroundColor(ContextCompat.getColor(view.context, R.color.grey_f2f2f2))
-        val bgImageUrl = book.backgroundImageUrl + "${DisplayUtils.getBgImgFolder(view.context)}/${"group_" + book.recommendType.toLowerCase() + ".png"}"
+        val bgImageUrl = book.backgroundImageUrl + "${DisplayUtils.getBgImgFolder(view.context)}/${"group_" + book.recommendType.lowercase() + ".png"}"
         Picasso.get().load(bgImageUrl).into(bgIv)
 
         makingCustomBookBtn.visibility = View.INVISIBLE

@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.TextViews
+package com.freewheelin.pulley.views.textViews
 
 import android.content.Context
 import android.util.TypedValue

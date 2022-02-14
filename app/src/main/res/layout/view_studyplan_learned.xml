@@ -131,7 +131,7 @@
 
     </com.freewheelin.pulley.views.LearningProgressView>
 
-    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+    <com.freewheelin.pulley.views.buttons.PrimaryButton
         android:id="@+id/solveBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"
@@ -144,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/reviewBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"

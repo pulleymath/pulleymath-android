@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@+id/studyTypeRadio" />
 
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/categorySl"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -79,7 +79,7 @@
             app:layout_constraintStart_toEndOf="@+id/allCheckBox"
             app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/problemCntSl"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -87,7 +87,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
             app:layout_constraintEnd_toEndOf="@+id/secondBorder"
             app:layout_constraintStart_toStartOf="@+id/firstBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.TextViews.SortableTextView>
+            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
 
         <View
             android:id="@+id/secondBorder"
@@ -98,7 +98,7 @@
             app:layout_constraintStart_toEndOf="@+id/firstBorder"
             app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/titleSl"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -106,7 +106,7 @@
             app:label="제목"
             app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
             app:layout_constraintStart_toEndOf="@+id/secondBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.TextViews.SortableTextView>
+            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
 
         <View
             style="@style/Border_Grey_e8e8e8_Vertical"
@@ -117,7 +117,7 @@
             app:layout_constraintTop_toTopOf="@+id/allCheckBox"
             app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"/>
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/scoreSl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
             app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
             app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/createDateSl"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -155,7 +155,7 @@
             app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
             app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
 
-        <com.freewheelin.pulley.views.TextViews.SortableTextView
+        <com.freewheelin.pulley.views.textViews.SortableTextView
             android:id="@+id/studyDateSl"
             android:layout_width="wrap_content"
             android:layout_height="48dp"

@@ -13,8 +13,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.setPermissionClickListener
-import com.freewheelin.pulley.views.Buttons.SecondaryButton
+import com.freewheelin.pulley.views.buttons.SecondaryButton
 
 interface AnalysisTodayStudyListViewListener {
     fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView)

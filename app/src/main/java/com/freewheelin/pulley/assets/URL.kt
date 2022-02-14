@@ -14,6 +14,7 @@ object URL {
     val 풀리플러스가격이미지 = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/app/images/image_popup_pulleymathplus.png"
 
     val 풀리플러스구매 = "https://pulleymath.com/math_plus?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
+    val 풀리플러스다이얼로그구매 = "https://pulleymath.com/math_plus?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=popup_buy"
     val 풀리과외구매 = "https://pulleymath.com/remote_class?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
     val 풀리북스구매 = "https://pulleymath.com/books?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
 
@@ -24,9 +25,12 @@ object URL {
     val 풀리활용가이드_마이페이지 = "https://bit.ly/31kxL95"
 
     val PULLEY_API = "https://api-live.pulleymath.com"
+//    val PULLEY_API = "https://api-dev.pulleymath.com"
     val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
 
     val 구매촉구 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=init&utm_content=intro_pay#part03"
-    val 구매촉구_메인 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-main"
+    val 구매촉구_메인 = "https://pulleymath.com/math_plus?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-main"
     val 구매촉구_마이페이지 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-edit"
+
+    val 건국대_시험_로그인 = "https://pulleymath.com/konkuk/login"
 }

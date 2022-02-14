@@ -18,7 +18,7 @@
         android:background="@drawable/bg_white_ffffff_round_top_only_10"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/studyWrongBtn"
             android:layout_width="160dp"
             android:layout_height="40dp"
@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/reviewBtn"
             android:layout_width="160dp"
             android:layout_height="40dp"

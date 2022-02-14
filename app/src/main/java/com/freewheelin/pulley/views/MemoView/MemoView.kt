@@ -1,9 +1,7 @@
-package com.freewheelin.pulley.views.MemoView
+package com.freewheelin.pulley.views.memoView
 
 import android.content.Context
-import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.BUTTON_STYLUS_PRIMARY
 import android.view.View
@@ -11,8 +9,6 @@ import com.freewheelin.pulley.views.Pencilcase
 import com.freewheelin.pulley.views.Pencilcase.EditType.eraser
 import com.freewheelin.pulley.views.Pencilcase.EditType.pencil
 import com.freewheelin.pulley.views.PencilcaseView
-import kotlinx.android.synthetic.main.view_pencilcase.view.*
-import java.util.*
 
 
 interface MemoViewListener {

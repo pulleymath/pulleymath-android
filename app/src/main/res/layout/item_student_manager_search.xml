@@ -32,21 +32,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/btnReport"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:text="모의고사 보고서" />
 
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/btnAnalysis"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:layout_marginStart="10dp"
             android:text="분석" />
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/btnRemove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

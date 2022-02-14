@@ -29,8 +29,8 @@
                 android:id="@+id/infoConatiner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
                 <TextView
                     android:id="@+id/greetingLabel"
                     style="@style/TextBlack_4c4c4c.Bold"
@@ -68,128 +68,143 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+
+
+                <com.freewheelin.pulley.views.editText.InputFieldV2
+                    android:id="@+id/fullNameDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp40"
-                    android:orientation="horizontal">
+                    app:InputFieldV2_Hint="이름"
+                    app:InputFieldV2_maxLength="15"/>
 
-                    <com.freewheelin.pulley.views.EditText.DaebakInputField
-                        android:id="@+id/fullNameDet"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:DaebakInputField_Hint="ex) 김풀리"
-                        app:DaebakInputField_maxLength="15"
-                        app:DaebakInputField_Label="이름"></com.freewheelin.pulley.views.EditText.DaebakInputField>
-
-                </LinearLayout>
-
-
-                <com.freewheelin.pulley.views.EditText.DaebakInputField
+                <com.freewheelin.pulley.views.editText.InputFieldV2
                     android:id="@+id/emailDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:DaebakInputField_Hint="ex) id@domain.com"
-                    app:DaebakInputField_maxLength="350"
-                    app:DaebakInputField_Label="이메일" />
+                    app:InputFieldV2_Hint="이메일"
+                    app:InputFieldV2_maxLength="350"/>
 
-                <com.freewheelin.pulley.views.EditText.DaebakPasswordField
+                <com.freewheelin.pulley.views.editText.PasswordFieldV2
                     android:id="@+id/pwDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:DaebakPasswordField_Hint="@string/text_please_input_6_between_15_eng_num_symbol"
-                    app:DaebakInputField_maxLength="15"
-                    app:DaebakPasswordField_Label="비밀번호" />
+                    app:PasswordFieldV2_Hint="비밀번호(6자 이상의 문자/숫자/기호 사용)"
+                    app:PasswordFieldV2_maxLength="15" />
 
                 <LinearLayout
                     android:id="@+id/secureLevelLl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:visibility="gone">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    >
 
                     <ImageView
                         android:id="@+id/levelIv"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_x_red_circle" />
+                        android:layout_width="80dp"
+                        android:layout_height="12dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/bar_red" />
 
                     <TextView
                         android:id="@+id/levelTv"
                         style="@style/TextRed_fe7b67.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="8dp"
                         android:text="비밀번호 안정성 : 위험"
                         android:textSize="@dimen/sp14" />
 
                 </LinearLayout>
 
-                <com.freewheelin.pulley.views.EditText.DaebakPasswordField
+                <com.freewheelin.pulley.views.editText.PasswordFieldV2
                     android:id="@+id/pwConfirmDet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:DaebakPasswordField_Hint="비밀번호를 한번 더 입력해 주세요."
-                    app:DaebakInputField_maxLength="15"
-                    app:DaebakPasswordField_Label="비밀번호 확인" />
+                    app:PasswordFieldV2_Hint="비밀번호 재확인"
+                    app:PasswordFieldV2_maxLength="15" />
 
-                <TextView
-                    android:id="@+id/labelPhoneTv"
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:text="@string/text_phone_number"
-                    android:textSize="@dimen/sp18" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginBottom="@dimen/dp20"
+                    >
 
-                <com.freewheelin.pulley.views.PulleySpinner
+                    <TextView
+                        android:id="@+id/phoneLabelTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="휴대폰 인증"
+                        android:textSize="@dimen/sp18"
+                        android:fontFamily="@font/font_pretendard_semibold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:text="카카오 알림톡으로 인증번호를 보내드립니다."
+                        android:textSize="@dimen/sp14"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/phoneLabelTv" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.freewheelin.pulley.views.v2.SpinnerV2
                     android:id="@+id/countrySpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"/>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="8dp">
+                    android:layout_marginTop="@dimen/dp16">
 
-                    <com.freewheelin.pulley.views.EditText.DaebakInputField
+<!--                    android:layout_width="232dp"-->
+
+                    <com.freewheelin.pulley.views.editText.InputFieldV2
                         android:id="@+id/phoneNumDet"
-                        android:layout_width="232dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:DaebakInputField_maxLength="11"
-                        app:DaebakInputField_Hint="010-0000-0000">
+                        app:InputFieldV2_Hint="휴대폰번호"
+                        app:InputFieldV2_ShowErrorIcon="false"
+                        app:InputFieldV2_maxLength="11"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    </com.freewheelin.pulley.views.EditText.DaebakInputField>
-
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
                         android:id="@+id/requestCodeBtn"
-                        android:layout_width="160dp"
-                        android:layout_height="@dimen/dp56"
-                        android:layout_marginStart="8dp"
-                        android:text="인증번호 받기"
-                        app:buttonTheme="blue">
+                        android:layout_width="@dimen/dp90"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="16dp"
+                        app:ButtonTextSize="@dimen/sp14"
+                        android:text="인증하기"
+                        app:buttonTheme="blue"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    </com.freewheelin.pulley.views.Buttons.SecondaryButton>
-                </LinearLayout>
+                    </com.freewheelin.pulley.views.buttons.PrimaryButton>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/codeContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp">
+                    android:layout_height="wrap_content">
 
-                    <com.freewheelin.pulley.views.EditText.DaebakInputField
+<!--                        app:InputFieldV2_ShowErrorIcon="false"-->
+                    <com.freewheelin.pulley.views.editText.InputFieldV2
                         android:id="@+id/codeDet"
-                        android:layout_width="232dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:DaebakInputField_maxLength="4"
-                        app:DaebakInputField_Hint="인증번호 입력"
+                        app:InputFieldV2_Hint="인증번호"
+                        app:InputFieldV2_maxLength="4"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -199,78 +214,43 @@
                         style="@style/TextRed_fe7b67"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dp24"
+                        android:layout_marginEnd="8dp"
                         android:text="3:00"
                         app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
-                        app:layout_constraintEnd_toEndOf="@+id/codeDet"
+                        app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
                         app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn" />
 
                     <ImageView
                         android:id="@+id/codeConfirmIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="18dp"
                         android:src="@drawable/ic_check_green_circle_w16"
-                        android:visibility="invisible"
-                        app:layout_constraintBottom_toBottomOf="@+id/timerTv"
-                        app:layout_constraintEnd_toEndOf="@+id/timerTv"
-                        app:layout_constraintTop_toTopOf="@+id/timerTv" />
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
                         android:id="@+id/codeConfirmBtn"
-                        android:layout_width="160dp"
-                        android:layout_height="@dimen/dp56"
-                        android:layout_marginStart="8dp"
-                        android:text="인증 확인"
+                        android:layout_width="@dimen/dp90"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="확인하기"
+                        app:ButtonTextSize="@dimen/sp14"
                         app:buttonTheme="blue"
-                        app:layout_constraintStart_toEndOf="@+id/codeDet"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                    </com.freewheelin.pulley.views.Buttons.SecondaryButton>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/confirmCompleteCl"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/bg_grey_f2f2f2_round"
-                        app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
-                        app:layout_constraintEnd_toEndOf="@+id/codeConfirmBtn"
-                        app:layout_constraintStart_toStartOf="@+id/codeConfirmBtn"
-                        app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn">
-
-                        <ImageView
-                            android:id="@+id/confirmCompleteIv"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_check_green_circle_w48"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/confirmCompleteTv"
-                            app:layout_constraintHorizontal_chainStyle="packed"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/confirmCompleteTv"
-                            style="@style/TextBlack_4c4c4c.Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="확인 완료"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_chainStyle="packed"
-                            app:layout_constraintStart_toEndOf="@+id/confirmCompleteIv"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    </com.freewheelin.pulley.views.buttons.PrimaryButton>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp12"
                     android:layout_marginBottom="@dimen/dp32">
 
                     <TextView
@@ -283,6 +263,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Switch
+                        style="@style/Switch"
                         android:id="@+id/phoneMessageSwitch"
                         android:background="@null"
                         android:layout_width="wrap_content"
@@ -290,27 +271,57 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/policyTv"
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp12"
-                    android:lineSpacingExtra="@dimen/sp8"
-                    android:text="회원가입 시, 서비스 이용약관 및 개인정보 취급방침, 마케팅 활용 동의 약관에 동의한 것으로 간주합니다."
-                    android:textSize="@dimen/sp14" />
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_white_stroke_e8e8e8_round">
 
-<!--                <com.freewheelin.pulley.views.Buttons.PrimaryButton-->
-<!--                    android:id="@+id/nextBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/dp56"-->
-<!--                    android:layout_marginTop="@dimen/dp32"-->
-<!--                    android:text="다음"-->
-<!--                    app:ButtonTextSize="@dimen/sp18"-->
-<!--                    app:buttonTheme="blue" />-->
+                    <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        android:id="@+id/allCb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:PolicyLayoutV2_ShowEssOpText="GONE"
+                        app:PolicyLayoutV2_ShowAllDocuText="GONE"
+                        android:text="전체 동의"/>
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@color/grey_e8e8e8" />
+
+                    <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        android:id="@+id/order14Cb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:PolicyLayoutV2_ShowAllDocuText="GONE"
+                        android:text="만 14세 이상의 회원입니다."/>
+
+                    <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        android:id="@+id/serviceAgreeCb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="서비스 이용약관에 동의합니다."/>
+
+                    <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        android:id="@+id/personalAgreeCb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="개인정보 처리방침에 동의합니다."/>
+
+                    <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        android:id="@+id/marketingAgreeCb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:PolicyLayoutV2_Type="Optional"
+                        android:text="마케팅 활용 동의 약관에 동의합니다."/>
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -346,7 +357,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/nextBtn"
             android:layout_width="400dp"
             android:layout_height="@dimen/dp56"

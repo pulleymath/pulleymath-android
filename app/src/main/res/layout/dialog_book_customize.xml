@@ -56,7 +56,7 @@
                 android:layout_marginBottom="@dimen/dp32"
                 app:layout_constraintTop_toBottomOf="@+id/subjectTab">
 
-                <com.freewheelin.pulley.views.TextViews.SortableTextView
+                <com.freewheelin.pulley.views.textViews.SortableTextView
                     android:id="@+id/subjectSl"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -66,7 +66,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-                <com.freewheelin.pulley.views.TextViews.SortableTextView
+                <com.freewheelin.pulley.views.textViews.SortableTextView
                     android:id="@+id/bookSl"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -76,7 +76,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-                <com.freewheelin.pulley.views.TextViews.SortableTextView
+                <com.freewheelin.pulley.views.textViews.SortableTextView
                     android:id="@+id/bookSeriesSl"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -87,7 +87,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-                <com.freewheelin.pulley.views.TextViews.SortableTextView
+                <com.freewheelin.pulley.views.textViews.SortableTextView
                     android:id="@+id/publisherSl"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -624,7 +624,7 @@
             app:layout_constraintEnd_toStartOf="@+id/actionBtn"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.freewheelin.pulley.views.Buttons.SecondaryButton
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
             android:id="@+id/cancelBtn"
             android:layout_width="@dimen/dp104"
             android:layout_height="@dimen/dp48"
@@ -646,7 +646,7 @@
             app:layout_constraintEnd_toStartOf="@+id/actionBtn"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/actionBtn"
             android:layout_width="@dimen/primaryBtn_width_160dp"
             android:layout_height="@dimen/dp48"

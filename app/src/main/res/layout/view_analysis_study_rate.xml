@@ -56,7 +56,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/guideTv" />
 
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/actionBtn"
         android:layout_width="@dimen/primaryBtn_width_200dp"
         android:layout_height="@dimen/dp56"

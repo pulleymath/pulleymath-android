@@ -8,8 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.NormalNoteRatio
-import com.freewheelin.pulley.views.Buttons.PrimaryButton
-import kotlinx.android.synthetic.main.view_analysis_study_rate.view.*
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 
 interface AnalysisStudyRateViewListener {
     fun onWrongStudyBtnClicked(view: AnalysisStudyRateView)

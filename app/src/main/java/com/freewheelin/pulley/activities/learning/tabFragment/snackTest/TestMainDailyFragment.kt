@@ -10,8 +10,8 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.Buttons.ButtonLockImage
-import com.freewheelin.pulley.views.Buttons.ButtonMode
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
+import com.freewheelin.pulley.views.buttons.ButtonMode
 import kotlinx.android.synthetic.main.fragment_test_main.*
 import kotlinx.android.synthetic.main.fragment_test_main.contentTv
 import kotlinx.android.synthetic.main.fragment_test_main.levelLabel

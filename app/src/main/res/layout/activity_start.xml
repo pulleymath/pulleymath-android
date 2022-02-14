@@ -12,7 +12,7 @@
         android:id="@+id/topLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="나에게 최적화된 수학 큐레이션"
+        android:text="수학 등급상승의 비결"
         android:textSize="@dimen/sp18"
         android:letterSpacing="0.61"
         android:gravity="center_horizontal"
@@ -45,16 +45,6 @@
             android:background="@color/white_fafafa" />
     </LinearLayout>
 
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/pulleyIv"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/pulley"-->
-    <!--        android:layout_marginStart="2dp"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/topLabel"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/topLabel"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>-->
     <ImageView
         android:id="@+id/pulleyIv"
         android:layout_width="522dp"
@@ -80,9 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp56"
         android:layout_marginTop="@dimen/dp64"
-        android:fontFamily="@font/nanum_square_bold"
         android:text="가입하고 공부 시작하기"
-        android:textColor="@color/white_ffffff"
         app:layout_constraintStart_toStartOf="@+id/topLabel"
         app:layout_constraintEnd_toEndOf="@+id/topLabel"
         app:layout_constraintTop_toBottomOf="@+id/guideline"

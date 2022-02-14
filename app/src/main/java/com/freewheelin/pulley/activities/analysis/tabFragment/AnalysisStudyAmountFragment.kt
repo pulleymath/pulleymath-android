@@ -10,16 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
-import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.NumberAnalysis
 import com.freewheelin.pulley.model.curation.MyCuration
 import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.partialFont
-import com.freewheelin.pulley.views.TextViews.UpDownTextView
+import com.freewheelin.pulley.views.textViews.UpDownTextView
 import com.freewheelin.pulley.views.charts.OneBarChart
 import kotlinx.android.synthetic.main.activity_analysis_tab.*
 import kotlinx.android.synthetic.main.fragment_analysis_study_amount.*

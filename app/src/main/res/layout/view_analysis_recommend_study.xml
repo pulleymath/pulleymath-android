@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.freewheelin.pulley.views.Bars.VerticalBar
+        <com.freewheelin.pulley.views.bars.VerticalBar
             android:id="@+id/myCorrectRateBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,18 +23,18 @@
             android:layout_marginRight="@dimen/dp24"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintEnd_toStartOf="@+id/averageCorrectRateBar"
-            app:layout_constraintStart_toStartOf="@+id/unitTv"
-            app:layout_constraintBottom_toTopOf="@+id/unitTv"/>
+            app:layout_constraintStart_toStartOf="@+id/intentionTv"
+            app:layout_constraintBottom_toTopOf="@+id/intentionTv"/>
 
-        <com.freewheelin.pulley.views.Bars.VerticalBar
+        <com.freewheelin.pulley.views.bars.VerticalBar
             android:id="@+id/averageCorrectRateBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp24"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/myCorrectRateBar"
-            app:layout_constraintEnd_toEndOf="@+id/unitTv"
-            app:layout_constraintBottom_toTopOf="@+id/unitTv"/>
+            app:layout_constraintEnd_toEndOf="@+id/intentionTv"
+            app:layout_constraintBottom_toTopOf="@+id/intentionTv"/>
 
         <TextView
             style="@style/TextWhite_ffffff.ExtraBold"
@@ -67,7 +67,7 @@
 
         <TextView
             style="@style/TextGrey_9f9f9f.Bold"
-            android:id="@+id/unitTv"
+            android:id="@+id/intentionTv"
             android:text="지수함수와 로그함수 백분위 비교"
             android:textSize="@dimen/sp14"
             android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/guideTv"/>
     
-    <com.freewheelin.pulley.views.Buttons.SecondaryButton
+    <com.freewheelin.pulley.views.buttons.SecondaryButton
         android:id="@+id/actionBtn"
         android:layout_width="@dimen/primaryBtn_width_200dp"
         android:layout_height="@dimen/dp56"

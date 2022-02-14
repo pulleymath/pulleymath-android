@@ -17,7 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.575">
-        
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView

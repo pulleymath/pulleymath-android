@@ -41,6 +41,11 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     var ySum: Int = 0
 
     fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "") {
+        val title = ""
+        val page = 0
+        val size = 1000
+        val subjectCode = ""
+        val category = ""
         pdfRepository.pdfList(title, page, size, subjectCode, category)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
@@ -80,8 +85,8 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             if(searchTextFilter.isNotEmpty()) {
                 Log.d(javaClass.simpleName, "Filter searchText=isNotEmpty")
                 result = result.filter {
-                    val upperTitle = it.title.toUpperCase()
-                    val upperSearchText = searchTextFilter.toUpperCase()
+                    val upperTitle = it.title.uppercase()
+                    val upperSearchText = searchTextFilter.uppercase()
                     upperTitle.contains(upperSearchText)
                 }
             }
@@ -96,7 +101,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit){
+    fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit) {
         pdfRepository.answer(cmBookId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)

@@ -166,7 +166,7 @@
             </LinearLayout>
 
 
-            <com.freewheelin.pulley.views.Buttons.PrimaryButton
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/modifyBtn"
                 android:layout_width="200dp"
                 android:layout_height="56dp"

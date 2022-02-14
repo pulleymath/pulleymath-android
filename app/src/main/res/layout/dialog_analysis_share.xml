@@ -115,7 +115,7 @@
             app:layout_constraintStart_toEndOf="@+id/shareContents"
             app:layout_constraintTop_toBottomOf="@id/todayLabel" />
 
-        <com.freewheelin.pulley.views.EditText.PulleyTextField
+        <com.freewheelin.pulley.views.editText.PulleyTextField
             android:id="@+id/memoTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/shareContents"
             app:layout_constraintStart_toStartOf="@+id/memoLabel" />
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/shareBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

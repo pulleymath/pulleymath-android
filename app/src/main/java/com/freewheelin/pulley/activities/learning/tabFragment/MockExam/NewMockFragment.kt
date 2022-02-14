@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.MockExamManager
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
@@ -31,8 +30,8 @@ import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
-import com.freewheelin.pulley.views.Buttons.ButtonLockImage
-import com.freewheelin.pulley.views.Buttons.ButtonMode
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
+import com.freewheelin.pulley.views.buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
 import kotlinx.android.synthetic.main.fragment_new_mock.*
 import kotlinx.android.synthetic.main.item_new_test.view.*

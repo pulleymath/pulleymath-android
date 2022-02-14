@@ -155,7 +155,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_chainStyle="packed" />
 
-                    <com.freewheelin.pulley.views.Buttons.PrimaryButton
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
                         android:id="@+id/reviewBtn"
                         android:layout_width="@dimen/primaryBtn_width_160dp"
                         android:layout_height="@dimen/dp48"

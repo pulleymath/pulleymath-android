@@ -233,7 +233,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/nameModifyBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"
@@ -244,7 +244,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/nameTv" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/emailModifyBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"
@@ -255,7 +255,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/emailTv" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/phoneModifyBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"
@@ -266,7 +266,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/phoneTv" />
 
-                <com.freewheelin.pulley.views.Buttons.SecondaryButton
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
                     android:id="@+id/passwordModifyBtn"
                     android:layout_width="96dp"
                     android:layout_height="36dp"

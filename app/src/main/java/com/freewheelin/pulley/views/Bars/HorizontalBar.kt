@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.views.Bars
+package com.freewheelin.pulley.views.bars
 
 import android.content.Context
 import android.graphics.*

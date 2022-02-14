@@ -19,11 +19,13 @@ class PlusMinusButton: ConstraintLayout {
     var autoIncrement = false
     var autoDecrement = false
 
-    var cnt: Int = 5
-    set(value) {
-        field = value
-        cntTv.text = cnt.toString()
-    }
+    var cnt: Int
+        get() {
+            return cntTv.text.toString().toInt()
+        }
+        set(value) {
+            cntTv.text = value.toString()
+        }
 
     var plusBtn: ImageButton
     var cntTv: TextView

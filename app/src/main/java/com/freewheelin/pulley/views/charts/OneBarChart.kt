@@ -15,7 +15,7 @@ import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.setPaddingLeft
 import com.freewheelin.pulley.utils.setPaddingRight
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.Bars.VerticalBar
+import com.freewheelin.pulley.views.bars.VerticalBar
 import kotlinx.android.synthetic.main.item_chart_onebar.view.*
 
 class OneBarChart: RecyclerView {

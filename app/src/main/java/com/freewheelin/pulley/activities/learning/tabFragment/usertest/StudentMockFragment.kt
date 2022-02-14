@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.REQUEST_MOCK_TEST
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.RESULT_MOCK_FINISH
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentMockReportActivity
@@ -25,8 +24,8 @@ import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.TextViews.SortableListener
-import com.freewheelin.pulley.views.TextViews.SortableTextView
+import com.freewheelin.pulley.views.textViews.SortableListener
+import com.freewheelin.pulley.views.textViews.SortableTextView
 import kotlinx.android.synthetic.main.dialog_wrong_management.*
 import kotlinx.android.synthetic.main.fragment_my_mock.*
 import kotlinx.android.synthetic.main.fragment_new_mock.*

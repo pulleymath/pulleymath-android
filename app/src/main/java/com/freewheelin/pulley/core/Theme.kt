@@ -7,6 +7,7 @@ import com.freewheelin.pulley.R
 
 enum class ScreenTheme {
     Bright,
+    BrightOutside,
     Dark
 }
 
@@ -16,7 +17,7 @@ class Theme {
         var _light: Typeface? = null
         fun light(context: Context): Typeface {
             if(_light == null)
-                _light = ResourcesCompat.getFont(context, R.font.nanum_square_light)
+                _light = ResourcesCompat.getFont(context, R.font.pretendard_light)
 
             return _light!!
         }
@@ -24,7 +25,7 @@ class Theme {
         var _regular: Typeface? = null
         fun regular(context: Context): Typeface {
             if(_regular == null)
-                _regular = ResourcesCompat.getFont(context, R.font.nanum_square_regular)
+                _regular = ResourcesCompat.getFont(context, R.font.pretendard_regular)
 
             return _regular!!
         }
@@ -32,14 +33,15 @@ class Theme {
         var _bold: Typeface? = null
         fun bold(context: Context): Typeface {
             if(_bold == null)
-                _bold = Typeface.create(regular(context), Typeface.BOLD)
+                _bold = ResourcesCompat.getFont(context, R.font.pretendard_semibold)
+//                _bold = Typeface.create(regular(context), Typeface.BOLD)
 
             return _bold!!
         }
         var _extraBold: Typeface? = null
         fun extraBold(context: Context): Typeface {
             if(_extraBold == null)
-                _extraBold = ResourcesCompat.getFont(context, R.font.nanum_square_extra_bold)
+                _extraBold = ResourcesCompat.getFont(context, R.font.pretendard_bold)
 
             return _extraBold!!
         }

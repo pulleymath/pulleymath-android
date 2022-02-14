@@ -2,10 +2,12 @@ package com.freewheelin.pulley.revision2021.repository.remote
 
 import android.util.Log
 import com.freewheelin.pulley.BuildConfig
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Version
 import com.freewheelin.pulley.core.retrofit
 import com.freewheelin.pulley.utils.APHelper
+import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.Preferences
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -19,10 +21,23 @@ import javax.inject.Named
 object Network {
     var shopUrl     = Preferences.shopUrl.get()
     val baseNodeUrl = if(Preferences.onTestAPI.get()) "http://3.36.127.47:3000" else "https://pdf-live.pulleymath.net"
+    val mockTestUrl = if(Preferences.onTestAPI.get()) "https://mock-dev.pulleymath.com" else "https://mock-live.pulleymath.com"
     var token = ""
 
-    fun retrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl(baseNodeUrl).apply {
+    enum class Type {
+        node, mockTest;
+
+        val url: String
+            get() {
+                return when(this) {
+                    node -> baseNodeUrl
+                    mockTest -> mockTestUrl
+                }
+            }
+    }
+
+    fun retrofit(type: Type = Type.node): Retrofit {
+        return Retrofit.Builder().baseUrl(type.url).apply {
 
             val client = OkHttpClient.Builder().apply {
 

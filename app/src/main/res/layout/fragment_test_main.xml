@@ -152,7 +152,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
 
-        <com.freewheelin.pulley.views.Buttons.PrimaryButton
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
