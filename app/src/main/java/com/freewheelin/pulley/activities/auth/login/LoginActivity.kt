@@ -44,6 +44,7 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 
 class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener, PasswordFieldV2EnterListener, LifecycleObserver {
@@ -139,9 +140,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             val pw = pwField.text
 
 
-            if (email.isEmpty() == true || pw.isEmpty() == true) {
-                if (email.isEmpty() == true) emailField.showErrorMsg("이메일을 입력해주세요.")
-                if (pw.isEmpty() == true) pwField.showErrorMsg("비밀번호를 입력해주세요.")
+            if (email.isEmpty() || pw.isEmpty()) {
+                if (email.isEmpty()) emailField.showErrorMsg("이메일을 입력해주세요.")
+                if (pw.isEmpty()) pwField.showErrorMsg("비밀번호를 입력해주세요.")
                 return
             }
 
@@ -158,26 +159,46 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 requested = true
                 showProgress()
 
-                API_V2.loginApp(RequestLogin(email, pw))
-                    .enqueue(object : Callback<Template<User?>> {
-                        override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
-                            responseFailed(this@LoginActivity, t)
-                            hideProgress()
-                            requested = false
-                        }
 
-                        override fun onResponse(
-                            call: Call<Template<User?>>,
-                            response: Response<Template<User?>>
-                        ) {
-                            Preferences.isAvailableRushDialog.set(true)
-                            val user = response.body()?.data
-                            user?.connectToCrashlytics()
-                            handleResponse(response, user)
-                            hideProgress()
-                            requested = false
-                        }
-                    })
+                    API_V2.loginApp(RequestLogin(email, pw))
+                        .enqueue(object : Callback<Template<User?>> {
+                            override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
+                                try {
+                                    responseFailed(this@LoginActivity, t)
+                                    hideProgress()
+                                    requested = false
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    hideProgress()
+                                    requested = false
+                                    DialogUtils.v2LoginErrDialog(this@LoginActivity)
+                                }
+                            }
+
+                            override fun onResponse(
+                                call: Call<Template<User?>>,
+                                response: Response<Template<User?>>
+                            ) {
+                                try {
+                                    Preferences.isAvailableRushDialog.set(true)
+                                    val user = response.body()?.data
+                                    user?.connectToCrashlytics()
+                                    handleResponse(response, user)
+                                    hideProgress()
+                                    requested = false
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    hideProgress()
+                                    requested = false
+                                    DialogUtils.v2LoginErrDialog(this@LoginActivity)
+                                }
+                            }
+                        })
+
+
+
+
+
             }
         }
     }

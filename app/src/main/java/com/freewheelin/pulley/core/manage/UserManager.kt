@@ -128,10 +128,11 @@ object UserManager {
 
             override fun onResponse(call: Call<MainProfile>, response: Response<MainProfile>) {
                 val mainProfile = response.body()
-                if(mainProfile != null)
+                if(mainProfile != null) {
                     successCB(mainProfile)
-                else
+                } else {
                     responseError(context, response)
+                }
             }
         })
     }

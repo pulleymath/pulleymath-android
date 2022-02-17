@@ -36,6 +36,10 @@ fun responseError(context: Context, response: Response<*>) {
         LogUtils.assert(false , "response 500 ERROR: response: ${response}")
         DialogUtils.showServerErr(context)
 
+    } else if (response.code() == 404) {
+        DialogUtils.v2NotFoundErrDialog(context) {
+            LogUtils.assert(false , "response 404 ERROR: response: ${response}")
+        }
     }
 }
 

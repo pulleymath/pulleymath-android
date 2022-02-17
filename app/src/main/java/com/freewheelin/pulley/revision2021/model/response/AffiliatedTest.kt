@@ -94,6 +94,13 @@ class AffiliatedTestWorkbook: BaseDiffItem, Serializable {
     fun isTestStartTimeHasPassed(): Boolean {
         return started_at != null // 값이 존재하면 시험이 시작된 이후임
     }
+    fun getWorkbookStartBtnText(): String {
+        return if (isTestStartTimeHasPassed()) {
+            "이어풀기"
+        } else {
+            "시험 시작하기"
+        }
+    }
     fun isFinished() : Boolean {
         return finished_at != null
     }
@@ -230,7 +237,7 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
         val finishDate = sdf.parse(testFinishTime)
         val finishDiff = (finishDate.time - nowDate.time.time).toFloat() / (60 * 1000).toFloat()
 
-        println("tpehf, minDiff ${minDiff}, finishDiff : ${finishDiff}")
+//        println("tpehf, minDiff ${minDiff}, finishDiff : ${finishDiff}")
         return finishDiff > 0 && minDiff < 30
     }
 
@@ -242,6 +249,10 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
     }
 
     var remainingTimeText = ObservableField("")
+
+    fun areAllWorkbookFinished() : Boolean {
+        return firstWorkbook.isFinished() && secondWorkbook.isFinished() && thirdWorkbook.isFinished()
+    }
 }
 
 class AffiliatedTestProblem: BaseDiffItem, Serializable {

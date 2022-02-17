@@ -49,6 +49,10 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
                                         it
                                     }
                                     .sortedBy { it.seq }
+                                    .sortedBy {
+                                        val b1 = if (it.areAllWorkbookFinished()) 1 else 0
+                                        b1
+                                    }
                     affiliatedTestCardList.postValue(cardList)
                     cardList[0].isSelected.set(true)
                     selectedUnivTestCard.postValue(cardList[0])
@@ -63,9 +67,8 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
 
     fun onTestStart(v: View) {
         selectedUnivTestCard.value?.let {
-            println("tpehf , it.isTestEnable() : ${it.isTestEnable()}")
             if (it.isTestEnable()) {
-                val intent = AffiliatedTestSolveActivity.getIntent(v.context, it)
+                val intent = AffiliatedTestSolveActivity.getIntent(v.context, it.selectedWorkbook)
                 v.context.startActivity(intent)
             } else {
                 DaebakToast.show(v.context, "시험시작 30분 전부터 입장할 수 있습니다.")

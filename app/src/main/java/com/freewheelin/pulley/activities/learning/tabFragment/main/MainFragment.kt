@@ -210,7 +210,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
                     learningTabInterface.openMarketingDialog(mainProfile)
                 }
 
-            }catch(e:Exception) {
+            } catch(e:Exception) {
                 Log.e("화면크래쉬", "error==>${e.localizedMessage}")
             }
 

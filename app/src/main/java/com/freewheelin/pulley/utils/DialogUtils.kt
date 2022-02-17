@@ -518,6 +518,35 @@ class DialogUtils {
             dialog.setCancelable(false)
             dialog.show(context)
         }
+        fun v2AffiliatedTestStartWarningDialog (context: Context, callback:(()->Unit)?) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "시험을 시작하시겠습니까?"
+            dialog.contentTv.text = "시험이 시작된 후에는 시험을 중단할 수 없습니다."
+            dialog.leftBtn.text = "취소"
+            dialog.rightBtn.text = "시험 시작하기"
+            dialog.setCancelable(true)
+            dialog.show(context)
+        }
+        fun v2LoginErrDialog (context: Context, callback:(()->Unit)? = {}) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "로그인에 실패했습니다."
+            dialog.contentTv.text = "문제가 지속될 경우\n카카오톡(@풀리는수학)으로 문의 바랍니다."
+            dialog.leftBtn.text = ""
+            dialog.rightBtn.text = "확인"
+            dialog.isOneBtn = true
+            dialog.setCancelable(true)
+            dialog.show(context)
+        }
+        fun v2NotFoundErrDialog (context: Context, callback:(()->Unit)? = {}) {
+            val dialog = DaebakDialogV2Confirm(context, callback)
+            dialog.titleTv.text = "잘못된 API요청입니다."
+            dialog.contentTv.text = "문제가 지속될 경우\n카카오톡(@풀리는수학)으로 문의 바랍니다."
+            dialog.leftBtn.text = ""
+            dialog.rightBtn.text = "확인"
+            dialog.isOneBtn = true
+            dialog.setCancelable(true)
+            dialog.show(context)
+        }
     }
 
     class DaebakDialog(context: Context, isTitleOnly: Boolean = false) : Dialog(context) {

@@ -14,11 +14,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/leftCl"
-            android:layout_width="502dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rightCl"
             android:background="@drawable/bg_gray_100">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -39,14 +40,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rightCl"
-            android:layout_width="0dp"
+            android:layout_width="758dp"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/dp60"
             android:paddingEnd="@dimen/dp40"
             android:paddingTop="@dimen/dp24"
             android:paddingBottom="@dimen/dp50"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/leftCl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/shadow_left_only"
@@ -84,7 +84,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
                     android:background="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
-                    android:textColor="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.secondWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
+                    android:textColor="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.firstWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
                     android:onClick="@{(view) -> vm.onStep(view, 2)}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/step1Btn"
@@ -97,7 +97,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="8dp"
                     android:background="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
-                    android:textColor="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.thirdWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
+                    android:textColor="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.secondWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
                     android:onClick="@{(view) -> vm.onStep(view, 3)}"
                     android:text="최종 자가진단 2차"
                     app:layout_constraintTop_toTopOf="parent"
@@ -483,8 +483,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:lineSpacingExtra="2sp"
-                                android:maxLength="200"
-                                android:maxLines="5"
+                                android:maxLength="300"
+                                android:maxLines="7"
                                 style="@style/b2"
                                 android:text="@{vm.selectedUnivTestCard.selectedWorkbook.instruction}"
                                 android:textColor="@color/gray_600"
@@ -515,22 +515,20 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 
-
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <Button
                 android:id="@+id/testStartBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginTop="@dimen/dp32"
-                android:text="시험 시작하기"
-                app:ButtonTextSize="@dimen/sp18"
-                app:buttonTheme="blue"
-                app:enableFlag="@{vm.selectedUnivTestCard.isTestEnable()}"
+                android:text="@{vm.selectedUnivTestCard.selectedWorkbook.getWorkbookStartBtnText()}"
+                android:textColor="@color/gray_100"
+                style="@style/h4"
+                android:enabled="@{vm.selectedUnivTestCard.isTestEnable()}"
+                android:background="@{ vm.selectedUnivTestCard.isTestEnable() ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
                 android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rightScrollView"/>
-<!--                android:onClick="@{(view) -> vm.onTestStart(view)}"-->
-<!--                android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }" todo dummy -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/testCompletedCl"

@@ -26,20 +26,20 @@
 
             <ImageButton
                 android:id="@+id/backBtn"
-                android:layout_marginTop="@dimen/dp16"
-                android:layout_marginStart="@dimen/dp24"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/dp24"
                 app:tint="@color/gray_600"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/ic_arrow_black_left"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_arrow_black_left"
+                />
             <TextView
                 android:id="@+id/titleTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
                 android:text="@{vm.currentProblem.subject}"
                 style="@style/b1"
                 android:textColor="@color/gray_600"
@@ -48,38 +48,32 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backBtn"/>
 
             <Button
-                android:id="@+id/videoView2"
-                android:text="버튼 2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/videoView"/>
-
-            <Button
-                android:id="@+id/videoView"
-                android:text="버튼 "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/submitBtn"/>
-
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/submitBtn"
-                android:layout_width="74dp"
-                android:layout_height="36dp"
                 android:text="제출하기"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
                 android:layout_marginVertical="@dimen/dp10"
                 android:layout_marginEnd="@dimen/dp24"
+                android:paddingHorizontal="12dp"
                 android:visibility="@{ vm.isReview ? View.GONE : View.VISIBLE }"
+                android:textColor="@{ vm.isSubmitBtnActive ? @color/white_ffffff : @color/white_4cffffff }"
+                android:enabled="@{vm.isSubmitBtnActive}"
+                android:background="@{ vm.isSubmitBtnActive ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
                 style="@style/h6"
-                app:buttonTheme="blue"
-                app:screenTheme="brightOutside"
-                app:enableFlag="@{vm.isSubmitBtnActive}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
-<!--                android:onClick="@{(view) -> vm.onSubmit(view)}"-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* 문제를 틀린 경우 해설을 확인할 수 있습니다."
+                style="@style/b1"
+                android:textColor="@color/gray_600"
+                android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -204,15 +198,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="* 문제를 틀린 경우 해설을 확인할 수 있습니다."
+                android:text="정답/해설 표시"
                 style="@style/b1"
                 android:textColor="@color/gray_600"
                 android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/solutionSwitch"
+                app:layout_constraintBottom_toBottomOf="@+id/solutionSwitch"
+                app:layout_constraintEnd_toStartOf="@+id/solutionSwitch"/>
 
+            <Switch
+                android:id="@+id/solutionSwitch"
+                android:layout_width="48dp"
+                android:layout_height="24dp"
+                android:checked="@{vm.showCommentaryView}"
+                android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
+                android:onCheckedChanged="@{vm.onCommentaryShowChanged}"
+                android:enabled="@{vm.isEnableSolutionSwitch}"
+                android:layout_marginEnd="@dimen/dp24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -273,7 +279,7 @@
                 android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
                 android:scrollbars="none"
                 android:focusable="false"
-                android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
+                android:visibility="@{vm.showCommentaryView ? View.VISIBLE : View.GONE }"
                 app:layout_constraintStart_toEndOf="@+id/problemContainer"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -289,13 +295,6 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-<!--                        <VideoView-->
-<!--                            android:id="@+id/videoView"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="210dp"-->
-<!--                            app:layout_constraintTop_toTopOf="parent"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"/>-->
 
                         <TextView
                             style="@style/TextBlack_4c4c4c.ExtraBold"
@@ -320,6 +319,17 @@
 
                         <TextView
                             style="@style/TextGrey_9f9f9f.Bold"
+                            android:id="@+id/pointTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp14"
+                            android:text="@{`배점 : ` + vm.currentProblem.point + ``}"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintTop_toBottomOf="@+id/lvTv"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                        <TextView
+                            style="@style/TextGrey_9f9f9f.Bold"
                             android:id="@+id/referenceLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -327,7 +337,7 @@
                             android:textSize="@dimen/sp14"
                             android:visibility="@{ vm.currentProblem.referenceVisible() ? View.VISIBLE : View.GONE }"
                             android:text="@{`문제 출처 : ` + vm.currentProblem.reference + ``}"
-                            app:layout_constraintTop_toBottomOf="@+id/lvTv"
+                            app:layout_constraintTop_toBottomOf="@+id/pointTv"
                             app:layout_constraintStart_toStartOf="parent"/>
 
                         <TextView

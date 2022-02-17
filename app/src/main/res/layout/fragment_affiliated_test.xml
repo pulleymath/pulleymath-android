@@ -485,8 +485,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:lineSpacingExtra="2sp"
-                                android:maxLength="200"
-                                android:maxLines="5"
+                                android:maxLength="300"
+                                android:maxLines="7"
                                 style="@style/b2"
                                 android:text="@{vm.selectedUnivTestCard.selectedWorkbook.instruction}"
                                 android:textColor="@color/gray_600"
@@ -593,21 +593,21 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <Button
                 android:id="@+id/testStartBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp56"
-                android:onClick="@{(view) -> vm.onTestStart(view)}"
                 android:layout_marginTop="@dimen/dp32"
-                android:text="시험 시작하기"
-                app:ButtonTextSize="@dimen/sp18"
-                app:buttonTheme="blue"
-                app:enableFlag="@{vm.selectedUnivTestCard.isTestEnable()}"
+                android:onClick="@{(view) -> vm.onTestStart(view)}"
+                android:text="@{vm.selectedUnivTestCard.selectedWorkbook.getWorkbookStartBtnText()}"
+                android:textColor="@color/gray_100"
+                style="@style/h4"
+                android:enabled="@{vm.selectedUnivTestCard.isTestEnable()}"
+                android:background="@{ vm.selectedUnivTestCard.isTestEnable() ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
                 android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rightScrollView"/>
-            <!--                android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }" todo dummy -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

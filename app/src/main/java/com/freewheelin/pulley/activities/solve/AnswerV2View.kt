@@ -191,7 +191,6 @@ class AnswerV2View : ConstraintLayout,
     }
 
     fun configureUI(problem: AffiliatedTestProblem, requestFocus: Boolean) {
-        println("tpehf, problem number : ${problem.no}, problem.type : ${problem.type}")
         if (problem.type == "주관식") {
             shortAnswerView.visibility = View.VISIBLE
             selectionAnswerView.visibility = View.INVISIBLE

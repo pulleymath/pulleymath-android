@@ -4,12 +4,12 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +20,14 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.DailyTestReportActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.solve.*
 import com.freewheelin.pulley.bases.DensityLevel.*
 import com.freewheelin.pulley.bases.densityLevel
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
 import com.freewheelin.pulley.model.ProblemType
@@ -80,6 +82,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         fun getIntent(context: Context, card: AffiliatedTestCard): Intent {
             val intent = Intent(context, AffiliatedTestSolveActivity::class.java)
             intent.putExtra(SELECTED_WORKBOOK, card.selectedWorkbook)
+            return intent
+        }
+
+        fun getIntent(context: Context, workbook: AffiliatedTestWorkbook): Intent {
+            val intent = Intent(context, AffiliatedTestSolveActivity::class.java)
+            intent.putExtra(SELECTED_WORKBOOK, workbook)
             return intent
         }
 
@@ -299,19 +307,6 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
             problemContainer.setOnTouchListener(problemGesture)
             solutionContainer.setOnTouchListener(solutionGesture)
-
-            videoView.setOnClickListener {
-                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter1.mp4"
-                val intent = VideoPlayerActivity.getIntent(baseContext, url)
-                startActivity(intent)
-            }
-
-            videoView2.setOnClickListener {
-                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter2.mp4"
-                val intent = VideoPlayerActivity.getIntent(baseContext, url)
-                startActivity(intent)
-            }
-
         }
     }
 
@@ -332,15 +327,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         viewModel.apply {
             val isWrongAnswer = problem?.is_correct == false
             val _isReview = isReview.value == true
-            showSolutionView.value = _isReview && isWrongAnswer
-
-
-//            val uri = Uri.parse("https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter2.mp4")
-//            binding.videoView.setVideoURI(uri)
-//            binding.videoView.setOnPreparedListener {
-//                it.start()
-//            }
-
+            showCommentaryView.value = _isReview && isWrongAnswer
+            isEnableSolutionSwitch.value = isWrongAnswer
         }
     }
 
@@ -352,20 +340,19 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
         Handler(Looper.getMainLooper()).postDelayed({
             setScreenDimComeInBeforeTestStart()
-        }, 500)
+        }, 800)
         if (viewModel.isReview.value == true) return
 
         Handler(Looper.getMainLooper()).postDelayed({
             setRemainingTimer()
             set5MinTimer()
-        }, 500)
+        }, 800)
     }
 
     private fun set5MinTimer() {
-        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() // todo dummy
+        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds()?: return // todo dummy
 //        val before5MinItEnds = "2022-02-07 11:36:00"
 
-        println("tpehf, before5MinItEnds : ${before5MinItEnds}")
         val paredDate = sdf.parse(before5MinItEnds)
         var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         val timeDiffMilli = paredDate.time - nowDate.time.time
@@ -379,7 +366,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     private fun setScreenDimComeInBeforeTestStart() {
-        val startedAt = viewModel.getStartedTime() // TODO dummy
+        val startedAt = viewModel.getStartedTime() ?: return // TODO dummy
 //        val startedAt = "2022-02-07 10:00:00"
 
         var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
@@ -411,10 +398,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     private fun setRemainingTimer() {
         if (!viewModel.showTimer) return
 
-        val finishedAt = viewModel.getFinishedTime() // TODO dummy
+        val finishedAt = viewModel.getFinishedTime() ?: return // TODO dummy
 //        val finishedAt = "2022-02-07 23:20:00"
 
-        println("tpehf, finishedAt : ${finishedAt}")
         val paredDate = sdf.parse(finishedAt)
         var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         val timeDiffMilli = paredDate.time - nowDate.time.time

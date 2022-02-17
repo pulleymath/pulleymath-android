@@ -23,6 +23,7 @@ import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel
 import androidx.databinding.BindingAdapter
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestReportDialog
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
@@ -110,8 +111,18 @@ class AffiliatedTestFragment: LearningTabFragment() {
             testStartBtn.setOnClickListener { view ->
                 viewModel.selectedUnivTestCard.value?.let {
                     if (it.isTestEnable()) {
-                        val intent = AffiliatedTestSolveActivity.getIntent(requireContext(), it)
-                        solveResultLauncher.launch(intent)
+                        val selectedWorkbook = it.selectedWorkbook
+                        val testStartedAt = it.selectedWorkbook.started_at
+                        if (selectedWorkbook.seq == 1 || !testStartedAt.isNullOrEmpty()) {
+                            val intent = AffiliatedTestSolveActivity.getIntent(requireContext(), it)
+                            solveResultLauncher.launch(intent)
+                        } else {
+                            DialogUtils.v2AffiliatedTestStartWarningDialog(requireContext()) {
+                                val intent = AffiliatedTestSolveActivity.getIntent(requireContext(), it.selectedWorkbook )
+                                solveResultLauncher.launch(intent)
+                            }
+                        }
+
                     } else {
                         DaebakToast.show(requireContext(), "시험시작 30분 전부터 입장할 수 있습니다.")
                     }
@@ -178,11 +189,11 @@ class AffiliatedTestFragment: LearningTabFragment() {
                     }
                     else -> {
 //                    val testStartedAt = "2022-02-05 19:50:26"
-                        val testStartedAt = it.firstWorkbook.test_started_at
+                        val testStartedAt = it.firstWorkbook.test_started_at ?: return@postDelayed
                         setTestStartCountDownTimer(it, testStartedAt)
 
 //                    val testFinishedAt = "2022-02-05 19:51:26"
-                        val testFinishedAt = it.firstWorkbook.test_finished_at
+                        val testFinishedAt = it.firstWorkbook.test_finished_at ?: return@postDelayed
                         setTestFinishCountDownTimer(it, testFinishedAt)
                     }
                 }
@@ -190,7 +201,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
         }, 1000)
     }
 
-    private fun setTestStartCountDownTimer(card: AffiliatedTestCard, timeStr: String?) {
+    private fun setTestStartCountDownTimer(card: AffiliatedTestCard, timeStr: String) {
         val timeDiffMilli = getTimeDiffMilli(timeStr)
 
         val remainingTimerInStartTime = object : CountDownTimer(timeDiffMilli, 1000) {
@@ -209,19 +220,19 @@ class AffiliatedTestFragment: LearningTabFragment() {
         }.start()
         remainingTimerListInStartTime.add(remainingTimerInStartTime)
     }
-    private fun setTestFinishCountDownTimer(card: AffiliatedTestCard, timeStr: String?) {
+    private fun setTestFinishCountDownTimer(card: AffiliatedTestCard, timeStr: String) {
         val finishedTimeDiffMilli = getTimeDiffMilli(timeStr)
 
         val remainingTimerInFinishedTime = object : CountDownTimer(finishedTimeDiffMilli, 1000) {
             override fun onTick(diff: Long) {}
             override fun onFinish() {
-                card.remainingTimeText.set("자가진단 1차 진행 가능")
+                card.remainingTimeText.set("사전진단평가가 종료되었습니다.")
             }
         }.start()
         remainingTimerListInFinishedTime.add(remainingTimerInFinishedTime)
     }
 
-    private fun getTimeDiffMilli (timeStr: String?): Long {
+    private fun getTimeDiffMilli (timeStr: String): Long {
         val paredDate = sdf.parse(timeStr)
         var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         return paredDate.time - nowDate.time.time

@@ -34,7 +34,8 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     val secInDimDialog by lazy { MutableLiveData<String>("00") }
 
     var isReview = MutableLiveData(false)
-    var showSolutionView = MutableLiveData(false)
+    var isEnableSolutionSwitch = MutableLiveData(false)
+    var showCommentaryView = MutableLiveData(false)
 
     var answeredSet: ObservableHashSet<AffiliatedTestProblem> = ObservableHashSet()
 
@@ -52,8 +53,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     var workbookSeq: Int = 0
 
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        println("buttonView = [$buttonView], isChecked = [$isChecked]")
-        showSolutionView.postValue(isChecked)
+        showCommentaryView.postValue(isChecked)
     }
 
     @SuppressLint("CheckResult")
@@ -167,7 +167,6 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
-                    println("tpehf , ${problemNo}번 문제 열기 ")
 
                 }, { error ->
                     Log.e(javaClass.simpleName, "openProblem error=${error.localizedMessage}")
@@ -204,7 +203,6 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
-                    println("tpehf , ${problemNo}번 문제 답 입력! ")
 
                 }, { error ->
                     Log.e(javaClass.simpleName, "insertAnswer error=${error.localizedMessage}")
@@ -218,7 +216,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
             1 -> { testFinishedAt }
             else -> {
                 val cal = Calendar.getInstance()
-                val startedAt = studentWorkbook?.started_at
+                val startedAt = studentWorkbook?.started_at ?: return null
                 val startedDate = sdf.parse(startedAt)
                 cal.time = startedDate
                 cal.add(Calendar.MINUTE, testPeriodMinutes)
