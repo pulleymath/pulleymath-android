@@ -16,16 +16,16 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
-import com.freewheelin.pulley.views.calendarPickerViews.SelectCalendarView
-import com.haibin.calendarview.Calendar
-import com.haibin.calendarview.CalendarView
 import kotlinx.android.synthetic.main.dialog_dday_setting.*
-import org.joda.time.LocalDate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import android.text.InputFilter
+import com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendar
+import com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendarListener
+import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 import java.lang.Math.abs
 
 
@@ -33,11 +33,8 @@ interface DDaySettingDialogListener {
     fun onOnDDaySettingCompleted()
 }
 
-class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListener,  CalendarView.OnCalendarSelectListener {
-
-
-    override fun onCalendarOutOfRange(calendar: Calendar?) {
-    }
+class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListener,
+    DaebakCalendarListener {
 
     var dDays: List<DDay> = emptyList()
     var selectedDate: Date? = null
@@ -68,9 +65,6 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setContentView(R.layout.dialog_dday_setting)
-        selectCalendar.calendar.setMonthView(SelectCalendarView::class.java)
-        selectCalendar.calendar.setRange(2020,1,1, 2099,12,31)
-        selectCalendar.calendar.setOnCalendarSelectListener(this)
 
         actionBtn.setOnClickListener {
             onModifyBtnClicked()
@@ -96,7 +90,6 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
         val dDays = dDays.getOrNull(position)
         if(dDays == null) {
             customField.visibility = View.VISIBLE
-            selectCalendar.calendar.clearSingleSelect()
             selectedDate = null
         } else {
             configureUIByDDay(dDays)
@@ -122,6 +115,7 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
             override fun onResponse(call: Call<List<DDay>>, response: Response<List<DDay>>) {
                 val dDayList = response.body() ?: return
                 dDays = dDayList
+                dDays.forEach { println("tpehf, dDays. startDate : ${it.startDate }") }
                 configureUI()
             }
 
@@ -132,6 +126,7 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
         val listTitles = dDays.map { it.description }.toMutableList()
         listTitles.add(customFieldText)
         targetSpinner.items = listTitles
+        selectCalendar.listener = this
 
         val existTarget = getTargetTitleAndDate()
 
@@ -143,7 +138,8 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
             targetSpinner.defaultStr = dDays.first().description
         } else {
             selectedDate = existTarget.third
-            selectCalendar.setSelectedDate(LocalDate(existTarget.third.year(), existTarget.third.month(), existTarget.third.day()), true)
+            val ldt = LocalDateTime(existTarget.third.year(), existTarget.third.month(), existTarget.third.day(), 0, 0)
+            selectCalendar.calendar.date = ldt.toDateTime().millis
             if(existTarget.first == -1) {
                 targetSpinner.position = dDays.size
                 customField.visibility = View.VISIBLE
@@ -163,10 +159,8 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
         val year = dDays.startDate.year()
         val month = dDays.startDate.month()
         val day = dDays.startDate.day()
-
-        selectCalendar.calendar.setOnCalendarSelectListener(null)
-        selectCalendar.setSelectedDate(LocalDate(year, month, day), true)
-        selectCalendar.calendar.setOnCalendarSelectListener(this)
+        val ldt = LocalDateTime(year, month, day, 0, 0)
+        selectCalendar.calendar.date = ldt.toDateTime().millis
     }
 
     fun onModifyBtnClicked() {
@@ -224,21 +218,6 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
         return super.onTouchEvent(event)
     }
 
-    override fun onCalendarSelect(calendar: Calendar?, isClick: Boolean) {
-        val calendar = calendar ?: return
-
-        targetSpinner.defaultStr = customFieldText
-        customField.visibility = View.VISIBLE
-
-        val year = calendar.year
-        val month = calendar.month
-        val day = calendar.day
-
-        targetSpinner.position = dDays.size
-        selectedDate =  LocalDate(year, month, day).toDate()
-    }
-
-
     fun getTargetTitleAndDate(): Triple<Int, String, Date>? {
         val targetTitle = Preferences.targetDateTitle.get()
         val targetDate = Preferences.targetDate.get()
@@ -260,5 +239,12 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
         Preferences.targetDate.set(dday.startDate.time)
         Preferences.targetDateTitle.set(dday.description)
         Preferences.targetID.set(dday.id)
+    }
+
+    override fun onSelectDate(calendar: DaebakCalendar, date: LocalDate) {
+        selectedDate = date.toDate()
+        customField.visibility = View.VISIBLE
+        targetSpinner.defaultStr = customFieldText
+        targetSpinner.position = dDays.size
     }
 }

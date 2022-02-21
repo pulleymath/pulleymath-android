@@ -369,7 +369,11 @@ class LearningTabActivity : PermissionActivity(),
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
         if (user?.userUniversityMajorCode == null) {
-            tabLayout.removeTabAt(7)
+            val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return
+            if (tabName == AffiliatedTestFragment.newInstance().screenName) {
+                tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                return
+            }
         }
         val majorCode = user?.userUniversityMajorCode ?: return
         val studentId = user?.studentID ?: return
@@ -383,7 +387,11 @@ class LearningTabActivity : PermissionActivity(),
                 res.data?.let {
                     val groupList = it.group_list
                     if (groupList.isEmpty()) {
-                        tabLayout.removeTabAt(7)
+                        val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return@let
+                        if (tabName == AffiliatedTestFragment.newInstance().screenName) {
+                            tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                            return@let
+                        }
                     }
                 }
             }, { error ->

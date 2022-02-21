@@ -213,7 +213,7 @@
                 android:layout_height="24dp"
                 android:checked="@{vm.showCommentaryView}"
                 android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
-                android:onCheckedChanged="@{vm.onCommentaryShowChanged}"
+                android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
                 android:enabled="@{vm.isEnableSolutionSwitch}"
                 android:layout_marginEnd="@dimen/dp24"
                 app:layout_constraintEnd_toEndOf="parent"

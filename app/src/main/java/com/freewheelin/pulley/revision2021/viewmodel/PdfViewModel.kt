@@ -41,11 +41,11 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     var ySum: Int = 0
 
     fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "") {
-        val title = ""
-        val page = 0
-        val size = 1000
-        val subjectCode = ""
-        val category = ""
+//        val title = ""
+//        val page = 0
+//        val size = 1000
+//        val subjectCode = ""
+//        val category = ""
         pdfRepository.pdfList(title, page, size, subjectCode, category)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)

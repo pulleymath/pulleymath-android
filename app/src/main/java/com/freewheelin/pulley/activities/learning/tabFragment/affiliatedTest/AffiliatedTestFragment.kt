@@ -51,7 +51,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
     private val viewModel: AffiliatedTestViewModel by viewModels()
 
-    override var screenName = "제휴대학 테스트"
+    override var screenName = "KU진단"
     override fun initUI() {
 
     }
