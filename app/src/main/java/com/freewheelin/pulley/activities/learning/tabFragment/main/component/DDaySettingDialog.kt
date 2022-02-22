@@ -115,7 +115,6 @@ class DDaySettingDialog(context: Context): Dialog(context), ArduousSpinnerListen
             override fun onResponse(call: Call<List<DDay>>, response: Response<List<DDay>>) {
                 val dDayList = response.body() ?: return
                 dDays = dDayList
-                dDays.forEach { println("tpehf, dDays. startDate : ${it.startDate }") }
                 configureUI()
             }
 

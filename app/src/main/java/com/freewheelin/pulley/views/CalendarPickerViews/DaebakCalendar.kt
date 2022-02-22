@@ -43,8 +43,8 @@ class DaebakCalendar : ConstraintLayout, CalendarView.OnDateChangeListener {
     }
 
     override fun onSelectedDayChange(p0: CalendarView, year: Int, month: Int, day: Int) {
-        println("tpehf, year: ${year}, month : $month, day : $day")
-        val date = LocalDate(year, month, day)
+        val mon = if (month in 0..11) month + 1 else month
+        val date = LocalDate(year, mon, day)
         listener?.onSelectDate(this, date)
 
     }

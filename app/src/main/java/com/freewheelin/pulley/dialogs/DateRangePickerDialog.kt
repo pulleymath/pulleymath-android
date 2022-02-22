@@ -3,6 +3,7 @@ package com.freewheelin.pulley.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.*
@@ -12,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import com.freewheelin.pulley.databinding.ViewDaebakDateRangePickerBinding
 import org.joda.time.DateTimeZone
+import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
 
 
@@ -30,33 +32,29 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
 
     override fun onSelectDate(calendar: DaebakCalendar, date: LocalDate) {
         binding.selectRangeBtn.performClick()
-        setRange()
-        setRangeGuideText()
-        binding.updateBtn.toEnableUI()
+        setRangeGuideTextTemp(calendar, date)
     }
 
-    var toastHandler = Handler()
+    var toastHandler = Handler(Looper.getMainLooper())
     var listener: DateRangePickerDialogListener? = null
     val period: Int
         get() = DateTimeUtils.getPeriod(from, to)
 
     var firstDate: LocalDate
 
+    var tempFrom: LocalDate? = null
+    var tempTo: LocalDate? = null
     var from: LocalDate
         set(value) {
-            binding.updateBtn.toEnableUI()
-//            binding.fromCalendar.setSelectedDate(value, true)
-            binding.fromCalendar.calendar.date = value.toLocalDateTime(LocalTime(DateTimeZone.UTC)).millisOfSecond.toLong()
-            setRange()
+            val ldt = LocalDateTime(value.year, value.monthOfYear, value.dayOfMonth, 0, 0)
+            binding.fromCalendar.calendar.date = ldt.toDateTime().millis
         }
         get() = LocalDate(binding.fromCalendar.calendar.date)
 
     var to: LocalDate
         set(value) {
-            binding.updateBtn.toEnableUI()
-            binding.toCalendar.calendar.date = value.toLocalDateTime(LocalTime(DateTimeZone.UTC)).millisOfSecond.toLong()
-//            binding.toCalendar.setSelectedDate(value, true)
-            setRange()
+            val ldt = LocalDateTime(value.year, value.monthOfYear, value.dayOfMonth, 0, 0)
+            binding.toCalendar.calendar.date = ldt.toDateTime().millis
         }
         get() = LocalDate(binding.toCalendar.calendar.date)
 
@@ -69,12 +67,8 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
     }
 
     fun initUI() {
-//        binding.fromCalendar.calendar.setMonthView(FromCalendarView::class.java)
-//        binding.toCalendar.calendar.setMonthView(ToCalendarView::class.java)
         binding.fromCalendar.listener = this
         binding.toCalendar.listener = this
-//        binding.fromCalendar.setUnitlNowMonthUISetter()
-//        binding.toCalendar.setUnitlNowMonthUISetter()
 
         binding.selectRangeBtn.setOnClickListener(this)
         binding.aWeekRangeBtn.setOnClickListener(this)
@@ -110,10 +104,10 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
     }
 
     override fun onClick(view: View?) {
-//        binding.selectRangeBtn.isSelected = false
-//        binding.aWeekRangeBtn.isSelected = false
-//        binding.twoWeeksRangeBtn.isSelected = false
-//        binding.aMonthBtn.isSelected = false
+        binding.selectRangeBtn.isSelected = false
+        binding.aWeekRangeBtn.isSelected = false
+        binding.twoWeeksRangeBtn.isSelected = false
+        binding.aMonthBtn.isSelected = false
 //        totalRangeBtn.isSelected = false
         view?.isSelected = true
 
@@ -146,41 +140,46 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
         binding.updateBtn.toDisableUI()
     }
 
-    private fun setRange() {
-//        binding.fromCalendar.calendar.setOnCalendarRangeSelectListener(null)
-//        binding.toCalendar.calendar.setOnCalendarRangeSelectListener(null)
-//
-//        binding.fromCalendar.calendar.setSelectCalendarRange(
-//                from.year,
-//                from.monthOfYear,
-//                from.dayOfMonth,
-//                to.year,
-//                to.monthOfYear,
-//                to.dayOfMonth
-//        )
-//        binding.toCalendar.calendar.setSelectCalendarRange(
-//                from.year,
-//                from.monthOfYear,
-//                from.dayOfMonth,
-//                to.year,
-//                to.monthOfYear,
-//                to.dayOfMonth
-//
-//        )
-//        binding.toCalendar.calendar.scrollToCalendar(to.year, to.monthOfYear, to.dayOfMonth)
-//        binding.fromCalendar.calendar.scrollToCalendar(from.year, from.monthOfYear, from.dayOfMonth)
-//
-//        binding.toCalendar.calendar.setOnCalendarRangeSelectListener(binding.toCalendar)
-//        binding.fromCalendar.calendar.setOnCalendarRangeSelectListener(binding.fromCalendar)
+    private fun setRangeGuideTextTemp(calendar: DaebakCalendar, date: LocalDate) {
+        when (calendar) {
+            binding.fromCalendar -> {
+                if (date > to) {
+                    showDateRangeErrToast()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        from = from
+                    }, 250)
+                } else {
+                    from = date
+                    updateRangeGuide()
+                }
+
+            }
+            binding.toCalendar -> {
+                if (from > date) {
+                    showDateRangeErrToast()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        to = to
+                    }, 250)
+                } else {
+                    to = date
+                    updateRangeGuide()
+                }
+            }
+        }
+    }
+    private fun updateRangeGuide() {
+        binding.updateBtn.toEnableUI()
+        binding.rangeGuideTv.text = "${from.year}.${from.monthOfYear}.${from.dayOfMonth} " +
+            "- ${to.year}.${to.monthOfYear}.${to.dayOfMonth} (${period}일간)"
     }
 
     private fun setRangeGuideText() {
-        if (from > to)
+        if (from > to) {
+            binding.updateBtn.toDisableUI()
             showDateRangeErrToast()
-
-        binding.rangeGuideTv.text = "${from.year}.${from.monthOfYear}.${from.dayOfMonth} " +
-                "- ${to.year}.${to.monthOfYear}.${to.dayOfMonth} (${period}일간)"
-
+        } else {
+            updateRangeGuide()
+        }
     }
 
     val hideRunnable = Runnable {

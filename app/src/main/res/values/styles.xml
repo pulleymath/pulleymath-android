@@ -15,6 +15,23 @@
         <item name="android:switchStyle">@style/Switch</item>
     </style>
 
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/purple_300</item>
+        <item name="colorPrimary">@color/gray_800</item>
+        <item name="android:textColorPrimary">@color/gray_800</item>
+        <item name="colorControlActivated">@color/purple_100</item>
+        <item name="android:textColorPrimaryInverse">@color/red_300</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/gray_800</item>
+        <item name="android:headerYearTextAppearance">@color/gray_800</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/gray_800</item>
+    </style>
+
     <style name ="DefaultTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/sp18</item>

@@ -50,7 +50,6 @@
                 android:id="@+id/customField"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="8dp"
                 app:DaebakInputField_Hint="디데이 이름 설정"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -169,6 +168,7 @@
         android:layout_marginStart="@dimen/dp48"
         android:layout_marginBottom="@dimen/dp24"
         android:layout_marginEnd="@dimen/dp48"
+        app:layout_constraintTop_toBottomOf="@id/scrollView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

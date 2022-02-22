@@ -36,6 +36,10 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2021.activity.VideoPlayerActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+        <activity
             android:name=".revision2021.activity.AffiliatedTestSolveActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />

@@ -4,12 +4,12 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,14 +20,12 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.DailyTestReportActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.solve.*
 import com.freewheelin.pulley.bases.DensityLevel.*
 import com.freewheelin.pulley.bases.densityLevel
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
 import com.freewheelin.pulley.model.ProblemType
@@ -307,6 +305,19 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
             problemContainer.setOnTouchListener(problemGesture)
             solutionContainer.setOnTouchListener(solutionGesture)
+
+            videoView.setOnClickListener {
+                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter1.mp4"
+                val intent = VideoPlayerActivity.getIntent(baseContext, url)
+                startActivity(intent)
+            }
+
+            videoView2.setOnClickListener {
+                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter2.mp4"
+                val intent = VideoPlayerActivity.getIntent(baseContext, url)
+                startActivity(intent)
+            }
+
         }
     }
 
@@ -327,7 +338,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         viewModel.apply {
             val isWrongAnswer = problem?.is_correct == false
             val _isReview = isReview.value == true
-            showCommentaryView.value = _isReview && isWrongAnswer
+            showSolutionView.value = _isReview && isWrongAnswer
             isEnableSolutionSwitch.value = isWrongAnswer
         }
     }

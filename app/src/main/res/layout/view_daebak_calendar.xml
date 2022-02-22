@@ -10,29 +10,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
+        android:theme="@style/CalenderViewCustom"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
-
-<!--    <com.haibin.calendarview.CalendarView-->
-<!--        android:id="@+id/calendar"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        app:calendar_height="30dp"-->
-<!--        app:day_text_size="@dimen/sp16"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/prevBtn"-->
-<!--        app:month_view_show_mode="mode_only_current"-->
-<!--        app:scheme_text_color="@color/black_4c4c4c"-->
-<!--        app:select_mode="single_mode"-->
-<!--        app:week_bar_height="38dp"-->
-<!--        app:week_bar_view="com.freewheelin.pulley.views.CalendarPickerViews.DaebakWeekBar"-->
-<!--        app:week_text_color="@color/black_4c4c4c"></com.haibin.calendarview.CalendarView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
