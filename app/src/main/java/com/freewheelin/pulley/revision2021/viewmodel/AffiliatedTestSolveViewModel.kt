@@ -34,8 +34,8 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     val secInDimDialog by lazy { MutableLiveData<String>("00") }
 
     var isReview = MutableLiveData(false)
-    var showSolutionView = MutableLiveData(false)
     var isEnableSolutionSwitch = MutableLiveData(false)
+    var showCommentaryView = MutableLiveData(false)
 
     var answeredSet: ObservableHashSet<AffiliatedTestProblem> = ObservableHashSet()
 
@@ -53,8 +53,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     var workbookSeq: Int = 0
 
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        println("buttonView = [$buttonView], isChecked = [$isChecked]")
-        showSolutionView.postValue(isChecked)
+        showCommentaryView.postValue(isChecked)
     }
 
     @SuppressLint("CheckResult")

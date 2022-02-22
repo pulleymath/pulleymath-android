@@ -48,24 +48,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backBtn"/>
 
             <Button
-                android:id="@+id/videoView2"
-                android:text="버튼 2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/videoView"/>
-
-            <Button
-                android:id="@+id/videoView"
-                android:text="버튼 "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/submitBtn"/>
-
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/submitBtn"
                 android:text="제출하기"
                 android:layout_width="wrap_content"
@@ -229,7 +211,7 @@
                 android:id="@+id/solutionSwitch"
                 android:layout_width="48dp"
                 android:layout_height="24dp"
-                android:checked="@{vm.showSolutionView}"
+                android:checked="@{vm.showCommentaryView}"
                 android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
                 android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
                 android:enabled="@{vm.isEnableSolutionSwitch}"
@@ -237,7 +219,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -298,7 +279,7 @@
                 android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
                 android:scrollbars="none"
                 android:focusable="false"
-                android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
+                android:visibility="@{vm.showCommentaryView ? View.VISIBLE : View.GONE }"
                 app:layout_constraintStart_toEndOf="@+id/problemContainer"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -314,13 +295,6 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-<!--                        <VideoView-->
-<!--                            android:id="@+id/videoView"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="210dp"-->
-<!--                            app:layout_constraintTop_toTopOf="parent"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"/>-->
 
                         <TextView
                             style="@style/TextBlack_4c4c4c.ExtraBold"

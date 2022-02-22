@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/rightCl"
+            app:layout_constraintWidth_percent="0.375"
             android:background="@drawable/bg_gray_100">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -40,13 +40,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rightCl"
-            android:layout_width="758dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/dp60"
             android:paddingEnd="@dimen/dp40"
             android:paddingTop="@dimen/dp24"
             android:paddingBottom="@dimen/dp50"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/leftCl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/shadow_left_only"
