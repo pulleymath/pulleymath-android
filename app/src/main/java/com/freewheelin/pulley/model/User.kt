@@ -269,6 +269,8 @@ class User {
 
             if (newUser.studentID != null) this.studentID = newUser.studentID
 
+            if (newUser.schoolID != null) this.schoolID = newUser.schoolID
+
             if (newUser.studentType != null) this.studentType = newUser.studentType
 
             if (newUser.initSettingCompleted != null) this.initSettingCompleted = newUser.initSettingCompleted

@@ -225,17 +225,20 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
 
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA) }
 
-    fun isTestEnable(): Boolean {
+    fun isTestEnable(currentTimeString: String?): Boolean {
         if (selectedWorkbook.test_started_at == null && selectedWorkbook.seq != 1) return true
         val testStartTime = selectedWorkbook.test_started_at ?: return false
+        val currentServerTimeString = currentTimeString ?: return false
+
         val paredDate = sdf.parse(testStartTime)
-        var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-        val minDiff = (paredDate.time - nowDate.time.time).toFloat() / (60 * 1000).toFloat()
+        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+
+        val minDiff = (paredDate.time - parsedCurrentServerDate.time).toFloat() / (60 * 1000).toFloat()
 
         // endtime check
         val testFinishTime = selectedWorkbook.test_finished_at
         val finishDate = sdf.parse(testFinishTime)
-        val finishDiff = (finishDate.time - nowDate.time.time).toFloat() / (60 * 1000).toFloat()
+        val finishDiff = (finishDate.time - parsedCurrentServerDate.time).toFloat() / (60 * 1000).toFloat()
 
 //        println("tpehf, minDiff ${minDiff}, finishDiff : ${finishDiff}")
         return finishDiff > 0 && minDiff < 30

@@ -16,11 +16,12 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
-    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository() }
+    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
 
     val affiliatedTestCardList by lazy { MutableLiveData<List<AffiliatedTestCard>>() }
 
     val selectedUnivTestCard by lazy { MutableLiveData<AffiliatedTestCard>() }
+    val currentTimeString by lazy { MutableLiveData<String>() }
 
     @SuppressLint("CheckResult")
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
@@ -33,7 +34,7 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "group list=>${res.data}")
-
+                currentTimeString.postValue(res.current_time)
                 res.data?.let {
                     val groupList = it.group_list
                     val workbookList = it.workbook_list
@@ -67,7 +68,7 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
 
     fun onTestStart(v: View) {
         selectedUnivTestCard.value?.let {
-            if (it.isTestEnable()) {
+            if (it.isTestEnable(currentTimeString.value)) {
                 val intent = AffiliatedTestSolveActivity.getIntent(v.context, it.selectedWorkbook)
                 v.context.startActivity(intent)
             } else {

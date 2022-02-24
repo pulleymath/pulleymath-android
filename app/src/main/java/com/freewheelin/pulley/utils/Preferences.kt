@@ -45,6 +45,8 @@ object Preferences {
     val targetDateTitle = APPreference("")
     val targetID = APPreference(-1)
 
+    val forceUpdateDialogCount = APPreference(0)
+
 }
 
 

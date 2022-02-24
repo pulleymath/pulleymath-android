@@ -1,11 +1,16 @@
 package com.freewheelin.pulley.revision2021.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestApi
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestService
 
-class AffiliatedTestRepository {
+class AffiliatedTestRepository private constructor() {
+    companion object {
+        val instance: AffiliatedTestRepository by lazy { AffiliatedTestRepository() }
+    }
+    val currentProblem by lazy { MutableLiveData<AffiliatedTestProblem>() }
 
     private val affiliatedTestService : AffiliatedTestService by lazy { AffiliatedTestApi.univTestService() }
 

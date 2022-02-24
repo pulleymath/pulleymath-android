@@ -4,12 +4,12 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -18,28 +18,34 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.DailyTestReportActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.solve.*
 import com.freewheelin.pulley.bases.DensityLevel.*
 import com.freewheelin.pulley.bases.densityLevel
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveConceptFragment
+import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
+import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveConceptViewModel
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import kotlinx.android.synthetic.main.activity_solve.*
+import com.google.android.material.tabs.TabLayoutMediator
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
@@ -54,11 +60,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_affiliated_test_solve, null, false)
     }
     private val viewModel: AffiliatedTestSolveViewModel by viewModels()
+    private val conceptViewModel = AffiliatedSolveConceptViewModel.instance
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScrenHeight(this) }
     var problemGesture: ProblemGestures? = null
-    var solutionGesture: SolveGestures? = null
+//    var solutionGesture: SolveGestures? = null
 
     var itemValue = ""
         set(value) {
@@ -174,10 +181,25 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             }
         }
     }
+
+    var tabFragments: MutableList<Fragment> = mutableListOf(
+        AffiliatedSolveConceptFragment.newInstance(),
+        AffiliatedSolveSolutionFragment.newInstance()
+    )
+    private val tabTitles = arrayOf("해설", "개념")
+
     fun initUI () {
         binding.apply {
             lifecycleOwner = this@AffiliatedTestSolveActivity
             vm = viewModel
+
+            pager.adapter = ViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
+            pager.isUserInputEnabled = false
+
+            TabLayoutMediator(tabLayout, pager) { tab, position ->
+                tab.text = tabTitles[position]
+            }.attach()
+
             backBtn.setOnClickListener {
                 onBackPressed()
             }
@@ -187,7 +209,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             nextBtn.setOnClickListener { onNextBtnClicked() }
             pencilcaseView.listener = this@AffiliatedTestSolveActivity
             problemMemoView.set(pencilcaseView)
-            solutionMemoView.set(pencilcaseView)
+//            solutionMemoView.set(pencilcaseView)
 
             val imageWidth = when(this@AffiliatedTestSolveActivity.densityLevel) {
                 Low -> screenWidth / 2
@@ -196,9 +218,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             }
 
             problemIv.maxWidth = imageWidth
-            solutionIv.maxWidth = imageWidth
+//            solutionIv.maxWidth = imageWidth
             problemMemoView.layoutParams.width = screenWidth
-            solutionMemoView.layoutParams.width = screenWidth
+//            solutionMemoView.layoutParams.width = screenWidth
 
             answerView.delegate = this@AffiliatedTestSolveActivity
 
@@ -301,17 +323,26 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
             problemGesture = ProblemGestures(this@AffiliatedTestSolveActivity, problemIv, problemMemoView)
             problemGesture?.listener = this@AffiliatedTestSolveActivity
-//            answeredSet.listener = this@AffiliatedTestSolveActivity // 필요없음
-            solutionGesture = SolveGestures(this@AffiliatedTestSolveActivity, solutionIv, solutionMemoView, problemInfoContainer)
-            solutionGesture?.listener = this@AffiliatedTestSolveActivity
-
             problemContainer.setOnTouchListener(problemGesture)
-            solutionContainer.setOnTouchListener(solutionGesture)
+
+            videoView.setOnClickListener {
+                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter1.mp4"
+                val intent = VideoPlayerActivity.getIntent(baseContext, url)
+                startActivity(intent)
+            }
+
+            videoView2.setOnClickListener {
+                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter2.mp4"
+                val intent = VideoPlayerActivity.getIntent(baseContext, url)
+                startActivity(intent)
+            }
+
         }
     }
 
     fun onProblemSelected(problem: AffiliatedTestProblem?, autoFocus: Boolean) {
         viewModel.currentProblem.postValue(problem)
+//        conceptViewModel.currentProblem.postValue(problem)
         saveMemo()
         onSetProblem(problem)
 
@@ -327,7 +358,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         viewModel.apply {
             val isWrongAnswer = problem?.is_correct == false
             val _isReview = isReview.value == true
-            showCommentaryView.value = _isReview && isWrongAnswer
+            showSolutionView.value = _isReview && isWrongAnswer
             isEnableSolutionSwitch.value = isWrongAnswer
         }
     }
@@ -351,11 +382,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun set5MinTimer() {
         val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds()?: return // todo dummy
+        val currentServerTimeString = viewModel.currentTimeString ?: return
 //        val before5MinItEnds = "2022-02-07 11:36:00"
 
         val paredDate = sdf.parse(before5MinItEnds)
-        var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-        val timeDiffMilli = paredDate.time - nowDate.time.time
+        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
+
         lastFiveMinTimer = object : CountDownTimer(timeDiffMilli, 1000) {
             override fun onTick(diff: Long) {}
 
@@ -367,11 +400,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun setScreenDimComeInBeforeTestStart() {
         val startedAt = viewModel.getStartedTime() ?: return // TODO dummy
+        val currentServerTimeString = viewModel.currentTimeString ?: return
 //        val startedAt = "2022-02-07 10:00:00"
 
-        var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         val paredDate = sdf.parse(startedAt)
-        val timeDiffMilli = paredDate.time - nowDate.time.time
+        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
+
         dimScreenTimer = object : CountDownTimer(timeDiffMilli, 1000) {
             override fun onTick(diff: Long) {
 
@@ -399,11 +434,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         if (!viewModel.showTimer) return
 
         val finishedAt = viewModel.getFinishedTime() ?: return // TODO dummy
-//        val finishedAt = "2022-02-07 23:20:00"
+        //        val finishedAt = "2022-02-07 23:20:00"
+        val currentServerTimeString = viewModel.currentTimeString ?: return
 
         val paredDate = sdf.parse(finishedAt)
-        var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-        val timeDiffMilli = paredDate.time - nowDate.time.time
+        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
         remainingTimer = object : CountDownTimer(timeDiffMilli, 1000) {
             override fun onTick(diff: Long) {
@@ -437,19 +473,21 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
         if(problem == null) {
             problemGesture?.init()
-            solutionGesture?.init()
+//            solutionGesture?.init()
+            binding.apply {
+                val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                conceptFragment?.gestureInit()
+            }
         } else {
 
             problemGesture?.init()
-            solutionGesture?.init()
+//            solutionGesture?.init()
             binding.apply {
-//                problemIv.setProblemImageURL(problem.img_url)
-//                solutionIv.setProblemImageURL(problem.answer_img_url)
-//                answerTv.text = "정답 : ${problem.answer}"
-//                lvTv.text = "난이도 : ${problem.level}"
-//                unitTv.text = "${problem.unit}"
+                val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                conceptFragment?.gestureInit()
+
                 problemMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
-                solutionMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
+//                solutionMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
                 answerView.configureUI(problem, false)
 
             }
@@ -484,8 +522,14 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     fun prevAnim() {
         checkShortAnswer()
 
-        binding.problemContainer.setOnTouchListener(null)
-        binding.solutionContainer.setOnTouchListener(null)
+        binding.apply {
+            problemContainer.setOnTouchListener(null)
+            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+            conceptFragment?.setTouchListener(isRelease = true)
+        }
+
+
+//        binding.solutionContainer.setOnTouchListener(null)
         val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.duration = 100
         anim.addUpdateListener {
@@ -510,8 +554,11 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 anim.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationEnd(p0: Animator?) {
-                        binding.problemContainer.setOnTouchListener(problemGesture)
-                        binding.solutionContainer.setOnTouchListener(solutionGesture)
+                        binding.apply {
+                            problemContainer.setOnTouchListener(problemGesture)
+                            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                            conceptFragment?.setTouchListener(isRelease = false)
+                        }
                     }
 
                     override fun onAnimationCancel(p0: Animator?) {}
@@ -533,8 +580,11 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     fun nextAnim() {
         checkShortAnswer()
 
-        binding.problemContainer.setOnTouchListener(null)
-        binding.solutionContainer.setOnTouchListener(null)
+        binding.apply {
+            problemContainer.setOnTouchListener(null)
+            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+            conceptFragment?.setTouchListener(isRelease = true)}
+
         val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.duration = 100
         anim.addUpdateListener {
@@ -557,8 +607,14 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 anim.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationEnd(p0: Animator?) {
-                        binding.problemContainer.setOnTouchListener(problemGesture)
-                        binding.solutionContainer.setOnTouchListener(solutionGesture)
+                        binding.apply {
+                            problemContainer.setOnTouchListener(problemGesture)
+                            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                            conceptFragment?.setTouchListener(isRelease = false)
+                        }
+
+//                        binding.solutionContainer.setOnTouchListener(solutionGesture)
+
                     }
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {
@@ -578,11 +634,19 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     override fun onEditTypeChanged(type: Pencilcase.EditType?) {
         if(type == null) {
-            binding.problemContainer.isBlock = false
-            binding.solutionContainer.isBlock = false
+            binding.apply {
+                problemContainer.isBlock = false
+                val conceptFragment =
+                    supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                conceptFragment?.setConceptContainerBlock(false)
+            }
         } else {
-            binding.problemContainer.isBlock = true
-            binding.solutionContainer.isBlock = true
+            binding.apply {
+                problemContainer.isBlock = true
+                val conceptFragment =
+                    supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                conceptFragment?.setConceptContainerBlock(true)
+            }
         }
 
         if(type == Pencilcase.EditType.pencil)
@@ -628,7 +692,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     private fun saveMemo() {
         val problem = viewModel.currentProblem.value ?: return
         binding.problemMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
-        binding.solutionMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
+//        binding.solutionMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
     }
     override fun getActivity(): Activity = this
 
@@ -691,7 +755,29 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 //        }
 //    }
 }
+//class ViewPagerAdapter(val fragments: List<Fragment>, fragment: FragmentActivity) :
+//    FragmentStateAdapter(fragment) {
+class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
 
+    override fun getItemCount(): Int {
+        return 2
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> fragments[position]
+            1 -> {
+                val fragment = fragments[position]
+                fragment.arguments = Bundle().apply {
+                    putString("param1", "value1")
+                }
+                fragment
+            }
+            else -> fragments[position]
+        }
+    }
+}
 
 @BindingAdapter("imgRes")
 fun loadImage(view: ImageView, imageUrl: String?) {

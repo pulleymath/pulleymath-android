@@ -50,5 +50,6 @@ abstract class BaseSingleResponseNode<T> : Serializable {
     var data: T? = null
     var error: Any? = null
     var message: Any? = null
+    var current_time: String? = null
 }
 

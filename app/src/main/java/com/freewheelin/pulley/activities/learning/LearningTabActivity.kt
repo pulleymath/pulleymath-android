@@ -78,6 +78,7 @@ import kotlinx.android.synthetic.main.activity_learning.container
 import kotlinx.android.synthetic.main.activity_learning.spyBtn
 import kotlinx.android.synthetic.main.activity_solve.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
+import kotlinx.android.synthetic.main.fragment_main_2.*
 import kotlinx.android.synthetic.main.fragment_my_main_page.*
 import kotlinx.android.synthetic.main.fragment_signup_student_info.*
 import kotlinx.coroutines.CoroutineScope
@@ -117,7 +118,7 @@ class LearningTabActivity : PermissionActivity(),
     var snackBar: SnackBar? = null
     var mypageFragment = MyMainPageFragment()
 
-    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository() }
+    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
 
     var spySeal1 = 1
     var spySeal2 = 3
@@ -138,6 +139,7 @@ class LearningTabActivity : PermissionActivity(),
 
     companion object {
         const val LEARNING_MAIN = "LEARNING_MAIN"
+        const val LEARNING_ANALYSIS = "LEARNING_ANALYSIS"
         const val LEARNING_TEST = "LEARNING_TEST"
         const val LEARNING_AFFILIATED_TEST = "LEARNING_AFFILIATED_TEST"
         const val LEARNING_UNIT = "LEARNING_UNIT"
@@ -166,27 +168,25 @@ class LearningTabActivity : PermissionActivity(),
         MockExamFragment.newInstance(),
         WrongNoteFragment.newInstance()
     )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppUsageMonitor.startAppUsage()
 
-        if (user?.userUniversityMajorCode != null) {
-            tabFragment.add(AffiliatedTestFragment.newInstance())
+        if (tabFragment == null) {
+            tabFragment = mutableListOf(
+                MainFragment.newInstance(),
+                AnalysisFragment.newInstance(),
+                SnackTestFragment.newInstance(),
+                BookFragment.newInstance(),
+                MockExamFragment.newInstance(),
+                WrongNoteFragment.newInstance()
+            )
         }
 
-
-        try {
-            if (savedInstanceState != null) {
-                tabFragment[0] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MAIN) as LearningTabFragment
-                tabFragment[1] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_TEST) as LearningTabFragment
-                tabFragment[2] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_UNIT) as LearningTabFragment
-                tabFragment[3] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_MOCK) as LearningTabFragment
-                tabFragment[4] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_WRONG) as LearningTabFragment
-                tabFragment[5] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_LIST) as LearningTabFragment
-                tabFragment[6] = supportFragmentManager.getFragment(savedInstanceState, LEARNING_AFFILIATED_TEST) as LearningTabFragment
-            }
-        } catch (e:IllegalStateException) {
-            e.printStackTrace()
+        if (user?.userUniversityMajorCode != null) {
+            tabFragment.add(AffiliatedTestFragment.newInstance())
         }
 
         setContentView(R.layout.activity_learning)
@@ -224,6 +224,8 @@ class LearningTabActivity : PermissionActivity(),
                         currentPagePosition = position
                     }
                 }
+
+                checkSpy(tab)
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) { }
             override fun onTabReselected(tab: TabLayout.Tab?) { }
@@ -262,7 +264,17 @@ class LearningTabActivity : PermissionActivity(),
                 secondClickCnt = 0
                 thirdClickCnt = 0
             }
+
+            if (spyCount == 10) {
+                isSPYMode = true
+                mypageFragment.spyOn()
+                spyBtn.show()
+                spyCount = 0
+            }
+
             onMypageBtnClicked()
+
+
         }
 
         if(isSPYMode) {
@@ -303,6 +315,27 @@ class LearningTabActivity : PermissionActivity(),
         registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
 
         userTest()
+    }
+
+    var spyCount = 0
+    private fun checkSpy(tab: TabLayout.Tab?) {
+        tab?.position?.let { position ->
+            if (position == 0) {
+                if (spyCount in 0..10 step 2 ) {
+                    spyCount += 1
+                } else {
+                    spyCount = 0
+                }
+            } else if (position == 1) {
+                if (spyCount in 1..11 step 2) {
+                    spyCount += 1
+                } else {
+                    spyCount = 0
+                }
+            } else {
+                spyCount = 0
+            }
+        }
     }
 
 
@@ -442,22 +475,26 @@ class LearningTabActivity : PermissionActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        println("SAVEINSTANCE, tabFragment.size : ${tabFragment.size}")
+
         if(tabFragment[0].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
-        if(tabFragment[1].isAdded) {
-            supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[1])
-        }
+        if(tabFragment[1].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_ANALYSIS, tabFragment[1])
         if(tabFragment[2].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
+            supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[2])
         if(tabFragment[3].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[3])
+            supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[3])
         if(tabFragment[4].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[4])
+            supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[4])
         if(tabFragment[5].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[5])
+            supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[5])
+        if (tabFragment[6].isAdded)
+            supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[6])
+
         if (user?.userUniversityMajorCode != null) {
-            if (tabFragment[6].isAdded) {
-                supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[6])
+            if (tabFragment.size > 7 && tabFragment[7].isAdded) {
+                supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[7])
             }
         }
     }

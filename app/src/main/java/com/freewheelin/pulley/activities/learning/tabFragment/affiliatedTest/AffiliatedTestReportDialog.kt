@@ -51,7 +51,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
     lateinit var subject: String
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        affiliatedTestRepository = AffiliatedTestRepository()
+        affiliatedTestRepository = AffiliatedTestRepository.instance
         setContentView(binding.root)
         this.workbook = workbook
         initData(workbookId, version)

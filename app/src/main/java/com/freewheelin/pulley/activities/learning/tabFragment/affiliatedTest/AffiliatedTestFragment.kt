@@ -110,7 +110,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
             testStartBtn.setOnClickListener { view ->
                 viewModel.selectedUnivTestCard.value?.let {
-                    if (it.isTestEnable()) {
+                    if (it.isTestEnable(viewModel.currentTimeString.value)) {
                         val selectedWorkbook = it.selectedWorkbook
                         val testStartedAt = it.selectedWorkbook.started_at
                         if (selectedWorkbook.seq == 1 || !testStartedAt.isNullOrEmpty()) {
@@ -156,10 +156,11 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchUnivTestGroup {}
-
         remainingTimerListInStartTime.clear()
         remainingTimerListInFinishedTime.clear()
+        viewModel.fetchUnivTestGroup {}
+
+
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.affiliatedTestCardList.value?.forEach {
                 when {
@@ -234,6 +235,10 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
     private fun getTimeDiffMilli (timeStr: String): Long {
         val paredDate = sdf.parse(timeStr)
+        viewModel.currentTimeString.value?.let { serverTime ->
+            val parsedCurrentSerevrDate = sdf.parse(serverTime)
+            return paredDate.time - parsedCurrentSerevrDate.time
+        }
         var nowDate = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
         return paredDate.time - nowDate.time.time
     }

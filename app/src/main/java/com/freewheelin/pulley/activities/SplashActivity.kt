@@ -22,6 +22,7 @@ import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -38,6 +39,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.coroutines.*
+import kotlin.concurrent.thread
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
@@ -84,7 +86,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
         VersionManager.requestVersionInfo(this) { required, info ->
             Log.d("테스트", "Required=${required}")
-            when(required) {
+            when (required) {
                 VersionManager.Required.NOT -> checkSign()
                 VersionManager.Required.MINOR -> checkSign() //requestAppUpdate(AppUpdateType.FLEXIBLE) 일단 안쓰기로...
                 VersionManager.Required.MAJOR -> updateDialog(info)
@@ -92,12 +94,21 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
+
     fun updateDialog(info:VersionInfo?) {
         if (info == null) {
             checkSign()
         } else {
             val dialogTitle = info.updateTitle ?: "보다 나은 풀리수학 이용을 위해 지금 업데이트 해주세요 :)"
-            val dialogContents = info.updateContent ?: "서비스 안정화"
+            var dialogContents = info.updateContent ?: "서비스 안정화"
+
+            Preferences.forceUpdateDialogCount.set(Preferences.forceUpdateDialogCount.get() + 1)
+            val updateCount = Preferences.forceUpdateDialogCount.get()
+
+            if (updateCount > 2) {
+                dialogContents += "\n\n 문제가 있을 경우 앱 설정에서 '구글 플레이스토어' 캐시를 삭제하거나 \n카카오톡 @풀리는수학으로 문의주세요."
+            }
+
             val dialog = DialogUtils.makeDialog(this, dialogTitle, dialogContents, "종료", "확인")
             dialog.leftBtn.setOnClickListener { finishAndRemoveTask() }
             dialog.setCancelable(false)
@@ -119,12 +130,8 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             val isUpdateAvailable = appUpdateInfo.updateAvailability()
             Log.d("테스트", "updateAvailability=${isUpdateAvailable}")
             Log.d("테스트", "installStatus=${appUpdateInfo.installStatus()}")
-            if(isUpdateAvailable == UpdateAvailability.UPDATE_AVAILABLE ||
-                isUpdateAvailable == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                appUpdateForResult(appUpdateInfo, updateType)
-            } else {
-                requestAppStore()
-            }
+
+            requestAppStore()
         }?.addOnFailureListener { ex ->
             requestAppStore()
             Log.e("테스트", "appUpdateInfo error=${ex.localizedMessage}")
@@ -138,6 +145,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${packageName}")))
         } catch (e: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${packageName}")))
+            Log.e("테스트", "requestAppStore error=${e.localizedMessage}")
         }
     }
 
@@ -165,7 +173,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     }
 
     fun checkSign() {
-
+        Preferences.forceUpdateDialogCount.set(0)
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
 
         if(MyApplication.user?.token?.isNotEmpty() == true) {
@@ -214,7 +222,8 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     override fun onResume() {
         super.onResume()
-        continueUpdateProcess()
+        start()
+//        continueUpdateProcess()
     }
 
     fun putFcmToken(user: User?) {
@@ -242,21 +251,11 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 response.data?.apply {
-                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing)
+                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing, schoolID = user?.schoolID)
                 }
             },{
                 /* do nothing */
             })
-    }
-
-    fun continueUpdateProcess() {
-        val task = appUpdateManager?.appUpdateInfo
-        task?.addOnSuccessListener { appUpdateInfo ->
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    || appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                appUpdateForResult(appUpdateInfo, AppUpdateType.IMMEDIATE)
-            } else checkSign()
-        }?.addOnFailureListener { checkSign() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

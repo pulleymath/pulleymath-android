@@ -20,7 +20,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
-    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository() }
+    val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
 
     var isSubmitBtnActive = MutableLiveData(false)
 
@@ -34,15 +34,16 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     val secInDimDialog by lazy { MutableLiveData<String>("00") }
 
     var isReview = MutableLiveData(false)
+    var showSolutionView = MutableLiveData(false)
     var isEnableSolutionSwitch = MutableLiveData(false)
-    var showCommentaryView = MutableLiveData(false)
 
     var answeredSet: ObservableHashSet<AffiliatedTestProblem> = ObservableHashSet()
 
     var selectedWorkbook: AffiliatedTestWorkbook? = null
     var studentWorkbook: AffiliatedStudentWorkbook? = null
     val problemList by lazy { MutableLiveData<List<AffiliatedTestProblem>>() }
-    val currentProblem by lazy { MutableLiveData<AffiliatedTestProblem>() }
+//    val currentProblem by lazy { MutableLiveData<AffiliatedTestProblem>() }
+    val currentProblem by lazy { affiliatedTestRepository.currentProblem }
 
     val problemIndex by lazy { MutableLiveData<Int>(0) }
 
@@ -52,8 +53,11 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     var testPeriodMinutes: Int = 0
     var workbookSeq: Int = 0
 
+    var currentTimeString: String? = null
+
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        showCommentaryView.postValue(isChecked)
+        println("buttonView = [$buttonView], isChecked = [$isChecked]")
+        showSolutionView.postValue(isChecked)
     }
 
     @SuppressLint("CheckResult")
@@ -64,6 +68,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "getTestResult list=>${res.data}")
+                currentTimeString = res.current_time
                 res.data?.let { resData ->
                     studentWorkbook = resData.student_workbook
                     val answerList = resData.answer_list
@@ -234,7 +239,6 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
 
     fun get5MinBeforeFinishedTimeEnds(): String? {
         val cal = Calendar.getInstance()
-
         return when (workbookSeq) {
             1 -> {
                 val finishedDate = sdf.parse(testFinishedAt)
