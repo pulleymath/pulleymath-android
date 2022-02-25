@@ -489,7 +489,7 @@ class LearningTabActivity : PermissionActivity(),
             supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[4])
         if(tabFragment[5].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_WRONG, tabFragment[5])
-        if (tabFragment[6].isAdded)
+        if (tabFragment.size > 6 && tabFragment[6].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[6])
 
         if (user?.userUniversityMajorCode != null) {
