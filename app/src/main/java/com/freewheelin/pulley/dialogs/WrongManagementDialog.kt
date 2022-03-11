@@ -6,17 +6,16 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.DialogWrongManagementBinding
+import com.freewheelin.pulley.activities.analysis.tabFragment.ChapterTreeList
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.model.ChapterAnalysis
 import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.showBalloon
 import com.freewheelin.pulley.utils.toPx
+import kotlinx.android.synthetic.main.dialog_wrong_management.*
 
 class WrongManagementDialog : Dialog {
 
@@ -65,7 +64,7 @@ class WrongManagementDialog : Dialog {
     var wrongCnt = 0
         set(value) {
             field = value
-            binding.wrongCntTv.text = "${type.text}문제 ${value}개로 학습지를 만듭니다."
+            this.wrongCntTv.text = "${type.text}문제 ${value}개로 학습지를 만듭니다."
         }
 
     var level: Level? = Level.normal
@@ -84,96 +83,86 @@ class WrongManagementDialog : Dialog {
     var autoDecrement = false
     var isClearInclude = false
 
-    val binding: DialogWrongManagementBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_wrong_management, null, false)
-    }
+
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        binding.apply {
-            setContentView(root)
+        setContentView(R.layout.dialog_wrong_management)
+        cntTv.text = cnt.toString()
+        plusBtn.setOnClickListener {
+            increment()
+        }
 
+        minusBtn.setOnClickListener {
+            decrement()
+        }
 
-            cntTv.text = cnt.toString()
-            plusBtn.setOnClickListener {
-                increment()
+        typeRg.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.originRadioBtn -> pieceProblemType = PieceProblemType.origin
+                R.id.customRadioBtn -> pieceProblemType = PieceProblemType.custom
             }
+        }
 
-            minusBtn.setOnClickListener {
-                decrement()
+        levelRg.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.easyRb -> level = Level.easier
+                R.id.originRb -> level = Level.normal
+                R.id.hardRb -> level = Level.harder
             }
+        }
 
-            typeRg.setOnCheckedChangeListener { _, id ->
-                when (id) {
-                    R.id.originRadioBtn -> pieceProblemType = PieceProblemType.origin
-                    R.id.customRadioBtn -> pieceProblemType = PieceProblemType.custom
-                }
+        clearRg.setOnCheckedChangeListener { _, id ->
+            when(id) {
+                R.id.includeRb -> isClearInclude = true
+                R.id.excludeRb -> isClearInclude = false
             }
+        }
 
-            levelRg.setOnCheckedChangeListener { _, id ->
-                when (id) {
-                    R.id.easyRb -> level = Level.easier
-                    R.id.originRb -> level = Level.normal
-                    R.id.hardRb -> level = Level.harder
-                }
-            }
+        plusBtn.setOnLongClickListener {
+            autoIncrement = true
+            repeatUpdateHandler.post(RptUpdater())
+            false
+        }
 
-            clearRg.setOnCheckedChangeListener { _, id ->
-                when (id) {
-                    R.id.includeRb -> isClearInclude = true
-                    R.id.excludeRb -> isClearInclude = false
-                }
+        plusBtn.setOnTouchListener { view, motionEvent ->
+            if ((motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) && autoIncrement) {
+                autoIncrement = false
             }
+            false
+        }
 
-            plusBtn.setOnLongClickListener {
-                autoIncrement = true
-                repeatUpdateHandler.post(RptUpdater())
-                false
-            }
+        minusBtn.setOnLongClickListener {
+            autoDecrement = true
+            repeatUpdateHandler.post(RptUpdater())
+            false
+        }
 
-            plusBtn.setOnTouchListener { view, motionEvent ->
-                if ((motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) && autoIncrement) {
-                    autoIncrement = false
-                }
-                false
+        minusBtn.setOnTouchListener{ _, motionEvent ->
+            if ((motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) && autoDecrement) {
+                autoDecrement = false
             }
-
-            minusBtn.setOnLongClickListener {
-                autoDecrement = true
-                repeatUpdateHandler.post(RptUpdater())
-                false
-            }
-
-            minusBtn.setOnTouchListener { _, motionEvent ->
-                if ((motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) && autoDecrement) {
-                    autoDecrement = false
-                }
-                false
-            }
-            levelQuestionIb.extensionTouchArea(8.toPx())
-            levelQuestionIb.setOnClickListener {
-                it.showBalloon("배점과 정답률을 고려하여 측정한\n문항의 수준 정보입니다.")
-            }
+            false
+        }
+        levelQuestionIb.extensionTouchArea(8.toPx())
+        levelQuestionIb.setOnClickListener {
+            it.showBalloon("배점과 정답률을 고려하여 측정한\n문항의 수준 정보입니다.")
         }
     }
 
     private fun disableSecondThirdSection() {
-        binding.apply {
-            firstHider.visibility = View.VISIBLE
-            secondHider.visibility = View.VISIBLE
-            clearHider.visibility = View.VISIBLE
-        }
+        firstHider.visibility = View.VISIBLE
+        secondHider.visibility = View.VISIBLE
+        clearHider.visibility = View.VISIBLE
     }
 
     private fun enableSecondThirdSection() {
-        binding.apply {
-            firstHider.visibility = View.GONE
-            secondHider.visibility = View.GONE
-            clearHider.visibility = View.GONE
-        }
+        firstHider.visibility = View.GONE
+        secondHider.visibility = View.GONE
+        clearHider.visibility = View.GONE
     }
 
     private fun hideClearSection() {
-        binding.clearSection.visibility = View.GONE
+        clearSection.visibility = View.GONE
     }
 
     inner class RptUpdater : Runnable {
@@ -198,44 +187,41 @@ class WrongManagementDialog : Dialog {
     fun increment() {
         if (cnt < 5)
             cnt += 1
-        binding.cntTv.text = cnt.toString()
+        cntTv.text = cnt.toString()
     }
 
     fun decrement() {
         if (cnt > 1)
             cnt -= 1
-        binding.cntTv.text = cnt.toString()
+        cntTv.text = cnt.toString()
     }
 
     fun configureUIByType() {
-        binding.apply {
-            customRadioBtn.text = "${type.text} 유사문제로 만들기"
-            originRadioBtn.text = "${type.text} 그대로 만들기"
+        customRadioBtn.text = "${type.text} 유사문제로 만들기"
+        originRadioBtn.text = "${type.text} 그대로 만들기"
 
-            cntGuideTv.text = "${type.text} 하나당"
-            makeBtn.text = "${type.text} 학습지 만들기"
+        cntGuideTv.text = "${type.text} 하나당"
+        makeBtn.text = "${type.text} 학습지 만들기"
 
-            if (type != Type.wrongPiece)
-                testTitleTv.text = ""
-        }
+        if(type != Type.wrongPiece)
+            testTitleTv.text = ""
     }
 
     fun configureUIByChapter(chapters: ObservableHashSet<ChapterAnalysis>) {
-        binding.apply {
-            val problemCount = chapters.sumBy { it.problemTotalNumber }
+        val problemCount = chapters.sumBy { it.problemTotalNumber }
 
-            if (chapters.size == 1)
-                testTitleTv.text = "${chapters.first().name}"
-            else
-                testTitleTv.text = "'${chapters.first().name}' 외 ${chapters.size - 1}건"
+        if(chapters.size == 1)
+            testTitleTv.text = "${chapters.first().name}"
+        else
+            testTitleTv.text = "'${chapters.first().name}' 외 ${chapters.size - 1}건"
 
-            wrongCntTv.text = "선택한 단원의 문제 ${problemCount}개로 학습지를 만듭니다."
+        wrongCntTv.text = "선택한 단원의 문제 ${problemCount}개로 학습지를 만듭니다."
 
-            customRadioBtn.text = "선택문제와 유사한 문제로 만들기"
-            originRadioBtn.text = "선택문제 그대로 만들기"
-            cntGuideTv.text = "선택문제 하나당"
-            makeBtn.text = "단원 학습지 만들기"
+        customRadioBtn.text = "선택문제와 유사한 문제로 만들기"
+        originRadioBtn.text = "선택문제 그대로 만들기"
+        cntGuideTv.text = "선택문제 하나당"
+        makeBtn.text = "단원 학습지 만들기"
 
-        }
+
     }
 }

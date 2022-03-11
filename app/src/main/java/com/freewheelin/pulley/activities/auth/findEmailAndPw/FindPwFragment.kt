@@ -12,19 +12,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.core.API.RequestModel.RequestCheckCode
 import com.freewheelin.pulley.core.API.RequestModel.RequestReset
 import com.freewheelin.pulley.core.API.RequestModel.RequestResetPassword
 import com.freewheelin.pulley.core.API_V2
-import com.freewheelin.pulley.databinding.FragmentFindPwBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.view_input_daebak.view.*
+import kotlinx.android.synthetic.main.fragment_find_pw.*
+import kotlinx.android.synthetic.main.fragment_find_pw.inputContainerCl
+import kotlinx.android.synthetic.main.fragment_find_pw.resultContainerCl
+import kotlinx.android.synthetic.main.fragment_find_pw.scrollContentsCl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,272 +62,194 @@ class FindPwFragment : Fragment() {
     }
 
     var from:From = From.MYPAGE
-    lateinit var binding: FragmentFindPwBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_pw, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_find_pw, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.apply {
-            from = From.get(arguments?.getString(KEY_FROM))
 
-            when(from) {
-                From.MYPAGE -> {
-                    // 상단 정렬로 번경
-                    scrollContentsCl.gravity = Gravity.CENTER_HORIZONTAL
-                    scrollContentsCl.setPaddingTop(24.toPx())
-                    // 완료 화면처리
-                    completeContainerCl.setPaddingTop(60.toPx())
-                    toLoginBtn.visibility = View.GONE // 로긴 버튼 가리기
-                }
+        from = From.get(arguments?.getString(KEY_FROM))
+
+        when(from) {
+            From.MYPAGE -> {
+                // 상단 정렬로 번경
+                scrollContentsCl.gravity = Gravity.CENTER_HORIZONTAL
+                scrollContentsCl.setPaddingTop(24.toPx())
+                // 완료 화면처리
+                completeContainerCl.setPaddingTop(60.toPx())
+                toLoginBtn.visibility = View.GONE // 로긴 버튼 가리기
             }
-
-            resultContainerCl.visibility = View.GONE
-            completeContainerCl.visibility = View.GONE
-            emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-
-            codeConfirmBtn.toDisableUI()
-            codeConfirmBtn.setOnClickListener { if(codeConfirmBtn.isEnableUI()) onCodeConfirmClicked() }
-            sendResetBtn.setOnClickListener { onSendResetClicked() }
-            toLoginBtn.setOnClickListener { onToLoginClicked() }
-
-            setValidButton()
-            setListeners()
         }
+
+        resultContainerCl.visibility = View.GONE
+        completeContainerCl.visibility = View.GONE
+        emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
+        codeConfirmBtn.toDisableUI()
+        codeConfirmBtn.setOnClickListener { if(codeConfirmBtn.isEnableUI()) onCodeConfirmClicked() }
+        sendResetBtn.setOnClickListener { onSendResetClicked() }
+        toLoginBtn.setOnClickListener { onToLoginClicked() }
+
+        setValidButton()
+        setListeners()
     }
 
     private fun setListeners() {
-        binding.apply {
-            emailDet.editText.doAfterTextChanged { editable -> setValidButton() }
-            sendBtn.setOnClickListener { if(sendBtn.isEnableUI()) onSendBtnClicked() }
-            selectRadio.setOnCheckedChangeListener { group, checkedId ->
-                when(checkedId) {
-                    R.id.radioEmail -> {
-                        emailDet.label = "이메일"
-                        emailDet.editText.hint = "name@yourdomain.com"
-                        emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                        emailDet.editText.filters = arrayOf( InputFilter.LengthFilter(350) )
-                    }
-                    R.id.radioPhone -> {
-                        emailDet.label = "휴대폰 번호"
-                        emailDet.editText.hint = "- 없이 입력해주세요"
-                        emailDet.editText.inputType = InputType.TYPE_CLASS_NUMBER
-                        emailDet.editText.filters = arrayOf( InputFilter.LengthFilter(11) )
-                    }
+        emailDet.editText.doAfterTextChanged { editable -> setValidButton() }
+        sendBtn.setOnClickListener { if(sendBtn.isEnableUI()) onSendBtnClicked() }
+        selectRadio.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId) {
+                R.id.radioEmail -> {
+                    emailDet.label = "이메일"
+                    emailDet.editText.hint = "name@yourdomain.com"
+                    emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                    emailDet.editText.filters = arrayOf( InputFilter.LengthFilter(350) )
                 }
-                emailDet.text = ""
-                backToRequestCodeLayout()
-                setValidButton()
+                R.id.radioPhone -> {
+                    emailDet.label = "휴대폰 번호"
+                    emailDet.editText.hint = "- 없이 입력해주세요"
+                    emailDet.editText.inputType = InputType.TYPE_CLASS_NUMBER
+                    emailDet.editText.filters = arrayOf( InputFilter.LengthFilter(11) )
+                }
             }
+            emailDet.text = ""
+            backToRequestCodeLayout()
+            setValidButton()
+        }
 
-            emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            codeDet.inputType = InputType.TYPE_CLASS_NUMBER
-            codeDet.doAfterTextChanged { text ->
-                if(text?.length?:0 == 4) codeConfirmBtn.toEnableUI() else codeConfirmBtn.toDisableUI()
-            }
+        emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        codeDet.inputType = InputType.TYPE_CLASS_NUMBER
+        codeDet.doAfterTextChanged { text ->
+            if(text?.length?:0 == 4) codeConfirmBtn.toEnableUI() else codeConfirmBtn.toDisableUI()
         }
     }
 
     private fun setValidButton() {
-        binding.apply {
-            val method = emailDet.text
 
-            if(method.isEmpty()) {
-                sendBtn.toDisableUI()
-                return
-            }
+        val method = emailDet.text
 
-            val valid = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> method.isValidEmail()
-                else -> method.isValidPhoneNum()
-            }
-
-            if(valid) sendBtn.toEnableUI() else sendBtn.toDisableUI()
+        if(method.isEmpty()) {
+            sendBtn.toDisableUI()
+            return
         }
+
+        val valid = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> method.isValidEmail()
+            else -> method.isValidPhoneNum()
+        }
+
+        if(valid) sendBtn.toEnableUI() else sendBtn.toDisableUI()
     }
 
     private fun onSendBtnClicked() {
-        binding.apply {
-            val target = emailDet.text
 
-            val errMsg = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> "이메일 주소를 입력해주세요."
-                else -> "휴대폰 번호를 입력해주세요."
-            }
+        val target = emailDet.text
 
-            val type = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> "EMAIL"
-                else -> "CELLPHONE"
-            }
-
-            if(target.isEmpty()) {
-                emailDet.showErrorMsg(errMsg)
-                return
-            }
-
-            when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> {
-                    if(!target.isValidEmail()){
-                        emailDet.showErrorMsg("이메일 주소를 확인해주세요.")
-                        return
-                    }
-                }
-                else -> {
-                    if(!target.isValidPhoneNum()){
-                        emailDet.showErrorMsg("휴대폰 번호를 확인해주세요.")
-                        return
-                    }
-                }
-            }
-
-            val request = RequestReset(type, target)
-
-            deinitTimer()
-
-            API_V2.requestReset(request).enqueue(object : Callback<ResponseBody<String>> {
-                override fun onFailure(call: Call<ResponseBody<String>>, t: Throwable) {
-                    responseFailed(context!!, t)
-                }
-
-                override fun onResponse(call: Call<ResponseBody<String>>, response: Response<ResponseBody<String>>) {
-                    val code = response.code()
-                    when(code) {
-                        200 -> requestSuccess()
-                        else -> requestFailed(response)
-                    }
-                }
-            })
+        val errMsg = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> "이메일 주소를 입력해주세요."
+            else -> "휴대폰 번호를 입력해주세요."
         }
+
+        val type = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> "EMAIL"
+            else -> "CELLPHONE"
+        }
+
+        if(target.isEmpty()) {
+            emailDet.showErrorMsg(errMsg)
+            return
+        }
+
+        when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> {
+                if(!target.isValidEmail()){
+                    emailDet.showErrorMsg("이메일 주소를 확인해주세요.")
+                    return
+                }
+            }
+            else -> {
+                if(!target.isValidPhoneNum()){
+                    emailDet.showErrorMsg("휴대폰 번호를 확인해주세요.")
+                    return
+                }
+            }
+        }
+
+        val request = RequestReset(type, target)
+
+        deinitTimer()
+
+        API_V2.requestReset(request).enqueue(object : Callback<ResponseBody<String>> {
+            override fun onFailure(call: Call<ResponseBody<String>>, t: Throwable) {
+                responseFailed(context!!, t)
+            }
+
+            override fun onResponse(call: Call<ResponseBody<String>>, response: Response<ResponseBody<String>>) {
+                val code = response.code()
+                when(code) {
+                    200 -> requestSuccess()
+                    else -> requestFailed(response)
+                }
+            }
+        })
     }
 
     private fun requestSuccess() {
-        binding.apply {
-            runTimer()
-            sendBtn.visibility = View.GONE
-            codeContainer.visibility = View.VISIBLE
-            timerTv.showIfNeed()
+        runTimer()
+        sendBtn.visibility = View.GONE
+        codeContainer.visibility = View.VISIBLE
+        timerTv.showIfNeed()
 
-            codeDet.setText("")
-            codeDet.requestFocus()
-            val toastMsg = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> "이메일 주소로 인증번호가 발송되었습니다. 메시지함을 확인해주세요."
-                else -> "휴대폰 번호로 인증번호가 발송되었습니다. 문자를 확인해주세요."
-            }
-
-            DaebakToast.show(requireContext(), toastMsg, overDialog = true)
+        codeDet.setText("")
+        codeDet.requestFocus()
+        val toastMsg = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> "이메일 주소로 인증번호가 발송되었습니다. 메시지함을 확인해주세요."
+            else -> "휴대폰 번호로 인증번호가 발송되었습니다. 문자를 확인해주세요."
         }
+
+        DaebakToast.show(requireContext(), toastMsg, overDialog = true)
     }
 
     private fun requestFailed(response: Response<ResponseBody<String>>) {
-        binding.apply {
-            val error = Gson().fromJson(response?.errorBody()?.string(), ResponseBody::class.java)
-            val message = error?.message
-            Log.d("비번찾기","message=$message")
+        val error = Gson().fromJson(response?.errorBody()?.string(), ResponseBody::class.java)
+        val message = error?.message
+        Log.d("비번찾기","message=$message")
 
-            val defaultMsg = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> getString(R.string.text_this_email_is_not_registered)
-                else -> "등록되지 않은 휴대폰 번호입니다."
-            }
+        val defaultMsg = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> getString(R.string.text_this_email_is_not_registered)
+            else -> "등록되지 않은 휴대폰 번호입니다."
+        }
 
-            when(error.error) {
-                LoginActivity.NOT_FOUND_DATA -> emailDet.showErrorMsg(defaultMsg)
-                else -> emailDet.showErrorMsg(message ?: defaultMsg)
-            }
+        when(error.error) {
+            LoginActivity.NOT_FOUND_DATA -> emailDet.showErrorMsg(defaultMsg)
+            else -> emailDet.showErrorMsg(message ?: defaultMsg)
         }
     }
 
     private fun backToRequestCodeLayout() {
-        binding.apply {
-            codeContainer.visibility = View.GONE
-            codeDetErrorContainer.visibility = View.GONE
-            timerTv.visibility = View.GONE
-            sendBtn.show(1000)
-            deinitTimer()
-        }
+        codeContainer.visibility = View.GONE
+        codeDetErrorContainer.visibility = View.GONE
+        timerTv.visibility = View.GONE
+        sendBtn.show(1000)
+        deinitTimer()
     }
 
     private fun onCodeConfirmClicked() {
-        binding.apply {
-            if(codeDet.text.length != 4) {
-                codeDetErrorContainer.visibility = View.VISIBLE
-                codeDetError.text = "인증번호를 정확하게 입력하세요."
-            } else {
-                codeDetErrorContainer.visibility = View.GONE
-                val request = RequestCheckCode(codeDet.text.toString(), emailDet.text)
-
-                API_V2.checkPhoneCode(request).enqueue(object: Callback<Template<String?>>{
-                    override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
-                        when(response.code()) {
-                            200 -> requestPhoneCodeSuccess()
-                            else -> requestPhoneCodeFailed(response)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
-                        DialogUtils.showServerErr(context!!)
-                    }
-                })
-            }
-        }
-    }
-
-    private fun requestPhoneCodeSuccess() {
-        binding.apply {
-            inputContainerCl.visibility = View.GONE
-            resultContainerCl.visibility = View.VISIBLE
-        }
-    }
-
-    private fun requestPhoneCodeFailed(response: Response<Template<String?>>) {
-        binding.apply {
+        if(codeDet.text.length != 4) {
             codeDetErrorContainer.visibility = View.VISIBLE
-            codeDetError.text = "${response.body()?.message?:"인증번호가 일치하지 않습니다."}"
-        }
-    }
+            codeDetError.text = "인증번호를 정확하게 입력하세요."
+        } else {
+            codeDetErrorContainer.visibility = View.GONE
+            val request = RequestCheckCode(codeDet.text.toString(), emailDet.text)
 
-    private fun onSendResetClicked() {
-        binding.apply {
-            if(password.text.isEmpty()){
-                password.isShownError = true
-                password.errorMsg = "비밀번호를 입력하세요."
-                return
-            } else if(!password.text.isValidPW()) {
-                password.isShownError = true
-                password.errorMsg = getString(R.string.text_please_input_6_between_15_eng_num_symbol)
-                return
-            } else if(password.text != passwordConfirm.text) {
-                password.isShownError = false
-                // 비밀번호 확인이 다릅니다.
-                passwordConfirm.isShownError = true
-                passwordConfirm.errorMsg = "비밀번호와 비밀번호 확인이 일치하지 않습니다."
-                return
-            }
-
-            password.isShownError = false
-            passwordConfirm.isShownError = false
-
-            val target = emailDet.text
-            val type = when(selectRadio.checkedRadioButtonId) {
-                R.id.radioEmail -> "EMAIL"
-                else -> "CELLPHONE"
-            }
-            val password = password.text
-            val code = codeDet.text.toString()
-            val request = RequestResetPassword(code, password, type, target)
-
-            API_V2.requestResetPassword(request).enqueue(object: Callback<Template<String?>>{
+            API_V2.checkPhoneCode(request).enqueue(object: Callback<Template<String?>>{
                 override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
                     when(response.code()) {
-                        200 -> {
-                            resultContainerCl.visibility = View.GONE
-                            completeContainerCl.visibility = View.VISIBLE
-                        }
-                        else -> {
-
-                        }
+                        200 -> requestPhoneCodeSuccess()
+                        else -> requestPhoneCodeFailed(response)
                     }
                 }
 
@@ -333,6 +258,65 @@ class FindPwFragment : Fragment() {
                 }
             })
         }
+    }
+
+    private fun requestPhoneCodeSuccess() {
+        inputContainerCl.visibility = View.GONE
+        resultContainerCl.visibility = View.VISIBLE
+    }
+
+    private fun requestPhoneCodeFailed(response: Response<Template<String?>>) {
+        codeDetErrorContainer.visibility = View.VISIBLE
+        codeDetError.text = "${response.body()?.message?:"인증번호가 일치하지 않습니다."}"
+    }
+
+    private fun onSendResetClicked() {
+
+        if(password.text.isEmpty()){
+            password.isShownError = true
+            password.errorMsg = "비밀번호를 입력하세요."
+            return
+        } else if(!password.text.isValidPW()) {
+            password.isShownError = true
+            password.errorMsg = getString(R.string.text_please_input_6_between_15_eng_num_symbol)
+            return
+        } else if(password.text != passwordConfirm.text) {
+            password.isShownError = false
+            // 비밀번호 확인이 다릅니다.
+            passwordConfirm.isShownError = true
+            passwordConfirm.errorMsg = "비밀번호와 비밀번호 확인이 일치하지 않습니다."
+            return
+        }
+
+        password.isShownError = false
+        passwordConfirm.isShownError = false
+
+        val target = emailDet.text
+        val type = when(selectRadio.checkedRadioButtonId) {
+            R.id.radioEmail -> "EMAIL"
+            else -> "CELLPHONE"
+        }
+        val password = password.text
+        val code = codeDet.text.toString()
+        val request = RequestResetPassword(code, password, type, target)
+
+        API_V2.requestResetPassword(request).enqueue(object: Callback<Template<String?>>{
+            override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                when(response.code()) {
+                    200 -> {
+                        resultContainerCl.visibility = View.GONE
+                        completeContainerCl.visibility = View.VISIBLE
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                DialogUtils.showServerErr(context!!)
+            }
+        })
     }
 
     private fun onToLoginClicked() {
@@ -358,7 +342,7 @@ class FindPwFragment : Fragment() {
         val min = (remainSec) / 60
         val sec = remainSec % 60
 
-        binding.timerTv.text = "${min}:${String.format("%02d", sec)}"
+        timerTv.text = "${min}:${String.format("%02d", sec)}"
     }
 
     fun tick() {
@@ -369,12 +353,12 @@ class FindPwFragment : Fragment() {
                     val min = (remainSec) / 60
                     val sec = remainSec % 60
 
-                    binding.timerTv.text = "${min}:${String.format("%02d", sec)}"
+                    timerTv.text = "${min}:${String.format("%02d", sec)}"
                 } else {
                     timer?.cancel()
                     timer = null
-                    binding.codeDetErrorContainer.visibility = View.VISIBLE
-                    binding.codeDetError.text = "시간이 만료되었습니다."
+                    codeDetErrorContainer.visibility = View.VISIBLE
+                    codeDetError.text = "시간이 만료되었습니다."
 
                     thread(start = true) {
                         Thread.sleep(1000)

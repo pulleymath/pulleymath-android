@@ -234,13 +234,14 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 }
                 // Get new FCM registration token
                 val token = task.result
-                if (token == null) return@OnCompleteListener
-                API_APP.putToken(token)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ _ ->
-                        Log.d(javaClass.simpleName, "토큰등록=$token")
-                    }, { })
+                if (token?.isNotEmpty() == true) {
+                    API_APP.putToken(token)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ _ ->
+                            Log.d(javaClass.simpleName, "토큰등록=$token")
+                        }, { })
+                }
             })
         }
     }

@@ -1,158 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="704dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_fafafa_round"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="704dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:id="@+id/titleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp64"
+        android:background="@drawable/bg_white_ffffff_round_top_only"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/titleContainer"
-            android:layout_width="704dp"
-            android:layout_height="@dimen/dp64"
-            android:background="@drawable/bg_white_ffffff_round_top_only"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp32"
-                android:textSize="@dimen/sp18"
-                android:text="공유화면 미리보기"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <ImageButton
-                android:id="@+id/xBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_x_grey_19dp"
-                android:layout_marginEnd="@dimen/dp24"
-                android:background="@null"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="704dp"
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp32"
-            android:paddingBottom="@dimen/dp48"
-            app:layout_constraintTop_toBottomOf="@+id/titleContainer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_marginStart="@dimen/dp32"
+            android:textSize="@dimen/sp18"
+            android:text="공유화면 미리보기"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-            <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView
-                android:id="@+id/shareContents"
-                android:layout_width="368dp"
-                android:layout_height="368dp"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-            </com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView>
-
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:id="@+id/percentageLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="백분위"
-                android:textSize="@dimen/sp16"
-                android:layout_marginStart="@dimen/dp32"
-                android:layout_marginTop="@dimen/dp48"
-                app:layout_constraintStart_toEndOf="@+id/shareContents"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <Switch
-                style="@style/Switch.Grey"
-                android:id="@+id/percentageSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:checked="true"
-                app:layout_constraintTop_toTopOf="@+id/percentageLabel"
-                app:layout_constraintStart_toEndOf="@+id/percentageLabel"
-                app:layout_constraintBottom_toBottomOf="@+id/percentageLabel"/>
-
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:id="@+id/todayLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="오늘 날짜"
-                android:textSize="@dimen/sp16"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="@dimen/dp32"
-                app:layout_constraintStart_toEndOf="@+id/shareContents"
-                app:layout_constraintTop_toBottomOf="@id/percentageLabel"/>
-
-            <Switch
-                style="@style/Switch.Grey"
-                android:id="@+id/todaySwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:checked="true"
-                app:layout_constraintTop_toTopOf="@+id/todayLabel"
-                app:layout_constraintStart_toEndOf="@+id/todayLabel"
-                app:layout_constraintBottom_toBottomOf="@+id/todayLabel"/>
-
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:id="@+id/memoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
-                android:text="메모"
-                android:textSize="@dimen/sp16"
-                android:layout_marginStart="@dimen/dp32"
-                android:focusableInTouchMode="true"
-                app:layout_constraintStart_toEndOf="@+id/shareContents"
-                app:layout_constraintTop_toBottomOf="@id/todayLabel"/>
-
-            <com.freewheelin.pulley.views.editText.PulleyTextField
-                android:id="@+id/memoTv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
-                android:height="@dimen/dp48"
-                android:layout_marginTop="8dp"
-                android:maxLength="30"
-                android:paddingStart="@dimen/dp16"
-                android:textColorHint="@color/grey_c0c0c0"
-                android:text="너란녀석..."
-                android:hint="30자 이내로 적어주세요."
-                app:layout_constraintStart_toStartOf="@+id/percentageLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/memoLabel"/>
-
-            <ImageButton
-                android:id="@+id/downloadBtn"
-                android:layout_width="@dimen/dp56"
-                android:layout_height="@dimen/dp56"
-                android:background="@drawable/bg_purple_ecebff_round"
-                android:src="@drawable/ic_download"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/memoLabel"/>
-
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
-                android:id="@+id/shareBtn"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp56"
-                android:text="공유하기"
-                android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@+id/downloadBtn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/shareContents"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/xBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_x_grey_19dp"
+            android:layout_marginEnd="@dimen/dp24"
+            android:background="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp32"
+        android:paddingBottom="@dimen/dp48"
+        app:layout_constraintTop_toBottomOf="@+id/titleContainer"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView
+            android:id="@+id/shareContents"
+            android:layout_width="368dp"
+            android:layout_height="368dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+        </com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView>
+
+        <TextView
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/percentageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="백분위"
+            android:textSize="@dimen/sp16"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp48"
+            app:layout_constraintStart_toEndOf="@+id/shareContents"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Switch
+            style="@style/Switch.Grey"
+            android:id="@+id/percentageSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:checked="true"
+            app:layout_constraintTop_toTopOf="@+id/percentageLabel"
+            app:layout_constraintStart_toEndOf="@+id/percentageLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/percentageLabel"/>
+
+        <TextView
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/todayLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘 날짜"
+            android:textSize="@dimen/sp16"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="@dimen/dp32"
+            app:layout_constraintStart_toEndOf="@+id/shareContents"
+            app:layout_constraintTop_toBottomOf="@id/percentageLabel"/>
+
+        <Switch
+            style="@style/Switch.Grey"
+            android:id="@+id/todaySwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:checked="true"
+            app:layout_constraintTop_toTopOf="@+id/todayLabel"
+            app:layout_constraintStart_toEndOf="@+id/todayLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/todayLabel"/>
+
+        <TextView
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/memoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="메모"
+            android:textSize="@dimen/sp16"
+            android:layout_marginStart="@dimen/dp32"
+            android:focusableInTouchMode="true"
+            app:layout_constraintStart_toEndOf="@+id/shareContents"
+            app:layout_constraintTop_toBottomOf="@id/todayLabel"/>
+
+        <com.freewheelin.pulley.views.editText.PulleyTextField
+            android:id="@+id/memoTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+            android:height="@dimen/dp48"
+            android:layout_marginTop="8dp"
+            android:maxLength="30"
+            android:paddingStart="@dimen/dp16"
+            android:textColorHint="@color/grey_c0c0c0"
+            android:text="너란녀석..."
+            android:hint="30자 이내로 적어주세요."
+            app:layout_constraintStart_toStartOf="@+id/percentageLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memoLabel"/>
+
+        <ImageButton
+            android:id="@+id/downloadBtn"
+            android:layout_width="@dimen/dp56"
+            android:layout_height="@dimen/dp56"
+            android:background="@drawable/bg_purple_ecebff_round"
+            android:src="@drawable/ic_download"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/memoLabel"/>
+
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
+            android:id="@+id/shareBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:text="공유하기"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/downloadBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/shareContents"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

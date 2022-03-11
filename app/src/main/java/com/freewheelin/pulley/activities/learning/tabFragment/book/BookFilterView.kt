@@ -8,23 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Switch
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.R
 import com.freewheelin.pulley.R.*
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.Type
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType.*
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterButtonHolder
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder2
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.databinding.ItemFilterSwitchBinding
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
+import kotlinx.android.synthetic.main.item_filter_switch.view.*
 
 
 enum class FilterType {
@@ -214,7 +212,7 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
         }
 
         override fun onBindViewHolder(holder: ViewHolder, indexPath: IndexPath) {
-            (holder as? HeaderHolder2)?.apply {
+            (holder as? HeaderHolder)?.apply {
                 if(indexPath.section == 0) {
                     titleTv.height = 0
                 } else
@@ -247,7 +245,7 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
                     listener?.onFilterTypeChanged(this@BookFilterView, selectedFilterTypes)
                 }
             }
-            (holder as? FilterSwitchHolder2)?.apply {
+            (holder as? FilterSwitchHolder)?.apply {
                 val row = indexPath.row
 
                 if(row == 0)
@@ -255,14 +253,14 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
                 else
                     holder.text = "워크북 포함"
 
-                itemBinding.filterSwitch.setOnCheckedChangeListener(null)
+                switch.setOnCheckedChangeListener(null)
 
                 if(row == 0)
-                    itemBinding.filterSwitch.isChecked = selectedFilterTypes.contains(핀_포함)
+                    switch.isChecked = selectedFilterTypes.contains(핀_포함)
                 else
-                    itemBinding.filterSwitch.isChecked = selectedFilterTypes.contains(워크북_포함)
+                    switch.isChecked = selectedFilterTypes.contains(워크북_포함)
 
-                itemBinding.filterSwitch.setOnCheckedChangeListener { button, isChecked ->
+                switch.setOnCheckedChangeListener { button, isChecked ->
                     val willAddFilter = if(isChecked) {
                         if(row == 0) 핀_포함
                         else 워크북_포함
@@ -285,13 +283,13 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             if (viewType == 0) {
-                return HeaderHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
+                val view = LayoutInflater.from(context).inflate(layout.item_note_filter_header, parent, false)
+                return HeaderHolder(view)
             } else if(viewType == 2) {
                 return FilterButtonHolder(Button(parent.context))
             } else {
-//                val view = LayoutInflater.from(context).inflate(layout.item_filter_switch, parent, false)
-//                return FilterSwitchHolder(view)
-                return FilterSwitchHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_filter_switch, parent, false))
+                val view = LayoutInflater.from(context).inflate(layout.item_filter_switch, parent, false)
+                return FilterSwitchHolder(view)
             }
 
         }
@@ -350,19 +348,11 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
     }
 }
 
-class FilterSwitchHolder2(val itemBinding: ItemFilterSwitchBinding): RecyclerView.ViewHolder(itemBinding.root) {
-//    var switch = itemBinding.filterSwitch
+class FilterSwitchHolder(val view: View): RecyclerView.ViewHolder(view) {
+    var switch = view.filterSwitch
     var text: String = "필터"
-        set(value) {
-            field = value
-            itemBinding.textView.text = field
-        }
+    set(value) {
+        field = value
+        view.textView.text = field
+    }
 }
-//class FilterSwitchHolder(val view: View): RecyclerView.ViewHolder(view) {
-//    var switch = view.filterSwitch
-//    var text: String = "필터"
-//    set(value) {
-//        field = value
-//        view.textView.text = field
-//    }
-//}

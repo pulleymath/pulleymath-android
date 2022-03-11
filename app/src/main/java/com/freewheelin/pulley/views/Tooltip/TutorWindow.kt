@@ -12,9 +12,9 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.views.FocusedDimView
-import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
-import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
-import com.freewheelin.pulley.utils.toPx
+import com.ht.balloonwindow.BalloonWindow
+import com.ht.balloonwindow.BalloonWindowListener
+import com.ht.balloonwindow.toPx
 import kotlinx.android.synthetic.main.tooltip_img_horizontal.view.*
 import kotlinx.android.synthetic.main.tooltip_vertical.view.*
 import kotlinx.android.synthetic.main.tooltip_vertical.view.contentsTv

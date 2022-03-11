@@ -9,9 +9,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,9 +27,6 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.FragmentMyMockBinding
-import com.freewheelin.pulley.databinding.ItemMyMockHeaderBinding
-import com.freewheelin.pulley.databinding.ItemMyMockListBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.lib.ObservableHashSet
@@ -41,6 +38,11 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
 import com.github.mikephil.charting.data.Entry
+import kotlinx.android.synthetic.main.dialog_wrong_management.*
+import kotlinx.android.synthetic.main.fragment_my_mock.*
+import kotlinx.android.synthetic.main.fragment_new_mock.*
+import kotlinx.android.synthetic.main.item_my_mock_header.view.*
+import kotlinx.android.synthetic.main.item_my_mock_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,14 +65,13 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     var selectedScoreEntries = ArrayList<Entry>()
     var selectedPercentageEntries = ArrayList<Entry>()
     var listener: MockTabListener? = null
-
-    lateinit var binding: FragmentMyMockBinding
-    lateinit var headerViewBinding: ItemMyMockHeaderBinding
     lateinit var receiver: BroadcastReceiver
     lateinit var clearReceiver: BroadcastReceiver
 
     var order: SortableTextView.Order = SortableTextView.Order.descend
     var selectedSort: SortType? = null
+
+    lateinit var headerView:View
 
     companion object {
         @JvmStatic
@@ -94,7 +95,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                     it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
                     this@MyMockFragment.exams = it
                     this@MyMockFragment.sortedExams = sortExamList()
-                    binding.myExamRv.adapter?.notifyDataSetChanged()
+                    myExamRv.adapter?.notifyDataSetChanged()
                     configureUI()
                 }
             }
@@ -118,8 +119,8 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_mock, container, false)
-        return binding.root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_my_mock, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,21 +130,19 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     }
 
     fun setInitOrder() {
-        headerViewBinding.dateSl.isSelected = true
+        headerView.dateSl.isSelected = true
     }
 
     override fun onItemChanged(set: ObservableHashSet<MockExam>) {
-        binding.apply {
-            if (set.isEmpty()) {
-                wrongManageView.inactive()
-                wrongManageView.hide(true)
-            } else {
-                if (set.size == 1)
-                    wrongManageView.active("'${set.first().title}'이 선택되었습니다.")
-                else
-                    wrongManageView.active("'${set.first().title}' 외 ${set.size - 1}건이 선택되었습니다.")
-                wrongManageView.show(true)
-            }
+        if (set.isEmpty()) {
+            wrongManageView.inactive()
+            wrongManageView.hide(true)
+        } else {
+            if (set.size == 1)
+                wrongManageView.active("'${set.first().title}'이 선택되었습니다.")
+            else
+                wrongManageView.active("'${set.first().title}' 외 ${set.size - 1}건이 선택되었습니다.")
+            wrongManageView.show(true)
         }
     }
 
@@ -166,37 +165,32 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     }
 
     private fun initUI() {
-        binding.apply {
-            myExamRv.layoutManager = LinearLayoutManager(context)
-            myExamRv.adapter = MyExamAdapter()
+        myExamRv.layoutManager = LinearLayoutManager(context)
+        myExamRv.adapter = MyExamAdapter()
 
-            wrongManageView.hideReviewBtn()
-            wrongManageView.hide(false)
+        wrongManageView.hideReviewBtn()
+        wrongManageView.hide(false)
 
-            newExamBtn.setOnClickListener {
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
-                listener?.onNewExamBtnClicked()
-            }
-
-            MockExamManager.getMyMockExamList(requireContext(), user!!) {
-                it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
-                this@MyMockFragment.exams = it
-                this@MyMockFragment.sortedExams = exams
-                myExamRv.adapter?.notifyDataSetChanged()
-                configureUI()
-            }
-
-            setHeader()
+        newExamBtn.setOnClickListener {
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
+            listener?.onNewExamBtnClicked()
         }
+
+        MockExamManager.getMyMockExamList(requireContext(), user!!) {
+            it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
+            this@MyMockFragment.exams = it
+            this@MyMockFragment.sortedExams = exams
+            myExamRv.adapter?.notifyDataSetChanged()
+            configureUI()
+        }
+
+        setHeader()
     }
 
     private fun setHeader() {
-        val headerContainer = binding.headerContainer
-        headerViewBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.item_my_mock_header, null, false)
-
-
-        val holder = MyMockHeadHolder(headerViewBinding)
-        headerContainer.addView(headerViewBinding.root)
+        headerView = LayoutInflater.from(context).inflate(R.layout.item_my_mock_header, headerContainer, false)
+        val holder = MyMockHeadHolder(headerView)
+        headerContainer.addView(headerView)
 
         holder.sortableTextViews.forEach {
             it.listener = (object : SortableListener {
@@ -211,14 +205,12 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     }
 
     private fun configureUI() {
-        binding.apply {
-            if (getExamList().isEmpty()) {
-                emptyContainerCl.visibility = View.VISIBLE
-                myExamRv.visibility = View.GONE
-            } else {
-                emptyContainerCl.visibility = View.GONE
-                myExamRv.visibility = View.VISIBLE
-            }
+        if (getExamList().isEmpty()) {
+            emptyContainerCl.visibility = View.VISIBLE
+            myExamRv.visibility = View.GONE
+        } else {
+            emptyContainerCl.visibility = View.GONE
+            myExamRv.visibility = View.VISIBLE
         }
     }
 
@@ -247,26 +239,24 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
 
     fun onOrderChanged(holder: MyMockHeadHolder, view: SortableTextView, order: SortableTextView.Order) = holder.apply {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기-정렬", view.label)
-        holder.headerBinding.apply {
-            when (view) {
-                typeSl -> selectedSort = SortType.category
-                gradeSl -> selectedSort = SortType.grade
-                examTitleSl -> selectedSort = SortType.title
-                percentSl -> selectedSort = SortType.correctPercent
-                scoreSl -> selectedSort = SortType.score
-                dateSl -> selectedSort = SortType.solvedDate
-                ratingSl -> selectedSort = SortType.rating
-                percentageSl -> selectedSort = SortType.percentage
-                else -> {
-                    LogUtils.assert(false, "Unexpected view type")
-                }
+        when (view) {
+            typeSl -> selectedSort = SortType.category
+            gradeSl -> selectedSort = SortType.grade
+            examTitleSl -> selectedSort = SortType.title
+            percentSl -> selectedSort = SortType.correctPercent
+            scoreSl -> selectedSort = SortType.score
+            dateSl -> selectedSort = SortType.solvedDate
+            ratingSl -> selectedSort = SortType.rating
+            percentageSl -> selectedSort = SortType.percentage
+            else -> {
+                LogUtils.assert(false, "Unexpected view type")
             }
         }
 
         this@MyMockFragment.order = order
         sortedExams = sortExamList()
 
-        binding.myExamRv.adapter?.notifyDataSetChanged()
+        myExamRv.adapter?.notifyDataSetChanged()
     }
 
     private fun sortExamList(): List<MockExam>? {
@@ -329,19 +319,17 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     inner class MyExamAdapter : RecyclerView.Adapter<MyMockHolder>() {
 
         override fun onBindViewHolder(holder: MyMockHolder, position: Int) {
-            holder.binding.apply {
-                val exam = sortedExams!![position]
+            val exam = sortedExams!![position]
 
-                if (exam == sortedExams!!.last())
-                    holder.setLastHolderUI()
-                else
-                    holder.setMiddleHolderUI()
+            if (exam == sortedExams!!.last())
+                holder.setLastHolderUI()
+            else
+                holder.setMiddleHolderUI()
 
-                holder.set(exam)
-                remainBtn.setOnClickListener { onSolveBtnClicked(exam) }
-                reportBtn.setOnClickListener { onReportBtnClicked(exam) }
-                reviewBtn.setOnClickListener { onReviewBtnClicked(exam) }
-            }
+            holder.set(exam)
+            holder.remainBtn.setOnClickListener { onSolveBtnClicked(exam) }
+            holder.reportBtn.setOnClickListener { onReportBtnClicked(exam) }
+            holder.reviewBtn.setOnClickListener { onReviewBtnClicked(exam) }
         }
 
         override fun getItemCount(): Int {
@@ -349,7 +337,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyMockHolder {
-            return MyMockHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_my_mock_list, parent, false))
+            return MyMockHolder(LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, parent, false))
         }
     }
 
@@ -379,115 +367,133 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
 }
 
 
-class MyMockHeadHolder(val headerBinding: ItemMyMockHeaderBinding) {
+
+class MyMockHeadHolder(val view: View) {
+    val typeSl = view.typeSl
+    val gradeSl = view.gradeSl
+    val examTitleSl = view.examTitleSl
+    val percentSl = view.percentSl
+    val scoreSl = view.scoreSl
+    val dateSl = view.dateSl
+    val ratingSl = view.ratingSl
+    val percentageSl = view.percentageSl
+
     val sortableTextViews: List<SortableTextView>
-        get() {
-            headerBinding.apply {
-                return listOf(
-                    typeSl, gradeSl, examTitleSl, percentSl, scoreSl, dateSl, ratingSl, percentageSl
-                )
-            }
-        }
+        get() = listOf(
+                view.typeSl, view.gradeSl, view.examTitleSl, view.percentSl, view.scoreSl, view.dateSl, view.ratingSl, view.percentageSl
+        )
 }
 
-class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(binding.root) {
+class MyMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
+
+    var typeTv = view.findViewById<TextView>(R.id.typeTv)
+    var gradeTv = view.findViewById<TextView>(R.id.gradeTv)
+    var titleTv = view.findViewById<TextView>(R.id.titleTv)
+    var scoreTv = view.findViewById<TextView>(R.id.scoreTv)
+    var percentageTv = view.findViewById<TextView>(R.id.percentageTv)
+    var ratingTv = view.findViewById<TextView>(R.id.ratingTv)
+    var remainBtn = view.remainBtn
+    var remainCountText = view.remainCountText
+    var dateTv = view.findViewById<TextView>(R.id.dateTv)
+    var ratingIv = view.findViewById<ImageView>(R.id.ratingIv)
+    val reportBtn = view.reportBtn
+    val horizontalBorder = view.horizontalBorder
+    val reviewBtn = view.reviewBtn
+    val containerCl = view.containerCl
+    val outContainerCl = view.outContainerCl
+
+    val correctPercentTv = view.correctPercentTv
+    val correctCountTv = view.correctCountTv
+
+    val optionContainer = view.optionContainer
+    val optionContainer8inch = view.optionContainer8inch
 
     fun set(exam: MockExam) {
-        val view = binding.root
-        binding.apply {
-            dateTv.text = DateTimeUtils.getBeforeDateStr(date = exam.createDate)
 
-            typeTv.text = exam.type.getStr()
-            gradeTv.text = "고${exam.grade}"
+        dateTv.text = DateTimeUtils.getBeforeDateStr(date = exam.createDate)
 
-            titleTv.text = exam.title //+ if(exam.count > 0) " (${exam.count})" else ""
+        typeTv.text = exam.type.getStr()
+        gradeTv.text = "고${exam.grade}"
 
-            exam.personalData?.let {
-                // 제거 후
-                optionContainer.removeAllViews()
-                optionContainer8inch.removeAllViews()
+        titleTv.text = exam.title //+ if(exam.count > 0) " (${exam.count})" else ""
 
-                // 코드가 지저분 하긴 한데.. 생각이 안난다...
-                // 8인치 미만에서 레이블 컨테이너 없애기 - 세로 정렬 어긋나는거 때문에
-                if (!view.context.is10InchUI) {
-                    if (it.optionalSubjectList.isEmpty()) {
-                        optionContainer8inch.visibility = View.GONE
-                    } else {
-                        optionContainer8inch.visibility = View.VISIBLE
-                    }
+        exam.personalData?.let {
+            // 제거 후
+            optionContainer.removeAllViews()
+            optionContainer8inch.removeAllViews()
+
+            // 코드가 지저분 하긴 한데.. 생각이 안난다...
+            // 8인치 미만에서 레이블 컨테이너 없애기 - 세로 정렬 어긋나는거 때문에
+            if (!view.context.is10InchUI) {
+                if(it.optionalSubjectList.isEmpty()) {
+                    optionContainer8inch.visibility = View.GONE
+                } else {
+                    optionContainer8inch.visibility = View.VISIBLE
                 }
-                // add
-                for (subject in it.optionalSubjectList) {
-                    if (view.context.is10InchUI) {
-                        val label = LayoutInflater.from(view.context).inflate(
-                            R.layout.item_mockexam_mymock_option_label,
-                            optionContainer,
-                            false
-                        ) as TextView
-                        label.text = subject.title
-                        optionContainer.addView(label)
-                    } else {
-                        val label = LayoutInflater.from(view.context).inflate(
-                            R.layout.item_mockexam_mymock_option_label,
-                            optionContainer8inch,
-                            false
-                        ) as TextView
-                        label.text = subject.title
-                        optionContainer8inch.addView(label)
-                    }
+            }
+            // add
+            for(subject in it.optionalSubjectList) {
+                if (view.context.is10InchUI) {
+                    val label = LayoutInflater.from(view.context).inflate(R.layout.item_mockexam_mymock_option_label,optionContainer, false) as TextView
+                    label.text = subject.title
+                    optionContainer.addView(label)
+                } else {
+                    val label = LayoutInflater.from(view.context).inflate(R.layout.item_mockexam_mymock_option_label, optionContainer8inch, false) as TextView
+                    label.text = subject.title
+                    optionContainer8inch.addView(label)
                 }
+            }
 
-                if (exam.isPersonalCompleted()) {
-                    setString(percentageTv, "${it.percent}%")
-                    setString(ratingTv, "${it.rating}")
-                    setRating(it.rating)
-                    setString(scoreTv, "${it.score}점")
-                    setString(correctPercentTv, "${it.correctRate}%")
+            if (exam.isPersonalCompleted()) {
+                setString(percentageTv, "${it.percent}%")
+                setString(ratingTv, "${it.rating}")
+                setRating(it.rating)
+                setString(scoreTv, "${it.score}점")
+                setString(correctPercentTv, "${it.correctRate}%")
 
-                    correctCountTv.text = "${it.correctCount}/${it.totalNumber}"
+                correctCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
-                    reportBtn.visibility = View.VISIBLE
-                    remainBtn.visibility = View.INVISIBLE
-                    reviewBtn.visibility = View.VISIBLE
+                reportBtn.visibility = View.VISIBLE
+                remainBtn.visibility = View.INVISIBLE
+                reviewBtn.visibility = View.VISIBLE
+
+                correctPercentTv.visibility = View.VISIBLE
+                correctCountTv.visibility = View.VISIBLE
+
+            } else {
+                setNone(scoreTv)
+                setNone(percentageTv)
+                setNone(ratingTv)
+                setNone(correctPercentTv)
+
+                it.percent = -1
+                it.rating = 99
+                it.score = -1
+                it.correctRate = -1
+
+                if(view.context.isTablet) {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    reportBtn.visibility = View.INVISIBLE
+                    remainBtn.visibility = View.VISIBLE
+                    reviewBtn.visibility = View.INVISIBLE
+
+                    remainCountText.text = "${it.totalNumber - it.markedNumber}문항"
 
                     correctPercentTv.visibility = View.VISIBLE
-                    correctCountTv.visibility = View.VISIBLE
-
-                } else {
-                    setNone(scoreTv)
-                    setNone(percentageTv)
-                    setNone(ratingTv)
-                    setNone(correctPercentTv)
-
-                    it.percent = -1
-                    it.rating = 99
-                    it.score = -1
-                    it.correctRate = -1
-
-                    if (view.context.isTablet) {
-                        ratingIv.visibility = View.INVISIBLE
-                        ratingTv.visibility = View.VISIBLE
-                        reportBtn.visibility = View.INVISIBLE
-                        remainBtn.visibility = View.VISIBLE
-                        reviewBtn.visibility = View.INVISIBLE
-
-                        remainCountText.text = "${it.totalNumber - it.markedNumber}문항"
-
-                        correctPercentTv.visibility = View.VISIBLE
-                        correctCountTv.visibility = View.GONE
-                    }
+                    correctCountTv.visibility = View.GONE
                 }
+            }
 
-                // 백분위가 null 이면 점수와 백분위 "-"
-                if (it.percent == null || it.percent ?: 0 < 0) {
-                    setNone(percentageTv)
-                    setNone(scoreTv)
-                    setNone(ratingTv)
+            // 백분위가 null 이면 점수와 백분위 "-"
+            if(it.percent == null || it.percent?:0 < 0) {
+                setNone(percentageTv)
+                setNone(scoreTv)
+                setNone(ratingTv)
 
-                    it.percent = -1
-                    it.rating = 99
-                    it.score = -1
-                }
+                it.percent = -1
+                it.rating = 99
+                it.score = -1
             }
         }
     }
@@ -503,54 +509,43 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
     }
 
     fun setLastHolderUI() {
-        val view = binding.root
-        binding.apply {
-            horizontalBorder.visibility = View.GONE
-            outContainerCl.layoutParams.apply {
-                height = 112.toPx()
-            }
-            outContainerCl.background =
-                ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_bottom)
+        horizontalBorder.visibility = View.GONE
+        outContainerCl.layoutParams.apply {
+            height = 112.toPx()
         }
+        outContainerCl.background = ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_bottom)
     }
 
     fun setMiddleHolderUI() {
-        val view = binding.root
-        binding.apply {
-            horizontalBorder.visibility = View.VISIBLE
-            outContainerCl.layoutParams.apply {
-                height = view.context.resources.getDimension(R.dimen.dp64).toInt()
-            }
-            outContainerCl.background =
-                ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_middle)
+        horizontalBorder.visibility = View.VISIBLE
+        outContainerCl.layoutParams.apply {
+            height = view.context.resources.getDimension(R.dimen.dp64).toInt()
         }
+        outContainerCl.background = ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_middle)
     }
 
     private fun setRating(rating: Int?) {
-        val view = binding.root
-        binding.apply {
-            if (view.context.isTablet) {
-                when (rating) {
-                    1 -> {
-                        ratingTv.visibility = View.INVISIBLE
-                        ratingIv.visibility = View.VISIBLE
-                        ratingIv.setImageResource(R.drawable.ic_rating_1)
-                    }
-                    2 -> {
-                        ratingTv.visibility = View.INVISIBLE
-                        ratingIv.visibility = View.VISIBLE
-                        ratingIv.setImageResource(R.drawable.ic_rating_2)
-                    }
-                    in 3..9 -> {
-                        ratingIv.visibility = View.INVISIBLE
-                        ratingTv.visibility = View.VISIBLE
-                        ratingTv.text = "$rating"
-                    }
-                    else -> {
-                        ratingIv.visibility = View.INVISIBLE
-                        ratingTv.visibility = View.VISIBLE
-                        ratingTv.text = "-"
-                    }
+        if(view.context.isTablet) {
+            when (rating) {
+                1 -> {
+                    ratingTv.visibility = View.INVISIBLE
+                    ratingIv.visibility = View.VISIBLE
+                    ratingIv.setImageResource(R.drawable.ic_rating_1)
+                }
+                2 -> {
+                    ratingTv.visibility = View.INVISIBLE
+                    ratingIv.visibility = View.VISIBLE
+                    ratingIv.setImageResource(R.drawable.ic_rating_2)
+                }
+                in 3..9 -> {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    ratingTv.text = "$rating"
+                }
+                else -> {
+                    ratingIv.visibility = View.INVISIBLE
+                    ratingTv.visibility = View.VISIBLE
+                    ratingTv.text = "-"
                 }
             }
         }

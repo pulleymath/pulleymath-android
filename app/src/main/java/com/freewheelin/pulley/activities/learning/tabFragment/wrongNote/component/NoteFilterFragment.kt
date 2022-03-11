@@ -9,15 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.databinding.FragmentNoteFilterBinding
-import com.freewheelin.pulley.databinding.ItemNoteFilterCalendarBinding
-import com.freewheelin.pulley.databinding.ItemNoteFilterHeaderBinding
 import com.freewheelin.pulley.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.utils.DateTimeUtils
@@ -26,6 +23,9 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
+import kotlinx.android.synthetic.main.fragment_note_filter.*
+import kotlinx.android.synthetic.main.item_note_filter_header.view.*
+import kotlinx.android.synthetic.main.item_note_filter_calendar.view.*
 import org.joda.time.LocalDate
 import java.io.Serializable
 
@@ -42,7 +42,6 @@ class NoteFilterFragment : Fragment() {
     var from: LocalDate = LocalDate.now().minusDays(6)
     var to: LocalDate = LocalDate.now()
     var type = DateRangePickerDialog.Type.RECENT7
-    lateinit var binding: FragmentNoteFilterBinding
 
     val dialog: DateRangePickerDialog by lazy {
         val pickerDialog = DateRangePickerDialog(requireContext(), from, to, LocalDate(user!!.firstDate))
@@ -53,7 +52,7 @@ class NoteFilterFragment : Fragment() {
                 this@NoteFilterFragment.type = type
 
                 listener?.onDateSet(from, to, type)
-                binding.filterRv.adapter?.notifyDataSetChanged()
+                filterRv.adapter?.notifyDataSetChanged()
             }
         }
         pickerDialog
@@ -110,8 +109,7 @@ class NoteFilterFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_filter, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_note_filter, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,9 +121,9 @@ class NoteFilterFragment : Fragment() {
     private fun initUI() {
         filterAdapter = FilterAdapter()
         filterAdapter?.sectionType = SectionType.header
-        binding.filterRv.adapter = filterAdapter
-        binding.filterRv.addItemDecoration(SpaceItemDecoration())
-        binding.filterRv.layoutManager = GridLayoutManager(context, 6, GridLayoutManager.VERTICAL, false).also {
+        filterRv.adapter = filterAdapter
+        filterRv.addItemDecoration(SpaceItemDecoration())
+        filterRv.layoutManager = GridLayoutManager(context, 6, GridLayoutManager.VERTICAL, false).also {
             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     val indexPath = filterAdapter?.getIndexPath(position)
@@ -184,12 +182,12 @@ class NoteFilterFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, indexPath: IndexPath) {
-            (holder as? CalendarHolder2)?.apply {
+            (holder as? CalendarHolder)?.apply {
                 set(from, to, type)
                 monthContainerCl.setOnClickListener { dialog.show() }
             }
 
-            (holder as? HeaderHolder2)?.apply {
+            (holder as? HeaderHolder)?.apply {
                 titleTv.text = filters[indexPath.section - 1].first
             }
 
@@ -216,13 +214,16 @@ class NoteFilterFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return if (viewType == 0) {
-                HeaderHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
+            if (viewType == 0) {
+                val view = LayoutInflater.from(context).inflate(R.layout.item_note_filter_header, parent, false)
+                return HeaderHolder(view)
             } else if (viewType == 1) {
-                FilterButtonHolder(Button(parent.context))
+                return FilterButtonHolder(Button(parent.context))
             } else {
-                CalendarHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_calendar, parent, false))
+                val view = LayoutInflater.from(context).inflate(R.layout.item_note_filter_calendar, parent, false)
+                return CalendarHolder(view)
             }
+
         }
     }
 
@@ -236,6 +237,7 @@ class NoteFilterFragment : Fragment() {
 
         selectedFilterTypes.add(filter)
     }
+
 
     inner class SpaceItemDecoration : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -275,9 +277,9 @@ class NoteFilterFragment : Fragment() {
     }
 }
 
-class CalendarHolder2(val itemBinding: ItemNoteFilterCalendarBinding) : RecyclerView.ViewHolder(itemBinding.root) {
-    val monthContainerCl = itemBinding.monthContainerCl
-    val calendarRangeTv = itemBinding.calendarRangeTv
+class CalendarHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    val monthContainerCl = view.monthContainerCl
+    val calendarRangeTv = view.calendarRangeTv
 
     fun set(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
         when(type) {
@@ -286,37 +288,16 @@ class CalendarHolder2(val itemBinding: ItemNoteFilterCalendarBinding) : Recycler
             DateRangePickerDialog.Type.RECENT30 -> { calendarRangeTv.text = "최근 30일" }
             else -> {
                 calendarRangeTv.text = "${DateTimeUtils.yyyyMMddFormat.format(from.toDate())}" +
-                    " - " +
-                    "${DateTimeUtils.yyyyMMddFormat.format(to.toDate())}"
+                        " - " +
+                        "${DateTimeUtils.yyyyMMddFormat.format(to.toDate())}"
             }
         }
     }
 }
-//class CalendarHolder(val view: View) : RecyclerView.ViewHolder(view) {
-//    val monthContainerCl = view.monthContainerCl
-//    val calendarRangeTv = view.calendarRangeTv
-//
-//    fun set(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
-//        when(type) {
-//            DateRangePickerDialog.Type.RECENT7 -> { calendarRangeTv.text = "최근 7일" }
-//            DateRangePickerDialog.Type.RECENT14 -> { calendarRangeTv.text = "최근 14일" }
-//            DateRangePickerDialog.Type.RECENT30 -> { calendarRangeTv.text = "최근 30일" }
-//            else -> {
-//                calendarRangeTv.text = "${DateTimeUtils.yyyyMMddFormat.format(from.toDate())}" +
-//                        " - " +
-//                        "${DateTimeUtils.yyyyMMddFormat.format(to.toDate())}"
-//            }
-//        }
-//    }
-//}
 
-
-class HeaderHolder2(val headerBinding: ItemNoteFilterHeaderBinding) : RecyclerView.ViewHolder(headerBinding.root) {
-    var titleTv = headerBinding.titleTv
+class HeaderHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    val titleTv = view.titleTv
 }
-//class HeaderHolder(val view: View) : RecyclerView.ViewHolder(view) {
-//    val titleTv = view.titleTv
-//}
 
 class FilterButtonHolder(val filterBtn: Button) : RecyclerView.ViewHolder(filterBtn) {
 

@@ -1,427 +1,425 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:orientation="vertical"
+    <ImageView
+        android:id="@+id/bgIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/mainScroller"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/bgIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ScrollView
-            android:id="@+id/mainScroller"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dDayContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/dDayContainer"
+                <TextView
+                    android:id="@+id/targetTv"
+                    style="@style/TextRed_fe7b67.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="targetTv"
+                    android:textColor="@color/red_fe7b67"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintBottom_toTopOf="@+id/dDayTv"
+                    app:layout_constraintStart_toStartOf="@+id/dDayTv" />
+
+                <TextView
+                    android:id="@+id/dDayTv"
+                    style="@style/TextRed_fe7b67.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="64dp"
+                    android:text="dDayTv"
+                    android:textSize="@dimen/dp36"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/dDayErrowIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_right_w_7"
+                    app:layout_constraintBottom_toBottomOf="@+id/dDayTv"
+                    app:layout_constraintStart_toEndOf="@+id/dDayTv"
+                    app:layout_constraintTop_toTopOf="@+id/dDayTv"
+                    app:tint="@color/red_fe7b67" />
+
+                <TextView
+                    android:id="@+id/guideTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:lineSpacingExtra="8sp"
+                    android:text="guideTv"
+                    android:textColor="@color/black_4c4c4c"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/dDayTv"
+                    app:layout_constraintTop_toBottomOf="@+id/dDayTv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/goalContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/shadow_clear">
+
+                <TextView
+                    android:id="@+id/phraseTv"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="8sp"
+                    android:text="계획 없는 목표는\n한낱 꿈에 불과하다\n-생텍쥐페리"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/continuousDayTv"
+                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp48"
+                    android:layout_marginTop="24dp"
+                    android:text="연속달성 0일째 🔥"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/dailyProblemGuideTv"
+                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="8sp"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintStart_toStartOf="@+id/continuousDayTv"
+                    app:layout_constraintTop_toBottomOf="@+id/continuousDayTv" />
+
+                <TextView
+                    android:id="@+id/targetSettingBtn"
+                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="@dimen/dp48"
+                    android:background="@null"
+                    android:text="목표 수정하기"
+                    android:textSize="@dimen/dp14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/targetSettingBtnBorder"
+                    style="@style/Border_Grey_c0c0c0_Vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintEnd_toEndOf="@+id/targetSettingBtn"
+                    app:layout_constraintStart_toStartOf="@+id/targetSettingBtn"
+                    app:layout_constraintTop_toBottomOf="@+id/targetSettingBtn" />
+
+                <com.freewheelin.pulley.views.bars.HorizontalWithCircleBar
+                    android:id="@+id/progressBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp">
+                    android:layout_marginStart="@dimen/dp48"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="@dimen/dp48"
+                    android:layout_marginBottom="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dailyProblemGuideTv" />
 
-                    <TextView
-                        android:id="@+id/targetTv"
-                        style="@style/TextRed_fe7b67.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="targetTv"
-                        android:textColor="@color/red_fe7b67"
-                        android:textSize="@dimen/dp14"
-                        app:layout_constraintBottom_toTopOf="@+id/dDayTv"
-                        app:layout_constraintStart_toStartOf="@+id/dDayTv" />
 
-                    <TextView
-                        android:id="@+id/dDayTv"
-                        style="@style/TextRed_fe7b67.ExtraBold"
-                        android:layout_width="wrap_content"
+                <View
+                    android:id="@+id/progressStarter"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintEnd_toStartOf="@+id/progressBar" />
+
+                <View
+                    android:id="@+id/progressIndicator"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progressStarter"
+                    app:layout_constraintEnd_toStartOf="@+id/progressEnder"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@+id/progressStarter" />
+
+                <View
+                    android:id="@+id/progressEnder"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintStart_toEndOf="@+id/progressBar" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/labelContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintEnd_toEndOf="@+id/progressIndicator"
+                    app:layout_constraintStart_toStartOf="@+id/progressIndicator">
+
+                    <ImageView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="64dp"
-                        android:text="dDayTv"
-                        android:textSize="@dimen/dp36"
+                        android:src="@drawable/ic_goal_label"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/dDayErrowIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_arrow_right_w_7"
-                        app:layout_constraintBottom_toBottomOf="@+id/dDayTv"
-                        app:layout_constraintStart_toEndOf="@+id/dDayTv"
-                        app:layout_constraintTop_toTopOf="@+id/dDayTv"
-                        app:tint="@color/red_fe7b67" />
-
                     <TextView
-                        android:id="@+id/guideTv"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:id="@+id/countTv"
+                        style="@style/TextWhite_ffffff.ExtraBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:lineSpacingExtra="8sp"
-                        android:text="guideTv"
-                        android:textColor="@color/black_4c4c4c"
-                        android:textSize="@dimen/dp18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/dDayTv"
-                        app:layout_constraintTop_toBottomOf="@+id/dDayTv" />
-
+                        android:layout_marginTop="3dp"
+                        android:text="0"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/goalContainer"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/shadow_clear">
+
+                <ImageView
+                    android:id="@+id/profileIv"
+                    android:layout_width="@dimen/dp144"
+                    android:layout_height="@dimen/dp144"
+                    android:layout_marginTop="@dimen/dp64"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/nameTv"
+                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:textSize="@dimen/dp36"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileIv" />
+
+                <!--        <ImageView-->
+                <!--            android:id="@+id/nameArrowIv"-->
+                <!--            android:layout_width="wrap_content"-->
+                <!--            android:layout_height="0dp"-->
+                <!--            android:padding="8dp"-->
+                <!--            android:src="@drawable/ic_arrow_right_w_7"-->
+                <!--            app:layout_constraintStart_toEndOf="@+id/nameTv"-->
+                <!--            app:layout_constraintTop_toTopOf="@+id/nameTv"-->
+                <!--            app:layout_constraintBottom_toBottomOf="@+id/nameTv"/>-->
+
+                <TextView
+                    android:id="@+id/reportTv"
+                    style="@style/TextPurple_6d6dff.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text=""
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/purple_6D6DFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/reportTv"
+                    app:layout_constraintEnd_toEndOf="@+id/reportTv"
+                    app:layout_constraintStart_toStartOf="@+id/reportTv" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/tagFl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="@drawable/shadow_clear">
+                    android:layout_marginTop="@dimen/sp16"
+                    app:alignContent="flex_start"
+                    app:alignItems="flex_start"
+                    app:dividerDrawable="@drawable/hashtag_divider"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center"
+                    app:layout_constraintTop_toBottomOf="@+id/reportTv"
+                    app:showDivider="middle">
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/freeUserContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tagFl">
 
                     <TextView
-                        android:id="@+id/phraseTv"
-                        style="@style/TextGrey_c0c0c0"
+                        android:id="@+id/freeGuideTv"
+                        style="@style/TextGrey_c0c0c0.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:lineSpacingExtra="8sp"
-                        android:text="계획 없는 목표는\n한낱 꿈에 불과하다\n-생텍쥐페리"
+                        android:textColor="@color/grey_c0c0c0"
                         android:textSize="@dimen/dp16"
-                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        android:id="@+id/startBtn"
+                        android:layout_width="190dp"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/text_study_start_with_pulley"
+                        app:ButtonTextSize="@dimen/dp16"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/continuousDayTv"
-                        style="@style/TextGrey_c0c0c0.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginTop="24dp"
-                        android:text="@string/text_study_continuous"
-                        android:textSize="@dimen/dp14"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/dailyProblemGuideTv"
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:lineSpacingExtra="8sp"
-                        android:textSize="@dimen/dp18"
-                        app:layout_constraintStart_toStartOf="@+id/continuousDayTv"
-                        app:layout_constraintTop_toBottomOf="@+id/continuousDayTv" />
-
-                    <TextView
-                        android:id="@+id/targetSettingBtn"
-                        style="@style/TextGrey_c0c0c0.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="@dimen/dp48"
-                        android:background="@null"
-                        android:text="목표 수정하기"
-                        android:textSize="@dimen/dp14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/targetSettingBtnBorder"
-                        style="@style/Border_Grey_c0c0c0_Vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        app:layout_constraintEnd_toEndOf="@+id/targetSettingBtn"
-                        app:layout_constraintStart_toStartOf="@+id/targetSettingBtn"
-                        app:layout_constraintTop_toBottomOf="@+id/targetSettingBtn" />
-
-                    <com.freewheelin.pulley.views.bars.HorizontalWithCircleBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginTop="32dp"
-                        android:layout_marginEnd="@dimen/dp48"
-                        android:layout_marginBottom="24dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dailyProblemGuideTv" />
-
-
-                    <View
-                        android:id="@+id/progressStarter"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                        app:layout_constraintEnd_toStartOf="@+id/progressBar" />
-
-                    <View
-                        android:id="@+id/progressIndicator"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/progressStarter"
-                        app:layout_constraintEnd_toStartOf="@+id/progressEnder"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toEndOf="@+id/progressStarter" />
-
-                    <View
-                        android:id="@+id/progressEnder"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                        app:layout_constraintStart_toEndOf="@+id/progressBar" />
-
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/labelContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                        app:layout_constraintEnd_toEndOf="@+id/progressIndicator"
-                        app:layout_constraintStart_toStartOf="@+id/progressIndicator">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_goal_label"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/countTv"
-                            style="@style/TextWhite_ffffff.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:text="0"
-                            android:textSize="14sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/freeGuideTv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profileContainer"
-                    android:layout_width="match_parent"
+                    android:id="@+id/payUserContainer"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="@drawable/shadow_clear">
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/freeUserContainer">
+
 
                     <ImageView
-                        android:id="@+id/profileIv"
-                        android:layout_width="@dimen/dp144"
-                        android:layout_height="@dimen/dp144"
-                        android:layout_marginTop="@dimen/dp64"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/problemCntIv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_paper"
+                        app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
+                        app:layout_constraintEnd_toStartOf="@+id/problemCntLabel"
+                        app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/nameTv"
+                        android:id="@+id/problemCntLabel"
+                        style="@style/TextGrey_c0c0c0.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="푼 문제 수(오답학습 수)"
+                        android:textColor="@color/grey_c0c0c0"
+                        android:textSize="@dimen/dp14"
+                        app:layout_constraintBottom_toBottomOf="@+id/problemCntIv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/problemCntIv"
+                        app:layout_constraintTop_toTopOf="@+id/problemCntIv" />
+
+                    <TextView
+                        android:id="@+id/problemCntTv"
                         style="@style/TextBlack_4c4c4c.ExtraBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp32"
+                        android:textColor="@color/black_4c4c4c"
                         android:textSize="@dimen/dp36"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/profileIv" />
-
-                    <!--        <ImageView-->
-                    <!--            android:id="@+id/nameArrowIv"-->
-                    <!--            android:layout_width="wrap_content"-->
-                    <!--            android:layout_height="0dp"-->
-                    <!--            android:padding="8dp"-->
-                    <!--            android:src="@drawable/ic_arrow_right_w_7"-->
-                    <!--            app:layout_constraintStart_toEndOf="@+id/nameTv"-->
-                    <!--            app:layout_constraintTop_toTopOf="@+id/nameTv"-->
-                    <!--            app:layout_constraintBottom_toBottomOf="@+id/nameTv"/>-->
-
-                    <TextView
-                        android:id="@+id/reportTv"
-                        style="@style/TextPurple_6d6dff.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:text=""
-                        android:textSize="@dimen/dp16"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/purple_6D6DFF"
-                        app:layout_constraintBottom_toBottomOf="@+id/reportTv"
-                        app:layout_constraintEnd_toEndOf="@+id/reportTv"
-                        app:layout_constraintStart_toStartOf="@+id/reportTv" />
-
-                    <com.google.android.flexbox.FlexboxLayout
-                        android:id="@+id/tagFl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/sp16"
-                        app:alignContent="flex_start"
-                        app:alignItems="flex_start"
-                        app:dividerDrawable="@drawable/hashtag_divider"
-                        app:flexDirection="row"
-                        app:flexWrap="wrap"
-                        app:justifyContent="center"
-                        app:layout_constraintTop_toBottomOf="@+id/reportTv"
-                        app:showDivider="middle">
-
-                    </com.google.android.flexbox.FlexboxLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/freeUserContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tagFl">
-
-                        <TextView
-                            android:id="@+id/freeGuideTv"
-                            style="@style/TextGrey_c0c0c0.Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:lineSpacingExtra="8sp"
-                            android:textColor="@color/grey_c0c0c0"
-                            android:textSize="@dimen/dp16"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
-                            android:id="@+id/startBtn"
-                            android:layout_width="190dp"
-                            android:layout_height="@dimen/dp40"
-                            android:layout_marginTop="@dimen/dp24"
-                            android:layout_marginBottom="8dp"
-                            android:text="@string/text_study_start_with_pulley"
-                            app:ButtonTextSize="@dimen/dp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/freeGuideTv" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/payUserContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/freeUserContainer">
+                        app:layout_constraintStart_toStartOf="parent" />
 
-
-                        <ImageView
-                            android:id="@+id/problemCntIv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:src="@drawable/ic_paper"
-                            app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
-                            app:layout_constraintEnd_toStartOf="@+id/problemCntLabel"
-                            app:layout_constraintHorizontal_chainStyle="packed"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/problemCntLabel"
-                            style="@style/TextGrey_c0c0c0.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="푼 문제 수(오답학습 수)"
-                            android:textColor="@color/grey_c0c0c0"
-                            android:textSize="@dimen/dp14"
-                            app:layout_constraintBottom_toBottomOf="@+id/problemCntIv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/problemCntIv"
-                            app:layout_constraintTop_toTopOf="@+id/problemCntIv" />
-
-                        <TextView
-                            android:id="@+id/problemCntTv"
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black_4c4c4c"
-                            android:textSize="@dimen/dp36"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <ImageButton
-                        android:id="@+id/shareBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:layout_marginEnd="@dimen/dp24"
-                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
-                        android:src="@drawable/ic_share"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+                <ImageButton
+                    android:id="@+id/shareBtn"
+                    android:layout_width="@dimen/dp36"
+                    android:layout_height="@dimen/dp36"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                    android:src="@drawable/ic_share"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
 
-        </ScrollView>
 
-        <FrameLayout
-            android:id="@+id/loadingContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#33000000"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/progressBar2"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-        </FrameLayout>
+    </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    <FrameLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#33000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

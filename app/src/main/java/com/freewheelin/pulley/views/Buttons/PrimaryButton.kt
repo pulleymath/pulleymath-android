@@ -68,10 +68,6 @@ enum class ButtonMode {
     normal, pulley_plus
 }
 
-enum class ButtonLockColor {
-    white, purple
-}
-
 open class PrimaryButton: ConstraintLayout {
 
     constructor(context: Context): super(context)
@@ -124,10 +120,7 @@ open class PrimaryButton: ConstraintLayout {
         if (value) toEnableUI() else toDisableUI()
     }
 
-    fun setLock(hasPulleyPlus:Boolean,
-                lockImage:ButtonLockImage = ButtonLockImage.small16,
-                mode: ButtonMode = ButtonMode.normal,
-                color: ButtonLockColor = ButtonLockColor.white) {
+    fun setLock(hasPulleyPlus:Boolean, lockImage:ButtonLockImage = ButtonLockImage.small16, mode: ButtonMode = ButtonMode.normal) {
         this.hasPulleyPlus = hasPulleyPlus
         this.mode = mode
         when(mode) {
@@ -140,16 +133,7 @@ open class PrimaryButton: ConstraintLayout {
                         ButtonLockImage.big48 -> imageLock.setImageResource(R.drawable.ic_lock_48_white)
                         else -> imageLock.setImageResource(R.drawable.ic_lock_16_white)
                     }
-//                    imageLock.setColorFilter(button.currentTextColor)
-                    when (color) {
-                        ButtonLockColor.white -> {
-                            imageLock.setColorFilter(button.currentTextColor)
-                        }
-                        ButtonLockColor.purple -> {
-                            imageLock.setColorFilter(ContextCompat.getColor(context, R.color.purple_300))
-                        }
-                    }
-
+                    imageLock.setColorFilter(button.currentTextColor)
                 } else {
                     imageLock.visibility = View.GONE
                 }

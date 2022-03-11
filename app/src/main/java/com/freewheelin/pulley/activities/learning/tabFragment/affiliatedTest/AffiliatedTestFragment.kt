@@ -68,7 +68,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_affiliated_test, container, false)
 
         solveResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -88,6 +88,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
             lifecycleOwner = viewLifecycleOwner
             val adapter = UnivTestAdapter(viewModel)
             testListRv.adapter = adapter
+//            testRv.adapter =
             uuiTv.movementMethod = ScrollingMovementMethod()
 
             reportBtn.setOnClickListener {

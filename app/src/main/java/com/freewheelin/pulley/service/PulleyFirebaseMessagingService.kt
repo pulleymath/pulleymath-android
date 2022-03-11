@@ -15,16 +15,16 @@ class PulleyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-
         if(user?.token?.isNotEmpty() == true) {
             Log.d(javaClass.simpleName, "new Token=>$token")
-
-            API_APP.putToken(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ _ ->
-                    Log.d(javaClass.simpleName, "토큰=$token")
-                }, { })
+            if (token.isNotEmpty()) {
+                API_APP.putToken(token)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ _ ->
+                        Log.d(javaClass.simpleName, "토큰=$token")
+                    }, { })
+            }
         }
     }
 }

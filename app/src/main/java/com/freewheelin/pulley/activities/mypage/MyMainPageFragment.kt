@@ -223,7 +223,7 @@ class MyMainPageFragment : Fragment() {
             Customer -> moveTo(MyCustomerFragment())
 
             Logout -> {
-                DialogUtils.DaebakTitleOnlyDialog(requireContext()).apply {
+                DialogUtils.DaebakDialog(requireContext(), true).apply {
                     title = "로그아웃하시겠습니까?"
                     type = DialogType.alert
                     leftBtn.text = "아니요"

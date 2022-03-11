@@ -16,17 +16,14 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
+import kotlinx.android.synthetic.main.dialog_dday_setting.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import android.text.InputFilter
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendar
 import com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendarListener
-import com.freewheelin.pulley.views.editText.DaebakInputField
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import java.lang.Math.abs
@@ -38,17 +35,6 @@ interface DDaySettingDialogListener {
 
 class DDaySettingDialog(context: Context, setOnSpyMode: () -> Unit): Dialog(context), ArduousSpinnerListener,
     DaebakCalendarListener {
-
-    val rootView get() = findViewById<ConstraintLayout>(R.id.rootView)
-    val dDayLabelPrefix get() = findViewById<TextView>(R.id.dDayLabelPrefix)
-    val dDayLabelSuffix get() = findViewById<TextView>(R.id.dDayLabelSuffix)
-    val dDayTv get() = findViewById<TextView>(R.id.dDayTv)
-    val actionBtn get() = findViewById<PrimaryButton>(R.id.actionBtn)
-    val targetSpinner get() = findViewById<ArduousSpinner>(R.id.targetSpinner)
-    val customField get() = findViewById<DaebakInputField>(R.id.customField)
-    val errorContainer get() = findViewById<LinearLayout>(R.id.errorContainer)
-    val scrollView get() = findViewById<ScrollView>(R.id.scrollView)
-    val selectCalendar get() = findViewById<DaebakCalendar>(R.id.selectCalendar)
 
     var dDays: List<DDay> = emptyList()
     var selectedDate: Date? = null

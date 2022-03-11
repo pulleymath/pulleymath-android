@@ -8,10 +8,8 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.ItemStudyListBinding
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.DateTimeUtils
@@ -79,57 +77,91 @@ class AnalysisTodayStudyListView: ConstraintLayout {
         var holder:StudyListViewHolder? = null
 
         for((index, piece) in contents.withIndex()) {
-            holder = StudyListViewHolder(DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.item_study_list, null, false))
-
+            val view = LayoutInflater.from(context).inflate(R.layout.item_study_list, recyclerView, false)
+            holder = StudyListViewHolder(view)
             holder.set(piece)
             if (isUserAnalysis) holder.setUserAnalysisUI()
 
-            holder.listBinding.solveBtn.setOnClickListener {
+            holder.solveBtn.setOnClickListener {
                 listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
             }
-            holder.listBinding.reportBtn.setOnClickListener {
+            holder.reportBtn.setOnClickListener {
                 listener?.onReportBtnClicked(this@AnalysisTodayStudyListView, piece)
             }
             Log.d("테스트", "setList($index, $newOne)")
             if(index == 0 && newOne) holder.setHighlight()
-            recyclerView.addView(holder.listBinding.root)
+            recyclerView.addView(view)
         }
         if(newOne) newOne = false
-        holder?.listBinding?.borderView?.visibility = View.INVISIBLE
+        holder?.borderView?.visibility = View.INVISIBLE
     }
+//    inner class StudyListAdapter: RecyclerView.Adapter<StudyListViewHolder>() {
+//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyListViewHolder {
+//            val view = LayoutInflater.from(context).inflate(R.layout.item_study_list, parent, false)
+//            return StudyListViewHolder(view)
+//        }
+//
+//        override fun getItemCount(): Int {
+//            return contents.size
+//        }
+//
+//        override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
+//            val content = contents[position]
+//            holder.set(content)
+//            if(position == contents.size - 1) {
+//                holder.borderView.visibility = View.INVISIBLE
+//            } else {
+//                holder.borderView.visibility = View.VISIBLE
+//            }
+//            holder.solveBtn.setPermissionClickListener {
+//                listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, content)
+//            }
+//            holder.reportBtn.setOnClickListener {
+//                listener?.onReportBtnClicked(this@AnalysisTodayStudyListView, content)
+//            }
+//        }
+//    }
 }
 
-class StudyListViewHolder(val listBinding: ItemStudyListBinding): RecyclerView.ViewHolder(listBinding.root) {
+class StudyListViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+    val dateTv: TextView = view.findViewById(R.id.dateTv)
+    val categoryTv: TextView = view.findViewById(R.id.categoryTv)
+    val titleTv: TextView = view.findViewById(R.id.titleTv)
+    val problemCntTv: TextView = view.findViewById(R.id.problemCntTv)
+    val problemTotalCntTv: TextView = view.findViewById(R.id.problemTotalCntTv)
+    val scoreTv: TextView = view.findViewById(R.id.scoreTv)
+    val reportBtn: ConstraintLayout = view.findViewById(R.id.reportBtn)
+    val solveBtn: SecondaryButton = view.findViewById(R.id.solveBtn)
+    val borderView: View = view.findViewById(R.id.borderView)
+
     fun set(piece: Content) {
-        listBinding.apply {
-            dateTv.text = DateTimeUtils.mMDashddFormat.format(piece.updateDateTime)
-            titleTv.text = piece.subject
+        dateTv.text = DateTimeUtils.mMDashddFormat.format(piece.updateDateTime)
+        titleTv.text = piece.subject
 //        problemCntTv.text = if(piece.similarProblemNumber > 0) "${piece.markedNumber}(+${piece.similarProblemNumber})문제" else "${piece.markedNumber}문제"
 
-            val solvedCnt = piece.markedNumber + piece.similarProblemNumber
-            val totalCnt = piece.totalNumber + piece.similarProblemNumber
+        val solvedCnt = piece.markedNumber + piece.similarProblemNumber
+        val totalCnt = piece.totalNumber + piece.similarProblemNumber
 
-            problemCntTv.text = "$solvedCnt"
+        problemCntTv.text = "$solvedCnt"
 
-            problemTotalCntTv.text = "/$totalCnt"
+        problemTotalCntTv.text = "/$totalCnt"
 
-            scoreTv.text = if(piece.isCompleted()) "${piece.score}%" else "-"
-            categoryTv.text = piece.pieceCategoryTag.getTagTitle
+        scoreTv.text = if(piece.isCompleted()) "${piece.score}%" else "-"
+        categoryTv.text = piece.pieceCategoryTag.getTagTitle
 
-            if(piece.isCompleted() && piece.pieceCategoryTag == BookType.MO || piece.pieceCategoryTag == BookType.TEST) {
-                reportBtn.visibility = View.VISIBLE
-            } else {
-                reportBtn.visibility = View.INVISIBLE
-            }
+        if(piece.isCompleted() && piece.pieceCategoryTag == BookType.MO || piece.pieceCategoryTag == BookType.TEST) {
+            reportBtn.visibility = View.VISIBLE
+        } else {
+            reportBtn.visibility = View.INVISIBLE
         }
 
     }
 
     fun setUserAnalysisUI() {
-        listBinding.solveBtn.visibility = View.INVISIBLE
+        solveBtn.visibility = View.INVISIBLE
     }
 
     fun setHighlight() {
-        listBinding.root.setBackgroundResource(R.color.yellow_fffbef)
+        view.setBackgroundResource(R.color.yellow_fffbef)
     }
 }

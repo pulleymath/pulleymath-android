@@ -5,19 +5,20 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.databinding.ActivityInitSettingBinding
 import com.freewheelin.pulley.utils.DialogUtils
+import kotlinx.android.synthetic.main.activity_init_setting.*
+import java.util.*
 
 class InitSettingActivity : AppCompatActivity() {
 
@@ -31,13 +32,11 @@ class InitSettingActivity : AppCompatActivity() {
             return Intent(context, InitSettingActivity::class.java)
         }
     }
-    private val binding: ActivityInitSettingBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_init_setting, null, false)
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         removeStatusBar()
-        setContentView(binding.root)
+        setContentView(R.layout.activity_init_setting)
         setUpUI()
     }
 
@@ -58,11 +57,9 @@ class InitSettingActivity : AppCompatActivity() {
     }
 
     private fun setViewPager(fragments:List<Fragment>) {
-        binding.apply {
-            adapter = InitSettingAdapter(fragments,this@InitSettingActivity)
-            viewPager.adapter = adapter
-            viewPager.isUserInputEnabled = false
-        }
+        adapter = InitSettingAdapter(fragments,this)
+        viewPager.adapter = adapter
+        viewPager.isUserInputEnabled = false
     }
 
     private fun removeStatusBar() {
@@ -73,32 +70,35 @@ class InitSettingActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
             actionBar?.hide()
         }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            window.insetsController?.hide(WindowInsets.Type.statusBars())
+//        } else {
+//            window.setFlags(
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+//            )
+//        }
     }
 
     override fun onBackPressed() {
-        binding.apply {
-            when(viewPager.currentItem) {
-                0 -> DialogUtils.showReluctanceDialog(this@InitSettingActivity, leftBtnCB = {
+        when(viewPager.currentItem) {
+            0 -> DialogUtils.showReluctanceDialog(this, leftBtnCB = {
                     finish()
                 })
-                1,2 -> viewPager.currentItem = viewPager.currentItem - 1
-            }
+            1,2 -> viewPager.currentItem = viewPager.currentItem - 1
         }
     }
 
     fun prev() {
-        binding.apply {
-            if(viewPager.currentItem - 1 >= 0) {
-                viewPager.currentItem = viewPager.currentItem - 1
-            }
+        if(viewPager.currentItem - 1 >= 0) {
+            viewPager.currentItem = viewPager.currentItem - 1
         }
     }
 
     fun next() {
-        binding.apply {
-            if(adapter?.itemCount?:0 > viewPager.currentItem + 1) {
-                viewPager.currentItem = viewPager.currentItem + 1
-            }
+        if(adapter?.itemCount?:0 > viewPager.currentItem + 1) {
+            viewPager.currentItem = viewPager.currentItem + 1
         }
     }
 
