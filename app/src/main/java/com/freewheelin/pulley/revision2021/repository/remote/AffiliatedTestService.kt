@@ -49,8 +49,7 @@ interface AffiliatedTestService {
 
     @GET("test/student/{student_id}/workbook/current")
     fun getGroupList2(@Path("student_id") studentId: String,
-                      @Query("school_id") schoolId: Int,
-                      @Query("major_code") majorCode: String) : Observable<AffiliatedGroupResponse>
+                      @Query("school_id") schoolId: Int) : Observable<AffiliatedGroupResponse>
 
 
     @PATCH("test/student/{student_id}/workbook/{workbook_id}/finish")

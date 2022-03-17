@@ -35,6 +35,7 @@ class AffiliatedTestWorkbook: BaseDiffItem, Serializable {
     override fun getId() = "${id}"
 
     var group_id: Int = 0
+    var problem_workbook_id: Int = -1
     lateinit var title: String
     lateinit var sub_title: String
     lateinit var subject: String

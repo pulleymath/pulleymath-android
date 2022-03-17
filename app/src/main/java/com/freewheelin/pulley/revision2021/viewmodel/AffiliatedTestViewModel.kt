@@ -27,9 +27,8 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
         val studentId = user?.studentID ?: return
         val schoolId = user?.schoolID ?: return
-        val majorCode = user?.userUniversityMajorCode ?: return
 
-        affiliatedTestRepository.getGroupList2(studentId, schoolId, majorCode)
+        affiliatedTestRepository.getGroupList2(studentId, schoolId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->

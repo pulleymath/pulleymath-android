@@ -23,6 +23,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     var categoryFilter: String? = ""
     var subjectFilter: String? = ""
     var searchTextFilter: String = ""
+    var purchaseBookFilter: Boolean = false
     var searchText = MutableLiveData("")
     var currSearchText = MutableLiveData("")
 
@@ -35,6 +36,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
     val categorySelectedPosition = MutableLiveData(0)
     val subjectSelectedPosition = MutableLiveData(0)
+    val isPurchaseBookSelected = MutableLiveData(false)
 
     val pdfListLength = MutableLiveData("0")
 
@@ -84,6 +86,10 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                     val upperSearchText = searchTextFilter.uppercase()
                     upperTitle.contains(upperSearchText)
                 }
+            }
+
+            if(purchaseBookFilter) {
+                result = result.filter { it.is_purchased }
             }
 
             showEmpty.postValue(result.isEmpty())
@@ -180,6 +186,12 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                 scrollShadowShow.postValue(false)
             }
         }
+    }
+    fun purchaseBookListener(isChecked: Boolean) {
+        purchaseBookFilter = isChecked
+        isPurchaseBookSelected.postValue(isChecked)
+        filter()
+        ySum = 0
     }
 }
 

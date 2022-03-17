@@ -394,10 +394,10 @@ class LearningTabActivity : PermissionActivity(),
                 return
             }
         }
-        val majorCode = user?.userUniversityMajorCode ?: return
+
         val studentId = user?.studentID ?: return
         val schoolId = user?.schoolID ?: return
-        affiliatedTestRepository.getGroupList2(studentId, schoolId, majorCode)
+        affiliatedTestRepository.getGroupList2(studentId, schoolId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->

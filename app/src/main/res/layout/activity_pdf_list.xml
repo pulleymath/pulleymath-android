@@ -123,6 +123,26 @@
                 android:selectedItemPosition="@={vm.categorySelectedPosition}"
                 app:adapter="@{categorySpinnerAdapter}"
                 />
+            <TextView
+                android:id="@+id/purchaseTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구매한 문제집만 보기"
+                android:layout_marginStart="@dimen/dp16"
+                app:layout_constraintStart_toEndOf="@+id/spinnerCategory"
+                app:layout_constraintTop_toTopOf="@+id/spinnerCategory"
+                app:layout_constraintBottom_toBottomOf="@+id/spinnerCategory"
+                />
+            <Switch
+                android:id="@+id/purchaseSwtich"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={vm.isPurchaseBookSelected}"
+                android:onCheckedChanged="@{(switch, flag) -> vm.purchaseBookListener(flag)}"
+                app:layout_constraintTop_toTopOf="@+id/purchaseTv"
+                app:layout_constraintBottom_toBottomOf="@+id/purchaseTv"
+                app:layout_constraintStart_toEndOf="@+id/purchaseTv"
+                android:layout_marginStart="@dimen/dp8"/>
 
             <SearchView
                 android:id="@+id/searchName"

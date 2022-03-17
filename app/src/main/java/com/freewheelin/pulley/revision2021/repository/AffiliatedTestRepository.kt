@@ -22,7 +22,7 @@ class AffiliatedTestRepository private constructor() {
     fun openWorkbook(studentId: String, workbookId: Int, version: Int) = affiliatedTestService.openWorkbook(studentId, workbookId, version)
     fun openProblem(studentId: String, workbookId: Int, problemNo: Int) = affiliatedTestService.openProblem(studentId, workbookId, problemNo)
     fun getTestAnswerList(studentId: String, workbookId: Int) = affiliatedTestService.getWorkbookAnswerList(studentId, workbookId)
-    fun getGroupList2(studentId: String, schoolId: Int, majorCode: String) = affiliatedTestService.getGroupList2(studentId, schoolId, majorCode)
+    fun getGroupList2(studentId: String, schoolId: Int) = affiliatedTestService.getGroupList2(studentId, schoolId)
     fun finishTest(studentId: String, workbookId: Int) = affiliatedTestService.finish(studentId, workbookId)
     fun insertAnswer(studentId: String, workbookId: Int, problemNo: Int, param: Parameter) = affiliatedTestService.insertAnswer(studentId, workbookId, problemNo, param)
     fun fetchScoringResult(studentId: String, workbookId: Int, version: Int) = affiliatedTestService.fetchScoringResult(studentId, workbookId, version)

@@ -110,6 +110,15 @@ class PdfListActivity : AppCompatActivity() {
         }
 
         with(viewModel) {
+            stickyAppBarShow.observe(this@PdfListActivity,
+                { isShow ->
+                    if (!isShow) {
+                        val adapter = (binding.recyclerPdf.adapter as PdfAdapter)
+                        val headerBinding = adapter.headerBinding
+                            headerBinding?.purchaseSwtich?.isChecked =
+                                isPurchaseBookSelected.value!!
+                    }
+                })
             subjectSelectedPosition.observe(this@PdfListActivity,
                 object : Observer<Int> {
                     override fun onChanged(position: Int?) {
@@ -176,8 +185,8 @@ class PdfListActivity : AppCompatActivity() {
                     it.isIconified = true
                 }
 
-                (binding.recyclerPdf.adapter as PdfAdapter).headerBinding.searchNameInHeader.let {
-                    it.isIconified = true
+                (binding.recyclerPdf.adapter as PdfAdapter).headerBinding?.searchNameInHeader.let {
+                    it?.isIconified = true
                 }
 
             } else {
@@ -189,12 +198,12 @@ class PdfListActivity : AppCompatActivity() {
     inner class PdfAdapter(private val viewModel: PdfViewModel): ListAdapter<Pdf, RecyclerView.ViewHolder>(DiffCallback<Pdf>()) {
         private val typeHeader = 0
         private val typeItem = 1
-        lateinit var headerBinding: HeaderPdfListBinding
+        var headerBinding: HeaderPdfListBinding? = null
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return when (viewType) {
                 typeHeader -> {
                     headerBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.header_pdf_list, parent, false)
-                    HeaderViewHolder(headerBinding)
+                    HeaderViewHolder(headerBinding!!)
                 }
                 typeItem -> PdfHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_pdf, parent, false))
                 else -> PdfHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_pdf, parent, false))
