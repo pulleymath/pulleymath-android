@@ -9,7 +9,7 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.utils.DisplayUtils
-import com.ht.balloonwindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 
 class TooltipWindow: BalloonWindow {
 

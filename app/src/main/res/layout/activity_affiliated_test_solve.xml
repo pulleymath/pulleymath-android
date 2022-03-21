@@ -48,24 +48,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backBtn"/>
 
             <Button
-                android:id="@+id/videoView2"
-                android:text="버튼 2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/videoView"/>
-
-            <Button
-                android:id="@+id/videoView"
-                android:text="버튼 "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_purple_6d6dff_round"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/submitBtn"/>
-
-            <Button
                 android:id="@+id/submitBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
@@ -312,26 +294,27 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/dp56"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabSelectedTextColor="@color/purple_300"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/purple_6D6DFF"
+                    app:tabIndicatorColor="@color/purple_300"
+                    app:tabIndicatorFullWidth="true"
                     app:tabIndicatorHeight="2dp"
-                    app:tabMaxWidth="0dp"
                     app:tabMode="fixed">
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tabItem"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="해설" />
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tabItem2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="개념" />
                 </com.google.android.material.tabs.TabLayout>

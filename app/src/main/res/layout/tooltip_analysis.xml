@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/chartIcon"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_bar_chart"
-        app:layout_constraintTop_toTopOf="@+id/chartTopTv"
-        app:layout_constraintBottom_toBottomOf="@+id/chartTopTv"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        style="@style/TextWhite_ffffff.ExtraBold"
-        android:id="@+id/chartTopTv"
-        android:layout_marginStart="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="내 전체 분석이란?"
-        android:textSize="@dimen/sp18"
-        app:layout_constraintStart_toEndOf="@+id/chartIcon"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:id="@+id/chartIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bar_chart"
+            app:layout_constraintTop_toTopOf="@+id/chartTopTv"
+            app:layout_constraintBottom_toBottomOf="@+id/chartTopTv"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        style="@style/TextWhite_ffffff.Bold"
-        android:id="@+id/chartContentTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:lineSpacingExtra="8sp"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintTop_toBottomOf="@+id/chartTopTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            style="@style/TextWhite_ffffff.ExtraBold"
+            android:id="@+id/chartTopTv"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 전체 분석이란?"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toEndOf="@+id/chartIcon"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            style="@style/TextWhite_ffffff.Bold"
+            android:id="@+id/chartContentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="8sp"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintTop_toBottomOf="@+id/chartTopTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

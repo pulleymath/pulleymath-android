@@ -11,18 +11,25 @@ import android.view.View
 import android.webkit.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.utils.Preferences
 import kotlinx.android.synthetic.main.activity_lesson.*
 import java.lang.Exception
 
 class LessonActivity : BaseActivity() {
 
-    val API_LESSON_DOMAIN =
-        if(Preferences.onTestAPI.get()) "https://dev.pulleymath.com" else "https://pulleymath.com"
+//    val API_LESSON_DOMAIN =
+//        if(Preferences.onTestAPI.get()) "https://dev.pulleymath.com" else "https://pulleymath.com"
+
+    val API_LESSON_DOMAIN = when (Preferences.onServerAPI.get().toString()) {
+        Network.Server.live.toString() -> "https://pulleymath.com"
+        Network.Server.staging.toString() -> "https://staging.pulleymath.com"
+        Network.Server.dev.toString() -> "https://dev.pulleymath.com"
+        else -> "https://pulleymath.com"
+    }
 
     val lessonPath = "$API_LESSON_DOMAIN/pplink"
     val lessonLink = "$lessonPath?token=${user?.token}"

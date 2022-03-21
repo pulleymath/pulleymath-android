@@ -1,192 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp48"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/step1"
-                style="@style/TextGrey_c0c0c0.Bold"
-                android:layout_width="@dimen/dp32"
-                android:layout_height="@dimen/dp32"
-                android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_circle"
-                android:gravity="center"
-                android:text="1"
-                android:textSize="@dimen/sp16" />
-
-            <ImageView
-                android:id="@+id/step1ComplteIv"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/ic_check_grey_engrave"
-                android:visibility="invisible" />
-
-            <TextView
-                android:id="@+id/step1Label"
-                style="@style/TextGrey_c0c0c0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="개인 정보"
-                android:textSize="@dimen/sp16" />
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
-                android:layout_width="@dimen/dp16"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp" />
-
-            <TextView
-                android:id="@+id/step2"
-                style="@style/TextGrey_c0c0c0.Bold"
-                android:layout_width="@dimen/dp32"
-                android:layout_height="@dimen/dp32"
-                android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_circle"
-                android:gravity="center"
-                android:text="2"
-                android:textSize="@dimen/sp16" />
-
-            <TextView
-                android:id="@+id/step2Label"
-                style="@style/TextGrey_c0c0c0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="학습 정보"
-                android:textSize="@dimen/sp16" />
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
-                android:layout_width="@dimen/dp16"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp" />
-
-            <TextView
-                android:id="@+id/step3"
-                style="@style/TextWhite_ffffff.ExtraBold"
-                android:layout_width="@dimen/dp32"
-                android:layout_height="@dimen/dp32"
-                android:background="@drawable/bg_purple_6d6dff_circle"
-                android:gravity="center"
-                android:text="3"
-                android:textSize="@dimen/sp16" />
-
-            <TextView
-                android:id="@+id/step3Label"
-                style="@style/TextPurple_6d6dff.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="선택 과목"
-                android:textSize="@dimen/sp16" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/step2Body"
-            android:layout_width="600dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp32"
-            android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:lineSpacingExtra="@dimen/sp12"
-                android:text="공부할 선택 과목을 골라주세요.\n선택하지 않은 과목은 풀리수학의 추천에서 제외됩니다."
-                android:textSize="@dimen/sp24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp48"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                style="@style/TextGrey_9f9f9f"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp16"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="@dimen/sp8"
-                android:text="아직 고민 중이라면, 추천받고 싶은 선택과목을 여러 개 골라도 좋아요"
-                android:textSize="@dimen/sp14" />
+                <TextView
+                    android:id="@+id/step1"
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_circle"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="@dimen/sp16" />
 
-            <com.freewheelin.pulley.views.SelectionButton
-                android:id="@+id/noneSelection"
-                style="@style/TextBlack_4c4c4c.Bold"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:layout_marginTop="@dimen/dp32"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
-                android:text="나중에 선택할게요"
-                android:textSize="@dimen/sp16" />
-
-            <com.freewheelin.pulley.views.DaebakInputSelection
-                android:id="@+id/probAnsStatSelection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                app:DaebakInputSelection_Label="확률과 통계" />
-
-            <com.freewheelin.pulley.views.DaebakInputSelection
-                android:id="@+id/calculusSelection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                app:DaebakInputSelection_Label="미적분" />
-
-            <com.freewheelin.pulley.views.DaebakInputSelection
-                android:id="@+id/geometrySelection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                app:DaebakInputSelection_Label="기하" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp48">
-
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
-                    android:id="@+id/prevBtn"
+                <ImageView
+                    android:id="@+id/step1ComplteIv"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp56"
-                    android:text="이전"
-                    app:buttonTheme="grey"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/completeBtn"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_check_grey_engrave"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/step1Label"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="개인 정보"
+                    android:textSize="@dimen/sp16" />
+
+                <View
+                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/step2"
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_circle"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/step2Label"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="학습 정보"
+                    android:textSize="@dimen/sp16" />
+
+                <View
+                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/step3"
+                    style="@style/TextWhite_ffffff.ExtraBold"
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:background="@drawable/bg_purple_6d6dff_circle"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/step3Label"
+                    style="@style/TextPurple_6d6dff.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="선택 과목"
+                    android:textSize="@dimen/sp16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/step2Body"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp32"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/sp12"
+                    android:text="공부할 선택 과목을 골라주세요.\n선택하지 않은 과목은 풀리수학의 추천에서 제외됩니다."
+                    android:textSize="@dimen/sp24"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
-                    android:id="@+id/completeBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp56"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:text="완료"
-                    app:buttonTheme="blue"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/prevBtn"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    style="@style/TextGrey_9f9f9f"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="@dimen/sp8"
+                    android:text="아직 고민 중이라면, 추천받고 싶은 선택과목을 여러 개 골라도 좋아요"
+                    android:textSize="@dimen/sp14" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.freewheelin.pulley.views.SelectionButton
+                    android:id="@+id/noneSelection"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:text="나중에 선택할게요"
+                    android:textSize="@dimen/sp16" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/probAnsStatSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="확률과 통계" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/calculusSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="미적분" />
+
+                <com.freewheelin.pulley.views.DaebakInputSelection
+                    android:id="@+id/geometrySelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:DaebakInputSelection_Label="기하" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp48">
+
+                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        android:id="@+id/prevBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp56"
+                        android:text="이전"
+                        app:buttonTheme="grey"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/completeBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        android:id="@+id/completeBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:text="완료"
+                        app:buttonTheme="blue"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/prevBtn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
 
+</layout>

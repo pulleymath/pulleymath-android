@@ -7,17 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.assets.Major
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.FragmentInitSettingPersonalBinding
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
-import kotlinx.android.synthetic.main.fragment_init_setting_personal.*
 
 class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
 
     var parent:InitSettingActivity? = null
+    lateinit var binding: FragmentInitSettingPersonalBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -30,7 +32,8 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_init_setting_personal, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_init_setting_personal, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,29 +42,31 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
     }
 
     private fun setUI() {
-        nextBtn.toDisableUI()
+        binding.apply {
+            nextBtn.toDisableUI()
 
-        firstStepGuideTv.text = "${user?.fullName}님에게 최적화된 서비스를 위해\n" + "정보가 필요해요! :)"
+            firstStepGuideTv.text = "${user?.fullName}님에게 최적화된 서비스를 위해\n" + "정보가 필요해요! :)"
 
-        gradeRadio.labels = grades.map { it.tabTitle }
-        majorRadio.labels = majors.map { it.title }
-        ratingRadio.labels = ratings.map { it.toString() }
+            gradeRadio.labels = grades.map { it.tabTitle }
+            majorRadio.labels = majors.map { it.title }
+            ratingRadio.labels = ratings.map { it.toString() }
 
-        gradeRadio.listener = this
-        majorRadio.listener = this
-        ratingRadio.listener = this
+            gradeRadio.listener = this@InitSettingPersonalFragment
+            majorRadio.listener = this@InitSettingPersonalFragment
+            ratingRadio.listener = this@InitSettingPersonalFragment
 
-        Log.d("개인정보", "grade=${user?.rawGrade}, major=${user?.major}, rating=${user?.rating?:0}")
+            Log.d("개인정보", "grade=${user?.rawGrade}, major=${user?.major}, rating=${user?.rating?:0}")
 
-        gradeRadio.selectedIndex = user?.rawGrade?: -1
-        majorRadio.selectedIndex =  if(user?.major == null) -1 else Major.list.indexOf(user?.major?:0)
-        ratingRadio.selectedIndex = (user?.rating?:0) - 1
+            gradeRadio.selectedIndex = user?.rawGrade?: -1
+            majorRadio.selectedIndex =  if(user?.major == null) -1 else Major.list.indexOf(user?.major?:0)
+            ratingRadio.selectedIndex = (user?.rating?:0) - 1
 
-        nextBtn.setOnClickListener { if(nextBtn.isEnableUI()) parent?.next() }
+            nextBtn.setOnClickListener { if(nextBtn.isEnableUI()) parent?.next() }
 
-        setNextBtn()
+            setNextBtn()
 
-        setLayout()
+            setLayout()
+        }
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
@@ -75,7 +80,7 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
     }
 
     private fun setLayout() {
-        when(gradeRadio.selectedIndex) {
+        when(binding.gradeRadio.selectedIndex) {
             0 -> {
                 showRating(false)
                 showMajor(false)
@@ -92,41 +97,47 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
     }
 
     private fun showMajor(show:Boolean) {
-        if(show) {
-            majorLabel.visibility = View.VISIBLE
-            majorRadio.visibility = View.VISIBLE
-        } else {
-            majorLabel.visibility = View.GONE
-            majorRadio.visibility = View.GONE
-            majorRadio.selectedIndex = -1
+        binding.apply {
+            if(show) {
+                majorLabel.visibility = View.VISIBLE
+                majorRadio.visibility = View.VISIBLE
+            } else {
+                majorLabel.visibility = View.GONE
+                majorRadio.visibility = View.GONE
+                majorRadio.selectedIndex = -1
+            }
         }
     }
 
     private fun showRating(show:Boolean) {
-        if(show) {
-            ratingLabel.visibility = View.VISIBLE
-            ratingRadio.visibility = View.VISIBLE
-        } else {
-            ratingLabel.visibility = View.GONE
-            ratingRadio.visibility = View.GONE
-            ratingRadio.selectedIndex = -1
+        binding.apply {
+            if(show) {
+                ratingLabel.visibility = View.VISIBLE
+                ratingRadio.visibility = View.VISIBLE
+            } else {
+                ratingLabel.visibility = View.GONE
+                ratingRadio.visibility = View.GONE
+                ratingRadio.selectedIndex = -1
+            }
         }
     }
 
     private fun setNextBtn() {
-        val grade = grades.getOrNull(gradeRadio?.selectedIndex?:-1)
-        val major = majors.getOrNull(majorRadio?.selectedIndex?:-1)
-        val rating = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
+        binding.apply {
+            val grade = grades.getOrNull(gradeRadio?.selectedIndex?:-1)
+            val major = majors.getOrNull(majorRadio?.selectedIndex?:-1)
+            val rating = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
 
-        if(grade == Grade.BeforeHigh
+            if(grade == Grade.BeforeHigh
                 || (grade == Grade.High_1 && rating != null)
                 || (grade == Grade.High_2 || grade == Grade.High_3 || grade == Grade.AfterHigh) && rating != null && major != null) {
-            nextBtn.toEnableUI()
-        } else
-            nextBtn.toDisableUI()
+                nextBtn.toEnableUI()
+            } else
+                nextBtn.toDisableUI()
+        }
     }
 
-    fun getGrade() = grades.getOrNull(gradeRadio?.selectedIndex?:-1)
-    fun getMajor() : Major? = majors.getOrNull(majorRadio?.selectedIndex?:-1)
-    fun getRating() = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
+    fun getGrade() = grades.getOrNull(binding.gradeRadio.selectedIndex?:-1)
+    fun getMajor() : Major? = majors.getOrNull(binding.majorRadio.selectedIndex?:-1)
+    fun getRating() = ratings.getOrNull(binding.ratingRadio.selectedIndex?:-1)
 }

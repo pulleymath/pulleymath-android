@@ -56,7 +56,7 @@ object AppUsageMonitor {
                 if(isStudying)
                     accumulatedStudyTime += 1
             }
-            addMonitorTimeIfNeed()
+            addMonitorTimeIfNeed() // dummy TODO
             listeners.forEach { it.monitoringTick() }
         }
         timer?.schedule(task, 1000, 1000)

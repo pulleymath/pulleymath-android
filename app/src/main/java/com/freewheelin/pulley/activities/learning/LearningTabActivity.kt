@@ -224,8 +224,6 @@ class LearningTabActivity : PermissionActivity(),
                         currentPagePosition = position
                     }
                 }
-
-                checkSpy(tab)
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) { }
             override fun onTabReselected(tab: TabLayout.Tab?) { }
@@ -273,8 +271,6 @@ class LearningTabActivity : PermissionActivity(),
             }
 
             onMypageBtnClicked()
-
-
         }
 
         if(isSPYMode) {
@@ -318,26 +314,16 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     var spyCount = 0
-    private fun checkSpy(tab: TabLayout.Tab?) {
-        tab?.position?.let { position ->
-            if (position == 0) {
-                if (spyCount in 0..10 step 2 ) {
-                    spyCount += 1
-                } else {
-                    spyCount = 0
-                }
-            } else if (position == 1) {
-                if (spyCount in 1..11 step 2) {
-                    spyCount += 1
-                } else {
-                    spyCount = 0
-                }
-            } else {
-                spyCount = 0
-            }
+
+    fun setOnSpyMode() {
+        spyCount += 1
+        if (spyCount > 10) {
+            isSPYMode = true
+            mypageFragment.spyOn()
+            spyBtn.show()
+            spyCount = 0
         }
     }
-
 
     private fun openLesson() {
         requirePermissions(lessonPermissions, lessonRequest)

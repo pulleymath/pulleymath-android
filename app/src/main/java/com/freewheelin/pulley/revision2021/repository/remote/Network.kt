@@ -1,13 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import android.util.Log
-import com.freewheelin.pulley.BuildConfig
-import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Version
-import com.freewheelin.pulley.core.retrofit
 import com.freewheelin.pulley.utils.APHelper
-import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.Preferences
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -16,12 +10,22 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 
 object Network {
     var shopUrl     = Preferences.shopUrl.get()
-    val baseNodeUrl = if(Preferences.onTestAPI.get()) "http://3.36.127.47:3000" else "https://pdf-live.pulleymath.net"
-    val mockTestUrl = if(Preferences.onTestAPI.get()) "https://mock-dev.pulleymath.com" else "https://mock-live.pulleymath.com"
+    val baseNodeUrl = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> "https://pdf-live.pulleymath.net"
+        Server.staging.toString() -> "http://3.36.127.47:3000"
+        Server.dev.toString() -> "http://3.36.127.47:3000"
+        else -> "https://pdf-live.pulleymath.net"
+    }
+
+    val mockTestUrl = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> "https://mock-live.pulleymath.com"
+        Server.staging.toString() -> "https://mock-staging.pulleymath.com"
+        Server.dev.toString() -> "https://mock-dev.pulleymath.com"
+        else -> "https://mock-live.pulleymath.com"
+    }
     var token = ""
 
     enum class Type {
@@ -34,6 +38,9 @@ object Network {
                     mockTest -> mockTestUrl
                 }
             }
+    }
+    enum class Server {
+        live, staging, dev
     }
 
     fun retrofit(type: Type = Type.node): Retrofit {

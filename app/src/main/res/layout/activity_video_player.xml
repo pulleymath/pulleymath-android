@@ -18,6 +18,8 @@
             android:id="@+id/exoPlayerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:controller_layout_id="@layout/exo_playback_control_view"
+            app:show_timeout="3000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

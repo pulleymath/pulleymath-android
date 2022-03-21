@@ -210,7 +210,8 @@ open class PdfViewerActivity : Activity() {
         studentId =  intent.getStringExtra(KEY_STUDENT_ID)?:""
         token =  intent.getStringExtra(KEY_TOKEN)?:""
 
-        onTestApi = intent.getBooleanExtra(KEY_TEST_API_FLAG, false)
+//        onTestApi = intent.getBooleanExtra(KEY_TEST_API_FLAG, false)
+        onServerApi = intent.getStringExtra(KEY_API_FLAG) ?: "live"
 
         Network.token = token
 
@@ -882,11 +883,13 @@ open class PdfViewerActivity : Activity() {
         const val KEY_TOKEN = "token"
 
         const val KEY_TEST_API_FLAG = "test_api_flag"
+        const val KEY_API_FLAG = "api_flag"
 
         var studentId: String = ""
         var token: String = ""
 
         var onTestApi = false
-        var memos = mutableMapOf<String, PdfMemo>()
+        var onServerApi = "live"
+//        var memos = mutableMapOf<String, PdfMemo>()
     }
 }

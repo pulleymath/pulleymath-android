@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2021.repository.remote
 
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.*
+import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 //import dagger.Module
 //import dagger.Provides
 //import dagger.hilt.InstallIn
@@ -66,6 +67,17 @@ interface AffiliatedTestService {
     fun fetchScoringResult(@Path("student_id") studentId: String,
                            @Path("workbook_id") workbookId: Int,
                            @Query("version") version: Int) : Observable<AffiliatedScoringResultResponse>
+
+    @GET("media/list")
+    fun fetchMedia(@Query("problem_id") problemId: Int) : Observable<AffiliatedSolutionResponse>
+
+    @POST("media/log")
+    fun makeMediaLog(@Body params: AffiliatedMediaLog) : Observable<AffiliatedMediaLogResponse<Int>>
+//    fun makeMediaLog(@Body params: AffiliatedMediaLog) : Observable<BaseSingleResponseNode<Int>>
+
+    @PATCH("media/log/{response_media_id}/finish")
+    fun finishMediaLog(@Path("response_media_id") responseMediaId: Int,
+                       @Body params: AffiliatedMediaLog) : Observable<AffiliatedMediaLogResponse<String>>
 
 
 }

@@ -6,11 +6,15 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityVideoPlayerBinding
+import com.freewheelin.pulley.databinding.ExoPlaybackControlViewBinding
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
 import com.freewheelin.pulley.revision2021.viewmodel.VideoPlayerViewModel
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.android.exoplayer2.ExoPlayer
@@ -28,11 +32,12 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     companion object {
         val URI_STRING = "URI_STRING"
+        val SOLUTION = "AFF_SOLUTION"
 
-        fun getIntent(context: Context, uriString: String): Intent {
+        fun getIntent(context: Context, uriString: String, item: AffiliatedSolution): Intent {
             val intent = Intent(context, VideoPlayerActivity::class.java)
-            println("tpehf, put intent - num : ${uriString}")
             intent.putExtra(URI_STRING, uriString)
+            intent.putExtra(SOLUTION, item)
             return intent
         }
     }
@@ -40,9 +45,23 @@ class VideoPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setFullscreen()
+        makeMediaLog()
         initVideoPlayer()
     }
 
+    override fun onBackPressed() {
+        viewModel.finishMediaLog {
+            super.onBackPressed()
+        }
+    }
+
+    private fun makeMediaLog() {
+        val solution = intent.getSerializableExtra(SOLUTION) as? AffiliatedSolution ?: return
+        viewModel.let {
+            it.currentMedia = solution
+            it.makeMediaLog()
+        }
+    }
     private fun setFullscreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             window.attributes.layoutInDisplayCutoutMode =
@@ -75,11 +94,18 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
         val exoPlayerView = binding.exoPlayerView
 
+        exoPlayerView.findViewById<View>(R.id.back_btn).setOnClickListener {
+            onBackPressed()
+        }
+
         val mediaItem = MediaItem.fromUri(Uri.parse(videoUriString))
         val factory = DefaultDataSource.Factory(this)
         val progressiveMediaSource = ProgressiveMediaSource.Factory(factory)
 
-        player = ExoPlayer.Builder(this, progressiveMediaSource).build()
+        player = ExoPlayer.Builder(this, progressiveMediaSource)
+            .setSeekBackIncrementMs(10000)
+            .setSeekForwardIncrementMs(10000)
+            .build()
         exoPlayerView.player = player
 
         player.setMediaItem(mediaItem)

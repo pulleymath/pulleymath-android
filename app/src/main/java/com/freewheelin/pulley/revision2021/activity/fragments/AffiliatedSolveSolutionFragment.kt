@@ -1,30 +1,25 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.*
-import com.freewheelin.pulley.revision2021.activity.PdfListActivity
+import com.freewheelin.pulley.revision2021.activity.VideoPlayerActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedOpenProblem
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestAnswer2
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
-import com.freewheelin.pulley.revision2021.model.response.Pdf
+import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
-import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class AffiliatedSolveSolutionFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
 
     val binding: FragmentAffiliatedSolveSolutionBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_affiliated_solve_solution, null, false)
@@ -32,6 +27,8 @@ class AffiliatedSolveSolutionFragment : Fragment() {
     private val viewModel = AffiliatedSolveSolutionViewModel.instance
 
     companion object {
+        var tabSize: Int = 2
+
         @JvmStatic
         fun newInstance(): AffiliatedSolveSolutionFragment {
             return AffiliatedSolveSolutionFragment()
@@ -40,10 +37,7 @@ class AffiliatedSolveSolutionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+//        viewModel.fetchMedia()
     }
 
     override fun onCreateView(
@@ -55,66 +49,102 @@ class AffiliatedSolveSolutionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initUI()
-
     }
+
     private fun initUI() {
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-
-            val adapter = VideoLectureAdapter(viewModel)
-            videoRv.adapter = adapter
-            println("tpehf, viewmodel workbook_id :${viewModel.currentProblem.value?.workbook_id}")
+            solutionRv.adapter = VideoSolutionAdapter(viewModel)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchUnivTestGroup {
 
-        }
-    }
-
-    inner class VideoLectureAdapter(private val viewModel: AffiliatedSolveSolutionViewModel): ListAdapter<AffiliatedTestAnswer2, RecyclerView.ViewHolder>(DiffCallback<AffiliatedTestAnswer2>()) {
-        private val typeHeader = 0
-        private val typeItem = 1
-//        lateinit var headerBinding: HeaderAffiliatedSolutionVideoBinding
-
+    inner class VideoSolutionAdapter(private val viewModel: AffiliatedSolveSolutionViewModel): ListAdapter<AffiliatedSolution, RecyclerView.ViewHolder>(DiffCallback<AffiliatedSolution>()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return when (viewType) {
-                typeHeader -> {
-                    VideoHeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.header_affiliated_solution_video, parent, false))
-                }
-                else -> VideoItemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_affiliated_solution_video, parent, false))
-            }
+            return VideoSolutionHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_video_solution_all, parent, false))
         }
-
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            when (position) {
-                0 -> (holder as AffiliatedSolveSolutionFragment.VideoHeaderHolder).bind(getItem(position))
-                else -> (holder as AffiliatedSolveSolutionFragment.VideoItemHolder).bind(getItem(position))
-            }
+            (holder as AffiliatedSolveSolutionFragment.VideoSolutionHolder).bind(getItem(position))
         }
-
         override fun getItemViewType(position: Int): Int {
-            return when(position % 2) {
-                0 -> typeHeader
-                else -> typeItem
+            return position
+        }
+    }
+
+    inner class VideoSolutionHolder(private val binding: ItemVideoSolutionAllBinding): RecyclerView.ViewHolder(binding.root), SolutionItemClickListener {
+        fun bind(item: AffiliatedSolution) {
+            binding.let {
+                it.item = item
+                it.vm = viewModel
+                it.listener = this@VideoSolutionHolder
+                setAllContainerViewGone(it)
+
+                when (item.itemType) {
+                    AffiliatedSolution.ItemType.textHeader, AffiliatedSolution.ItemType.videoTextHeader -> {
+                        it.textHeaderContainer.visibility = View.VISIBLE
+                    }
+                    AffiliatedSolution.ItemType.pdfItem -> {
+                        it.pdfItemContainer.visibility = View.VISIBLE
+                    }
+                    AffiliatedSolution.ItemType.videoGroupHeader -> {
+                        it.videoGroupContainer.visibility = View.VISIBLE
+                    }
+                    AffiliatedSolution.ItemType.videoItem -> {
+                        it.videoItemContainer.visibility = View.VISIBLE
+                    }
+                    AffiliatedSolution.ItemType.videoFooter -> {
+                        it.videoFooterContainer.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+
+        private fun setAllContainerViewGone(view: ItemVideoSolutionAllBinding) {
+            view.apply {
+                textHeaderContainer.visibility = View.GONE
+                pdfItemContainer.visibility = View.GONE
+                videoGroupContainer.visibility = View.GONE
+                videoItemContainer.visibility = View.GONE
+                videoFooterContainer.visibility = View.GONE
+                emptyContainer.visibility = View.GONE
+            }
+        }
+
+        override fun onItemClick(item: AffiliatedSolution) {
+            when (item.itemType) {
+                AffiliatedSolution.ItemType.textHeader, AffiliatedSolution.ItemType.videoTextHeader -> {}
+                AffiliatedSolution.ItemType.pdfItem -> {
+                    viewModel.makeMediaLog(item)
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.fileurl))
+                    startActivity(intent)
+                }
+                AffiliatedSolution.ItemType.videoGroupHeader -> {
+                    item.isSelected = !item.isSelected
+                    viewModel.solutionFilter(item.id, item.group_no)
+                }
+                AffiliatedSolution.ItemType.videoItem -> {
+                    val intent = VideoPlayerActivity.getIntent(requireContext(), item.fileurl, item)
+                    startActivity(intent)
+                }
+                AffiliatedSolution.ItemType.videoFooter -> { }
             }
         }
     }
 
-    inner class VideoHeaderHolder(private val binding: HeaderAffiliatedSolutionVideoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: AffiliatedTestAnswer2) {
-
-        }
+    interface SolutionItemClickListener {
+        fun onItemClick(item: AffiliatedSolution)
     }
-    inner class VideoItemHolder(private val binding: ItemAffiliatedSolutionVideoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: AffiliatedTestAnswer2) {
+}
 
-        }
+@BindingAdapter("bind_solution_list")
+fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AffiliatedSolution>?) {
+//    Log.d("bind_solution_video_response", " size=${item?.size}")
+    item?.let { workbookList ->
+        val adapter = recyclerView.adapter as AffiliatedSolveSolutionFragment.VideoSolutionAdapter
+        adapter.submitList(null)
+        adapter.submitList(workbookList)
+        adapter.notifyDataSetChanged()
     }
-
 }

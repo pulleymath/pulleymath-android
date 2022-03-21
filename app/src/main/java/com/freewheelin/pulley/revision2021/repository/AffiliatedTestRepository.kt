@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2021.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedMediaLog
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestApi
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestService
@@ -25,4 +26,9 @@ class AffiliatedTestRepository private constructor() {
     fun finishTest(studentId: String, workbookId: Int) = affiliatedTestService.finish(studentId, workbookId)
     fun insertAnswer(studentId: String, workbookId: Int, problemNo: Int, param: Parameter) = affiliatedTestService.insertAnswer(studentId, workbookId, problemNo, param)
     fun fetchScoringResult(studentId: String, workbookId: Int, version: Int) = affiliatedTestService.fetchScoringResult(studentId, workbookId, version)
+
+    fun fetchMedia(problemId: Int) = affiliatedTestService.fetchMedia(problemId)
+    fun makeMediaLog(params: AffiliatedMediaLog) = affiliatedTestService.makeMediaLog(params)
+    fun finishMediaLog(responseMediaId: Int, params: AffiliatedMediaLog) = affiliatedTestService.finishMediaLog(responseMediaId, params)
+
 }

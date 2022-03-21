@@ -29,10 +29,12 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.FragmentAffiliatedTestBinding
+import com.freewheelin.pulley.databinding.ItemAffiliatedSolutionLectureBinding
 import com.freewheelin.pulley.databinding.ItemAffiliatedTestBinding
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
+import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import kotlinx.android.synthetic.main.dialog_daebak.*
@@ -66,7 +68,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_affiliated_test, container, false)
 
         solveResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -158,48 +160,49 @@ class AffiliatedTestFragment: LearningTabFragment() {
         super.onResume()
         remainingTimerListInStartTime.clear()
         remainingTimerListInFinishedTime.clear()
-        viewModel.fetchUnivTestGroup {}
-
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            viewModel.affiliatedTestCardList.value?.forEach {
-                when {
-                    it.thirdWorkbook.isFinished() -> {
-                        it.remainingTimeText.set("")
-                        it.isCompleted.set(true)
-                    }
-                    it.secondWorkbook.isFinished() -> {
-                        when {
-                            it.thirdWorkbook.isTestNotStartedYet() -> {
-                                it.remainingTimeText.set("자가진단 1차 완료")
-                            }
-                            else -> {
-                                it.remainingTimeText.set("자가진단 2차 진행중")
+        viewModel.fetchUnivTestGroup {
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewModel.affiliatedTestCardList.value?.forEach {
+                    when {
+                        it.thirdWorkbook.isFinished() -> {
+                            it.remainingTimeText.set("")
+                            it.isCompleted.set(true)
+                        }
+                        it.secondWorkbook.isFinished() -> {
+                            when {
+                                it.thirdWorkbook.isTestNotStartedYet() -> {
+                                    it.remainingTimeText.set("자가진단 1차 완료")
+                                }
+                                else -> {
+                                    it.remainingTimeText.set("자가진단 2차 진행중")
+                                }
                             }
                         }
-                    }
-                    it.firstWorkbook.isFinished() -> {
-                        when {
-                            it.secondWorkbook.isTestNotStartedYet() -> {
-                                it.remainingTimeText.set("자가진단 1차 진행 가능")
-                            }
-                            else -> {
-                                it.remainingTimeText.set("자가진단 1차 진행중")
+                        it.firstWorkbook.isFinished() -> {
+                            when {
+                                it.secondWorkbook.isTestNotStartedYet() -> {
+                                    it.remainingTimeText.set("자가진단 1차 진행 가능")
+                                }
+                                else -> {
+                                    it.remainingTimeText.set("자가진단 1차 진행중")
+                                }
                             }
                         }
-                    }
-                    else -> {
+                        else -> {
 //                    val testStartedAt = "2022-02-05 19:50:26"
-                        val testStartedAt = it.firstWorkbook.test_started_at ?: return@postDelayed
-                        setTestStartCountDownTimer(it, testStartedAt)
+                            val testStartedAt = it.firstWorkbook.test_started_at ?: return@postDelayed
+                            setTestStartCountDownTimer(it, testStartedAt)
 
 //                    val testFinishedAt = "2022-02-05 19:51:26"
-                        val testFinishedAt = it.firstWorkbook.test_finished_at ?: return@postDelayed
-                        setTestFinishCountDownTimer(it, testFinishedAt)
+                            val testFinishedAt = it.firstWorkbook.test_finished_at ?: return@postDelayed
+                            setTestFinishCountDownTimer(it, testFinishedAt)
+                        }
                     }
                 }
-            }
-        }, 1000)
+            }, 100)
+        }
+
+
     }
 
     private fun setTestStartCountDownTimer(card: AffiliatedTestCard, timeStr: String) {

@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.utils
 
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+
 object Preferences {
 
     val isNovice: Boolean
@@ -12,6 +14,7 @@ object Preferences {
         }
 
     var onTestAPI = APPreference(false)
+    var onServerAPI = APPreference(Network.Server.live.toString())
     var onLoggingEvent = APPreference(false)
     var onSuccessToast = APPreference(false)
 //    var testBaseURL = APPreference("https://api-staging.pulleymath.com")

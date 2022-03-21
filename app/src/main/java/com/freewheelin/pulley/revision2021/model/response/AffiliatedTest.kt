@@ -440,6 +440,111 @@ class AffiliatedScoringResult: Serializable {
     lateinit var student_workbook: AffiliatedStudentWorkbook
 }
 
+class AffiliatedSolution: BaseDiffItem, Serializable {
+    var id: Int = -1
+    override fun getId() = "$id"
+
+    var problem_id: Int = -1
+    var group_no: Int = -1
+    var seq: Int = -1
+    var group_title: String = ""
+    var media_file_id: Int = -1
+    var subject: String = ""
+    var type: String = ""
+    var title: String = ""
+    var length: Int = -1 // 비디오의 총 시간(초)
+    var filename: String = ""
+    var thumburl: String = ""
+    var fileurl: String = ""
+
+
+    constructor(type: ItemType, title: String, id: Int, parentId: Int = -1) {
+        this.id = id
+        itemType = type
+        this.title = title
+        this.parentId = parentId
+    }
+    constructor(type: ItemType, solution: AffiliatedSolution) {
+        this.id = hashCode()
+        itemType = type
+        this.title = solution.title
+        this.group_no = solution.group_no
+        this.group_title = solution.group_title
+    }
+    var listOrder: String = ""
+
+    var isSelected: Boolean = false // ObservableBoolean = ObservableBoolean(false)
+
+    var itemType: ItemType? = null
+        get() {
+            return if (field == null) {
+                when (type) {
+                    "video" -> ItemType.videoItem
+                    "pdf" -> ItemType.pdfItem
+                    else -> ItemType.textHeader
+                }
+            } else {
+                field
+            }
+        }
+
+    fun isVideoGroup (): Boolean {
+        val it = itemType ?: return false
+        return when (it) {
+            ItemType.videoGroupHeader, ItemType.videoItem, ItemType.videoFooter -> true
+            else -> false
+        }
+     }
+    fun isNotVideoGroup() : Boolean {
+        return !isVideoGroup()
+    }
+    fun isVideoItemAndFooter(): Boolean {
+        val it = itemType ?: return false
+        return when (it) {
+            ItemType.videoItem, ItemType.videoFooter -> true
+            else -> false
+        }
+    }
+    fun isNotVideoItemAndFooter(): Boolean {
+        return !isVideoItemAndFooter()
+    }
+    var parentId: Int = -1
+    enum class ItemType {
+        textHeader,
+        pdfItem,
+        videoTextHeader,
+        videoGroupHeader, // video group
+        videoItem, // video group
+        videoFooter // video group
+    }
+
+    val minSec: String
+        get() {
+            if (length == -1) return "00:00"
+            val min = (length / 60).let {
+                if (it < 10) {
+                    return@let "0${it}"
+                }
+                return@let "${it}"
+            }
+            val sec = (length % 60).let {
+                if (it < 10) return@let "0${it}"
+                return@let "${it}"
+            }
+            return "${min}:${sec}"
+        }
+    var videoGroupDurationString: String = "00:00"
+}
+
+
+class AffiliatedMediaLogResponse<T>: Serializable {
+    var data: T? = null
+    var error: Any? = null
+    var message: Any? = null
+    var pageable: Any? = null
+    var current_time: String? = ""
+}
+
 class AffiliatedTestResponse : BaseResponse<AffiliatedTestGroup>()
 class AffiliatedTestWorkbookResponse : BaseResponse<AffiliatedTestWorkbook>()
 class AffiliatedTestWorkbookOnStudentResponse : BaseResponse<AffiliatedTestWorkbookOnStudent>()
@@ -450,3 +555,6 @@ class AffiliatedGroupResponse : BaseSingleResponseNode<AffiliatedGroup>()
 class AffiliatedOpenProblemResponse : BaseSingleResponseNode<AffiliatedOpenProblem>()
 class AffiliatedStudentWorkbookResponse : BaseSingleResponseNode<AffiliatedStudentWorkbook>()
 class AffiliatedScoringResultResponse : BaseSingleResponseNode<AffiliatedScoringResult>()
+class AffiliatedSolutionResponse : BaseResponse<AffiliatedSolution>()
+
+data class AffiliatedMediaLog(val problem_id: Int, val media_id: Int, val media_file_id: Int, val student_id: String): Serializable

@@ -100,7 +100,6 @@ class PdfListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         viewModel.listPdf()
     }
 
@@ -382,7 +381,8 @@ class PdfListActivity : AppCompatActivity() {
                 putExtra(PdfViewerActivity.KEY_STUDENT_ID, user!!.studentID)
                 putExtra(PdfViewerActivity.KEY_TOKEN, user!!.token)
 
-                putExtra(PdfViewerActivity.KEY_TEST_API_FLAG, Preferences.onTestAPI.get())
+//                putExtra(PdfViewerActivity.KEY_TEST_API_FLAG, Preferences.onTestAPI.get())
+                putExtra(PdfViewerActivity.KEY_API_FLAG, Preferences.onServerAPI.get().toString())
 
                 var linkString = ""
                 for(link in answerLinks) {

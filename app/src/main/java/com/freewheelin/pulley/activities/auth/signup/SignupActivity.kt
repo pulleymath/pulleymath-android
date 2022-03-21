@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -20,17 +22,13 @@ import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.ActivitySignupBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_signup.*
-import kotlinx.android.synthetic.main.activity_signup.rootView
-import kotlinx.android.synthetic.main.fragment_signup_student_info.*
-import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,15 +47,17 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
     lateinit var signupFragment: SignupFragment
     lateinit var studentInfoFragment: StudentInfoFragment
-
+    private val binding: ActivitySignupBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_signup, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signup)
+        setContentView(binding.root)
         initUI()
     }
 
     private fun initUI() {
-        rootView.setOnTouchListener { view, motionEvent ->
+        binding.rootView.setOnTouchListener { view, motionEvent ->
             currentFocus?.let { hideKeyboard(it) }
             false
         }
@@ -69,8 +69,8 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         studentInfoFragment = StudentInfoFragment()
 
         val pagerAdapter = SignupViewPagerAdapter(listOf(signupFragment,studentInfoFragment), this)
-        viewPager.isUserInputEnabled = false
-        viewPager.adapter = pagerAdapter
+        binding.viewPager.isUserInputEnabled = false
+        binding.viewPager.adapter = pagerAdapter
     }
 
     override fun goBack() {
@@ -78,12 +78,12 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     override fun goStudentInfo() {
-        viewPager.currentItem = 1
+        binding.viewPager.currentItem = 1
     }
 
     override fun onBackPressed() {
-        if(viewPager.currentItem == 1) {
-            viewPager.currentItem = 0
+        if(binding.viewPager.currentItem == 1) {
+            binding.viewPager.currentItem = 0
         } else {
             if(!signupFragment.isAllEmpty() || signupFragment.isAvailableToSecondStep()){ // 동의 후 이탈일 경우 팝업 확인
                 DialogUtils.confirmDialog(this, "알림", "회원가입을 완료하지 않았습니다. 회원가입을 중단하시겠습니까?", rightBtnCB = {
@@ -168,12 +168,12 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         }
         when(errorTemplate?.error){
             LoginActivity.NOT_MATCH_PW -> {
-                signupFragment.emailDet.isShownError = false
-                signupFragment.pwDet.showErrorMsg(errorTemplate.message?:"")
+                signupFragment.binding.emailDet.isShownError = false
+                signupFragment.binding.pwDet.showErrorMsg(errorTemplate.message?:"")
             }
             LoginActivity.LOCK_ACCOUNT, LoginActivity.LOGINID_INVALID -> {
-                signupFragment.emailDet.showErrorMsg(errorTemplate.message?:"")
-                signupFragment.pwDet.isShownError = false
+                signupFragment.binding.emailDet.showErrorMsg(errorTemplate.message?:"")
+                signupFragment.binding.pwDet.isShownError = false
             }
             else -> {
                 DialogUtils.showServerErr(this)

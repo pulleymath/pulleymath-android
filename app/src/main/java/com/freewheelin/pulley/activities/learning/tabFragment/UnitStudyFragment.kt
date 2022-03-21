@@ -34,11 +34,11 @@ import com.freewheelin.pulley.dialogs.UnitPlanAddDialogListener
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.tooltip.TutorWindow
-import com.ht.balloonwindow.BalloonWindow
-import com.ht.balloonwindow.BalloonWindowListener
-import com.ht.balloonwindow.toPx
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
 import kotlinx.android.synthetic.main.fragment_unit_study.*
 import kotlinx.android.synthetic.main.item_piece_learned_in_four.*
 import kotlinx.android.synthetic.main.item_piece_learned_in_four.view.*

@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
 import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.DailyTestReportActivity
@@ -26,15 +27,12 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-//import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.fragment_snack_test.*
-import kotlinx.android.synthetic.main.fragment_snack_test.view.*
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -49,16 +47,13 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override var screenName = "테스트"
 
+    lateinit var binding: FragmentSnackTestBinding
+
     var timer: Timer? = null
-
     var currentMainFragment: TestMainBaseFragment? = null
-
     var set: HashSet<TestPageBaseFragment> = HashSet()
-
     var scoringReceiver: BroadcastReceiver? = null
-
     var settingReceiver: BroadcastReceiver? = null
-
     var clearRecevier: BroadcastReceiver? = null
 
     var isStartWithInitTest = false
@@ -93,8 +88,8 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_snack_test, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_snack_test, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,7 +120,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "테스트 시작하기", test.getTestType().eventItemValue)
         if(Date() > test.endDate && (test.getTestType() == Test.TestType.weekly || test.getTestType() == Test.TestType.daily)) {
             val dialog = DialogUtils.makeDialog(requireContext(), "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
-            dialog.rightBtn.visibility = View.GONE
+            dialog.binding.rightBtn.visibility = View.GONE
             dialog.show()
 
         } else {
@@ -185,10 +180,12 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun initUI() {
-        dailyContainer.setOnClickListener { onSelectorContainerClicked(it) }
-        weeklyContainer.setOnClickListener { onSelectorContainerClicked(it) }
-        wrongContainer.setOnClickListener { onSelectorContainerClicked(it) }
-        runTimer()
+        binding.apply {
+            dailyContainer.setOnClickListener { onSelectorContainerClicked(it) }
+            weeklyContainer.setOnClickListener { onSelectorContainerClicked(it) }
+            wrongContainer.setOnClickListener { onSelectorContainerClicked(it) }
+            runTimer()
+        }
     }
 
     private fun syncTestList(reStudyTest: Test? = null) {
@@ -202,71 +199,113 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
             }
 
             setSelectorUI()
-            if(currentMainFragment == null) {
-                val test = tests.first()
-                when(test.getTestType()) {
-                    Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
-                    Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
-                    Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
-                }
-            } else {
-                val testType = currentMainFragment!!.testType
-                when(testType) {
-                    Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
-                    Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
-                    Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+            binding.apply {
+                if (currentMainFragment == null) {
+                    val test = tests.first()
+                    when (test.getTestType()) {
+                        Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
+                        Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
+                        Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                    }
+                } else {
+                    val testType = currentMainFragment!!.testType
+                    when (testType) {
+                        Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
+                        Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
+                        Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                    }
                 }
             }
         }
     }
 
     private fun onSelectorContainerClicked(view: View) {
+        binding.apply {
+            if (requireContext().isTablet) {
+                dailyContainer.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
+                weeklyContainer.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
+                wrongContainer.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
 
-        if(requireContext().isTablet) {
-            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
-            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
-            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.shadow_clear)
+                view.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.snack_shadow_border_purple
+                )
+            } else {
+                dailyContainer.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.bg_common_white_stroke_grey
+                )
+                weeklyContainer.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.bg_common_white_stroke_grey
+                )
+                wrongContainer.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.bg_common_white_stroke_grey
+                )
 
-            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.snack_shadow_border_purple)
-        } else {
-            dailyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
-            weeklyContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
-            wrongContainer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_common_white_stroke_grey)
-
-            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round)
-        }
-        val set = ConstraintSet()
-        set.clone(rootView)
-
-        when(view) {
-            dailyContainer -> {
-                set.connect(arrowIv.id, TOP, dailyContainer.id, TOP)
-                set.connect(arrowIv.id, BOTTOM, dailyContainer.id, BOTTOM)
-                val test = tests.filter { it.getTestType() == Test.TestType.daily }.firstOrNull()
-                // set test info to
-                setUserRecentSubject(test)
-
-                setMainFragment(test, Test.TestType.daily)
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "데일리테스트")
-
+                view.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round
+                )
             }
-            weeklyContainer -> {
-                set.connect(arrowIv.id, TOP, weeklyContainer.id, TOP)
-                set.connect(arrowIv.id, BOTTOM, weeklyContainer.id, BOTTOM)
-                val test = tests.filter { it.getTestType() == Test.TestType.weekly }.firstOrNull()
-                setMainFragment(test, Test.TestType.weekly)
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "주간테스트")
-            }
-            wrongContainer -> {
-                set.connect(arrowIv.id, TOP, wrongContainer.id, TOP)
-                set.connect(arrowIv.id, BOTTOM, wrongContainer.id, BOTTOM)
-                tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()?.let { test ->
-                    setMainFragment(test, Test.TestType.wrong)
+            val set = ConstraintSet()
+            set.clone(rootView)
+
+            when (view) {
+                dailyContainer -> {
+                    set.connect(arrowIv.id, TOP, dailyContainer.id, TOP)
+                    set.connect(arrowIv.id, BOTTOM, dailyContainer.id, BOTTOM)
+                    val test =
+                        tests.filter { it.getTestType() == Test.TestType.daily }.firstOrNull()
+                    // set test info to
+                    setUserRecentSubject(test)
+
+                    setMainFragment(test, Test.TestType.daily)
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "테스트",
+                        "데일리테스트"
+                    )
+
                 }
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트")
+                weeklyContainer -> {
+                    set.connect(arrowIv.id, TOP, weeklyContainer.id, TOP)
+                    set.connect(arrowIv.id, BOTTOM, weeklyContainer.id, BOTTOM)
+                    val test =
+                        tests.filter { it.getTestType() == Test.TestType.weekly }.firstOrNull()
+                    setMainFragment(test, Test.TestType.weekly)
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "테스트",
+                        "주간테스트"
+                    )
+                }
+                wrongContainer -> {
+                    set.connect(arrowIv.id, TOP, wrongContainer.id, TOP)
+                    set.connect(arrowIv.id, BOTTOM, wrongContainer.id, BOTTOM)
+                    tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()
+                        ?.let { test ->
+                            setMainFragment(test, Test.TestType.wrong)
+                        }
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "테스트",
+                        "오답테스트"
+                    )
+                }
             }
+            set.applyTo(rootView)
         }
-        set.applyTo(rootView)
     }
 
     private fun setUserRecentSubject(test:Test?) {
@@ -341,9 +380,10 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
         val dailyTest = tests.filter { it.getTestType() == Test.TestType.daily }.firstOrNull()
         val weeklyTest = tests.filter { it.getTestType() == Test.TestType.weekly }.firstOrNull()
         val wrongTest = tests.filter { it.getTestType() == Test.TestType.wrong }.firstOrNull()
-
-        dailyContainer.setUpUI(dailyTest)
-        weeklyContainer.setUpUI(weeklyTest)
-        wrongContainer.setUpUI(wrongTest)
+        binding.apply {
+            dailyContainer.setUpUI(dailyTest)
+            weeklyContainer.setUpUI(weeklyTest)
+            wrongContainer.setUpUI(wrongTest)
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
+import android.content.res.ColorStateList
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -42,9 +43,11 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveConceptViewModel
+import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,10 +60,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     PencilcaseListener {
 
     private val binding: ActivityAffiliatedTestSolveBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_affiliated_test_solve, null, false)
+        DataBindingUtil.inflate(
+            LayoutInflater.from(this),
+            R.layout.activity_affiliated_test_solve,
+            null,
+            false
+        )
     }
     private val viewModel: AffiliatedTestSolveViewModel by viewModels()
     private val conceptViewModel = AffiliatedSolveConceptViewModel.instance
+    private val solutionViewModel = AffiliatedSolveSolutionViewModel.instance
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScrenHeight(this) }
@@ -116,9 +125,11 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         fetchProblem()
         registerReceiver()
     }
+
     private fun getExtra() {
         with(viewModel) {
-            selectedWorkbook = intent.getSerializableExtra(SELECTED_WORKBOOK) as? AffiliatedTestWorkbook
+            selectedWorkbook =
+                intent.getSerializableExtra(SELECTED_WORKBOOK) as? AffiliatedTestWorkbook
             isReview.value = intent.getBooleanExtra(IS_REVIEW, false)
 
             selectedWorkbook?.let {
@@ -133,6 +144,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             }
         }
     }
+
     fun registerReceiver() {
         finishReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -144,7 +156,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 }
             }
         }
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishReceiver, IntentFilter(BROADCAST_MSG))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(finishReceiver, IntentFilter(BROADCAST_MSG))
 
     }
 
@@ -186,18 +199,19 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         AffiliatedSolveConceptFragment.newInstance(),
         AffiliatedSolveSolutionFragment.newInstance()
     )
-    private val tabTitles = arrayOf("해설", "개념")
+//    var tabList: MutableList<TabLayout.Tab> = mutableListOf()
+    private var tabTitles = arrayOf("해설", "개념학습")
 
-    fun initUI () {
+    fun initUI() {
         binding.apply {
             lifecycleOwner = this@AffiliatedTestSolveActivity
             vm = viewModel
 
             pager.adapter = ViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
             pager.isUserInputEnabled = false
-
             TabLayoutMediator(tabLayout, pager) { tab, position ->
                 tab.text = tabTitles[position]
+//                tabList.add(tab)
             }.attach()
 
             backBtn.setOnClickListener {
@@ -211,7 +225,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             problemMemoView.set(pencilcaseView)
 //            solutionMemoView.set(pencilcaseView)
 
-            val imageWidth = when(this@AffiliatedTestSolveActivity.densityLevel) {
+            val imageWidth = when (this@AffiliatedTestSolveActivity.densityLevel) {
                 Low -> screenWidth / 2
                 High -> (screenWidth / 2.7).toInt()
                 else -> (500.toPx()).toInt()
@@ -234,7 +248,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                         viewModel.finishTest {
                             this@AffiliatedTestSolveActivity.runOnUiThread {
                                 DialogUtils.v2FinishTestDialog(this@AffiliatedTestSolveActivity) {
-                                    val intent = Intent(getActivity(), LearningTabActivity::class.java)
+                                    val intent =
+                                        Intent(getActivity(), LearningTabActivity::class.java)
                                     intent.putExtra(SELECTED_WORKBOOK, viewModel.selectedWorkbook)
                                     setResult(AffiliatedTestFragment.SHOW_REPORT_INT, intent)
                                     if (!isFinishing) finish()
@@ -245,7 +260,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 }
             }
             baseCl.setOnDragListener { view, dragEvent ->
-                when(dragEvent.action) {
+                when (dragEvent.action) {
                     DragEvent.ACTION_DRAG_LOCATION -> {
 
                     }
@@ -261,7 +276,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                         if (y > screenHeight) {
                             val answerWidth = answerView.width
 
-                            x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                            x =
+                                dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                             y = dragEvent.y - answerHeight / 2f
 
                             // 화면 밖으로 나가면 안으로 넣기
@@ -293,13 +309,21 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 //                    }
                     }
                     DragEvent.ACTION_DROP -> {
-                        LogUtils.logEvent(this@AffiliatedTestSolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "플로팅OMR 드래그", itemValue)
+                        LogUtils.logEvent(
+                            this@AffiliatedTestSolveActivity,
+                            user,
+                            PulleyEvent.BUTTON_CLICK,
+                            "바로풀기화면",
+                            "플로팅OMR 드래그",
+                            itemValue
+                        )
                         answerView.visibility = View.VISIBLE
 
                         val answerHeight = answerView.height
                         val answerWidth = answerView.width
 
-                        var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        var x =
+                            dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                         var y = dragEvent.y - answerHeight / 2f
                         // 화면 밖으로 나가면 안으로 넣기
                         if (x > screenWidth - answerWidth) {
@@ -321,34 +345,33 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 true
             }
 
-            problemGesture = ProblemGestures(this@AffiliatedTestSolveActivity, problemIv, problemMemoView)
+            problemGesture =
+                ProblemGestures(this@AffiliatedTestSolveActivity, problemIv, problemMemoView)
             problemGesture?.listener = this@AffiliatedTestSolveActivity
             problemContainer.setOnTouchListener(problemGesture)
-
-            videoView.setOnClickListener {
-                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter1.mp4"
-                val intent = VideoPlayerActivity.getIntent(baseContext, url)
-                startActivity(intent)
-            }
-
-            videoView2.setOnClickListener {
-                val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/android-video-test/winter2.mp4"
-                val intent = VideoPlayerActivity.getIntent(baseContext, url)
-                startActivity(intent)
-            }
 
         }
     }
 
     fun onProblemSelected(problem: AffiliatedTestProblem?, autoFocus: Boolean) {
-        viewModel.currentProblem.postValue(problem)
+
 //        conceptViewModel.currentProblem.postValue(problem)
+        viewModel.currentProblem.postValue(problem)
+
         saveMemo()
         onSetProblem(problem)
 
-        if(problem != null) {
-            if(viewModel.currentProblem.value?.getResultByScoring() == Result.yet && viewModel.currentProblem.value?.getProblemType() == ProblemType.short) {
-            // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
+
+        solutionViewModel.fetchMedia(problem?.id) { showEmptyView ->
+            binding.apply {
+//                tabLayout.getTabAt(1)?.view?.isClickable = isSolutionEnable
+                solutionViewModel.showEmptyView.postValue(showEmptyView)
+            }
+        }
+
+        if (problem != null) {
+            if (viewModel.currentProblem.value?.getResultByScoring() == Result.yet && viewModel.currentProblem.value?.getProblemType() == ProblemType.short) {
+                // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
             } else {
                 binding.answerView.clearFocusOnShortAnswer()
             }
@@ -358,8 +381,11 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         viewModel.apply {
             val isWrongAnswer = problem?.is_correct == false
             val _isReview = isReview.value == true
-            showSolutionView.value = _isReview && isWrongAnswer
-            isEnableSolutionSwitch.value = isWrongAnswer
+            val showSolutionFlag = _isReview && isWrongAnswer
+            if (!showSolutionFlag) {
+                showSolutionView.postValue(false)
+            }
+            isEnableSolutionSwitch.postValue(isWrongAnswer)
         }
     }
 
@@ -381,7 +407,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     private fun set5MinTimer() {
-        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds()?: return // todo dummy
+        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() ?: return // todo dummy
         val currentServerTimeString = viewModel.currentTimeString ?: return
 //        val before5MinItEnds = "2022-02-07 11:36:00"
 
@@ -393,7 +419,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             override fun onTick(diff: Long) {}
 
             override fun onFinish() {
-                binding.remainingTime.setTextColor(ContextCompat.getColor(this@AffiliatedTestSolveActivity, R.color.red_300))
+                binding.remainingTime.setTextColor(
+                    ContextCompat.getColor(
+                        this@AffiliatedTestSolveActivity,
+                        R.color.red_300
+                    )
+                )
             }
         }.start()
     }
@@ -430,6 +461,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         }.start()
 
     }
+
     private fun setRemainingTimer() {
         if (!viewModel.showTimer) return
 
@@ -455,11 +487,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
             override fun onFinish() {
                 viewModel.finishTest {
-                    LocalBroadcastManager.getInstance(baseContext).sendBroadcast(Intent(BROADCAST_MSG))
+                    LocalBroadcastManager.getInstance(baseContext)
+                        .sendBroadcast(Intent(BROADCAST_MSG))
                 }
             }
         }.start()
     }
+
     override fun onPause() {
         super.onPause()
         remainingTimer?.cancel()
@@ -468,14 +502,15 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     fun onSetProblem(problem: AffiliatedTestProblem?) {
-        if(binding.pencilcaseView.writeModeSwitch.isChecked == false)
+        if (binding.pencilcaseView.writeModeSwitch.isChecked == false)
             binding.pencilcaseView.setDefaultState()
 
-        if(problem == null) {
+        if (problem == null) {
             problemGesture?.init()
 //            solutionGesture?.init()
             binding.apply {
-                val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                val conceptFragment =
+                    supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
                 conceptFragment?.gestureInit()
             }
         } else {
@@ -483,7 +518,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             problemGesture?.init()
 //            solutionGesture?.init()
             binding.apply {
-                val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                val conceptFragment =
+                    supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
                 conceptFragment?.gestureInit()
 
                 problemMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
@@ -497,7 +533,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     private fun checkShortAnswer() {
         if (viewModel.currentProblem.value?.type == "주관식") {
             val textValue = binding.answerView.getShortAnswerText()
-            if(textValue.isNotEmpty() && viewModel.currentProblem.value?.user_answer?.length ?:0 < 1) {
+            if (textValue.isNotEmpty() && viewModel.currentProblem.value?.user_answer?.length ?: 0 < 1) {
                 viewModel.currentProblem.value?.user_answer = textValue
             }
         }
@@ -524,7 +560,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
         binding.apply {
             problemContainer.setOnTouchListener(null)
-            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+            val conceptFragment =
+                supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
             conceptFragment?.setTouchListener(isRelease = true)
         }
 
@@ -556,7 +593,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                     override fun onAnimationEnd(p0: Animator?) {
                         binding.apply {
                             problemContainer.setOnTouchListener(problemGesture)
-                            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                            val conceptFragment = supportFragmentManager.findFragmentByTag(
+                                "f" + pager.adapter?.getItemId(pager.currentItem)
+                            ) as? AffiliatedSolveConceptFragment
                             conceptFragment?.setTouchListener(isRelease = false)
                         }
                     }
@@ -577,13 +616,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         })
         anim.start()
     }
+
     fun nextAnim() {
         checkShortAnswer()
 
         binding.apply {
             problemContainer.setOnTouchListener(null)
-            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
-            conceptFragment?.setTouchListener(isRelease = true)}
+            val conceptFragment =
+                supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+            conceptFragment?.setTouchListener(isRelease = true)
+        }
 
         val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.duration = 100
@@ -601,7 +643,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 anim.addUpdateListener {
                     var value = it.animatedValue as Float
                     value = value.pow(2)
-                    binding.solveCl.x = binding.problemContainer.width.toFloat() - binding.problemContainer.measuredWidth.toFloat() * value
+                    binding.solveCl.x =
+                        binding.problemContainer.width.toFloat() - binding.problemContainer.measuredWidth.toFloat() * value
                     binding.solveCl.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
@@ -609,13 +652,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                     override fun onAnimationEnd(p0: Animator?) {
                         binding.apply {
                             problemContainer.setOnTouchListener(problemGesture)
-                            val conceptFragment = supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AffiliatedSolveConceptFragment
+                            val conceptFragment = supportFragmentManager.findFragmentByTag(
+                                "f" + pager.adapter?.getItemId(pager.currentItem)
+                            ) as? AffiliatedSolveConceptFragment
                             conceptFragment?.setTouchListener(isRelease = false)
                         }
 
 //                        binding.solutionContainer.setOnTouchListener(solutionGesture)
 
                     }
+
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {
                         val nextIndex = viewModel.problemIndex.value?.plus(1)
@@ -626,6 +672,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 })
                 anim.start()
             }
+
             override fun onAnimationCancel(p0: Animator?) {}
             override fun onAnimationStart(p0: Animator?) {}
         })
@@ -633,7 +680,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     override fun onEditTypeChanged(type: Pencilcase.EditType?) {
-        if(type == null) {
+        if (type == null) {
             binding.apply {
                 problemContainer.isBlock = false
                 val conceptFragment =
@@ -649,12 +696,15 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             }
         }
 
-        if(type == Pencilcase.EditType.pencil)
-            Tutor.showToolTipIfNeed(binding.pencilcaseView.pencilBtn, Tutor.TooltipType.takeNoteScroll)
+        if (type == Pencilcase.EditType.pencil)
+            Tutor.showToolTipIfNeed(
+                binding.pencilcaseView.pencilBtn,
+                Tutor.TooltipType.takeNoteScroll
+            )
     }
 
     override fun onThicknessSelected(thickness: Pencilcase.Thickness) {
-        val itemName  = when(thickness) {
+        val itemName = when (thickness) {
             Pencilcase.Thickness.line -> "펜굵기-1"
             Pencilcase.Thickness.thin -> "펜굵기-2"
             Pencilcase.Thickness.medium -> "펜굵기-3"
@@ -678,7 +728,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
-        if(viewModel.answeredSet.isNotEmpty()) {
+        if (viewModel.answeredSet.isNotEmpty()) {
             DialogUtils.v2GetOutSolveViewDialog(this) {
                 saveMemo()
                 super.onBackPressed()
@@ -694,6 +744,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         binding.problemMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
 //        binding.solutionMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
     }
+
     override fun getActivity(): Activity = this
 
     override fun onAnswerChanged(view: View, answer: String?, problem: AffiliatedTestProblem?) {
@@ -715,6 +766,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     override fun onEnter() {
         next()
     }
+
     fun onMarkingBtnClicked() {
 
     }
@@ -728,9 +780,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     override fun onLeftSwipe() {
-        if(binding.pencilcaseView.editType == null) {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-이전", itemValue)
-            if(viewModel.currentProblem.value != viewModel.problemList.value?.firstOrNull())
+        if (binding.pencilcaseView.editType == null) {
+            LogUtils.logEvent(
+                this,
+                user,
+                PulleyEvent.BUTTON_CLICK,
+                "바로풀기화면",
+                "문제 스와이프-이전",
+                itemValue
+            )
+            if (viewModel.currentProblem.value != viewModel.problemList.value?.firstOrNull())
                 prevAnim()
             else
                 DaebakToast.show(this, "첫번째 문제입니다 :)")
@@ -738,30 +797,28 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     override fun onRightSwipe() {
-        if(binding.pencilcaseView.editType == null) {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-다음", itemValue)
-            if(viewModel.currentProblem.value != viewModel.problemList.value?.lastOrNull())
+        if (binding.pencilcaseView.editType == null) {
+            LogUtils.logEvent(
+                this,
+                user,
+                PulleyEvent.BUTTON_CLICK,
+                "바로풀기화면",
+                "문제 스와이프-다음",
+                itemValue
+            )
+            if (viewModel.currentProblem.value != viewModel.problemList.value?.lastOrNull())
                 nextAnim()
             else
                 DaebakToast.show(this, "마지막 문제입니다 :)")
         }
     }
-
-//    override fun onItemChanged(set: ObservableHashSet<AffiliatedTestProblem>) {
-//        if(set.isEmpty()) {
-//            binding.answerView.disableMarking()
-//        } else {
-//            binding.answerView.enableMarking(set.size)
-//        }
-//    }
 }
-//class ViewPagerAdapter(val fragments: List<Fragment>, fragment: FragmentActivity) :
-//    FragmentStateAdapter(fragment) {
+
 class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
-        return 2
+        return AffiliatedSolveSolutionFragment.tabSize
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -769,9 +826,6 @@ class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentM
             0 -> fragments[position]
             1 -> {
                 val fragment = fragments[position]
-                fragment.arguments = Bundle().apply {
-                    putString("param1", "value1")
-                }
                 fragment
             }
             else -> fragments[position]

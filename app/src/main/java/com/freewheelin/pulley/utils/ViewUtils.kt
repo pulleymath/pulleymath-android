@@ -22,7 +22,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.views.TooltipWindow
-import com.ht.balloonwindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_note_detail.*

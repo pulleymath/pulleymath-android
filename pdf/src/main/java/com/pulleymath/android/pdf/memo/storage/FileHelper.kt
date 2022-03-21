@@ -2,6 +2,7 @@ package com.pulleymath.android.pdf.memo.storage
 
 import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import com.google.gson.Gson
 import com.pulleymath.android.pdf.PdfViewerActivity
 import com.pulleymath.android.pdf.log.Network
@@ -39,7 +40,7 @@ object FileHelper {
 
             db.pdfWritingDao().delete(memo)
             Network.uploadMemo(listOf(memo))
-            PdfViewerActivity.memos.set(memo.id, memo)
+//            PdfViewerActivity.memos.set(memo.id, memo)
         }
     }
 
@@ -65,7 +66,9 @@ object FileHelper {
                     )
                     db.pdfWritingDao().upsert(listOf(memo))
                     Network.uploadMemo(listOf(memo))
-                    PdfViewerActivity.memos.set(memo.id, memo)
+//                    PdfViewerActivity.memos.set(memo.id, memo)
+                } catch (e:OutOfMemoryError) {
+                    showAlert(context, "메모리가 부족해서 필기한 내용을 저장할 수 없습니다. 메모리를 정리하세요.")
                 } catch (e:Exception) {
                     e.printStackTrace()
                 }
@@ -94,6 +97,20 @@ object FileHelper {
                     Log.e(javaClass.simpleName, "${e.localizedMessage}")
                 }
             }
+        }
+    }
+
+    fun showAlert(context: Context, msg: String, title: String="알림") {
+        AlertDialog.Builder(context).apply {
+            setTitle(title)
+            setMessage(msg)
+            setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+            }
+//            setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which ->
+//                /* 취소 후 처리 */
+//            })
+            show()
         }
     }
 }

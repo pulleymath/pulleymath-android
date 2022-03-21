@@ -38,6 +38,7 @@ import com.freewheelin.pulley.core.Version.v1
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.dialogs.UpdateDialog
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.utils.*
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
@@ -73,6 +74,7 @@ enum class SettingCategory(val title: String) {
                             ClearAllStudy,
                             CrashlyticsCrash, CrashlyticsReport,
                             ClearTutorialHistory,
+                            StagingAPI,
                             TestAPI,
                             ShowEventLogging,
                             ShowProblem,
@@ -124,6 +126,7 @@ enum class Setting(val title: String) {
     CrashlyticsCrash("강제 크래시"),
     CrashlyticsReport("크래시리틱 리포트"),
     ClearTutorialHistory("튜토리얼 보인 내역 삭제"),
+    StagingAPI("Staging서버로 접속"),
     TestAPI("Test서버로 접속"),
     ShowEventLogging("이벤트 로깅 보이기"),
     ShowProblem("문제가 잘나오나?"),
@@ -220,7 +223,7 @@ class MyMainPageFragment : Fragment() {
             Customer -> moveTo(MyCustomerFragment())
 
             Logout -> {
-                DialogUtils.DaebakDialog(requireContext(), true).apply {
+                DialogUtils.DaebakTitleOnlyDialog(requireContext()).apply {
                     title = "로그아웃하시겠습니까?"
                     type = DialogType.alert
                     leftBtn.text = "아니요"
@@ -404,6 +407,9 @@ class MyMainPageFragment : Fragment() {
                 }.show()
             }
 
+            StagingAPI -> {
+
+            }
             TestAPI -> {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("현재 테스트 URL")
@@ -525,10 +531,25 @@ class MyMainPageFragment : Fragment() {
     }
 
     fun onCheckChanged(setting: Setting, value: Boolean) {
+
         when (setting) {
+            StagingAPI -> {
+                MyApplication.user?.logout { errorMsg ->
+                    val api = if (value) Network.Server.staging.toString() else Network.Server.live.toString()
+                    Preferences.onServerAPI.set(api)
+                    val intent = Intent(context, SplashActivity::class.java)
+                    val mPendingIntentId = 123456
+                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                    val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+                    System.exit(0)
+                }
+            }
             TestAPI -> {
                 MyApplication.user?.logout { errorMsg ->
-                    Preferences.onTestAPI.set(value)
+//                    Preferences.onTestAPI.set(value)
+                    val api = if (value) Network.Server.dev.toString() else Network.Server.live.toString()
+                    Preferences.onServerAPI.set(api)
                     val intent = Intent(context, SplashActivity::class.java)
                     val mPendingIntentId = 123456
                     val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
@@ -591,7 +612,7 @@ class MyMainPageFragment : Fragment() {
                     titleTv.typeface = Theme.bold(requireContext())
                     updateTag.visibility = View.VISIBLE
 
-                } else if (setting == TestAPI || setting == ShowEventLogging || setting == SHOW_ALWAYS_COMPLETE_TOAST) {
+                } else if (setting == StagingAPI || setting == TestAPI || setting == ShowEventLogging || setting == SHOW_ALWAYS_COMPLETE_TOAST) {
                     updateTag.visibility = View.GONE
                     switch.setOnCheckedChangeListener { compoundButton, value ->
                         onCheckChanged(setting, value)
@@ -665,10 +686,15 @@ class ListHolder(val view: View) : RecyclerView.ViewHolder(view) {
         clampIv.visibility = if(setting != Logout) View.VISIBLE else View.GONE
 
         when(setting){
-            TestAPI -> {
-                titleTv.text = v1.base
+            StagingAPI -> {
+                titleTv.text = "현재 API주소 ${v1.base} -> Staging API로 변경하기"
                 switch.visibility = View.VISIBLE
-                switch.isChecked = Preferences.onTestAPI.get()
+                switch.isChecked = Preferences.onServerAPI.get() == Network.Server.staging.toString()
+            }
+            TestAPI -> {
+                titleTv.text = "현재 API주소 ${v1.base} -> Dev API로 변경하기"
+                switch.visibility = View.VISIBLE
+                switch.isChecked = Preferences.onServerAPI.get() == Network.Server.dev.toString()
             }
             ShowEventLogging -> {
                 switch.visibility = View.VISIBLE

@@ -5,7 +5,7 @@ import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.FocusedDimView
 import com.freewheelin.pulley.views.tooltip.TutorWindow
-import com.ht.balloonwindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 
 class Tutor {
     enum class TooltipType {

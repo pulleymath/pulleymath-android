@@ -25,6 +25,7 @@ object URL {
     val 풀리활용가이드_마이페이지 = "https://bit.ly/31kxL95"
 
     val PULLEY_API = "https://api-live.pulleymath.com"
+    val PULLEY_STAGING_API = "https://api-staging.pulleymath.com"
 //    val PULLEY_API = "https://api-dev.pulleymath.com"
     val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
 

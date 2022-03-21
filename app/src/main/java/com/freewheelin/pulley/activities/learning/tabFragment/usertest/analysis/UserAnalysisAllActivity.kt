@@ -27,7 +27,7 @@ import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.showBalloon
 import com.freewheelin.pulley.utils.toPx
 import com.google.android.material.tabs.TabLayout
-import com.ht.balloonwindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import kotlinx.android.synthetic.main.activity_analysis_tab.*
 import kotlinx.android.synthetic.main.tooltip_analysis.view.*
 import kotlinx.android.synthetic.main.view_analysis_tab.view.*
