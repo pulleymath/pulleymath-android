@@ -8,6 +8,9 @@ import com.pulleymath.android.pdf.PdfViewerActivity
 import com.pulleymath.android.pdf.log.Network
 
 import com.pulleymath.android.pdf.memo.FreeDrawSerializableState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.lang.Exception
 import kotlin.concurrent.thread
@@ -21,7 +24,7 @@ object FileHelper {
     fun eraseMemo(context: Context, fileName: String) {
         Log.d(javaClass.simpleName, "eraseMemo() fileName=$fileName")
 
-        thread(start = true) {
+        CoroutineScope(Dispatchers.IO).launch {
             val db = DatabaseHelper.get(context)
             val valueArray = fileName.split("_")
             val studentId = valueArray[1]
@@ -29,7 +32,7 @@ object FileHelper {
             val pageNo = valueArray[3].toInt()
             val updatedAt = System.currentTimeMillis()
             val fileData = ""
-            val memo = PdfMemo(
+            var memo:PdfMemo? = PdfMemo(
                 id = fileName,
                 student_id = studentId,
                 pdf_id = pdfId,
@@ -38,8 +41,10 @@ object FileHelper {
                 updated_at = updatedAt
             )
 
-            db.pdfWritingDao().delete(memo)
-            Network.uploadMemo(listOf(memo))
+            db.pdfWritingDao().delete(memo!!)
+            Network.uploadMemo(listOf(memo)) {
+                memo = null
+            }
 //            PdfViewerActivity.memos.set(memo.id, memo)
         }
     }
@@ -47,7 +52,7 @@ object FileHelper {
     fun saveMemo(context: Context,state: FreeDrawSerializableState?, fileName: String) {
         Log.d(javaClass.simpleName, "saveMemo() fileName=$fileName")
         state?.let { memoObject ->
-            thread(start = true) {
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val db = DatabaseHelper.get(context)
                     val valueArray = fileName.split("_")
@@ -55,17 +60,20 @@ object FileHelper {
                     val pdfId = valueArray[2].toInt()
                     val pageNo = valueArray[3].toInt()
                     val updatedAt = System.currentTimeMillis()
-                    val fileData = Gson().toJson(memoObject) // 숫자 값에 NaN 넘어오는 경우 있음
-                    val memo = PdfMemo(
+                    var fileData:String? = Gson().toJson(memoObject) // 숫자 값에 NaN 넘어오는 경우 있음
+                    var memo:PdfMemo? = PdfMemo(
                         id = fileName,
                         student_id = studentId,
                         pdf_id = pdfId,
                         page_no = pageNo,
-                        file = fileData,
+                        file = fileData!!,
                         updated_at = updatedAt
                     )
-                    db.pdfWritingDao().upsert(listOf(memo))
-                    Network.uploadMemo(listOf(memo))
+                    db.pdfWritingDao().upsert(listOf(memo!!))
+                    Network.uploadMemo(listOf(memo)) {
+                        fileData = null
+                        memo = null
+                    }
 //                    PdfViewerActivity.memos.set(memo.id, memo)
                 } catch (e:OutOfMemoryError) {
                     showAlert(context, "메모리가 부족해서 필기한 내용을 저장할 수 없습니다. 메모리를 정리하세요.")
@@ -81,7 +89,7 @@ object FileHelper {
             completion:(FreeDrawSerializableState)->Unit,
             errorCompletion:((String)->Unit)?=null) {
 
-        thread(start = true) {
+        CoroutineScope(Dispatchers.IO).launch {
             DatabaseHelper.get(context)?.let { db ->
                 try {
                     val pdfMemo = db.pdfWritingDao().get(fileName)

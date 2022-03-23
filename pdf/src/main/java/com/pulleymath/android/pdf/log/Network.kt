@@ -1,5 +1,6 @@
 package com.pulleymath.android.pdf.log
 
+import android.util.Log
 import com.pulleymath.android.pdf.BuildConfig
 import com.pulleymath.android.pdf.PdfViewerActivity
 import com.pulleymath.android.pdf.memo.storage.PdfMemo
@@ -91,14 +92,16 @@ object Network {
             override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {
                 callback?.let{ it() }
             }
-            override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {}
+            override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {
+                Log.e("uploadMemo", "${t.localizedMessage}")
+            }
         })
     }
 
     fun downloadMemo(studentId:String, pdfId:Int?=null, pageNo:Int?=null, updatedAt:Long?=null, onResponse:(PdfMemoResponse?)->Unit, onFailure:(String)->Unit) {
         pdfMemoService.downloadMemo(studentId, pdfId, pageNo, updatedAt).enqueue(object: Callback<PdfMemoResponse>{
             override fun onResponse(call: Call<PdfMemoResponse>, response: Response<PdfMemoResponse>) {
-                onResponse(response?.body())
+                onResponse(response.body())
             }
             override fun onFailure(call: Call<PdfMemoResponse>, t: Throwable) {
                 onFailure(t.localizedMessage)

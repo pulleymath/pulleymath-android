@@ -33,6 +33,9 @@ import com.pulleymath.android.pdf.log.PdfReadLog
 import com.pulleymath.android.pdf.memo.PencilcaseView
 import com.pulleymath.android.pdf.memo.storage.DatabaseHelper
 import com.pulleymath.android.pdf.memo.storage.PdfMemo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -344,11 +347,11 @@ open class PdfViewerActivity : Activity() {
     }
 
     fun loadMemo(savedInstanceState: Bundle?) {
-        thread(start=true) {
+        CoroutineScope(Dispatchers.IO).launch {
             val latest:Long? = if(db.pdfWritingDao().countPdf(studentId, pdfId) < 1) null else db.pdfWritingDao().getLatestTimestamp(studentId)
             Log.d(javaClass.simpleName, "latest timestamp=$latest")
             Network.downloadMemo(studentId, pdfId, null, latest, { response ->
-                thread(start=true) {
+                CoroutineScope(Dispatchers.IO).launch {
                     db.pdfWritingDao().upsert(response?.data?: listOf())
                     runOnUiThread { createUI(savedInstanceState) }
                 }

@@ -403,6 +403,15 @@ class LearningTabActivity : PermissionActivity(),
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "group list=>${res.data}")
 
+                if (res.data == null) {
+                    val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return@subscribe
+                    if (tabName == AffiliatedTestFragment.newInstance().screenName) {
+                        tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                    }
+
+                    return@subscribe
+                }
+
                 res.data?.let {
                     val groupList = it.group_list
                     if (groupList.isEmpty()) {
@@ -416,7 +425,6 @@ class LearningTabActivity : PermissionActivity(),
             }, { error ->
                 Log.e(javaClass.simpleName, "group error=${error.localizedMessage}")
             })
-
     }
 
     private fun openStudyHistory(category: String, item_name: String) {
