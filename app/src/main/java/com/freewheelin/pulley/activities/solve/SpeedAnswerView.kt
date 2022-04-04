@@ -11,13 +11,16 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.isTablet
+import com.freewheelin.pulley.databinding.ItemSpeedyScoringBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemErrorStatus
 import com.freewheelin.pulley.model.ProblemType
@@ -25,18 +28,6 @@ import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import kotlinx.android.synthetic.main.activity_solve.*
-import kotlinx.android.synthetic.main.item_problem_gallery.view.numberTv
-import kotlinx.android.synthetic.main.item_problem_gallery.view.resultIv
-import kotlinx.android.synthetic.main.item_speedy_scoring.view.*
-import kotlinx.android.synthetic.main.item_speedy_scoring.view.selectionAnswerView
-import kotlinx.android.synthetic.main.item_speedy_scoring.view.shortAnswerView
-import kotlinx.android.synthetic.main.view_answer.view.*
-import kotlinx.android.synthetic.main.view_number_keypad.view.*
-import kotlinx.android.synthetic.main.view_speed_answer.view.*
-import kotlinx.android.synthetic.main.view_speed_answer.view.answeredCntTv
-import kotlinx.android.synthetic.main.view_speed_answer.view.markingBtn
-import kotlinx.android.synthetic.main.view_speed_answer.view.submitBtn
 
 interface SpeedAnswerDelegate {
     val isShowAnswer: Boolean
@@ -62,8 +53,20 @@ class SpeedAnswerView: ConstraintLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
+    var recyclerView: RecyclerView
+    var answeredCntTv: TextView
+    var markingBtn: ConstraintLayout
+    var submitBtn: Button
+    var emptyFilterContainer: ConstraintLayout
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_speed_answer, this)
+        recyclerView = findViewById(R.id.recyclerView)
+        answeredCntTv = findViewById(R.id.answeredCntTv)
+        markingBtn = findViewById(R.id.markingBtn)
+        submitBtn = findViewById(R.id.submitBtn)
+        emptyFilterContainer = findViewById(R.id.emptyFilterContainer)
+
         setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))
     }
 
@@ -77,8 +80,8 @@ class SpeedAnswerView: ConstraintLayout {
 
     inner class  SpeedAnswerAdapter: RecyclerView.Adapter<SpeedAnswerHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpeedAnswerHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_speedy_scoring, null, false)
-            return SpeedAnswerHolder(view)
+            val holderBinding: ItemSpeedyScoringBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_speedy_scoring, parent, false)
+            return SpeedAnswerHolder(holderBinding)
         }
 
         override fun getItemCount(): Int {
@@ -159,11 +162,11 @@ class SpeedAnswerView: ConstraintLayout {
         val prevHolder = recyclerView.findViewHolderForAdapterPosition(prevIndex) as? SpeedAnswerHolder
         prevHolder?.keypadWindow?.dismiss()
 
-        val itemView = recyclerView.findViewHolderForAdapterPosition(focusIndex)?.itemView ?: return
-        if (itemView.shortAnswerView.visibility == View.VISIBLE) {
-            itemView.shortAnswerView.requestFocus()
+        val focusedHolder = recyclerView.findViewHolderForAdapterPosition(focusIndex) as? SpeedAnswerHolder ?: return
+        if (focusedHolder.holderBinding.shortAnswerView.visibility == View.VISIBLE) {
+            focusedHolder.holderBinding.shortAnswerView.requestFocus()
         } else {
-            itemView.run {
+            focusedHolder.itemView.run {
                 performClick()
                 requestFocus()
                 clearFocus()
@@ -172,26 +175,26 @@ class SpeedAnswerView: ConstraintLayout {
     }
 
 }
-class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinusKeypadListener, AnswerSelectionListener {
+class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerView.ViewHolder(holderBinding.root), PlusMinusKeypadListener, AnswerSelectionListener {
     lateinit var problem: Problem
     var delegate: AnswerDelegate? = null
     var speedAnswerDelegate: SpeedAnswerDelegate? = null
     var isShowAnswer: Boolean = false
-    val resultIv = view.resultIv
-    val numberTv = view.numberTv
-    val infoContainer = view.infoContainer
-    val selectionAnswerView = view.selectionAnswerView
-    val shortAnswerView = view.shortAnswerView
+    val resultIv = holderBinding.resultIv
+    val numberTv = holderBinding.numberTv
+    val infoContainer = holderBinding.infoContainer
+    val selectionAnswerView = holderBinding.selectionAnswerView
+    val shortAnswerView = holderBinding.shortAnswerView
 
 
-    val answerTv = view.answerTv
-    val infoTv = view.infoTv
-    val errorTv = view.errorTv
-    val context: Context
-        get() = view.context
+    val answerTv = holderBinding.answerTv
+    val infoTv = holderBinding.infoTv
+    val errorTv = holderBinding.errorTv
+    val viewContext: Context
+        get() = holderBinding.root.context
 
     val keypadWindow by lazy {
-        PlusMinusKeypadWindow(context, object : PlusMinusKeypadWindowListener {
+        PlusMinusKeypadWindow(viewContext, object : PlusMinusKeypadWindowListener {
             override var keypadListener: PlusMinusKeypadListener = this@SpeedAnswerHolder
             override fun onKeyboardDismiss() {
                 shortAnswerView.clearFocus()
@@ -210,10 +213,10 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
         }
 
         shortAnswerView.run {
-            setHintTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
+            setHintTextColor(ContextCompat.getColor(viewContext, R.color.grey_c0c0c0))
             setTextSize(
-                    view.context.resources.getDimension(R.dimen.sp24),
-                    view.context.resources.getDimension(R.dimen.sp14)
+                viewContext.resources.getDimension(R.dimen.sp24),
+                viewContext.resources.getDimension(R.dimen.sp14)
             )
             setTextIsSelectable(true)
             showSoftInputOnFocus = false
@@ -228,12 +231,12 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
 //                            context.resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height)
 //                    )
 
-                    val height = if(context.isTablet) ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx()
-                                else ((DisplayUtils.getScrenHeight(context) - context.resources.getDimension(R.dimen.dp64)) * 0.8f).toInt() - 32.toPx()
+                    val height = if(viewContext.isTablet) ((DisplayUtils.getScrenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx()
+                                else ((DisplayUtils.getScrenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.8f).toInt() - 32.toPx()
 
                     val width = height * 232 / 296
-                    var x = this.view.getTargetAbsolutePosition().first.toInt()
-                    val y: Int = DisplayUtils.getScrenHeight(context) - height - 16.toPx()
+                    var x = holderBinding.root.getTargetAbsolutePosition().first.toInt()
+                    val y: Int = DisplayUtils.getScrenHeight(viewContext) - height - 16.toPx()
                     x = x - 32.toPx() - width
 
                     keypadWindow.showAtLocation(view.rootView, Gravity.NO_GRAVITY, x, y)
@@ -294,7 +297,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
     }
 
     fun enterNumberBtnClicked() {
-        delegate?.onAnswerChanged(view, shortAnswerView.text.toString())
+        delegate?.onAnswerChanged(holderBinding.root, shortAnswerView.text.toString())
     }
 
     fun next() {
@@ -312,7 +315,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
             shortAnswerView.setText(deleted)
             shortAnswerView.setSelection(deleted.length)
         }
-        delegate?.onAnswerChanged(view, shortAnswerView.text.toString())
+        delegate?.onAnswerChanged(holderBinding.root, shortAnswerView.text.toString())
     }
 
     fun set(problem: Problem, isShowAnswer: Boolean) {
@@ -321,7 +324,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
         resultIv.setImageDrawable(getResultDrawable())
         // 8인치 체크해서
         // 4글자 이상인데 + 가 있으면 +를 기준으로 개행
-        if(context.is10InchUI) {
+        if(viewContext.is10InchUI) {
             numberTv.text = problem.getNumberText()
         } else {
             var text = problem.getNumberText()
@@ -338,8 +341,8 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
 
     fun getResultDrawable(): Drawable? {
         return when(problem.getResultByScoring()) {
-            Result.correct -> ContextCompat.getDrawable(view.context, R.drawable.ic_correct_new)
-            Result.incorrect -> ContextCompat.getDrawable(view.context, R.drawable.ic_incorrect_new)
+            Result.correct -> ContextCompat.getDrawable(viewContext, R.drawable.ic_correct_new)
+            Result.incorrect -> ContextCompat.getDrawable(viewContext, R.drawable.ic_incorrect_new)
             else -> null
         }
     }
@@ -350,7 +353,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
         answerTv.visibility = View.GONE
         infoTv.visibility = View.GONE
         errorTv.visibility = View.VISIBLE
-        numberTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+        numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.grey_c0c0c0))
     }
 
     private fun setInfoUI() {
@@ -372,7 +375,7 @@ class SpeedAnswerHolder(val view: View): RecyclerView.ViewHolder(view), PlusMinu
 
                 errorTv.visibility = View.GONE
                 answerTv.visibility = View.VISIBLE
-                numberTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
                 answerTv.text = "정답 : ${getAnswerStr(problem.answerData)}"
                 if(problem.getResultByScoring() == Result.incorrect) {
                     infoTv.text = if(problem.userAnswer != null) "(내 입력 : ${getAnswerStr(problem.userAnswer!!)})"

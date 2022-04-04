@@ -100,7 +100,9 @@ class PdfListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.listPdf()
+        viewModel.listPdf {
+            viewModel.filter()
+        }
     }
 
     private fun initUI() {

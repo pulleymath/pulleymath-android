@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -15,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import com.freewheelin.pulley.R
@@ -26,6 +28,7 @@ import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.AppUsageMonitorListener
 import com.freewheelin.pulley.core.manage.ContentManager
 import com.freewheelin.pulley.core.manage.MockExamManager
+import com.freewheelin.pulley.databinding.ActivityOmrBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.model.Problem
@@ -33,14 +36,13 @@ import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.OMRView.OMRViewType
-import kotlinx.android.synthetic.main.activity_omr.*
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.view_timer_vertical.view.*
 import kotlin.collections.ArrayList
 
 
 class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, TimerViewListener, AppUsageMonitorListener {
-
+    private val binding: ActivityOmrBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_omr,null,false)
+    }
     lateinit var mockExam: MockExam
     lateinit var problems: List<Problem>
 //    var isRestart: Boolean = false
@@ -61,7 +63,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
         super.onCreate(savedInstanceState)
         this.mockExam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
 //        this.isRestart = intent.getBooleanExtra(MockExamManager.ARG_MOCK_IS_RESTART, false)
-        setContentView(R.layout.activity_omr)
+        setContentView(binding.root)
 
         loadInitData()
         initUI()
@@ -75,47 +77,49 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
 
             if (mockExam.year < 2021 || mockExam.selectOptional.isEmpty()) {
                 showOmrViewTopLabel(false)
-                omrViewLeft.setAnswer(it.problems.filter { problem -> problem.problemType != ProblemType.short }, OMRViewType.LEFT)
-                omrViewRight.setAnswer(it.problems.filter { problem -> problem.problemType == ProblemType.short }, OMRViewType.RIGHT)
+                binding.omrViewLeft.setAnswer(it.problems.filter { problem -> problem.problemType != ProblemType.short }, OMRViewType.LEFT)
+                binding.omrViewRight.setAnswer(it.problems.filter { problem -> problem.problemType == ProblemType.short }, OMRViewType.RIGHT)
             } else {
                 showOmrViewTopLabel(true)
-                omrViewLeft.setAnswer(it.problems.filter { problem -> problem.problemNum!! < 23 }, OMRViewType.LEFT)
-                omrViewRight.setAnswer(it.problems.filter { problem -> problem.problemNum!! >= 23 }, OMRViewType.RIGHT)
+                binding.omrViewLeft.setAnswer(it.problems.filter { problem -> problem.problemNum!! < 23 }, OMRViewType.LEFT)
+                binding.omrViewRight.setAnswer(it.problems.filter { problem -> problem.problemNum!! >= 23 }, OMRViewType.RIGHT)
             }
-            omrViewLeft.setOMRViewListener(this)
-            omrViewRight.setOMRViewListener(this)
+            binding.omrViewLeft.setOMRViewListener(this)
+            binding.omrViewRight.setOMRViewListener(this)
         }
     }
 
     private fun initUI() {
-        submitBtn.toDisableUI()
-        setToolbar(toolbar)
-        showOmrViewTopLabel(false)
-        keypadView.visibility = View.INVISIBLE
-        keypadView.setNumberKeypadListener(this)
-        timerView.setTimerViewListener(this)
+        with(binding) {
+            submitBtn.toDisableUI()
+            setToolbar(toolbar)
+            showOmrViewTopLabel(false)
+            keypadView.visibility = View.INVISIBLE
+            keypadView.setNumberKeypadListener(this@OMRActivity)
+            timerView.setTimerViewListener(this@OMRActivity)
 
-        tvTitle.text = mockExam.getMockTitle()
+            tvTitle.text = mockExam.getMockTitle()
 
-        if(isSPYMode) {
-            spyBtn.visibility = View.VISIBLE
-            spyBtn.setOnClickListener {
-                onSpyBtnClikced()
+            if(isSPYMode) {
+                spyBtn.visibility = View.VISIBLE
+                spyBtn.setOnClickListener {
+                    onSpyBtnClikced()
+                }
             }
-        }
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
-        submitBtn.setOnClickListener {
-            onSubmitBtnClicked()
-        }
+            submitBtn.setOnClickListener {
+                onSubmitBtnClicked()
+            }
 
-        frontDimmedLl.setOnClickListener {
-            hideKeypad()
-        }
+            frontDimmedLl.setOnClickListener {
+                hideKeypad()
+            }
 
-        dimOfLeftOmr.referencedIds.forEach { id ->
-            findViewById<View>(id).setOnClickListener { hideKeypad() }
+            dimOfLeftOmr.referencedIds.forEach { id ->
+                findViewById<View>(id).setOnClickListener { hideKeypad() }
+            }
         }
     }
 
@@ -123,55 +127,56 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
         if (mockExam.time != null && !mockExam.isRestart) {
             val time = mockExam.time!!
             if(time >= 6000) {
-                timerView.submitType = TimerView.SubmitType.lenient
-                timerView.setLenientOvetimeUI()
+                binding.timerView.submitType = TimerView.SubmitType.lenient
+                binding.timerView.setLenientOvetimeUI()
             }
-            timerView.elapsedTime = time
+            binding.timerView.elapsedTime = time
         }
 
         AnimationUtils.showTimer(this, 3, "시험 시작!", object:AnimationListener {
             override fun onAnimationEnd() {
-                timerView.runTimer()
+                binding.timerView.runTimer()
             }
 
             override fun onAnimationCancel() {
-                timerView.runTimer()
+                binding.timerView.runTimer()
             }
         })
     }
 
     private fun showOmrViewTopLabel(isShow: Boolean) {
+        with(binding) {
+            val visibility = if (isShow) View.VISIBLE else View.GONE
+            lbCommonSubject.visibility = visibility
+            dividerCommonSubject.visibility = visibility
+            lbSelectedSubject.visibility = visibility
+            dividerSelectedSubject.visibility = visibility
+            (dividerSecondOmrLeft.layoutParams as? ConstraintLayout.LayoutParams)?.setMargins(0, if (isShow) 32.toPx() else 0, 0, 0)
 
-        val visibility = if (isShow) View.VISIBLE else View.GONE
-        lbCommonSubject.visibility = visibility
-        dividerCommonSubject.visibility = visibility
-        lbSelectedSubject.visibility = visibility
-        dividerSelectedSubject.visibility = visibility
-        (dividerSecondOmrLeft.layoutParams as? ConstraintLayout.LayoutParams)?.setMargins(0, if (isShow) 32.toPx() else 0, 0, 0)
+            // 선택과목 없을 시 공통 레이블 숨기기
+            val labelHide = if(mockExam.selectOptional.isEmpty()) View.GONE else View.VISIBLE
 
-        // 선택과목 없을 시 공통 레이블 숨기기
-        val labelHide = if(mockExam.selectOptional.isEmpty()) View.GONE else View.VISIBLE
-
-        lbCommonSubject.visibility = labelHide
-        lbSelectedSubject.visibility = labelHide
-        dividerCommonSubject.visibility = labelHide
-        dividerSelectedSubject.visibility = labelHide
+            lbCommonSubject.visibility = labelHide
+            lbSelectedSubject.visibility = labelHide
+            dividerCommonSubject.visibility = labelHide
+            dividerSelectedSubject.visibility = labelHide
+        }
     }
 
     override fun onDestroy() {
         AppUsageMonitor.finishStudy(this)
         super.onDestroy()
-        timerView.deinitTimer()
+        binding.timerView.deinitTimer()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (keypadView.visibility == View.VISIBLE) hideKeypad()
+        if (binding.keypadView.visibility == View.VISIBLE) hideKeypad()
         this.onBackPressed()
         return true
     }
 
     override fun onBackPressed() {
-        if (keypadView.visibility == View.VISIBLE) {
+        if (binding.keypadView.visibility == View.VISIBLE) {
             hideKeypad()
             return
         }
@@ -182,7 +187,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
                 "취소",
                 "종료하기")
         dialog.type = DialogType.alert
-        dialog.rightBtn.setOnClickListener {
+        dialog.binding.rightBtn.setOnClickListener {
             dialog.dismiss()
             super.onBackPressed()
         }
@@ -227,11 +232,11 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
             if (value == field) return
             field = value
         }
-    private fun getKeypadFocusOmrView() = if (currentFocusEditTextOMRViewType == OMRViewType.LEFT) omrViewLeft else omrViewRight
+    private fun getKeypadFocusOmrView() = if (currentFocusEditTextOMRViewType == OMRViewType.LEFT) binding.omrViewLeft else binding.omrViewRight
 
     override fun onShortAnswerFocusChanged(editText: EditText, omrViewType: OMRViewType, hasFocus: Boolean, isLast: Boolean) {
-        keypadView.type = if (isLast) NumberKeypadView.Type.FINISH else NumberKeypadView.Type.NEXT
-        keypadView.visibility = View.VISIBLE
+        binding.keypadView.type = if (isLast) NumberKeypadView.Type.FINISH else NumberKeypadView.Type.NEXT
+        binding.keypadView.visibility = View.VISIBLE
         currentFocusEditTextOMRViewType = omrViewType
 
         if (hasFocus)
@@ -243,48 +248,52 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
     }
 
     override fun onAnswerChanged(answers: ArrayList<Int?>) {
-        val answeredSet1 = omrViewLeft.getAnswers().filterNotNull()
-        val answeredSet2 = omrViewRight.getAnswers().filterNotNull()
+        with(binding) {
+            val answeredSet1 = omrViewLeft.getAnswers().filterNotNull()
+            val answeredSet2 = omrViewRight.getAnswers().filterNotNull()
 
-        if (answeredSet1.isEmpty() && answeredSet2.isEmpty())
-            submitBtn.toDisableUI()
-        else
-            submitBtn.toEnableUI()
+            if (answeredSet1.isEmpty() && answeredSet2.isEmpty())
+                submitBtn.toDisableUI()
+            else
+                submitBtn.toEnableUI()
+        }
     }
 
     private fun showKeypad() {
-        val keypadMarginLayout = keypadView.layoutParams as ViewGroup.MarginLayoutParams
+        val keypadMarginLayout = binding.keypadView.layoutParams as ViewGroup.MarginLayoutParams
         keypadMarginLayout.rightMargin =
                 if (currentFocusEditTextOMRViewType == OMRViewType.LEFT)
-                    omrViewRight.width * 2 + 22.toPx()
+                    binding.omrViewRight.width * 2 + 22.toPx()
                 else
-                    omrViewRight.width + 8
-        keypadView.visibility = View.VISIBLE
+                    binding.omrViewRight.width + 8
+        binding.keypadView.visibility = View.VISIBLE
 
         when(currentFocusEditTextOMRViewType) {
             OMRViewType.LEFT -> {
-                dimOfLeftOmr.visibility = View.VISIBLE
+                binding.dimOfLeftOmr.visibility = View.VISIBLE
             }
             OMRViewType.RIGHT -> {
-                frontDimmedLl.visibility = View.VISIBLE
+                binding.frontDimmedLl.visibility = View.VISIBLE
             }
         }
     }
 
     private fun hideKeypad() {
-        omrViewLeft.clearFocus()
-        omrViewRight.clearFocus()
-        keypadView.visibility = View.GONE
+        with(binding) {
+            omrViewLeft.clearFocus()
+            omrViewRight.clearFocus()
+            keypadView.visibility = View.GONE
 
-        dimOfLeftOmr.visibility = View.GONE
-        frontDimmedLl.visibility = View.GONE
+            dimOfLeftOmr.visibility = View.GONE
+            frontDimmedLl.visibility = View.GONE
+        }
     }
 
     fun onSubmitBtnClicked() {
-        if(!submitBtn.isEnableUI())
+        if(!binding.submitBtn.isEnableUI())
             return
 
-        val answerList = omrViewLeft.getAnswers().plus(omrViewRight.getAnswers())
+        val answerList = binding.omrViewLeft.getAnswers().plus(binding.omrViewRight.getAnswers())
 
         for (i in answerList.indices) {
             val answer = answerList[i]
@@ -296,7 +305,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
 
         val notSolvedProblem = answerList.filter { it == null }
 
-        val time = timerView.elapsedTime
+        val time = binding.timerView.elapsedTime
 
         if(notSolvedProblem.isNotEmpty()) {
             DialogUtils.showExamSubmitDialog(this, notSolvedProblem.size) {
@@ -328,28 +337,30 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
                 "타이머 세팅: 5분전",
                 "타이머 세팅: 제출직전"
         ).toTypedArray()) { dialog, position ->
-            when (position) {
-                0 -> {
-                    problems.forEach { it.userAnswer = it.answerData }
-                    omrViewLeft.adapter?.notifyDataSetChanged()
-                    omrViewLeft.adapter?.notifyDataSetChanged()
-                }
+            with(binding) {
+                when (position) {
+                    0 -> {
+                        problems.forEach { it.userAnswer = it.answerData }
+                        omrViewLeft.adapter?.notifyDataSetChanged()
+                        omrViewLeft.adapter?.notifyDataSetChanged()
+                    }
 
-                1 -> {
-                    problems.forEach { it.userAnswer = "3" }
-                    omrViewLeft.adapter?.notifyDataSetChanged()
-                    omrViewRight.adapter?.notifyDataSetChanged()
-                }
+                    1 -> {
+                        problems.forEach { it.userAnswer = "3" }
+                        omrViewLeft.adapter?.notifyDataSetChanged()
+                        omrViewRight.adapter?.notifyDataSetChanged()
+                    }
 
-                2 -> {
-                    timerView?.elapsedTime = 5695
-                    timerView?.typeRg?.visibility = View.VISIBLE
-                    timerView?.overTimerTv?.visibility = View.GONE
-                }
-                3 -> {
-                    timerView?.elapsedTime = 5995
-                    timerView?.typeRg?.visibility = View.VISIBLE
-                    timerView?.overTimerTv?.visibility = View.GONE
+                    2 -> {
+                        timerView.elapsedTime = 5695
+                        timerView.typeRadioGroup?.visibility = View.VISIBLE
+                        timerView.overTimerTextView?.visibility = View.GONE
+                    }
+                    3 -> {
+                        timerView.elapsedTime = 5995
+                        timerView.typeRadioGroup?.visibility = View.VISIBLE
+                        timerView.overTimerTextView?.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -376,7 +387,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
             return
 
         timerView.stop()
-        val notSolvedProblem = omrViewLeft.getAnswers().plus(omrViewRight.getAnswers()).filter { it == null }
+        val notSolvedProblem = binding.omrViewLeft.getAnswers().plus(binding.omrViewRight.getAnswers()).filter { it == null }
 
         DialogUtils.showExamExpiredDialog(this, notSolvedProblem.size,
                 onSolveClicked = {
@@ -386,7 +397,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
                     timerView.runTimer()
                 },
                 onSubmitClicked = {
-                    val answerList = omrViewLeft.getAnswers().plus(omrViewRight.getAnswers())
+                    val answerList = binding.omrViewLeft.getAnswers().plus(binding.omrViewRight.getAnswers())
 
                     for (i in answerList.indices) {
                         val answer = answerList[i]
@@ -415,7 +426,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
         sec = sec % 60
 
         runOnUiThread {
-            spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
+            binding.spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
         }
 
 

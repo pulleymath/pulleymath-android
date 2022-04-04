@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/bg_white_ffffff_round"
-    android:layout_width="424dp"
-    android:layout_height="wrap_content"
-    android:padding="40dp"
-    android:gravity="center">
-    
-    <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/ic_check_green_circle"/>
-
-    <TextView
-        style="@style/TextGreen_70d000.Bold"
-        android:id="@+id/titleTv"
-        android:gravity="center"
-        android:layout_width="wrap_content"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_ffffff_round"
+        android:layout_width="424dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="24sp"
-        android:lineSpacingExtra="12sp"
-        android:text="제출 완료!"/>
+        android:padding="40dp"
+        android:gravity="center">
 
-    <TextView
-        style="@style/TextGrey_c0c0c0.Bold"
-        android:id="@+id/guideTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:lineSpacingExtra="@dimen/sp8"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:text="잠시만 기다려주세요 :)"/>
-</LinearLayout>
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_check_green_circle"/>
+
+        <TextView
+            style="@style/TextGreen_70d000.Bold"
+            android:id="@+id/titleTv"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="24sp"
+            android:lineSpacingExtra="12sp"
+            android:text="제출 완료!"/>
+
+        <TextView
+            style="@style/TextGrey_c0c0c0.Bold"
+            android:id="@+id/guideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="@dimen/sp8"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="잠시만 기다려주세요 :)"/>
+    </LinearLayout>
+</layout>

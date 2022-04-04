@@ -4,24 +4,30 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
-import kotlinx.android.synthetic.main.dialog_pulley_plus_price.*
 
-class PulleyPlusPriceDialog: Dialog {
+class PulleyPlusPriceDialog(context: Context) : Dialog(context) {
 
-    constructor(context: Context): super(context) {
+    var closeBtn: ImageButton
+    var priceIv: ImageView
+    var buyBtn: Button
+    init {
         setContentView(R.layout.dialog_pulley_plus_price)
+        closeBtn = findViewById(R.id.closeBtn)
+        priceIv = findViewById(R.id.priceIv)
+        buyBtn = findViewById(R.id.buyBtn)
 
         closeBtn.setOnClickListener {
             dismiss()
         }
-
         Glide.with(context)
             .load(URL.풀리플러스가격이미지)
             .into(priceIv)
-
         buyBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(URL.풀리플러스다이얼로그구매)

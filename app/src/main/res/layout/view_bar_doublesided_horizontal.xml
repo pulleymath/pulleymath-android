@@ -1,86 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <merge>
 
-    <View android:background="@drawable/bg_red_fe7b67_round_2"
-        android:id="@+id/negativeBar"
-        android:layout_height="24dp"
-        android:layout_width="140dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/centerLine"/>
+        <View android:background="@drawable/bg_red_fe7b67_round_2"
+            android:id="@+id/negativeBar"
+            android:layout_height="24dp"
+            android:layout_width="140dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/centerLine"/>
 
-    <TextView
-        style="@style/TextRed_fe7b67.Bold"
-        android:id="@+id/negativeTv"
-        android:textSize="@dimen/sp16"
-        android:text="25%"
-        android:layout_marginEnd="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/negativeBar"/>
+        <TextView
+            style="@style/TextRed_fe7b67.Bold"
+            android:id="@+id/negativeTv"
+            android:textSize="@dimen/sp16"
+            android:text="25%"
+            android:layout_marginEnd="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/negativeBar"/>
 
-    <ImageView
-        android:id="@+id/negativeArrowIv"
-        android:layout_width="10dp"
-        android:layout_height="8dp"
-        android:layout_marginEnd="4dp"
-        android:src="@drawable/ic_triangle_below_blue"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/negativeTv"/>
+        <ImageView
+            android:id="@+id/negativeArrowIv"
+            android:layout_width="10dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_triangle_below_blue"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/negativeTv"/>
 
-    <View style="@style/Border_Grey_e8e8e8_Vertical"
-        android:id="@+id/centerLine"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <View style="@style/Border_Grey_e8e8e8_Vertical"
+            android:id="@+id/centerLine"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <View android:background="@drawable/bg_blue_30a4ff_round_2"
-        android:id="@+id/positiveBar"
-        android:layout_height="24dp"
-        android:layout_width="140dp"
-        app:layout_constraintStart_toEndOf="@+id/centerLine"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <View android:background="@drawable/bg_blue_30a4ff_round_2"
+            android:id="@+id/positiveBar"
+            android:layout_height="24dp"
+            android:layout_width="140dp"
+            app:layout_constraintStart_toEndOf="@+id/centerLine"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        style="@style/TextBlue_30a4ff.Bold"
-        android:id="@+id/positiveTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="25%"
-        app:layout_constraintStart_toEndOf="@+id/positiveArrowIv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            style="@style/TextBlue_30a4ff.Bold"
+            android:id="@+id/positiveTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="25%"
+            app:layout_constraintStart_toEndOf="@+id/positiveArrowIv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageView
-        android:id="@+id/positiveArrowIv"
-        android:layout_width="10dp"
-        android:layout_height="8dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/ic_triangle_top_grey"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/positiveBar"/>
+        <ImageView
+            android:id="@+id/positiveArrowIv"
+            android:layout_width="10dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_triangle_top_grey"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/positiveBar"/>
 
-    <TextView
-        style="@style/TextGrey_818181.Bold"
-        android:id="@+id/zeroLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white_ffffff"
-        android:text="0%"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            style="@style/TextGrey_818181.Bold"
+            android:id="@+id/zeroLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white_ffffff"
+            android:text="0%"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-</merge>
+    </merge>
+</layout>

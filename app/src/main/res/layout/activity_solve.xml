@@ -1,265 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.freewheelin.pulley.views.DisableHorizontalScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:animateLayoutChanges="true"
-    android:id="@+id/rootView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:focusable="false"
-    tools:context="com.freewheelin.pulley.activities.solve.SolveActivity">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <com.freewheelin.pulley.views.DisableHorizontalScrollView
+        android:animateLayoutChanges="true"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:focusable="false"
-        android:orientation="horizontal">
+        tools:context="com.freewheelin.pulley.activities.solve.SolveActivity">
 
-        <com.freewheelin.pulley.activities.solve.GalleryView
-            android:id="@+id/galleryView"
-            android:layout_width="400dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:focusable="false"
-            android:visibility="visible" />
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/solveCl"
-            android:layout_width="600dp"
-            android:layout_height="match_parent"
-            android:focusable="false">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/mainHeaderView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp64"
-                android:background="@color/black_333333"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageButton
-                    android:id="@+id/backBtn"
-                    android:layout_width="@dimen/dp80"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:src="@drawable/ic_toolbar_back"
-                    android:focusable="false"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:tint="@color/grey_9f9f9f" />
-
-                <TextView
-                    style="@style/TextGrey_9f9f9f.Bold"
-                    android:id="@+id/titleTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp16"
-                    android:layout_marginStart="@dimen/dp64"
-                    android:text=""
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <Button
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
-                    android:id="@+id/spyBtn"
-                    android:layout_width="@dimen/dp64"
-                    android:layout_height="@dimen/dp36"
-                    android:text="SPY"
-                    android:textSize="@dimen/sp16"
-                    android:layout_marginEnd="@dimen/dp24"
-                    android:background="@drawable/bg_grey_9f9f9f_round"
-                    android:focusable="false"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.freewheelin.pulley.activities.solve.GalleryView
+                android:id="@+id/galleryView"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:visibility="visible" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toolView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp64"
-                android:background="@color/black_333333"
-                app:layout_constraintTop_toBottomOf="@+id/mainHeaderView">
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/galleryBtn"
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginStart="@dimen/dp32"
-                    android:visibility="visible"
-                    android:focusable="false"
-                    app:lottie_loop="true"
-                    app:lottie_fileName="gallery.json"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <LinearLayout
-                    android:id="@+id/pageTool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"
-                    android:orientation="horizontal"
-                    app:layout_goneMarginStart="@dimen/dp32"
-                    app:layout_constraintStart_toEndOf="@+id/galleryBtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/prevBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_arrow_left_8"
-                        android:background="@null"
-                        android:focusable="false"/>
-
-                    <View
-                        style="@style/Border_Black_4c4c4c_Vertical"
-                        android:layout_height="match_parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/numTv"
-                            style="@style/TextWhite_ffffff.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:gravity="center"
-                            android:text="-"
-                            android:textSize="@dimen/sp24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/numExtTv"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/numExtTv"
-                            style="@style/TextWhite_ffffff.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="-"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
-                            app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/numTv" />
-
-                        <TextView
-                            android:id="@+id/totalCntTv"
-                            style="@style/TextGrey_818181.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:text="/ -"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/numExtTv" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <View
-                        style="@style/Border_Black_4c4c4c_Vertical"
-                        android:layout_height="match_parent"/>
-
-                    <ImageButton
-                        android:id="@+id/nextBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_arrow_right_8"
-                        android:background="@null"
-                        android:focusable="false"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/controlTool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp24"
-                    app:layout_constraintStart_toEndOf="@+id/pageTool"
-                    app:layout_constraintTop_toTopOf="@+id/pageTool"
-                    app:layout_constraintBottom_toBottomOf="@+id/pageTool">
-
-                    <ImageButton
-                        android:id="@+id/clearBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:layout_marginEnd="8dp"
-                        android:visibility="gone"
-                        android:focusable="false"
-                        android:src="@drawable/ic_check_grey_20"
-                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
-
-                    <ImageButton
-                        android:id="@+id/scrapBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:layout_marginEnd="8dp"
-                        android:focusable="false"
-                        android:src="@drawable/ic_tag_14_unselected"
-                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
-
-                    <ImageButton
-                        android:id="@+id/reportBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:src="@drawable/ic_siren_w22"
-                        android:focusable="false"
-                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
-                </LinearLayout>
-
-                <com.freewheelin.pulley.views.TimerView
-                    android:id="@+id/timerView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:layout_marginEnd="@dimen/dp32"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:orientation="solve">
-                </com.freewheelin.pulley.views.TimerView>
+                android:id="@+id/solveCl"
+                android:layout_width="600dp"
+                android:layout_height="match_parent"
+                android:focusable="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/mainFormatTool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/dp24"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:id="@+id/mainHeaderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:background="@color/black_333333"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.freewheelin.pulley.views.DaebakSwitch
-                        android:id="@+id/solutionSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dp16"
-                        android:padding="8dp"
+                    <ImageButton
+                        android:id="@+id/backBtn"
+                        android:layout_width="@dimen/dp80"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:src="@drawable/ic_toolbar_back"
                         android:focusable="false"
-                        app:DaebakSwitch_Label="정답/해설 표시"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/speedyScoreSwitch"/>
+                        app:tint="@color/grey_9f9f9f" />
 
-                    <com.freewheelin.pulley.views.DaebakSwitch
-                        android:id="@+id/speedyScoreSwitch"
+                    <TextView
+                        style="@style/TextGrey_9f9f9f.Bold"
+                        android:id="@+id/titleTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:DaebakSwitch_Label="빠른 채점"
-                        android:padding="8dp"
+                        android:textSize="@dimen/sp16"
+                        android:layout_marginStart="@dimen/dp64"
+                        android:text=""
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <Button
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:id="@+id/spyBtn"
+                        android:layout_width="@dimen/dp64"
+                        android:layout_height="@dimen/dp36"
+                        android:text="SPY"
+                        android:textSize="@dimen/sp16"
+                        android:layout_marginEnd="@dimen/dp24"
+                        android:background="@drawable/bg_grey_9f9f9f_round"
                         android:focusable="false"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -268,405 +79,595 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/addSimilarProblemCl"
-                    android:layout_width="@dimen/dp120"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:visibility="visible"
-                    android:background="@drawable/bg_yellow_ffb300_round_18"
-                    app:layout_constraintBottom_toBottomOf="@+id/controlTool"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintTop_toTopOf="@+id/controlTool">
+                    android:id="@+id/toolView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:background="@color/black_333333"
+                    app:layout_constraintTop_toBottomOf="@+id/mainHeaderView">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/galleryBtn"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:visibility="visible"
+                        android:focusable="false"
+                        app:lottie_loop="true"
+                        app:lottie_fileName="gallery.json"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <LinearLayout
+                        android:id="@+id/pageTool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"
+                        android:orientation="horizontal"
+                        app:layout_goneMarginStart="@dimen/dp32"
+                        app:layout_constraintStart_toEndOf="@+id/galleryBtn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <ImageButton
+                            android:id="@+id/prevBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_left_8"
+                            android:background="@null"
+                            android:focusable="false"/>
+
+                        <View
+                            style="@style/Border_Black_4c4c4c_Vertical"
+                            android:layout_height="match_parent"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/numTv"
+                                style="@style/TextWhite_ffffff.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:gravity="center"
+                                android:text="-"
+                                android:textSize="@dimen/sp24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/numExtTv"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/numExtTv"
+                                style="@style/TextWhite_ffffff.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="-"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
+                                app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/numTv" />
+
+                            <TextView
+                                android:id="@+id/totalCntTv"
+                                style="@style/TextGrey_818181.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="16dp"
+                                android:text="/ -"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/numExtTv" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            style="@style/Border_Black_4c4c4c_Vertical"
+                            android:layout_height="match_parent"/>
+
+                        <ImageButton
+                            android:id="@+id/nextBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_right_8"
+                            android:background="@null"
+                            android:focusable="false"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/controlTool"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        android:layout_marginStart="@dimen/dp24"
+                        app:layout_constraintStart_toEndOf="@+id/pageTool"
+                        app:layout_constraintTop_toTopOf="@+id/pageTool"
+                        app:layout_constraintBottom_toBottomOf="@+id/pageTool">
 
-                        <ImageView
-                            android:id="@+id/plusIv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_plus_white"
-                            app:tint="@color/black_333333" />
-
-                        <ImageView
-                            android:id="@+id/lockIv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <ImageButton
+                            android:id="@+id/clearBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="@dimen/dp36"
+                            android:layout_marginEnd="8dp"
                             android:visibility="gone"
-                            android:src="@drawable/ic_lock_16_white"
+                            android:focusable="false"
+                            android:src="@drawable/ic_check_grey_20"
+                            android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
+
+                        <ImageButton
+                            android:id="@+id/scrapBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="@dimen/dp36"
+                            android:layout_marginEnd="8dp"
+                            android:focusable="false"
+                            android:src="@drawable/ic_tag_14_unselected"
+                            android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
+
+                        <ImageButton
+                            android:id="@+id/reportBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="@dimen/dp36"
+                            android:src="@drawable/ic_siren_w22"
+                            android:focusable="false"
+                            android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
+                    </LinearLayout>
+
+                    <com.freewheelin.pulley.views.TimerView
+                        android:id="@+id/timerView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginEnd="@dimen/dp32"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/controlTool"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:orientation="solve">
+                    </com.freewheelin.pulley.views.TimerView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/mainFormatTool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/dp24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.freewheelin.pulley.views.DaebakSwitch
+                            android:id="@+id/solutionSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:padding="8dp"
+                            android:focusable="false"
+                            app:DaebakSwitch_Label="정답/해설 표시"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/speedyScoreSwitch"/>
+
+                        <com.freewheelin.pulley.views.DaebakSwitch
+                            android:id="@+id/speedyScoreSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:DaebakSwitch_Label="빠른 채점"
+                            android:padding="8dp"
+                            android:focusable="false"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/addSimilarProblemCl"
+                        android:layout_width="@dimen/dp120"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:visibility="visible"
+                        android:background="@drawable/bg_yellow_ffb300_round_18"
+                        app:layout_constraintBottom_toBottomOf="@+id/controlTool"
+                        app:layout_constraintStart_toEndOf="@+id/controlTool"
+                        app:layout_constraintTop_toTopOf="@+id/controlTool">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent">
+
+                            <ImageView
+                                android:id="@+id/plusIv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_plus_white"
+                                app:tint="@color/black_333333" />
+
+                            <ImageView
+                                android:id="@+id/lockIv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:src="@drawable/ic_lock_16_white"
+                                app:tint="@color/black_333333" />
+
+                            <TextView
+                                style="@style/TextBlack_333333.ExtraBold"
+                                android:id="@+id/similarTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="유사 문제"
+                                android:textSize="@dimen/sp16" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/changeSimilarProblemCl"
+                        android:layout_width="@dimen/dp120"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:background="@drawable/bg_yellow_ffb300_round_18"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/controlTool"
+                        app:layout_constraintStart_toEndOf="@+id/controlTool"
+                        app:layout_constraintTop_toTopOf="@+id/controlTool">
+
+                        <ImageView
+                            android:id="@+id/changeIv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_problem_change"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/changeTv"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:tint="@color/black_333333" />
 
                         <TextView
                             style="@style/TextBlack_333333.ExtraBold"
-                            android:id="@+id/similarTv"
+                            android:id="@+id/changeTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="유사 문제"
-                            android:textSize="@dimen/sp16" />
-                    </LinearLayout>
+                            android:text="문제 교체"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toEndOf="@+id/changeIv"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/changeSimilarProblemCl"
-                    android:layout_width="@dimen/dp120"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:background="@drawable/bg_yellow_ffb300_round_18"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/controlTool"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintTop_toTopOf="@+id/controlTool">
-
-                    <ImageView
-                        android:id="@+id/changeIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_problem_change"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/changeTv"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black_333333" />
-
-                    <TextView
-                        style="@style/TextBlack_333333.ExtraBold"
-                        android:id="@+id/changeTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="문제 교체"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@+id/changeIv"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/mainBgView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/white_ffffff"
-                android:animateLayoutChanges="true"
-                android:focusable="false"
-                app:layout_constraintTop_toBottomOf="@+id/toolView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/container"
+                    android:id="@+id/mainBgView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:background="@color/white_ffffff"
+                    android:animateLayoutChanges="true"
                     android:focusable="false"
+                    app:layout_constraintTop_toBottomOf="@+id/toolView"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/speedAnswerView">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.freewheelin.pulley.views.DisableVerticalScrollView
-                        android:id="@+id/problemContainer"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:fillViewport="true"
-                        android:scrollbars="none"
                         android:focusable="false"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/speedAnswerView">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/memoArea"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false">
-                            <ImageView
-                                android:id="@+id/problemIv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/dp32"
-                                android:scaleType="fitStart"
-                                android:focusable="false"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.freewheelin.pulley.views.memoView.MemoView
-                                android:id="@+id/problemMemoView"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:focusable="false"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </com.freewheelin.pulley.views.DisableVerticalScrollView>
-
-                    <com.freewheelin.pulley.views.DisableVerticalScrollView
-                        android:id="@+id/solutionContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:fillViewport="true"
-                        android:padding="1dp"
-                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
-                        android:scrollbars="none"
-                        android:focusable="false"
-                        app:layout_constraintStart_toEndOf="@+id/problemContainer"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                        <com.freewheelin.pulley.views.DisableVerticalScrollView
+                            android:id="@+id/problemContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:fillViewport="true"
+                            android:scrollbars="none"
+                            android:focusable="false"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/problemInfoContainer"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/memoArea"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <TextView
-                                    style="@style/TextBlack_4c4c4c.ExtraBold"
-                                    android:id="@+id/answerTv"
+                                android:focusable="false">
+                                <ImageView
+                                    android:id="@+id/problemIv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textSize="@dimen/sp18"
-                                    android:text="정답: -123"
+                                    android:padding="@dimen/dp32"
+                                    android:scaleType="fitStart"
+                                    android:focusable="false"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.freewheelin.pulley.views.memoView.MemoView
+                                    android:id="@+id/problemMemoView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:focusable="false"
+                                    app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"/>
-
-                                <TextView
-                                    style="@style/TextGrey_9f9f9f.Bold"
-                                    android:id="@+id/correctRateTv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="@dimen/sp14"
-                                    android:text="정답률 : -"
-                                    android:layout_marginTop="@dimen/dp24"
-                                    app:layout_constraintTop_toBottomOf="@+id/answerTv"
-                                    app:layout_constraintStart_toStartOf="parent"/>
-
-                                <TextView
-                                    style="@style/TextGrey_9f9f9f.Bold"
-                                    android:id="@+id/lvTv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="@dimen/sp14"
-                                    android:text="난이도 : -"
-                                    android:layout_marginTop="8dp"
-                                    app:layout_constraintTop_toBottomOf="@+id/correctRateTv"
-                                    app:layout_constraintStart_toStartOf="parent"/>
-
-                                <TextView
-                                    style="@style/TextGrey_9f9f9f.Bold"
-                                    android:id="@+id/referenceLabel"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="@dimen/sp14"
-                                    android:text="유형명 : "
-                                    android:layout_marginTop="8dp"
-                                    app:layout_constraintTop_toBottomOf="@+id/lvTv"
-                                    app:layout_constraintStart_toStartOf="parent"/>
-
-                                <TextView
-                                    style="@style/TextGrey_9f9f9f.Bold"
-                                    android:id="@+id/intentionTv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="@dimen/sp14"
-                                    android:text="-"
-                                    app:layout_constraintTop_toTopOf="@+id/referenceLabel"
-                                    app:layout_constraintStart_toEndOf="@+id/referenceLabel"/>
+                                    app:layout_constraintBottom_toBottomOf="parent" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.freewheelin.pulley.views.DisableVerticalScrollView>
+
+                        <com.freewheelin.pulley.views.DisableVerticalScrollView
+                            android:id="@+id/solutionContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:fillViewport="true"
+                            android:padding="1dp"
+                            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
+                            android:scrollbars="none"
+                            android:focusable="false"
+                            app:layout_constraintStart_toEndOf="@+id/problemContainer"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/problemInfoContainer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                                        android:id="@+id/answerTv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/sp18"
+                                        android:text="정답: -123"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"/>
+
+                                    <TextView
+                                        style="@style/TextGrey_9f9f9f.Bold"
+                                        android:id="@+id/correctRateTv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/sp14"
+                                        android:text="정답률 : -"
+                                        android:layout_marginTop="@dimen/dp24"
+                                        app:layout_constraintTop_toBottomOf="@+id/answerTv"
+                                        app:layout_constraintStart_toStartOf="parent"/>
+
+                                    <TextView
+                                        style="@style/TextGrey_9f9f9f.Bold"
+                                        android:id="@+id/lvTv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/sp14"
+                                        android:text="난이도 : -"
+                                        android:layout_marginTop="8dp"
+                                        app:layout_constraintTop_toBottomOf="@+id/correctRateTv"
+                                        app:layout_constraintStart_toStartOf="parent"/>
+
+                                    <TextView
+                                        style="@style/TextGrey_9f9f9f.Bold"
+                                        android:id="@+id/referenceLabel"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/sp14"
+                                        android:text="유형명 : "
+                                        android:layout_marginTop="8dp"
+                                        app:layout_constraintTop_toBottomOf="@+id/lvTv"
+                                        app:layout_constraintStart_toStartOf="parent"/>
+
+                                    <TextView
+                                        style="@style/TextGrey_9f9f9f.Bold"
+                                        android:id="@+id/intentionTv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/sp14"
+                                        android:text="-"
+                                        app:layout_constraintTop_toTopOf="@+id/referenceLabel"
+                                        app:layout_constraintStart_toEndOf="@+id/referenceLabel"/>
+                                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
+                                <ImageView
+                                    android:id="@+id/solutionIv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingStart="@dimen/dp32"
+                                    android:paddingEnd="@dimen/dp32"
+                                    android:paddingBottom="@dimen/dp64"
+                                    android:paddingTop="@dimen/dp32"
+                                    android:scaleType="fitStart"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/problemInfoContainer" />
+
+                                <com.freewheelin.pulley.views.memoView.MemoView
+                                    android:id="@+id/solutionMemoView"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.freewheelin.pulley.views.DisableVerticalScrollView>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clearContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="#c0ffffff"
+                            android:visibility="invisible"
+                            android:focusable="false"
+                            app:layout_constraintStart_toStartOf="@+id/problemContainer"
+                            app:layout_constraintEnd_toEndOf="@+id/problemContainer"
+                            app:layout_constraintBottom_toBottomOf="@+id/problemContainer"
+                            app:layout_constraintTop_toTopOf="@+id/problemContainer">
 
                             <ImageView
-                                android:id="@+id/solutionIv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingStart="@dimen/dp32"
-                                android:paddingEnd="@dimen/dp32"
-                                android:paddingBottom="@dimen/dp64"
-                                android:paddingTop="@dimen/dp32"
-                                android:scaleType="fitStart"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/problemInfoContainer" />
-
-                            <com.freewheelin.pulley.views.memoView.MemoView
-                                android:id="@+id/solutionMemoView"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
+                                android:src="@drawable/ic_check_green_circle"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent" />
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
-                    </com.freewheelin.pulley.views.DisableVerticalScrollView>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clearContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="#c0ffffff"
-                        android:visibility="invisible"
-                        android:focusable="false"
-                        app:layout_constraintStart_toStartOf="@+id/problemContainer"
-                        app:layout_constraintEnd_toEndOf="@+id/problemContainer"
-                        app:layout_constraintBottom_toBottomOf="@+id/problemContainer"
-                        app:layout_constraintTop_toTopOf="@+id/problemContainer">
 
                         <ImageView
+                            android:id="@+id/tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_check_green_circle"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:src="@drawable/ic_tag_yellow_long"
+                            android:layout_marginEnd="@dimen/dp32"
+                            android:visibility="invisible"
+                            app:layout_goneMarginEnd="140dp"
+                            app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
+                            app:layout_constraintTop_toTopOf="@+id/problemContainer"/>
+
+                        <com.freewheelin.pulley.views.PencilcaseView
+                            android:id="@+id/pencilcaseView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp32"
+                            android:layout_marginEnd="@dimen/dp32"
+                            app:layout_constraintTop_toTopOf="@+id/problemContainer"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/statusContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="#80818181"
+                            android:visibility="gone"
+                            android:clickable="true"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <ImageView
-                        android:id="@+id/tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_tag_yellow_long"
-                        android:layout_marginEnd="@dimen/dp32"
-                        android:visibility="invisible"
-                        app:layout_goneMarginEnd="140dp"
-                        app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
-                        app:layout_constraintTop_toTopOf="@+id/problemContainer"/>
-
-                    <com.freewheelin.pulley.views.PencilcaseView
-                        android:id="@+id/pencilcaseView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp32"
-                        android:layout_marginEnd="@dimen/dp32"
-                        app:layout_constraintTop_toTopOf="@+id/problemContainer"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/statusContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="#80818181"
-                        android:visibility="gone"
-                        android:clickable="true"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/problemContainer"
-                        app:layout_constraintEnd_toEndOf="@+id/solutionContainer">
-
-                        <ImageView
-                            android:id="@+id/statusIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_siren_w28"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/statusTv"
-                            app:layout_constraintVertical_chainStyle="packed"/>
-
-                        <TextView
-                            style="@style/TextWhite_ffffff.Bold"
-                            android:id="@+id/statusTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:textSize="@dimen/sp14"
-                            android:lineSpacingExtra="6sp"
-                            android:gravity="center"
-                            android:text="신고 처리 중입니다.\n빠른 시일 내에 처리하겠습니다 :)"
-                            app:layout_constraintTop_toBottomOf="@+id/statusIcon"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintVertical_chainStyle="packed"/>
+                            app:layout_constraintStart_toStartOf="@+id/problemContainer"
+                            app:layout_constraintEnd_toEndOf="@+id/solutionContainer">
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ImageView
+                                android:id="@+id/statusIcon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_siren_w28"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toTopOf="@+id/statusTv"
+                                app:layout_constraintVertical_chainStyle="packed"/>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/emptyGuide"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@color/white_ffffff"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toStartOf="@+id/problemContainer"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/solutionContainer"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                            <TextView
+                                style="@style/TextWhite_ffffff.Bold"
+                                android:id="@+id/statusTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:textSize="@dimen/sp14"
+                                android:lineSpacingExtra="6sp"
+                                android:gravity="center"
+                                android:text="신고 처리 중입니다.\n빠른 시일 내에 처리하겠습니다 :)"
+                                app:layout_constraintTop_toBottomOf="@+id/statusIcon"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed"/>
 
-                        <ImageView
-                            android:id="@+id/emptyIv"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/rect_grey_c0c0c0"
-                            app:layout_constraintStart_toStartOf="parent"
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/emptyGuide"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@color/white_ffffff"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@+id/problemContainer"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/emptyTv"
-                            app:layout_constraintVertical_chainStyle="packed"/>
+                            app:layout_constraintEnd_toEndOf="@+id/solutionContainer"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
-                        <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
-                            android:id="@+id/emptyTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/sp16"
-                            android:text="와! 틀린 문제가 없네요 :)"
-                            android:layout_marginTop="@dimen/dp24"
-                            app:layout_constraintTop_toBottomOf="@+id/emptyIv"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintVertical_chainStyle="packed"/>
+                            <ImageView
+                                android:id="@+id/emptyIv"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/rect_grey_c0c0c0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toTopOf="@+id/emptyTv"
+                                app:layout_constraintVertical_chainStyle="packed"/>
+
+                            <TextView
+                                style="@style/TextGrey_c0c0c0.Bold"
+                                android:id="@+id/emptyTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sp16"
+                                android:text="와! 틀린 문제가 없네요 :)"
+                                android:layout_marginTop="@dimen/dp24"
+                                app:layout_constraintTop_toBottomOf="@+id/emptyIv"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintVertical_chainStyle="packed"/>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <com.freewheelin.pulley.activities.solve.SpeedAnswerView
+                        android:id="@+id/speedAnswerView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <com.freewheelin.pulley.activities.solve.SpeedAnswerView
-                    android:id="@+id/speedAnswerView"
+                <com.freewheelin.pulley.activities.solve.AnswerView
+                    android:id="@+id/answerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:layout_height="@dimen/dp64"
+                    android:layout_marginBottom="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:elevation="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/galleryCloser"
+                    android:visibility="gone"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <com.freewheelin.pulley.activities.solve.AnswerView
-                android:id="@+id/answerView"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp64"
-                android:layout_marginBottom="@dimen/dp32"
-                android:layout_marginEnd="@dimen/dp32"
-                android:elevation="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/galleryCloser"
-                android:visibility="gone"
-                android:focusable="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-</com.freewheelin.pulley.views.DisableHorizontalScrollView>
-
+        </LinearLayout>
+    </com.freewheelin.pulley.views.DisableHorizontalScrollView>
+</layout>

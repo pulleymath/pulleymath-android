@@ -6,17 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.databinding.FragmentInitSettingSelectionBinding
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
-import kotlinx.android.synthetic.main.fragment_init_setting_selection.*
-import kotlinx.android.synthetic.main.fragment_init_setting_selection.prevBtn
 
 class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
 
     var parent:InitSettingActivity? = null
+    lateinit var binding: FragmentInitSettingSelectionBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -25,7 +26,8 @@ class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_init_setting_selection, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_init_setting_selection, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,40 +36,46 @@ class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
     }
 
     private fun setUI() {
-        completeBtn.toDisableUI()
+        binding.apply {
+            completeBtn.toDisableUI()
 
-        probAnsStatSelection.buttonTitles = listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
-        calculusSelection.buttonTitles = listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
-        geometrySelection.buttonTitles = listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
+            probAnsStatSelection.buttonTitles = listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
+            calculusSelection.buttonTitles = listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
+            geometrySelection.buttonTitles = listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
 
-        noneSelection.setOnClickListener { onNoneSelection() }
-        probAnsStatSelection.listener = this
-        calculusSelection.listener = this
-        geometrySelection.listener = this
+            noneSelection.setOnClickListener { onNoneSelection() }
+            probAnsStatSelection.listener = this@InitSettingSelectionFragment
+            calculusSelection.listener = this@InitSettingSelectionFragment
+            geometrySelection.listener = this@InitSettingSelectionFragment
 
-        prevBtn.setOnClickListener { parent?.prev() }
-        completeBtn.setOnClickListener { if(completeBtn.isEnableUI()) parent?.complete() }
+            prevBtn.setOnClickListener { parent?.prev() }
+            completeBtn.setOnClickListener { if(completeBtn.isEnableUI()) parent?.complete() }
+        }
     }
 
     private fun onNoneSelection() {
-        noneSelection.isSelected = !noneSelection.isSelected
-        if(noneSelection.isSelected) {
-            probAnsStatSelection.release()
-            calculusSelection.release()
-            geometrySelection.release()
-        }
+        binding.apply {
+            noneSelection.isSelected = !noneSelection.isSelected
+            if(noneSelection.isSelected) {
+                probAnsStatSelection.release()
+                calculusSelection.release()
+                geometrySelection.release()
+            }
 
-        setComplete()
+            setComplete()
+        }
     }
 
     fun getSelectedUnit(): Collection<BigUnit> {
-        val selectedBigUnits = hashSetOf<BigUnit>()
+        binding.apply {
+            val selectedBigUnits = hashSetOf<BigUnit>()
 
-        selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
-        selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
-        selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
+            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
+            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
+            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
 
-        return selectedBigUnits
+            return selectedBigUnits
+        }
     }
 
     private fun getSelectedUnits(view: DaebakInputSelection, subject: Subject): Collection<BigUnit> {
@@ -83,16 +91,18 @@ class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
 
     override fun onSelectionChanged(view: DaebakInputSelection) {
         if(getSelectedUnit().isNotEmpty()){
-            noneSelection.isSelected = false
+            binding.noneSelection.isSelected = false
         }
         setComplete()
     }
 
     private fun setComplete() {
-        if(getSelectedUnit().isEmpty() && !noneSelection.isSelected) {
-            completeBtn.toDisableUI()
-        } else {
-            completeBtn.toEnableUI()
+        binding.apply {
+            if(getSelectedUnit().isEmpty() && !noneSelection.isSelected) {
+                completeBtn.toDisableUI()
+            } else {
+                completeBtn.toEnableUI()
+            }
         }
     }
 }

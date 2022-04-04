@@ -4,9 +4,11 @@ import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestChangePhone
@@ -15,6 +17,8 @@ import com.freewheelin.pulley.core.API.RequestModel.sign.ConfirmCodeRequest
 import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.core.API_ANONYMOUS
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.DialogBannerBinding
+import com.freewheelin.pulley.databinding.DialogConfirmPhoneBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.isValidPhoneNum
@@ -24,14 +28,13 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_confirm_phone.*
-import kotlinx.android.synthetic.main.dialog_confirm_phone.countrySpinner
-import kotlinx.android.synthetic.main.fragment_signup.*
 import retrofit2.HttpException
 
 
 class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val failCB:()->Unit): Dialog(activity), CodeConfirmView.CodeConfirmInterface {
-
+    val binding: DialogConfirmPhoneBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_confirm_phone, null, false)
+    }
     lateinit var countryCodes:List<CountryCodeResponse.CountryCode>
     var countryCode = "82"
     var countryType = "KOR"
@@ -39,7 +42,7 @@ class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val fai
 
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setContentView(R.layout.dialog_confirm_phone)
+        setContentView(binding.root)
         initUI()
         load()
     }
@@ -56,20 +59,20 @@ class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val fai
 
     private fun setSpinner() {
         val items = countryCodes.map { "(+${it.code}) ${it.title}"}
-        countrySpinner.set(items) {
+        binding.countrySpinner.set(items) {
             val country = countryCodes.get(it)
             countryCode = country.code
             countryType = country.type
         }
-        countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
+        binding.countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
     }
 
     private fun initUI() {
         setCancelable(false)
-        btnClose.setOnClickListener { close() }
-        closeBtn.setOnClickListener { close() }
+        binding.btnClose.setOnClickListener { close() }
+        binding.closeBtn.setOnClickListener { close() }
 
-        codeConfirm.codeInterface = this
+        binding.codeConfirm.codeInterface = this
     }
 
     private fun close() {

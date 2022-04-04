@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.MotionEvent.BUTTON_STYLUS_PRIMARY
 import android.view.View
 import com.pulleymath.android.pdf.memo.storage.FileHelper
-import kotlinx.android.synthetic.main.view_pencilcase.view.*
 
 
 interface MemoViewListener {

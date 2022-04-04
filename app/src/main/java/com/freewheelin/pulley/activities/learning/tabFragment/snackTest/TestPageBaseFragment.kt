@@ -10,7 +10,7 @@ import com.freewheelin.pulley.utils.LogUtils
 
 abstract class TestPageBaseFragment: Fragment() {
     val curation: TestCuration
-        get() = TestCuration(context!!)
+        get() = TestCuration(requireContext())
     abstract var test: Test?
 
 

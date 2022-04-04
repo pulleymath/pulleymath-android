@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,14 +18,17 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.ActivityTestReportWrongBinding
+import com.freewheelin.pulley.databinding.ItemTestReportScoringWrongBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.*
-import kotlinx.android.synthetic.main.activity_test_report_wrong.*
-import kotlinx.android.synthetic.main.item_test_report_scoring_wrong.view.*
 
 class WrongTestReportActivity : AppCompatActivity() {
+    private val binding: ActivityTestReportWrongBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_test_report_wrong,null,false)
+    }
     lateinit var test: Test
     var isFromSolve = false
 
@@ -38,7 +42,7 @@ class WrongTestReportActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_report_wrong)
+        setContentView(binding.root)
         initUI()
         test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
@@ -52,36 +56,40 @@ class WrongTestReportActivity : AppCompatActivity() {
     fun syncTest(test: Test) {
         TestManager.getTestReport(this, user!!, test) {
             this.test = it
-            scoreTv.text = "${it.score}"
-            leftScoringRv.adapter = ScoringAdapter(this,  true)
-            rightScoringRv.adapter = ScoringAdapter(this, false)
+            with(binding) {
+                scoreTv.text = "${it.score}"
+                leftScoringRv.adapter = ScoringAdapter(this@WrongTestReportActivity,  true)
+                rightScoringRv.adapter = ScoringAdapter(this@WrongTestReportActivity, false)
 
-            leftCorrectRateTv.text = "${it.studentRating}등급 정답률"
-            rightCorrectRateTv.text = "${it.studentRating}등급 정답률"
+                leftCorrectRateTv.text = "${it.studentRating}등급 정답률"
+                rightCorrectRateTv.text = "${it.studentRating}등급 정답률"
 
-            scoreResultLabel.show()
-            scoreResultContainerCl.show()
-            leftScoringRv.show()
-            rightScoringRv.show()
+                scoreResultLabel.show()
+                scoreResultContainerCl.show()
+                leftScoringRv.show()
+                rightScoringRv.show()
 
-            configureCheckbox(it)
+                configureCheckbox(it)
+            }
 
         }
     }
 
     private fun initUI() {
         hideViews()
-        leftScoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 5
-        leftScoringRv.layoutManager = LinearLayoutManager(this)
-        rightScoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 5
-        rightScoringRv.layoutManager = LinearLayoutManager(this)
+        with(binding) {
+            leftScoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 5
+            leftScoringRv.layoutManager = LinearLayoutManager(this@WrongTestReportActivity)
+            rightScoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 5
+            rightScoringRv.layoutManager = LinearLayoutManager(this@WrongTestReportActivity)
 
-        xBtn.extensionTouchArea(24.toPx())
-        xBtn.setOnClickListener {
-            this.onBackPressed()
+            xBtn.extensionTouchArea(24.toPx())
+            xBtn.setOnClickListener {
+                this@WrongTestReportActivity.onBackPressed()
+            }
+
+            reviewBtn.setOnClickListener { onReviewBtnClicked() }
         }
-
-        reviewBtn.setOnClickListener { onReviewBtnClicked() }
     }
 
     fun onReviewBtnClicked() {
@@ -95,10 +103,12 @@ class WrongTestReportActivity : AppCompatActivity() {
     }
 
     private fun hideViews() {
-        scoreResultLabel.visibility = View.INVISIBLE
-        scoreResultContainerCl.visibility = View.INVISIBLE
-        leftScoringRv.visibility = View.INVISIBLE
-        rightScoringRv.visibility = View.INVISIBLE
+        with(binding) {
+            scoreResultLabel.visibility = View.INVISIBLE
+            scoreResultContainerCl.visibility = View.INVISIBLE
+            leftScoringRv.visibility = View.INVISIBLE
+            rightScoringRv.visibility = View.INVISIBLE
+        }
     }
 
     private fun configureCheckbox(test: Test) {
@@ -107,24 +117,24 @@ class WrongTestReportActivity : AppCompatActivity() {
 
 
         if(correctProblems.isEmpty()) {
-            clearCheckbox.isChecked = false
+            binding.clearCheckbox.isChecked = false
         } else {
-            clearCheckbox.isChecked = correctAndNotClearedProblems.isEmpty()
+            binding.clearCheckbox.isChecked = correctAndNotClearedProblems.isEmpty()
 
-            clearCheckbox.setOnCheckedChangeListener { button, isChecked ->
+            binding.clearCheckbox.setOnCheckedChangeListener { button, isChecked ->
                 if(isChecked)
                     ProblemManager.clearProblems(this, correctAndNotClearedProblems, user!!) {
                         correctAndNotClearedProblems.forEach { it.isClear = isChecked }
-                        leftScoringRv.adapter?.notifyDataSetChanged()
-                        rightScoringRv.adapter?.notifyDataSetChanged()
+                        binding.leftScoringRv.adapter?.notifyDataSetChanged()
+                        binding.rightScoringRv.adapter?.notifyDataSetChanged()
                         val intent = Intent(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED)
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     }
                 else
                     ProblemManager.unclearProblems(this, correctAndNotClearedProblems, user!!) {
                         correctAndNotClearedProblems.forEach { it.isClear = isChecked }
-                        leftScoringRv.adapter?.notifyDataSetChanged()
-                        rightScoringRv.adapter?.notifyDataSetChanged()
+                        binding.leftScoringRv.adapter?.notifyDataSetChanged()
+                        binding.rightScoringRv.adapter?.notifyDataSetChanged()
                         val intent = Intent(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED)
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                     }
@@ -134,8 +144,8 @@ class WrongTestReportActivity : AppCompatActivity() {
 
     inner class ScoringAdapter(val context: Context, val isLeftSide: Boolean = false): RecyclerView.Adapter<WrongReportScoringHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WrongReportScoringHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_test_report_scoring_wrong, parent, false)
-            val holder = WrongReportScoringHolder(view)
+            val itemBinding: ItemTestReportScoringWrongBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_test_report_scoring_wrong, parent, false)
+            val holder = WrongReportScoringHolder(itemBinding)
             if(isLeftSide)
                 holder.endBorder.visibility = View.INVISIBLE
             return holder
@@ -155,27 +165,28 @@ class WrongTestReportActivity : AppCompatActivity() {
     }
 }
 
-class WrongReportScoringHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val numTv = view.numTv
-    val containerCl = view.containerCl
-    val endBorder = view.endBorder
-    val resultIv = view.resultIv
-    val correctRateTv = view.correctRateTv
-    val wrongCntTv = view.wrongCntTv
-    val resultTv = view.resultTv
-    val clearContainerCl = view.clearContainerCl
+class WrongReportScoringHolder(val itemBinding: ItemTestReportScoringWrongBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val numTv = itemBinding.numTv
+    val containerCl = itemBinding.containerCl
+    val endBorder = itemBinding.endBorder
+    val resultIv = itemBinding.resultIv
+    val correctRateTv = itemBinding.correctRateTv
+    val wrongCntTv = itemBinding.wrongCntTv
+    val resultTv = itemBinding.resultTv
+    val clearContainerCl = itemBinding.clearContainerCl
+    val viewContext = itemBinding.root.context
 
     fun set(problem: Problem?) {
         if(problem == null) {
             numTv.text = "-"
             correctRateTv.text = "-"
             wrongCntTv.text = "-"
-            numTv.setBackgroundColor(ContextCompat.getColor(view.context, R.color.white_fafafa))
+            numTv.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_fafafa))
 
-            wrongCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-            wrongCntTv.typeface = Theme.regular(view.context)
+            wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
+            wrongCntTv.typeface = Theme.regular(viewContext)
 
-            itemView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.white_ffffff))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_ffffff))
             resultTv.visibility = View.VISIBLE
             resultIv.visibility = View.INVISIBLE
             clearContainerCl.visibility = View.GONE
@@ -187,12 +198,12 @@ class WrongReportScoringHolder(val view: View): RecyclerView.ViewHolder(view) {
             correctRateTv.text = "${problem.standardCorrectRate}%"
             if (problem.getResultByScoring() == Result.correct) {
                 resultIv.setImageResource(R.drawable.ic_result_correct)
-                wrongCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-                wrongCntTv.typeface = Theme.regular(view.context)
+                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
+                wrongCntTv.typeface = Theme.regular(viewContext)
             } else {
                 resultIv.setImageResource(R.drawable.ic_result_incorrect)
-                wrongCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.red_fe7b67))
-                wrongCntTv.typeface = Theme.extraBold(view.context)
+                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.red_fe7b67))
+                wrongCntTv.typeface = Theme.extraBold(viewContext)
             }
 
             if(problem.isClear) {

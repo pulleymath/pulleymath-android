@@ -1,101 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
-    android:orientation="vertical"
-    android:clickable="true"
-    tools:context=".activities.mypage.MySignUpInfoFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white_ffffff">
-
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@null"
-            android:src="@drawable/ic_toolbar_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black_4c4c4c" />
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="쿠폰함"
-            android:textSize="@dimen/sp24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View style="@style/Border_Grey_e8e8e8_Horizontal" />
-
-    <TextView
-        android:id="@+id/titleLabel"
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="12dp"
-        android:text="쿠폰을 등록해주세요."
-        android:textSize="18sp" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inputCouponContainer"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/bg_common_white_stroke_grey"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/couponEt"
-            style="@style/TextBlack_4c4c4c"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:hint="쿠폰 코드 입력"
-            android:inputType="textPersonName"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/registBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
-            android:id="@+id/registBtn"
-            android:layout_width="80dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="16dp"
-            android:text="등록하기"
-            tools:buttonTextSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"/>
+        android:background="@color/white_fafafa"
+        android:orientation="vertical"
+        android:clickable="true"
+        tools:context=".activities.mypage.MySignUpInfoFragment">
 
-</LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_ffffff">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@null"
+                android:src="@drawable/ic_toolbar_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black_4c4c4c" />
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="쿠폰함"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View style="@style/Border_Grey_e8e8e8_Horizontal" />
+
+        <TextView
+            android:id="@+id/titleLabel"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="쿠폰을 등록해주세요."
+            android:textSize="18sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/inputCouponContainer"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_common_white_stroke_grey"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/couponEt"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:hint="쿠폰 코드 입력"
+                android:inputType="textPersonName"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/registBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.freewheelin.pulley.views.buttons.PrimaryButton
+                android:id="@+id/registBtn"
+                android:layout_width="80dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="16dp"
+                android:text="등록하기"
+                tools:buttonTextSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</layout>

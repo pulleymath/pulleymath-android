@@ -56,7 +56,7 @@ object AppUsageMonitor {
                 if(isStudying)
                     accumulatedStudyTime += 1
             }
-            addMonitorTimeIfNeed() // dummy TODO
+            addMonitorTimeIfNeed() // 공부시간 기록
             listeners.forEach { it.monitoringTick() }
         }
         timer?.schedule(task, 1000, 1000)

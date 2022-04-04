@@ -6,15 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.FragmentTestPageFinishBinding
 import com.freewheelin.pulley.model.contents.Test
-import kotlinx.android.synthetic.main.fragment_test_page.*
 import java.util.*
-
 
 class TestPageFinishFragment : TestPageBaseFragment() {
     override var test: Test? = null
+    lateinit var binding: FragmentTestPageFinishBinding
     companion object {
         fun newInstance(test: Test): TestPageFinishFragment {
             val fragment = TestPageFinishFragment()
@@ -24,14 +25,15 @@ class TestPageFinishFragment : TestPageBaseFragment() {
             return fragment
         }
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_test_page_finish, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_page_finish, container, false)
+        return binding.root
     }
 
     override fun configureBy(test: Test) {
-        titleTv.text = when(test.getTestType()) {
+        binding.titleTv.text = when(test.getTestType()) {
             Test.TestType.daily -> "데일리 테스트\n완료"
             Test.TestType.weekly -> "주간 테스트\n완료"
             Test.TestType.wrong -> "오답 테스트\n완료"
@@ -40,7 +42,7 @@ class TestPageFinishFragment : TestPageBaseFragment() {
         }
 
 
-        descTv.text = when(test.getTestType()) {
+        binding.descTv.text = when(test.getTestType()) {
             Test.TestType.daily -> curation.getDailyListFinishQ(Date())
             Test.TestType.weekly -> "다음 주간 테스트는\n토요일 오전 6시에 공개됩니다 :)"
             Test.TestType.wrong -> "오답 테스트는\n무제한 응시 가능합니다 :)"

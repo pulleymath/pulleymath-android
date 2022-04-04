@@ -1,340 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/dialog_test_report_top_margin"
-    android:paddingBottom="@dimen/dialog_test_report_bottom_margin"
-    tools:context="com.freewheelin.pulley.activities.DailyTestReportActivity">>
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="960dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa_round"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dialog_test_report_top_margin"
+        android:paddingBottom="@dimen/dialog_test_report_bottom_margin"
+        tools:context="com.freewheelin.pulley.activities.DailyTestReportActivity">>
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topContainerCl"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp64"
-            android:background="@drawable/bg_white_ffffff_round_top_only"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="960dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_fafafa_round"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/topTitleTv"
-                style="@style/TextBlack_4c4c4c.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp32"
-                android:text="보고서 보기"
-                android:textSize="@dimen/sp18"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/xBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dp24"
-                android:background="@null"
-                android:src="@drawable/ic_x_grey_19dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tabGravity="center"
-                app:tabIndicatorColor="@color/purple_6D6DFF"
-                app:tabIndicatorHeight="3dp"
-                app:tabPaddingBottom="0dp"
-                app:tabPaddingEnd="@dimen/dp24"
-                app:tabPaddingStart="@dimen/dp24"
-                app:tabSelectedTextColor="@color/purple_6D6DFF"
-                app:tabTextAppearance="@style/AppTheme.TabBar.TabText.18"
-                app:tabTextColor="@color/black_4c4c4c" />
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/topContainerCl">
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/contentsCl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/dp40"
-                android:paddingTop="@dimen/dp32"
-                android:paddingEnd="@dimen/dp40"
-                android:paddingBottom="@dimen/dp64"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topContainerCl">
+                android:id="@+id/topContainerCl"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp64"
+                android:background="@drawable/bg_white_ffffff_round_top_only"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/scoreResultLabel"
-                    style="@style/TextGrey_9f9f9f"
+                    android:id="@+id/topTitleTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="채점 결과"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:text="보고서 보기"
                     android:textSize="@dimen/sp18"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageButton
+                    android:id="@+id/xBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:background="@null"
+                    android:src="@drawable/ic_x_grey_19dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/scoreResultContainerCl"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp200"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/white_ffffff"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabGravity="center"
+                    app:tabIndicatorColor="@color/purple_6D6DFF"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabPaddingBottom="0dp"
+                    app:tabPaddingEnd="@dimen/dp24"
+                    app:tabPaddingStart="@dimen/dp24"
+                    app:tabSelectedTextColor="@color/purple_6D6DFF"
+                    app:tabTextAppearance="@style/AppTheme.TabBar.TabText.18"
+                    app:tabTextColor="@color/black_4c4c4c" />
+
+                <View
+                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/topContainerCl">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/contentsCl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dp40"
+                    android:paddingTop="@dimen/dp32"
+                    android:paddingEnd="@dimen/dp40"
+                    android:paddingBottom="@dimen/dp64"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/topContainerCl">
 
                     <TextView
-                        android:id="@+id/scoreTv"
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:id="@+id/scoreResultLabel"
+                        style="@style/TextGrey_9f9f9f"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp64"
-                        android:layout_marginTop="@dimen/dp48"
-                        android:layout_marginBottom="@dimen/dp36"
-                        android:text="100"
-                        android:textSize="@dimen/sp104"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="채점 결과"
+                        android:textSize="@dimen/sp18"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/scoreLabel"
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginBottom="@dimen/dp20"
-                        android:text="점"
-                        android:textSize="@dimen/sp48"
-                        app:layout_constraintBottom_toBottomOf="@+id/scoreTv"
-                        app:layout_constraintStart_toEndOf="@+id/scoreTv" />
-
-
-                    <TextView
-                        android:id="@+id/scoreGuideTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp64"
-                        android:layout_marginEnd="@dimen/dp48"
-                        android:lineSpacingExtra="@dimen/sp8"
-                        android:maxLines="3"
-                        android:text=""
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/scoreLabel"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
-                        android:id="@+id/reviewBtn"
-                        android:layout_width="@dimen/primaryBtn_width_160dp"
-                        android:layout_height="@dimen/dp48"
-                        android:layout_marginTop="@dimen/dp16"
-                        android:text="리뷰하기"
-                        app:buttonTheme="blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/scoreGuideTv"
-                        app:layout_constraintTop_toBottomOf="@+id/scoreGuideTv" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <TextView
-                    android:id="@+id/scoringResultLabel"
-                    style="@style/TextGrey_9f9f9f"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp48"
-                    android:text="출제 문항별 정오현황"
-                    android:textSize="@dimen/sp18"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/scoreResultContainerCl" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
-                    android:padding="@dimen/dp32"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp64"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/scoringResultLabel"
-                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/columnCl"
+                        android:id="@+id/scoreResultContainerCl"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/dp48"
-                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
-                        android:padding="1dp"
+                        android:layout_height="@dimen/dp200"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:background="@color/white_ffffff"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
 
                         <TextView
-                            android:id="@+id/numberLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/white_fafafa"
-                            android:gravity="center"
-                            android:text="번호"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <View
-                            style="@style/Border_Grey_e8e8e8_Vertical"
-                            android:layout_height="match_parent"
-                            app:layout_constraintStart_toEndOf="@+id/numberLabel" />
-
-                        <TextView
-                            android:id="@+id/resultLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
-                            android:layout_width="72dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="결과"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintStart_toEndOf="@+id/numberLabel" />
-
-                        <View
-                            style="@style/Border_Grey_e8e8e8_Vertical"
-                            android:layout_height="@dimen/dp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/resultLabel"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/totalCorrectRateLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
-                            android:layout_width="120dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="전체 정답률"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintStart_toEndOf="@+id/resultLabel" />
-
-                        <View
-                            style="@style/Border_Grey_e8e8e8_Vertical"
-                            android:layout_height="@dimen/dp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/sameCorrectRateLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
-                            android:layout_width="120dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="전체 정답률"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel" />
-
-                        <View
-                            style="@style/Border_Grey_e8e8e8_Vertical"
-                            android:layout_height="@dimen/dp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/subjectLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            android:id="@+id/scoreTv"
+                            style="@style/TextBlack_4c4c4c.ExtraBold"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="24dp"
-                            android:gravity="center"
-                            android:text="과목"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp64"
+                            android:layout_marginTop="@dimen/dp48"
+                            android:layout_marginBottom="@dimen/dp36"
+                            android:text="100"
+                            android:textSize="@dimen/sp104"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
+                        <TextView
+                            android:id="@+id/scoreLabel"
+                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginBottom="@dimen/dp20"
+                            android:text="점"
+                            android:textSize="@dimen/sp48"
+                            app:layout_constraintBottom_toBottomOf="@+id/scoreTv"
+                            app:layout_constraintStart_toEndOf="@+id/scoreTv" />
+
+
+                        <TextView
+                            android:id="@+id/scoreGuideTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp64"
+                            android:layout_marginEnd="@dimen/dp48"
+                            android:lineSpacingExtra="@dimen/sp8"
+                            android:maxLines="3"
+                            android:text=""
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/scoreLabel"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed" />
+
+                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                            android:id="@+id/reviewBtn"
+                            android:layout_width="@dimen/primaryBtn_width_160dp"
+                            android:layout_height="@dimen/dp48"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:text="리뷰하기"
+                            app:buttonTheme="blue"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/scoreGuideTv"
+                            app:layout_constraintTop_toBottomOf="@+id/scoreGuideTv" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/scoringResultLabel"
+                        style="@style/TextGrey_9f9f9f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp48"
+                        android:text="출제 문항별 정오현황"
+                        android:textSize="@dimen/sp18"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/scoreResultContainerCl" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white_ffffff"
+                        android:padding="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginBottom="@dimen/dp64"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/scoringResultLabel"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/columnCl"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp48"
+                            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                            android:padding="1dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/numberLabel"
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/white_fafafa"
+                                android:gravity="center"
+                                android:text="번호"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <View
+                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toEndOf="@+id/numberLabel" />
+
+                            <TextView
+                                android:id="@+id/resultLabel"
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:layout_width="72dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="결과"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/numberLabel" />
+
+                            <View
+                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/resultLabel"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/totalCorrectRateLabel"
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="전체 정답률"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/resultLabel" />
+
+                            <View
+                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/sameCorrectRateLabel"
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="전체 정답률"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel" />
+
+                            <View
+                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_height="@dimen/dp16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/subjectLabel"
+                                style="@style/TextBlack_4c4c4c.Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="24dp"
+                                android:gravity="center"
+                                android:text="과목"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/scoringRv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/columnCl" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/scoringRv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/columnCl" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/questionCl"
+                android:background="@color/white_fafafa"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/scrollView"
+                app:layout_constraintEnd_toEndOf="@+id/scrollView"
+                app:layout_constraintTop_toTopOf="@+id/scrollView"
+                app:layout_constraintBottom_toBottomOf="@+id/scrollView">
+
+                <ImageView
+                    android:id="@+id/questionIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_question_box"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/questionTv"
+                    app:layout_constraintVertical_chainStyle="packed"/>
+
+                <TextView
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:id="@+id/questionTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp16"
+                    android:lineSpacingExtra="@dimen/sp8"
+                    android:gravity="center_horizontal"
+                    android:text="앗! 아직 2회차 테스트를 하지 않았네요 :)"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/questionIv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/questionCl"
-            android:background="@color/white_fafafa"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="@+id/scrollView"
-            app:layout_constraintEnd_toEndOf="@+id/scrollView"
-            app:layout_constraintTop_toTopOf="@+id/scrollView"
-            app:layout_constraintBottom_toBottomOf="@+id/scrollView">
-
-            <ImageView
-                android:id="@+id/questionIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_question_box"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/questionTv"
-                app:layout_constraintVertical_chainStyle="packed"/>
-
-            <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
-                android:id="@+id/questionTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp16"
-                android:lineSpacingExtra="@dimen/sp8"
-                android:gravity="center_horizontal"
-                android:text="앗! 아직 2회차 테스트를 하지 않았네요 :)"
-                android:layout_marginTop="@dimen/dp24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/questionIv"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

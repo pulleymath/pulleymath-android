@@ -5,16 +5,20 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
+import android.view.LayoutInflater
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.dialog_complete.*
+import com.freewheelin.pulley.databinding.DialogCompleteBinding
 
 class CompleteDialog(context: Context, val title: String, val guide: String): Dialog(context) {
-
+    val binding: DialogCompleteBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_complete, null, false)
+    }
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setContentView(R.layout.dialog_complete)
-        titleTv.text = title
-        guideTv.text = guide
+        setContentView(binding.root)
+        binding.titleTv.text = title
+        binding.guideTv.text = guide
     }
 
 

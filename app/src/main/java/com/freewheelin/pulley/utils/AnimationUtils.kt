@@ -5,8 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Handler
 import android.view.View
+import android.widget.TextView
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.dialog_timer.*
 
 interface AnimationListener {
     fun onAnimationEnd() {
@@ -31,8 +32,16 @@ class AnimationUtils {
 class TimerDialog: Dialog {
     var listener: AnimationListener? = null
 
+    var timerLottie: LottieAnimationView
+    var timerTv: TextView
+    var endTv: TextView
+
     constructor(context: Context, count: Int=3 , endText: String): super(context, R.style.CustomBackgroundDialog) {
         setContentView(R.layout.dialog_timer)
+
+        timerLottie = findViewById(R.id.timerLottie)
+        timerTv = findViewById(R.id.timerTv)
+        endTv = findViewById(R.id.endTv)
 
         endTv.text = "준비~"
         endTv.visibility = View.VISIBLE

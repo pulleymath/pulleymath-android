@@ -1,93 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white_ffffff"
-    android:gravity="center_vertical"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/tvNum"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="1"
-        android:textSize="@dimen/sp14" />
-
-    <TextView
-        android:id="@+id/tvSubject"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="수학1"
-        android:textSize="@dimen/sp14" />
-
-
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@color/white_ffffff"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvBigUnit"
+            android:id="@+id/tvNum"
             style="@style/TextBlack_4c4c4c"
-            android:layout_width="180dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:text="집합과 명제"
+            android:gravity="center"
+            android:text="1"
             android:textSize="@dimen/sp14" />
 
         <TextView
-            android:id="@+id/tvType"
-            style="@style/TextGrey_9f9f9f"
+            android:id="@+id/tvSubject"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="수학1"
+            android:textSize="@dimen/sp14" />
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="로그함수와 지수함수"
-            android:textSize="@dimen/sp12" />
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvBigUnit"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="집합과 명제"
+                android:textSize="@dimen/sp14" />
 
-    <TextView
-        android:id="@+id/tvPoint"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="62dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="1점"
-        android:textSize="@dimen/sp14" />
+            <TextView
+                android:id="@+id/tvType"
+                style="@style/TextGrey_9f9f9f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="로그함수와 지수함수"
+                android:textSize="@dimen/sp12" />
 
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:id="@+id/ivKiller"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/bg_red_fe7b67_circle" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ivResult"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tvPoint"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="62dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_mock_report_result_o" />
+            android:gravity="center"
+            android:text="1점"
+            android:textSize="@dimen/sp14" />
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/ivKiller"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/bg_red_fe7b67_circle" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_mock_report_result_o" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</layout>

@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 apply plugin: 'com.google.gms.google-services'
@@ -25,8 +24,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 240
-        versionName '1.4.16'
+        versionCode 241
+        versionName '1.4.17'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -133,7 +132,7 @@ dependencies {
     implementation 'com.rm:freedrawview:1.1.2'
     implementation 'gun0912.ted:tedpermission:2.2.2'
     implementation 'com.airbnb.android:lottie:3.1.0'
-    implementation 'com.github.hyuntae0117:android-BalloonWindow:0.2.4'
+//    implementation 'com.github.hyuntae0117:android-BalloonWindow:0.2.4'
     implementation 'com.github.hyuntae0117:android-RecyclerAdapters:0.6'
 
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'

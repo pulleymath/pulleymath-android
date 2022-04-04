@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
-import kotlinx.android.synthetic.main.dialog_my_study_info_setting.*
 
 interface MyPageSettingDialogListener {
     fun onModifyCompleted(user: User)
@@ -24,9 +23,6 @@ open class MyPageSettingBaseDialog(context: Context, open val user: User, listen
 
     override fun setContentView(resId: Int) {
         super.setContentView(resId)
-        xBtn.setOnClickListener {
-            dismiss()
-        }
     }
 
     fun showCompleteDialog() {

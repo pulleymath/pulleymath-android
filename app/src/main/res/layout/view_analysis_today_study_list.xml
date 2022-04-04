@@ -1,91 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:id="@+id/titleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
-        android:textColor="@color/black_4c4c4c"
-        android:text="오늘의 학습 내역"
-        android:layout_marginStart="@dimen/dp48"
-        android:layout_marginTop="@dimen/dp48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        style="@style/TextPurple_6d6dff.ExtraBold"
-        android:id="@+id/viewAllListBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp16"
-        android:text="학습 내역 전체보기 >"
-        app:layout_constraintTop_toBottomOf="@+id/titleLabel"
-        app:layout_constraintStart_toStartOf="@+id/titleLabel"/>
-
-    <LinearLayout
-        android:id="@+id/recyclerView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/dp32"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="@dimen/dp48"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn">
+        android:layout_height="wrap_content">
 
-    </LinearLayout>
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/titleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:textColor="@color/black_4c4c4c"
+            android:text="오늘의 학습 내역"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recyclerView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="@dimen/dp48"-->
-<!--        android:layout_marginTop="@dimen/dp32"-->
-<!--        android:layout_marginEnd="@dimen/dp48"-->
-<!--        android:layout_marginBottom="@dimen/dp48"-->
-<!--        android:divider="@drawable/line_grey_e8e8e8"-->
-<!--        android:nestedScrollingEnabled="false"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn" />-->
+        <TextView
+            style="@style/TextPurple_6d6dff.ExtraBold"
+            android:id="@+id/viewAllListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="학습 내역 전체보기 >"
+            app:layout_constraintTop_toBottomOf="@+id/titleLabel"
+            app:layout_constraintStart_toStartOf="@+id/titleLabel"/>
+
+        <LinearLayout
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="@dimen/dp48"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn">
+
+        </LinearLayout>
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/recyclerView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/dp48"-->
+    <!--        android:layout_marginTop="@dimen/dp32"-->
+    <!--        android:layout_marginEnd="@dimen/dp48"-->
+    <!--        android:layout_marginBottom="@dimen/dp48"-->
+    <!--        android:divider="@drawable/line_grey_e8e8e8"-->
+    <!--        android:nestedScrollingEnabled="false"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn" />-->
 
 
-    <TextView
-        android:id="@+id/emptyGuideTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp16"
-        android:textColor="@color/grey_c0c0c0"
-        android:lineSpacingExtra="8sp"
-        android:layout_marginTop="@dimen/dp48"
-        android:text="공부한 내역이 없네요..!\n공부하고 돌아오면 딱 맞는 추천학습을 준비해둘게요 :)"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@+id/studyBtn"/>
+        <TextView
+            android:id="@+id/emptyGuideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp16"
+            android:textColor="@color/grey_c0c0c0"
+            android:lineSpacingExtra="8sp"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="공부한 내역이 없네요..!\n공부하고 돌아오면 딱 맞는 추천학습을 준비해둘게요 :)"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewAllListBtn"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@+id/studyBtn"/>
 
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
-        android:id="@+id/studyBtn"
-        android:layout_width="@dimen/primaryBtn_width_200dp"
-        android:layout_height="@dimen/dp56"
-        android:layout_marginTop="@dimen/dp24"
-        android:layout_marginBottom="@dimen/dp96"
-        android:text="공부하기"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emptyGuideTv"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
+            android:id="@+id/studyBtn"
+            android:layout_width="@dimen/primaryBtn_width_200dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp24"
+            android:layout_marginBottom="@dimen/dp96"
+            android:text="공부하기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emptyGuideTv"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

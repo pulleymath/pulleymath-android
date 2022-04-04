@@ -8,22 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ItemChartOnebarBinding
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.setPaddingLeft
 import com.freewheelin.pulley.utils.setPaddingRight
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.bars.VerticalBar
-import kotlinx.android.synthetic.main.item_chart_onebar.view.*
 
-class OneBarChart: RecyclerView {
+class OneBarChart(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs) {
     class BarData(val title: String, val value: Int)
-
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
-        initUI()
-    }
 
     private var data: List<BarData> = ArrayList()
     var isHighlightMaxAndMin: Boolean = false
@@ -36,6 +33,10 @@ class OneBarChart: RecyclerView {
 
     private val chartWidth: Int
         get() = DisplayUtils.getScreenWidth(context) - 64.toPx()
+
+    init {
+        initUI()
+    }
 
     fun initUI() {
         this.setPaddingLeft(70.toPx())
@@ -63,8 +64,8 @@ class OneBarChart: RecyclerView {
 
     inner class OneBarChartAdapter: RecyclerView.Adapter<OneBarHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OneBarHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_chart_onebar, parent, false)
-            return OneBarHolder(view)
+            val itemBinding: ItemChartOnebarBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_chart_onebar, parent, false)
+            return OneBarHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -110,9 +111,9 @@ class OneBarChart: RecyclerView {
     }
 }
 
-class OneBarHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val bar: VerticalBar = view.bar
-    val textView: TextView = view.tv
+class OneBarHolder(val itemBinding: ItemChartOnebarBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val bar: VerticalBar = itemBinding.bar
+    val textView: TextView = itemBinding.tv
 
     fun set(max: Int, data: OneBarChart.BarData) {
         val value = data.value.toFloat() / max.toFloat()

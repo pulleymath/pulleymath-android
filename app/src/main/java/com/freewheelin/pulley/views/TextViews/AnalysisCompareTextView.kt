@@ -6,8 +6,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.textview_analysis_compare.view.*
+import com.freewheelin.pulley.databinding.TextviewAnalysisCompareBinding
 
 class AnalysisCompareTextView: LinearLayout {
     constructor(context: Context): super(context)
@@ -21,49 +22,49 @@ class AnalysisCompareTextView: LinearLayout {
             when(field) {
                 UpDownTextView.Change.increase -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.blue_2287ef))
-                    changeIv.setImageResource(R.drawable.ic_up_blue)
+                    binding.changeIv.setImageResource(R.drawable.ic_up_blue)
                 }
                 UpDownTextView.Change.decrease -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.red_fe7b67))
-                    changeIv.setImageResource(R.drawable.ic_down_red)
+                    binding.changeIv.setImageResource(R.drawable.ic_down_red)
                 }
                 UpDownTextView.Change.noChange -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.grey_9f9f9f))
-                    changeIv.setImageDrawable(null)
+                    binding.changeIv.setImageDrawable(null)
                 }
             }
         }
     var valueText: String?
         get() {
-            return valueTv.text.toString()
+            return binding.valueTv.text.toString()
         }
         set(value) {
-            valueTv.text = value
+            binding.valueTv.text = value
         }
 
     var diffText: String?
         get() {
-            return diffTv.text.toString()
+            return binding.diffTv.text.toString()
         }
         set(value) {
-            diffTv.text = value
+            binding.diffTv.text = value
         }
+    var binding: TextviewAnalysisCompareBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.textview_analysis_compare, this, true)
 
     init {
         orientation = LinearLayout.VERTICAL
-        LayoutInflater.from(context).inflate(R.layout.textview_analysis_compare, this)
         gravity = Gravity.CENTER
     }
 
     fun setDiffTextColor(color: Int) {
-        diffTv.setTextColor(color)
+        binding.diffTv.setTextColor(color)
     }
 
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.AnalysisCompareTextView)
 
-        topLabel.text = array.getString(R.styleable.AnalysisCompareTextView_AnalysisCompareTextView_TopLabel)
-        bottomLabel.text = array.getString(R.styleable.AnalysisCompareTextView_AnalysisCompareTextView_BottomLabel)
+        binding.topLabel.text = array.getString(R.styleable.AnalysisCompareTextView_AnalysisCompareTextView_TopLabel)
+        binding.bottomLabel.text = array.getString(R.styleable.AnalysisCompareTextView_AnalysisCompareTextView_BottomLabel)
         array.recycle()
     }
 }

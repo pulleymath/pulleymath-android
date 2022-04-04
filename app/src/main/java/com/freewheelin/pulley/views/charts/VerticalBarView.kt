@@ -12,13 +12,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.*
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.databinding.ViewBarVerticalBinding
 import com.freewheelin.pulley.utils.hide
 import com.freewheelin.pulley.utils.show
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.bars.VerticalBar
-import kotlinx.android.synthetic.main.view_bar_vertical.view.*
 import java.io.Serializable
 
 interface VerticalBarListener {
@@ -71,17 +72,17 @@ class VerticalBarView : ConstraintLayout {
         }
     var title: String? = null
         get() {
-            return titleTv.text.toString()
+            return binding.titleTv.text.toString()
         }
         set(value) {
             field = value
-            titleTv.text = value
+            binding.titleTv.text = value
         }
 
     var detailBtn: Button
+    var binding: ViewBarVerticalBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_bar_vertical, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_bar_vertical, this)
 
         detailBtn = findViewById(R.id.detailBtn)
 
@@ -259,9 +260,9 @@ class VerticalBarView : ConstraintLayout {
         addView(secondBar)
         addView(thirdBar)
 
-        set.connect(firstBar.id, BOTTOM, bottomContainerCl.id, TOP)
-        set.connect(secondBar.id, BOTTOM, bottomContainerCl.id, TOP)
-        set.connect(thirdBar.id, BOTTOM, bottomContainerCl.id, TOP)
+        set.connect(firstBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
+        set.connect(secondBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
+        set.connect(thirdBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
 
         set.connect(firstBar.id, START, this.id, START)
         set.connect(firstBar.id, END, secondBar.id, START)
@@ -289,8 +290,8 @@ class VerticalBarView : ConstraintLayout {
         addView(firstBar)
         addView(secondBar)
 
-        set.connect(firstBar.id, BOTTOM, bottomContainerCl.id, TOP)
-        set.connect(secondBar.id, BOTTOM, bottomContainerCl.id, TOP)
+        set.connect(firstBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
+        set.connect(secondBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
 
         set.connect(firstBar.id, START, this.id, START)
         set.connect(firstBar.id, END, secondBar.id, START)
@@ -310,7 +311,7 @@ class VerticalBarView : ConstraintLayout {
 
         val barWidth = resources.getDimension(R.dimen.triple_vertical_bar_width).toInt()
 
-        set.connect(firstBar.id, BOTTOM, bottomContainerCl.id, TOP)
+        set.connect(firstBar.id, BOTTOM, binding.bottomContainerCl.id, TOP)
         set.connect(firstBar.id, START, this.id, START)
         set.connect(firstBar.id, END, this.id, END)
         set.constrainWidth(firstBar.id, barWidth)

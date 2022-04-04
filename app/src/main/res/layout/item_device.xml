@@ -1,106 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dp8">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp96"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
-        android:visibility="visible">
-
-        <ImageButton
-            android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/dp32"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_x_grey_19dp" />
-
-        <TextView
-            android:id="@+id/currentDevice"
-            style="@style/TextGrey_9f9f9f.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp24"
-            android:background="@drawable/bg_grey_e0e0e0_round_20"
-            android:gravity="center"
-            android:paddingStart="6dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="6dp"
-            android:paddingBottom="2dp"
-            android:text="현재 기기"
-            android:textSize="@dimen/sp12"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textName"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:ellipsize="end"
-            android:text="TextView"
-            android:textSize="@dimen/sp14"
-            app:layout_constraintBottom_toTopOf="@+id/lastAccess"
-            app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/lastAccess"
-            style="@style/TextBlack_4c4c4c"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
-            android:textSize="@dimen/sp12"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <FrameLayout
-        android:id="@+id/noDeviceContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp96"
-        android:visibility="visible"
-        android:background="@drawable/bg_grey_e8e8e8_round">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp8">
 
-        <TextView
-            style="@style/TextGrey_9f9f9f.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="기기 미등록"
-            android:textSize="@dimen/sp14" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp96"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+            android:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/dp32"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_x_grey_19dp" />
+
+            <TextView
+                android:id="@+id/currentDevice"
+                style="@style/TextGrey_9f9f9f.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp24"
+                android:background="@drawable/bg_grey_e0e0e0_round_20"
+                android:gravity="center"
+                android:paddingStart="6dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="2dp"
+                android:text="현재 기기"
+                android:textSize="@dimen/sp12"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textName"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:ellipsize="end"
+                android:text="TextView"
+                android:textSize="@dimen/sp14"
+                app:layout_constraintBottom_toTopOf="@+id/lastAccess"
+                app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/lastAccess"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textSize="@dimen/sp12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textName" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/noDeviceContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp96"
+            android:visibility="visible"
+            android:background="@drawable/bg_grey_e8e8e8_round">
+
+            <TextView
+                style="@style/TextGrey_9f9f9f.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="기기 미등록"
+                android:textSize="@dimen/sp14" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp96"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar4"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
     </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/loadingContainer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp96"
-        android:clickable="true"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progressBar4"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-
-</FrameLayout>
+</layout>

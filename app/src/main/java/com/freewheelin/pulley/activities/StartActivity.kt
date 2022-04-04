@@ -5,10 +5,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
@@ -16,27 +17,23 @@ import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ActivityStartBinding
 import com.freewheelin.pulley.utils.*
-import com.pulleymath.android.pdf.PdfViewerActivity
-import kotlinx.android.synthetic.main.activity_start.*
 
 class StartActivity : BaseActivity(), LifecycleObserver {
+    private val binding: ActivityStartBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_start,null,false)
+    }
 
     companion object {
         fun getIntent(context: Context): Intent {
-//            val intent = if(context.isMobileUI)
-//                Intent(context, MStartActivity::class.java)
-//            else
-//                Intent(context, StartActivity::class.java)
-//            return intent
-
             return Intent(context, StartActivity::class.java)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_start)
+        setContentView(binding.root)
 
         initTablet()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -63,49 +60,51 @@ class StartActivity : BaseActivity(), LifecycleObserver {
     }
 
     private fun initTablet() {
-        startBtn?.visibility = View.INVISIBLE
-        loginTv?.visibility = View.INVISIBLE
-        loginLabel?.visibility = View.INVISIBLE
-        loginBorder?.visibility = View.INVISIBLE
-        balloonCl?.visibility = View.INVISIBLE
+        with(binding) {
+            startBtn.visibility = View.INVISIBLE
+            loginTv.visibility = View.INVISIBLE
+            loginLabel.visibility = View.INVISIBLE
+            loginBorder.visibility = View.INVISIBLE
+            balloonCl.visibility = View.INVISIBLE
 
-        startBtn?.setOnClickListener {
-            onStartBtnClicked()
-        }
-
-        loginTv?.setOnClickListener {
-            onLoginBtnClicked()
-        }
-
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 1000
-        animator.startDelay = 500
-        animator.addUpdateListener {
-            val value = it.animatedValue as Float
-            (topLabelCoverVisible?.layoutParams as? LinearLayout.LayoutParams)?.weight = value
-            (topLabelCover?.layoutParams as? LinearLayout.LayoutParams)?.weight = 1 - value
-            coverLl?.requestLayout()
-        }
-        animator.addListener(object: Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
-
-            override fun onAnimationEnd(p0: Animator?) {
-                startBtn?.show()
-                loginTv?.show()
-                loginLabel?.show()
-                loginBorder?.show()
-                balloonCl?.show {
-                    val anim = AnimationUtils.loadAnimation(this@StartActivity, R.anim.balloon_anim)
-                    it.startAnimation(anim)
-                }
+            startBtn.setOnClickListener {
+                onStartBtnClicked()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
+            loginTv.setOnClickListener {
+                onLoginBtnClicked()
+            }
 
-            override fun onAnimationStart(p0: Animator?) {}
+            val animator = ValueAnimator.ofFloat(0f, 1f)
+            animator.duration = 1000
+            animator.startDelay = 500
+            animator.addUpdateListener {
+                val value = it.animatedValue as Float
+                (topLabelCoverVisible.layoutParams as? LinearLayout.LayoutParams)?.weight = value
+                (topLabelCover.layoutParams as? LinearLayout.LayoutParams)?.weight = 1 - value
+                coverLl.requestLayout()
+            }
+            animator.addListener(object: Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {}
 
-        })
-        animator.start()
+                override fun onAnimationEnd(p0: Animator?) {
+                    startBtn.show()
+                    loginTv.show()
+                    loginLabel.show()
+                    loginBorder.show()
+                    balloonCl.show {
+                        val anim = AnimationUtils.loadAnimation(this@StartActivity, R.anim.balloon_anim)
+                        it.startAnimation(anim)
+                    }
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {}
+
+                override fun onAnimationStart(p0: Animator?) {}
+
+            })
+            animator.start()
+        }
     }
 
     override fun onBackPressed() {

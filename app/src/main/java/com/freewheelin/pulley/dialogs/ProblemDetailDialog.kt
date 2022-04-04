@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.utils.*
-import kotlinx.android.synthetic.main.dialog_problem_detail.*
 
 //class ProblemDetailDialog: Dialog {
 //    val problem: Problem

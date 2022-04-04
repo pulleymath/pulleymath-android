@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ViewTvUpdownBinding
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_tv_updown.view.*
 
 class UpDownTextView : ConstraintLayout {
 
     var textSize: Float
-        get() = tv.textSize
+        get() = binding.tv.textSize
         set(value) {
-            tv.textSize = value
+            binding.tv.textSize = value
         }
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -34,37 +35,37 @@ class UpDownTextView : ConstraintLayout {
             field = value
             when (value) {
                 Change.increase -> {
-                    tv.setTextColor(ContextCompat.getColor(context, R.color.blue_30a4ff))
-                    arrowIv.visibility = View.VISIBLE
-                    arrowIv.setImageResource(R.drawable.ic_arrow_blue_top)
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.blue_30a4ff))
+                    binding.arrowIv.visibility = View.VISIBLE
+                    binding.arrowIv.setImageResource(R.drawable.ic_arrow_blue_top)
                 }
 
                 Change.decrease -> {
-                    tv.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
-                    arrowIv.visibility = View.VISIBLE
-                    arrowIv.setImageResource(R.drawable.ic_arrow_red_bottom)
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
+                    binding.arrowIv.visibility = View.VISIBLE
+                    binding.arrowIv.setImageResource(R.drawable.ic_arrow_red_bottom)
                 }
 
                 Change.noChange -> {
-                    tv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                    arrowIv.visibility = View.GONE
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    binding.arrowIv.visibility = View.GONE
                 }
             }
         }
 
     var text: String
-        get() = tv.text.toString()
+        get() = binding.tv.text.toString()
         set(value) {
-            tv.text = value
+            binding.tv.text = value
         }
+    var binding: ViewTvUpdownBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_tv_updown, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_tv_updown, this)
     }
 
     private fun setTypedArray(attrs: AttributeSet) {
         val array= context.obtainStyledAttributes(attrs, R.styleable.UpDownTextView)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimension(R.styleable.UpDownTextView_udTv_textSize, 16f.toPx()))
+        binding.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, array.getDimension(R.styleable.UpDownTextView_udTv_textSize, 16f.toPx()))
         array.recycle()
     }
 }

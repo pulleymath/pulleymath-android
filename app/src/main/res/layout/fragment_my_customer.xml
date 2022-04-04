@@ -1,151 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white_fafafa"
-    android:clickable="true"
-    tools:context=".activities.mypage.MySignUpInfoFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white_ffffff">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white_fafafa"
+        android:clickable="true"
+        tools:context=".activities.mypage.MySignUpInfoFragment">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@null"
-            android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="고객 지원"
-            android:textSize="@dimen/sp24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/white_ffffff">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@null"
+                android:src="@drawable/ic_toolbar_back"
+                app:tint="@color/black_4c4c4c"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextBlack_4c4c4c.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp24"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginBottom="@dimen/dp12"
-                android:text="문의사항"
-                android:textSize="@dimen/sp16" />
+                android:text="고객 지원"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <LinearLayout
-                android:id="@+id/faqBtn"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:clickable="true"
-                android:background="@drawable/bg_white_ripple">
-                <TextView
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="자주 묻는 질문"
-                    android:textSize="@dimen/sp16" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
+                <TextView
+                    style="@style/TextGrey_c0c0c0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_new_window"/>
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:text="문의사항"
+                    android:textSize="@dimen/sp16" />
 
-            <TextView
-                style="@style/TextGrey_c0c0c0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp24"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginBottom="@dimen/dp12"
-                android:text="약관"
-                android:textSize="@dimen/sp16" />
-
-            <LinearLayout
-                android:id="@+id/termsBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:clickable="true"
-                android:background="@drawable/bg_white_ripple">
-                <TextView
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                <LinearLayout
+                    android:id="@+id/faqBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:text="서비스 이용약관"
-                    android:textSize="@dimen/sp16" />
+                    android:paddingStart="@dimen/dp24"
+                    android:paddingEnd="@dimen/dp24"
+                    android:clickable="true"
+                    android:background="@drawable/bg_white_ripple">
+                    <TextView
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="자주 묻는 질문"
+                        android:textSize="@dimen/sp16" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_new_window"/>
-            </LinearLayout>
-            <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_new_window"/>
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/privacyBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:clickable="true"
-                android:background="@drawable/bg_white_ripple">
                 <TextView
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="개인정보 취급방침"
-                    android:textSize="@dimen/sp16" />
-
-                <ImageView
+                    style="@style/TextGrey_c0c0c0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_new_window"/>
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:text="약관"
+                    android:textSize="@dimen/sp16" />
+
+                <LinearLayout
+                    android:id="@+id/termsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp24"
+                    android:paddingEnd="@dimen/dp24"
+                    android:clickable="true"
+                    android:background="@drawable/bg_white_ripple">
+                    <TextView
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="서비스 이용약관"
+                        android:textSize="@dimen/sp16" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_new_window"/>
+                </LinearLayout>
+                <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+                <LinearLayout
+                    android:id="@+id/privacyBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp24"
+                    android:paddingEnd="@dimen/dp24"
+                    android:clickable="true"
+                    android:background="@drawable/bg_white_ripple">
+                    <TextView
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="개인정보 취급방침"
+                        android:textSize="@dimen/sp16" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_new_window"/>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

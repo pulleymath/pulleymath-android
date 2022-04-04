@@ -2,20 +2,23 @@ package com.freewheelin.pulley.activities.learning.tabFragment.usertest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.StudentMockFragment
-import kotlinx.android.synthetic.main.activity_student_manager.*
+import com.freewheelin.pulley.databinding.ActivityStudentManagerBinding
 
 class StudentManagerActivity : AppCompatActivity() {
 
     var studentID: String? = ""
     var studentName: String? = ""
-
+    private val binding: ActivityStudentManagerBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_student_manager, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_student_manager)
+        setContentView(binding.root)
 
         studentID = intent.getStringExtra("studentID")
         studentName = intent.getStringExtra("studentName")
@@ -23,15 +26,15 @@ class StudentManagerActivity : AppCompatActivity() {
         if(studentID?.isNotEmpty() == true) {
             initUI()
         } else {
-            textEmpty.visibility = View.VISIBLE
+            binding.textEmpty.visibility = View.VISIBLE
         }
     }
 
     private fun initUI() {
 
-        textName.text = "$studentName"
+        binding.textName.text = "$studentName"
 
-        btnClose.setOnClickListener {
+        binding.btnClose.setOnClickListener {
             finish()
         }
 

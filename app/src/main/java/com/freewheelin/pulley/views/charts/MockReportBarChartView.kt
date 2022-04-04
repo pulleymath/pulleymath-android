@@ -5,23 +5,22 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.utils.show
-import kotlinx.android.synthetic.main.activity_mock_report.*
-import kotlinx.android.synthetic.main.view_mockexam_horizontal_bar_chart.view.*
+import com.freewheelin.pulley.databinding.ViewMockexamHorizontalBarChartBinding
 
 class MockReportBarChartView(val context: Context, val parent: ViewGroup, val showSub:Boolean=false) {
-    val view by lazy {LayoutInflater.from(context).inflate(R.layout.view_mockexam_horizontal_bar_chart, parent, false)}
+//    val view by lazy { LayoutInflater.from(context).inflate(R.layout.view_mockexam_horizontal_bar_chart, parent, false)}
     var mainPercent = 0f
     var subPercent = 0f
+    var binding: ViewMockexamHorizontalBarChartBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_mockexam_horizontal_bar_chart, parent, false)
 
     fun setTitles(leftTitle:String, leftSub:String, rightTitle:String, rightSub:String) {
-        view.leftTitle.text = leftTitle
-        view.leftSubTitle.text = leftSub
-        view.rightTitle.text = rightTitle
-        view.rightSubTitle.text = rightSub
+        binding.leftTitle.text = leftTitle
+        binding.leftSubTitle.text = leftSub
+        binding.rightTitle.text = rightTitle
+        binding.rightSubTitle.text = rightSub
     }
 
     fun setMainColorWithPercent(percent:Int) {
@@ -30,8 +29,8 @@ class MockReportBarChartView(val context: Context, val parent: ViewGroup, val sh
             percent >= 70 -> R.color.blue_78beff
             else -> R.color.yellow_ffd545
         }
-        view.mainBar.progressColor = ContextCompat.getColor(context, colorId)
-        view.mainBar.completeColor = ContextCompat.getColor(context, colorId)
+        binding.mainBar.progressColor = ContextCompat.getColor(context, colorId)
+        binding.mainBar.completeColor = ContextCompat.getColor(context, colorId)
         mainPercent = percent.toFloat()
     }
 
@@ -41,16 +40,16 @@ class MockReportBarChartView(val context: Context, val parent: ViewGroup, val sh
 
     fun show() {
         if(!showSub) {
-            view.subBar.visibility = View.GONE
-            view.rightSubTitle.visibility = View.GONE
+            binding.subBar.visibility = View.GONE
+            binding.rightSubTitle.visibility = View.GONE
         }
-        parent.addView(view)
+        parent.addView(binding.root)
 
 
         val mp = mainPercent * 0.01f
         val duration = (mp * 800).toLong()
-        view.mainBar.set(mp, true, listener = animationListener, delay = 30, duration = duration )
-        view.subBar.set(subPercent * 0.01f, false)
+        binding.mainBar.set(mp, true, listener = animationListener, delay = 30, duration = duration )
+        binding.subBar.set(subPercent * 0.01f, false)
         parent.postInvalidate()
     }
 

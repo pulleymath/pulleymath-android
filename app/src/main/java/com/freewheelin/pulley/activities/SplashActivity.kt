@@ -6,8 +6,10 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.InitTestActivity
@@ -18,6 +20,8 @@ import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.databinding.ActivityOnboardingBinding
+import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DialogUtils
@@ -32,24 +36,23 @@ import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_splash.*
-import kotlinx.android.synthetic.main.dialog_daebak.*
 import kotlinx.coroutines.*
-import kotlin.concurrent.thread
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
     private var appUpdateManager : AppUpdateManager? = null
     private val UPDATE_IMMEDIATE = 700
     private val UPDATE_FLEXIBLE = 701
+    private val binding: ActivitySplashBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         requestedOrientation = if(isMobileUI) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -110,12 +113,12 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             }
 
             val dialog = DialogUtils.makeDialog(this, dialogTitle, dialogContents, "종료", "확인")
-            dialog.leftBtn.setOnClickListener { finishAndRemoveTask() }
+            dialog.binding.leftBtn.setOnClickListener { finishAndRemoveTask() }
             dialog.setCancelable(false)
             dialog.setOnCancelListener {
                 LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "스플래쉬", "업데이트취소", "업데이트확인")
             }
-            dialog.rightBtn.setOnClickListener {
+            dialog.binding.rightBtn.setOnClickListener {
                 requestAppUpdate(AppUpdateType.IMMEDIATE)
             }
 

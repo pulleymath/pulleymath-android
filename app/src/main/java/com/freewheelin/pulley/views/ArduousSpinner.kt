@@ -20,7 +20,6 @@ import android.widget.PopupWindow
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.toPx
-//import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 
 interface ArduousSpinnerListener {
     fun onItemClicked(view: ArduousSpinner, position: Int)

@@ -4,21 +4,26 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.model.contents.Test
-import kotlinx.android.synthetic.main.view_selector_daily_test.view.*
-import kotlinx.android.synthetic.main.view_selector_daily_test.view.guideTv
-import kotlinx.android.synthetic.main.view_selector_daily_test.view.titleTv
-import kotlinx.android.synthetic.main.view_selector_weekly_test.view.*
 
 class WeeklyTestSelectorView : TestSelectorView {
     constructor(context: Context) : super(context)
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
 
+    var tagTv: TextView
+    var guideTv: TextView
+    var titleTv: TextView
+    var needMoreTv: TextView
+
     init {
         LayoutInflater.from(context).inflate(R.layout.view_selector_weekly_test, this)
+        tagTv = findViewById(R.id.tagTv)
+        guideTv = findViewById(R.id.guideTv)
+        titleTv = findViewById(R.id.titleTv)
+        needMoreTv = findViewById(R.id.needMoreTv)
     }
 
     override fun setTestUI(test: Test) {
@@ -41,8 +46,16 @@ class WeeklyTestSelectorView : TestSelectorView {
         }
     }
 
+    override fun toEnableUI() {
+        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+    }
+
     override fun toDisableUI() {
-        super.toDisableUI()
+        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round)
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
         guideTv.text = "다음 주간 테스트는\n토요일 오전 6시에 공개됩니다 :)"
     }
 }

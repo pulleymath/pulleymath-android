@@ -6,18 +6,15 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.*
 import android.widget.EditText
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ItemOmrAnswerBinding
+import com.freewheelin.pulley.databinding.ItemOmrShortAnswerBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemType
-import kotlinx.android.synthetic.main.item_omr_answer.view.*
-import kotlinx.android.synthetic.main.item_omr_short_answer.view.*
 import java.lang.ref.WeakReference
-import kotlinx.android.synthetic.main.item_omr_answer.view.horizontalBorder as singleHorizontalBorder
-import kotlinx.android.synthetic.main.item_omr_answer.view.numberTv as singleNumberTv
-import kotlinx.android.synthetic.main.item_omr_short_answer.view.horizontalBorder as shortHorizontalBorder
-import kotlinx.android.synthetic.main.item_omr_short_answer.view.numberTv as shortNumberTv
 
 
 interface OMRViewListener {
@@ -188,7 +185,8 @@ class OMRAdapter(val context: Context,
             val answer = omrAnswers[position]
             answer.listener = WeakReference(this)
             holder.set(answer, isLast)
-            holder.itemView.topHorizontalBorder.visibility = if (type == OMRView.OMRViewType.RIGHT && singleCount != 0 && position == singleCount) View.VISIBLE else View.GONE
+            val visibility = if (type == OMRView.OMRViewType.RIGHT && singleCount != 0 && position == singleCount) View.VISIBLE else View.GONE
+            holder.setTopHorizontalBorderVisibility(visibility)
         }
     }
 
@@ -197,17 +195,20 @@ class OMRAdapter(val context: Context,
 
         return when (viewType) {
             OMRView.SINGLE_ANSWER -> {
-                val holder = OMRSingleAnswerView(LayoutInflater.from(context).inflate(R.layout.item_omr_answer, parent, false))
+                val itemBinding: ItemOmrAnswerBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_omr_answer, parent, false)
+                val holder = OMRSingleAnswerView(itemBinding)
                 holder.itemView.layoutParams.width = if (type == OMRView.OMRViewType.RIGHT) parent.measuredWidth else parent.measuredWidth / 3
                 return holder
             }
             OMRView.SHORT_ANSWER -> {
-                val holder = OMRShortAnswer(LayoutInflater.from(context).inflate(R.layout.item_omr_short_answer, parent, false))
+                val itemBinding: ItemOmrShortAnswerBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_omr_short_answer, parent, false)
+                val holder = OMRShortAnswer(itemBinding)
                 holder.itemView.layoutParams.width = if (type == OMRView.OMRViewType.RIGHT) parent.measuredWidth else parent.measuredWidth / 3
                 return holder
             }
             else -> {
-                val holder = OMRShortAnswer(LayoutInflater.from(context).inflate(R.layout.item_omr_short_answer, parent, false))
+                val itemBinding: ItemOmrShortAnswerBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_omr_short_answer, parent, false)
+                val holder = OMRShortAnswer(itemBinding)
                 holder.itemView.layoutParams.width = 0
                 return holder
             }
@@ -249,14 +250,15 @@ class OMRAdapter(val context: Context,
 abstract class OMRAnswerView (view: View): RecyclerView.ViewHolder(view) {
     abstract var answer: OMRAnswer?
     abstract fun set(omrAnswer: OMRAnswer, isLast: Boolean)
+    abstract fun setTopHorizontalBorderVisibility(view: Int)
 }
 
-class OMRSingleAnswerView (view: View) : OMRAnswerView(view), AnswerSelectionListener {
+class OMRSingleAnswerView (itemBinding: ItemOmrAnswerBinding) : OMRAnswerView(itemBinding.root), AnswerSelectionListener {
     override var answer: OMRAnswer? = null
 
-    var numberTv = view.singleNumberTv
-    var horizontalBorder = view.singleHorizontalBorder
-    var answerSelectionView = view.answerSelectionView
+    var numberTv = itemBinding.numberTv
+    var horizontalBorder = itemBinding.horizontalBorder
+    var answerSelectionView = itemBinding.answerSelectionView
 
     override fun set(omrAnswer: OMRAnswer, isLast: Boolean) {
         this.answer = omrAnswer
@@ -285,13 +287,18 @@ class OMRSingleAnswerView (view: View) : OMRAnswerView(view), AnswerSelectionLis
             this.answer?.answer = answer.first().toInt()
         }
     }
+
+    override fun setTopHorizontalBorderVisibility(view: Int) {
+    }
 }
 
-class OMRShortAnswer(view: View) : OMRAnswerView(view) {
+class OMRShortAnswer(val itemBinding: ItemOmrShortAnswerBinding) : OMRAnswerView(itemBinding.root) {
     override var answer: OMRAnswer? = null
-    var answerEt = view.answerEt
-    var numberTv = view.shortNumberTv
-    var horizontalBorder = view.shortHorizontalBorder
+    var answerEt = itemBinding.answerEt
+    var numberTv = itemBinding.numberTv
+    var horizontalBorder = itemBinding.horizontalBorder
+    var topHorizontalBorder = itemBinding.topHorizontalBorder
+
     var listener: View.OnFocusChangeListener? = null
 
     override fun set(omrAnswer: OMRAnswer, isLast: Boolean) {
@@ -335,6 +342,9 @@ class OMRShortAnswer(view: View) : OMRAnswerView(view) {
 
     fun setOnFocusChangeListener(listener: View.OnFocusChangeListener) {
         this.listener = listener
+    }
+    override fun setTopHorizontalBorderVisibility(view: Int) {
+        topHorizontalBorder.visibility = view
     }
 }
 

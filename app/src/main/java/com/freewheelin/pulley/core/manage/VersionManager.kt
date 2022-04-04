@@ -7,14 +7,12 @@ import android.util.Log
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.bases.isNetworkConnected
 import com.freewheelin.pulley.bases.user
-
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.Preferences
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.dialog_daebak.*
 import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
@@ -113,7 +111,7 @@ object VersionManager {
                 }
 
                 dialog.setCancelable(false)
-                dialog.rightBtn.setOnClickListener {
+                dialog.binding.rightBtn.setOnClickListener {
                     activity.finishAndRemoveTask()
                 }
                 if(!activity.isFinishing) {
@@ -143,7 +141,7 @@ object VersionManager {
                         }
 
                         dialog.setCancelable(false)
-                        dialog.rightBtn.setOnClickListener {
+                        dialog.binding.rightBtn.setOnClickListener {
                             activity.finishAndRemoveTask()
                         }
                         dialog.show()

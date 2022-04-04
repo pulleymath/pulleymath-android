@@ -1,93 +1,97 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainNeedMoreFragment">
-
-    <TextView
-        android:id="@+id/dateGuideTv"
-        style="@style/TextGrey_9f9f9f"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="7월 30일 - 8월 4일까지 N문제 풀었습니다."
-        android:textSize="@dimen/sp18"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/remainGuideTv"
-        app:layout_constraintVertical_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/remainGuideTv"
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp24"
-        android:gravity="center"
-        android:text="주간 테스트를 시작하려면\n5문제를 더 풀어주세요."
-        android:textSize="@dimen/sp32"
-        android:lineSpacingExtra="@dimen/sp16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateGuideTv"
-        app:layout_constraintBottom_toTopOf="@+id/containerCl"/>
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerCl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remainGuideTv"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-        <ImageView
-            android:id="@+id/balloonIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_balloon_black"
-            android:layout_marginBottom="@dimen/dp12"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintEnd_toEndOf="@+id/guideline3"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainNeedMoreFragment">
 
         <TextView
-            style="@style/TextWhite_ffffff.ExtraBold"
-            android:id="@+id/balloonTv"
+            android:id="@+id/dateGuideTv"
+            style="@style/TextGrey_9f9f9f"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp24"
-            android:layout_marginTop="12dp"
-            android:text="24"
-            android:visibility="invisible"
-            app:layout_constraintTop_toTopOf="@+id/balloonIv"
-            app:layout_constraintEnd_toEndOf="@+id/balloonIv"
-            app:layout_constraintStart_toStartOf="@+id/balloonIv"/>
-
-        <com.freewheelin.pulley.views.LearningProgressView
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="@dimen/dp104"
-            android:layout_marginStart="@dimen/dp120"
-            android:layout_marginEnd="@dimen/dp120"
-            app:backgroundColor="@color/purple_ECEBFF"
-            app:cardCornerRadius="8dp"
+            android:text="7월 30일 - 8월 4일까지 N문제 풀었습니다."
+            android:textSize="@dimen/sp18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:progressColor="@color/purple_6D6DFF">
+            app:layout_constraintBottom_toTopOf="@+id/remainGuideTv"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
-        </com.freewheelin.pulley.views.LearningProgressView>
+        <TextView
+            android:id="@+id/remainGuideTv"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:gravity="center"
+            android:text="주간 테스트를 시작하려면\n5문제를 더 풀어주세요."
+            android:textSize="@dimen/sp32"
+            android:lineSpacingExtra="@dimen/sp16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateGuideTv"
+            app:layout_constraintBottom_toTopOf="@+id/containerCl"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/remainGuideTv"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <ImageView
+                android:id="@+id/balloonIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_balloon_black"
+                android:layout_marginBottom="@dimen/dp12"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintEnd_toEndOf="@+id/guideline3"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"/>
+
+            <TextView
+                style="@style/TextWhite_ffffff.ExtraBold"
+                android:id="@+id/balloonTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp24"
+                android:layout_marginTop="12dp"
+                android:text="24"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/balloonIv"
+                app:layout_constraintEnd_toEndOf="@+id/balloonIv"
+                app:layout_constraintStart_toStartOf="@+id/balloonIv"/>
+
+            <com.freewheelin.pulley.views.LearningProgressView
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="@dimen/dp104"
+                android:layout_marginStart="@dimen/dp120"
+                android:layout_marginEnd="@dimen/dp120"
+                app:backgroundColor="@color/purple_ECEBFF"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressColor="@color/purple_6D6DFF">
+
+            </com.freewheelin.pulley.views.LearningProgressView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

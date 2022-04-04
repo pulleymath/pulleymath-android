@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.NoticeManager
+import com.freewheelin.pulley.databinding.FragmentMyNoticeBinding
+import com.freewheelin.pulley.databinding.ItemMypageExpandableListBinding
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.setImageURL
@@ -18,23 +20,25 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
-import kotlinx.android.synthetic.main.fragment_my_notice.*
-import kotlinx.android.synthetic.main.item_mypage_expandable_list.view.*
 
 
 class MyNoticeFragment : MyPageBaseFragment() {
     var notices: List<Notice> = NoticeManager.notices
     var selectedIndex: Int? = null
 
+    lateinit var binding: FragmentMyNoticeBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_notice, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_notice, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rv.adapter = NoticeAdapter()
-        rv.layoutManager = LinearLayoutManager(context)
+        binding.rv.adapter = NoticeAdapter()
+        binding.rv.layoutManager = LinearLayoutManager(context)
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
     }
 
 
@@ -95,8 +99,10 @@ class MyNoticeFragment : MyPageBaseFragment() {
             if(viewType == 0)
                 return HeaderHolder.create(parent)
             else {
-                val view = LayoutInflater.from(context).inflate(R.layout.item_mypage_expandable_list, parent, false)
-                return NoticeItemHolder(view)
+                val itemBinding: ItemMypageExpandableListBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(requireContext()), R.layout.item_mypage_expandable_list, parent, false)
+//                val view = LayoutInflater.from(context).inflate(R.layout.item_mypage_expandable_list, parent, false)
+                return NoticeItemHolder(itemBinding)
             }
 
         }
@@ -104,17 +110,17 @@ class MyNoticeFragment : MyPageBaseFragment() {
     }
 }
 
-class NoticeItemHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val headerCl = view.headerCl
-    val collapseContainerCl = view.collapseContainerCl
+class NoticeItemHolder(val itemBinding: ItemMypageExpandableListBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val headerCl = itemBinding.headerCl
+    val collapseContainerCl = itemBinding.collapseContainerCl
 
-    val titleTv = view.titleTv
-    val updateTag = view.updateTag
-    val dateTv = view.dateTv
-    val collapseIndicator = view.collapseIndicateIv
-    val headlineTv = view.headlineTv
-    val contentsTv = view.contentsTv
-    val imageView = view.iv
+    val titleTv = itemBinding.titleTv
+    val updateTag = itemBinding.updateTag
+    val dateTv = itemBinding.dateTv
+    val collapseIndicator = itemBinding.collapseIndicateIv
+    val headlineTv = itemBinding.headlineTv
+    val contentsTv = itemBinding.contentsTv
+    val imageView = itemBinding.iv
 
     fun set(notice: Notice) {
         titleTv.text = notice.subject
@@ -123,10 +129,10 @@ class NoticeItemHolder(val view: View): RecyclerView.ViewHolder(view) {
         dateTv.text = DateTimeUtils.yyyyMMddFormat.format(notice.dateTime)
 
         if(notice.isNeedUpdateTag()) {
-            titleTv.typeface = Theme.bold(view.context)
+            titleTv.typeface = Theme.bold(itemBinding.root.context)
             updateTag.visibility = View.VISIBLE
         } else {
-            titleTv.typeface = Theme.regular(view.context)
+            titleTv.typeface = Theme.regular(itemBinding.root.context)
             updateTag.visibility = View.GONE
         }
 

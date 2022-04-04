@@ -8,50 +8,53 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.FragmentMySignupInfoBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.FacebookEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_my_signup_info.*
 import java.util.*
 
 
 class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
+    lateinit var binding: FragmentMySignupInfoBinding
 
     companion object {
         const val RELOAD = "reload"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_signup_info, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_signup_info, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        nameModifyBtn.setOnClickListener { moveTo(MyChangeNameFragment()) }
-        emailModifyBtn.setOnClickListener { moveTo(MyChangeEmailFragment()) }
-        phoneModifyBtn.setOnClickListener { moveTo(MyChangePhoneFragment()) }
-        passwordModifyBtn.setOnClickListener { moveTo(MyChangePasswordFragment()) }
-        deviceBtn.setOnClickListener { moveTo(MyDeviceManagerFragment()) }
+        with(binding) {
+            nameModifyBtn.setOnClickListener { moveTo(MyChangeNameFragment()) }
+            emailModifyBtn.setOnClickListener { moveTo(MyChangeEmailFragment()) }
+            phoneModifyBtn.setOnClickListener { moveTo(MyChangePhoneFragment()) }
+            passwordModifyBtn.setOnClickListener { moveTo(MyChangePasswordFragment()) }
+            deviceBtn.setOnClickListener { moveTo(MyDeviceManagerFragment()) }
 //        membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
+            backBtn.setOnClickListener { onBackBtnClicked() }
 
-        val user = MyApplication.user ?: return
-        configureUI(user)
+            val user = MyApplication.user ?: return
+            configureUI(user)
 
-        setFragmentResultListener(RELOAD) { key, bundle ->
-            reload()
+            setFragmentResultListener(RELOAD) { key, bundle ->
+                reload()
+            }
         }
     }
 
@@ -66,11 +69,12 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
 
     fun configureUI(user: User) {
-        nameTv.text = user.fullName
-        emailTv.text = user.email
-        phoneTv.text = user.cellPhone
+        with(binding) {
+            nameTv.text = user.fullName
+            emailTv.text = user.email
+            phoneTv.text = user.cellPhone
 
-        emailModifyBtn.text = if(user.isValidEmail) "변경하기" else "인증하기"
+            emailModifyBtn.text = if(user.isValidEmail) "변경하기" else "인증하기"
 
 //        if(user.isExpiredUser() || user.serviceName == null) {
 //            noSeviceLabel.visibility = View.VISIBLE
@@ -91,10 +95,11 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 //            availableDurationTv.text = getDurationText(user)
 //        }
 
-        ivConfirmPhone.visibility = if(user.isValidPhone) View.VISIBLE else View.GONE
-        ivConfirmEmail.visibility = if(user.isValidEmail) View.VISIBLE else View.GONE
+            ivConfirmPhone.visibility = if(user.isValidPhone) View.VISIBLE else View.GONE
+            ivConfirmEmail.visibility = if(user.isValidEmail) View.VISIBLE else View.GONE
 
-        loadDeviceCount()
+            loadDeviceCount()
+        }
     }
 
     fun loadDeviceCount() {
@@ -103,7 +108,7 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     val count = response.data?.size?:1
-                    deviceCount.text = "등록 기기 : ${count}대"
+                    binding.deviceCount.text = "등록 기기 : ${count}대"
                 }, {
                     Log.e(javaClass.simpleName, "${it.localizedMessage}")
                 })

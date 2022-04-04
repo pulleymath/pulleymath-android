@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.MyPageActivity
-import kotlinx.android.synthetic.main.fragment_my_signup_info.*
 
 interface MyPageActionListener {
     fun onModifyCompleted()
@@ -21,9 +20,9 @@ open class MyPageBaseFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        backBtn.setOnClickListener {
-            onBackBtnClicked()
-        }
+//        backBtn.setOnClickListener {
+//            onBackBtnClicked()
+//        }
     }
     fun onBackBtnClicked() {
         Log.d(javaClass.simpleName, "onBackBtnClicked=$this, activity=${activity?.javaClass?.simpleName}")

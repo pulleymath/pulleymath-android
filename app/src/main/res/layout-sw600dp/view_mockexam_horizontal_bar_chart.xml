@@ -1,84 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/leftTitle"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="2점 문항"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintBottom_toTopOf="@+id/leftSubTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/leftTitle"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:layout_width="136dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="2점 문항"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toTopOf="@+id/leftSubTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/leftSubTitle"
-        style="@style/TextGrey_9f9f9f.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="6문제"
-        android:textSize="@dimen/sp12"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/leftTitle"
-        app:layout_constraintTop_toBottomOf="@+id/leftTitle" />
+        <TextView
+            android:id="@+id/leftSubTitle"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6문제"
+            android:textSize="@dimen/sp12"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/leftTitle"
+            app:layout_constraintTop_toBottomOf="@+id/leftTitle" />
 
-    <TextView
-        android:id="@+id/rightTitle"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:text="내 정답률 100%"
-        android:textSize="@dimen/sp12"
-        app:layout_constraintBottom_toBottomOf="@+id/mainBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mainBar" />
+        <TextView
+            android:id="@+id/rightTitle"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="내 정답률 100%"
+            android:textSize="@dimen/sp12"
+            app:layout_constraintBottom_toBottomOf="@+id/mainBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/mainBar" />
 
-    <TextView
-        android:id="@+id/rightSubTitle"
-        style="@style/TextGrey_9f9f9f.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1등급 평균 70%"
-        android:textSize="@dimen/sp12"
-        app:layout_constraintBottom_toBottomOf="@+id/subBar"
-        app:layout_constraintStart_toStartOf="@+id/rightTitle"
-        app:layout_constraintTop_toTopOf="@+id/subBar" />
+        <TextView
+            android:id="@+id/rightSubTitle"
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1등급 평균 70%"
+            android:textSize="@dimen/sp12"
+            app:layout_constraintBottom_toBottomOf="@+id/subBar"
+            app:layout_constraintStart_toStartOf="@+id/rightTitle"
+            app:layout_constraintTop_toTopOf="@+id/subBar" />
 
-    <com.freewheelin.pulley.views.LearningProgressView
-        android:id="@+id/mainBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:backgroundColor="@color/grey_f2f2f2"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/subBar"
-        app:layout_constraintEnd_toStartOf="@+id/rightTitle"
-        app:layout_constraintStart_toEndOf="@+id/leftTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:progressColor="#78beff">
+        <com.freewheelin.pulley.views.LearningProgressView
+            android:id="@+id/mainBar"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:backgroundColor="@color/grey_f2f2f2"
+            app:cardCornerRadius="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/subBar"
+            app:layout_constraintEnd_toStartOf="@+id/rightTitle"
+            app:layout_constraintStart_toEndOf="@+id/leftTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:progressColor="#78beff">
 
-    </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.views.LearningProgressView>
 
-    <com.freewheelin.pulley.views.LearningProgressView
-        android:id="@+id/subBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        app:backgroundColor="@color/grey_f2f2f2"
-        app:cardCornerRadius="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/mainBar"
-        app:layout_constraintStart_toStartOf="@+id/mainBar"
-        app:layout_constraintTop_toBottomOf="@+id/mainBar"
-        app:progressColor="@color/grey_e0e0e0"
-        app:completeColor="@color/grey_e0e0e0"
-        tools:visibility="visible" />
+        <com.freewheelin.pulley.views.LearningProgressView
+            android:id="@+id/subBar"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:backgroundColor="@color/grey_f2f2f2"
+            app:cardCornerRadius="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/mainBar"
+            app:layout_constraintStart_toStartOf="@+id/mainBar"
+            app:layout_constraintTop_toBottomOf="@+id/mainBar"
+            app:progressColor="@color/grey_e0e0e0"
+            app:completeColor="@color/grey_e0e0e0"
+            tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -20,6 +21,8 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ContentManager
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.FragmentMyLogBinding
+import com.freewheelin.pulley.databinding.ItemLearningTabListBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
@@ -28,9 +31,6 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
-import kotlinx.android.synthetic.main.dialog_wrong_management.*
-import kotlinx.android.synthetic.main.fragment_my_log.*
-import kotlinx.android.synthetic.main.item_learning_tab_list.view.*
 import java.util.*
 
 
@@ -40,10 +40,12 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
     var contents: List<Content> = listOf()
     var filteredContents: List<Content>? = null
     var checkedContent = ObservableHashSet<Content>()
+    lateinit var binding: FragmentMyLogBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_log, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_log, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,48 +64,49 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
     }
     override fun initUI() {
         checkedContent.listener = this
+        with(binding) {
+            studyTypeRadio.labels = listOf("전체", "기본학습", "오답학습")
+            pieceTypeRadio.labels = listOf("전체", "테스트", "유형학습", "모의고사")
+            finishRadio.labels = listOf("전체", "푼 것", "안 푼 것")
 
-        studyTypeRadio.labels = listOf("전체", "기본학습", "오답학습")
-        pieceTypeRadio.labels = listOf("전체", "테스트", "유형학습", "모의고사")
-        finishRadio.labels = listOf("전체", "푼 것", "안 푼 것")
+            studyTypeRadio.listener = this@MyLogFragment
+            pieceTypeRadio.listener = this@MyLogFragment
+            finishRadio.listener = this@MyLogFragment
 
-        studyTypeRadio.listener = this
-        pieceTypeRadio.listener = this
-        finishRadio.listener = this
-
-        rv.adapter = ListAdapter()
-        rv.layoutManager = LinearLayoutManager(context)
+            rv.adapter = ListAdapter()
+            rv.layoutManager = LinearLayoutManager(context)
 
 
-        wrongManageView.hide(false)
-        wrongManageView.listener = this
-        wrongManageView.hideReviewBtn()
-        wrongManageView.makeBtn(WrongManageView.BtnType.mail)
+            wrongManageView.hide(false)
+            wrongManageView.listener = this@MyLogFragment
+            wrongManageView.hideReviewBtn()
+            wrongManageView.makeBtn(WrongManageView.BtnType.mail)
 
-        allCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
-                checkedContent.addAll(getContentList())
-            } else {
-                checkedContent.clear()
+            allCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked) {
+                    checkedContent.addAll(getContentList())
+                } else {
+                    checkedContent.clear()
+                }
+
+                rv.adapter?.notifyDataSetChanged()
             }
+            categorySl.listener = this@MyLogFragment
+            problemCntSl.listener = this@MyLogFragment
+            titleSl.listener = this@MyLogFragment
+            scoreSl.listener = this@MyLogFragment
+            createDateSl.listener = this@MyLogFragment
+            studyDateSl.listener = this@MyLogFragment
 
-            rv.adapter?.notifyDataSetChanged()
+            syncContentList()
         }
-        categorySl.listener = this
-        problemCntSl.listener = this
-        titleSl.listener = this
-        scoreSl.listener = this
-        createDateSl.listener = this
-        studyDateSl.listener = this
-        
-        syncContentList()
     }
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
         checkedContent.clear()
         configureAllCheckBoxUI()
-        rv.adapter?.notifyDataSetChanged()
+        binding.rv.adapter?.notifyDataSetChanged()
         if(ContentManager.isNeedToSyncMyContentList)
             syncContentList()
     }
@@ -121,100 +124,104 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
     }
 
     private fun configureAllCheckBoxUI() {
-        allCheckBox.setOnCheckedChangeListener(null)
-        allCheckBox.isChecked = (checkedContent.isNotEmpty() && checkedContent.containsAll(getContentList()))
-        allCheckBox.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked) {
-                checkedContent.addAll(getContentList())
-            } else {
-                checkedContent.clear()
-            }
+        with(binding) {
+            allCheckBox.setOnCheckedChangeListener(null)
+            allCheckBox.isChecked = (checkedContent.isNotEmpty() && checkedContent.containsAll(getContentList()))
+            allCheckBox.setOnCheckedChangeListener { button, isChecked ->
+                if(isChecked) {
+                    checkedContent.addAll(getContentList())
+                } else {
+                    checkedContent.clear()
+                }
 
-            rv.adapter?.notifyDataSetChanged()
+                rv.adapter?.notifyDataSetChanged()
+            }
         }
     }
 
     private fun filterAndSort() {
         var filteredList = contents
-        filteredList = when(studyTypeRadio.selectedIndex) {
-            1 -> filteredList.filter { !it.isDerivedContent() }
-            2 -> filteredList.filter { it.isDerivedContent() }
-            else -> filteredList
+        with(binding) {
+            filteredList = when(studyTypeRadio.selectedIndex) {
+                1 -> filteredList.filter { !it.isDerivedContent() }
+                2 -> filteredList.filter { it.isDerivedContent() }
+                else -> filteredList
+            }
+
+            filteredList = when(pieceTypeRadio.selectedIndex) {
+                1 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.test) }
+                2 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.book) }
+                3 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.mockExam) }
+                else -> filteredList
+            }
+
+            filteredList = when(finishRadio.selectedIndex) {
+                1 -> filteredList.filter { it.markedNumber > 0 }
+                2 -> filteredList.filter { it.markedNumber == 0 }
+                else -> filteredList
+            }
+
+            if(categorySl.isSelected == true)
+                filteredList = when(categorySl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.category.getContentCategoryTitle()}
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.category.getContentCategoryTitle() }
+                }
+
+            if(problemCntSl.isSelected)
+                filteredList = when(problemCntSl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.markedNumber }
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.markedNumber }
+                }
+
+            if(titleSl.isSelected)
+                filteredList = when(titleSl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.subject }
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.subject }
+                }
+
+            if(scoreSl.isSelected)
+                filteredList = when(scoreSl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.score }
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.score }
+                }
+
+            if(createDateSl.isSelected)
+                filteredList = when(createDateSl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.createDateTime }
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.createDateTime }
+                }
+
+            if(studyDateSl.isSelected)
+                filteredList = when(studyDateSl.order) {
+                    SortableTextView.Order.ascend -> filteredList.sortedBy { it.solveDateTime }
+                    SortableTextView.Order.descend -> filteredList.sortedByDescending { it.solveDateTime }
+                }
+
+
+            filteredContents = filteredList
+            rv.adapter?.notifyDataSetChanged()
+
+            if(getContentList().isEmpty())
+                emptyGuideTv.visibility = View.VISIBLE
+            else
+                emptyGuideTv.visibility = View.INVISIBLE
         }
-
-        filteredList = when(pieceTypeRadio.selectedIndex) {
-            1 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.test) }
-            2 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.book) }
-            3 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.mockExam) }
-            else -> filteredList
-        }
-
-        filteredList = when(finishRadio.selectedIndex) {
-            1 -> filteredList.filter { it.markedNumber > 0 }
-            2 -> filteredList.filter { it.markedNumber == 0 }
-            else -> filteredList
-        }
-
-        if(categorySl.isSelected == true)
-            filteredList = when(categorySl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.category.getContentCategoryTitle()}
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.category.getContentCategoryTitle() }
-            }
-
-        if(problemCntSl.isSelected)
-            filteredList = when(problemCntSl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.markedNumber }
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.markedNumber }
-            }
-
-        if(titleSl.isSelected)
-            filteredList = when(titleSl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.subject }
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.subject }
-            }
-
-        if(scoreSl.isSelected)
-            filteredList = when(scoreSl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.score }
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.score }
-            }
-
-        if(createDateSl.isSelected)
-            filteredList = when(createDateSl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.createDateTime }
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.createDateTime }
-            }
-
-        if(studyDateSl.isSelected)
-            filteredList = when(studyDateSl.order) {
-                SortableTextView.Order.ascend -> filteredList.sortedBy { it.solveDateTime }
-                SortableTextView.Order.descend -> filteredList.sortedByDescending { it.solveDateTime }
-            }
-
-
-        this.filteredContents = filteredList
-        rv.adapter?.notifyDataSetChanged()
-
-        if(getContentList().isEmpty())
-            emptyGuideTv.visibility = View.VISIBLE
-        else
-            emptyGuideTv.visibility = View.INVISIBLE
     }
 
     override fun onStudyBtnClicked(view: WrongManageView) {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "나의학습", "오답학습하기")
         val dialogType = WrongManagementDialog.Type.wrongPiece
         val dialog = WrongManagementDialog(requireContext(), dialogType)
-        dialog.wrongCntTv.text = "나의학습 ${checkedContent.size}개로 오답학습지를 만듭니다."
+        dialog.binding.wrongCntTv.text = "나의학습 ${checkedContent.size}개로 오답학습지를 만듭니다."
         if (checkedContent.size == 1)
-            dialog.testTitleTv.text = "'${checkedContent.first().subject}'"
+            dialog.binding.testTitleTv.text = "'${checkedContent.first().subject}'"
         else
-            dialog.testTitleTv.text = "'${checkedContent.first().subject}' 외 ${checkedContent.size - 1}건"
+            dialog.binding.testTitleTv.text = "'${checkedContent.first().subject}' 외 ${checkedContent.size - 1}건"
 
         dialog.show()
 
-        dialog.makeBtn.setOnClickListener {
-            dialog.makeBtn.startLoding()
+        dialog.binding.makeBtn.setOnClickListener {
+            dialog.binding.makeBtn.startLoding()
             val cntPerProblem = dialog.cnt
             val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
             val level = dialog.level
@@ -225,7 +232,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                     successCB = {
                         dialog.dismiss()
 
-                        if (dialog.checkbox.isChecked) {
+                        if (dialog.binding.checkbox.isChecked) {
                             val intent = SolveActivity.getIntent(requireContext(), it)
                             startActivity(intent)
                         } else {
@@ -254,24 +261,24 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
 
     override fun onItemChanged(set: ObservableHashSet<Content>) {
         if(set.isEmpty()) {
-            wrongManageView.inactive()
-            wrongManageView.hide(true)
+            binding.wrongManageView.inactive()
+            binding.wrongManageView.hide(true)
         } else {
             if (set.size == 1)
-                wrongManageView.active("'${set.first().subject}'이 선택되었습니다.")
+                binding.wrongManageView.active("'${set.first().subject}'이 선택되었습니다.")
             else
-                wrongManageView.active("'${set.first().subject}' 외 ${set.size - 1}건이 선택되었습니다.")
+                binding.wrongManageView.active("'${set.first().subject}' 외 ${set.size - 1}건이 선택되었습니다.")
 
-            wrongManageView.show(true) {
-                Tutor.showToolTipIfNeed(wrongManageView.buttons.first(), Tutor.TooltipType.mailInMyStudy)
+            binding.wrongManageView.show(true) {
+                Tutor.showToolTipIfNeed(binding.wrongManageView.buttons.first(), Tutor.TooltipType.mailInMyStudy)
             }
         }
     }
 
     inner class ListAdapter: RecyclerView.Adapter<MyLogHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyLogHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_learning_tab_list, parent, false)
-            return MyLogHolder(view)
+            val itemBinding: ItemLearningTabListBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_learning_tab_list, parent, false)
+            return MyLogHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -315,15 +322,17 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
     }
 
     override fun onOrderChanged(view: SortableTextView, order: SortableTextView.Order) {
-        categorySl.isSelected = false
-        problemCntSl.isSelected = false
-        titleSl.isSelected = false
-        scoreSl.isSelected = false
-        studyDateSl.isSelected = false
-        createDateSl.isSelected = false
+        with(binding) {
+            categorySl.isSelected = false
+            problemCntSl.isSelected = false
+            titleSl.isSelected = false
+            scoreSl.isSelected = false
+            studyDateSl.isSelected = false
+            createDateSl.isSelected = false
 
-        view.isSelected = true
-        filterAndSort()
+            view.isSelected = true
+            filterAndSort()
+        }
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
@@ -434,8 +443,8 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
             }
             override fun onSentEmail() {
                 checkedContent.clear()
-                allCheckBox.isChecked = false
-                rv.adapter?.notifyDataSetChanged()
+                binding.allCheckBox.isChecked = false
+                binding.rv.adapter?.notifyDataSetChanged()
                 DaebakToast.show(requireContext(), "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
             }
         })
@@ -444,20 +453,20 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
     }
 }
 
-class MyLogHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val checkbox = view.checkBox
-    val studyTypeTv = view.studyTypeTv
-    val problemCntTv = view.problemCntTv
-    val titleTv = view.titleTv
-    val newTag = view.newTag
-    val createDateTv = view.createDateTv
-    val studyDateTv = view.studyDateTv
-    val solveBtn = view.solveBtn
-    val scoreTv = view.scoreTv
-    val reportBtn = view.reportBtn
-    val reviewBtn = view.reviewBtn
-    val horizontalBorder = view.horizontalBorder
-    val containerCl = view.containerCl
+class MyLogHolder(val itemBinding: ItemLearningTabListBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val checkbox = itemBinding.checkBox
+    val studyTypeTv = itemBinding.studyTypeTv
+    val problemCntTv = itemBinding.problemCntTv
+    val titleTv = itemBinding.titleTv
+    val newTag = itemBinding.newTag
+    val createDateTv = itemBinding.createDateTv
+    val studyDateTv = itemBinding.studyDateTv
+    val solveBtn = itemBinding.solveBtn
+    val scoreTv = itemBinding.scoreTv
+    val reportBtn = itemBinding.reportBtn
+    val reviewBtn = itemBinding.reviewBtn
+    val horizontalBorder = itemBinding.horizontalBorder
+    val containerCl = itemBinding.containerCl
 
     init {
         checkbox.extensionTouchArea(24.toPx())
@@ -508,9 +517,9 @@ class MyLogHolder(val view: View): RecyclerView.ViewHolder(view) {
 
     private fun setCategoryText(content: Content) {
         if(content.isDerivedContent()) {
-            studyTypeTv.setTextColor(ContextCompat.getColor(view.context, R.color.purple_6D6DFF))
+            studyTypeTv.setTextColor(ContextCompat.getColor(itemBinding.root.context, R.color.purple_6D6DFF))
         } else {
-            studyTypeTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
+            studyTypeTv.setTextColor(ContextCompat.getColor(itemBinding.root.context, R.color.black_4c4c4c))
         }
         studyTypeTv.text = content.category.getContentCategoryTitle()
     }

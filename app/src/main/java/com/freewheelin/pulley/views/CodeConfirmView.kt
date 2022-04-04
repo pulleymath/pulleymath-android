@@ -10,9 +10,9 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.fragment_signup.*
-import kotlinx.android.synthetic.main.view_code_confirm.view.*
+import com.freewheelin.pulley.databinding.ViewCodeConfirmBinding
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -36,10 +36,10 @@ class CodeConfirmView : LinearLayout {
         fun requestConfirm(requestText:String, confirmCode:String, callback:(status:Status, msg:String?)->Unit)
         fun confirmSuccess()
     }
+    var binding: ViewCodeConfirmBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_code_confirm, this, true)
 
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
-        LayoutInflater.from(context).inflate(R.layout.view_code_confirm, this)
         setAttributes(attrs)
         initUI()
     }
@@ -60,55 +60,55 @@ class CodeConfirmView : LinearLayout {
     }
 
     fun setTitle(title:String) {
-        textTitle.text = title
+        binding.textTitle.text = title
     }
 
     fun setHint(hint:String) {
-        editValue.hint = hint
+        binding.editValue.hint = hint
     }
 
     fun setText(text:String) {
-        editValue.setText(text)
+        binding.editValue.setText(text)
     }
 
     fun setMaxLength(length:Int) {
-        editValue.filters = arrayOf( InputFilter.LengthFilter(length) )
+        binding.editValue.filters = arrayOf( InputFilter.LengthFilter(length) )
     }
 
     fun setRequestButtonText(text:String) {
-        btnRequestCode.text = text
+        binding.btnRequestCode.text = text
     }
 
     fun setConfirmButtonText(text:String) {
-        btnCodeConfirm.text = text
+        binding.btnCodeConfirm.text = text
     }
 
     fun setInputType(type:Int) {
         when(type) {
-            1 -> editValue.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            1 -> binding.editValue.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             2 -> {
-                editValue.inputType = InputType.TYPE_CLASS_PHONE
-                phoneAuthTypeCl.visibility = View.VISIBLE
+                binding.editValue.inputType = InputType.TYPE_CLASS_PHONE
+                binding.phoneAuthTypeCl.visibility = View.VISIBLE
             }
-            else -> editValue.inputType = InputType.TYPE_CLASS_TEXT
+            else -> binding.editValue.inputType = InputType.TYPE_CLASS_TEXT
         }
     }
 
-    fun getText() =  editValue.text.toString()
+    fun getText() = binding.editValue.text.toString()
 
     private fun initUI() {
-        btnRequestCode.setOnClickListener {
+        binding.btnRequestCode.setOnClickListener {
             requestCode()
         }
         // 인증 요청
-        btnCodeConfirm.setOnClickListener {
-            if(btnCodeConfirm.isEnableUI()) requestConfirm()
+        binding.btnCodeConfirm.setOnClickListener {
+            if(binding.btnCodeConfirm.isEnableUI()) requestConfirm()
         }
 
-        editCodeConfirm.doAfterTextChanged { text ->
-            if(text?.length?:0 == 4) btnCodeConfirm.toEnableUI() else btnCodeConfirm.toDisableUI()
+        binding.editCodeConfirm.doAfterTextChanged { text ->
+            if(text?.length?:0 == 4) binding.btnCodeConfirm.toEnableUI() else binding.btnCodeConfirm.toDisableUI()
         }
-        phoneMessageSwitch.setOnCheckedChangeListener { cb, flag ->
+        binding.phoneMessageSwitch.setOnCheckedChangeListener { cb, flag ->
             phoneAuthType = if (flag) "SMS" else "ALIMTALK"
         }
         initReqeust()
@@ -116,17 +116,17 @@ class CodeConfirmView : LinearLayout {
 
     private fun initReqeust() {
         // 요청 버튼 활성화
-        btnRequestCode.toEnableUI()
+        binding.btnRequestCode.toEnableUI()
         // 요청값 에러
-        containerValueError.visibility = View.GONE
+        binding.containerValueError.visibility = View.GONE
         // 코드 인증 요청 레이아웃
-        containerCodeConfirm.visibility = View.GONE
+        binding.containerCodeConfirm.visibility = View.GONE
         // 코드 인증값 에러
-        containerCodeConfirmError.visibility = View.GONE
+        binding.containerCodeConfirmError.visibility = View.GONE
         // 컨펌 버튼 비활성화
-        btnCodeConfirm.toDisableUI()
+        binding.btnCodeConfirm.toDisableUI()
 
-        phoneMessageSwitch.isEnabled = true
+        binding.phoneMessageSwitch.isEnabled = true
     }
 
     fun requestCode() {
@@ -135,13 +135,13 @@ class CodeConfirmView : LinearLayout {
             Toast.makeText(context, "CodeConfirmInterface 인터페이스가 연결되지 않았습니다", Toast.LENGTH_LONG).show()
             return
         }
-        btnRequestCode.startLoding()
+        binding.btnRequestCode.startLoding()
         // 구현체로 코드요청 후 콜백처리
-        requestText = editValue.text.toString().trim()
-        editValue.setText(requestText)
+        requestText = binding.editValue.text.toString().trim()
+        binding.editValue.setText(requestText)
         codeInterface?.requestCode(requestText, phoneAuthType) { status, msg ->
 
-            btnRequestCode.completeLoading()
+            binding.btnRequestCode.completeLoading()
             requestResult(status, msg)
         }
     }
@@ -149,7 +149,7 @@ class CodeConfirmView : LinearLayout {
     private fun requestResult(status:Status, msg: String?) {
         when(status) {
             Status.Sucess -> {
-                containerValueError.visibility = View.GONE
+                binding.containerValueError.visibility = View.GONE
                 startCodeConfirm()
             }
             Status.Fail -> {
@@ -160,28 +160,30 @@ class CodeConfirmView : LinearLayout {
 
     // 코드 컨펌 시작
     private fun startCodeConfirm() {
-        btnRequestCode.toDisableUI()
-        containerCodeConfirm.visibility = View.VISIBLE
-        containerCodeConfirmError.visibility = View.GONE
-        editCodeConfirm.requestFocus()
-        phoneMessageSwitch.isEnabled = false
+        with(binding) {
+            btnRequestCode.toDisableUI()
+            containerCodeConfirm.visibility = View.VISIBLE
+            containerCodeConfirmError.visibility = View.GONE
+            editCodeConfirm.requestFocus()
+            phoneMessageSwitch.isEnabled = false
 
-        startTimer()
+            startTimer()
+        }
     }
 
     private fun requestFailed(msg:String?) {
-        containerValueError.visibility = View.VISIBLE
-        textValueError.text = msg
+        binding.containerValueError.visibility = View.VISIBLE
+        binding.textValueError.text = msg
     }
 
     fun requestConfirm() {
         // 코드 인증도 구현체로 요청 후 콜백 처리
-        confirmCode = editCodeConfirm.text.toString()
-        editCodeConfirm.setText(confirmCode)
+        confirmCode = binding.editCodeConfirm.text.toString()
+        binding.editCodeConfirm.setText(confirmCode)
 
-        btnCodeConfirm.startLoding()
+        binding.btnCodeConfirm.startLoding()
         codeInterface?.requestConfirm(requestText, confirmCode) { status, msg ->
-            btnCodeConfirm.completeLoading()
+            binding.btnCodeConfirm.completeLoading()
 
             when(status) {
                 Status.Sucess -> {
@@ -201,12 +203,12 @@ class CodeConfirmView : LinearLayout {
     }
 
     private fun setConfirmErrorMsg(msg:String?) {
-        containerCodeConfirmError.visibility = View.VISIBLE
-        textCodeConfirmError.text = msg?:"인증 오류가 발생하였습니다"
+        binding.containerCodeConfirmError.visibility = View.VISIBLE
+        binding.textCodeConfirmError.text = msg?:"인증 오류가 발생하였습니다"
     }
 
     private fun setFinish() {
-        btnRequestCode.text = "인증번호 재발송"
+        binding.btnRequestCode.text = "인증번호 재발송"
         deinitTimer()
         initReqeust()
     }
@@ -223,7 +225,7 @@ class CodeConfirmView : LinearLayout {
             tick()
         }
         timer?.schedule(task, 1000, 1000)
-        timerTv.visibility = View.VISIBLE
+        binding.timerTv.visibility = View.VISIBLE
     }
 
     private fun deinitTimer() {
@@ -233,7 +235,7 @@ class CodeConfirmView : LinearLayout {
         val min = (remainSec) / 60
         val sec = remainSec % 60
 
-        timerTv.text = "${min}:${String.format("%02d", sec)}"
+        binding.timerTv.text = "${min}:${String.format("%02d", sec)}"
     }
 
     fun tick() {
@@ -243,7 +245,7 @@ class CodeConfirmView : LinearLayout {
                     remainSec = remainSec - 1
                     val min = (remainSec) / 60
                     val sec = remainSec % 60
-                    timerTv.text = "${min}:${String.format("%02d", sec)}"
+                    binding.timerTv.text = "${min}:${String.format("%02d", sec)}"
                 } else {
                     setExpiredError("인증번호 유효기간이 만료되었습니다. 인증번호를 재발송해주세요.")
                     DaebakToast.show(context, "인증번호 유효기간이 만료되었습니다. 인증번호를 재발송해주세요.", overDialog = true)

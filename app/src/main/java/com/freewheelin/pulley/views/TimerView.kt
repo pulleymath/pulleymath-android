@@ -1,18 +1,24 @@
 package com.freewheelin.pulley.views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.RadioGroup
+import android.widget.Switch
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ViewTimerHorizontalBinding
+import com.freewheelin.pulley.databinding.ViewTimerSolveBinding
+import com.freewheelin.pulley.databinding.ViewTimerVerticalBinding
 import com.freewheelin.pulley.utils.hide
 import com.freewheelin.pulley.utils.show
-//import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
-import kotlinx.android.synthetic.main.view_timer_vertical.view.*
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -64,97 +70,274 @@ class TimerView : ConstraintLayout {
     var timer: Timer? = null
     var listener: TimerViewListener? = null
     val checkedTextColor: Int
-    get() {
-        if(orientation == SOLVE)
-            return ContextCompat.getColor(context, R.color.purple_6D6DFF)
-        else
-            return ContextCompat.getColor(context, R.color.purple_ACACFF)
-    }
+        get() {
+            if(orientation == SOLVE)
+                return ContextCompat.getColor(context, R.color.purple_6D6DFF)
+            else
+                return ContextCompat.getColor(context, R.color.purple_ACACFF)
+        }
 
     var submitType = SubmitType.strict
         set(value) {
             field = value
             listener?.onSubmitTypeChanged(value)
         }
+    var overTimerTextView: TextView? = null
+        get() {
+            return when (orientation) {
+                VERTICAL -> { (binding as ViewTimerVerticalBinding).overTimerTv }
+                HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).overTimerTv }
+                SOLVE -> { null }
+                else -> null
+            }
+        }
+
+    var typeRadioGroup: RadioGroup? = null
+        get() {
+            return when (orientation) {
+                VERTICAL -> { (binding as ViewTimerVerticalBinding).typeRg }
+                HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).typeRg }
+                SOLVE -> { (binding as ViewTimerSolveBinding).typeRg }
+                else -> (binding as ViewTimerSolveBinding).typeRg
+            }
+        }
+
+    var timerSwitch: Switch
+        get() {
+            return when (orientation) {
+                VERTICAL -> { (binding as ViewTimerVerticalBinding).timerSwitch }
+                HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).timerSwitch }
+                SOLVE -> { (binding as ViewTimerSolveBinding).timerSwitch }
+                else -> (binding as ViewTimerSolveBinding).timerSwitch
+            }
+        }
+        set(value) {}
+    var hourMinTv: TextView? = null
+        get() {
+            return when (orientation) {
+                VERTICAL -> { (binding as ViewTimerVerticalBinding).hourMinTv }
+                HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).hourMinTv }
+                SOLVE -> { (binding as ViewTimerSolveBinding).hourMinTv }
+                else -> (binding as ViewTimerSolveBinding).hourMinTv
+            }
+        }
+    var secTv: TextView? = null
+        get() {
+            return when (orientation) {
+                VERTICAL -> { (binding as ViewTimerVerticalBinding).secTv }
+                HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).secTv }
+                SOLVE -> { (binding as ViewTimerSolveBinding).secTv }
+                else -> (binding as ViewTimerSolveBinding).secTv
+            }
+        }
 
     constructor(context: Context, orientation: Int) : super(context) {
         this.orientation = orientation
+        initBinding()
         initView()
+
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         setTypedArray(attrs)
+        initBinding()
         initView()
+    }
+
+    lateinit var binding: ViewDataBinding
+
+    private fun initBinding() {
+        binding = when (orientation) {
+            VERTICAL -> { DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_timer_vertical, null, false) }
+            HORIZONTAL -> { DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_timer_horizontal, null, false) }
+            SOLVE -> { DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_timer_solve, null, false) }
+            else -> DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_timer_vertical, null, false)
+        }
+    }
+
+    private fun initView () {
+        // hideGuideLabel, overTimerTv 는 solve에 없음
+        when (orientation) {
+            VERTICAL -> {
+                with(binding as ViewTimerVerticalBinding) {
+                    timerSwitch.setOnCheckedChangeListener { button, isChecked ->
+                        if(isChecked) {
+                            hourMinTv.visibility = View.VISIBLE
+                            secTv.visibility = View.VISIBLE
+                            timerPlayBtn.visibility = View.VISIBLE
+
+                            hideGuideLabel.visibility = View.INVISIBLE
+                            val timeLimitSec = timeLimit - elapsedTime
+                            if(timeLimitSec < 0 )
+                                overTimerTv.visibility = View.VISIBLE
+                        } else {
+                            if(orientation == SOLVE) {
+                                hourMinTv.visibility = View.GONE
+                                secTv.visibility = View.GONE
+                                timerPlayBtn.visibility = View.GONE
+                            } else {
+                                hourMinTv.visibility = View.INVISIBLE
+                                secTv.visibility = View.INVISIBLE
+                                timerPlayBtn.visibility = View.INVISIBLE
+                                hideGuideLabel.visibility = View.VISIBLE
+                            }
+
+                            val timeLimitSec = timeLimit - elapsedTime
+                            if(timeLimitSec < 0 )
+                                overTimerTv.visibility = View.GONE
+                        }
+                        listener?.onTimerSwitchChecked()
+                    }
+
+                    timerSwitch.isChecked = true
+                    timerPlayBtn.setOnClickListener {
+                        it.isSelected = !it.isSelected
+
+                        if (it.isSelected)
+                            stop()
+                        else
+                            runTimer()
+                        listener?.onTimerStopClicked()
+                    }
+                    hideGuideLabel.visibility = View.GONE
+                    overTimerTv.visibility = View.GONE
+
+                    strictRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.strict
+                    }
+
+                    lenientRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.lenient
+                    }
+                }
+            }
+            HORIZONTAL -> {
+                with(binding as ViewTimerHorizontalBinding) {
+                    timerSwitch.setOnCheckedChangeListener { button, isChecked ->
+                        if(isChecked) {
+                            hourMinTv.visibility = View.VISIBLE
+                            secTv.visibility = View.VISIBLE
+                            timerPlayBtn.visibility = View.VISIBLE
+
+                            hideGuideLabel.visibility = View.INVISIBLE
+                            val timeLimitSec = timeLimit - elapsedTime
+                            if(timeLimitSec < 0 )
+                                overTimerTv.visibility = View.VISIBLE
+                        } else {
+                            if(orientation == SOLVE) {
+                                hourMinTv.visibility = View.GONE
+                                secTv.visibility = View.GONE
+                                timerPlayBtn.visibility = View.GONE
+                            } else {
+                                hourMinTv.visibility = View.INVISIBLE
+                                secTv.visibility = View.INVISIBLE
+                                timerPlayBtn.visibility = View.INVISIBLE
+                                hideGuideLabel.visibility = View.VISIBLE
+                            }
+
+                            val timeLimitSec = timeLimit - elapsedTime
+                            if(timeLimitSec < 0 )
+                                overTimerTv.visibility = View.GONE
+                        }
+                        listener?.onTimerSwitchChecked()
+                    }
+
+                    timerSwitch.isChecked = true
+                    timerPlayBtn.setOnClickListener {
+                        it.isSelected = !it.isSelected
+
+                        if (it.isSelected)
+                            stop()
+                        else
+                            runTimer()
+                        listener?.onTimerStopClicked()
+                    }
+                    hideGuideLabel.visibility = View.GONE
+                    overTimerTv.visibility = View.GONE
+
+                    strictRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.strict
+                    }
+
+                    lenientRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.lenient
+                    }
+                }
+            }
+            SOLVE -> {
+                with(binding as ViewTimerSolveBinding) {
+                    timerSwitch.setOnCheckedChangeListener { button, isChecked ->
+                        if(isChecked) {
+                            hourMinTv.visibility = View.VISIBLE
+                            secTv.visibility = View.VISIBLE
+                            timerPlayBtn.visibility = View.VISIBLE
+
+                        } else {
+                            if(orientation == SOLVE) {
+                                hourMinTv.visibility = View.GONE
+                                secTv.visibility = View.GONE
+                                timerPlayBtn.visibility = View.GONE
+                            } else {
+                                hourMinTv.visibility = View.INVISIBLE
+                                secTv.visibility = View.INVISIBLE
+                                timerPlayBtn.visibility = View.INVISIBLE
+                            }
+                        }
+                        listener?.onTimerSwitchChecked()
+                    }
+
+                    timerSwitch.isChecked = true
+                    timerPlayBtn.setOnClickListener {
+                        it.isSelected = !it.isSelected
+
+                        if (it.isSelected)
+                            stop()
+                        else
+                            runTimer()
+                        listener?.onTimerStopClicked()
+                    }
+
+                    strictRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.strict
+                    }
+
+                    lenientRb.setOnCheckedChangeListener { button, isChecked ->
+                        val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
+                        button.setTextColor(color)
+                        if(isChecked)
+                            submitType = SubmitType.lenient
+                    }
+                }
+            }
+            else -> {}
+        }
+
+        timerSwitch = when (orientation) {
+            VERTICAL -> { (binding as ViewTimerVerticalBinding).timerSwitch }
+            HORIZONTAL -> { (binding as ViewTimerHorizontalBinding).timerSwitch }
+            SOLVE -> { (binding as ViewTimerSolveBinding).timerSwitch }
+            else -> (binding as ViewTimerSolveBinding).timerSwitch
+        }
     }
 
     fun setTimerViewListener(listener: TimerViewListener) {
         this.listener = listener
     }
-
-    private fun initView() {
-        when (orientation) {
-            VERTICAL -> LayoutInflater.from(context).inflate(R.layout.view_timer_vertical, this)
-            HORIZONTAL -> LayoutInflater.from(context).inflate(R.layout.view_timer_horizontal, this)
-            SOLVE -> LayoutInflater.from(context).inflate(R.layout.view_timer_solve, this)
-        }
-
-        timerSwitch.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked) {
-                hourMinTv.visibility = View.VISIBLE
-                secTv.visibility = View.VISIBLE
-                timerPlayBtn.visibility = View.VISIBLE
-                hideGuideLabel?.visibility = View.INVISIBLE
-
-                val timeLimitSec = timeLimit - elapsedTime
-                if(timeLimitSec < 0 )
-                    overTimerTv?.visibility = View.VISIBLE
-            } else {
-                if(orientation == SOLVE) {
-                    hourMinTv.visibility = View.GONE
-                    secTv.visibility = View.GONE
-                    timerPlayBtn.visibility = View.GONE
-                } else {
-                    hourMinTv.visibility = View.INVISIBLE
-                    secTv.visibility = View.INVISIBLE
-                    timerPlayBtn.visibility = View.INVISIBLE
-                    hideGuideLabel?.visibility = View.VISIBLE
-                }
-
-                val timeLimitSec = timeLimit - elapsedTime
-                if(timeLimitSec < 0 )
-                    overTimerTv?.visibility = View.GONE
-            }
-            this.listener?.onTimerSwitchChecked()
-        }
-
-        timerSwitch.isChecked = true
-        timerPlayBtn.setOnClickListener {
-            it.isSelected = !it.isSelected
-
-            if (it.isSelected)
-                stop()
-            else
-                runTimer()
-            this.listener?.onTimerStopClicked()
-        }
-        hideGuideLabel?.visibility = View.GONE
-        overTimerTv?.visibility = View.GONE
-
-        strictRb.setOnCheckedChangeListener { button, isChecked ->
-            val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
-            button.setTextColor(color)
-            if(isChecked)
-                submitType = SubmitType.strict
-        }
-
-        lenientRb.setOnCheckedChangeListener { button, isChecked ->
-            val color = if (isChecked) checkedTextColor else Color.parseColor("#ffffff")
-            button.setTextColor(color)
-            if(isChecked)
-                submitType = SubmitType.lenient
-        }
-    }
-
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.TimerView)
         val rawValueForOrientation = array.getInt(R.styleable.TimerView_orientation, VERTICAL)
@@ -176,15 +359,15 @@ class TimerView : ConstraintLayout {
     }
 
     fun hideTypeRadio() {
-        typeRg.hide()
+        typeRadioGroup?.hide()
     }
 
     fun showOverTimerView() {
-        overTimerTv?.show()
+        overTimerTextView?.show()
     }
 
     fun isTimerShown(): Boolean {
-        return timerSwitch.isChecked
+        return timerSwitch?.isChecked
     }
 
     private fun setTimerText(timeLimitSec: Int) {
@@ -193,11 +376,11 @@ class TimerView : ConstraintLayout {
         val sec = timeLimitSec % 60
 
         if (timeLimitSec <= 300) {
-            hourMinTv.setTextColor(Color.parseColor("#fe7b67"))
-            secTv.setTextColor(Color.parseColor("#fe7b67"))
+            hourMinTv?.setTextColor(Color.parseColor("#fe7b67"))
+            secTv?.setTextColor(Color.parseColor("#fe7b67"))
         }
-        hourMinTv.text = hour.toString() + ":" + String.format("%02d", min)
-        secTv.text = ":" + String.format("%02d", sec)
+        hourMinTv?.text = hour.toString() + ":" + String.format("%02d", min)
+        secTv?.text = ":" + String.format("%02d", sec)
     }
 
     private fun setOvertimerText(timeLimitSec: Int) {
@@ -207,16 +390,16 @@ class TimerView : ConstraintLayout {
         val sec = overtimeSec % 60
 
         if (timeLimitSec <= 300) {
-            hourMinTv.setTextColor(Color.parseColor("#fe7b67"))
-            secTv.setTextColor(Color.parseColor("#fe7b67"))
+            hourMinTv?.setTextColor(Color.parseColor("#fe7b67"))
+            secTv?.setTextColor(Color.parseColor("#fe7b67"))
         }
-        hourMinTv.text = "0:00"
-        secTv.text = ":00"
+        hourMinTv?.text = "0:00"
+        secTv?.text = ":00"
 
-        overTimerTv?.text = "+ ${hour}:${String.format("%02d",min)}:${String.format("%02d",sec)}"
+        overTimerTextView?.text = "+ ${hour}:${String.format("%02d",min)}:${String.format("%02d",sec)}"
         if(orientation == SOLVE) {
-            hourMinTv.text = "- ${hour}:${String.format("%02d", min)}"
-            secTv.text = ":" + String.format("%02d", sec)
+            hourMinTv?.text = "- ${hour}:${String.format("%02d", min)}"
+            secTv?.text = ":" + String.format("%02d", sec)
         }
     }
 
@@ -229,7 +412,7 @@ class TimerView : ConstraintLayout {
         hideTypeRadio()
 
         if(isTimerShown())
-            overTimerTv?.visibility = View.VISIBLE
+            overTimerTextView?.visibility = View.VISIBLE
     }
 
 }

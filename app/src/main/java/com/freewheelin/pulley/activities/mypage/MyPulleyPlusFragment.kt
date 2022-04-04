@@ -10,25 +10,25 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryPlusItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.databinding.FragmentMyPulleyPlusBinding
 import com.freewheelin.pulley.utils.DateTimeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_my_pulley_plus.*
-import kotlinx.android.synthetic.main.fragment_my_pulley_plus.backBtn
-import kotlinx.android.synthetic.main.item_my_pulley_product.*
 import java.util.*
 
 class MyPulleyPlusFragment : MyPageBaseFragment() {
-
+    lateinit var binding: FragmentMyPulleyPlusBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_pulley_plus, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pulley_plus, container, false)
+        return binding.root
     }
 
     lateinit var backBtn: ImageButton

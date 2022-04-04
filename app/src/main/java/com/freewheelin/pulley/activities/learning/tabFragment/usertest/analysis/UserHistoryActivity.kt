@@ -7,35 +7,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
 import com.freewheelin.pulley.activities.OMRActivity
-import com.freewheelin.pulley.activities.WeeklyTestReportActivity
-import com.freewheelin.pulley.activities.WrongTestReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyListViewHolder
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.dialogs.MockExamGuideDialog
+import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.*
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.setPermissionClickListener
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
-import kotlinx.android.synthetic.main.activity_study_history.*
-import kotlinx.android.synthetic.main.view_analysis_today_study_list.view.*
 
 class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExamGuideDialogListener {
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
         var filteredList = contents
 
-        filteredList = when(categoryTab.selectedIndex) {
+        filteredList = when(binding.categoryTab.selectedIndex) {
             1 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
             2 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK}
             3 -> filteredList.filter { it.pieceCategoryTag == BookType.MO }
@@ -44,19 +35,19 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
             else -> filteredList
         }
 
-        filteredList = when(ingTab.selectedIndex) {
+        filteredList = when(binding.ingTab.selectedIndex) {
             1 -> filteredList.filter { !it.isCompleted() }
             2 -> filteredList.filter { it.isCompleted() }
             else -> filteredList
         }
 
         this.filteredContents = filteredList
-        recyclerView.adapter?.notifyDataSetChanged()
+        binding.recyclerView.adapter?.notifyDataSetChanged()
 
         if(getContentList().isEmpty()) {
-            emptyGuideTv.visibility = View.VISIBLE
+            binding.emptyGuideTv.visibility = View.VISIBLE
         } else {
-            emptyGuideTv.visibility = View.INVISIBLE
+            binding.emptyGuideTv.visibility = View.INVISIBLE
         }
     }
 
@@ -64,10 +55,12 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
 
     var contents: List<Content> = emptyList()
     var filteredContents: List<Content>? = null
-
+    private val binding: ActivityStudyHistoryBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_study_history, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_study_history)
+        setContentView(binding.root)
 
         val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
         val name = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_NAME)?:"none"
@@ -81,30 +74,30 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
 
     override fun onResume() {
         super.onResume()
-        user?.getStudyList(this) {
+        user.getStudyList(this) {
             this.contents = it
             if(this.contents.isEmpty())
-                emptyGuideTv.visibility = View.VISIBLE
+                binding.emptyGuideTv.visibility = View.VISIBLE
             else
-                emptyGuideTv.visibility = View.INVISIBLE
+                binding.emptyGuideTv.visibility = View.INVISIBLE
 
 
-            if(recyclerView.adapter == null) {
-                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                recyclerView.adapter = StudyListAdapter()
+            if(binding.recyclerView.adapter == null) {
+                binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                binding.recyclerView.adapter = StudyListAdapter()
             } else {
-                recyclerView.adapter?.notifyDataSetChanged()
+                binding.recyclerView.adapter?.notifyDataSetChanged()
             }
 
-            recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            binding.recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
                     super.onScrolled(recyclerView, dx, dy)
 //                    Log.d("스크롤", "scrollY=$dy")
                     if(dy > 0) {
-                        viewShadow.visibility = View.VISIBLE
+                        binding.viewShadow.visibility = View.VISIBLE
                     } else {
-                        viewShadow.visibility = View.INVISIBLE
+                        binding.viewShadow.visibility = View.INVISIBLE
                     }
                 }
             })
@@ -112,12 +105,13 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
     }
 
     fun setUpUI() {
-        backBtn.setOnClickListener { finish() }
-        categoryTab.labels = listOf("전체", "테스트", "유형학습", "모의고사", "오답학습", "추천학습")
-        ingTab.labels = listOf("전체", "학습 중", "학습 완료")
+        with(binding) {
+            backBtn.setOnClickListener { finish() }
+            categoryTab.labels = listOf("전체", "테스트", "유형학습", "모의고사", "오답학습", "추천학습")
+            ingTab.labels = listOf("전체", "학습 중", "학습 완료")
 
-        categoryTab.listener = this
-        ingTab.listener = this
+            categoryTab.listener = this@UserHistoryActivity
+            ingTab.listener = this@UserHistoryActivity
 
 //        problemCntContainer.setOnClickListener {
 //            val balloonWindow = BalloonWindow(this, questionIv, BalloonWindow.Position.below, 8.toPx())
@@ -128,6 +122,7 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
 //            textView.setTextColor(ContextCompat.getColor(this, R.color.white_ffffff))
 //            balloonWindow.show(textView)
 //        }
+        }
 
 
     }
@@ -148,8 +143,7 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
 
     inner class StudyListAdapter: RecyclerView.Adapter<StudyListViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyListViewHolder {
-            val view = LayoutInflater.from(this@UserHistoryActivity).inflate(R.layout.item_study_list, parent, false)
-            return StudyListViewHolder(view)
+            return StudyListViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_list, parent, false))
         }
 
         override fun getItemCount(): Int {
@@ -160,83 +154,16 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
             val content = getContentList()[position]
             holder.set(content)
             if(position == getContentList().size - 1) {
-                holder.borderView.visibility = View.INVISIBLE
+                holder.listBinding.borderView.visibility = View.INVISIBLE
             } else {
-                holder.borderView.visibility = View.VISIBLE
+                holder.listBinding.borderView.visibility = View.VISIBLE
             }
 
-//            holder.reportBtn.setOnClickListener {
-//                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
-//                when(content.pieceCategoryTag) {
-//                    BookType.MO -> {
-//                        val intent = MockReportActivity.getIntent(this@UserHistoryActivity, MockExam(content))
-//                        startActivity(intent)
-//                    }
-//                    BookType.TEST -> {
-//                        val test = Test(content)
-//                        when(test.getTestType()) {
-//                            Test.TestType.weekly ->  {
-//                                val intent = WeeklyTestReportActivity.getIntent(this@UserHistoryActivity, test)
-//                                startActivity(intent)
-//                            }
-//                            Test.TestType.wrong -> {
-//                                val intent = WrongTestReportActivity.getIntent(this@UserHistoryActivity, test)
-//                                startActivity(intent)
-//                            }
-//                            else -> {
-//                                LogUtils.assert(false, "예상치 못한 테스트 타입 ${test.getTestType()}")
-//                            }
-//                        }
-//                    }
-//                    else -> {
-//                        LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
-//                    }
-//                }
-//            }
-
-//            holder.solveBtn.setPermissionClickListener {
-//                LogUtils.logEvent(this@UserHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
-//                when(content.pieceCategoryTag) {
-//                    BookType.MO -> {
-//                        if(content.isCompleted()) {
-//                            val intent = SolveActivity.getReviewIntent(this@UserHistoryActivity, MockExam(content))
-//                            startActivity(intent)
-//                        } else {
-//                            val exam = MockExam(content)
-//                            MockExamGuideDialog(this@UserHistoryActivity, exam, true, this@UserHistoryActivity).show()
-//                        }
-//                    }
-//                    BookType.BOOK, BookType.CUSTOM_BOOK -> {
-//                        val intent = if(content.isCompleted())
-//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Book(content))
-//                        else
-//                            SolveActivity.getIntent(this@UserHistoryActivity, Book(content))
-//                        startActivity(intent)
-//                    }
-//
-//                    BookType.NOTE, BookType.RECOMMEND -> {
-//                        val intent = if(content.isCompleted()) {
-//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Piece(content))
-//                        } else {
-//                            SolveActivity.getIntent(this@UserHistoryActivity, Piece(content))
-//                        }
-//                        startActivity(intent)
-//                    }
-//
-//                    BookType.TEST -> {
-//                        val intent = if(content.isCompleted())
-//                            SolveActivity.getReviewIntent(this@UserHistoryActivity, Test(content))
-//                        else
-//                            SolveActivity.getIntent(this@UserHistoryActivity, Test(content))
-//                        startActivity(intent)
-//                    }
-//                }
-//            }
 
             // TODO 이부분 기획이 안되어있고 리포트나 솔브나 토큰 권한문제로 에러가 나기때문에
             // 제대로하려면 기획 + 서버 api 와의 협의가 필요함
-            holder.reportBtn.visibility = View.INVISIBLE
-            holder.solveBtn.visibility = View.INVISIBLE
+            holder.listBinding.reportBtn.visibility = View.INVISIBLE
+            holder.listBinding.solveBtn.visibility = View.INVISIBLE
         }
     }
 }

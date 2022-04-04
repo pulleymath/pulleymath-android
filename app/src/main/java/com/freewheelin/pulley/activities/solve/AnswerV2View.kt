@@ -49,9 +49,6 @@ class AnswerV2View : ConstraintLayout,
     var focusContainer: LinearLayout
     var resultIv: ImageView
 
-//    var answeredCntTv: TextView
-//    var markingBtn: ConstraintLayout
-//    var submitBtn: Button
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_answer_v2, this)
@@ -62,9 +59,6 @@ class AnswerV2View : ConstraintLayout,
         focusContainer = findViewById(R.id.focusContainer)
         resultIv = findViewById(R.id.resultIv)
 
-//        answeredCntTv = findViewById(R.id.answeredCntTv)
-//        markingBtn = findViewById(R.id.markingBtn)
-//        submitBtn = findViewById(R.id.submitBtn)
 
         val paddingStartEnd = resources.getDimension(R.dimen.dp16).toInt()
         setPadding(paddingStartEnd, 0, paddingStartEnd, 0)
@@ -234,7 +228,7 @@ class AnswerV2View : ConstraintLayout,
     }
 
     fun getShortAnswerText() : String {
-        return shortAnswerView?.text.toString() ?: ""
+        return shortAnswerView.text.toString() ?: ""
     }
 
     fun disableMarking() {

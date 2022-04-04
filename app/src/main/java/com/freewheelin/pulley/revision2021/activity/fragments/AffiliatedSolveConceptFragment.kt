@@ -1,25 +1,20 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.ProblemGestureListener
 import com.freewheelin.pulley.activities.solve.SolveGestures
 import com.freewheelin.pulley.bases.DensityLevel
 import com.freewheelin.pulley.bases.densityLevel
-import com.freewheelin.pulley.databinding.DialogAffiliatedTestReportDialogBinding
 import com.freewheelin.pulley.databinding.FragmentAffiliatedSolveConceptBinding
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveConceptViewModel
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.activity_affiliated_test_solve.*
 
 class AffiliatedSolveConceptFragment : Fragment(), ProblemGestureListener {
 

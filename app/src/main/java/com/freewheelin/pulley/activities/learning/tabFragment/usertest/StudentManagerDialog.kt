@@ -28,10 +28,6 @@ import com.freewheelin.pulley.utils.responseFailed
 import com.freewheelin.pulley.views.buttons.SecondaryButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.dialog_marketing.*
-import kotlinx.android.synthetic.main.dialog_student_manager.*
-import kotlinx.android.synthetic.main.item_student_manager_search.view.*
-import kotlinx.android.synthetic.main.item_student_manager.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,7 +80,7 @@ class StudentManagerDialog(val activity: Activity, val successCB:()->Unit, val f
 
     private fun initUI() {
         setCancelable(true)
-        btnClose.setOnClickListener { close() }
+        binding.btnClose.setOnClickListener { close() }
         setStudentListView()
         setSearchListView()
         setSearchView()
@@ -96,14 +92,14 @@ class StudentManagerDialog(val activity: Activity, val successCB:()->Unit, val f
     }
 
     private fun setStudentListView() {
-        studentListRv.adapter = studentAdapter
-        studentListRv.layoutManager = LinearLayoutManager(context)
+        binding.studentListRv.adapter = studentAdapter
+        binding.studentListRv.layoutManager = LinearLayoutManager(context)
         studentAdapter.notifyDataSetChanged()
     }
 
     private fun setSearchListView() {
-        searchListRv.adapter = searchAdapter
-        searchListRv.layoutManager = LinearLayoutManager(context)
+        binding.searchListRv.adapter = searchAdapter
+        binding.searchListRv.layoutManager = LinearLayoutManager(context)
         searchAdapter.notifyDataSetChanged()
     }
 

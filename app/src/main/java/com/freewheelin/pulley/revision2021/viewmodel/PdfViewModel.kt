@@ -42,7 +42,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
     var ySum: Int = 0
 
-    fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "") {
+    fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "", callback: () -> Unit) {
         pdfRepository.pdfList(title, page, size, subjectCode, category)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
@@ -56,6 +56,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                 val finalPdfList = listOf(headerPdf) + response.data.content;
                 pdfList.postValue(finalPdfList)
                 showEmpty.postValue(response.data.content.isEmpty())
+                callback()
             }, { error ->
                 Log.e(javaClass.simpleName, "listPdf error=${error.localizedMessage}")
             })

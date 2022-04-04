@@ -7,18 +7,17 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.views.FocusedDimView
-import com.ht.balloonwindow.BalloonWindow
-import com.ht.balloonwindow.BalloonWindowListener
-import com.ht.balloonwindow.toPx
-import kotlinx.android.synthetic.main.tooltip_img_horizontal.view.*
-import kotlinx.android.synthetic.main.tooltip_vertical.view.*
-import kotlinx.android.synthetic.main.tooltip_vertical.view.contentsTv
-import kotlinx.android.synthetic.main.tooltip_vertical.view.lottieV
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
+import com.freewheelin.pulley.utils.toPx
 import kotlin.math.PI
 import kotlin.math.sin
 
@@ -65,7 +64,7 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
                     val y = if (position == Position.above || position == Position.below) y + (20 * sign).toInt() else y
                     window.update(x, y, window.width, window.height)
                 }
-                contentView.lottieV?.playAnimation()
+                contentView.findViewById<LottieAnimationView>(R.id.lottieV)?.playAnimation()
                 anim.start()
             }
         })
@@ -82,32 +81,32 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
         val toolTipView =  when(type) {
             Tutor.TooltipType.takeNoteScroll -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_horizontal, null)
-                view.lottieV.setAnimation("tooltip_take_note_scroll.json")
-                view.contentsTv.text = "필기모드 시,\n" +
+                view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_take_note_scroll.json")
+                view.findViewById<TextView>(R.id.contentsTv).text = "필기모드 시,\n" +
                         "두 손가락으로\n" +
                         "스크롤 하세요:)"
                 view
             }
             Tutor.TooltipType.addSimilar -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical_img, null)
-                view.imageView.setImageResource(R.drawable.ic_tooltip_add_similar)
-                view.contentsTv.text = "같은 유형 문제를 추가해\n" +
+                view.findViewById<ImageView>(R.id.imageView).setImageResource(R.drawable.ic_tooltip_add_similar)
+                view.findViewById<TextView>(R.id.contentsTv).text = "같은 유형 문제를 추가해\n" +
                         "취약점을 채워보세요 :)"
                 view
             }
             Tutor.TooltipType.changeSimilar -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical, null)
-                view.lottieV.visibility = View.GONE
-                view.titleTv.visibility = View.GONE
-                view.contentsTv.text = "추가된 문제를 풀면\n" +
+                view.findViewById<LottieAnimationView>(R.id.lottieV).visibility = View.GONE
+                view.findViewById<TextView>(R.id.titleTv).visibility = View.GONE
+                view.findViewById<TextView>(R.id.contentsTv).text = "추가된 문제를 풀면\n" +
                         "유사문항을 계속\n" +
                         "추가할 수 있어요 :)"
                 view
             }
             Tutor.TooltipType.additionalStudyInWrongNote -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_horizontal, null)
-                view.lottieV.setAnimation("tooltip_additional_study.json")
-                view.contentsTv.text = "더 공부하고 싶은\n" +
+                view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_additional_study.json")
+                view.findViewById<TextView>(R.id.contentsTv).text = "더 공부하고 싶은\n" +
                         "문제를 체크하면\n" +
                         "문제리뷰 & 오답학습을\n" +
                         "할 수 있어요 :)"
@@ -115,8 +114,8 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
             }
             Tutor.TooltipType.additionalStudyInAnalysis -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_horizontal, null)
-                view.lottieV.setAnimation("tooltip_additional_study.json")
-                view.contentsTv.text = "더 공부하고 싶은\n" +
+                view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_additional_study.json")
+                view.findViewById<TextView>(R.id.contentsTv).text = "더 공부하고 싶은\n" +
                         "단원을 체크하면\n" +
                         "문제리뷰 & 추가학습을\n" +
                         "할 수 있어요 :)"
@@ -124,22 +123,22 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
             }
             Tutor.TooltipType.recommendPlan -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_img_horizontal, null)
-                view.imageView.setImageResource(R.drawable.ic_tooltip_recommend)
-                view.contentsTv.text = "${user!!.fullName}님께\n딱 맞는 플랜을 추천해드려요 :)"
+                view.findViewById<ImageView>(R.id.imageView).setImageResource(R.drawable.ic_tooltip_recommend)
+                view.findViewById<TextView>(R.id.contentsTv).text = "${user!!.fullName}님께\n딱 맞는 플랜을 추천해드려요 :)"
                 return view
             }
             Tutor.TooltipType.mailInUnitStudy -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical, null)
-                view.titleTv.text = "출력하고 싶나요?"
-                view.lottieV.setAnimation("tooltip_mail.json")
-                view.contentsTv.text = "이메일로 학습지를\n" + "보낼 수 있어요!"
+                view.findViewById<TextView>(R.id.titleTv).text = "출력하고 싶나요?"
+                view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_mail.json")
+                view.findViewById<TextView>(R.id.contentsTv).text = "이메일로 학습지를\n" + "보낼 수 있어요!"
                 view
             }
             else -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical, null)
-                view.titleTv.text = "출력하고 싶나요?"
-                view.lottieV.setAnimation("tooltip_mail.json")
-                view.contentsTv.text = "이 아이콘을 선택하면\n" +
+                view.findViewById<TextView>(R.id.titleTv).text = "출력하고 싶나요?"
+                view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_mail.json")
+                view.findViewById<TextView>(R.id.contentsTv).text = "이 아이콘을 선택하면\n" +
                         "이메일로 학습지를 보내드려요!"
                 view
             }

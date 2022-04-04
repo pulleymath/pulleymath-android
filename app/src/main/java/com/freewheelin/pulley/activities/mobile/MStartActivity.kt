@@ -8,16 +8,17 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.utils.FacebookEvent
 import com.freewheelin.pulley.utils.show
-import kotlinx.android.synthetic.main.m_activity_start.*
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 
 class MStartActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +28,9 @@ class MStartActivity : AppCompatActivity() {
     }
 
     private fun initMobile() {
+        findViewById<LottieAnimationView>(R.id.studentLottie).playAnimation()
 
-        studentLottie.playAnimation()
-
-        freeStartBtn.setOnClickListener {
+        findViewById<PrimaryButton>(R.id.freeStartBtn).setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(URL.모바일무료체험)
             startActivity(intent)
@@ -39,8 +39,8 @@ class MStartActivity : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            freeStartGuideTv.show()
-            freeStartBtn?.show()
+            findViewById<TextView>(R.id.freeStartGuideTv).show()
+            findViewById<PrimaryButton>(R.id.freeStartBtn).show()
         }, 1000)
     }
 
@@ -55,6 +55,6 @@ class MStartActivity : AppCompatActivity() {
                 startIndex + boldStr.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        topLabel.text = spannable
+        findViewById<TextView>(R.id.topLabel).text = spannable
     }
 }

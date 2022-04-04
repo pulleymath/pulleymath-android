@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.mypage
 
-
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
@@ -17,27 +17,19 @@ import com.freewheelin.pulley.assets.Subject
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.dialogs.CompleteDialog
+import com.freewheelin.pulley.databinding.FragmentStudyUnitOptionalSettingBinding
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
-import kotlinx.android.synthetic.main.fragment_init_setting_selection.*
-import kotlinx.android.synthetic.main.fragment_study_unit_optional_setting.*
-import kotlinx.android.synthetic.main.fragment_study_unit_optional_setting.noneSelection
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.*
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.calculusSelection
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.geometrySelection
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.modifyBtn
-import kotlinx.android.synthetic.main.fragment_study_unit_setting.probAnsStatSelection
-
 
 class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
 
+    lateinit var binding: FragmentStudyUnitOptionalSettingBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_study_unit_optional_setting, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_study_unit_optional_setting, container, false)
+        return binding.root
     }
 
 
@@ -47,46 +39,69 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
     }
 
     fun setUpUI() {
-        probAnsStatSelection.listener = this
-        calculusSelection.listener = this
-        geometrySelection.listener = this
+        with(binding) {
+            probAnsStatSelection.listener = this@StudyOptionalUnitSettingFragment
+            calculusSelection.listener = this@StudyOptionalUnitSettingFragment
+            geometrySelection.listener = this@StudyOptionalUnitSettingFragment
 
-        probAnsStatSelection.buttonTitles = listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
-        calculusSelection.buttonTitles = listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
-        geometrySelection.buttonTitles = listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
+            probAnsStatSelection.buttonTitles =
+                listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
+            calculusSelection.buttonTitles =
+                listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
+            geometrySelection.buttonTitles =
+                listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
 
 
-        val userUnits = user!!.optionalUnit
-        if(userUnits.isEmpty()) {
-            noneSelection.isSelected = true
-        } else {
-            probAnsStatSelection.result = listOf(false, userUnits.contains(BigUnit.경우의_수), userUnits.contains(BigUnit.확률), userUnits.contains(BigUnit.통계))
-            calculusSelection.result = listOf(false, userUnits.contains(BigUnit.수열의_극한), userUnits.contains(BigUnit.미분법), userUnits.contains(BigUnit.적분법))
-            geometrySelection.result = listOf(false, userUnits.contains(BigUnit.이차곡선), userUnits.contains(BigUnit.벡터), userUnits.contains(BigUnit.공간도형))
+            val userUnits = user!!.optionalUnit
+            if (userUnits.isEmpty()) {
+                noneSelection.isSelected = true
+            } else {
+                probAnsStatSelection.result = listOf(
+                    false,
+                    userUnits.contains(BigUnit.경우의_수),
+                    userUnits.contains(BigUnit.확률),
+                    userUnits.contains(BigUnit.통계)
+                )
+                calculusSelection.result = listOf(
+                    false,
+                    userUnits.contains(BigUnit.수열의_극한),
+                    userUnits.contains(BigUnit.미분법),
+                    userUnits.contains(BigUnit.적분법)
+                )
+                geometrySelection.result = listOf(
+                    false,
+                    userUnits.contains(BigUnit.이차곡선),
+                    userUnits.contains(BigUnit.벡터),
+                    userUnits.contains(BigUnit.공간도형)
+                )
+            }
+
+            noneSelection.setOnClickListener { onNoneSelection() }
+            modifyBtn.setOnClickListener { onModifyBtnClicked() }
+            backBtn.setOnClickListener { onBackBtnClicked() }
         }
-
-        noneSelection.setOnClickListener { onNoneSelection() }
-        modifyBtn.setOnClickListener { onModifyBtnClicked() }
     }
 
     private fun onNoneSelection() {
-        noneSelection.isSelected = !noneSelection.isSelected
-        if(noneSelection.isSelected) {
-            probAnsStatSelection.release()
-            calculusSelection.release()
-            geometrySelection.release()
-        } else {
-            setModifyBtn()
+        with(binding) {
+            noneSelection.isSelected = !noneSelection.isSelected
+            if (noneSelection.isSelected) {
+                probAnsStatSelection.release()
+                calculusSelection.release()
+                geometrySelection.release()
+            } else {
+                setModifyBtn()
+            }
         }
     }
 
     private fun getSelectedUnit(): Collection<BigUnit> {
         val selectedBigUnits = hashSetOf<BigUnit>()
-
-        selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
-        selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
-        selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
-
+        with(binding) {
+            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
+            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
+            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
+        }
         return selectedBigUnits
     }
 
@@ -104,7 +119,7 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
     private fun onModifyBtnClicked() {
         MyApplication.user?.let { user ->
             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "선택과목", "변경하기")
-            if (modifyBtn.isEnableUI()) {
+            if (binding.modifyBtn.isEnableUI()) {
                 UserManager.setInitOptional(requireContext(), user, getSelectedUnit(), successCB = {
                     val selected = getSelectedUnit().map { it.id }
                     user.rawInitOptional = selected.joinToString(",")
@@ -123,12 +138,14 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
     }
 
     private fun setModifyBtn() {
-        noneSelection.isSelected = getSelectedUnit().isEmpty()
+        with(binding) {
+            noneSelection.isSelected = getSelectedUnit().isEmpty()
 
-        if(getSelectedUnit().isEmpty() && noneSelection.isSelected == false) {
-            modifyBtn.toDisableUI()
-        } else {
-            modifyBtn.toEnableUI()
+            if(getSelectedUnit().isEmpty() && noneSelection.isSelected == false) {
+                modifyBtn.toDisableUI()
+            } else {
+                modifyBtn.toEnableUI()
+            }
         }
     }
 }

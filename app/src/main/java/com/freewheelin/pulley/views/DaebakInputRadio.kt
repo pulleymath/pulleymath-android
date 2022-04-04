@@ -5,9 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
-import kotlinx.android.synthetic.main.view_input_daebak_radio.view.*
+import com.freewheelin.pulley.databinding.ViewInputDaebakRadioBinding
+import com.freewheelin.pulley.databinding.ViewPolicyLayoutV2Binding
 
 class DaebakInputRadio: LinearLayout {
 
@@ -18,45 +20,47 @@ class DaebakInputRadio: LinearLayout {
 
     var label: String?
         get() {
-            return labelTv.text.toString()
+            return binding.labelTv.text.toString()
         }
         set(value) {
-            labelTv.text = value
+            binding.labelTv.text = value
         }
 
     var errorMsg: String
         get() {
-            return errorTv.text.toString()
+            return binding.errorTv.text.toString()
         }
         set(value) {
-            errorTv.text = value
+            binding.errorTv.text = value
         }
 
     var position: Int? = null
         set(value) {
             field = value
             when(value) {
-                0 -> rg.check(R.id.rb1)
-                1 -> rg.check(R.id.rb2)
-                2 -> rg.check(R.id.rb3)
+                0 -> binding.rg.check(R.id.rb1)
+                1 -> binding.rg.check(R.id.rb2)
+                2 -> binding.rg.check(R.id.rb3)
             }
         }
 
     var isShownError: Boolean
         get() {
-            return errorContainerLl.visibility == View.VISIBLE
+            return binding.errorContainerLl.visibility == View.VISIBLE
         }
         set(value) {
             if (value)
-                errorContainerLl.visibility = View.VISIBLE
+                binding.errorContainerLl.visibility = View.VISIBLE
             else
-                errorContainerLl.visibility = View.GONE
+                binding.errorContainerLl.visibility = View.GONE
         }
+    var binding: ViewInputDaebakRadioBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_input_daebak_radio, this, true)
+
     init {
         orientation = LinearLayout.VERTICAL
         LayoutInflater.from(context).inflate(R.layout.view_input_daebak_radio, this)
         isShownError = false
-        rg.setOnCheckedChangeListener { group, checkedId ->
+        binding.rg.setOnCheckedChangeListener { group, checkedId ->
             isShownError = false
             when(checkedId) {
                 R.id.rb1 -> position = 0

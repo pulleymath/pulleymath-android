@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/firstCheck"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_check_green_circle_24"
-        android:layout_marginStart="@dimen/dp40"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/titleTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        <ImageView
+            android:id="@+id/firstCheck"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check_green_circle_24"
+            android:layout_marginStart="@dimen/dp40"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/titleTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
-    <ImageView
-        android:id="@+id/secondCheck"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_check_green_circle_24"
-        android:layout_marginStart="@dimen/dp12"
-        app:layout_constraintTop_toTopOf="@+id/firstCheck"
-        app:layout_constraintBottom_toBottomOf="@+id/firstCheck"
-        app:layout_constraintStart_toEndOf="@+id/firstCheck"/>
+        <ImageView
+            android:id="@+id/secondCheck"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check_green_circle_24"
+            android:layout_marginStart="@dimen/dp12"
+            app:layout_constraintTop_toTopOf="@+id/firstCheck"
+            app:layout_constraintBottom_toBottomOf="@+id/firstCheck"
+            app:layout_constraintStart_toEndOf="@+id/firstCheck"/>
 
-    <ImageView
-        android:id="@+id/thirdCheck"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_check_green_circle_24"
-        android:layout_marginStart="@dimen/dp12"
-        app:layout_constraintTop_toTopOf="@+id/firstCheck"
-        app:layout_constraintBottom_toBottomOf="@+id/firstCheck"
-        app:layout_constraintStart_toEndOf="@+id/secondCheck"/>
+        <ImageView
+            android:id="@+id/thirdCheck"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_check_green_circle_24"
+            android:layout_marginStart="@dimen/dp12"
+            app:layout_constraintTop_toTopOf="@+id/firstCheck"
+            app:layout_constraintBottom_toBottomOf="@+id/firstCheck"
+            app:layout_constraintStart_toEndOf="@+id/secondCheck"/>
 
 
-    <TextView
-        style="@style/TextGreen_70d000.Bold"
-        android:id="@+id/titleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
-        android:lineSpacingExtra="@dimen/sp12"
-        android:text="데일리 테스트\n완료!"
-        android:layout_marginTop="@dimen/dp16"
-        app:layout_constraintStart_toStartOf="@+id/firstCheck"
-        app:layout_constraintTop_toBottomOf="@+id/firstCheck"
-        app:layout_constraintBottom_toTopOf="@+id/guideTv"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        <TextView
+            style="@style/TextGreen_70d000.Bold"
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:lineSpacingExtra="@dimen/sp12"
+            android:text="데일리 테스트\n완료!"
+            android:layout_marginTop="@dimen/dp16"
+            app:layout_constraintStart_toStartOf="@+id/firstCheck"
+            app:layout_constraintTop_toBottomOf="@+id/firstCheck"
+            app:layout_constraintBottom_toTopOf="@+id/guideTv"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
-    <TextView
-        android:id="@+id/guideTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp16"
-        android:textColor="@color/grey_c0c0c0"
-        android:lineSpacingExtra="8sp"
-        android:layout_marginTop="@dimen/dp24"
-        android:text="다음 데일리 테스트가 공개되는\n내일 오전 6시에 또 만나요!"
-        app:layout_constraintStart_toStartOf="@+id/firstCheck"
-        app:layout_constraintTop_toBottomOf="@+id/titleTv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/guideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp16"
+            android:textColor="@color/grey_c0c0c0"
+            android:lineSpacingExtra="8sp"
+            android:layout_marginTop="@dimen/dp24"
+            android:text="다음 데일리 테스트가 공개되는\n내일 오전 6시에 또 만나요!"
+            app:layout_constraintStart_toStartOf="@+id/firstCheck"
+            app:layout_constraintTop_toBottomOf="@+id/titleTv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

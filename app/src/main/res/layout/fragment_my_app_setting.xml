@@ -1,195 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white_fafafa"
-    android:clickable="true"
-    tools:context=".activities.mypage.MySignUpInfoFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white_ffffff">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white_fafafa"
+        android:clickable="true"
+        tools:context=".activities.mypage.MySignUpInfoFragment">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@null"
-            android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="알림 설정"
-            android:textSize="@dimen/sp24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/white_ffffff">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@null"
+                android:src="@drawable/ic_toolbar_back"
+                app:tint="@color/black_4c4c4c"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextBlack_4c4c4c.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginBottom="@dimen/dp12"
-                android:textSize="@dimen/sp16"
-                android:text="알림 방식"/>
+                android:text="알림 설정"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp32"
-                android:orientation="vertical"
-                android:background="@color/white_ffffff">
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:textSize="@dimen/sp16"
+                    android:text="알림 방식"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:padding="@dimen/dp32"
+                    android:orientation="vertical"
+                    android:background="@color/white_ffffff">
 
-                    <TextView
-                        style="@style/TextBlack_4c4c4c"
-                        android:id="@+id/alimtalkLabel"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/sp16"
-                        android:text="알림톡(문자) 알림"/>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <Switch
-                        style="@style/Switch.Light"
-                        android:id="@+id/alimtalkSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:id="@+id/alimtalkLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp16"
+                            android:text="알림톡(문자) 알림"/>
 
-                </LinearLayout>
+                        <Switch
+                            style="@style/Switch.Light"
+                            android:id="@+id/alimtalkSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        style="@style/TextBlack_4c4c4c"
-                        android:id="@+id/pushLabel"
-                        android:layout_width="0dp"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/sp16"
-                        android:text="푸시 알림"/>
+                        android:layout_marginTop="24dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:id="@+id/pushLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp16"
+                            android:text="푸시 알림"/>
 
-                    <Switch
-                        style="@style/Switch.Light"
-                        android:id="@+id/pushSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                        <Switch
+                            style="@style/Switch.Light"
+                            android:id="@+id/pushSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/TextBlack_4c4c4c"
-                        android:id="@+id/emailLabel"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/sp16"
-                        android:text="이메일 알림"/>
+                        android:layout_marginTop="24dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <Switch
-                        style="@style/Switch.Light"
-                        android:id="@+id/emailSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:id="@+id/emailLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp16"
+                            android:text="이메일 알림"/>
 
-                </LinearLayout>
+                        <Switch
+                            style="@style/Switch.Light"
+                            android:id="@+id/emailSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
-            </LinearLayout>
-
-            <TextView
-                style="@style/TextGrey_c0c0c0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginBottom="@dimen/dp12"
-                android:textSize="@dimen/sp16"
-                android:text="알림 종류"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dp32"
-                android:orientation="vertical"
-                android:background="@color/white_ffffff">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/TextBlack_4c4c4c"
-                        android:id="@+id/marketingLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/sp16"
-                        android:text="마케팅 알림"/>
-
-                    <Switch
-                        style="@style/Switch.Light"
-                        android:id="@+id/marketingSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGrey_c0c0c0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:textSize="@dimen/sp16"
+                    android:text="알림 종류"/>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="혜택 및 이벤트 소식 등과 관련된 사항을 안내해드립니다."
-                    android:textSize="12sp" />
+                    android:padding="@dimen/dp32"
+                    android:orientation="vertical"
+                    android:background="@color/white_ffffff">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:id="@+id/marketingLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/sp16"
+                            android:text="마케팅 알림"/>
+
+                        <Switch
+                            style="@style/Switch.Light"
+                            android:id="@+id/marketingSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/TextGrey_c0c0c0.Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="혜택 및 이벤트 소식 등과 관련된 사항을 안내해드립니다."
+                        android:textSize="12sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

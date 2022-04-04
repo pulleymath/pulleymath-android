@@ -1,217 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
-    tools:context=".activities.learning.tabFragment.MyLogFragment">
-
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bgView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
-        android:layout_margin="@dimen/dp32"
-        android:padding="@dimen/dp32"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_fafafa"
+        tools:context=".activities.learning.tabFragment.MyLogFragment">
 
-        <com.freewheelin.pulley.views.DaebakTabRadio
-            android:id="@+id/studyTypeRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            app:layout_constraintStart_toStartOf="@+id/bgView"
-            app:layout_constraintTop_toTopOf="@+id/bgView"
-            app:tabWidth="@dimen/primaryBtn_width_96dp"/>
-
-
-        <com.freewheelin.pulley.views.DaebakTabRadio
-            android:id="@+id/pieceTypeRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginStart="@dimen/dp32"
-            app:layout_constraintStart_toEndOf="@+id/studyTypeRadio"
-            app:layout_constraintTop_toTopOf="@+id/studyTypeRadio"
-            app:layout_constraintBottom_toBottomOf="@+id/studyTypeRadio"
-            app:tabWidth="@dimen/primaryBtn_width_96dp"/>
-
-        <com.freewheelin.pulley.views.DaebakTabRadio
-            android:id="@+id/finishRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginStart="@dimen/dp32"
-            app:layout_constraintStart_toEndOf="@+id/pieceTypeRadio"
-            app:layout_constraintTop_toTopOf="@+id/studyTypeRadio"
-            app:layout_constraintBottom_toBottomOf="@+id/studyTypeRadio"
-            app:tabWidth="@dimen/primaryBtn_width_96dp"/>
-
-
-        <CheckBox
-            android:id="@+id/allCheckBox"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginTop="40dp"
-            android:button="@drawable/checkbox_blue"
-            app:layout_constraintStart_toStartOf="@+id/bgView"
-            app:layout_constraintTop_toBottomOf="@+id/studyTypeRadio" />
-
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/categorySl"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:label="카테고리"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintStart_toEndOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toStartOf="@+id/firstBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"/>
-
-        <View
-            android:id="@+id/firstBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:layout_height="16dp"
-            android:layout_marginStart="@dimen/dp104"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintStart_toEndOf="@+id/allCheckBox"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/problemCntSl"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:label="푼 문항"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toEndOf="@+id/secondBorder"
-            app:layout_constraintStart_toStartOf="@+id/firstBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
-
-        <View
-            android:id="@+id/secondBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:layout_height="16dp"
-            android:layout_marginStart="@dimen/dp80"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintStart_toEndOf="@+id/firstBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/titleSl"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/dp16"
-            app:label="제목"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintStart_toEndOf="@+id/secondBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
-
-        <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:id="@+id/titleBorder"
-            android:layout_height="16dp"
-            android:layout_marginEnd="@dimen/dp80"
-            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"/>
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/scoreSl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:label="점수"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toEndOf="@+id/thirdBorder"
-            app:layout_constraintStart_toStartOf="@+id/titleBorder"/>
-
-        <View
-            android:id="@+id/thirdBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:layout_height="16dp"
-            android:layout_marginEnd="@dimen/dp80"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/createDateSl"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:label="생성일"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toEndOf="@+id/fourthBorder"
-            app:layout_constraintStart_toStartOf="@+id/thirdBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <View
-            android:id="@+id/fourthBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:layout_height="16dp"
-            android:layout_marginEnd="@dimen/dp80"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <com.freewheelin.pulley.views.textViews.SortableTextView
-            android:id="@+id/studyDateSl"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:label="학습일"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toEndOf="@+id/fifthBorder"
-            app:layout_constraintStart_toStartOf="@+id/fourthBorder"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-
-        <View
-            android:id="@+id/fifthBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
-            android:layout_height="16dp"
-            android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
-            app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintEnd_toEndOf="@+id/bgView"
-            app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
-        <View
-            android:id="@+id/horizontalBorder"
-            style="@style/Border_Grey_f2f2f2_Horizontal"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/allCheckBox"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bgView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:paddingBottom="28dp"
-            android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalBorder"
-            app:layout_constraintBottom_toBottomOf="@+id/bgView"
-            app:layout_constraintStart_toStartOf="@+id/bgView"
-            app:layout_constraintEnd_toEndOf="@+id/bgView">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:layout_margin="@dimen/dp32"
+            android:padding="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
-            android:id="@+id/emptyGuideTv"
-            android:layout_width="wrap_content"
+            <com.freewheelin.pulley.views.DaebakTabRadio
+                android:id="@+id/studyTypeRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                app:layout_constraintStart_toStartOf="@+id/bgView"
+                app:layout_constraintTop_toTopOf="@+id/bgView"
+                app:tabWidth="@dimen/primaryBtn_width_96dp"/>
+
+
+            <com.freewheelin.pulley.views.DaebakTabRadio
+                android:id="@+id/pieceTypeRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="@dimen/dp32"
+                app:layout_constraintStart_toEndOf="@+id/studyTypeRadio"
+                app:layout_constraintTop_toTopOf="@+id/studyTypeRadio"
+                app:layout_constraintBottom_toBottomOf="@+id/studyTypeRadio"
+                app:tabWidth="@dimen/primaryBtn_width_96dp"/>
+
+            <com.freewheelin.pulley.views.DaebakTabRadio
+                android:id="@+id/finishRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="@dimen/dp32"
+                app:layout_constraintStart_toEndOf="@+id/pieceTypeRadio"
+                app:layout_constraintTop_toTopOf="@+id/studyTypeRadio"
+                app:layout_constraintBottom_toBottomOf="@+id/studyTypeRadio"
+                app:tabWidth="@dimen/primaryBtn_width_96dp"/>
+
+
+            <CheckBox
+                android:id="@+id/allCheckBox"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/dp16"
+                android:layout_marginTop="40dp"
+                android:button="@drawable/checkbox_blue"
+                app:layout_constraintStart_toStartOf="@+id/bgView"
+                app:layout_constraintTop_toBottomOf="@+id/studyTypeRadio" />
+
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/categorySl"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:label="카테고리"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintStart_toEndOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toStartOf="@+id/firstBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox"/>
+
+            <View
+                android:id="@+id/firstBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/dp104"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintStart_toEndOf="@+id/allCheckBox"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/problemCntSl"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:label="푼 문항"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toEndOf="@+id/secondBorder"
+                app:layout_constraintStart_toStartOf="@+id/firstBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
+
+            <View
+                android:id="@+id/secondBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginStart="@dimen/dp80"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintStart_toEndOf="@+id/firstBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/titleSl"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/dp16"
+                app:label="제목"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintStart_toEndOf="@+id/secondBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox"></com.freewheelin.pulley.views.textViews.SortableTextView>
+
+            <View
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:id="@+id/titleBorder"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp80"
+                app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"/>
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/scoreSl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:label="점수"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toEndOf="@+id/thirdBorder"
+                app:layout_constraintStart_toStartOf="@+id/titleBorder"/>
+
+            <View
+                android:id="@+id/thirdBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp80"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/createDateSl"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:label="생성일"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toEndOf="@+id/fourthBorder"
+                app:layout_constraintStart_toStartOf="@+id/thirdBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <View
+                android:id="@+id/fourthBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp80"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <com.freewheelin.pulley.views.textViews.SortableTextView
+                android:id="@+id/studyDateSl"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:label="학습일"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toEndOf="@+id/fifthBorder"
+                app:layout_constraintStart_toStartOf="@+id/fourthBorder"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+
+            <View
+                android:id="@+id/fifthBorder"
+                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
+                app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintEnd_toEndOf="@+id/bgView"
+                app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
+            <View
+                android:id="@+id/horizontalBorder"
+                style="@style/Border_Grey_f2f2f2_Horizontal"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/allCheckBox"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingBottom="28dp"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalBorder"
+                app:layout_constraintBottom_toBottomOf="@+id/bgView"
+                app:layout_constraintStart_toStartOf="@+id/bgView"
+                app:layout_constraintEnd_toEndOf="@+id/bgView">
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:id="@+id/emptyGuideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="@dimen/sp16"
+                android:text="학습 데이터가 없습니다. 학습을 진행해보세요!"
+                app:layout_constraintEnd_toEndOf="@+id/rv"
+                app:layout_constraintTop_toTopOf="@+id/rv"
+                app:layout_constraintStart_toStartOf="@+id/rv"
+                app:layout_constraintBottom_toBottomOf="@+id/rv"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.freewheelin.pulley.views.WrongManageView
+            android:id="@+id/wrongManageView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textSize="@dimen/sp16"
-            android:text="학습 데이터가 없습니다. 학습을 진행해보세요!"
-            app:layout_constraintEnd_toEndOf="@+id/rv"
-            app:layout_constraintTop_toTopOf="@+id/rv"
-            app:layout_constraintStart_toStartOf="@+id/rv"
-            app:layout_constraintBottom_toBottomOf="@+id/rv"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.freewheelin.pulley.views.WrongManageView
-        android:id="@+id/wrongManageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

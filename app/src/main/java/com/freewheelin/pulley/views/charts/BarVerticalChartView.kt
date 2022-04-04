@@ -9,9 +9,9 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.*
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.view_bar_vertical.view.*
-import kotlinx.android.synthetic.main.view_bar_vertical_chart.view.*
+import com.freewheelin.pulley.databinding.ViewBarVerticalChartBinding
 import java.io.Serializable
 
 interface BarVerticalChartViewListener {
@@ -28,10 +28,7 @@ class BarVerticalChartView: ConstraintLayout, VerticalBarListener {
 
 
     var selectedBar: VerticalBarView? = null
-
-    init {
-        LayoutInflater.from(context).inflate(R.layout.view_bar_vertical_chart, this)
-    }
+    var binding: ViewBarVerticalChartBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_bar_vertical_chart, this, true)
 
     fun setValues(values: List<Serializable>) {
 
@@ -181,18 +178,18 @@ class BarVerticalChartView: ConstraintLayout, VerticalBarListener {
     }
 
     fun setEmptyGuideText(text: String) {
-        emptyGuideTv.text = text
+        binding.emptyGuideTv.text = text
     }
 
     fun showEmptyGuideTv() {
-        horizontalBorder.visibility = View.GONE
-        emptyGuideTv.visibility = View.VISIBLE
+        binding.horizontalBorder.visibility = View.GONE
+        binding.emptyGuideTv.visibility = View.VISIBLE
 
     }
 
     fun hideEmptyGuideTv() {
-        horizontalBorder.visibility = View.VISIBLE
-        emptyGuideTv.visibility = View.GONE
+        binding.horizontalBorder.visibility = View.VISIBLE
+        binding.emptyGuideTv.visibility = View.GONE
     }
 
     override fun onDetailBtnClicked(item: VerticalBarView) {

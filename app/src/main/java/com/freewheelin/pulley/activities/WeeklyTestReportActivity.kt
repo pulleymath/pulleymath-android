@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -18,6 +19,8 @@ import com.freewheelin.pulley.assets.Subject
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.ActivityTestReportWeeklyBinding
+import com.freewheelin.pulley.databinding.ItemTestReportScoringBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.Test
@@ -28,10 +31,11 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import kotlinx.android.synthetic.main.activity_test_report_weekly.*
-import kotlinx.android.synthetic.main.item_test_report_scoring.view.*
 
 class WeeklyTestReportActivity : AppCompatActivity() {
+    private val binding: ActivityTestReportWeeklyBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_test_report_weekly,null,false)
+    }
     lateinit var test: Test
     val curation: TestCuration
         get() = TestCuration(this)
@@ -48,77 +52,81 @@ class WeeklyTestReportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_report_weekly)
+        setContentView(binding.root)
         initUI()
 
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
         val test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
-        TestManager.getTestReport(this, user!!, test) {
-            this@WeeklyTestReportActivity.test = it
-            scoreTv.text = "${it.score}"
-            scoringRv.adapter = ScoringAdapter()
-            scoreGuideTv.text = curation.getWeeklyReportGuideQ(it.getLastTimeScore(), it.problems, user!!.fullName)
-            setChartData()
+        with(binding) {
+            TestManager.getTestReport(this@WeeklyTestReportActivity, user!!, test) {
+                this@WeeklyTestReportActivity.test = it
+                scoreTv.text = "${it.score}"
+                scoringRv.adapter = ScoringAdapter()
+                scoreGuideTv.text = curation.getWeeklyReportGuideQ(it.getLastTimeScore(), it.problems, user!!.fullName)
+                setChartData()
 
-            scoreTv.show()
-            scoreLabel.show()
-            scoreGuideTv.show()
-            reviewBtn.show()
-            historyChart.show()
-            correctRateGuideTv.show()
+                scoreTv.show()
+                scoreLabel.show()
+                scoreGuideTv.show()
+                reviewBtn.show()
+                historyChart.show()
+                correctRateGuideTv.show()
 
-            correctRateGuideTv.text = "* 정오 옆의 숫자는 ${it.studentRating}등급 평균 정답률입니다."
-            if(it.weakChapterAnalysis == null)
-                lowestNothingGuideTv.show()
-            else {
-                lowestSubjectTv.text = Subject.init(it.weakChapterAnalysis!!.code).filterText
-                lowestUnitTv.text = it.weakChapterAnalysis?.name
-                lowestPenChart.setValues(it.weakChapterAnalysis!!.myRate, it.weakChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
-                lowestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
-                lowestSubjectTv.show()
-                lowestUnitTv.show()
-                lowestPenChart.show()
-            }
+                correctRateGuideTv.text = "* 정오 옆의 숫자는 ${it.studentRating}등급 평균 정답률입니다."
+                if(it.weakChapterAnalysis == null)
+                    lowestNothingGuideTv.show()
+                else {
+                    lowestSubjectTv.text = Subject.init(it.weakChapterAnalysis!!.code).filterText
+                    lowestUnitTv.text = it.weakChapterAnalysis?.name
+                    lowestPenChart.setValues(it.weakChapterAnalysis!!.myRate, it.weakChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
+                    lowestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
+                    lowestSubjectTv.show()
+                    lowestUnitTv.show()
+                    lowestPenChart.show()
+                }
 
-            if(it.strongChapterAnalysis == null)
-                highestNothingGuideTv.show()
-            else {
-                highestSubjectTv.text = Subject.init(it.strongChapterAnalysis!!.code).filterText
-                highestUnitTv.text = it.strongChapterAnalysis?.name
-                highestPenChart.setValues(it.strongChapterAnalysis!!.myRate, it.strongChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
-                highestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
-                highestSubjectTv.show()
-                highestUnitTv.show()
-                highestPenChart.show()
+                if(it.strongChapterAnalysis == null)
+                    highestNothingGuideTv.show()
+                else {
+                    highestSubjectTv.text = Subject.init(it.strongChapterAnalysis!!.code).filterText
+                    highestUnitTv.text = it.strongChapterAnalysis?.name
+                    highestPenChart.setValues(it.strongChapterAnalysis!!.myRate, it.strongChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
+                    highestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
+                    highestSubjectTv.show()
+                    highestUnitTv.show()
+                    highestPenChart.show()
+                }
             }
         }
     }
 
     private fun initUI() {
-        scoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 4
-        scoringRv.layoutManager = GridLayoutManager(this, 4, GridLayoutManager.HORIZONTAL, false).also {
-            it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return 1
+        with(binding) {
+            scoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 4
+            scoringRv.layoutManager = GridLayoutManager(this@WeeklyTestReportActivity, 4, GridLayoutManager.HORIZONTAL, false).also {
+                it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return 1
+                    }
                 }
             }
-        }
 
-        lowestPenChart.setLabelTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp14))
-        lowestPenChart.setValueTextSize(resources.getDimension(R.dimen.sp14))
-        lowestPenChart.setLabelWidth(resources.getDimension(R.dimen.dp80).toInt())
-        highestPenChart.setLabelTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp14))
-        highestPenChart.setValueTextSize(resources.getDimension(R.dimen.sp14))
-        highestPenChart.setLabelWidth(resources.getDimension(R.dimen.dp80).toInt())
+            lowestPenChart.setLabelTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp14))
+            lowestPenChart.setValueTextSize(resources.getDimension(R.dimen.sp14))
+            lowestPenChart.setLabelWidth(resources.getDimension(R.dimen.dp80).toInt())
+            highestPenChart.setLabelTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp14))
+            highestPenChart.setValueTextSize(resources.getDimension(R.dimen.sp14))
+            highestPenChart.setLabelWidth(resources.getDimension(R.dimen.dp80).toInt())
 
-        initChart(historyChart)
-        hideViews()
-        xBtn.extensionTouchArea(24.toPx())
-        xBtn.setOnClickListener {
-            this.onBackPressed()
-        }
-        reviewBtn.setOnClickListener {
-            onReviewBtnClicked()
+            initChart(historyChart)
+            hideViews()
+            xBtn.extensionTouchArea(24.toPx())
+            xBtn.setOnClickListener {
+                onBackPressed()
+            }
+            reviewBtn.setOnClickListener {
+                onReviewBtnClicked()
+            }
         }
     }
 
@@ -177,7 +185,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
                 ContextCompat.getColor(this, R.color.purple_ACACFF)
         )
 
-        historyChart.data = BarData(barDataSet).apply {
+        binding.historyChart.data = BarData(barDataSet).apply {
             barWidth = 0.5f
             isHighlightEnabled = false
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
@@ -194,48 +202,52 @@ class WeeklyTestReportActivity : AppCompatActivity() {
     }
 
     private fun hideViews() {
-        scoreTv.visibility = View.INVISIBLE
-        scoreLabel.visibility = View.INVISIBLE
-        scoreGuideTv.visibility = View.INVISIBLE
-        reviewBtn.visibility = View.INVISIBLE
-        historyChart.visibility = View.INVISIBLE
-        lowestSubjectTv.visibility = View.INVISIBLE
-        lowestUnitTv.visibility = View.INVISIBLE
-        lowestPenChart.visibility = View.INVISIBLE
-        lowestNothingGuideTv.visibility = View.INVISIBLE
+        with(binding) {
+            scoreTv.visibility = View.INVISIBLE
+            scoreLabel.visibility = View.INVISIBLE
+            scoreGuideTv.visibility = View.INVISIBLE
+            reviewBtn.visibility = View.INVISIBLE
+            historyChart.visibility = View.INVISIBLE
+            lowestSubjectTv.visibility = View.INVISIBLE
+            lowestUnitTv.visibility = View.INVISIBLE
+            lowestPenChart.visibility = View.INVISIBLE
+            lowestNothingGuideTv.visibility = View.INVISIBLE
 
-        highestSubjectTv.visibility = View.INVISIBLE
-        highestUnitTv.visibility = View.INVISIBLE
-        highestPenChart.visibility = View.INVISIBLE
-        highestNothingGuideTv.visibility = View.INVISIBLE
+            highestSubjectTv.visibility = View.INVISIBLE
+            highestUnitTv.visibility = View.INVISIBLE
+            highestPenChart.visibility = View.INVISIBLE
+            highestNothingGuideTv.visibility = View.INVISIBLE
 
-        correctRateGuideTv.visibility = View.INVISIBLE
+            correctRateGuideTv.visibility = View.INVISIBLE
+        }
     }
 
     private fun showViews() {
-        scoreTv.show()
-        scoreLabel.show()
-        scoreGuideTv.show()
-        reviewBtn.show()
-        historyChart.show()
-        lowestSubjectTv.show()
-        lowestUnitTv.show()
-        lowestPenChart.show()
-        lowestNothingGuideTv.show()
+        with(binding) {
+            scoreTv.show()
+            scoreLabel.show()
+            scoreGuideTv.show()
+            reviewBtn.show()
+            historyChart.show()
+            lowestSubjectTv.show()
+            lowestUnitTv.show()
+            lowestPenChart.show()
+            lowestNothingGuideTv.show()
 
-        highestSubjectTv.show()
-        highestUnitTv.show()
-        highestPenChart.show()
-        highestNothingGuideTv.show()
+            highestSubjectTv.show()
+            highestUnitTv.show()
+            highestPenChart.show()
+            highestNothingGuideTv.show()
 
-        correctRateGuideTv.show()
-        scoringRv.show()
+            correctRateGuideTv.show()
+            scoringRv.show()
+        }
     }
 
     inner class ScoringAdapter: RecyclerView.Adapter<WeeklyScoringHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyScoringHolder {
-            val view = LayoutInflater.from(this@WeeklyTestReportActivity).inflate(R.layout.item_test_report_scoring, parent, false)
-            return WeeklyScoringHolder(view)
+            val itemBinding: ItemTestReportScoringBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_test_report_scoring, parent, false)
+            return WeeklyScoringHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -259,12 +271,12 @@ class WeeklyTestReportActivity : AppCompatActivity() {
 }
 
 
-class WeeklyScoringHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val endBorder = view.endBorder
-    val bottomBorder= view.bottomBorder
-    val numTv = view.numTv
-    val resultIv = view.resultIv
-    val correctRateTv = view.correctRateTv
+class WeeklyScoringHolder(val itemBinding: ItemTestReportScoringBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val endBorder = itemBinding.endBorder
+    val bottomBorder= itemBinding.bottomBorder
+    val numTv = itemBinding.numTv
+    val resultIv = itemBinding.resultIv
+    val correctRateTv = itemBinding.correctRateTv
 
     fun set(problem: Problem) {
         numTv.text = "${problem.problemNum}"

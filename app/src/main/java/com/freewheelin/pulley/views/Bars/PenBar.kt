@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ViewBarPenBinding
 import com.freewheelin.pulley.utils.TextUtils
-import kotlinx.android.synthetic.main.view_bar_pen.view.*
 
 class PenBar : ConstraintLayout {
 
@@ -36,27 +37,24 @@ class PenBar : ConstraintLayout {
                 blue -> R.drawable.bg_blue_30a4ff_round_2
                 else -> R.drawable.bg_grey_e0e0e0_round_2
             }
-            progressBar.background = ContextCompat.getDrawable(context, drawableResource)
+            binding.progressBar.background = ContextCompat.getDrawable(context, drawableResource)
         }
 
 
     var value: Float = 0f
         set(value) {
             field = value
-            valueTv.text = TextUtils.percentFormat.format(value)
-            val layoutParams = progressBar.layoutParams as LinearLayout.LayoutParams
+            binding.valueTv.text = TextUtils.percentFormat.format(value)
+            val layoutParams = binding.progressBar.layoutParams as LinearLayout.LayoutParams
             layoutParams.weight = value * 100
         }
 
     var title: String
-        get() = titleTv.text.toString()
+        get() = binding.titleTv.text.toString()
         set(value) {
-            titleTv.text = value
+            binding.titleTv.text = value
         }
-
-    init {
-        LayoutInflater.from(context).inflate(R.layout.view_bar_pen, this)
-    }
+    var binding: ViewBarPenBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_bar_pen, this, true)
 
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.PenBar)

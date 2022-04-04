@@ -1,202 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity">
-
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="@color/white_ffffff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="@dimen/dp32"
-            android:src="@drawable/ic_arrow_black_left"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="학습 내역"
-            android:textSize="@dimen/sp18"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/navBar"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/shadow_clear"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar">
-
-        <com.freewheelin.pulley.views.DaebakTabRadio
-            android:id="@+id/categoryTab"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp48"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabWidth="@dimen/dp96" />
-
-        <com.freewheelin.pulley.views.DaebakTabRadio
-            android:id="@+id/ingTab"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/categoryTab"
-            app:layout_constraintTop_toBottomOf="@+id/categoryTab"
-            app:tabWidth="@dimen/dp96" />
-
-
-        <LinearLayout
-            android:id="@+id/topHeaderView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/white_ffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingTab">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:layout_width="@dimen/dp72"
-                android:layout_height="@dimen/dp48"
-                android:gravity="center"
-                android:text="날짜"
-                android:textSize="@dimen/sp16" />
-
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp24"
-                android:layout_marginStart="@dimen/dp16"
-                android:gravity="center"
-                android:text="분류"
-                android:textSize="@dimen/sp16" />
-
-            <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:layout_width="0dp"
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp16"
-                android:layout_weight="1"
-                android:text="제목"
-                android:textSize="@dimen/sp16" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/problemCntContainer"
-                android:layout_width="@dimen/dp144"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/dp16"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/problemCntLabel"
-                    style="@style/TextGrey_9f9f9f.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="푼 문제/전체 문제"
-                    android:textSize="@dimen/sp16"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:background="@null"
+                android:padding="@dimen/dp32"
+                android:src="@drawable/ic_arrow_black_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
-                android:layout_width="@dimen/dp64"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="정답률"
-                android:textSize="@dimen/sp16" />
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="학습 내역"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                android:layout_width="@dimen/dp36"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp8" />
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp8" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/view3"
-            style="@style/Border_Grey_e8e8e8_Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            app:layout_constraintEnd_toEndOf="@+id/topHeaderView"
-            app:layout_constraintStart_toStartOf="@+id/topHeaderView"
-            app:layout_constraintTop_toBottomOf="@+id/topHeaderView" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:paddingStart="@dimen/dp48"
-            android:paddingEnd="@dimen/dp48"
+            android:background="@drawable/shadow_clear"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topHeaderView"
-            tools:listitem="@layout/item_study_list" />
+            app:layout_constraintTop_toBottomOf="@+id/navBar">
 
-        <TextView
-            android:id="@+id/emptyGuideTv"
-            style="@style/TextGrey_c0c0c0.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:lineSpacingExtra="8sp"
-            android:text="학습 데이터가 없습니다.\n&lt;테스트&gt; &lt;유형학습&gt; &lt;모의고사&gt; 탭에서 학습을 진행할 수 있어요."
-            android:textSize="@dimen/sp16"
-            app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-            app:layout_constraintStart_toStartOf="@+id/recyclerView"
-            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+            <com.freewheelin.pulley.views.DaebakTabRadio
+                android:id="@+id/categoryTab"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginStart="@dimen/dp48"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabWidth="@dimen/dp96" />
 
-        <View
-            android:id="@+id/viewShadow"
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:background="@drawable/gradient_shadow_under_list_header"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@+id/topHeaderView"
-            app:layout_constraintStart_toStartOf="@+id/topHeaderView"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            <com.freewheelin.pulley.views.DaebakTabRadio
+                android:id="@+id/ingTab"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/categoryTab"
+                app:layout_constraintTop_toBottomOf="@+id/categoryTab"
+                app:tabWidth="@dimen/dp96" />
+
+
+            <LinearLayout
+                android:id="@+id/topHeaderView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ingTab">
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f.Bold"
+                    android:layout_width="@dimen/dp72"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center"
+                    android:text="날짜"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f.Bold"
+                    android:layout_width="@dimen/dp60"
+                    android:layout_height="@dimen/dp24"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:gravity="center"
+                    android:text="분류"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f.Bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_weight="1"
+                    android:text="제목"
+                    android:textSize="@dimen/sp16" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/problemCntContainer"
+                    android:layout_width="@dimen/dp144"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/problemCntLabel"
+                        style="@style/TextGrey_9f9f9f.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="푼 문제/전체 문제"
+                        android:textSize="@dimen/sp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    style="@style/TextGrey_9f9f9f.Bold"
+                    android:layout_width="@dimen/dp64"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="정답률"
+                    android:textSize="@dimen/sp16" />
+
+                <View
+                    android:layout_width="@dimen/dp36"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/dp8" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/dp8" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view3"
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                app:layout_constraintEnd_toEndOf="@+id/topHeaderView"
+                app:layout_constraintStart_toStartOf="@+id/topHeaderView"
+                app:layout_constraintTop_toBottomOf="@+id/topHeaderView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="@dimen/dp48"
+                android:paddingEnd="@dimen/dp48"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topHeaderView"
+                tools:listitem="@layout/item_study_list" />
+
+            <TextView
+                android:id="@+id/emptyGuideTv"
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="8sp"
+                android:text="학습 데이터가 없습니다.\n&lt;테스트&gt; &lt;유형학습&gt; &lt;모의고사&gt; 탭에서 학습을 진행할 수 있어요."
+                android:textSize="@dimen/sp16"
+                app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+                app:layout_constraintStart_toStartOf="@+id/recyclerView"
+                app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+            <View
+                android:id="@+id/viewShadow"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:background="@drawable/gradient_shadow_under_list_header"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/topHeaderView"
+                app:layout_constraintStart_toStartOf="@+id/topHeaderView"
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

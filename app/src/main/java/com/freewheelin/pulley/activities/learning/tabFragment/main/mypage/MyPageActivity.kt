@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageActionListener
@@ -14,20 +16,15 @@ import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.ServerCommunicator
+import com.freewheelin.pulley.databinding.ActivityMyPageBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
-import kotlinx.android.synthetic.main.activity_my_page.*
-import kotlinx.android.synthetic.main.activity_my_page.availableDurationTv
-import kotlinx.android.synthetic.main.activity_my_page.emailTv
-import kotlinx.android.synthetic.main.activity_my_page.membershipBtn
-import kotlinx.android.synthetic.main.activity_my_page.nameTv
-import kotlinx.android.synthetic.main.activity_my_page.phoneTv
-import kotlinx.android.synthetic.main.activity_my_page.serviceTv
-
 
 class MyPageActivity : AppCompatActivity(), MyPageActionListener {
-
+    private val binding: ActivityMyPageBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_my_page, null, false)
+    }
     companion object {
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MyPageActivity::class.java)
@@ -37,7 +34,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_page)
+        setContentView(binding.root)
         setUpUI()
     }
 
@@ -47,30 +44,35 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
     }
 
     fun setUpUI() {
+        with(binding) {
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val topBottomMargin = resources.getDimension(R.dimen.dp16) * 2
-        val lp = rootView.layoutParams
-        lp.height = DisplayUtils.getScrenHeight(this) - topBottomMargin.toInt()
-        rootView.layoutParams = lp
+            val topBottomMargin = resources.getDimension(R.dimen.dp16) * 2
+            val lp = rootView.layoutParams
+            lp.height = DisplayUtils.getScrenHeight(this@MyPageActivity) - topBottomMargin.toInt()
+            rootView.layoutParams = lp
 
-        pwModifyBtn.setOnClickListener { onPwModifyBtnClicked() }
-        membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
-        phoneModifyBtn.setOnClickListener { onPhoneModifyBtnClicked() }
-        recommendUnitSettingBtn.setOnClickListener { onRecommendUnitSettingBtnClickked() }
-        optionalUnitSettingBtn.setOnClickListener { onOptionalUnitSettingBtnClicked() }
-        studyInfoSettingBtn.setOnClickListener { onStudyInfoSettingBtnClicked() }
-        myPageContainer.setOnTouchListener { view, motionEvent -> true }
+            pwModifyBtn.setOnClickListener { onPwModifyBtnClicked() }
+            membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
+            phoneModifyBtn.setOnClickListener { onPhoneModifyBtnClicked() }
+            recommendUnitSettingBtn.setOnClickListener { onRecommendUnitSettingBtnClickked() }
+            optionalUnitSettingBtn.setOnClickListener { onOptionalUnitSettingBtnClicked() }
+            studyInfoSettingBtn.setOnClickListener { onStudyInfoSettingBtnClicked() }
+            myPageContainer.setOnTouchListener { view, motionEvent -> true }
 
-        val user = user ?: return
-        greetingLabel.text = String.format(getString(R.string.greeting_name_format), user.fullName)
-        nameTv.text = user.fullName
-        emailTv.text = user.email
-        phoneTv.text = user.cellPhone
-        serviceTv.text = user.serviceName
-        availableDurationTv.text = getDurationText(user)
-        pwdModifyGuideTv.text = String.format(getString(R.string.guide_reset_password_email_info_format), user.email)
+            val user = user ?: return
+            greetingLabel.text =
+                String.format(getString(R.string.greeting_name_format), user.fullName)
+            nameTv.text = user.fullName
+            emailTv.text = user.email
+            phoneTv.text = user.cellPhone
+            serviceTv.text = user.serviceName
+            availableDurationTv.text = getDurationText(user)
+            pwdModifyGuideTv.text = String.format(
+                getString(R.string.guide_reset_password_email_info_format),
+                user.email
+            )
 
-        user.log()
+            user.log()
 
 //        val unit = user.studiedUnit
 //        studiedUnitTv.text = unit.fold("", { acc, unit ->
@@ -79,7 +81,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
 //            else
 //                acc + ", " + unit.title
 //        })
-        studiedUnitTv.text = user!!.getCommonSubjectText()
+            studiedUnitTv.text = user!!.getCommonSubjectText()
 
 //        val optional = user.optionalUnit
 //        optionalUnitTv.text = optional.fold("", { acc, optional ->
@@ -88,27 +90,28 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
 //            else
 //                acc + ", " + optional.title
 //        })
-        optionalUnitTv.text = calcNoneText(user?.getOptionalSubjectText())
+            optionalUnitTv.text = calcNoneText(user?.getOptionalSubjectText())
 
-        if (user.hasPulleyPlus) {
-            payUserContainer.visibility = View.VISIBLE
-            freeUserContainer.visibility = View.GONE
-        } else {
-            payUserContainer.visibility = View.GONE
-            freeUserContainer.visibility = View.VISIBLE
+            if (user.hasPulleyPlus) {
+                payUserContainer.visibility = View.VISIBLE
+                freeUserContainer.visibility = View.GONE
+            } else {
+                payUserContainer.visibility = View.GONE
+                freeUserContainer.visibility = View.VISIBLE
+            }
+
+            var gradeText = user.grade.text
+
+            if (user.grade == Grade.High_2 || user.grade == Grade.High_3 || user.grade == Grade.AfterHigh) {
+                gradeText += ", ${user.major.title}"
+            }
+
+            if (user.grade == Grade.High_1 || user.grade == Grade.High_2 || user.grade == Grade.High_3 || user.grade == Grade.AfterHigh) {
+                gradeText += ", ${user.ratingText}"
+            }
+
+            gradeTv.text = gradeText
         }
-
-        var gradeText = user.grade.text
-
-        if (user.grade == Grade.High_2 || user.grade == Grade.High_3 || user.grade == Grade.AfterHigh) {
-            gradeText += ", ${user.major.title}"
-        }
-
-        if (user.grade == Grade.High_1 || user.grade == Grade.High_2 || user.grade == Grade.High_3 || user.grade == Grade.AfterHigh) {
-            gradeText += ", ${user.ratingText}"
-        }
-
-        gradeTv.text = gradeText
     }
 
     private fun calcNoneText(text: String?): String {

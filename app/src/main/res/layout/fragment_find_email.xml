@@ -1,198 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
-    android:animateLayoutChanges="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.auth.findEmailAndPw.FindEmailFragment">
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/scrollContentsCl"
+        android:background="@color/white_fafafa"
+        android:animateLayoutChanges="true"
+        tools:context=".activities.auth.findEmailAndPw.FindEmailFragment">
+
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/inputContainerCl"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.4">
+                android:id="@+id/scrollContentsCl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
-                    android:id="@+id/inputGuideLabel"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/inputContainerCl"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="12sp"
-                    android:textSize="@dimen/dp24"
-                    android:text="이메일을 찾아드릴게요! 아래 내용을 입력해주세요."
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-
-                <com.freewheelin.pulley.views.editText.DaebakInputField
-                    android:id="@+id/nameDet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
-                    app:DaebakInputField_Label="이름"
-                    app:DaebakInputField_maxLength="15"
-                    app:layout_constraintTop_toBottomOf="@+id/inputGuideLabel"/>
-
-                <com.freewheelin.pulley.views.editText.DaebakInputField
-                    android:id="@+id/phoneDet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:DaebakInputField_Label="휴대폰 번호"
-                    app:layout_constraintTop_toBottomOf="@+id/nameDet"/>
-
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
-                    android:id="@+id/findEmailBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="48dp"
-                    android:text="이메일 찾기"
-                    app:buttonTheme="blue"
-                    app:ButtonTextSize="@dimen/dp18"
-                    app:layout_constraintTop_toBottomOf="@+id/phoneDet"/>
-
-                <LinearLayout
-                    android:id="@+id/notFoundMsg"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/findEmailBtn"
-                    app:layout_constraintStart_toStartOf="@+id/findEmailBtn">
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_exclamation_red"/>
-
-                    <TextView
-                        style="@style/TextRed_fe7b67.Bold"
-                        android:id="@+id/errorTv"
-                        android:textSize="@dimen/dp14"
-                        android:text="@string/text_not_matched_member_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layoutSignup"
-                    android:layout_marginTop="48dp"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/findEmailBtn"
-                    app:layout_constraintStart_toStartOf="@+id/findEmailBtn">
-
-                    <TextView
-                        style="@style/TextBlack_4c4c4c"
-                        android:textSize="@dimen/sp14"
-                        android:text="가입한 메일이 없나요?"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:id="@+id/signupBtn"
-                        style="@style/TextPurple_6d6dff.ExtraBold"
-                        android:textSize="@dimen/sp14"
-                        android:text="@string/text_to_regist_member"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"/>
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/resultContainerCl"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp24"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/inputContainerCl">
-
-                <TextView
-                    android:id="@+id/resultGuideLabel"
-                    style="@style/TextBlack_4c4c4c.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="@dimen/dp12"
-                    android:text="이메일 검색 결과입닌다.로그인하러 가볼까요?"
-                    android:textSize="@dimen/dp24"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_bias="0.4">
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:id="@+id/inputGuideLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="12sp"
+                        android:textSize="@dimen/dp24"
+                        android:text="이메일을 찾아드릴게요! 아래 내용을 입력해주세요."
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
 
-                <View
-                    android:id="@+id/emailContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="144dp"
-                    android:layout_marginTop="48dp"
-                    android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8"
-                    app:layout_constraintTop_toBottomOf="@+id/resultGuideLabel"></View>
+                    <com.freewheelin.pulley.views.editText.DaebakInputField
+                        android:id="@+id/nameDet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="48dp"
+                        app:DaebakInputField_Label="이름"
+                        app:DaebakInputField_maxLength="15"
+                        app:layout_constraintTop_toBottomOf="@+id/inputGuideLabel"/>
 
-                <TextView
-                    android:id="@+id/emailTv"
-                    style="@style/TextBlack_4c4c4c"
-                    android:layout_width="wrap_content"
+                    <com.freewheelin.pulley.views.editText.DaebakInputField
+                        android:id="@+id/phoneDet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        app:DaebakInputField_Label="휴대폰 번호"
+                        app:layout_constraintTop_toBottomOf="@+id/nameDet"/>
+
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        android:id="@+id/findEmailBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="48dp"
+                        android:text="이메일 찾기"
+                        app:buttonTheme="blue"
+                        app:ButtonTextSize="@dimen/dp18"
+                        app:layout_constraintTop_toBottomOf="@+id/phoneDet"/>
+
+                    <LinearLayout
+                        android:id="@+id/notFoundMsg"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/findEmailBtn"
+                        app:layout_constraintStart_toStartOf="@+id/findEmailBtn">
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_exclamation_red"/>
+
+                        <TextView
+                            style="@style/TextRed_fe7b67.Bold"
+                            android:id="@+id/errorTv"
+                            android:textSize="@dimen/dp14"
+                            android:text="@string/text_not_matched_member_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutSignup"
+                        android:layout_marginTop="48dp"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/findEmailBtn"
+                        app:layout_constraintStart_toStartOf="@+id/findEmailBtn">
+
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:textSize="@dimen/sp14"
+                            android:text="가입한 메일이 없나요?"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/signupBtn"
+                            style="@style/TextPurple_6d6dff.ExtraBold"
+                            android:textSize="@dimen/sp14"
+                            android:text="@string/text_to_regist_member"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/resultContainerCl"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:text="abcd@gmail.com"
-                    android:textSize="@dimen/dp18"
-                    app:layout_constraintBottom_toBottomOf="@+id/emailContainer"
+                    android:paddingTop="@dimen/dp24"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/emailContainer" />
+                    app:layout_constraintTop_toTopOf="@+id/inputContainerCl">
 
-                <Button
-                    android:id="@+id/clipBtn"
-                    style="@style/TextPurple_6d6dff.ExtraBold"
-                    android:layout_width="75dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/bg_white_ffffff_round"
-                    android:text="복사하기"
-                    android:textSize="@dimen/dp14"
-                    app:layout_constraintBottom_toBottomOf="@+id/emailTv"
-                    app:layout_constraintStart_toEndOf="@+id/emailTv"
-                    app:layout_constraintTop_toTopOf="@+id/emailTv" />
+                    <TextView
+                        android:id="@+id/resultGuideLabel"
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/dp12"
+                        android:text="이메일 검색 결과입닌다.로그인하러 가볼까요?"
+                        android:textSize="@dimen/dp24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
-                    android:id="@+id/loginBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="48dp"
-                    android:text="로그인하기"
-                    app:ButtonTextSize="@dimen/dp18"
-                    app:buttonTheme="blue"
-                    app:layout_constraintTop_toBottomOf="@+id/emailContainer" />
+
+                    <View
+                        android:id="@+id/emailContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="144dp"
+                        android:layout_marginTop="48dp"
+                        android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8"
+                        app:layout_constraintTop_toBottomOf="@+id/resultGuideLabel"></View>
+
+                    <TextView
+                        android:id="@+id/emailTv"
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:text="abcd@gmail.com"
+                        android:textSize="@dimen/dp18"
+                        app:layout_constraintBottom_toBottomOf="@+id/emailContainer"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/emailContainer" />
+
+                    <Button
+                        android:id="@+id/clipBtn"
+                        style="@style/TextPurple_6d6dff.ExtraBold"
+                        android:layout_width="75dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@drawable/bg_white_ffffff_round"
+                        android:text="복사하기"
+                        android:textSize="@dimen/dp14"
+                        app:layout_constraintBottom_toBottomOf="@+id/emailTv"
+                        app:layout_constraintStart_toEndOf="@+id/emailTv"
+                        app:layout_constraintTop_toTopOf="@+id/emailTv" />
+
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        android:id="@+id/loginBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="48dp"
+                        android:text="로그인하기"
+                        app:ButtonTextSize="@dimen/dp18"
+                        app:buttonTheme="blue"
+                        app:layout_constraintTop_toBottomOf="@+id/emailContainer" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

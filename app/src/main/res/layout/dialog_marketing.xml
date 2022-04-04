@@ -1,91 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/black50_000000"
-    android:orientation="vertical"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/marketingPager"
-        android:layout_width="720dp"
-        android:layout_height="560dp"
-        app:layout_constraintBottom_toTopOf="@+id/marketingButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/pagerIndicator"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/marketingPager"
-        app:layout_constraintEnd_toEndOf="@+id/marketingPager"
-        app:layout_constraintStart_toStartOf="@+id/marketingPager"
-        app:tabGravity="center"
-        app:tabIndicatorGravity="bottom"
-        app:tabIndicatorHeight="0dp"
-        app:tabPaddingEnd="3dp"
-        app:tabPaddingStart="3dp" />
-
-    <LinearLayout
-        android:id="@+id/marketingButtonLayout"
-        android:layout_width="720dp"
-        android:layout_height="64dp"
-        android:background="#e8e8e8"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/marketingPager">
-
-        <Button
-            android:id="@+id/btnMarketingNoShow"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#ffffff"
-            android:text="7일동안 보지 않기"
-            android:textSize="@dimen/dp18" />
-
-        <Button
-            android:id="@+id/btnMarketingClose"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="1dp"
-            android:layout_weight="1"
-            android:background="#ffffff"
-            android:text="닫기"
-            android:textSize="@dimen/dp18" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/loadingContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
+        android:background="@color/black50_000000"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyle"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/marketingPager"
+            android:layout_width="720dp"
+            android:layout_height="560dp"
+            app:layout_constraintBottom_toTopOf="@+id/marketingButtonLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/pagerIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
+            app:layout_constraintBottom_toBottomOf="@+id/marketingPager"
+            app:layout_constraintEnd_toEndOf="@+id/marketingPager"
+            app:layout_constraintStart_toStartOf="@+id/marketingPager"
+            app:tabGravity="center"
+            app:tabIndicatorGravity="bottom"
+            app:tabIndicatorHeight="0dp"
+            app:tabPaddingEnd="3dp"
+            app:tabPaddingStart="3dp" />
+
+        <LinearLayout
+            android:id="@+id/marketingButtonLayout"
+            android:layout_width="720dp"
+            android:layout_height="64dp"
+            android:background="#e8e8e8"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/marketingPager">
+
+            <Button
+                android:id="@+id/btnMarketingNoShow"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:text="7일동안 보지 않기"
+                android:textSize="@dimen/dp18" />
+
+            <Button
+                android:id="@+id/btnMarketingClose"
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="1dp"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:text="닫기"
+                android:textSize="@dimen/dp18" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

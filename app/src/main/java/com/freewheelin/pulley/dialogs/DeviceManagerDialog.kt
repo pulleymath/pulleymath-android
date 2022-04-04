@@ -6,17 +6,20 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ImageButton
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.API.ResponseModel.Device
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.buttons.SecondaryButton
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_device_manager.*
 import retrofit2.HttpException
 
 class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val failCB:()->Unit): Dialog(activity) {
@@ -27,6 +30,7 @@ class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val fa
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setContentView(R.layout.dialog_device_manager)
+        initComponents()
         initUI()
     }
 
@@ -119,5 +123,16 @@ class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val fa
 
     private fun stopLoading() {
         deleteBtn.completeLoading()
+    }
+
+    lateinit var btnClose: ImageButton
+    lateinit var cancelBtn: SecondaryButton
+    lateinit var deviceContainer: RadioGroup
+    lateinit var deleteBtn: PrimaryButton
+    private fun initComponents() {
+        btnClose = findViewById(R.id.btnClose)
+        cancelBtn = findViewById(R.id.cancelBtn)
+        deviceContainer = findViewById(R.id.deviceContainer)
+        deleteBtn = findViewById(R.id.deleteBtn)
     }
 }

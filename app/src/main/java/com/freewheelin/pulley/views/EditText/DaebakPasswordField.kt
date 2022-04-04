@@ -14,13 +14,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
-import kotlinx.android.synthetic.main.view_input_daebak.view.*
-import kotlinx.android.synthetic.main.view_input_password.view.*
-import kotlinx.android.synthetic.main.view_input_password.view.editText
-import kotlinx.android.synthetic.main.view_input_password.view.errorTv
-import kotlinx.android.synthetic.main.view_input_password.view.labelTv
+import com.freewheelin.pulley.databinding.ViewInputPasswordBinding
 
 interface DaebakPasswordFieldListener {
     fun onFieldFocusChanged(view: DaebakPasswordField, hasFocus: Boolean)
@@ -43,26 +40,26 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
 
     var label: String?
         get() {
-            return labelTv.text.toString()
+            return binding.labelTv.text.toString()
         }
         set(value) {
-            labelTv.text = value
+            binding.labelTv.text = value
         }
 
     var text: String
         get() {
-            return editText.text.toString()
+            return binding.editText.text.toString()
         }
         set(value) {
-            editText.setText(value)
+            binding.editText.setText(value)
         }
 
     var errorMsg: String
         get() {
-            return errorTv.text.toString()
+            return binding.errorTv.text.toString()
         }
         set(value) {
-            errorTv.text = value
+            binding.errorTv.text = value
             isShownError = true
         }
 
@@ -114,6 +111,7 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
                 label.visibility = View.INVISIBLE
             }
         }
+    lateinit var inputEt: EditText
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
@@ -141,13 +139,13 @@ class DaebakPasswordField: LinearLayout, View.OnFocusChangeListener {
         edit.isEnabled = enabled
     }
 
+    var binding: ViewInputPasswordBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_input_password, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_input_password, this)
 
         val edit = findViewById<EditText>(R.id.editText)
         val check = findViewById<CheckBox>(R.id.checkEye)
-
+        inputEt = edit
         edit.onFocusChangeListener = this
         edit.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {

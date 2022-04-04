@@ -7,20 +7,23 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.databinding.DialogConfirmPhoneBinding
+import com.freewheelin.pulley.databinding.DialogProblemReportBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
 import com.freewheelin.pulley.utils.show
 import com.freewheelin.pulley.utils.toKoreanKeyboard
-import kotlinx.android.synthetic.main.dialog_problem_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -101,9 +104,10 @@ interface ProblemReportDialogListener {
     fun onReportCompleted(problem: Problem)
 }
 
-class ProblemReportDialog: Dialog, View.OnFocusChangeListener {
-    val problem: Problem
-
+class ProblemReportDialog(context: Context, val problem: Problem) : Dialog(context), View.OnFocusChangeListener {
+    val binding: DialogProblemReportBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_problem_report, null, false)
+    }
     var reportType: ProblemReportType = ProblemReportType.PROBLEM
         set(value) {
             field = value
@@ -115,15 +119,13 @@ class ProblemReportDialog: Dialog, View.OnFocusChangeListener {
             configureUIByDetail(value)
         }
     val detailSeletor
-        get() = listOf(detail1, detail2, detail3)
+        get() = listOf(binding.detail1, binding.detail2, binding.detail3)
 
     var listener: ProblemReportDialogListener? = null
 
 
-
-    constructor(context: Context, problem: Problem) : super(context) {
-        this.problem = problem
-        setContentView(R.layout.dialog_problem_report)
+    init {
+        setContentView(binding.root)
         initUI()
         reportType = ProblemReportType.PROBLEM
     }
@@ -148,75 +150,77 @@ class ProblemReportDialog: Dialog, View.OnFocusChangeListener {
             }, index.toLong() * 100)
             index++
         }
-        detail1.isChecked = true
+        binding.detail1.isChecked = true
         reportDetail = reportType.details[0]
     }
 
     private fun configureUIByDetail(type: ProblemReportType.ProblemReportDetail) {
-        describeEt.hint = type.placeHolder
-        describeEt.text = null
+        binding.describeEt.hint = type.placeHolder
+        binding.describeEt.text = null
     }
     private fun initUI() {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setCanceledOnTouchOutside(false)
 
-        describeEt.onFocusChangeListener = this
-        describeEt.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                errorContainerLl.visibility = View.GONE
+        with(binding) {
+            describeEt.onFocusChangeListener = this@ProblemReportDialog
+            describeEt.addTextChangedListener(object: TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+                    errorContainerLl.visibility = View.GONE
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            })
+            describeEt.toKoreanKeyboard()
+            xBtn.setOnClickListener {
+                dismiss()
+            }
+            submitBtn.setOnClickListener {
+                onSubmitBtnClicked()
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            reportTypeRg.setOnCheckedChangeListener { radioGroup, id ->
+                when(id) {
+                    R.id.problemRadio -> reportType = ProblemReportType.PROBLEM
+                    R.id.answerRadio -> reportType = ProblemReportType.ANSWER
+                    R.id.solutionRadio -> reportType = ProblemReportType.SOLUTION
+                    R.id.paintingRadio -> reportType = ProblemReportType.PICTURE
+                }
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            detailRg.setOnCheckedChangeListener { radioGroup, id ->
+                val index = when(id) {
+                    R.id.detail1 -> 0
+                    R.id.detail2 -> 1
+                    else -> 2
+                }
 
-        })
-        describeEt.toKoreanKeyboard()
-        xBtn.setOnClickListener {
-            dismiss()
-        }
-        submitBtn.setOnClickListener {
-            onSubmitBtnClicked()
-        }
-
-        reportTypeRg.setOnCheckedChangeListener { radioGroup, id ->
-            when(id) {
-                R.id.problemRadio -> reportType = ProblemReportType.PROBLEM
-                R.id.answerRadio -> reportType = ProblemReportType.ANSWER
-                R.id.solutionRadio -> reportType = ProblemReportType.SOLUTION
-                R.id.paintingRadio -> reportType = ProblemReportType.PICTURE
-            }
-        }
-
-        detailRg.setOnCheckedChangeListener { radioGroup, id ->
-            val index = when(id) {
-                R.id.detail1 -> 0
-                R.id.detail2 -> 1
-                else -> 2
+                reportDetail = reportType.details[index]
             }
 
-            reportDetail = reportType.details[index]
-        }
+            rootView.setOnTouchListener { view, motionEvent ->
+                currentFocus?.let { context.hideKeyboard(it) }
 
-        rootView.setOnTouchListener { view, motionEvent ->
-            currentFocus?.let { context.hideKeyboard(it) }
+                false
+            }
+            scrollView.setOnTouchListener { view, motionEvent ->
+                currentFocus?.let { context.hideKeyboard(it) }
 
-            false
-        }
-        scrollView.setOnTouchListener { view, motionEvent ->
-            currentFocus?.let { context.hideKeyboard(it) }
-
-            false
+                false
+            }
         }
     }
 
     private fun onSubmitBtnClicked() {
-        val detailText = describeEt.text.toString()
+        val detailText = binding.describeEt.text.toString()
         if (detailText.isEmpty()) {
-            errorContainerLl.visibility = View.VISIBLE
-            describeEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+            binding.errorContainerLl.visibility = View.VISIBLE
+            binding.describeEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
             return
         }
 

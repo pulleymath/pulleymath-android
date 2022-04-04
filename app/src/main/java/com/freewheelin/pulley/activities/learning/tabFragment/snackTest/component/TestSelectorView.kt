@@ -3,10 +3,7 @@ package com.freewheelin.pulley.activities.learning.tabFragment.snackTest.compone
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import com.freewheelin.pulley.R
 import com.freewheelin.pulley.model.contents.Test
-import kotlinx.android.synthetic.main.view_selector_daily_test.view.*
 
 
 abstract class TestSelectorView: ConstraintLayout {
@@ -24,19 +21,6 @@ abstract class TestSelectorView: ConstraintLayout {
         }
     }
 
-
-    open fun toEnableUI() {
-        tagTv?.background = ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)
-        titleTv?.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-        guideTv?.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-    }
-
-    open fun toDisableUI() {
-        tagTv?.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round)
-        titleTv?.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-        guideTv?.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-    }
-
     fun setUpUI(test: Test?) {
         isEnableUI = test != null
 
@@ -45,5 +29,7 @@ abstract class TestSelectorView: ConstraintLayout {
         }
     }
 
+    abstract fun toEnableUI()
+    abstract fun toDisableUI()
     abstract fun setTestUI(test: Test)
 }

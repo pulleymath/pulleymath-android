@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.model
 
-import com.freewheelin.pulley.views.charts.VerticalBarView
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

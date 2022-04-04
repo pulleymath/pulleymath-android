@@ -26,7 +26,7 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
     enum class Type {
         RECENT7, RECENT14, RECENT30, CUSTOM
     }
-    private val binding: ViewDaebakDateRangePickerBinding by lazy {
+    val binding: ViewDaebakDateRangePickerBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_daebak_date_range_picker, null, false)
     }
 

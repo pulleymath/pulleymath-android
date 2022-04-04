@@ -31,8 +31,6 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.views.buttons.PrimaryButton
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_book.*
-import kotlinx.android.synthetic.main.tooltip_analysis.view.*
 import java.util.concurrent.TimeUnit
 
 class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int, workbook: AffiliatedTestWorkbook): Dialog(context) {

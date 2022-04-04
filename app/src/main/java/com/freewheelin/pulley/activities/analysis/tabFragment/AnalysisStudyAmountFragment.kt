@@ -7,19 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
+import com.freewheelin.pulley.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
+import com.freewheelin.pulley.databinding.FragmentAnalysisStudyAmountBinding
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.NumberAnalysis
 import com.freewheelin.pulley.model.curation.MyCuration
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.views.textViews.UpDownTextView
 import com.freewheelin.pulley.views.charts.OneBarChart
-import kotlinx.android.synthetic.main.activity_analysis_tab.*
-import kotlinx.android.synthetic.main.fragment_analysis_study_amount.*
 import org.joda.time.LocalDate
 
 
@@ -54,11 +55,12 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
         @JvmStatic
         fun newInstance() = AnalysisStudyAmountFragment()
     }
+    lateinit var binding: FragmentAnalysisStudyAmountBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analysis_study_amount, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_analysis_study_amount, container, false)
+        return binding.root
 
     }
 
@@ -66,24 +68,30 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         configUI(from, to)
-        activity?.scrollView?.scrollTo(0, scrollPosition)
 
-        unitChart.post {
-           val itemCnt = unitChart.adapter?.itemCount
-            if(itemCnt != null)
-                (unitChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
-        }
-        dailyChart.post {
-            val itemCnt = dailyChart.adapter?.itemCount
-            if(itemCnt != null)
-                (dailyChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
+        (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+        (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+
+        with(binding) {
+            unitChart.post {
+                val itemCnt = unitChart.adapter?.itemCount
+                if(itemCnt != null)
+                    (unitChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
+            }
+            dailyChart.post {
+                val itemCnt = dailyChart.adapter?.itemCount
+                if(itemCnt != null)
+                    (dailyChart.layoutManager as? LinearLayoutManager)?.scrollToPosition(itemCnt - 1)
+            }
         }
     }
 
     private fun initUI() {
-        (0 until 6).forEach { getLegendViewComp(it).first.background.setTint(ringChart.legendColors[it]) }
-        unitChart.isHighlightMaxAndMin = true
-        dailyChart.isHighlightMaxAndMin = true
+        with(binding) {
+            (0 until 6).forEach { getLegendViewComp(it).first.background.setTint(ringChart.legendColors[it]) }
+            unitChart.isHighlightMaxAndMin = true
+            dailyChart.isHighlightMaxAndMin = true
+        }
     }
 
     private fun configUI(from: LocalDate, to: LocalDate) {
@@ -93,96 +101,100 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
     }
 
     private fun configSummaryUI(from: LocalDate, to: LocalDate) {
-        val period = DateTimeUtils.getPeriod(from, to)
-        periodLabel.text = "지난 ${period}일 학습량"
-        lastPeriodLabel.text = "지난 ${period}일 대비"
+        with(binding) {
+            val period = DateTimeUtils.getPeriod(from, to)
+            periodLabel.text = "지난 ${period}일 학습량"
+            lastPeriodLabel.text = "지난 ${period}일 대비"
 
-        if(numberAnalysis == null) {
-            ringChart.visibility = View.INVISIBLE
-            legendContainerLl.visibility = View.INVISIBLE
-            summaryEmptyGuideTv.visibility = View.VISIBLE
-            subjectGuideTv.text = notExistDataText
-            testCntTv.text = "0개"
-            unitCntTv.text = "0개"
-            mockCntTv.text = "0개"
-            wrongCntTv.text = "0개"
+            if(numberAnalysis == null) {
+                ringChart.visibility = View.INVISIBLE
+                legendContainerLl.visibility = View.INVISIBLE
+                summaryEmptyGuideTv.visibility = View.VISIBLE
+                subjectGuideTv.text = notExistDataText
+                testCntTv.text = "0개"
+                unitCntTv.text = "0개"
+                mockCntTv.text = "0개"
+                wrongCntTv.text = "0개"
 
-            periodTotalCntTv.text = "0문제"
-            lastPeriodCompCntUtv.change = UpDownTextView.Change.noChange
-            lastPeriodCompCntUtv.text = "0문제"
-            return
-        }
+                periodTotalCntTv.text = "0문제"
+                lastPeriodCompCntUtv.change = UpDownTextView.Change.noChange
+                lastPeriodCompCntUtv.text = "0문제"
+                return
+            }
 
-        periodTotalCntTv.text = "${numberAnalysis!!.problemTotalCount}문제"
-        lastPeriodCompCntUtv.change = if(numberAnalysis!!.changeAmount >= 0) UpDownTextView.Change.increase else UpDownTextView.Change.decrease
-        if(numberAnalysis!!.changeAmount < 0)
-            lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount * -1}문제"
-        else
-            lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount}문제"
+            periodTotalCntTv.text = "${numberAnalysis!!.problemTotalCount}문제"
+            lastPeriodCompCntUtv.change = if(numberAnalysis!!.changeAmount >= 0) UpDownTextView.Change.increase else UpDownTextView.Change.decrease
+            if(numberAnalysis!!.changeAmount < 0)
+                lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount * -1}문제"
+            else
+                lastPeriodCompCntUtv.text = "${numberAnalysis!!.changeAmount}문제"
 
-        val categoryAnalysis = numberAnalysis?.categoryAnalysis
-        if(categoryAnalysis != null) {
-            testCntTv.text = "${categoryAnalysis.testProblemCount}개"
-            unitCntTv.text = "${categoryAnalysis.bookProblemCount}개"
-            mockCntTv.text = "${categoryAnalysis.moProblemCount}개"
-            wrongCntTv.text = "${categoryAnalysis.weakProblemCount}개"
-        } else {
-            testCntTv.text = "0개"
-            unitCntTv.text = "0개"
-            mockCntTv.text = "0개"
-            wrongCntTv.text = "0개"
-        }
+            val categoryAnalysis = numberAnalysis?.categoryAnalysis
+            if(categoryAnalysis != null) {
+                testCntTv.text = "${categoryAnalysis.testProblemCount}개"
+                unitCntTv.text = "${categoryAnalysis.bookProblemCount}개"
+                mockCntTv.text = "${categoryAnalysis.moProblemCount}개"
+                wrongCntTv.text = "${categoryAnalysis.weakProblemCount}개"
+            } else {
+                testCntTv.text = "0개"
+                unitCntTv.text = "0개"
+                mockCntTv.text = "0개"
+                wrongCntTv.text = "0개"
+            }
 
-        (0 until 6).forEach { hideLegend(it) }
-        val subjectAnalysis = numberAnalysis!!.getArrangedSubjectAnalysis()
+            (0 until 6).forEach { hideLegend(it) }
+            val subjectAnalysis = numberAnalysis!!.getArrangedSubjectAnalysis()
 
-        for(i in 0 until subjectAnalysis.size) {
-            showLegend(i)
-            val legend = getLegendViewComp(i)
-            legend.second.text = subjectAnalysis[i].chapterName
-            legend.third.text = "${subjectAnalysis[i].problemTotalNumber}개"
-        }
+            for(i in 0 until subjectAnalysis.size) {
+                showLegend(i)
+                val legend = getLegendViewComp(i)
+                legend.second.text = subjectAnalysis[i].chapterName
+                legend.third.text = "${subjectAnalysis[i].problemTotalNumber}개"
+            }
 
-        val guideAnalysis = subjectAnalysis.getOrNull(0)
-        subjectGuideTv.text = curation.getStudyAmountSummaryQ(subjectAnalysis)
+            val guideAnalysis = subjectAnalysis.getOrNull(0)
+            subjectGuideTv.text = curation.getStudyAmountSummaryQ(subjectAnalysis)
 
-        if(guideAnalysis != null) {
-            legendContainerLl.visibility = View.VISIBLE
-            ringChart.setData(subjectAnalysis.map { it.problemTotalNumber })
-            ringChart.visibility = View.VISIBLE
-            summaryEmptyGuideTv.visibility = View.INVISIBLE
-        } else {
-            legendContainerLl.visibility = View.INVISIBLE
-            ringChart.visibility = View.INVISIBLE
-            summaryEmptyGuideTv.visibility = View.VISIBLE
+            if(guideAnalysis != null) {
+                legendContainerLl.visibility = View.VISIBLE
+                ringChart.setData(subjectAnalysis.map { it.problemTotalNumber })
+                ringChart.visibility = View.VISIBLE
+                summaryEmptyGuideTv.visibility = View.INVISIBLE
+            } else {
+                legendContainerLl.visibility = View.INVISIBLE
+                ringChart.visibility = View.INVISIBLE
+                summaryEmptyGuideTv.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun configUnitAmountUI() {
-        if (numberAnalysis == null) {
-            unitGuideTv.text = notExistDataText
-            unitChart.visibility = View.INVISIBLE
-            bigUnitEmptyGuideTv.visibility = View.VISIBLE
-            return
-        }
-        val chapterBigAnalysis = numberAnalysis!!.chatperBigAnalysis
+        with(binding) {
+            if (numberAnalysis == null) {
+                unitGuideTv.text = notExistDataText
+                unitChart.visibility = View.INVISIBLE
+                bigUnitEmptyGuideTv.visibility = View.VISIBLE
+                return
+            }
+            val chapterBigAnalysis = numberAnalysis!!.chatperBigAnalysis
 
-        unitGuideTv.text = curation.getStudyAmountCompareByUnitQ(chapterBigAnalysis)
-        val data = chapterBigAnalysis.map { OneBarChart.BarData(it.chapterName, it.problemTotalNumber) }
+            unitGuideTv.text = curation.getStudyAmountCompareByUnitQ(chapterBigAnalysis)
+            val data = chapterBigAnalysis.map { OneBarChart.BarData(it.chapterName, it.problemTotalNumber) }
 
-        if(data.isNotEmpty()) {
-            bigUnitEmptyGuideTv.visibility = View.GONE
-            unitChart.visibility = View.VISIBLE
-            unitChart.setData(data)
-        } else {
-            bigUnitEmptyGuideTv.visibility = View.VISIBLE
-            unitChart.visibility = View.INVISIBLE
+            if(data.isNotEmpty()) {
+                bigUnitEmptyGuideTv.visibility = View.GONE
+                unitChart.visibility = View.VISIBLE
+                unitChart.setData(data)
+            } else {
+                bigUnitEmptyGuideTv.visibility = View.VISIBLE
+                unitChart.visibility = View.INVISIBLE
+            }
         }
     }
 
     private fun configDailyAmountUI(from: LocalDate, to: LocalDate) {
 
-        dailyChart.setData(getDailyAnalysis(from, to))
+        binding.dailyChart.setData(getDailyAnalysis(from, to))
     }
 
     private fun getDailyAnalysis(from: LocalDate, to: LocalDate): List<OneBarChart.BarData> {
@@ -212,7 +224,8 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
     }
 
     private fun getLegendViewComp(position: Int): Triple<View, TextView, TextView> {
-        val legends = listOf(
+        with(binding) {
+            val legends = listOf(
                 Triple(firstLegend, firstLegendTv, firstLegendCntTv),
                 Triple(secondLegend, secondLegendTv, secondLegendCntTv),
                 Triple(thirdLegend, thirdLegendTv, thirdLegendCntTv),
@@ -220,8 +233,9 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
                 Triple(fifthLegend, fifthLegendTv, fifthLegendCntTv),
                 Triple(sixthLegend, sixthLegendTv, sixthLegendCntTv)
 
-        )
-        return legends[position]
+            )
+            return legends[position]
+        }
     }
 
     override fun onPeriodSelected(from: LocalDate, to: LocalDate, period: Int) {

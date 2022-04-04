@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.MockReportActivity
@@ -35,6 +37,8 @@ import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
 import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
 import com.freewheelin.pulley.core.API.ResponseModel.WeekStudyData
 import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
+import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.User
@@ -47,7 +51,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import kotlinx.android.synthetic.main.fragment_analysis.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -63,10 +66,17 @@ class UserAnalysisActivity : AppCompatActivity(),
         MockExamGuideDialogListener {
 
     lateinit var user: User
-
+    private val binding: FragmentAnalysisBinding by lazy {
+        DataBindingUtil.inflate(
+            LayoutInflater.from(this),
+            R.layout.fragment_analysis,
+            null,
+            false
+        )
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_analysis)
+        setContentView(binding.root)
         initUI()
     }
 
@@ -88,42 +98,44 @@ class UserAnalysisActivity : AppCompatActivity(),
 
     private fun setUpStudyUI(study: DailyStudy) {
         try {
-            mainCurationTv.text = study.mainCuration
-            percentCompareTv.valueText = "${study.todayPercentage}%"
-            cntCompareTv.valueText = "${study.todayProblemCount}"
+            with(binding) {
+                mainCurationTv.text = study.mainCuration
+                percentCompareTv.valueText = "${study.todayPercentage}%"
+                cntCompareTv.valueText = "${study.todayProblemCount}"
 
-            percentCompareTv.diffText = if (study.todayPercentageDiff == 0) "-" else "${abs(study.todayPercentageDiff)}%"
-            cntCompareTv.diffText = if (study.todayProblemCountDiff == 0) "-" else "${abs(study.todayProblemCountDiff)}"
+                percentCompareTv.diffText = if (study.todayPercentageDiff == 0) "-" else "${abs(study.todayPercentageDiff)}%"
+                cntCompareTv.diffText = if (study.todayProblemCountDiff == 0) "-" else "${abs(study.todayProblemCountDiff)}"
 
-            percentCompareTv.change = when {
-                study.todayPercentageDiff == 0 -> noChange
-                study.todayPercentageDiff > 0 -> increase
-                else -> decrease
+                percentCompareTv.change = when {
+                    study.todayPercentageDiff == 0 -> noChange
+                    study.todayPercentageDiff > 0 -> increase
+                    else -> decrease
+                }
+
+                cntCompareTv.change = when {
+                    study.todayProblemCountDiff == 0 -> noChange
+                    study.todayProblemCountDiff > 0 -> increase
+                    else -> decrease
+                }
+
+                timeCompareTv.change = noChange
+                timeCompareTv.valueText = DateTimeUtils.getHourMinSpentTimeStr(study.totalStudyTime)
+                timeCompareTv.diffText = DateTimeUtils.getHourMinSpentTimeStr(study.onlyStudyTime)
+                if (study.onlyStudyTime < 60) {
+                    timeCompareTv.setDiffTextColor(ContextCompat.getColor(this@UserAnalysisActivity, R.color.grey_9f9f9f))
+                } else {
+                    timeCompareTv.setDiffTextColor(ContextCompat.getColor(this@UserAnalysisActivity, R.color.blue_2287ef))
+                }
+
+                shareBtn.setOnClickListener {
+                    LogUtils.logEvent(this@UserAnalysisActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공유하기")
+                    val dialog = ShareAnalysisDialog(this@UserAnalysisActivity, study)
+                    dialog.listener = this@UserAnalysisActivity
+                    dialog.show()
+                }
+
+                setChartData(study.weekStudyData)
             }
-
-            cntCompareTv.change = when {
-                study.todayProblemCountDiff == 0 -> noChange
-                study.todayProblemCountDiff > 0 -> increase
-                else -> decrease
-            }
-
-            timeCompareTv.change = noChange
-            timeCompareTv.valueText = DateTimeUtils.getHourMinSpentTimeStr(study.totalStudyTime)
-            timeCompareTv.diffText = DateTimeUtils.getHourMinSpentTimeStr(study.onlyStudyTime)
-            if (study.onlyStudyTime < 60) {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(this, R.color.grey_9f9f9f))
-            } else {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(this, R.color.blue_2287ef))
-            }
-
-            shareBtn.setOnClickListener {
-                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공유하기")
-                val dialog = ShareAnalysisDialog(this, study)
-                dialog.listener = this
-                dialog.show()
-            }
-
-            setChartData(study.weekStudyData)
 
         } catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
@@ -132,9 +144,11 @@ class UserAnalysisActivity : AppCompatActivity(),
 
     private fun setUpPieceUI(pieces: List<Content>) {
         try {
-            todayStudyView.setUpUIByUserAnalysis()
-            todayStudyView.setUpUI(pieces)
-            todayStudyView.findViewById<View>(R.id.studyBtn).visibility = View.INVISIBLE
+            with(binding) {
+                todayStudyView.setUpUIByUserAnalysis()
+                todayStudyView.setUpUI(pieces)
+                todayStudyView.findViewById<View>(R.id.studyBtn).visibility = View.INVISIBLE
+            }
         }catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
         }
@@ -143,10 +157,12 @@ class UserAnalysisActivity : AppCompatActivity(),
     private fun setUpRecommendUI(recommend: DailyRecommend?) {
         if(recommend != null) {
             try {
-                recommendStudyView.setUpUI(recommend.weakChapter, recommend.curation)
-                studyRateView.setUpUI(recommend.compareNormalAndNote, recommend.curation)
-                recommendStudyView.showIfNeed()
-                studyRateView.showIfNeed()
+                with(binding) {
+                    recommendStudyView.setUpUI(recommend.weakChapter, recommend.curation)
+                    studyRateView.setUpUI(recommend.compareNormalAndNote, recommend.curation)
+                    recommendStudyView.showIfNeed()
+                    studyRateView.showIfNeed()
+                }
             }catch(e:Exception) {
                 Log.e("화면크래쉬", "error==>${e.localizedMessage}")
             }
@@ -155,45 +171,49 @@ class UserAnalysisActivity : AppCompatActivity(),
 
     fun initUI() {
         try {
-            todayStudyView.listener = this
-            studyRateView.listener = this
-            recommendStudyView.listener = this
-            initChart(timeCountChart)
-            mainAnalysisBtn.setOnClickListener {
-                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
-                val intent = Intent(this, UserAnalysisAllActivity::class.java)
-                intent.putExtra(KEY_STUDENT_ID, user.studentID)
-                startActivity(intent)
+            with(binding) {
+                todayStudyView.listener = this@UserAnalysisActivity
+                studyRateView.listener = this@UserAnalysisActivity
+                recommendStudyView.listener = this@UserAnalysisActivity
+                initChart(timeCountChart)
+                mainAnalysisBtn.setOnClickListener {
+                    LogUtils.logEvent(this@UserAnalysisActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
+                    val intent = Intent(this@UserAnalysisActivity, UserAnalysisAllActivity::class.java)
+                    intent.putExtra(KEY_STUDENT_ID, user.studentID)
+                    startActivity(intent)
+                }
+                onFragmentSelected()
             }
-            onFragmentSelected()
         }catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
         }
     }
 
     fun onFragmentSelected() {
-        user!!.getDailyStudy(this) { setUpStudyUI(it) }
-        user!!.getDailyRecommend(this, callback = {
+        user.getDailyStudy(this) { setUpStudyUI(it) }
+        user.getDailyRecommend(this, callback = {
             setUpRecommendUI(it)
         }, failCB = {
             setUpRecommendUI(null)
         })
-        user!!.getDailyPiece(this) { setUpPieceUI(it) }
+        user.getDailyPiece(this) { setUpPieceUI(it) }
     }
 
     private fun setUpUI(summary: DailySummary) {
-        if(summary.isNeedToStudyUI) {
-            recommendStudyView.visibility = View.GONE
-            studyRateView.visibility = View.GONE
-            setChartData(summary.weekStudyData)
+        with(binding) {
+            if (summary.isNeedToStudyUI) {
+                recommendStudyView.visibility = View.GONE
+                studyRateView.visibility = View.GONE
+                setChartData(summary.weekStudyData)
 
-        } else {
-            recommendStudyView.visibility = View.VISIBLE
-            studyRateView.visibility = View.VISIBLE
+            } else {
+                recommendStudyView.visibility = View.VISIBLE
+                studyRateView.visibility = View.VISIBLE
 
-            recommendStudyView.setUpUI(summary.weakChapter, summary.curation)
-            studyRateView.setUpUI(summary.compareNormalAndNote, summary.curation)
-            setChartData(summary.weekStudyData)
+                recommendStudyView.setUpUI(summary.weakChapter, summary.curation)
+                studyRateView.setUpUI(summary.compareNormalAndNote, summary.curation)
+                setChartData(summary.weekStudyData)
+            }
         }
 
     }
@@ -252,11 +272,13 @@ class UserAnalysisActivity : AppCompatActivity(),
             setValueTextColor(ContextCompat.getColor(baseContext, R.color.purple_ACACFF))
             setValueTypeface(Theme.bold(baseContext))
         }
-        val renderer = CustomBarChartRender(timeCountChart, timeCountChart.animator, timeCountChart.viewPortHandler)
-        renderer.setRadius(16f.toPx())
-        chart.renderer = renderer
-        timeCountChart.notifyDataSetChanged()
-        timeCountChart.invalidate()
+        with(binding) {
+            val renderer = CustomBarChartRender(timeCountChart, timeCountChart.animator, timeCountChart.viewPortHandler)
+            renderer.setRadius(16f.toPx())
+            chart.renderer = renderer
+            timeCountChart.notifyDataSetChanged()
+            timeCountChart.invalidate()
+        }
 
     }
 
@@ -270,8 +292,8 @@ class UserAnalysisActivity : AppCompatActivity(),
 
 
         val barDataSet = BarDataSet(entry, "개수")
-        timeCountChart.axisLeft.axisMinimum = 0f
-        timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
+        binding.timeCountChart.axisLeft.axisMinimum = 0f
+        binding.timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
         val colors = mutableListOf(
                 ContextCompat.getColor(this, R.color.grey_e0e0e0),
                 ContextCompat.getColor(this, R.color.grey_e0e0e0),
@@ -293,7 +315,7 @@ class UserAnalysisActivity : AppCompatActivity(),
 
         barDataSet.colors = colors
 
-        timeCountChart.data = BarData(barDataSet).apply {
+        binding.timeCountChart.data = BarData(barDataSet).apply {
             barWidth = 0.7f
             isHighlightEnabled = false
             setDrawValues(false)
@@ -302,8 +324,8 @@ class UserAnalysisActivity : AppCompatActivity(),
             setValueTypeface(Theme.bold(baseContext))
         }
 
-        timeCountChart.notifyDataSetChanged()
-        timeCountChart.invalidate()
+        binding.timeCountChart.notifyDataSetChanged()
+        binding.timeCountChart.invalidate()
     }
 
 
@@ -464,8 +486,8 @@ class UserAnalysisActivity : AppCompatActivity(),
 
     fun setTodayStudyNewOne() {
         Log.d("테스트", "AnalysisFragment => setTodayStudyNewOne.setList(true)")
-        scrollToView(scrollContainer, todayStudyView)
-        todayStudyView.newOne = true
+        scrollToView(binding.scrollContainer, binding.todayStudyView)
+        binding.todayStudyView.newOne = true
     }
 
     private fun scrollToView(scrollViewParent: ScrollView, view: View) {

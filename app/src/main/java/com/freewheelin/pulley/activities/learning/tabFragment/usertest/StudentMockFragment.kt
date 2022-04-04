@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.activities.learning.tabFragment.mockExam
+package com.freewheelin.pulley.activities.learning.tabFragment.usertest
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,31 +6,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.REQUEST_MOCK_TEST
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.RESULT_MOCK_FINISH
-import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentMockReportActivity
+import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockTabListener
 import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.MockExamManager
+import com.freewheelin.pulley.databinding.FragmentMyMockBinding
+import com.freewheelin.pulley.databinding.ItemMyMockHeaderBinding
+import com.freewheelin.pulley.databinding.ItemMyMockListBinding
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
-import kotlinx.android.synthetic.main.dialog_wrong_management.*
-import kotlinx.android.synthetic.main.fragment_my_mock.*
-import kotlinx.android.synthetic.main.fragment_new_mock.*
-import kotlinx.android.synthetic.main.item_my_mock_header.view.*
-import kotlinx.android.synthetic.main.item_my_mock_list.view.*
 import java.util.*
 
 class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
@@ -56,12 +54,14 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
 
     var studentID: String? = ""
 
-    lateinit var headerView:View
+//    lateinit var headerView:View
+    lateinit var headerBinding: ItemMyMockHeaderBinding
+    lateinit var binding: FragmentMyMockBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(R.layout.fragment_my_mock, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_mock, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,19 +71,21 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
     }
 
     fun setInitOrder() {
-        headerView.dateSl.isSelected = true
+        headerBinding.dateSl.isSelected = true
     }
 
     override fun onItemChanged(set: ObservableHashSet<MockExam>) {
-        if (set.isEmpty()) {
-            wrongManageView.inactive()
-            wrongManageView.hide(true)
-        } else {
-            if (set.size == 1)
-                wrongManageView.active("'${set.first().title}'이 선택되었습니다.")
-            else
-                wrongManageView.active("'${set.first().title}' 외 ${set.size - 1}건이 선택되었습니다.")
-            wrongManageView.show(true)
+        with(binding) {
+            if (set.isEmpty()) {
+                wrongManageView.inactive()
+                wrongManageView.hide(true)
+            } else {
+                if (set.size == 1)
+                    wrongManageView.active("'${set.first().title}'이 선택되었습니다.")
+                else
+                    wrongManageView.active("'${set.first().title}' 외 ${set.size - 1}건이 선택되었습니다.")
+                wrongManageView.show(true)
+            }
         }
     }
 
@@ -96,44 +98,48 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
     }
 
     private fun initUI() {
+        setHeader()
 
-        myExamRv.layoutManager = LinearLayoutManager(context)
-        myExamRv.adapter = StudentExamAdapter()
+        with(binding) {
+            myExamRv.layoutManager = LinearLayoutManager(context)
+            myExamRv.adapter = StudentExamAdapter()
 
-        wrongManageView.hideReviewBtn()
-        wrongManageView.hide(false)
+            wrongManageView.hideReviewBtn()
+            wrongManageView.hide(false)
 
-        newExamBtn.setOnClickListener {
-            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
-            listener?.onNewExamBtnClicked()
-        }
+            newExamBtn.setOnClickListener {
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "새로풀기", "나의모의고사")
+                listener?.onNewExamBtnClicked()
+            }
 
-        Log.d(javaClass.simpleName, "studentID==========>${arguments?.getString("studentID")}")
+            Log.d(javaClass.simpleName, "studentID==========>${arguments?.getString("studentID")}")
 
-        arguments?.getString("studentID")?.let { studentID ->
+            arguments?.getString("studentID")?.let { studentID ->
 
-            this.studentID = studentID
+                this@StudentMockFragment.studentID = studentID
 
-            MockExamManager.getStudentMockExamList(requireContext(), studentID) {
+                MockExamManager.getStudentMockExamList(requireContext(), studentID) {
 
-                it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
+                    it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
 
-                Log.d(javaClass.simpleName, "it==========>$it")
+                    Log.d(javaClass.simpleName, "it==========>$it")
 
-                this@StudentMockFragment.exams = it
-                this@StudentMockFragment.sortedExams = exams
-                myExamRv.adapter?.notifyDataSetChanged()
-                configureUI()
+                    this@StudentMockFragment.exams = it
+                    this@StudentMockFragment.sortedExams = exams
+                    myExamRv.adapter?.notifyDataSetChanged()
+                    configureUI()
+                }
             }
         }
 
-        setHeader()
     }
 
     private fun setHeader() {
-        headerView = LayoutInflater.from(context).inflate(R.layout.item_my_mock_header, headerContainer, false)
-        val holder = StudentMockHeadHolder(headerView)
-        headerContainer.addView(headerView)
+        headerBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.item_my_mock_header, binding.headerContainer, false)
+
+//        headerView = headerBinding.root
+        val holder = StudentMockHeadHolder(headerBinding)
+        binding.headerContainer.addView(headerBinding.root)
 
         holder.sortableTextViews.forEach {
             it.listener = (object : SortableListener {
@@ -147,13 +153,15 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
     }
 
     private fun configureUI() {
-        newExamBtn.visibility = View.GONE
-        if (getExamList().isEmpty()) {
-            emptyContainerCl.visibility = View.VISIBLE
-            myExamRv.visibility = View.GONE
-        } else {
-            emptyContainerCl.visibility = View.GONE
-            myExamRv.visibility = View.VISIBLE
+        with(binding) {
+            newExamBtn.visibility = View.GONE
+            if (getExamList().isEmpty()) {
+                emptyContainerCl.visibility = View.VISIBLE
+                myExamRv.visibility = View.GONE
+            } else {
+                emptyContainerCl.visibility = View.GONE
+                myExamRv.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -186,7 +194,7 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
         this@StudentMockFragment.order = order
         sortedExams = sortExamList()
 
-        myExamRv.adapter?.notifyDataSetChanged()
+        binding.myExamRv.adapter?.notifyDataSetChanged()
     }
 
     private fun sortExamList(): List<MockExam>? {
@@ -265,23 +273,23 @@ class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentMockHolder {
-            return StudentMockHolder(LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, parent, false))
+            return StudentMockHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_my_mock_list, parent, false))
         }
     }
 }
 
 
 
-class StudentMockHeadHolder(val view: View) {
-    val typeSl = view.typeSl
-    val gradeSl = view.gradeSl
-    val examTitleSl = view.examTitleSl
-    val percentSl = view.percentSl
-    val scoreSl = view.scoreSl
-    val dateSl = view.dateSl
-    val ratingSl = view.ratingSl
-    val percentageSl = view.percentageSl
-    val review = view.reviewContainer
+class StudentMockHeadHolder(val headerBinding: ItemMyMockHeaderBinding) {
+    val typeSl = headerBinding.typeSl
+    val gradeSl = headerBinding.gradeSl
+    val examTitleSl = headerBinding.examTitleSl
+    val percentSl = headerBinding.percentSl
+    val scoreSl = headerBinding.scoreSl
+    val dateSl = headerBinding.dateSl
+    val ratingSl = headerBinding.ratingSl
+    val percentageSl = headerBinding.percentageSl
+    val review = headerBinding.reviewContainer
 
     init {
         review.visibility = View.GONE
@@ -289,33 +297,33 @@ class StudentMockHeadHolder(val view: View) {
 
     val sortableTextViews: List<SortableTextView>
         get() = listOf(
-                view.typeSl, view.gradeSl, view.examTitleSl, view.percentSl, view.scoreSl, view.dateSl, view.ratingSl, view.percentageSl
+            headerBinding.typeSl, headerBinding.gradeSl, headerBinding.examTitleSl, headerBinding.percentSl, headerBinding.scoreSl, headerBinding.dateSl, headerBinding.ratingSl, headerBinding.percentageSl
         )
 }
 
-class StudentMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
+class StudentMockHolder(val itemBinding: ItemMyMockListBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
-    var typeTv = view.findViewById<TextView>(R.id.typeTv)
-    var gradeTv = view.findViewById<TextView>(R.id.gradeTv)
-    var titleTv = view.findViewById<TextView>(R.id.titleTv)
-    var scoreTv = view.findViewById<TextView>(R.id.scoreTv)
-    var percentageTv = view.findViewById<TextView>(R.id.percentageTv)
-    var ratingTv = view.findViewById<TextView>(R.id.ratingTv)
-    var remainBtn = view.remainBtn
-    var remainCountText = view.remainCountText
-    var dateTv = view.findViewById<TextView>(R.id.dateTv)
-    var ratingIv = view.findViewById<ImageView>(R.id.ratingIv)
-    val reportBtn = view.reportBtn
-    val horizontalBorder = view.horizontalBorder
-    val reviewBtn = view.reviewBtn
-    val containerCl = view.containerCl
-    val outContainerCl = view.outContainerCl
+    var typeTv = itemBinding.typeTv
+    var gradeTv = itemBinding.gradeTv
+    var titleTv = itemBinding.titleTv
+    var scoreTv = itemBinding.scoreTv
+    var percentageTv = itemBinding.percentageTv
+    var ratingTv = itemBinding.ratingTv
+    var remainBtn = itemBinding.remainBtn
+    var remainCountText = itemBinding.remainCountText
+    var dateTv = itemBinding.dateTv
+    var ratingIv = itemBinding.ratingIv
+    val reportBtn = itemBinding.reportBtn
+    val horizontalBorder = itemBinding.horizontalBorder
+    val reviewBtn = itemBinding.reviewBtn
+    val containerCl = itemBinding.containerCl
+    val outContainerCl = itemBinding.outContainerCl
 
-    val correctPercentTv = view.correctPercentTv
-    val correctCountTv = view.correctCountTv
+    val correctPercentTv = itemBinding.correctPercentTv
+    val correctCountTv = itemBinding.correctCountTv
 
-    val optionContainer = view.optionContainer
-    val optionContainer8inch = view.optionContainer8inch
+    val optionContainer = itemBinding.optionContainer
+    val optionContainer8inch = itemBinding.optionContainer8inch
 
     init {
         remainBtn.visibility = View.GONE
@@ -338,7 +346,7 @@ class StudentMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
             // 코드가 지저분 하긴 한데.. 생각이 안난다...
             // 8인치 미만에서 레이블 컨테이너 없애기 - 세로 정렬 어긋나는거 때문에
-            if (!view.context.is10InchUI) {
+            if (!itemBinding.root.context.is10InchUI) {
                 if(it.optionalSubjectList.isEmpty()) {
                     optionContainer8inch.visibility = View.GONE
                 } else {
@@ -347,12 +355,12 @@ class StudentMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
             }
             // add
             for(subject in it.optionalSubjectList) {
-                if (view.context.is10InchUI) {
-                    val label = LayoutInflater.from(view.context).inflate(R.layout.item_mockexam_mymock_option_label,optionContainer, false) as TextView
+                if (itemBinding.root.context.is10InchUI) {
+                    val label = LayoutInflater.from(itemBinding.root.context).inflate(R.layout.item_mockexam_mymock_option_label,optionContainer, false) as TextView
                     label.text = subject.title
                     optionContainer.addView(label)
                 } else {
-                    val label = LayoutInflater.from(view.context).inflate(R.layout.item_mockexam_mymock_option_label, optionContainer8inch, false) as TextView
+                    val label = LayoutInflater.from(itemBinding.root.context).inflate(R.layout.item_mockexam_mymock_option_label, optionContainer8inch, false) as TextView
                     label.text = subject.title
                     optionContainer8inch.addView(label)
                 }
@@ -421,15 +429,15 @@ class StudentMockHolder(val view: View) : RecyclerView.ViewHolder(view) {
         outContainerCl.layoutParams.apply {
             height = 112.toPx()
         }
-        outContainerCl.background = ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_bottom)
+        outContainerCl.background = ContextCompat.getDrawable(itemBinding.root.context, R.drawable.bg_shadow_bottom)
     }
 
     fun setMiddleHolderUI() {
         horizontalBorder.visibility = View.VISIBLE
         outContainerCl.layoutParams.apply {
-            height = view.context.resources.getDimension(R.dimen.dp64).toInt()
+            height = itemBinding.root.context.resources.getDimension(R.dimen.dp64).toInt()
         }
-        outContainerCl.background = ContextCompat.getDrawable(view.context, R.drawable.bg_shadow_middle)
+        outContainerCl.background = ContextCompat.getDrawable(itemBinding.root.context, R.drawable.bg_shadow_middle)
     }
 
     private fun setRating(rating: Int?) {

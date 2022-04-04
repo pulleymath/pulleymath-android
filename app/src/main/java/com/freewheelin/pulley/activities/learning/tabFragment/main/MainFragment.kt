@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -31,10 +32,10 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.databinding.FragmentMain2Binding
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.textViews.HashTagTextView
-import kotlinx.android.synthetic.main.fragment_main_2.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -45,6 +46,8 @@ import kotlin.concurrent.thread
 class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemCountSettingDialogListener, DDaySettingDialogListener, LifecycleObserver {
 
     override var screenName: String = "메인"
+    lateinit var binding: FragmentMain2Binding
+
     var mainProfile: MainProfile? = null
 
     var profileReceiver: BroadcastReceiver? = null
@@ -80,7 +83,8 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_main_2, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_2, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,158 +119,173 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
     }
 
     fun setupUI() {
-        profileIv.setOnClickListener {
-            setProgress()
-        }
+        binding.apply {
+            profileIv.setOnClickListener {
+                setProgress()
+            }
 
-        shareBtn.setOnClickListener {
-            onShareBtnClicked()
-        }
+            shareBtn.setOnClickListener {
+                onShareBtnClicked()
+            }
 
-        nameTv.setOnClickListener { onNameBtnClicked() }
+            nameTv.setOnClickListener { onNameBtnClicked() }
 //        nameArrowIv.setOnClickListener { onNameBtnClicked() }
-        targetSettingBtn.setOnClickListener { onTargetSettingClicked() }
-        dDayTv.setOnClickListener { onDDayBtnClicked() }
-        dDayErrowIv.setOnClickListener { onDDayBtnClicked() }
-        startBtn.setOnClickListener { onStartBtnClicked() }
-        bgIv.layoutParams.width = (DisplayUtils.getScreenWidth(requireContext()) * 0.5).toInt()
-        reportTv.setOnClickListener { onReportBtnClicked() }
+            targetSettingBtn.setOnClickListener { onTargetSettingClicked() }
+            dDayTv.setOnClickListener { onDDayBtnClicked() }
+            dDayErrowIv.setOnClickListener { onDDayBtnClicked() }
+            startBtn.setOnClickListener { onStartBtnClicked() }
+            bgIv.layoutParams.width = (DisplayUtils.getScreenWidth(requireContext()) * 0.5).toInt()
+            reportTv.setOnClickListener { onReportBtnClicked() }
 //        profileIv.setOnClickListener { onProfileBtnClicked() }
 
 //        syncProfile()
 
-        Log.d("마케팅", "setupUI() is called!!!")
+            Log.d("마케팅", "setupUI() is called!!!")
+        }
     }
 
     private fun setReportType() {
         val dessertType = user?.studentType
         if(dessertType != null) {
-            reportTv.text = "${dessertType.dessertName} 타입에 관한 심층 보고서"
+            binding.reportTv.text = "${dessertType.dessertName} 타입에 관한 심층 보고서"
         }
     }
 
     var loadFirst = true
 
     fun syncProfile() {
+        binding.apply {
+            Log.d("마케팅", "syncProfile() is called!!!")
 
-        Log.d("마케팅", "syncProfile() is called!!!")
-
-        if(loadFirst) {
-            loadingContainer.visibility = View.VISIBLE
-            loadFirst = false
-        }
-
-        UserManager.getProfile(requireContext(), user!!) { mainProfile ->
-            try {
-                this.mainProfile = mainProfile
-                nameTv.text = mainProfile.studentName
-                guideTv.text = mainProfile.curation
-                countTv.text = "${mainProfile.dailySolvedProblemCount}"
-                freeGuideTv.text = mainProfile.getFreeGuideText()
-
-                if (mainProfile.profileImageUrl.isNotEmpty())
-                    profileIv.setImageURL(mainProfile.profileImageUrl)
-
-                setReportType()
-
-                bgIv.setImageURLBackground(mainProfile.backgroundImageUrl)
-                problemCntTv.text = "${mainProfile.totalSolvedProblemCount}(${mainProfile.totalSolvedWeakProblemCount})"
-                setProgress()
-                tagFl.removeAllViewsInLayout()
-                continuousDayTv.text = mainProfile.getContinuousText()
-                dailyProblemGuideTv.text = mainProfile.getProblemCountGuideText(user!!)
-
-                val existTarget = getTargetTitleAndDate()
-
-                Log.d("테스트", "Dday=$existTarget")
-                Log.d("테스트", "getDDay=${mainProfile.getDDay(existTarget?.third)}")
-
-                if(mainProfile.getDDay(existTarget?.third) < 0 ) {
-                    targetTv.text = mainProfile.getDDayTitle(null)
-                    dDayTv.text = mainProfile.getDDayText(null)
-                } else {
-                    targetTv.text = mainProfile.getDDayTitle(existTarget?.second)
-                    dDayTv.text = mainProfile.getDDayText(existTarget?.third)
-                }
-
-                mainProfile.getUserHashtag(user).forEach {
-                    tagFl.addView(HashTagTextView(requireContext(), "#${it}"))
-                }
-
-                if (mainProfile.getUserHashtag(user).isEmpty()) {
-                    tagFl.visibility = View.GONE
-                    freeUserContainer.setPaddingTop(resources.getDimension(R.dimen.dp48).toInt())
-                } else {
-                    tagFl.visibility = View.VISIBLE
-                    freeUserContainer.setPaddingTop(resources.getDimension(R.dimen.dp32).toInt())
-                }
-
-                if (user?.hasPulleyPlus == true)
-                    setAvailableUI()
-                else
-                    setDisabailableUI()
-
-                // 여기서 마케팅 팝업처리
-                if(loadingContainer.visibility == View.VISIBLE) {
-                    learningTabInterface.openMarketingDialog(mainProfile)
-                }
-
-            } catch(e:Exception) {
-                Log.e("화면크래쉬", "error==>${e.localizedMessage}")
+            if (loadFirst) {
+                loadingContainer.visibility = View.VISIBLE
+                loadFirst = false
             }
 
-            thread(start=true) {
-                Thread.sleep(500)
-                activity?.runOnUiThread {
-                    try {
-                        loadingContainer?.visibility = View.GONE
-                    }catch(e:Exception){}
+            UserManager.getProfile(requireContext(), user!!) { mainProfile ->
+                try {
+                    this@MainFragment.mainProfile = mainProfile
+                    nameTv.text = mainProfile.studentName
+                    guideTv.text = mainProfile.curation
+                    countTv.text = "${mainProfile.dailySolvedProblemCount}"
+                    freeGuideTv.text = mainProfile.getFreeGuideText()
+
+                    if (mainProfile.profileImageUrl.isNotEmpty())
+                        profileIv.setImageURL(mainProfile.profileImageUrl)
+
+                    setReportType()
+
+                    bgIv.setImageURLBackground(mainProfile.backgroundImageUrl)
+                    problemCntTv.text =
+                        "${mainProfile.totalSolvedProblemCount}(${mainProfile.totalSolvedWeakProblemCount})"
+                    setProgress()
+                    tagFl.removeAllViewsInLayout()
+                    continuousDayTv.text = mainProfile.getContinuousText()
+                    dailyProblemGuideTv.text = mainProfile.getProblemCountGuideText(user!!)
+
+                    val existTarget = getTargetTitleAndDate()
+
+                    Log.d("테스트", "Dday=$existTarget")
+                    Log.d("테스트", "getDDay=${mainProfile.getDDay(existTarget?.third)}")
+
+                    if (mainProfile.getDDay(existTarget?.third) < 0) {
+                        targetTv.text = mainProfile.getDDayTitle(null)
+                        dDayTv.text = mainProfile.getDDayText(null)
+                    } else {
+                        targetTv.text = mainProfile.getDDayTitle(existTarget?.second)
+                        dDayTv.text = mainProfile.getDDayText(existTarget?.third)
+                    }
+
+                    mainProfile.getUserHashtag(user).forEach {
+                        tagFl.addView(HashTagTextView(requireContext(), "#${it}"))
+                    }
+
+                    if (mainProfile.getUserHashtag(user).isEmpty()) {
+                        tagFl.visibility = View.GONE
+                        freeUserContainer.setPaddingTop(
+                            resources.getDimension(R.dimen.dp48).toInt()
+                        )
+                    } else {
+                        tagFl.visibility = View.VISIBLE
+                        freeUserContainer.setPaddingTop(
+                            resources.getDimension(R.dimen.dp32).toInt()
+                        )
+                    }
+
+                    if (user?.hasPulleyPlus == true)
+                        setAvailableUI()
+                    else
+                        setDisabailableUI()
+
+                    // 여기서 마케팅 팝업처리
+                    if (loadingContainer.visibility == View.VISIBLE) {
+                        learningTabInterface.openMarketingDialog(mainProfile)
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("화면크래쉬", "error==>${e.localizedMessage}")
+                }
+
+                thread(start = true) {
+                    Thread.sleep(500)
+                    activity?.runOnUiThread {
+                        try {
+                            loadingContainer?.visibility = View.GONE
+                        } catch (e: Exception) {
+                        }
+                    }
                 }
             }
         }
     }
 
     private fun setAvailableUI() {
-        phraseTv.visibility = View.INVISIBLE
-        freeUserContainer.visibility = View.GONE
-        payUserContainer.visibility = View.VISIBLE
+        binding.apply {
+            phraseTv.visibility = View.INVISIBLE
+            freeUserContainer.visibility = View.GONE
+            payUserContainer.visibility = View.VISIBLE
 
-        phraseTv.visibility = View.INVISIBLE
-        continuousDayTv.visibility = View.VISIBLE
-        dailyProblemGuideTv.visibility = View.VISIBLE
-        targetSettingBtn.visibility = View.VISIBLE
-        targetSettingBtnBorder.visibility = View.VISIBLE
-        progressBar.visibility = View.VISIBLE
-        labelContainer.visibility = View.VISIBLE
+            phraseTv.visibility = View.INVISIBLE
+            continuousDayTv.visibility = View.VISIBLE
+            dailyProblemGuideTv.visibility = View.VISIBLE
+            targetSettingBtn.visibility = View.VISIBLE
+            targetSettingBtnBorder.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
+            labelContainer.visibility = View.VISIBLE
+        }
     }
 
     private fun setDisabailableUI() {
-        phraseTv.visibility = View.VISIBLE
-        freeUserContainer.visibility = View.VISIBLE
-        payUserContainer.visibility = View.INVISIBLE
+        binding.apply {
+            phraseTv.visibility = View.VISIBLE
+            freeUserContainer.visibility = View.VISIBLE
+            payUserContainer.visibility = View.INVISIBLE
 
-        phraseTv.visibility = View.VISIBLE
-        continuousDayTv.visibility = View.INVISIBLE
-        dailyProblemGuideTv.visibility = View.INVISIBLE
-        targetSettingBtn.visibility = View.INVISIBLE
-        targetSettingBtnBorder.visibility = View.INVISIBLE
-        progressBar.visibility = View.INVISIBLE
-        labelContainer.visibility = View.INVISIBLE
+            phraseTv.visibility = View.VISIBLE
+            continuousDayTv.visibility = View.INVISIBLE
+            dailyProblemGuideTv.visibility = View.INVISIBLE
+            targetSettingBtn.visibility = View.INVISIBLE
+            targetSettingBtnBorder.visibility = View.INVISIBLE
+            progressBar.visibility = View.INVISIBLE
+            labelContainer.visibility = View.INVISIBLE
+        }
     }
 
     private fun setProgress() {
-        val value = mainProfile!!.progressValue
-        progressBar.value = value
-        val lp = (progressIndicator.layoutParams as ConstraintLayout.LayoutParams)
-        lp.horizontalBias = value
-        progressIndicator.layoutParams = lp
-        labelContainer.requestLayout()
+        binding.apply {
+            val value = mainProfile!!.progressValue
+            progressBar.value = value
+            val lp = (progressIndicator.layoutParams as ConstraintLayout.LayoutParams)
+            lp.horizontalBias = value
+            progressIndicator.layoutParams = lp
+            labelContainer.requestLayout()
 
 
-        if(value >= 0)
-            labelContainer.visibility = View.VISIBLE
-        else
-            labelContainer.visibility = View.INVISIBLE
+            if (value >= 0)
+                labelContainer.visibility = View.VISIBLE
+            else
+                labelContainer.visibility = View.INVISIBLE
+        }
     }
 
     private fun onNameBtnClicked() {
@@ -387,13 +406,13 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
         val existTarget = getTargetTitleAndDate()
         val profile = mainProfile ?: return
 
-        targetTv.text = profile.getDDayTitle(existTarget?.second)
-        dDayTv.text = profile.getDDayText(existTarget?.third)
+        binding.targetTv.text = profile.getDDayTitle(existTarget?.second)
+        binding.dDayTv.text = profile.getDDayText(existTarget?.third)
     }
 
     override fun onModifyCompleted(cnt: Int) {
         val profile = mainProfile ?: return
-        dailyProblemGuideTv.text = profile.getProblemCountGuideText(user!!)
+        binding.dailyProblemGuideTv.text = profile.getProblemCountGuideText(user!!)
         setProgress()
     }
 }

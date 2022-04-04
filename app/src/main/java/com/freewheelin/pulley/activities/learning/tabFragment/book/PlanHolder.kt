@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.graphics.drawable.ColorDrawable
 import android.view.*
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,20 +14,8 @@ import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.ClientBookType
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_arduous_spinner.view.*
-import kotlinx.android.synthetic.main.item_book_my_plan.view.*
-import kotlinx.android.synthetic.main.item_book_my_plan.view.correctRateTv
-import kotlinx.android.synthetic.main.item_book_my_plan.view.finishContainer
-import kotlinx.android.synthetic.main.item_book_my_plan.view.problemCntTv
-import kotlinx.android.synthetic.main.item_book_my_plan.view.reviewBtn
-import kotlinx.android.synthetic.main.item_book_my_plan.view.solveCntTv
-import kotlinx.android.synthetic.main.item_book_plan.view.*
-//import kotlinx.android.synthetic.main.item_book_recommend_plan.view.*
-import kotlinx.android.synthetic.main.item_book_total_plan.view.guideTv
-import kotlinx.android.synthetic.main.item_book_total_plan.view.tag1
-import kotlinx.android.synthetic.main.item_book_total_plan.view.tag2
-import kotlinx.android.synthetic.main.view_action_list.view.*
 
 enum class ActionType {
     pin,
@@ -44,17 +33,17 @@ interface PlanListener {
 abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
     lateinit var book: Book
 
-    val pin get() = view.pin
-    val bookNameTv get() = view.bookNameTv
-    val seriesTv get() = view.seriesTv
-    val subjectTv get() = view.subjectTv
-    val chapterTv get() = view.chapterTv
-    val actionBtn get() = view.actionBtn
-    val workbookIv get() = view.workbookIv
-    val backgroudCl get() = view.backgroundCl
-    val reviewBtn get() = view.reviewBtn
-    val makingCustomBookBtn get() = view.makingCustomBook
-    val finishContainer get() = view.finishContainer
+    val pin get() = view.findViewById<ImageView>(R.id.pin)
+    val bookNameTv get() = view.findViewById<TextView>(R.id.bookNameTv)
+    val seriesTv get() = view.findViewById<TextView>(R.id.seriesTv)
+    val subjectTv get() = view.findViewById<TextView>(R.id.subjectTv)
+    val chapterTv get() = view.findViewById<TextView>(R.id.chapterTv)
+    val actionBtn get() = view.findViewById<ImageView>(R.id.actionBtn)
+    val workbookIv get() = view.findViewById<ImageView>(R.id.workbookIv)
+    val backgroudCl get() = view.findViewById<ConstraintLayout>(R.id.backgroundCl)
+    val reviewBtn get() = view.findViewById<PrimaryButton>(R.id.reviewBtn)
+    val makingCustomBookBtn get() = view.findViewById<Button>(R.id.makingCustomBook)
+    val finishContainer get() = view.findViewById<LinearLayout>(R.id.finishContainer)
 
     open var actionList = listOf(ActionType.pin)
     var listener: PlanListener? = null
@@ -63,8 +52,8 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
     var popupWindow: PopupWindow? = null
 
-    val bgIv get() = view.bgIv
-    val foldIv get() = view.foldIv
+    val bgIv get() = view.findViewById<ImageView>(R.id.bgIv)
+    val foldIv get() = view.findViewById<ImageView>(R.id.foldIv)
 
     open fun set(book: Book) {
         this.book = book
@@ -85,8 +74,9 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         val width = view.context.resources.getDimension(R.dimen.dp168).toInt()
         val actionBtnWidth = view.context.resources.getDimension(R.dimen.dp64).toInt()
         val view = LayoutInflater.from(view.context).inflate(R.layout.view_action_list, null, false)
-        view.recyclerView.adapter = ActionAdapter()
-        view.recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.adapter = ActionAdapter()
+        recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         popupWindow = PopupWindow(view, width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popupWindow?.isOutsideTouchable = true
         popupWindow?.isFocusable = true
@@ -341,12 +331,12 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class MyPlanHolder(override var view: View) : PlanHolder(view) {
-    val solveDateLabel = view.solveDateLabel
-    val solveDateTv = view.solveDateTv
-    val solveCntTv = view.solveCntTv
-    val problemCntTv = view.problemCntTv
-    val correctRateTv = view.correctRateTv
-    val solveCntLabel = view.solveCntLabel
+    val solveDateLabel = view.findViewById<TextView>(R.id.solveDateLabel)
+    val solveDateTv = view.findViewById<TextView>(R.id.solveDateTv)
+    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
+    val solveCntLabel = view.findViewById<TextView>(R.id.solveCntLabel)
 
 
     override var actionList = listOf(ActionType.pin, ActionType.mail, ActionType.delete)
@@ -388,11 +378,11 @@ class MyPlanHolder(override var view: View) : PlanHolder(view) {
 }
 
 class TotalPlanHolder(override var view: View) : PlanHolder(view) {
-    val solveCntTv = view.solveCntTv
-    val problemCntTv = view.problemCntTv
-    val correctRateTv = view.correctRateTv
-    val tags = listOf(view.tag1, view.tag2)
-    val guideTv = view.guideTv
+    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
+    val tags = listOf(view.findViewById<TextView>(R.id.tag1), view.findViewById<TextView>(R.id.tag2))
+    val guideTv = view.findViewById<TextView>(R.id.guideTv)
 
     override fun set(book: Book) {
         book.clientBookType = ClientBookType.ALL
@@ -415,11 +405,11 @@ class TotalPlanHolder(override var view: View) : PlanHolder(view) {
 }
 
 class RecommendPlanHolder(override var view: View) : PlanHolder(view) {
-    val solveCntTv = view.solveCntTv
-    val problemCntTv = view.problemCntTv
-    val correctRateTv = view.correctRateTv
+    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
 
-    val tags = listOf(view.tag1, view.tag2)
+    val tags = listOf(view.findViewById<TextView>(R.id.tag1), view.findViewById<TextView>(R.id.tag2))
     override fun set(book: Book) {
         book.clientBookType = ClientBookType.RECOMMEND
         super.set(book)
@@ -438,5 +428,5 @@ class RecommendPlanHolder(override var view: View) : PlanHolder(view) {
 }
 
 class PlanActionHolder(var view: View) : RecyclerView.ViewHolder(view) {
-    val button = view.listItem
+    val button = view.findViewById<Button>(R.id.listItem)
 }

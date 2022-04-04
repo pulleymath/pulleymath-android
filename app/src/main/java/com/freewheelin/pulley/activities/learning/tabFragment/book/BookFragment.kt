@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +31,8 @@ import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.manage.BookManager
-import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.FragmentBookBinding
+import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
@@ -38,19 +40,17 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
-import com.ht.balloonwindow.BalloonWindow
-import kotlinx.android.synthetic.main.fragment_book.*
-import kotlinx.android.synthetic.main.fragment_book.rootView
-import kotlinx.android.synthetic.main.fragment_unit_study.*
-import kotlinx.android.synthetic.main.tooltip_analysis.view.*
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import java.lang.Math.abs
 
 class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
 
+    lateinit var binding: FragmentBookBinding
+
     var myBooks: MyBookList? = null
     var totalBooks: MutableList<Book>? = null
-    val recommendBookListViews
-        get() = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
+    lateinit var recommendBookListViews: List<RecommendBookList>
+//        get() = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
 
     var isStartWithInitTest = false
 
@@ -81,9 +81,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_book, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,88 +95,131 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     override fun initUI() {
-        myPlanRv.adapter = MyPlanAdapter()
-        myPlanRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
 
-        commercialBookLayout.setOnClickListener {
-            Intent(requireContext(), PdfListActivity::class.java).let {
-                startActivity(it)
+            myPlanRv.adapter = MyPlanAdapter()
+            myPlanRv.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            commercialBookLayout.setOnClickListener {
+                Intent(requireContext(), PdfListActivity::class.java).let {
+                    startActivity(it)
+                }
             }
-        }
 
-        iconLock.visibility = if(user!!.hasPulleyPlus) { View.GONE } else { View.VISIBLE }
-        workbookBtn.setOnClickListener {
-            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체-워크북만들기")
-            if(user!!.hasPulleyPlus) {
-                CustomizeBookDialog(requireContext(), this).show()
+            iconLock.visibility = if (user!!.hasPulleyPlus) {
+                View.GONE
             } else {
-                DialogUtils.confirmHasPulleyPlus(requireContext()) {
-                    PulleyPlusPriceDialog(requireContext()).show()
-                }
+                View.VISIBLE
             }
-        }
-
-        totalRv.layoutManager =  GridLayoutManager(context, 3)
-        totalRv.adapter = TotalPlanAdapter()
-        val totalRvAnimationController = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recyclerview_grid_layout_animation)
-        totalRv.layoutAnimation = totalRvAnimationController
-        totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), 0, 3))
-        totalRv.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                when(newState) {
-                    RecyclerView.SCROLL_STATE_DRAGGING -> {
-                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체플랜")
+            workbookBtn.setOnClickListener {
+                LogUtils.logEvent(
+                    requireContext(),
+                    user!!,
+                    PulleyEvent.BUTTON_CLICK,
+                    "유형학습",
+                    "전체-워크북만들기"
+                )
+                if (user!!.hasPulleyPlus) {
+                    CustomizeBookDialog(requireContext(), this@BookFragment).show()
+                } else {
+                    DialogUtils.confirmHasPulleyPlus(requireContext()) {
+                        PulleyPlusPriceDialog(requireContext()).show()
                     }
                 }
             }
-        })
 
-        val itemSpace = resources.getDimension(R.dimen.dp16).toInt()
-        myPlanRv.addItemDecoration(MarginDecoration(itemSpace))
-        myPlanRv.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                when(newState) {
-                    RecyclerView.SCROLL_STATE_DRAGGING -> {
-                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스와이프", "나의플랜")
+            totalRv.layoutManager = GridLayoutManager(context, 3)
+            totalRv.adapter = TotalPlanAdapter()
+            val totalRvAnimationController = AnimationUtils.loadLayoutAnimation(
+                requireContext(),
+                R.anim.recyclerview_grid_layout_animation
+            )
+            totalRv.layoutAnimation = totalRvAnimationController
+            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), 0, 3))
+            totalRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_DRAGGING -> {
+                            LogUtils.logEvent(
+                                requireContext(),
+                                user!!,
+                                PulleyEvent.BUTTON_CLICK,
+                                "유형학습",
+                                "스크롤",
+                                "전체플랜"
+                            )
+                        }
                     }
                 }
-            }
-        })
-        myPlanDeleteGuideTv.extensionTouchArea(12.toPx())
-        myPlanDeleteGuideTv.setOnClickListener {
-            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "삭제기준보기")
-            val window = BalloonWindow(requireContext(), it, BalloonWindow.Position.below, 16.toPx())
-            window.balloonColor = ContextCompat.getColor(requireContext(), R.color.purple_ACACFF)
-            window.offset = if(context?.is10InchUI == true) - 240 else -210
-            window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx())
-            val view = LayoutInflater.from(requireContext()).inflate(R.layout.tooltip_analysis, null)
-            view.chartTopTv.text = "삭제 기준"
-            view.chartContentTv.text = "- 최근 30일 동안 학습하지 않은 플랜은 [나의플랜]에서 자동으로 빠집니다.\n" +
+            })
+
+            val itemSpace = resources.getDimension(R.dimen.dp16).toInt()
+            myPlanRv.addItemDecoration(MarginDecoration(itemSpace))
+            myPlanRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_DRAGGING -> {
+                            LogUtils.logEvent(
+                                requireContext(),
+                                user!!,
+                                PulleyEvent.BUTTON_CLICK,
+                                "유형학습",
+                                "스와이프",
+                                "나의플랜"
+                            )
+                        }
+                    }
+                }
+            })
+            myPlanDeleteGuideTv.extensionTouchArea(12.toPx())
+            myPlanDeleteGuideTv.setOnClickListener {
+                LogUtils.logEvent(
+                    requireContext(),
+                    user!!,
+                    PulleyEvent.BUTTON_CLICK,
+                    "유형학습",
+                    "삭제기준보기"
+                )
+                val window =
+                    BalloonWindow(requireContext(), it, BalloonWindow.Position.below, 16.toPx())
+                window.balloonColor =
+                    ContextCompat.getColor(requireContext(), R.color.purple_ACACFF)
+                window.offset = if (context?.is10InchUI == true) -240 else -210
+                window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx())
+                val tooltipBinding: TooltipAnalysisBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.tooltip_analysis, null, false)
+//                val view = LayoutInflater.from(requireContext()).inflate(R.layout.tooltip_analysis, null)
+                tooltipBinding.chartTopTv.text = "삭제 기준"
+                tooltipBinding.chartContentTv.text = "- 최근 30일 동안 학습하지 않은 플랜은 [나의플랜]에서 자동으로 빠집니다.\n" +
                     "   그렇게 빠진 플랜은 [전체플랜]에서 다시 볼 수 있습니다.\n" +
                     "\n" +
                     "- 워크북 플랜의 경우,\n" +
                     "   채점한 문제가 총 2문제 이하이고 최근 30일 동안 학습하지 않았다면 영구 삭제됩니다.\n" +
                     "\n" +
                     "- 핀을 꽂아둔 모든 플랜은 빠지거나 삭제되지 않습니다."
-            window.show(view)
-        }
 
-        planLoadingView.playAnimation()
-        Handler(Looper.getMainLooper()).postDelayed({
-            getMyPlanList {
-                getRecommendList {
-//                    Tutor.showToolTipIfNeed(recommendLabel, Tutor.TooltipType.recommendPlan)
-                    getTotalList()
-                }
+                window.show(tooltipBinding.root)
             }
-        }, 200)
 
-        recommendBookListViews.forEach { it.visibility = View.GONE }
-        recommendLabel.visibility = View.INVISIBLE
-        totalPlanContainer.layoutParams.height = DisplayUtils.getScrenHeight(requireContext())
-        filterView.listener = this
+            planLoadingView.playAnimation()
+            Handler(Looper.getMainLooper()).postDelayed({
+                getMyPlanList {
+                    getRecommendList {
+//                    Tutor.showToolTipIfNeed(recommendLabel, Tutor.TooltipType.recommendPlan)
+                        getTotalList()
+                    }
+                }
+            }, 200)
+
+            recommendBookListViews = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
+            recommendBookListViews.forEach { it.visibility = View.GONE }
+            recommendLabel.visibility = View.INVISIBLE
+            totalPlanContainer.layoutParams.height = DisplayUtils.getScrenHeight(requireContext())
+            filterView.listener = this@BookFragment
+        }
     }
 
     override fun onResume() {
@@ -186,21 +229,23 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     fun getMyPlanList(cb: () -> Unit) {
-        BookManager.getMyBookList(requireContext(), user!!) {
-            this.myBooks = it
+        binding.apply {
+            BookManager.getMyBookList(requireContext(), user!!) {
+                myBooks = it
 
-            myPlanCntTv?.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
-            pinCntTv?.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
-            if (it == null || it.myPieceStorageList.size == 0) {
-                myBookEmptyContainer?.visibility = View.VISIBLE
-                myPlanRv?.visibility = View.INVISIBLE
-            } else {
-                myBookEmptyContainer?.visibility = View.INVISIBLE
-                myPlanRv?.visibility = View.VISIBLE
-                myPlanRv?.adapter?.notifyDataSetChanged()
+                myPlanCntTv?.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
+                pinCntTv?.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
+                if (it == null || it.myPieceStorageList.size == 0) {
+                    myBookEmptyContainer?.visibility = View.VISIBLE
+                    myPlanRv?.visibility = View.INVISIBLE
+                } else {
+                    myBookEmptyContainer?.visibility = View.INVISIBLE
+                    myPlanRv?.visibility = View.VISIBLE
+                    myPlanRv?.adapter?.notifyDataSetChanged()
+                }
+
+                cb()
             }
-
-            cb()
         }
     }
 
@@ -215,9 +260,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     view?.set(bookList.toMutableList(), title, i + 1, this@BookFragment)
                     view?.show { }
                 }
-                recommendLabel?.showIfNeed()
-                planLoadingView?.cancelAnimation()
-                planLoadingView?.visibility = View.INVISIBLE
+                binding.recommendLabel.showIfNeed()
+                binding.planLoadingView.cancelAnimation()
+                binding.planLoadingView.visibility = View.INVISIBLE
                 cb()
             }
         }
@@ -233,65 +278,72 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     val view = recommendBookListViews.getOrNull(i)
                     view?.set(bookList.toList())
                 }
-                recommendLabel?.showIfNeed()
-                planLoadingView?.cancelAnimation()
-                planLoadingView?.visibility = View.INVISIBLE
+                binding.recommendLabel.showIfNeed()
+                binding.planLoadingView.cancelAnimation()
+                binding.planLoadingView.visibility = View.INVISIBLE
                 cb()
             }
         }
     }
 
     fun getTotalList() {
-        totalEmptyContainer.visibility = View.INVISIBLE
-        totalRv.visibility = View.INVISIBLE
-        totalRv.scrollTo(0,0)
-        totalRv.adapter = null
-        totalLoadingView.visibility = View.VISIBLE
-        totalLoadingView.playAnimation()
+        binding.apply {
+            totalEmptyContainer.visibility = View.INVISIBLE
+            totalRv.visibility = View.INVISIBLE
+            totalRv.scrollTo(0, 0)
+            totalRv.adapter = null
+            totalLoadingView.visibility = View.VISIBLE
+            totalLoadingView.playAnimation()
 
-        val filters = filterView.selectedFilterTypes.toSet()
+            val filters = filterView.selectedFilterTypes.toSet()
 
-        BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
-            if(filter != null && filter == filterView?.selectedFilterTypes) {
-                totalBooks = books.toMutableList()
-                totalRv.visibility = View.VISIBLE
-                totalRv.adapter = TotalPlanAdapter()
+            BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
+                if (filter != null && filter == filterView.selectedFilterTypes) {
+                    totalBooks = books.toMutableList()
+                    totalRv.visibility = View.VISIBLE
+                    totalRv.adapter = TotalPlanAdapter()
 
-                if (books.isEmpty()) {
-                    totalEmptyContainer.show(300)
-                    totalRv.adapter?.notifyDataSetChanged()
-                } else {
-                    val totalRvAnimationController = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recyclerview_grid_layout_animation)
-                    totalRv.layoutAnimation = totalRvAnimationController
-                    totalRv.adapter?.notifyDataSetChanged()
-                    totalRv.scheduleLayoutAnimation()
+                    if (books.isEmpty()) {
+                        totalEmptyContainer.show(300)
+                        totalRv.adapter?.notifyDataSetChanged()
+                    } else {
+                        val totalRvAnimationController = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.recyclerview_grid_layout_animation
+                        )
+                        totalRv.layoutAnimation = totalRvAnimationController
+                        totalRv.adapter?.notifyDataSetChanged()
+                        totalRv.scheduleLayoutAnimation()
+                    }
                 }
-            }
-            totalLoadingView.visibility = View.INVISIBLE
-            totalLoadingView.cancelAnimation()
-        })
+                totalLoadingView.visibility = View.INVISIBLE
+                totalLoadingView.cancelAnimation()
+            })
+        }
     }
 
     private fun getTotalListWithoutRefresh() {
-        totalPlanCover.visibility = View.VISIBLE
-        totalLoadingView.visibility = View.VISIBLE
-        totalLoadingView.playAnimation()
-        val filters = filterView.selectedFilterTypes.toSet()
+        binding.apply {
+            totalPlanCover.visibility = View.VISIBLE
+            totalLoadingView.visibility = View.VISIBLE
+            totalLoadingView.playAnimation()
+            val filters = filterView.selectedFilterTypes.toSet()
 
-        BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
-            if(filter == filterView.selectedFilterTypes) {
-                totalBooks?.clear()
-                totalBooks?.addAll(books.toMutableList())
+            BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
+                if (filter == filterView.selectedFilterTypes) {
+                    totalBooks?.clear()
+                    totalBooks?.addAll(books.toMutableList())
 
-                if (books.isEmpty()) {
-                    totalEmptyContainer.show(300)
+                    if (books.isEmpty()) {
+                        totalEmptyContainer.show(300)
+                    }
+                    totalRv.adapter?.notifyDataSetChanged()
                 }
-                totalRv.adapter?.notifyDataSetChanged()
-            }
-            totalLoadingView.visibility = View.INVISIBLE
-            totalLoadingView.cancelAnimation()
-            totalPlanCover.visibility = View.GONE
-        })
+                totalLoadingView.visibility = View.INVISIBLE
+                totalLoadingView.cancelAnimation()
+                totalPlanCover.visibility = View.GONE
+            })
+        }
     }
 
     fun syncRecommendBook(book: Book) {
@@ -320,12 +372,12 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             books[index] = book
         }
 
-        if(filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.pin == true) {
+        if(binding.filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.pin == true) {
             books?.remove(book)
         }
 
         totalBooks = books
-        totalRv.adapter?.notifyDataSetChanged()
+        binding.totalRv.adapter?.notifyDataSetChanged()
     }
 
     inner class MyPlanAdapter : RecyclerView.Adapter<MyPlanHolder>() {
@@ -388,18 +440,19 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의플랜빼기")
                 BookManager.deleteBook(requireContext(), user!!, book) {
                     myBooks?.removeBook(book) {
+                        binding.apply {
+                            myPlanRv.adapter?.notifyItemRemoved(it)
+                            myPlanCntTv.text = "총 ${myBooks?.myPieceStorageList?.size ?: 0}개 "
+                            pinCntTv.text = "핀 설정 ${myBooks?.pinBookPlanCount ?: 0}개 "
 
-                        myPlanRv.adapter?.notifyItemRemoved(it)
-                        myPlanCntTv.text = "총 ${myBooks?.myPieceStorageList?.size ?: 0}개 "
-                        pinCntTv.text = "핀 설정 ${myBooks?.pinBookPlanCount ?: 0}개 "
-
-                        if(myBooks == null || myBooks!!.myPieceStorageList.size == 0) {
-                            myBookEmptyContainer.visibility = View.VISIBLE
-                            myPlanRv.visibility = View.INVISIBLE
-                        } else {
-                            myBookEmptyContainer.visibility = View.INVISIBLE
-                            myPlanRv.visibility = View.VISIBLE
-                            myPlanRv.adapter?.notifyDataSetChanged()
+                            if (myBooks == null || myBooks!!.myPieceStorageList.size == 0) {
+                                myBookEmptyContainer.visibility = View.VISIBLE
+                                myPlanRv.visibility = View.INVISIBLE
+                            } else {
+                                myBookEmptyContainer.visibility = View.INVISIBLE
+                                myPlanRv.visibility = View.VISIBLE
+                                myPlanRv.adapter?.notifyDataSetChanged()
+                            }
                         }
                     }
                 }
@@ -441,7 +494,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         getMyPlanList {
             (activity as LearningTabActivity).showSnackBar("${book.bookName}으로 워크북이 만들어졌습니다.", "나의플랜으로 이동", action = {
                 val index = myBooks?.myPieceStorageList?.indexOfFirst { it.assignID == book.assignID }
-                rootView.smoothScrollTo(0, 0)
+                binding.rootView.smoothScrollTo(0, 0)
 
                 if(index != null) {
                     val scroller = object: LinearSmoothScroller(context) {
@@ -452,7 +505,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     scroller.targetPosition = index
                     Handler(Looper.getMainLooper()).postDelayed({
                         try {
-                            myPlanRv.layoutManager?.startSmoothScroll(scroller)
+                            binding.myPlanRv.layoutManager?.startSmoothScroll(scroller)
                         } catch (e:Exception) {
                             Log.e("워크북생성", "error===>${e.localizedMessage}, position=>$index")
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "워크북생성", "나의플랜으로 이동")
@@ -495,13 +548,13 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             )
         }
 
-        filterView.selectedFilterTypes = targetHashSet
-        filterView.adapter?.notifyDataSetChanged()
+        binding.filterView.selectedFilterTypes = targetHashSet
+        binding.filterView.adapter?.notifyDataSetChanged()
 
         getTotalList()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            rootView.scrollToView(totalLabel)
+            binding.rootView.scrollToView(binding.totalLabel)
 
         }, 1000)
     }

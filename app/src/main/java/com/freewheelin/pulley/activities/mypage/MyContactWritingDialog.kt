@@ -6,28 +6,34 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.vibrate
 import com.freewheelin.pulley.core.API.postInquiry
 import com.freewheelin.pulley.core.API_V1
+import com.freewheelin.pulley.databinding.DialogMyContactWritingBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
-import kotlinx.android.synthetic.main.dialog_my_contact_writing.*
-import kotlinx.android.synthetic.main.view_input_daebak.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MyContactWritingDialog(context: Context, val user: User): Dialog(context), View.OnFocusChangeListener {
     val cagetoryItems = listOf("건의사항", "오류 신고", "기능 문의", "회원정보 문의")
+
+    private val binding: DialogMyContactWritingBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_my_contact_writing, null, false)
+    }
+
     init {
-        setContentView(R.layout.dialog_my_contact_writing)
+        setContentView(binding.root)
         setCanceledOnTouchOutside(false)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
@@ -35,9 +41,9 @@ class MyContactWritingDialog(context: Context, val user: User): Dialog(context),
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         if(hasFocus)
-            contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
         else {
-            contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
         }
     }
 
@@ -47,72 +53,76 @@ class MyContactWritingDialog(context: Context, val user: User): Dialog(context),
     }
 
     private fun initUI() {
-        scrollView.setOnTouchListener { view, motionEvent ->
-            currentFocus?.let { context.hideKeyboard(it) }
-            false
-        }
-
-        contentsEt.onFocusChangeListener = this
-        contentsEt.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        with(binding) {
+            scrollView.setOnTouchListener { view, motionEvent ->
+                currentFocus?.let { context.hideKeyboard(it) }
+                false
             }
 
-            override fun onTextChanged(sequence: CharSequence, p1: Int, p2: Int, p3: Int) {
-                if(sequence.isEmpty()) {
-                    contentsEt.textSize = 16f
-                } else {
-                    contentsEt.textSize = 18f
+            contentsEt.onFocusChangeListener = this@MyContactWritingDialog
+            contentsEt.addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 }
+
+                override fun onTextChanged(sequence: CharSequence, p1: Int, p2: Int, p3: Int) {
+                    if(sequence.isEmpty()) {
+                        contentsEt.textSize = 16f
+                    } else {
+                        contentsEt.textSize = 18f
+                    }
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                }
+            })
+
+            categorySpinner.items = cagetoryItems
+            xBtn.setOnClickListener {
+                dismiss()
             }
 
-            override fun afterTextChanged(p0: Editable?) {
+            completeBtn.setOnClickListener {
+                onCompleteBtnClicked()
             }
-        })
-
-        categorySpinner.items = cagetoryItems
-        xBtn.setOnClickListener {
-            dismiss()
-        }
-
-        completeBtn.setOnClickListener {
-            onCompleteBtnClicked()
         }
     }
 
     private fun onCompleteBtnClicked() {
-        if(!isCompletable()) {
-            context.vibrate()
-            if(categorySpinner.position == null)
-                categoryErrorLl.visibility = View.VISIBLE
-            else
-                categoryErrorLl.visibility = View.GONE
-
-            if(titleDif.editText.text.trim().isEmpty())
-                titleDif.showErrorMsg("제목을 입력해주세요.")
-            else
-                titleDif.isShownError = false
-
-            if(contentsEt.text.trim().isEmpty()) {
-                contentsErrorLl.visibility = View.VISIBLE
-                contentsErrorTv.text = "내용을 입력해주세요."
-                contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
-            } else if (contentsEt.text.trim().length < 10) {
-                contentsErrorLl.visibility = View.VISIBLE
-                contentsErrorTv.text = "내용을 10자 이상 입력해주세요."
-                contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
-            } else {
-                contentsErrorLl.visibility = View.GONE
-                if(contentsEt.isFocused)
-                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+        with(binding) {
+            if(!isCompletable()) {
+                context.vibrate()
+                if(categorySpinner.position == null)
+                    categoryErrorLl.visibility = View.VISIBLE
                 else
-                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                    categoryErrorLl.visibility = View.GONE
 
+                if(titleDif.editText.text.trim().isEmpty())
+                    titleDif.showErrorMsg("제목을 입력해주세요.")
+                else
+                    titleDif.isShownError = false
+
+                if(contentsEt.text.trim().isEmpty()) {
+                    contentsErrorLl.visibility = View.VISIBLE
+                    contentsErrorTv.text = "내용을 입력해주세요."
+                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                } else if (contentsEt.text.trim().length < 10) {
+                    contentsErrorLl.visibility = View.VISIBLE
+                    contentsErrorTv.text = "내용을 10자 이상 입력해주세요."
+                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                } else {
+                    contentsErrorLl.visibility = View.GONE
+                    if(contentsEt.isFocused)
+                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                    else
+                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+
+                }
+            } else {
+                val title = titleDif.editText.text.trim().toString()
+                val contents = contentsEt.text.trim().toString()
+                val category = cagetoryItems[categorySpinner.position!!]
+                requestInquiry(category = category, title = title, content = contents)
             }
-        } else {
-            val title = titleDif.editText.text.trim().toString()
-            val contents = contentsEt.text.trim().toString()
-            val category = cagetoryItems[categorySpinner.position!!]
-            requestInquiry(category = category, title = title, content = contents)
         }
     }
 
@@ -137,7 +147,7 @@ class MyContactWritingDialog(context: Context, val user: User): Dialog(context),
 
 
     private fun isCompletable(): Boolean {
-        return categorySpinner.position != null &&
-                contentsEt.text.trim().length >= 10 && !titleDif.editText.text.trim().isEmpty()
+        return binding.categorySpinner.position != null &&
+            binding.contentsEt.text.trim().length >= 10 && !binding.titleDif.editText.text.trim().isEmpty()
     }
 }

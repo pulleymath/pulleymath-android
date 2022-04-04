@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.os.Handler
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,17 +12,13 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.dialogs.CompleteDialog
+import com.freewheelin.pulley.databinding.ViewAddOptionalUnitToastBinding
 import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_add_optional_unit_toast.view.*
-import kotlinx.android.synthetic.main.view_success_toast.view.*
-import kotlinx.android.synthetic.main.view_success_toast.view.contentTv
-import kotlinx.android.synthetic.main.view_success_toast.view.titleTv
 
 class AddOptionUnitToast: PopupWindow() {
     companion object {
@@ -50,10 +45,10 @@ class AddOptionUnitToast: PopupWindow() {
 //            }
             toastView.measure(0,0)
 
-            toastView.checkNoShow.setOnCheckedChangeListener { buttonView, isChecked -> check = isChecked }
+            toastView.binding.checkNoShow.setOnCheckedChangeListener { buttonView, isChecked -> check = isChecked }
 
-            toastView.btnNo.setOnClickListener { no(context) }
-            toastView.btnYes.setOnClickListener { yes(context) }
+            toastView.binding.btnNo.setOnClickListener { no(context) }
+            toastView.binding.btnYes.setOnClickListener { yes(context) }
 
             val popupWindow = PopupWindow(toastView, toastView.measuredWidth, toastView.measuredHeight)
 
@@ -139,26 +134,24 @@ class AddOptionUnitToast: PopupWindow() {
 class AddOptionalUnitToastView: ConstraintLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+    var binding: ViewAddOptionalUnitToastBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_add_optional_unit_toast, this, true)
 
     var title: String
         set(value) {
-            titleTv.text = value
+            binding.titleTv.text = value
         }
         get() {
-            return titleTv.text.toString()
+            return binding.titleTv.text.toString()
         }
 
     var contents: String
         set(value) {
-            contentTv.text = value
+            binding.contentTv.text = value
         }
         get() {
-            return contentTv.text.toString()
+            return binding.contentTv.text.toString()
         }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_add_optional_unit_toast, this)
-//        setBackgroundResource(R.drawable.bg_purple_6d6dff_radius_20_left_only)
-//        setPadding(32.toPx() ,32.toPx() ,32.toPx(), 32.toPx())
     }
 }

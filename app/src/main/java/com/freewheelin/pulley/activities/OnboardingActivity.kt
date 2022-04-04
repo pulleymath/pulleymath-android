@@ -1,11 +1,9 @@
 package com.freewheelin.pulley.activities
 
-import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -15,15 +13,16 @@ import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.isMobileUI
 import com.freewheelin.pulley.bases.isNeedOnboarding
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ActivityOnboardingBinding
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import kotlinx.android.synthetic.main.activity_onboarding.*
 
 class OnboardingActivity : BaseActivity() {
 
-
-
+    private val binding: ActivityOnboardingBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_onboarding,null,false)
+    }
 
     lateinit var firstLottieFragment: OnboardingPageFragment
     lateinit var secondLottieFragment: OnboardingPageFragment
@@ -39,7 +38,7 @@ class OnboardingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding)
+        setContentView(binding.root)
 
         var firstFragment: OnboardingPageFragment? = null
         var secondFragment: OnboardingPageFragment? = null
@@ -79,15 +78,15 @@ class OnboardingActivity : BaseActivity() {
     }
 
     fun initUI() {
-        viewPager.adapter = OnboardingAdapter(supportFragmentManager)
-        viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+        binding.viewPager.adapter = OnboardingAdapter(supportFragmentManager)
+        binding.viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                val frag = fragments[viewPager.currentItem]
+                val frag = fragments[binding.viewPager.currentItem]
                 frag.runAnim()
             }
         })
@@ -97,15 +96,15 @@ class OnboardingActivity : BaseActivity() {
 
     fun setStartButton() {
 
-        startBtn.visibility = View.VISIBLE
-        startBtn.setOnClickListener {
+        binding.startBtn.visibility = View.VISIBLE
+        binding.startBtn.setOnClickListener {
             isNeedOnboarding = false
             val intent = StartActivity.getIntent(this)
             startActivity(intent)
             finish()
         }
 
-        if(isMobileUI) startBtn.text = "다음"
+        if(isMobileUI) binding.startBtn.text = "다음"
     }
 
     override fun onBackPressed() {

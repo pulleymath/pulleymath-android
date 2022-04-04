@@ -1,99 +1,108 @@
 package com.freewheelin.pulley.activities.mypage
 
 import android.content.Context
+import android.view.LayoutInflater
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.assets.Subject
 import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.databinding.DialogMyStudyInfoSettingBinding
+import com.freewheelin.pulley.databinding.DialogMyStudyUnitSettingBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
-import kotlinx.android.synthetic.main.dialog_my_study_unit_setting.*
 
 class MyStudyUnitSettingDialog(context: Context, override val user: User, listener: MyPageSettingDialogListener): MyPageSettingBaseDialog(context, user, listener), DaebakInputSelectionListener {
+    var binding: DialogMyStudyUnitSettingBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_my_study_unit_setting, null, false)
 
     init {
-        setContentView(R.layout.dialog_my_study_unit_setting)
+        setContentView(binding.root)
         configureUI()
     }
 
     private fun configureUI() {
-        mathTopSelection.buttonTitles = Subject.수학_상.bigUnits.map { it.title }
-        mathBottomSelection.buttonTitles = Subject.수학_하.bigUnits.map { it.title }
-        math1Selection.buttonTitles = Subject.수학I.bigUnits.map { it.title }
-        math2Selection.buttonTitles = Subject.수학II.bigUnits.map { it.title }
+        with(binding) {
+            mathTopSelection.buttonTitles = Subject.수학_상.bigUnits.map { it.title }
+            mathBottomSelection.buttonTitles = Subject.수학_하.bigUnits.map { it.title }
+            math1Selection.buttonTitles = Subject.수학I.bigUnits.map { it.title }
+            math2Selection.buttonTitles = Subject.수학II.bigUnits.map { it.title }
 
-        probAnsStatSelection.buttonTitles = Subject.확률과통계.bigUnits.map { it.title }
-        calculusSelection.buttonTitles = Subject.미적분.bigUnits.map { it.title }
-        geometrySelection.buttonTitles = Subject.기하.bigUnits.map { it.title }
+            probAnsStatSelection.buttonTitles = Subject.확률과통계.bigUnits.map { it.title }
+            calculusSelection.buttonTitles = Subject.미적분.bigUnits.map { it.title }
+            geometrySelection.buttonTitles = Subject.기하.bigUnits.map { it.title }
 
-        modifyBtn.toDisableUI()
+            modifyBtn.toDisableUI()
 
-        val userUnits = user.studiedUnit
-        mathTopSelection.result = listOf(
+            val userUnits = user.studiedUnit
+            mathTopSelection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.다항식),
                 userUnits.contains(BigUnit.방정식과_부등식),
                 userUnits.contains(BigUnit.도형의_방정식)
-        )
+            )
 
-        mathBottomSelection.result = listOf(
+            mathBottomSelection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.집합과_명제),
                 userUnits.contains(BigUnit.함수),
                 userUnits.contains(BigUnit.순열과_조합)
-        )
+            )
 
-        math1Selection.result = listOf(
+            math1Selection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.지수함수와_로그함수),
                 userUnits.contains(BigUnit.삼각함수),
                 userUnits.contains(BigUnit.수열)
-        )
+            )
 
-        math2Selection.result = listOf(
+            math2Selection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.함수의_극한과_연속),
                 userUnits.contains(BigUnit.미분),
                 userUnits.contains(BigUnit.적분)
-        )
+            )
 
-        probAnsStatSelection.result = listOf(
+            probAnsStatSelection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.경우의_수),
                 userUnits.contains(BigUnit.확률),
                 userUnits.contains(BigUnit.통계)
-        )
+            )
 
-        calculusSelection.result = listOf(
+            calculusSelection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.수열의_극한),
                 userUnits.contains(BigUnit.미분법),
                 userUnits.contains(BigUnit.적분법)
-        )
+            )
 
 
-        geometrySelection.result = listOf(
+            geometrySelection.result = listOf(
                 false,
                 userUnits.contains(BigUnit.이차곡선),
                 userUnits.contains(BigUnit.벡터),
                 userUnits.contains(BigUnit.공간도형)
-        )
+            )
 
-        convertCheckStateIfAllSelected(mathTopSelection)
-        convertCheckStateIfAllSelected(mathBottomSelection)
-        convertCheckStateIfAllSelected(math1Selection)
-        convertCheckStateIfAllSelected(math2Selection)
-        convertCheckStateIfAllSelected(probAnsStatSelection)
-        convertCheckStateIfAllSelected(calculusSelection)
-        convertCheckStateIfAllSelected(geometrySelection)
+            convertCheckStateIfAllSelected(mathTopSelection)
+            convertCheckStateIfAllSelected(mathBottomSelection)
+            convertCheckStateIfAllSelected(math1Selection)
+            convertCheckStateIfAllSelected(math2Selection)
+            convertCheckStateIfAllSelected(probAnsStatSelection)
+            convertCheckStateIfAllSelected(calculusSelection)
+            convertCheckStateIfAllSelected(geometrySelection)
 
 
-        setAllSelectionListener()
-        modifyBtn.setOnClickListener {
+            setAllSelectionListener()
+            modifyBtn.setOnClickListener {
 
-            if(modifyBtn.isEnableUI())
-                onModifyBtnClicked()
+                if(modifyBtn.isEnableUI())
+                    onModifyBtnClicked()
+            }
+            xBtn.setOnClickListener {
+                dismiss()
+            }
         }
     }
 
@@ -105,33 +114,37 @@ class MyStudyUnitSettingDialog(context: Context, override val user: User, listen
     }
 
     private fun setAllSelectionListener() {
-        mathTopSelection.listener = this
+        with(binding) {
+            mathTopSelection.listener = this@MyStudyUnitSettingDialog
 
-        mathBottomSelection.listener = this
+            mathBottomSelection.listener = this@MyStudyUnitSettingDialog
 
-        math1Selection.listener = this
+            math1Selection.listener = this@MyStudyUnitSettingDialog
 
-        math2Selection.listener = this
+            math2Selection.listener = this@MyStudyUnitSettingDialog
 
-        probAnsStatSelection.listener = this
+            probAnsStatSelection.listener = this@MyStudyUnitSettingDialog
 
-        calculusSelection.listener = this
+            calculusSelection.listener = this@MyStudyUnitSettingDialog
 
-        geometrySelection.listener = this
+            geometrySelection.listener = this@MyStudyUnitSettingDialog
+        }
     }
 
     private fun getSelectedUnit(): Collection<BigUnit> {
-        val selectedBigUnits = hashSetOf<BigUnit>()
+        with(binding) {
+            val selectedBigUnits = hashSetOf<BigUnit>()
 
-        selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, Subject.수학_상))
-        selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, Subject.수학_하))
-        selectedBigUnits.addAll(getSelectedUnits(math1Selection, Subject.수학I))
-        selectedBigUnits.addAll(getSelectedUnits(math2Selection, Subject.수학II))
-        selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
-        selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
-        selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
+            selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, Subject.수학_상))
+            selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, Subject.수학_하))
+            selectedBigUnits.addAll(getSelectedUnits(math1Selection, Subject.수학I))
+            selectedBigUnits.addAll(getSelectedUnits(math2Selection, Subject.수학II))
+            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
+            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
+            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
 
-        return selectedBigUnits
+            return selectedBigUnits
+        }
     }
 
     private fun onModifyBtnClicked() {
@@ -142,10 +155,12 @@ class MyStudyUnitSettingDialog(context: Context, override val user: User, listen
     }
 
     override fun onSelectionChanged(view: DaebakInputSelection) {
-        if(getSelectedUnit().isEmpty()) {
-            modifyBtn.toDisableUI()
-        } else {
-            modifyBtn.toEnableUI()
+        with(binding) {
+            if(getSelectedUnit().isEmpty()) {
+                modifyBtn.toDisableUI()
+            } else {
+                modifyBtn.toEnableUI()
+            }
         }
     }
 

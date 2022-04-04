@@ -1,401 +1,404 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootView"
-    android:layout_width="@dimen/dp640"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_white_fafafa_round"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.MyPageActivity">
-
-    <LinearLayout
-        android:id="@+id/myPageContainer"
-        android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="@dimen/dp640"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/bg_white_fafafa_round"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.MyPageActivity">
 
-        <TextView
-            android:id="@+id/greetingLabel"
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp48"
-            android:layout_marginTop="@dimen/dp48"
-            android:textSize="@dimen/sp24"
-            tools:text="풀리수학님 안녕하세요!" />
-
-
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/myPageContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp24">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/greetingLabel"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginStart="@dimen/dp48"
+                android:layout_marginTop="@dimen/dp48"
+                android:textSize="@dimen/sp24"
+                tools:text="풀리수학님 안녕하세요!" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/payUserContainer"
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp24">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
-                    android:paddingStart="@dimen/dp48"
-                    android:paddingTop="@dimen/dp32"
-                    android:paddingBottom="@dimen/dp32">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/serviceNameLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/payUserContainer"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_service_name"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:background="@color/white_ffffff"
+                        android:paddingStart="@dimen/dp48"
+                        android:paddingTop="@dimen/dp32"
+                        android:paddingBottom="@dimen/dp32">
 
-                    <TextView
-                        android:id="@+id/availableDurationLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/serviceNameLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_service_name"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/availableDurationLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_available_duration"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/serviceNameLabel" />
+
+
+                        <TextView
+                            android:id="@+id/serviceTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp104"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/serviceNameLabel"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/serviceNameLabel"
+                            tools:text="대박이 고3용 (프로모션)" />
+
+                        <TextView
+                            android:id="@+id/availableDurationTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp104"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/availableDurationLabel"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/availableDurationLabel"
+                            tools:text="2019.11.01 - 2020.11.15 (152일 남음)" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/freeUserContainer"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_available_duration"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/serviceNameLabel" />
+                        android:background="@color/white_ffffff"
+                        android:paddingStart="@dimen/dp48"
+                        android:paddingTop="@dimen/dp32"
+                        android:paddingBottom="@dimen/dp32">
 
+                        <TextView
+                            android:id="@+id/membershipGuideLabel"
+                            style="@style/TextBlack_4c4c4c.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="8sp"
+                            android:text="@string/guide_membership_none"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/serviceTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp104"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/serviceNameLabel"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/serviceNameLabel"
-                        tools:text="대박이 고3용 (프로모션)" />
+                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                            android:id="@+id/membershipBtn"
+                            android:layout_width="@dimen/primaryBtn_width_160dp"
+                            android:layout_height="@dimen/dp48"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_study_with_pulley"
+                            app:buttonTheme="blue"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/membershipGuideLabel" />
 
-                    <TextView
-                        android:id="@+id/availableDurationTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp104"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/availableDurationLabel"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/availableDurationLabel"
-                        tools:text="2019.11.01 - 2020.11.15 (152일 남음)" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/freeUserContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
-                    android:paddingStart="@dimen/dp48"
-                    android:paddingTop="@dimen/dp32"
-                    android:paddingBottom="@dimen/dp32">
-
-                    <TextView
-                        android:id="@+id/membershipGuideLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="8sp"
-                        android:text="@string/guide_membership_none"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
-                        android:id="@+id/membershipBtn"
-                        android:layout_width="@dimen/primaryBtn_width_160dp"
-                        android:layout_height="@dimen/dp48"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_study_with_pulley"
-                        app:buttonTheme="blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/membershipGuideLabel" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:background="@color/white_ffffff"
-                    android:paddingStart="@dimen/dp48"
-                    android:paddingTop="@dimen/dp32"
-                    android:paddingBottom="@dimen/dp32">
-
-                    <TextView
-                        android:id="@+id/nameLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_name"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/emailLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_email"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+                        android:background="@color/white_ffffff"
+                        android:paddingStart="@dimen/dp48"
+                        android:paddingTop="@dimen/dp32"
+                        android:paddingBottom="@dimen/dp32">
 
-                    <TextView
-                        android:id="@+id/phoneLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/nameLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_name"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/emailLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_email"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+
+                        <TextView
+                            android:id="@+id/phoneLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_phone"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+
+
+                        <TextView
+                            android:id="@+id/nameTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="72dp"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/nameLabel"
+                            tools:text="대박이" />
+
+                        <TextView
+                            android:id="@+id/emailTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/emailLabel"
+                            app:layout_constraintStart_toStartOf="@+id/nameTv"
+                            app:layout_constraintTop_toTopOf="@+id/emailLabel"
+                            tools:text="daebak@gmail.com" />
+
+                        <TextView
+                            android:id="@+id/phoneTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/phoneLabel"
+                            app:layout_constraintStart_toStartOf="@+id/emailTv"
+                            app:layout_constraintTop_toTopOf="@+id/phoneLabel"
+                            tools:text="010-90**-4355" />
+
+                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            android:id="@+id/phoneModifyBtn"
+                            android:layout_width="@dimen/primaryBtn_width_96dp"
+                            android:layout_height="@dimen/dp40"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/text_do_edit"
+                            app:ButtonTextSize="@dimen/sp16"
+                            app:buttonTheme="grey"
+                            app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
+                            app:layout_constraintStart_toEndOf="@+id/phoneTv"
+                            app:layout_constraintTop_toTopOf="@+id/phoneTv" />
+
+                        <TextView
+                            android:id="@+id/pwLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="32dp"
+                            android:text="@string/text_password"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
+
+                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            android:id="@+id/pwModifyBtn"
+                            android:layout_width="@dimen/primaryBtn_width_160dp"
+                            android:layout_height="@dimen/dp40"
+                            android:text="@string/text_modify_password"
+                            app:ButtonTextSize="@dimen/sp16"
+                            app:buttonTheme="grey"
+                            app:layout_constraintBottom_toBottomOf="@+id/pwLabel"
+                            app:layout_constraintStart_toStartOf="@+id/phoneTv"
+                            app:layout_constraintTop_toTopOf="@+id/pwLabel" />
+
+                        <TextView
+                            android:id="@+id/pwdModifyGuideTv"
+                            style="@style/TextPurple_6d6dff.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:textSize="@dimen/sp14"
+                            app:layout_constraintStart_toStartOf="@+id/phoneTv"
+                            app:layout_constraintTop_toBottomOf="@+id/pwLabel"
+                            tools:text="@string/guide_reset_password_email_info_format" />
+
+                        <TextView
+                            android:id="@+id/phoneModifyGuideTv"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:lineSpacingExtra="@dimen/sp6"
+                            android:text="@string/guide_name_modify"
+                            android:textSize="@dimen/sp14"
+                            app:layout_constraintStart_toStartOf="@+id/pwdModifyGuideTv"
+                            app:layout_constraintTop_toBottomOf="@+id/pwdModifyGuideTv" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_phone"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
+                        android:background="@drawable/bg_white_ffffff_round_bottom_only"
+                        android:paddingStart="@dimen/dp48"
+                        android:paddingTop="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp48"
+                        android:paddingBottom="@dimen/dp32">
+
+                        <TextView
+                            android:id="@+id/gradeLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/text_grade_and_score"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/gradeTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/gradeLabel"
+                            app:layout_constraintStart_toEndOf="@+id/gradeLabel"
+                            app:layout_constraintTop_toTopOf="@+id/gradeLabel"
+                            tools:text="고등학교 3학년, 이과, 1등급" />
 
 
-                    <TextView
-                        android:id="@+id/nameTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="72dp"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/nameLabel"
-                        tools:text="대박이" />
-
-                    <TextView
-                        android:id="@+id/emailTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/emailLabel"
-                        app:layout_constraintStart_toStartOf="@+id/nameTv"
-                        app:layout_constraintTop_toTopOf="@+id/emailLabel"
-                        tools:text="daebak@gmail.com" />
-
-                    <TextView
-                        android:id="@+id/phoneTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/phoneLabel"
-                        app:layout_constraintStart_toStartOf="@+id/emailTv"
-                        app:layout_constraintTop_toTopOf="@+id/phoneLabel"
-                        tools:text="010-90**-4355" />
-
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
-                        android:id="@+id/phoneModifyBtn"
-                        android:layout_width="@dimen/primaryBtn_width_96dp"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/text_do_edit"
-                        app:ButtonTextSize="@dimen/sp16"
-                        app:buttonTheme="grey"
-                        app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
-                        app:layout_constraintStart_toEndOf="@+id/phoneTv"
-                        app:layout_constraintTop_toTopOf="@+id/phoneTv" />
-
-                    <TextView
-                        android:id="@+id/pwLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
-                        android:text="@string/text_password"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
-
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
-                        android:id="@+id/pwModifyBtn"
-                        android:layout_width="@dimen/primaryBtn_width_160dp"
-                        android:layout_height="@dimen/dp40"
-                        android:text="@string/text_modify_password"
-                        app:ButtonTextSize="@dimen/sp16"
-                        app:buttonTheme="grey"
-                        app:layout_constraintBottom_toBottomOf="@+id/pwLabel"
-                        app:layout_constraintStart_toStartOf="@+id/phoneTv"
-                        app:layout_constraintTop_toTopOf="@+id/pwLabel" />
-
-                    <TextView
-                        android:id="@+id/pwdModifyGuideTv"
-                        style="@style/TextPurple_6d6dff.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textSize="@dimen/sp14"
-                        app:layout_constraintStart_toStartOf="@+id/phoneTv"
-                        app:layout_constraintTop_toBottomOf="@+id/pwLabel"
-                        tools:text="@string/guide_reset_password_email_info_format" />
-
-                    <TextView
-                        android:id="@+id/phoneModifyGuideTv"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:lineSpacingExtra="@dimen/sp6"
-                        android:text="@string/guide_name_modify"
-                        android:textSize="@dimen/sp14"
-                        app:layout_constraintStart_toStartOf="@+id/pwdModifyGuideTv"
-                        app:layout_constraintTop_toBottomOf="@+id/pwdModifyGuideTv" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            android:id="@+id/studyInfoSettingBtn"
+                            android:layout_width="@dimen/primaryBtn_width_96dp"
+                            android:layout_height="@dimen/dp40"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:text="@string/text_do_edit"
+                            app:buttonTheme="grey"
+                            app:layout_constraintBottom_toBottomOf="@+id/gradeTv"
+                            app:layout_constraintStart_toEndOf="@+id/gradeTv"
+                            app:layout_constraintTop_toTopOf="@+id/gradeTv" />
 
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:background="@drawable/bg_white_ffffff_round_bottom_only"
-                    android:paddingStart="@dimen/dp48"
-                    android:paddingTop="@dimen/dp16"
-                    android:paddingEnd="@dimen/dp48"
-                    android:paddingBottom="@dimen/dp32">
+                        <TextView
+                            android:id="@+id/recommendLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_recommend_common_subject"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/gradeLabel" />
 
-                    <TextView
-                        android:id="@+id/gradeLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/text_grade_and_score"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/studiedUnitTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="@dimen/sp8"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/recommendLabel"
+                            app:layout_constraintStart_toStartOf="@+id/gradeTv"
+                            app:layout_constraintTop_toTopOf="@+id/recommendLabel"
+                            tools:text="함수, 삼각함수" />
 
-                    <TextView
-                        android:id="@+id/gradeTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp16"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/gradeLabel"
-                        app:layout_constraintStart_toEndOf="@+id/gradeLabel"
-                        app:layout_constraintTop_toTopOf="@+id/gradeLabel"
-                        tools:text="고등학교 3학년, 이과, 1등급" />
+                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            android:id="@+id/recommendUnitSettingBtn"
+                            android:layout_width="@dimen/primaryBtn_width_96dp"
+                            android:layout_height="@dimen/dp40"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:text="@string/text_do_edit"
+                            app:buttonTheme="grey"
+                            app:layout_constraintBottom_toBottomOf="@+id/studiedUnitTv"
+                            app:layout_constraintStart_toEndOf="@+id/studiedUnitTv"
+                            app:layout_constraintTop_toTopOf="@+id/studiedUnitTv" />
 
+                        <TextView
+                            android:id="@+id/optionalLabel"
+                            style="@style/TextGrey_c0c0c0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp24"
+                            android:text="@string/text_recommend_selected_subject"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintStart_toStartOf="@+id/recommendLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/recommendLabel" />
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
-                        android:id="@+id/studyInfoSettingBtn"
-                        android:layout_width="@dimen/primaryBtn_width_96dp"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_marginStart="@dimen/dp16"
-                        android:text="@string/text_do_edit"
-                        app:buttonTheme="grey"
-                        app:layout_constraintBottom_toBottomOf="@+id/gradeTv"
-                        app:layout_constraintStart_toEndOf="@+id/gradeTv"
-                        app:layout_constraintTop_toTopOf="@+id/gradeTv" />
+                        <TextView
+                            android:id="@+id/optionalUnitTv"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="@dimen/sp8"
+                            android:textSize="@dimen/sp16"
+                            app:layout_constraintBottom_toBottomOf="@+id/optionalLabel"
+                            app:layout_constraintStart_toStartOf="@+id/studiedUnitTv"
+                            app:layout_constraintTop_toTopOf="@+id/optionalLabel"
+                            tools:text="확률, 벡터, 미분" />
 
+                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            android:id="@+id/optionalUnitSettingBtn"
+                            android:layout_width="@dimen/primaryBtn_width_96dp"
+                            android:layout_height="@dimen/dp40"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:text="@string/text_do_edit"
+                            app:buttonTheme="grey"
+                            app:layout_constraintBottom_toBottomOf="@+id/optionalUnitTv"
+                            app:layout_constraintStart_toEndOf="@+id/optionalUnitTv"
+                            app:layout_constraintTop_toTopOf="@+id/optionalUnitTv" />
 
-                    <TextView
-                        android:id="@+id/recommendLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_recommend_common_subject"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/gradeLabel" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/studiedUnitTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="@dimen/sp8"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/recommendLabel"
-                        app:layout_constraintStart_toStartOf="@+id/gradeTv"
-                        app:layout_constraintTop_toTopOf="@+id/recommendLabel"
-                        tools:text="함수, 삼각함수" />
+                </LinearLayout>
+            </ScrollView>
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
-                        android:id="@+id/recommendUnitSettingBtn"
-                        android:layout_width="@dimen/primaryBtn_width_96dp"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_marginStart="@dimen/dp16"
-                        android:text="@string/text_do_edit"
-                        app:buttonTheme="grey"
-                        app:layout_constraintBottom_toBottomOf="@+id/studiedUnitTv"
-                        app:layout_constraintStart_toEndOf="@+id/studiedUnitTv"
-                        app:layout_constraintTop_toTopOf="@+id/studiedUnitTv" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/optionalLabel"
-                        style="@style/TextGrey_c0c0c0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:text="@string/text_recommend_selected_subject"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="@+id/recommendLabel"
-                        app:layout_constraintTop_toBottomOf="@+id/recommendLabel" />
-
-                    <TextView
-                        android:id="@+id/optionalUnitTv"
-                        style="@style/TextBlack_4c4c4c"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingExtra="@dimen/sp8"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/optionalLabel"
-                        app:layout_constraintStart_toStartOf="@+id/studiedUnitTv"
-                        app:layout_constraintTop_toTopOf="@+id/optionalLabel"
-                        tools:text="확률, 벡터, 미분" />
-
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
-                        android:id="@+id/optionalUnitSettingBtn"
-                        android:layout_width="@dimen/primaryBtn_width_96dp"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_marginStart="@dimen/dp16"
-                        android:text="@string/text_do_edit"
-                        app:buttonTheme="grey"
-                        app:layout_constraintBottom_toBottomOf="@+id/optionalUnitTv"
-                        app:layout_constraintStart_toEndOf="@+id/optionalUnitTv"
-                        app:layout_constraintTop_toTopOf="@+id/optionalUnitTv" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/childContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/myPageContainer"
-        app:layout_constraintEnd_toEndOf="@+id/myPageContainer"
-        app:layout_constraintStart_toStartOf="@+id/myPageContainer"
-        app:layout_constraintTop_toTopOf="@+id/myPageContainer" />
+        <FrameLayout
+            android:id="@+id/childContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/myPageContainer"
+            app:layout_constraintEnd_toEndOf="@+id/myPageContainer"
+            app:layout_constraintStart_toStartOf="@+id/myPageContainer"
+            app:layout_constraintTop_toTopOf="@+id/myPageContainer" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

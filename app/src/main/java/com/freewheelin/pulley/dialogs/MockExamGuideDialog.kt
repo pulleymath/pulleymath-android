@@ -11,24 +11,21 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.isMobileUI
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.MockExamManager
-import com.freewheelin.pulley.core.manage.ProblemManager
+import com.freewheelin.pulley.databinding.DialogMockExamGuideBinding
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.model.contents.MockExamSummary
 import com.freewheelin.pulley.model.contents.SubjectSummary
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.dialog_mock_exam_guide.*
 
 
 interface MockExamGuideDialogListener {
@@ -42,6 +39,9 @@ class MockExamGuideDialog(
         val isSolved: Boolean,
         val listener: MockExamGuideDialogListener
 ): Dialog(context), EmailInputDialogListener {
+    val binding: DialogMockExamGuideBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_mock_exam_guide, null, false)
+    }
 
     var mockSummary:MockExamSummary? = null
 
@@ -49,12 +49,12 @@ class MockExamGuideDialog(
     val option2 = CommercialSubject.CALCULUS // 미적
     val option3 = CommercialSubject.GEOMETRY // 기하
 
-    val checkBoxes : Array<CheckBox> by lazy { arrayOf(checkSelectOne, checkSelectTwo, checkSelectThree) }
+    val checkBoxes : Array<CheckBox> by lazy { arrayOf(binding.checkSelectOne, binding.checkSelectTwo, binding.checkSelectThree) }
 
     val selectedOptions:MutableList<SubjectSummary> = mutableListOf()
 
     init {
-        super.setContentView(R.layout.dialog_mock_exam_guide)
+        super.setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         progress(true)
@@ -86,63 +86,65 @@ class MockExamGuideDialog(
 
     fun setListener() {
         val dp24 = context.resources.getDimension(R.dimen.dp24)
-        xBtn.extensionTouchArea(dp24.toInt())
-        xBtn.setOnClickListener {
-            dismiss()
-        }
-
-        checkRestart.setOnCheckedChangeListener { buttonView, isChecked ->
-            resolveGuideLabel.visibility = if(isChecked) View.VISIBLE else View.GONE
-
-            Log.d("모의고사", "다시풀기=$isChecked")
-
-            if(!isChecked) {
-                resetSelectedOptions()
-                setSubjectsUi()
-                setSelectSubjectUi()
+        with(binding) {
+            xBtn.extensionTouchArea(dp24.toInt())
+            xBtn.setOnClickListener {
+                dismiss()
             }
 
-            setDisableOptionalUi()
-        }
+            checkRestart.setOnCheckedChangeListener { buttonView, isChecked ->
+                resolveGuideLabel.visibility = if(isChecked) View.VISIBLE else View.GONE
 
-        solveOnTabletBtn.setOnClickListener {
-            LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "바로풀기모드")
-            if(isRestart()) { showConfirmDialog { openSolveActivity() } } else openSolveActivity()
-        }
+                Log.d("모의고사", "다시풀기=$isChecked")
 
-        sendEmailBtn.setOnClickListener {
-            LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "메일")
-            sendEmailPDF()
-        }
-
-        solveOnOMR.setOnClickListener {
-            LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "OMR모드")
-            if(isRestart()) { showConfirmDialog { openOMRActivity() } } else openOMRActivity()
-        }
-
-        radioMethod.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.radioOnTablet -> setTabletModeUi()
-                R.id.radioOnPrint -> setPrintModeUi()
-            }
-        }
-
-        if(mockSummary?.year?:0 > 2020) {
-            selectRadioContainer.setOnCheckedChangeListener { radioGroup, checkedId ->
-                mockSummary?.let { mock ->
-                    when (checkedId) {
-                        R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option1.name }
-                        R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option2.name }
-                        R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option3.name }
-                    }
+                if(!isChecked) {
+                    resetSelectedOptions()
+                    setSubjectsUi()
+                    setSelectSubjectUi()
                 }
-                setSubjectsUi()
-                setRemainButton(isRestart())
+
+                setDisableOptionalUi()
             }
-        } else {
-            checkSelectOne.setOnCheckedChangeListener(optionalCheckedChangedListener)
-            checkSelectTwo.setOnCheckedChangeListener(optionalCheckedChangedListener)
-            checkSelectThree.setOnCheckedChangeListener(optionalCheckedChangedListener)
+
+            solveOnTabletBtn.setOnClickListener {
+                LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "바로풀기모드")
+                if(isRestart()) { showConfirmDialog { openSolveActivity() } } else openSolveActivity()
+            }
+
+            sendEmailBtn.setOnClickListener {
+                LogUtils.logEvent(context!!, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "메일")
+                sendEmailPDF()
+            }
+
+            solveOnOMR.setOnClickListener {
+                LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "모의고사", "OMR모드")
+                if(isRestart()) { showConfirmDialog { openOMRActivity() } } else openOMRActivity()
+            }
+
+            radioMethod.setOnCheckedChangeListener { group, checkedId ->
+                when(checkedId) {
+                    R.id.radioOnTablet -> setTabletModeUi()
+                    R.id.radioOnPrint -> setPrintModeUi()
+                }
+            }
+
+            if(mockSummary?.year?:0 > 2020) {
+                selectRadioContainer.setOnCheckedChangeListener { radioGroup, checkedId ->
+                    mockSummary?.let { mock ->
+                        when (checkedId) {
+                            R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option1.name }
+                            R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option2.name }
+                            R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option3.name }
+                        }
+                    }
+                    setSubjectsUi()
+                    setRemainButton(isRestart())
+                }
+            } else {
+                checkSelectOne.setOnCheckedChangeListener(optionalCheckedChangedListener)
+                checkSelectTwo.setOnCheckedChangeListener(optionalCheckedChangedListener)
+                checkSelectThree.setOnCheckedChangeListener(optionalCheckedChangedListener)
+            }
         }
     }
 
@@ -160,45 +162,49 @@ class MockExamGuideDialog(
 
     var isScrollShown = false
     fun checkScrollIsShown() {
-        val observer = scrollView.viewTreeObserver
-        observer.addOnGlobalLayoutListener {
-            val viewHeight = scrollView.measuredHeight
-            val child = scrollView.getChildAt(0)
-            val contentHeight = child.height
-            if(viewHeight - contentHeight < 0) {
-                isScrollShown = true
-            }
-            bottomContainerShadow.visibility = if(isScrollShown) View.VISIBLE else View.INVISIBLE
-        }
-
-        scrollView.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
-            val child = scrollView.getChildAt(0)
-            val diff = child.bottom - (scrollView.height + scrollY)
-            Log.d("다이얼로그","scroll=$isScrollShown,child bottom=${child.bottom}, scroll height=${scrollView.height}, scrollY=${scrollY}, diff=$diff")
-            if(isScrollShown) {
-                Handler(Looper.getMainLooper()).post {
-                    if (diff == 0)
-                        bottomContainerShadow.visibility = View.INVISIBLE
-                    else
-                        bottomContainerShadow.visibility = View.VISIBLE
-
-                    // Toast.makeText(context,"다이얼로그 diff=$diff, visibility=${bottomContainerShadow.visibility}",Toast.LENGTH_SHORT).show()
+        with(binding) {
+            val observer = scrollView.viewTreeObserver
+            observer.addOnGlobalLayoutListener {
+                val viewHeight = scrollView.measuredHeight
+                val child = scrollView.getChildAt(0)
+                val contentHeight = child.height
+                if(viewHeight - contentHeight < 0) {
+                    isScrollShown = true
                 }
+                bottomContainerShadow.visibility = if(isScrollShown) View.VISIBLE else View.INVISIBLE
+            }
 
+            scrollView.setOnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
+                val child = scrollView.getChildAt(0)
+                val diff = child.bottom - (scrollView.height + scrollY)
+                Log.d("다이얼로그","scroll=$isScrollShown,child bottom=${child.bottom}, scroll height=${scrollView.height}, scrollY=${scrollY}, diff=$diff")
+                if(isScrollShown) {
+                    Handler(Looper.getMainLooper()).post {
+                        if (diff == 0)
+                            bottomContainerShadow.visibility = View.INVISIBLE
+                        else
+                            bottomContainerShadow.visibility = View.VISIBLE
+
+                        // Toast.makeText(context,"다이얼로그 diff=$diff, visibility=${bottomContainerShadow.visibility}",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
             }
         }
     }
 
     fun setTitleUi() {
-        textMonth.text = "${mockSummary?.year}년 ${mockSummary?.month}월"
-        val gua = "${mockSummary?.type?.getStr()}"
-        textTitle.text = "고${mockSummary?.grade} ${mockSummary?.examType} [$gua]"
-        updateTag.visibility = if(mockSummary?.updated == true) View.VISIBLE else View.GONE
+        with(binding) {
+            textMonth.text = "${mockSummary?.year}년 ${mockSummary?.month}월"
+            val gua = "${mockSummary?.type?.getStr()}"
+            textTitle.text = "고${mockSummary?.grade} ${mockSummary?.examType} [$gua]"
+            updateTag.visibility = if(mockSummary?.updated == true) View.VISIBLE else View.GONE
+        }
     }
 
     fun setSubjectsUi() {
         mockSummary?.let { mock ->
-            subjectContainer.removeAllViews()
+            binding.subjectContainer.removeAllViews()
             val combinedSubjects = (mock.commonSubjectSummary + selectedOptions).toMutableList()
             // 교육과정 외
             combinedSubjects.firstOrNull { it.subjectCodeType == "NONE"}?.let { none->
@@ -215,9 +221,9 @@ class MockExamGuideDialog(
                     if(!subject.isSelected) continue // 선택된 것만 반영
 
                     val text = "${subject.title}${space}${subject.count}문항"
-                    val textView = LayoutInflater.from(context).inflate(R.layout.item_mockexam_dialog_subject_textview, subjectContainer, false) as TextView
+                    val textView = LayoutInflater.from(context).inflate(R.layout.item_mockexam_dialog_subject_textview, binding.subjectContainer, false) as TextView
                     textView.text = text
-                    subjectContainer.addView(textView)
+                    binding.subjectContainer.addView(textView)
 
                     if (cnt > 5) break
                 }
@@ -227,76 +233,81 @@ class MockExamGuideDialog(
 
     fun setResolveUi() {
         if(mockSummary!!.isIng) {
-            reSolveContainer.visibility = View.VISIBLE
+            binding.reSolveContainer.visibility = View.VISIBLE
         } else {
-            reSolveContainer.visibility = View.GONE
+            binding.reSolveContainer.visibility = View.GONE
         }
     }
 
     fun setSelectSubjectUi() {
         // 선택과목이 있는 상태에서
         mockSummary?.let {
+            with(binding) {
+                Log.d("모의고사", "selectedOptions=${selectedOptions.size}")
 
-            Log.d("모의고사", "selectedOptions=${selectedOptions.size}")
+                if(selectedOptions.isNotEmpty()) {
+                    selectSubjectContainer.visibility = View.VISIBLE
 
-            if(selectedOptions.isNotEmpty()) {
-                selectSubjectContainer.visibility = View.VISIBLE
-
-                if(it.year <= 2020) { // 체크박스 : 시험 출제기준이 2020년 까지
-                    selectCheckContainer.visibility = View.VISIBLE
-                    selectRadioContainer.visibility = View.GONE
-                } else {
-                    selectCheckContainer.visibility = View.GONE
-                    selectRadioContainer.visibility = View.VISIBLE
-                }
-
-                for((idx, subject) in selectedOptions.withIndex()) {
-//                    val text = "${subject.title} ${subject.count}문항"
-                    if(idx >= 3) break
-                    val subTitle = "  ${subject.count}문항"
-                    var text = "${subject.title}" + subTitle
-
-                    checkBoxes[idx].text = text.partialFontAndColoredWithSize(Theme.bold(context), ContextCompat.getColor(context, R.color.grey_c0c0c0), 0.9f, subject.title.length, text.length)
-                    checkBoxes[idx].visibility = View.VISIBLE
-                    if(subject.isSelected) {
-                        // 체크박스 체크 처리
-                        checkBoxes[idx].isChecked = true
-                        // 라디오 버튼 선택처리 - 라디오일 경우는 셋 중에 하나만 선택됨
-                        when(subject.subjectCodeType) {
-                            option1.name -> radioSelectOne.isChecked = true
-                            option2.name -> radioSelectTwo.isChecked = true
-                            option3.name -> radioSelectThree.isChecked = true
-                        }
-                    }else{
-                        checkBoxes[idx].isChecked = false
+                    if(it.year <= 2020) { // 체크박스 : 시험 출제기준이 2020년 까지
+                        selectCheckContainer.visibility = View.VISIBLE
+                        selectRadioContainer.visibility = View.GONE
+                    } else {
+                        selectCheckContainer.visibility = View.GONE
+                        selectRadioContainer.visibility = View.VISIBLE
                     }
+
+                    for((idx, subject) in selectedOptions.withIndex()) {
+//                    val text = "${subject.title} ${subject.count}문항"
+                        if(idx >= 3) break
+                        val subTitle = "  ${subject.count}문항"
+                        var text = "${subject.title}" + subTitle
+
+                        checkBoxes[idx].text = text.partialFontAndColoredWithSize(Theme.bold(context), ContextCompat.getColor(context, R.color.grey_c0c0c0), 0.9f, subject.title.length, text.length)
+                        checkBoxes[idx].visibility = View.VISIBLE
+                        if(subject.isSelected) {
+                            // 체크박스 체크 처리
+                            checkBoxes[idx].isChecked = true
+                            // 라디오 버튼 선택처리 - 라디오일 경우는 셋 중에 하나만 선택됨
+                            when(subject.subjectCodeType) {
+                                option1.name -> radioSelectOne.isChecked = true
+                                option2.name -> radioSelectTwo.isChecked = true
+                                option3.name -> radioSelectThree.isChecked = true
+                            }
+                        }else{
+                            checkBoxes[idx].isChecked = false
+                        }
+                    }
+                } else {
+                    selectSubjectContainer.visibility = View.GONE
+                    selectCheckContainer.visibility = View.GONE
+                    selectRadioContainer.visibility = View.GONE
                 }
-            } else {
-                selectSubjectContainer.visibility = View.GONE
-                selectCheckContainer.visibility = View.GONE
-                selectRadioContainer.visibility = View.GONE
             }
         }
     }
 
     fun setTabletModeUi() {
-        sendEmailBtn?.visibility = View.GONE
-        solveOnOMR?.visibility = View.GONE
-        solveOnTabletBtn.visibility = View.VISIBLE
+        with(binding) {
+            sendEmailBtn?.visibility = View.GONE
+            solveOnOMR?.visibility = View.GONE
+            solveOnTabletBtn.visibility = View.VISIBLE
 
-        printButtonsContainer?.visibility = View.GONE
+            printButtonsContainer?.visibility = View.GONE
+        }
     }
 
     fun setPrintModeUi() {
-        solveOnTabletBtn?.visibility = View.GONE
+        with(binding) {
+            solveOnTabletBtn?.visibility = View.GONE
 
-        printButtonsContainer?.visibility = View.VISIBLE
-        sendEmailBtn?.visibility = View.VISIBLE
-        // 핸드폰 ui에서는 지원안함
-        if(context.isTablet)
-            solveOnOMR?.visibility = View.VISIBLE
-        else
-            solveOnOMR?.visibility = View.GONE
+            printButtonsContainer?.visibility = View.VISIBLE
+            sendEmailBtn?.visibility = View.VISIBLE
+            // 핸드폰 ui에서는 지원안함
+            if(context.isTablet)
+                solveOnOMR?.visibility = View.VISIBLE
+            else
+                solveOnOMR?.visibility = View.GONE
+        }
 
     }
 
@@ -305,9 +316,11 @@ class MockExamGuideDialog(
             for (checkBox in checkBoxes) {
                 checkBox.isEnabled = isRestart()
             }
-            radioSelectOne.isEnabled = isRestart()
-            radioSelectTwo.isEnabled = isRestart()
-            radioSelectThree.isEnabled = isRestart()
+            with(binding) {
+                radioSelectOne.isEnabled = isRestart()
+                radioSelectTwo.isEnabled = isRestart()
+                radioSelectThree.isEnabled = isRestart()
+            }
         }
         setRemainButton(isRestart())
     }
@@ -316,10 +329,10 @@ class MockExamGuideDialog(
         if(mockSummary?.isIng == true && !remain) {
             val remainCount = mockSummary?.let{it.getTotalNumber(selectedOptions) - it.markedNumber}
             val text = "$remainCount 문항 "
-            solveOnTabletBtn.text = "$text 이어 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
+            binding.solveOnTabletBtn.text = "$text 이어 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
         } else {
             val text = "총 ${mockSummary?.getTotalNumber(selectedOptions)}문항 "
-            solveOnTabletBtn.text = "$text 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
+            binding.solveOnTabletBtn.text = "$text 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
         }
     }
 
@@ -328,16 +341,16 @@ class MockExamGuideDialog(
             title = "기존 풀이내역은 사라집니다"
             contents = "다시 풀기 시\n기존 풀이내역은 복구할 수 없습니다.\n정말 새로 푸실 건가요?"
             type = DialogType.alert
-            leftBtn.text = "취소"
-            rightBtn.text = "새로 풀게요"
-            rightBtn.setOnClickListener {
+            binding.leftBtn.text = "취소"
+            binding.rightBtn.text = "새로 풀게요"
+            binding.rightBtn.setOnClickListener {
                 cb()
                 dismiss()
             }
         }.show()
     }
 
-    fun isRestart() = checkRestart.isChecked
+    fun isRestart() = binding.checkRestart.isChecked
 
     private fun sendEmailPDF(){
         setOptionToMockExam()
@@ -363,13 +376,13 @@ class MockExamGuideDialog(
 
         mockExam.isRestart = isRestart()
 
-        if(selectCheckContainer.visibility == View.VISIBLE) {
+        if(binding.selectCheckContainer.visibility == View.VISIBLE) {
             for((idx, subject) in selectedOptions.withIndex()) {
                 if(idx >= 3) break
                 if(checkBoxes[idx].isChecked) optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
             }
-        } else if(selectRadioContainer.visibility == View.VISIBLE) {
-            when(selectRadioContainer.checkedRadioButtonId) {
+        } else if(binding.selectRadioContainer.visibility == View.VISIBLE) {
+            when(binding.selectRadioContainer.checkedRadioButtonId) {
                 R.id.radioSelectOne -> optionResult.add(option1)
                 R.id.radioSelectTwo -> optionResult.add(option2)
                 R.id.radioSelectThree -> optionResult.add(option3)
@@ -379,7 +392,7 @@ class MockExamGuideDialog(
     }
 
     private fun progress(run: Boolean) {
-        progressContainer.visibility = if(run) View.VISIBLE else View.GONE
+        binding.progressContainer.visibility = if(run) View.VISIBLE else View.GONE
     }
 
     override fun onSentEmail() {

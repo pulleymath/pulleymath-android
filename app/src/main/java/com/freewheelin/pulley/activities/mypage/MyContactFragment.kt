@@ -5,28 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.utils.partialFont
-import kotlinx.android.synthetic.main.fragment_my_contact.*
+import com.freewheelin.pulley.databinding.FragmentMyContactBinding
 
 class MyContactFragment : MyPageBaseFragment() {
 
+    lateinit var binding: FragmentMyContactBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_contact, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_contact, container, false)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        contactBtn.setOnClickListener {
+        binding.contactBtn.setOnClickListener {
             onContactBtnClicked()
         }
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
     }
 
     fun onContactBtnClicked() {

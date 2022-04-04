@@ -10,10 +10,13 @@ import android.widget.ImageButton
 import android.widget.Switch
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ItemHeaderGalleryBinding
+import com.freewheelin.pulley.databinding.ItemProblemGalleryBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
@@ -262,8 +265,9 @@ class GalleryView : ConstraintLayout {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_problem_gallery, parent, false)
-            return GalleryHolder(view)
+//            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_problem_gallery, parent, false)
+            val itemBinding: ItemProblemGalleryBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_problem_gallery, parent, false)
+            return GalleryHolder(itemBinding)
         }
 
         open fun reload(problem: Problem) {
@@ -498,11 +502,11 @@ class GalleryView : ConstraintLayout {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if (viewType == 1) {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_problem_gallery, parent, false)
-                return GalleryHolder(view)
+                val itemBinding: ItemProblemGalleryBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_problem_gallery, parent, false)
+                return GalleryHolder(itemBinding)
             } else {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_header_gallery, parent, false)
-                return GalleryHeaderHolder(view)
+                val itemHeaderBinding: ItemHeaderGalleryBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_header_gallery, parent, false)
+                return GalleryHeaderHolder(itemHeaderBinding)
             }
         }
 

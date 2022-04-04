@@ -5,31 +5,31 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.signup.StudentInfoFragment
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
-
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DialogUtils
-import kotlinx.android.synthetic.main.fragment_my_study_info.*
 
 class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
-
+    lateinit var binding: FragmentMyStudyInfoBinding
     companion object {
         const val RELOAD = "study_info_reload"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_study_info, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_study_info, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,10 +51,13 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
 
     private fun initUI() {
-        modifyBtn.setOnClickListener { moveTo(MyStudyInfoSettingFragment()) }
-        modifyCommonBtn.setOnClickListener { moveTo(StudyCommonUnitSettingFragment()) }
-        modifySelectBtn.setOnClickListener { moveTo(StudyOptionalUnitSettingFragment()) }
+        with(binding) {
+            modifyBtn.setOnClickListener { moveTo(MyStudyInfoSettingFragment()) }
+            modifyCommonBtn.setOnClickListener { moveTo(StudyCommonUnitSettingFragment()) }
+            modifySelectBtn.setOnClickListener { moveTo(StudyOptionalUnitSettingFragment()) }
 //        deleteAllBtn.setOnClickListener { deleteAll() }
+            backBtn.setOnClickListener { onBackBtnClicked() }
+        }
     }
 
     // 이번에 보류
@@ -65,34 +68,40 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
 
     private fun configureUI(user: User) {
-        gradeTv.text = user.grade.text
+        with(binding) {
+            gradeTv.text = user.grade.text
 
-        configureSchool(user)
+            configureSchool(user)
 
-        if (user.grade == Grade.BeforeHigh) {
-            majorTv.text = "-"
-            ratingTv.text = "-"
-        } else {
-            majorTv.text = user.major.title
-            ratingTv.text = user.ratingText
+            if (user.grade == Grade.BeforeHigh) {
+                majorTv.text = "-"
+                ratingTv.text = "-"
+            } else {
+                majorTv.text = user.major.title
+                ratingTv.text = user.ratingText
+            }
+
+            configureStudy(user)
         }
-
-        configureStudy(user)
     }
 
     private fun configureSchool(user: User) {
-        if(user.schoolID?:0 > 0) {
-            schoolLabel.text = "학교"
-            schoolTv.text = user.schoolName?:""
-        }else if(user.regionID?:0 > 0) {
-            schoolLabel.text = "지역"
-            schoolTv.text = user.regionName?:""
+        with(binding) {
+            if(user.schoolID?:0 > 0) {
+                schoolLabel.text = "학교"
+                schoolTv.text = user.schoolName?:""
+            }else if(user.regionID?:0 > 0) {
+                schoolLabel.text = "지역"
+                schoolTv.text = user.regionName?:""
+            }
         }
     }
 
     private fun configureStudy(user: User) {
-        commonSubjectTv.text = user!!.getCommonSubjectText()
-        optionalSubjectTv.text = calcNoneText(user?.getOptionalSubjectText())
+        with(binding) {
+            commonSubjectTv.text = user!!.getCommonSubjectText()
+            optionalSubjectTv.text = calcNoneText(user?.getOptionalSubjectText())
+        }
     }
 
     private fun calcNoneText(text: String?): String {

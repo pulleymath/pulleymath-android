@@ -6,7 +6,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.view.*
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -17,6 +20,9 @@ import com.freewheelin.pulley.core.API.ResponseModel.CommercialBook
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialBookPage
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.BookManager
+import com.freewheelin.pulley.databinding.ItemCommercialListBinding
+import com.freewheelin.pulley.databinding.ItemCommercialPageBinding
+import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.Book
@@ -24,16 +30,10 @@ import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
 import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.buttons.PrimaryButton
+import com.freewheelin.pulley.views.buttons.SecondaryButton
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
-import kotlinx.android.synthetic.main.dialog_book_customize.*
-import kotlinx.android.synthetic.main.dialog_book_customize.cntTv
-import kotlinx.android.synthetic.main.dialog_book_customize.minusBtn
-import kotlinx.android.synthetic.main.dialog_book_customize.plusBtn
-import kotlinx.android.synthetic.main.item_commercial_list.view.*
-import kotlinx.android.synthetic.main.item_commercial_page.view.*
-import kotlinx.android.synthetic.main.item_commercial_page_problem.view.*
-import kotlinx.android.synthetic.main.view_mockexam_horizontal_bar_chart.view.*
 
 interface CustomizeBookDialogListener {
     fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book)
@@ -187,6 +187,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     private fun initUI() {
 //        setCancelable(false)
+        initComponents()
+
         subjectTab.labels = listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
         subjectTab.listener = this
         step2Container.visibility = View.GONE
@@ -382,8 +384,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     inner class PageAdapter: RecyclerView.Adapter<PageHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_commercial_page, parent, false)
-            return PageHolder(view)
+            val itemBinding: ItemCommercialPageBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_commercial_page, parent, false)
+            return PageHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -445,8 +447,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     inner class ProblemAdapter: RecyclerView.Adapter<ProblemHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProblemHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_commercial_page_problem, parent, false)
-            return ProblemHolder(view)
+            val itemBinding: ItemCommercialPageProblemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_commercial_page_problem, parent, false)
+            return ProblemHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -547,8 +549,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     inner class CommercialAdapter: RecyclerView.Adapter<CommercialBookHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommercialBookHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_commercial_list, parent, false)
-            return CommercialBookHolder(view)
+            val itemBinding: ItemCommercialListBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_commercial_list, parent, false)
+            return CommercialBookHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -600,13 +602,81 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             }
         }
     }
+
+
+    lateinit var subjectTab: DaebakTabRadio
+    lateinit var step1Container: LinearLayout
+    lateinit var step2Container: LinearLayout
+    lateinit var nowCheckbox: CheckBox
+    lateinit var bookListRv: RecyclerView
+    lateinit var problemRv: RecyclerView
+    lateinit var pageRv: RecyclerView
+    lateinit var actionBtn: PrimaryButton
+    lateinit var bookEmptyTv: TextView
+    lateinit var cancelBtn: SecondaryButton
+
+    lateinit var subjectSl: SortableTextView
+    lateinit var bookSl: SortableTextView
+    lateinit var bookSeriesSl: SortableTextView
+    lateinit var publisherSl: SortableTextView
+
+    lateinit var selectedBookTv: TextView
+    lateinit var selectGuideLabel: TextView
+    lateinit var step2Body: ConstraintLayout
+    lateinit var levelRg: RadioGroup
+    lateinit var clearRg: RadioGroup
+    lateinit var includeRb: RadioButton
+    lateinit var excludeRb: RadioButton
+    lateinit var cntImpossibleCl: ConstraintLayout
+    lateinit var step1Header: ConstraintLayout
+    lateinit var step1Body: ConstraintLayout
+    lateinit var cntImpossibleIv: ImageView
+    lateinit var plusBtn: ImageButton
+    lateinit var minusBtn: ImageButton
+    lateinit var allCheckBox: CheckBox
+    lateinit var totalCntTv: TextView
+    lateinit var cntTv: TextView
+
+    private fun initComponents() {
+
+        subjectTab = findViewById(R.id.subjectTab)
+        step1Container = findViewById(R.id.step1Container)
+        step2Container = findViewById(R.id.step2Container)
+        nowCheckbox = findViewById(R.id.nowCheckbox)
+        bookListRv = findViewById(R.id.bookListRv)
+        problemRv = findViewById(R.id.problemRv)
+        pageRv = findViewById(R.id.pageRv)
+        actionBtn = findViewById(R.id.actionBtn)
+        bookEmptyTv = findViewById(R.id.bookEmptyTv)
+        cancelBtn = findViewById(R.id.cancelBtn)
+        subjectSl = findViewById(R.id.subjectSl)
+        bookSl = findViewById(R.id.bookSl)
+        bookSeriesSl = findViewById(R.id.bookSeriesSl)
+        publisherSl = findViewById(R.id.publisherSl)
+        selectedBookTv = findViewById(R.id.selectedBookTv)
+        selectGuideLabel = findViewById(R.id.selectGuideLabel)
+        step2Body = findViewById(R.id.step2Body)
+        levelRg = findViewById(R.id.levelRg)
+        clearRg = findViewById(R.id.clearRg)
+        includeRb = findViewById(R.id.includeRb)
+        excludeRb = findViewById(R.id.excludeRb)
+        cntImpossibleCl = findViewById(R.id.cntImpossibleCl)
+        cntImpossibleIv = findViewById(R.id.cntImpossibleIv)
+        plusBtn = findViewById(R.id.plusBtn)
+        minusBtn = findViewById(R.id.minusBtn)
+        allCheckBox = findViewById(R.id.allCheckBox)
+        step1Header = findViewById(R.id.step1Header)
+        step1Body = findViewById(R.id.step1Body)
+        totalCntTv = findViewById(R.id.totalCntTv)
+        cntTv = findViewById(R.id.cntTv)
+    }
 }
 
-class CommercialBookHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val subjectTv = view.subjectTv
-    val bookTv = view.bookTv
-    val bookSeriesTv = view.bookSeriesTv
-    val publisherTv = view.publisherTv
+class CommercialBookHolder(val itemBinding: ItemCommercialListBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val subjectTv = itemBinding.subjectTv
+    val bookTv = itemBinding.bookTv
+    val bookSeriesTv = itemBinding.bookSeriesTv
+    val publisherTv = itemBinding.publisherTv
 
     fun set(commercialBook: CommercialBook) {
         subjectTv.text = commercialBook.subjectType?.text
@@ -616,9 +686,9 @@ class CommercialBookHolder(val view: View): RecyclerView.ViewHolder(view) {
     }
 }
 
-class ProblemHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val checkbox = view.checkbox
-    val pageTitleTv = view.pageTitleTv
+class ProblemHolder(val itemBinding: ItemCommercialPageProblemBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val checkbox = itemBinding.checkbox
+    val pageTitleTv = itemBinding.pageTitleTv
 
     fun set(problem: CommercialBookPage) {
         checkbox.text = problem.problemNumber
@@ -626,9 +696,9 @@ class ProblemHolder(val view: View): RecyclerView.ViewHolder(view) {
     }
 }
 
-class PageHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val checkIv = view.checkIv
-    val pageTv = view.pageTv
+class PageHolder(val itemBinding: ItemCommercialPageBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val checkIv = itemBinding.checkIv
+    val pageTv = itemBinding.pageTv
 
     fun set(page: Int) {
         pageTv.text = "${page}p"

@@ -7,16 +7,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ActivityLessonBinding
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.utils.Preferences
-import kotlinx.android.synthetic.main.activity_lesson.*
 import java.lang.Exception
 
 class LessonActivity : BaseActivity() {
@@ -60,10 +62,12 @@ class LessonActivity : BaseActivity() {
         }
 
     lateinit var audioManager: AudioManager
-
+    private val binding: ActivityLessonBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_lesson, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lesson)
+        setContentView(binding.root)
 
         setWebView()
 
@@ -73,7 +77,7 @@ class LessonActivity : BaseActivity() {
     }
 
     private fun setWebView() {
-        with(webView) {
+        with(binding.webView) {
             webViewClient = LessonClient()
             settings.apply {
                 javaScriptEnabled = true
@@ -132,19 +136,19 @@ class LessonActivity : BaseActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
 
-        Log.d(javaClass.simpleName, "host check =========> ${webView.url}")
+        Log.d(javaClass.simpleName, "host check =========> ${binding.webView.url}")
 
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             return super.onKeyDown(keyCode, event)
 //            audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND)
 //        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 //            audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND)
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && webView.url?.startsWith(lessonPath) == true) {
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(lessonPath) == true) {
             finish()
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && webView.url?.contains("pagecall.net") == true){
-            webView.loadUrl(lessonLink)
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.contains("pagecall.net") == true){
+            binding.webView.loadUrl(lessonLink)
         } else if (keyCode == KeyEvent.KEYCODE_BACK)  {
-            webView.goBack()
+            binding.webView.goBack()
         }
 
         return true

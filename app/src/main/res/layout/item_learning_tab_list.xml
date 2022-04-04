@@ -1,232 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:id="@+id/containerCl"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View style="@style/Border_Grey_f2f2f2_Horizontal"
-        android:id="@+id/horizontalBorder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:id="@+id/containerCl">
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp16"
-        android:button="@drawable/checkbox_blue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <View style="@style/Border_Grey_f2f2f2_Horizontal"
+            android:id="@+id/horizontalBorder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/studyTypeTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="26dp"
-        android:layout_marginStart="23dp"
-        android:text="모의고사"
-        android:textSize="@dimen/sp14"
-        app:layout_constraintStart_toEndOf="@+id/checkBox"
-        app:layout_constraintEnd_toEndOf="@+id/firstBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:button="@drawable/checkbox_blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    <View
-        android:id="@+id/firstBorder"
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:layout_height="16dp"
-        android:layout_marginStart="@dimen/dp104"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintStart_toEndOf="@+id/checkBox"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/studyTypeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="26dp"
+            android:layout_marginStart="23dp"
+            android:text="모의고사"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintStart_toEndOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="@+id/firstBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/problemCntTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="30"
-        android:textSize="@dimen/sp14"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toEndOf="@+id/secondBorder"
-        app:layout_constraintStart_toStartOf="@+id/firstBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"/>
+        <View
+            android:id="@+id/firstBorder"
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_height="16dp"
+            android:layout_marginStart="@dimen/dp104"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintStart_toEndOf="@+id/checkBox"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
-    <View
-        android:id="@+id/secondBorder"
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:layout_height="16dp"
-        android:layout_marginStart="@dimen/dp80"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintStart_toEndOf="@+id/firstBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/problemCntTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="@+id/secondBorder"
+            app:layout_constraintStart_toStartOf="@+id/firstBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/titleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_marginStart="@dimen/dp16"
-        android:textSize="@dimen/sp14"
-        android:text="모의고사"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintStart_toEndOf="@+id/secondBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
-        app:layout_constraintEnd_toStartOf="@+id/newTag"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
+        <View
+            android:id="@+id/secondBorder"
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_height="16dp"
+            android:layout_marginStart="@dimen/dp80"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintStart_toEndOf="@+id/firstBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
-
-    <TextView
-        style="@style/TextRed_fe7b67.ExtraBold"
-        android:id="@+id/newTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="NEW"
-        android:textSize="@dimen/sp14"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
-        app:layout_constraintStart_toEndOf="@+id/titleTv"
-        app:layout_constraintEnd_toStartOf="@+id/titleBorder"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <View
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:id="@+id/titleBorder"
-        android:layout_height="16dp"
-        android:layout_marginEnd="@dimen/dp80"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
-        app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
-
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/scoreTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp14"
-        android:text="81점"
-        app:layout_constraintStart_toStartOf="@+id/titleBorder"
-        app:layout_constraintEnd_toEndOf="@+id/thirdBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/dp16"
+            android:textSize="@dimen/sp14"
+            android:text="모의고사"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintStart_toEndOf="@+id/secondBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            app:layout_constraintEnd_toStartOf="@+id/newTag"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
 
 
-    <View
-        android:id="@+id/thirdBorder"
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:layout_height="16dp"
-        android:layout_marginEnd="@dimen/dp80"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
+        <TextView
+            style="@style/TextRed_fe7b67.ExtraBold"
+            android:id="@+id/newTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEW"
+            android:textSize="@dimen/sp14"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            app:layout_constraintStart_toEndOf="@+id/titleTv"
+            app:layout_constraintEnd_toStartOf="@+id/titleBorder"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
 
-    <TextView
-        android:id="@+id/createDateTv"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="03-29"
-        android:textSize="@dimen/sp14"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toEndOf="@+id/fourthBorder"
-        app:layout_constraintStart_toStartOf="@+id/thirdBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
+        <View
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:id="@+id/titleBorder"
+            android:layout_height="16dp"
+            android:layout_marginEnd="@dimen/dp80"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
 
-    <View
-        android:id="@+id/fourthBorder"
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:layout_height="16dp"
-        android:layout_marginEnd="@dimen/dp80"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
-
-    <TextView
-        android:id="@+id/studyDateTv"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="03-29"
-        android:textSize="@dimen/sp14"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toEndOf="@+id/fifthBorder"
-        app:layout_constraintStart_toStartOf="@+id/fourthBorder"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
-
-    <View
-        android:id="@+id/fifthBorder"
-        style="@style/Border_Grey_e8e8e8_Vertical"
-        android:layout_height="16dp"
-        android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBox" />
-
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintTop_toTopOf="@+id/solveBtn"
-        app:layout_constraintEnd_toEndOf="@+id/solveBtn"
-        app:layout_constraintBottom_toBottomOf="@+id/solveBtn"
-        app:layout_constraintStart_toStartOf="@+id/solveBtn"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/scoreTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:text="81점"
+            app:layout_constraintStart_toStartOf="@+id/titleBorder"
+            app:layout_constraintEnd_toEndOf="@+id/thirdBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
 
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
-        android:id="@+id/solveBtn"
-        android:layout_width="@dimen/primaryBtn_width_96dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="@dimen/dp16"
-        android:text="풀기"
-        app:buttonTheme="blue"
-        app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <View
+            android:id="@+id/thirdBorder"
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_height="16dp"
+            android:layout_marginEnd="@dimen/dp80"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
-    
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/reportBtn"
-        android:layout_width="@dimen/primaryBtn_width_96dp"
-        android:layout_height="36dp"
-        android:text="보고서"
-        app:buttonTheme="grey"
-        app:layout_constraintTop_toTopOf="@+id/solveBtn"
-        app:layout_constraintStart_toStartOf="@+id/solveBtn"
-        app:layout_constraintEnd_toEndOf="@+id/solveBtn"
-        app:layout_constraintBottom_toBottomOf="@+id/solveBtn"/>
+        <TextView
+            android:id="@+id/createDateTv"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03-29"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="@+id/fourthBorder"
+            app:layout_constraintStart_toStartOf="@+id/thirdBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/reviewBtn"
-        app:layout_constraintEnd_toEndOf="@+id/reviewBtn"/>
+        <View
+            android:id="@+id/fourthBorder"
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_height="16dp"
+            android:layout_marginEnd="@dimen/dp80"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
-        android:id="@+id/reviewBtn"
-        android:layout_width="@dimen/primaryBtn_width_96dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="@dimen/dp16"
-        android:text="문제 리뷰"
-        app:buttonTheme="blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:id="@+id/studyDateTv"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03-29"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="@+id/fifthBorder"
+            app:layout_constraintStart_toStartOf="@+id/fourthBorder"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
+
+        <View
+            android:id="@+id/fifthBorder"
+            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_height="16dp"
+            android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkBox" />
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            app:layout_constraintTop_toTopOf="@+id/solveBtn"
+            app:layout_constraintEnd_toEndOf="@+id/solveBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/solveBtn"
+            app:layout_constraintStart_toStartOf="@+id/solveBtn"/>
 
 
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
+            android:id="@+id/solveBtn"
+            android:layout_width="@dimen/primaryBtn_width_96dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="@dimen/dp16"
+            android:text="풀기"
+            app:buttonTheme="blue"
+            app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/reportBtn"
+            android:layout_width="@dimen/primaryBtn_width_96dp"
+            android:layout_height="36dp"
+            android:text="보고서"
+            app:buttonTheme="grey"
+            app:layout_constraintTop_toTopOf="@+id/solveBtn"
+            app:layout_constraintStart_toStartOf="@+id/solveBtn"
+            app:layout_constraintEnd_toEndOf="@+id/solveBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/solveBtn"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/reviewBtn"
+            app:layout_constraintEnd_toEndOf="@+id/reviewBtn"/>
+
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
+            android:id="@+id/reviewBtn"
+            android:layout_width="@dimen/primaryBtn_width_96dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="@dimen/dp16"
+            android:text="문제 리뷰"
+            app:buttonTheme="blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

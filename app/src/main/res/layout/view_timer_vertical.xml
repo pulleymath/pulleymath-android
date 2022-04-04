@@ -1,135 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
+    <merge
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/timerLabel"
-        style="@style/Textwhite_f2f2f2.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="타이머 표시"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintEnd_toStartOf="@+id/timerSwitch"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/timerSwitch"
-        app:layout_constraintBottom_toBottomOf="@+id/timerSwitch"/>
-
-    <Switch
-        android:id="@+id/timerSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/timerLabel"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/hideGuideLabel"
-        style="@style/TextGrey_818181.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:text="타이머를 숨겼습니다."
-        android:textSize="@dimen/sp14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerLabel" />
-
-
-    <TextView
-        android:id="@+id/hourMinTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="0sp"
-        android:text="1:40"
-        android:textColor="@color/white_ffffff"
-        android:textSize="@dimen/sp36"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/secTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerLabel"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/secTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="0sp"
-        android:text=":00"
-        android:textColor="@color/grey_9f9f9f"
-        android:textSize="@dimen/sp36"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/hourMinTv"
-        app:layout_constraintEnd_toStartOf="@+id/timerPlayBtn"
-        app:layout_constraintTop_toTopOf="@+id/hourMinTv"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-
-    <ImageButton
-        android:id="@+id/timerPlayBtn"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/bg_grey_3d3d3d_round"
-        android:src="@drawable/timer_play"
-        app:layout_constraintBottom_toBottomOf="@+id/secTv"
-        app:layout_constraintStart_toEndOf="@+id/secTv"
-        app:layout_constraintTop_toTopOf="@+id/secTv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/overTimerTv"
-        style="@style/TextRed_fe7b67.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="+ 0:00:00"
-        app:layout_constraintEnd_toEndOf="@+id/secTv"
-        app:layout_constraintStart_toStartOf="@+id/hourMinTv"
-        app:layout_constraintTop_toBottomOf="@+id/hourMinTv" />
-
-    <RadioGroup
-        android:id="@+id/typeRg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/hourMinTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/strictRb"
+        <TextView
+            android:id="@+id/timerLabel"
+            style="@style/Textwhite_f2f2f2.Bold"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp36"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="만료 시 자동제출"
-            android:textColor="@color/purple_ACACFF"
+            android:layout_height="wrap_content"
+            android:text="타이머 표시"
             android:textSize="@dimen/sp16"
-            android:theme="@style/OMR_radio_button" />
+            app:layout_constraintEnd_toStartOf="@+id/timerSwitch"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/timerSwitch"
+            app:layout_constraintBottom_toBottomOf="@+id/timerSwitch"/>
 
-        <RadioButton
-            android:id="@+id/lenientRb"
+        <Switch
+            android:id="@+id/timerSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp36"
-            android:layout_weight="1"
-            android:text="만료 후에도 풀기"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/timerLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/hideGuideLabel"
+            style="@style/TextGrey_818181.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="타이머를 숨겼습니다."
+            android:textSize="@dimen/sp14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timerLabel" />
+
+
+        <TextView
+            android:id="@+id/hourMinTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0sp"
+            android:text="1:40"
             android:textColor="@color/white_ffffff"
-            android:textSize="@dimen/sp16"
-            android:theme="@style/OMR_radio_button" />
-    </RadioGroup>
+            android:textSize="@dimen/sp36"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/secTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timerLabel"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/secTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0sp"
+            android:text=":00"
+            android:textColor="@color/grey_9f9f9f"
+            android:textSize="@dimen/sp36"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/hourMinTv"
+            app:layout_constraintEnd_toStartOf="@+id/timerPlayBtn"
+            app:layout_constraintTop_toTopOf="@+id/hourMinTv"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
 
 
-</merge>
+        <ImageButton
+            android:id="@+id/timerPlayBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_grey_3d3d3d_round"
+            android:src="@drawable/timer_play"
+            app:layout_constraintBottom_toBottomOf="@+id/secTv"
+            app:layout_constraintStart_toEndOf="@+id/secTv"
+            app:layout_constraintTop_toTopOf="@+id/secTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/overTimerTv"
+            style="@style/TextRed_fe7b67.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="+ 0:00:00"
+            app:layout_constraintEnd_toEndOf="@+id/secTv"
+            app:layout_constraintStart_toStartOf="@+id/hourMinTv"
+            app:layout_constraintTop_toBottomOf="@+id/hourMinTv" />
+
+        <RadioGroup
+            android:id="@+id/typeRg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/hourMinTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <RadioButton
+                android:id="@+id/strictRb"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp36"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="만료 시 자동제출"
+                android:textColor="@color/purple_ACACFF"
+                android:textSize="@dimen/sp16"
+                android:theme="@style/OMR_radio_button" />
+
+            <RadioButton
+                android:id="@+id/lenientRb"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp36"
+                android:layout_weight="1"
+                android:text="만료 후에도 풀기"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/sp16"
+                android:theme="@style/OMR_radio_button" />
+        </RadioGroup>
+
+
+    </merge>
+</layout>

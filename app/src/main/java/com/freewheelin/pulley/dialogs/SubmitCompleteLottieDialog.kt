@@ -6,24 +6,37 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.widget.Button
+import android.widget.TextView
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.DailyTestReportActivity
 import com.freewheelin.pulley.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.activities.WrongTestReportActivity
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.partialFontAndColored
-import kotlinx.android.synthetic.main.dialog_submit_complete_lottie.*
 
 class SubmitCompleteLottieDialog(context: Context, content: Content): Dialog(context) {
+
+    var scoreTv: TextView
+    var completeGuideTv: TextView
+    var scoreSuffixLabel: TextView
+    var submitLottie: LottieAnimationView
+    var confirmBtn: Button
+
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setContentView(R.layout.dialog_submit_complete_lottie)
+
+        scoreTv = findViewById(R.id.scoreTv)
+        completeGuideTv = findViewById(R.id.completeGuideTv)
+        scoreSuffixLabel = findViewById(R.id.scoreSuffixLabel)
+        submitLottie = findViewById(R.id.submitLottie)
+        confirmBtn = findViewById(R.id.confirmBtn)
+
         confirmBtn.setOnClickListener { onConfirmBtnClicked(content) }
         scoreTv.text = content.score.toString()
 

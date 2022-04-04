@@ -12,30 +12,33 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ViewPolicyLayoutV2Binding
+import com.freewheelin.pulley.databinding.ViewToastBinding
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_toast.view.*
 
 class DaebakToastView: ConstraintLayout {
 
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+    var binding: ViewToastBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_toast, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_toast, this)
+
     }
 
     fun setBackground(res: Int) {
-        toastTv.setBackgroundResource(res)
+        binding.toastTv.setBackgroundResource(res)
     }
 
     var text: String
         set(value) {
-            toastTv.text = value
+            binding.toastTv.text = value
         }
         get() {
-            return toastTv.text.toString()
+            return binding.toastTv.text.toString()
         }
 }
 

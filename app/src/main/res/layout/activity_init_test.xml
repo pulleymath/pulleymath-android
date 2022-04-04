@@ -1,199 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.freewheelin.pulley.activities.auth.InitTestActivity">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="64dp">
-        <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
-            android:id="@+id/pageTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="1/12"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <com.freewheelin.pulley.views.LearningProgressView
-            android:id="@+id/pageBar"
-            android:layout_width="96dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/pageTv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:backgroundColor="@color/purple_ECEBFF"
-            app:cardCornerRadius="4dp"/>
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:id="@+id/titleTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:text="이 문제 풀 수 있나요?"
-            android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pageBar"/>
+        android:layout_height="match_parent"
+        tools:context="com.freewheelin.pulley.activities.auth.InitTestActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/contentLl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/titleTv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:padding="64dp">
+            <TextView
+                style="@style/TextPurple_6d6dff.ExtraBold"
+                android:id="@+id/pageTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="1/12"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.freewheelin.pulley.views.LearningProgressView
+                android:id="@+id/pageBar"
+                android:layout_width="96dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/pageTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:backgroundColor="@color/purple_ECEBFF"
+                app:cardCornerRadius="4dp"/>
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.ExtraBold"
+                android:id="@+id/titleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="이 문제 풀 수 있나요?"
+                android:layout_marginTop="32dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pageBar"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ivCl"
-                android:layout_width="552dp"
+                android:id="@+id/contentLl"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:background="@color/white_ffffff"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/titleTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/problemIv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ivCl"
                     android:layout_width="552dp"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitStart"
-                    android:adjustViewBounds="true"
+                    android:padding="24dp"
+                    android:background="@color/white_ffffff"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/problemIv"
+                        android:layout_width="552dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitStart"
+                        android:adjustViewBounds="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.freewheelin.pulley.activities.auth.SelectorView
+                    android:id="@+id/firstSelector"
+                    android:layout_width="0dp"
+                    android:layout_height="144dp"
+                    app:layout_constraintTop_toBottomOf="@+id/ivCl"
+                    android:layout_marginTop="48dp"
+                    app:layout_constraintStart_toStartOf="@+id/ivCl"
+                    app:layout_constraintEnd_toStartOf="@+id/secondSelector"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <com.freewheelin.pulley.activities.auth.SelectorView
+                    android:id="@+id/secondSelector"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintStart_toEndOf="@+id/firstSelector"
+                    app:layout_constraintEnd_toStartOf="@+id/thirdSelector"
+                    app:layout_constraintTop_toTopOf="@+id/firstSelector"
+                    app:layout_constraintBottom_toBottomOf="@+id/firstSelector"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <com.freewheelin.pulley.activities.auth.SelectorView
+                    android:id="@+id/thirdSelector"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toEndOf="@+id/secondSelector"
+                    app:layout_constraintEnd_toEndOf="@+id/ivCl"
+                    app:layout_constraintTop_toTopOf="@+id/firstSelector"
+                    app:layout_constraintBottom_toBottomOf="@+id/firstSelector"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <ImageView
+                    android:id="@+id/firstCheck"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_check_circle_purple_34"
+                    app:layout_constraintTop_toTopOf="@+id/firstSelector"
+                    app:layout_constraintBottom_toTopOf="@+id/firstSelector"
+                    app:layout_constraintStart_toStartOf="@+id/firstSelector"
+                    app:layout_constraintEnd_toStartOf="@+id/firstSelector"/>
+
+                <ImageView
+                    android:id="@+id/secondCheck"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_check_circle_purple_34"
+                    app:layout_constraintTop_toTopOf="@+id/secondSelector"
+                    app:layout_constraintBottom_toTopOf="@+id/secondSelector"
+                    app:layout_constraintStart_toStartOf="@+id/secondSelector"
+                    app:layout_constraintEnd_toStartOf="@+id/secondSelector"/>
+
+                <ImageView
+                    android:id="@+id/thirdCheck"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_check_circle_purple_34"
+                    app:layout_constraintTop_toTopOf="@+id/thirdSelector"
+                    app:layout_constraintBottom_toTopOf="@+id/thirdSelector"
+                    app:layout_constraintStart_toStartOf="@+id/thirdSelector"
+                    app:layout_constraintEnd_toStartOf="@+id/thirdSelector"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.freewheelin.pulley.activities.auth.SelectorView
-                android:id="@+id/firstSelector"
-                android:layout_width="0dp"
-                android:layout_height="144dp"
-                app:layout_constraintTop_toBottomOf="@+id/ivCl"
-                android:layout_marginTop="48dp"
-                app:layout_constraintStart_toStartOf="@+id/ivCl"
-                app:layout_constraintEnd_toStartOf="@+id/secondSelector"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"/>
+            <LinearLayout
+                android:id="@+id/btnLl"
+                android:layout_width="552dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="64dp"
+                app:layout_constraintStart_toStartOf="@+id/contentLl"
+                app:layout_constraintEnd_toEndOf="@+id/contentLl"
+                app:layout_constraintTop_toBottomOf="@+id/contentLl">
 
-            <com.freewheelin.pulley.activities.auth.SelectorView
-                android:id="@+id/secondSelector"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintStart_toEndOf="@+id/firstSelector"
-                app:layout_constraintEnd_toStartOf="@+id/thirdSelector"
-                app:layout_constraintTop_toTopOf="@+id/firstSelector"
-                app:layout_constraintBottom_toBottomOf="@+id/firstSelector"
-                app:layout_constraintHorizontal_chainStyle="packed"/>
+                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    android:id="@+id/prevBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="이전"
+                    android:layout_weight="1"
+                    app:layout_constraintStart_toStartOf="@+id/contentLl"
+                    app:layout_constraintTop_toBottomOf="@+id/contentLl"
+                    app:layout_constraintEnd_toStartOf="@+id/nextBtn"
+                    app:ButtonTextSize="18sp"
+                    app:buttonTheme="grey">
+                </com.freewheelin.pulley.views.buttons.SecondaryButton>
 
-            <com.freewheelin.pulley.activities.auth.SelectorView
-                android:id="@+id/thirdSelector"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toEndOf="@+id/secondSelector"
-                app:layout_constraintEnd_toEndOf="@+id/ivCl"
-                app:layout_constraintTop_toTopOf="@+id/firstSelector"
-                app:layout_constraintBottom_toBottomOf="@+id/firstSelector"
-                app:layout_constraintHorizontal_chainStyle="packed"/>
+                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    android:id="@+id/nextBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:text="다음"
+                    android:layout_weight="1"
+                    app:layout_constraintTop_toTopOf="@+id/prevBtn"
+                    app:layout_constraintEnd_toEndOf="@+id/contentLl"
+                    app:layout_constraintStart_toEndOf="@+id/prevBtn"
+                    app:ButtonTextSize="18sp"
+                    app:buttonTheme="blue" >
+                </com.freewheelin.pulley.views.buttons.PrimaryButton>
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/firstCheck"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_check_circle_purple_34"
-                app:layout_constraintTop_toTopOf="@+id/firstSelector"
-                app:layout_constraintBottom_toTopOf="@+id/firstSelector"
-                app:layout_constraintStart_toStartOf="@+id/firstSelector"
-                app:layout_constraintEnd_toStartOf="@+id/firstSelector"/>
 
-            <ImageView
-                android:id="@+id/secondCheck"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_check_circle_purple_34"
-                app:layout_constraintTop_toTopOf="@+id/secondSelector"
-                app:layout_constraintBottom_toTopOf="@+id/secondSelector"
-                app:layout_constraintStart_toStartOf="@+id/secondSelector"
-                app:layout_constraintEnd_toStartOf="@+id/secondSelector"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadingLottie"
+                android:layout_width="@dimen/dp200"
+                android:layout_height="@dimen/dp200"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_fileName="circle_loading.json"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageView
-                android:id="@+id/thirdCheck"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_check_circle_purple_34"
-                app:layout_constraintTop_toTopOf="@+id/thirdSelector"
-                app:layout_constraintBottom_toTopOf="@+id/thirdSelector"
-                app:layout_constraintStart_toStartOf="@+id/thirdSelector"
-                app:layout_constraintEnd_toStartOf="@+id/thirdSelector"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/btnLl"
-            android:layout_width="552dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="64dp"
-            app:layout_constraintStart_toStartOf="@+id/contentLl"
-            app:layout_constraintEnd_toEndOf="@+id/contentLl"
-            app:layout_constraintTop_toBottomOf="@+id/contentLl">
+    </ScrollView>
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
-                android:id="@+id/prevBtn"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginEnd="24dp"
-                android:text="이전"
-                android:layout_weight="1"
-                app:layout_constraintStart_toStartOf="@+id/contentLl"
-                app:layout_constraintTop_toBottomOf="@+id/contentLl"
-                app:layout_constraintEnd_toStartOf="@+id/nextBtn"
-                app:ButtonTextSize="18sp"
-                app:buttonTheme="grey">
-            </com.freewheelin.pulley.views.buttons.SecondaryButton>
-
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
-                android:id="@+id/nextBtn"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:text="다음"
-                android:layout_weight="1"
-                app:layout_constraintTop_toTopOf="@+id/prevBtn"
-                app:layout_constraintEnd_toEndOf="@+id/contentLl"
-                app:layout_constraintStart_toEndOf="@+id/prevBtn"
-                app:ButtonTextSize="18sp"
-                app:buttonTheme="blue" >
-            </com.freewheelin.pulley.views.buttons.PrimaryButton>
-        </LinearLayout>
-        
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loadingLottie"
-            android:layout_width="@dimen/dp200"
-            android:layout_height="@dimen/dp200"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_fileName="circle_loading.json"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</layout>

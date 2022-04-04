@@ -3,18 +3,19 @@ package com.freewheelin.pulley.activities.mypage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.item_mypage_header.view.*
+import com.freewheelin.pulley.databinding.ItemMypageHeaderBinding
 
-class HeaderHolder(val view: View) : RecyclerView.ViewHolder(view) {
+class HeaderHolder(val binding: ItemMypageHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun create(parent: ViewGroup): HeaderHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_mypage_header, parent, false)
-            return HeaderHolder(view)
+            val binding: ItemMypageHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mypage_header, parent, false)
+            return HeaderHolder(binding)
         }
     }
-    val headerTitleTv = view.headerTitleTv
+    val headerTitleTv = binding.headerTitleTv
 
     fun set(category: SettingCategory) {
         this.headerTitleTv.text = category.title

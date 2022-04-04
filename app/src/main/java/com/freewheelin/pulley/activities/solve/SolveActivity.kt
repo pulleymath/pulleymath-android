@@ -21,6 +21,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -35,6 +36,7 @@ import com.freewheelin.pulley.core.manage.MockExamManager.ARG_MOCK_IS_RESTART
 import com.freewheelin.pulley.core.manage.MockExamManager.ARG_START_PROBLEM
 import com.freewheelin.pulley.core.manage.PieceManager.ARG_REVIEW_SYNC
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.ActivitySolveBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
@@ -45,24 +47,9 @@ import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-//import com.samsung.android.sdk.penremote.*
-import kotlinx.android.synthetic.main.activity_learning.*
-import kotlinx.android.synthetic.main.activity_solve.*
-import kotlinx.android.synthetic.main.activity_solve.container
-import kotlinx.android.synthetic.main.activity_solve.spyBtn
-import kotlinx.android.synthetic.main.activity_solve.titleTv
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.dialog_mock_exam_guide.*
-import kotlinx.android.synthetic.main.view_answer.view.*
-import kotlinx.android.synthetic.main.view_answer.view.markingBtn
-import kotlinx.android.synthetic.main.view_answer.view.submitBtn
-import kotlinx.android.synthetic.main.view_pencilcase.*
-import kotlinx.android.synthetic.main.view_pencilcase.view.*
-import kotlinx.android.synthetic.main.view_speed_answer.view.*
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
-
 
 class SolveActivity : BaseActivity(),
         AnswerDelegate,
@@ -73,6 +60,10 @@ class SolveActivity : BaseActivity(),
         ObservableHashSetListener<Problem>,
         LifecycleObserver,
         AppUsageMonitorListener {
+
+    private val binding: ActivitySolveBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_solve, null,false)
+    }
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScrenHeight(this) }
@@ -134,20 +125,20 @@ class SolveActivity : BaseActivity(),
 
     var selectedProblem: Problem? = null
     override val isShowAnswer: Boolean
-        get() = speedyScoreSwitch.isChecked
+        get() = binding.speedyScoreSwitch.isChecked
 
     var answeredSet: ObservableHashSet<Problem> = ObservableHashSet()
     var itemValue = ""
         set(value) {
             field = value
-            pencilcaseView.itemValue = value
-            galleryView.itemValue = value
+            binding.pencilcaseView.itemValue = value
+            binding.galleryView.itemValue = value
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_solve)
+        setContentView(binding.root)
 
         initUI()
 
@@ -187,7 +178,7 @@ class SolveActivity : BaseActivity(),
         AppUsageMonitor.finishStudy(this)
         super.onDestroy()
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        timerView?.deinitTimer()
+        binding.timerView?.deinitTimer()
     }
 
     override fun onBackPressed() {
@@ -256,81 +247,82 @@ class SolveActivity : BaseActivity(),
     fun initReviewContent(content: Content?) {
 
         Log.d("문제풀기", "initReview content======>$content")
+        with(binding) {
+            onItemChanged(answeredSet)
+            timerView.visibility = View.INVISIBLE
+            mainFormatTool.visibility = View.VISIBLE
 
-        onItemChanged(answeredSet)
-        timerView.visibility = View.INVISIBLE
-        mainFormatTool.visibility = View.VISIBLE
-
-        when(content) {
-            is Book -> {
-                itemValue = "유형학습-리뷰"
-                BookManager.review(this, content, user!!) {
-                    it.arrangeChapter()
-                    this.content = it
-                    galleryView.set(it)
-                    speedAnswerView.set(it)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
-                }
-            }
-            is Test -> {
-                itemValue = "테스트-리뷰"
-                TestManager.getTestReview(this, user!!, content) {
-                    this.content = it
-                    galleryView.set(it)
-                    speedAnswerView.set(it)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
-                }
-            }
-
-            is MockExam -> {
-                itemValue = "모의고사-리뷰"
-                MockExamManager.getExamReviewProblems(this, content, user!!) { it ->
-                    this.content = it
-                    galleryView.set(it)
-                    speedAnswerView.set(it)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
-
-                    val startProblemID = intent?.extras?.getInt(ARG_START_PROBLEM, -1)
-                    val startProblem = this.content?.problems?.filter { it.id == startProblemID }?.firstOrNull()
-                    if (startProblem != null)
-                        galleryView.select(startProblem)
-                }
-            }
-
-            is Piece -> {
-                itemValue = "2차학습-리뷰"
-                val isNeedSync = intent.getBooleanExtra(ARG_REVIEW_SYNC, false)
-
-                if (isNeedSync) {
-                    PieceManager.getPieceReviewProblems(this, content, user!!) {
-                        this.content = it
+            when(content) {
+                is Book -> {
+                    itemValue = "유형학습-리뷰"
+                    BookManager.review(this@SolveActivity, content, user!!) {
+                        it.arrangeChapter()
+                        this@SolveActivity.content = it
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
                         speedAnswerView.showMarkingBtn()
                     }
-                } else {
-                    this.content = content
-                    galleryView.set(content)
-                    speedAnswerView.set(content)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
                 }
-            }
-            else -> {
-                itemValue = "2차학습-리뷰"
-//                val problems = intent.getSerializableExtra(PieceManager.ARG_PIECE_PROBLEMS) as? List<Problem>
-                arg_piece_problems?.let {
-                    val subject = intent.getStringExtra(PieceManager.ARG_PIECE_SUBJECT)?:""
-                    PieceManager.getReviewInfo(this, subject, it, user!!) {
-                        this.content = it
+                is Test -> {
+                    itemValue = "테스트-리뷰"
+                    TestManager.getTestReview(this@SolveActivity, user!!, content) {
+                        this@SolveActivity.content = it
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
                         speedAnswerView.showMarkingBtn()
+                    }
+                }
+
+                is MockExam -> {
+                    itemValue = "모의고사-리뷰"
+                    MockExamManager.getExamReviewProblems(this@SolveActivity, content, user!!) { it ->
+                        this@SolveActivity.content = it
+                        galleryView.set(it)
+                        speedAnswerView.set(it)
+                        answerView.showMarkingBtn()
+                        speedAnswerView.showMarkingBtn()
+
+                        val startProblemID = intent?.extras?.getInt(ARG_START_PROBLEM, -1)
+                        val startProblem = this@SolveActivity.content?.problems?.filter { it.id == startProblemID }?.firstOrNull()
+                        if (startProblem != null)
+                            galleryView.select(startProblem)
+                    }
+                }
+
+                is Piece -> {
+                    itemValue = "2차학습-리뷰"
+                    val isNeedSync = intent.getBooleanExtra(ARG_REVIEW_SYNC, false)
+
+                    if (isNeedSync) {
+                        PieceManager.getPieceReviewProblems(this@SolveActivity, content, user!!) {
+                            this@SolveActivity.content = it
+                            galleryView.set(it)
+                            speedAnswerView.set(it)
+                            answerView.showMarkingBtn()
+                            speedAnswerView.showMarkingBtn()
+                        }
+                    } else {
+                        this@SolveActivity.content = content
+                        galleryView.set(content)
+                        speedAnswerView.set(content)
+                        answerView.showMarkingBtn()
+                        speedAnswerView.showMarkingBtn()
+                    }
+                }
+                else -> {
+                    itemValue = "2차학습-리뷰"
+//                val problems = intent.getSerializableExtra(PieceManager.ARG_PIECE_PROBLEMS) as? List<Problem>
+                    arg_piece_problems?.let {
+                        val subject = intent.getStringExtra(PieceManager.ARG_PIECE_SUBJECT)?:""
+                        PieceManager.getReviewInfo(this@SolveActivity, subject, it, user!!) {
+                            this@SolveActivity.content = it
+                            galleryView.set(it)
+                            speedAnswerView.set(it)
+                            answerView.showMarkingBtn()
+                            speedAnswerView.showMarkingBtn()
+                        }
                     }
                 }
             }
@@ -340,78 +332,78 @@ class SolveActivity : BaseActivity(),
     fun initContent(content: Content?) {
 
         Log.d("문제풀기", "init content======>$content")
-
-        when(content) {
-            is Book -> {
-                itemValue = "유형학습"
-                timerView.visibility = View.INVISIBLE
-                mainFormatTool.visibility = View.VISIBLE
-                BookManager.getBook(this, content, user!!) {
-                    Log.d("유형학습", "init getBook======>$it")
-                    this.content = it
-                    galleryView.set(it)
-                    speedAnswerView.set(it)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
-                }
-            }
-            is Test -> {
-                itemValue = "테스트"
-                solutionSwitch.visibility = View.GONE
-                timerView.visibility = View.INVISIBLE
-                mainFormatTool.visibility = View.VISIBLE
-
-                when (content.getTestType()) {
-                    Test.TestType.daily -> {
-                        TestManager.getDailyTest(this, user!!, content) {
-                            it.scoringTestPieceCount = content.scoringTestPieceCount
-                            this.content = it
-                            galleryView.set(it)
-                            galleryView.hideFilter()
-                            speedAnswerView.set(it)
-                            answerView.showSubmitBtn()
-                            speedAnswerView.showSubmitBtn()
-                        }
-                    }
-                    else -> {
-                        TestManager.getTest(this, user!!, content) {
-                            it.scoringTestPieceCount = content.scoringTestPieceCount
-                            this.content = it
-                            galleryView.set(it)
-                            galleryView.hideFilter()
-                            speedAnswerView.set(it)
-                            answerView.showSubmitBtn()
-                            speedAnswerView.showSubmitBtn()
-                        }
+        with(binding) {
+            when(content) {
+                is Book -> {
+                    itemValue = "유형학습"
+                    timerView.visibility = View.INVISIBLE
+                    mainFormatTool.visibility = View.VISIBLE
+                    BookManager.getBook(this@SolveActivity, content, user!!) {
+                        Log.d("유형학습", "init getBook======>$it")
+                        this@SolveActivity.content = it
+                        galleryView.set(it)
+                        speedAnswerView.set(it)
+                        answerView.showMarkingBtn()
+                        speedAnswerView.showMarkingBtn()
                     }
                 }
-            }
-            is MockExam -> {
-                itemValue = "모의고사"
-                solutionSwitch.visibility = View.GONE
-                val isRestart = intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
-                timerView.visibility = View.VISIBLE
-                timerView.setTimerViewListener(object : TimerViewListener {
-                    override fun onSubmitTypeChanged(submitType: TimerView.SubmitType) {
-                        val itemName = if (submitType == TimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
-                        LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", itemName, itemValue)
+                is Test -> {
+                    itemValue = "테스트"
+                    solutionSwitch.visibility = View.GONE
+                    timerView.visibility = View.INVISIBLE
+                    mainFormatTool.visibility = View.VISIBLE
+
+                    when (content.getTestType()) {
+                        Test.TestType.daily -> {
+                            TestManager.getDailyTest(this@SolveActivity, user!!, content) {
+                                it.scoringTestPieceCount = content.scoringTestPieceCount
+                                this@SolveActivity.content = it
+                                galleryView.set(it)
+                                galleryView.hideFilter()
+                                speedAnswerView.set(it)
+                                answerView.showSubmitBtn()
+                                speedAnswerView.showSubmitBtn()
+                            }
+                        }
+                        else -> {
+                            TestManager.getTest(this@SolveActivity, user!!, content) {
+                                it.scoringTestPieceCount = content.scoringTestPieceCount
+                                this@SolveActivity.content = it
+                                galleryView.set(it)
+                                galleryView.hideFilter()
+                                speedAnswerView.set(it)
+                                answerView.showSubmitBtn()
+                                speedAnswerView.showSubmitBtn()
+                            }
+                        }
                     }
+                }
+                is MockExam -> {
+                    itemValue = "모의고사"
+                    solutionSwitch.visibility = View.GONE
+                    val isRestart = intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
+                    timerView.visibility = View.VISIBLE
+                    timerView.setTimerViewListener(object : TimerViewListener {
+                        override fun onSubmitTypeChanged(submitType: TimerView.SubmitType) {
+                            val itemName = if (submitType == TimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
+                            LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", itemName, itemValue)
+                        }
 
-                    override fun onTimerSwitchChecked() {
-                        LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "타이머표시", itemValue)
-                    }
+                        override fun onTimerSwitchChecked() {
+                            LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "타이머표시", itemValue)
+                        }
 
-                    override fun onTimerStopClicked() {
-                        LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "일시정지", itemValue)
-                    }
+                        override fun onTimerStopClicked() {
+                            LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "일시정지", itemValue)
+                        }
 
-                    override fun onTimerExpired(timerView: TimerView, type: TimerView.SubmitType) {
-                        if (type == TimerView.SubmitType.lenient) return
+                        override fun onTimerExpired(timerView: TimerView, type: TimerView.SubmitType) {
+                            if (type == TimerView.SubmitType.lenient) return
 
-                        timerView.stop()
-                        val notSolvedProblem = content.problems.filter { !it.isUserAnswerInput() }
+                            timerView.stop()
+                            val notSolvedProblem = content.problems.filter { !it.isUserAnswerInput() }
 
-                        DialogUtils.showExamExpiredDialog(this@SolveActivity, notSolvedProblem.size,
+                            DialogUtils.showExamExpiredDialog(this@SolveActivity, notSolvedProblem.size,
                                 onSolveClicked = {
                                     if (timerView.isTimerShown())
                                         timerView.showOverTimerView()
@@ -427,64 +419,65 @@ class SolveActivity : BaseActivity(),
                                         finish()
                                     }
                                 }
-                        )
-                    }
-                })
-
-                mainFormatTool.visibility = View.GONE
-
-                MockExamManager.getMockProblems(this, content, user!!) {
-                    Log.d("문제풀기", "모의고사 it=${it.assignID}")
-                    content.assignID = it.assignID
-                    content.problems = it.problems
-                    content.time = it.time
-//                    content.problems.forEach { if(it.getResultByScoring() != Result.yet) { it.rawResult == Result.yet.rawValue } }
-                    this.content = content
-
-                    if (content.time != null && isRestart == false) {
-                        val time = content.time!!
-                        if (time >= 6000) {
-                            timerView.submitType = TimerView.SubmitType.lenient
-                            timerView.setLenientOvetimeUI()
-                        }
-                        timerView.elapsedTime = time
-                    }
-
-                    AnimationUtils.showTimer(this, 3, "시험 시작!", object : AnimationListener {
-                        override fun onAnimationEnd() {
-                            timerView.runTimer()
-                        }
-
-                        override fun onAnimationCancel() {
-                            timerView.runTimer()
+                            )
                         }
                     })
 
-                    galleryView.set(content)
-                    galleryView.hideFilter()
-                    speedAnswerView.set(content)
-                    answerView.showSubmitBtn()
-                    speedAnswerView.showSubmitBtn()
+                    mainFormatTool.visibility = View.GONE
 
-                    resetProblemResult(content)
+                    MockExamManager.getMockProblems(this@SolveActivity, content, user!!) {
+                        Log.d("문제풀기", "모의고사 it=${it.assignID}")
+                        content.assignID = it.assignID
+                        content.problems = it.problems
+                        content.time = it.time
+//                    content.problems.forEach { if(it.getResultByScoring() != Result.yet) { it.rawResult == Result.yet.rawValue } }
+                        this@SolveActivity.content = content
+
+                        if (content.time != null && !isRestart) {
+                            val time = content.time!!
+                            if (time >= 6000) {
+                                timerView.submitType = TimerView.SubmitType.lenient
+                                timerView.setLenientOvetimeUI()
+                            }
+                            timerView.elapsedTime = time
+                        }
+
+                        AnimationUtils.showTimer(this@SolveActivity, 3, "시험 시작!", object : AnimationListener {
+                            override fun onAnimationEnd() {
+                                timerView.runTimer()
+                            }
+
+                            override fun onAnimationCancel() {
+                                timerView.runTimer()
+                            }
+                        })
+
+                        galleryView.set(content)
+                        galleryView.hideFilter()
+                        speedAnswerView.set(content)
+                        answerView.showSubmitBtn()
+                        speedAnswerView.showSubmitBtn()
+
+                        resetProblemResult(content)
+                    }
+                }
+                is Piece -> {
+                    itemValue = "2차학습"
+                    timerView.visibility = View.INVISIBLE
+                    mainFormatTool.visibility = View.VISIBLE
+                    PieceManager.getProblems(this@SolveActivity, content, user!!) {
+                        content.problems = it
+                        this@SolveActivity.content = content
+                        galleryView.set(content)
+                        speedAnswerView.set(content)
+                        answerView.showMarkingBtn()
+                        speedAnswerView.showMarkingBtn()
+                    }
                 }
             }
-            is Piece -> {
-                itemValue = "2차학습"
-                timerView.visibility = View.INVISIBLE
-                mainFormatTool.visibility = View.VISIBLE
-                PieceManager.getProblems(this, content, user!!) {
-                    content.problems = it
-                    this.content = content
-                    galleryView.set(content)
-                    speedAnswerView.set(content)
-                    answerView.showMarkingBtn()
-                    speedAnswerView.showMarkingBtn()
-                }
-            }
+
+            onItemChanged(answeredSet)
         }
-
-        onItemChanged(answeredSet)
     }
 
     // 모의고사 다시 풀기시 문제 전부 채점 전 상태로 변경
@@ -496,8 +489,6 @@ class SolveActivity : BaseActivity(),
 
     private fun initUI() {
 
-//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-//        actionBar?.hide()
 
         if (Build.VERSION.SDK_INT < 16) {
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -507,25 +498,17 @@ class SolveActivity : BaseActivity(),
             actionBar?.hide()
         }
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            window.insetsController?.hide(WindowInsets.Type.statusBars())
-//        } else {
-//            window.setFlags(
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-//            )
-//        }
+        with(binding) {
+            if(isSPYMode) {
+                spyBtn.visibility = View.VISIBLE
+                spyBtn.setOnClickListener { onSpyBtnClikcked() }
+            } else {
+                spyBtn.visibility = View.GONE
+            }
 
-        if(isSPYMode) {
-            spyBtn.visibility = View.VISIBLE
-            spyBtn.setOnClickListener { onSpyBtnClikcked() }
-        } else {
-            spyBtn.visibility = View.GONE
-        }
-
-        galleryView.layoutParams.width = GalleryView.getGalleryViewWidth(this)
-        solveCl.layoutParams.width = screenWidth
-        galleryView.delegate = this
+            galleryView.layoutParams.width = GalleryView.getGalleryViewWidth(this@SolveActivity)
+            solveCl.layoutParams.width = screenWidth
+            galleryView.delegate = this@SolveActivity
 
 //        var isSetScrollPosition: Boolean = false
 //        rootView.viewTreeObserver.addOnGlobalLayoutListener {
@@ -536,99 +519,131 @@ class SolveActivity : BaseActivity(),
 //            }
 //        }
 
-        answeredSet.listener = this
-        speedAnswerView.answerDelegate = this
-        solutionContainer.visibility = View.GONE
-        speedAnswerView.visibility = View.GONE
+            answeredSet.listener = this@SolveActivity
+            speedAnswerView.answerDelegate = this@SolveActivity
+            solutionContainer.visibility = View.GONE
+            speedAnswerView.visibility = View.GONE
 
-        backBtn.setOnClickListener { onBackPressed() }
-        galleryBtn.setOnClickListener { onGalleryBtnClicked() }
-        galleryBtn.extensionTouchArea(8.toPx())
-        galleryCloser.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
-                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "갤-갤러리화면닫기", itemValue)
-                onFoldBtnClicked()
+            backBtn.setOnClickListener { onBackPressed() }
+            galleryBtn.setOnClickListener { onGalleryBtnClicked() }
+            galleryBtn.extensionTouchArea(8.toPx())
+            galleryCloser.setOnTouchListener { view, motionEvent ->
+                if(motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "갤-갤러리화면닫기", itemValue)
+                    onFoldBtnClicked()
+                }
+                true
             }
-            true
-        }
-        prevBtn.setOnClickListener { onPrevBtnClicked() }
-        nextBtn.setOnClickListener { onNextBtnClicked() }
-        clearBtn.setOnClickListener { onClearBtnClicked() }
-        scrapBtn.setOnClickListener { onScrapBtnClicked() }
-        reportBtn.setOnClickListener { onSirenBtnClicked() }
-        // 풀리플러스 처리
-        lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
-        plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
-        addSimilarProblemCl.setOnClickListener {
-            if(user!!.hasPulleyPlus) {
-                onAddSimilarBtnClicked()
-            } else {
-                DialogUtils.confirmHasPulleyPlus(this@SolveActivity) {
-                    PulleyPlusPriceDialog(this@SolveActivity).show()
+            prevBtn.setOnClickListener { onPrevBtnClicked() }
+            nextBtn.setOnClickListener { onNextBtnClicked() }
+            clearBtn.setOnClickListener { onClearBtnClicked() }
+            scrapBtn.setOnClickListener { onScrapBtnClicked() }
+            reportBtn.setOnClickListener { onSirenBtnClicked() }
+            // 풀리플러스 처리
+            lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
+            plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
+            addSimilarProblemCl.setOnClickListener {
+                if(user!!.hasPulleyPlus) {
+                    onAddSimilarBtnClicked()
+                } else {
+                    DialogUtils.confirmHasPulleyPlus(this@SolveActivity) {
+                        PulleyPlusPriceDialog(this@SolveActivity).show()
+                    }
                 }
             }
-        }
-        changeSimilarProblemCl.setOnClickListener { onChangeSimilarBtnClicked() }
-        answerView.markingBtn.setOnClickListener {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
-            onMarkingBtnClicked()
-        }
-        answerView.submitBtn.setOnClickListener {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
-            onSubmitBtnClicked()
-        }
-        speedAnswerView.markingBtn.setOnClickListener {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
-            onMarkingBtnClicked()
-        }
-        speedAnswerView.submitBtn.setOnClickListener {
-            LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
-            onSubmitBtnClicked()
-        }
-        pencilcaseView.listener = this
-        problemMemoView.set(pencilcaseView)
-        solutionMemoView.set(pencilcaseView)
+            changeSimilarProblemCl.setOnClickListener { onChangeSimilarBtnClicked() }
+            answerView.markingBtn.setOnClickListener {
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
+                onMarkingBtnClicked()
+            }
+            answerView.submitBtn.setOnClickListener {
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
+                onSubmitBtnClicked()
+            }
+            speedAnswerView.markingBtn.setOnClickListener {
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
+                onMarkingBtnClicked()
+            }
+            speedAnswerView.submitBtn.setOnClickListener {
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
+                onSubmitBtnClicked()
+            }
+            pencilcaseView.listener = this@SolveActivity
+            problemMemoView.set(pencilcaseView)
+            solutionMemoView.set(pencilcaseView)
 
-        speedyScoreSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
-            onSpeedyScoringCheckChanged(isChecked)
-        })
-        solutionSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
-            onShowSolutionCheckChanged(isChecked)
-        })
+            speedyScoreSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
+                onSpeedyScoringCheckChanged(isChecked)
+            })
+            solutionSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
+                onShowSolutionCheckChanged(isChecked)
+            })
 
-        val imageWidth = when(this.densityLevel) {
-            DensityLevel.Low -> screenWidth / 2
-            DensityLevel.High -> (screenWidth / 2.7).toInt()
-            else -> (500.toPx()).toInt()
-        }
+            val imageWidth = when(densityLevel) {
+                DensityLevel.Low -> screenWidth / 2
+                DensityLevel.High -> (screenWidth / 2.7).toInt()
+                else -> (500.toPx()).toInt()
+            }
 
-        problemIv.maxWidth = imageWidth
-        solutionIv.maxWidth = imageWidth
+            problemIv.maxWidth = imageWidth
+            solutionIv.maxWidth = imageWidth
 
-        problemMemoView.layoutParams.width = screenWidth
-        solutionMemoView.layoutParams.width = screenWidth
-        answerView.delegate = this
+            problemMemoView.layoutParams.width = screenWidth
+            solutionMemoView.layoutParams.width = screenWidth
+            answerView.delegate = this@SolveActivity
 
-        solveCl.setOnDragListener { view, dragEvent ->
-            when(dragEvent.action) {
-                DragEvent.ACTION_DRAG_LOCATION -> {
+            solveCl.setOnDragListener { view, dragEvent ->
+                when(dragEvent.action) {
+                    DragEvent.ACTION_DRAG_LOCATION -> {
 
-                }
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    val x = dragEvent.x
-                    val y = dragEvent.y
-                    Log.d("드래그", "Started x=$x, y=$y")
-                }
-                DragEvent.ACTION_DRAG_ENDED -> {
-                    var x = dragEvent.x
-                    var y = dragEvent.y
+                    }
+                    DragEvent.ACTION_DRAG_STARTED -> {
+                        val x = dragEvent.x
+                        val y = dragEvent.y
+                        Log.d("드래그", "Started x=$x, y=$y")
+                    }
+                    DragEvent.ACTION_DRAG_ENDED -> {
+                        var x = dragEvent.x
+                        var y = dragEvent.y
 
-                    if (y > screenHeight) {
+                        if (y > screenHeight) {
+                            val answerHeight = answerView.height
+                            val answerWidth = answerView.width
+
+                            x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                            y = dragEvent.y - answerHeight / 2f
+
+                            // 화면 밖으로 나가면 안으로 넣기
+                            if (x > screenWidth - answerWidth) {
+                                x = (screenWidth - answerWidth).toFloat()
+                            } else if (x < (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))) {
+                                x = (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                            }
+
+                            if (y > screenHeight - answerHeight) {
+                                y = (screenHeight - answerHeight).toFloat()
+                            } else if (y < answerHeight) {
+                                y = (answerHeight).toFloat()
+                            }
+                            answerView.setPosition(x, y)
+                            answerView.visibility = View.VISIBLE
+                        }
+                        Log.d("드래그", "Ended x=$x, y=$y, sw=$screenWidth, sh=$screenHeight")
+                    }
+                    DragEvent.ACTION_DRAG_EXITED -> {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        answerView.cancelDragAndDrop()
+//                    }
+                    }
+                    DragEvent.ACTION_DROP -> {
+                        LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "플로팅OMR 드래그", itemValue)
+                        answerView.visibility = View.VISIBLE
+
                         val answerHeight = answerView.height
                         val answerWidth = answerView.width
 
-                        x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
-                        y = dragEvent.y - answerHeight / 2f
+                        var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        var y = dragEvent.y - answerHeight / 2f
 
                         // 화면 밖으로 나가면 안으로 넣기
                         if (x > screenWidth - answerWidth) {
@@ -642,69 +657,40 @@ class SolveActivity : BaseActivity(),
                         } else if (y < answerHeight) {
                             y = (answerHeight).toFloat()
                         }
+
+                        Log.d("드래그", "x=$x, y=$y, w=$answerWidth")
+
                         answerView.setPosition(x, y)
-                        answerView.visibility = View.VISIBLE
                     }
-                    Log.d("드래그", "Ended x=$x, y=$y, sw=$screenWidth, sh=$screenHeight")
                 }
-                DragEvent.ACTION_DRAG_EXITED -> {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                        answerView.cancelDragAndDrop()
-//                    }
-                }
-                DragEvent.ACTION_DROP -> {
-                    LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "플로팅OMR 드래그", itemValue)
-                    answerView.visibility = View.VISIBLE
-
-                    val answerHeight = answerView.height
-                    val answerWidth = answerView.width
-
-                    var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
-                    var y = dragEvent.y - answerHeight / 2f
-
-                    // 화면 밖으로 나가면 안으로 넣기
-                    if (x > screenWidth - answerWidth) {
-                        x = (screenWidth - answerWidth).toFloat()
-                    } else if (x < (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))) {
-                        x = (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
-                    }
-
-                    if (y > screenHeight - answerHeight) {
-                        y = (screenHeight - answerHeight).toFloat()
-                    } else if (y < answerHeight) {
-                        y = (answerHeight).toFloat()
-                    }
-
-                    Log.d("드래그", "x=$x, y=$y, w=$answerWidth")
-
-                    answerView.setPosition(x, y)
-                }
+                true
             }
-            true
+
+            problemGesture = ProblemGestures(this@SolveActivity, problemIv, problemMemoView)
+            problemGesture?.listener = this@SolveActivity
+            problemContainer.setOnTouchListener(problemGesture)
+
+            solutionGesture = SolveGestures(this@SolveActivity, solutionIv, solutionMemoView, problemInfoContainer)
+            solutionGesture?.listener = this@SolveActivity
+            solutionContainer.setOnTouchListener(solutionGesture)
+            highlightGalleryBtnIfNeed()
         }
-
-        problemGesture = ProblemGestures(this, problemIv, problemMemoView)
-        problemGesture?.listener = this
-        problemContainer.setOnTouchListener(problemGesture)
-
-        solutionGesture = SolveGestures(this, solutionIv, solutionMemoView, problemInfoContainer)
-        solutionGesture?.listener = this
-        solutionContainer.setOnTouchListener(solutionGesture)
-        highlightGalleryBtnIfNeed()
     }
 
     private fun setInitPosition() {
-        rootView.postDelayed({
-            rootView.scrollX = GalleryView.getGalleryViewWidth(this)
-            answerView.setInitPosition()
-        }, 0)
+        with(binding) {
+            rootView.postDelayed({
+                rootView.scrollX = GalleryView.getGalleryViewWidth(this@SolveActivity)
+                answerView.setInitPosition()
+            }, 0)
 
-        rootView.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
-            Log.d("키보드", "currentFocus new=$newFocus id=${newFocus?.id} old=$oldFocus")
-            if(newFocus != null){
-                when(newFocus) {
-                    is AppCompatImageButton, is Switch, is SwitchCompat, is DaebakSwitch, is AppCompatTextView, is AppCompatImageView -> {
-                        newFocus.clearFocus()
+            rootView.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
+                Log.d("키보드", "currentFocus new=$newFocus id=${newFocus?.id} old=$oldFocus")
+                if(newFocus != null){
+                    when(newFocus) {
+                        is AppCompatImageButton, is Switch, is SwitchCompat, is DaebakSwitch, is AppCompatTextView, is AppCompatImageView -> {
+                            newFocus.clearFocus()
+                        }
                     }
                 }
             }
@@ -718,16 +704,17 @@ class SolveActivity : BaseActivity(),
                 val scoredCnt = answeredSet.size
                 answeredSet.forEach { it.mark() }
                 answeredSet.clear()
-                galleryView.updateAll()
-                speedAnswerView.updateAll()
+                binding.galleryView.updateAll()
+                binding.speedAnswerView.updateAll()
                 onProblemSelected(selectedProblem)
 
-                if(it?.isNeedToShowCompletedToast() == true) {
-                    SuccessToast.showCompleteDialogIfNeed(this, it)
-                }
-                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
-                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
-                }
+                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
+//                if(it?.isNeedToShowCompletedToast() == true) {
+//                    SuccessToast.showCompleteDialogIfNeed(this, it)
+//                }
+//                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
+//                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
+//                }
             }
         } else {
             // 추천 학습지 채점 로그 분리
@@ -741,8 +728,8 @@ class SolveActivity : BaseActivity(),
 
                 answeredSet.forEach { it.mark() }
                 answeredSet.clear()
-                galleryView.updateAll()
-                speedAnswerView.updateAll()
+                binding.galleryView.updateAll()
+                binding.speedAnswerView.updateAll()
                 onProblemSelected(selectedProblem)
 
                 if(it?.isNeedToShowCompletedToast() == true) {
@@ -774,14 +761,14 @@ class SolveActivity : BaseActivity(),
                         dialogTitle,
                         dialogContents,
                         "취소", "제출하기")
-                dialog.leftBtn.setOnClickListener {
+                dialog.binding.leftBtn.setOnClickListener {
                     dialog.cancel()
                 }
                 dialog.setOnCancelListener {
                     LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "제출취소", "문제풀이직후")
                 }
 
-                dialog.rightBtn.setOnClickListener {
+                dialog.binding.rightBtn.setOnClickListener {
                     if (content == null) {
                         DaebakToast.show(this, "처리할 내용이 없습니다.")
                     } else {
@@ -790,14 +777,14 @@ class SolveActivity : BaseActivity(),
                             val scoredCnt = answeredSet.size
                             answeredSet.forEach { it.mark() }
                             answeredSet.clear()
-                            galleryView.updateAll()
-                            speedAnswerView.updateAll()
+                            binding.galleryView.updateAll()
+                            binding.speedAnswerView.updateAll()
                             onProblemSelected(selectedProblem)
-                            answerView.showMarkingBtn()
-                            speedAnswerView.showMarkingBtn()
-                            galleryView.showFilter()
+                            binding.answerView.showMarkingBtn()
+                            binding.speedAnswerView.showMarkingBtn()
+                            binding.galleryView.showFilter()
                             dialog.dismiss()
-                            solutionSwitch.visibility = View.VISIBLE
+                            binding.solutionSwitch.visibility = View.VISIBLE
 
                             Log.d("테스", "askAddSubjectCode=${it?.getAskAddSubjects()}, show=${user!!.isShowAddOptionalSubjectStatus()}")
 
@@ -822,7 +809,7 @@ class SolveActivity : BaseActivity(),
             is MockExam -> {
                 val exam = content as MockExam
                 val notSolvedCnt = exam.problems.filter { !it.isUserAnswerInput() }.size
-                val time = timerView!!.elapsedTime
+                val time = binding.timerView!!.elapsedTime
 
                 Log.d("선택모의고사", "exam=${exam.assignID}")
 
@@ -852,7 +839,7 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onSpeedNumberClicked(problem: Problem) {
-        galleryView.select(problem)
+        binding.galleryView.select(problem)
     }
 
 //    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean { // 화면 끌림 방지
@@ -881,10 +868,10 @@ class SolveActivity : BaseActivity(),
                 KeyEvent.KEYCODE_4 -> inputNumber(4)
                 KeyEvent.KEYCODE_5 -> inputNumber(5)
 
-                KeyEvent.KEYCODE_DPAD_LEFT -> if (speedAnswerView.visibility != View.VISIBLE) prev()
-                KeyEvent.KEYCODE_DPAD_RIGHT -> if (speedAnswerView.visibility != View.VISIBLE) next()
-                KeyEvent.KEYCODE_ENTER -> if (speedAnswerView.visibility != View.VISIBLE) onEnter()
-                KeyEvent.KEYCODE_DEL -> if (speedAnswerView.visibility != View.VISIBLE) inputBack()
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (binding.speedAnswerView.visibility != View.VISIBLE) prev()
+                KeyEvent.KEYCODE_DPAD_RIGHT -> if (binding.speedAnswerView.visibility != View.VISIBLE) next()
+                KeyEvent.KEYCODE_ENTER -> if (binding.speedAnswerView.visibility != View.VISIBLE) onEnter()
+                KeyEvent.KEYCODE_DEL -> if (binding.speedAnswerView.visibility != View.VISIBLE) inputBack()
                 KeyEvent.KEYCODE_TAB -> next()
 //                KeyEvent.KEYCODE_DPAD_DOWN -> next()
 //                KeyEvent.KEYCODE_DPAD_UP -> prev()
@@ -895,18 +882,18 @@ class SolveActivity : BaseActivity(),
     }
 
     private fun speedAnswerViewNext() {
-        if (speedAnswerView.visibility == View.VISIBLE) {
+        if (binding.speedAnswerView.visibility == View.VISIBLE) {
             val problems = content?.problems ?: return
             val index = problems.indexOf(selectedProblem)
-            speedAnswerView.changedFocus(focusIndex = index, prevIndex = index-1)
+            binding.speedAnswerView.changedFocus(focusIndex = index, prevIndex = index-1)
         }
     }
 
     private fun speedAnswerViewPrev() {
-        if (speedAnswerView.visibility == View.VISIBLE) {
+        if (binding.speedAnswerView.visibility == View.VISIBLE) {
             val problems = content?.problems ?: return
             val index = problems.indexOf(selectedProblem)
-            speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
+            binding.speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
         }
     }
 
@@ -925,20 +912,20 @@ class SolveActivity : BaseActivity(),
         else
             answeredSet.add(problem)
 
-        galleryView.update(problem)
+        binding.galleryView.update(problem)
 
         if(selectedProblem != problem)
-            galleryView.select(problem)
+            binding.galleryView.select(problem)
 
-        galleryView.clearFocus()
-        if(speedAnswerView.visibility != View.VISIBLE) {
-            speedAnswerView.clearFocus()
+        binding.galleryView.clearFocus()
+        if(binding.speedAnswerView.visibility != View.VISIBLE) {
+            binding.speedAnswerView.clearFocus()
         }
 
-        if(view == answerView) {
-            speedAnswerView.update(problem)
+        if(view == binding.answerView) {
+            binding.speedAnswerView.update(problem)
         } else {
-            answerView.configureUI(problem, speedAnswerView.visibility == View.GONE && galleryCloser.visibility == View.GONE)
+            binding.answerView.configureUI(problem, binding.speedAnswerView.visibility == View.GONE && binding.galleryCloser.visibility == View.GONE)
         }
     }
 
@@ -947,7 +934,7 @@ class SolveActivity : BaseActivity(),
         if(selectedProblem?.getResultByScoring() == Result.yet) { // 아직 채점하지 않았고,
             when (selectedProblem?.problemType){
                 ProblemType.single, ProblemType.multi ->
-                    answerView.enterNumberBtnClickedFromSolve("$num", selectedProblem!!.problemType)
+                    binding.answerView.enterNumberBtnClickedFromSolve("$num", selectedProblem!!.problemType)
             }
         }
     }
@@ -956,7 +943,7 @@ class SolveActivity : BaseActivity(),
         Log.d("키보드", "inputnum => scoring=${selectedProblem?.getResultByScoring()}, type=${selectedProblem?.problemType}")
         if(selectedProblem?.getResultByScoring() == Result.yet) { // 아직 채점하지 않았고,
             when (selectedProblem?.problemType){
-                ProblemType.short -> answerView.deleteBtnClicked()
+                ProblemType.short -> binding.answerView.deleteBtnClicked()
             }
         } else {
             onBackPressed()
@@ -968,38 +955,38 @@ class SolveActivity : BaseActivity(),
 //        Log.d("키보드", "submit=${answerView.isShowSubmit}")
 
         if(selectedProblem?.getResultByScoring() == Result.yet) { // 아직 채점하지 않았을 때만
-            answerView.releasePad()
-            if(answerView.isShowSubmit) {
+            binding.answerView.releasePad()
+            if(binding.answerView.isShowSubmit) {
                 onSubmitBtnClicked()
             } else {
                 onMarkingBtnClicked()
             }
-            answerView.requestFocus()
+            binding.answerView.requestFocus()
         } else {
             next()
         }
     }
 
     override fun next() {
-        if(galleryCloser.visibility != View.VISIBLE) {
+        if(binding.galleryCloser.visibility != View.VISIBLE) {
             onNextBtnClicked()
         } // 갤러리가 닫혀 있을 때만
     }
 
     override fun prev() {
-        if(galleryCloser.visibility != View.VISIBLE) {
+        if(binding.galleryCloser.visibility != View.VISIBLE) {
             onPrevBtnClicked()
         } // 갤러리가 닫혀 있을 때만
     }
 
     override fun onFoldBtnClicked() {
-        galleryCloser.visibility = View.GONE
+        binding.galleryCloser.visibility = View.GONE
 
-        val galleyParam = (galleryView.layoutParams as LinearLayout.LayoutParams)
+        val galleyParam = (binding.galleryView.layoutParams as LinearLayout.LayoutParams)
         val animator = ValueAnimator.ofInt(0, galleyParam.width)
         animator.addUpdateListener {
             val value = it.animatedValue as Int
-            rootView.scrollTo(value, 0)
+            binding.rootView.scrollTo(value, 0)
         }
 
         animator.addListener(object : Animator.AnimatorListener {
@@ -1008,7 +995,7 @@ class SolveActivity : BaseActivity(),
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                galleryBtn.visibility = View.VISIBLE
+                binding.galleryBtn.visibility = View.VISIBLE
             }
 
             override fun onAnimationCancel(p0: Animator?) {
@@ -1022,21 +1009,23 @@ class SolveActivity : BaseActivity(),
         animator.start()
 
         selectedProblem?.let { selected ->
-            answerView?.configureUI(selected, true)
+            binding.answerView?.configureUI(selected, true)
 
-            if (speedyScoreSwitch.isChecked) {
-                speedAnswerView.scrollTo(selected, "onFoldBtnClicked()")
+            if (binding.speedyScoreSwitch.isChecked) {
+                binding.speedAnswerView.scrollTo(selected, "onFoldBtnClicked()")
             }
         }
     }
 
     override fun onFilterCheckChanged(isChecked: Boolean) {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "갤-틀린문제토글", itemValue)
-        emptyGuide.visibility = galleryView.emptyFilterContainer.visibility
-        speedAnswerView.isFilter = isChecked
-        if(galleryCloser.visibility != View.VISIBLE) { // 갤러리가 열려있을 때는 안보여야 됨
-            speedAnswerView.emptyFilterContainer.visibility = galleryView.emptyFilterContainer.visibility
-            answerView.visibility = getAnswerViewVisibility(selectedProblem)
+        with(binding) {
+            emptyGuide.visibility = galleryView.emptyFilterContainer.visibility
+            speedAnswerView.isFilter = isChecked
+            if(galleryCloser.visibility != View.VISIBLE) { // 갤러리가 열려있을 때는 안보여야 됨
+                speedAnswerView.emptyFilterContainer.visibility = galleryView.emptyFilterContainer.visibility
+                answerView.visibility = getAnswerViewVisibility(selectedProblem)
+            }
         }
     }
 
@@ -1057,7 +1046,7 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onLeftSwipe() {
-        if(pencilcaseView.editType == null) {
+        if(binding.pencilcaseView.editType == null) {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-이전", itemValue)
             if(selectedProblem != content?.problems?.firstOrNull())
                 prevAnim()
@@ -1067,7 +1056,7 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onRightSwipe() {
-        if(pencilcaseView.editType == null) {
+        if(binding.pencilcaseView.editType == null) {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-다음", itemValue)
             if(selectedProblem != content?.problems?.lastOrNull())
                 nextAnim()
@@ -1091,7 +1080,7 @@ class SolveActivity : BaseActivity(),
     // 키보드로 입력시 주관식 정답 저장 안되는 현상
     private fun checkShortAnswer() {
         if(selectedProblem?.problemType == ProblemType.short) {
-            val textValue = answerView.getShortAnswerText()
+            val textValue = binding.answerView.getShortAnswerText()
             if(textValue?.length > 0 && selectedProblem?.userAnswer?.length ?:0 < 1) {
                 selectedProblem?.userAnswer = textValue
             }
@@ -1101,15 +1090,15 @@ class SolveActivity : BaseActivity(),
     private fun prevAnim() {
         checkShortAnswer()
 
-        problemContainer.setOnTouchListener(null)
-        solutionContainer.setOnTouchListener(null)
+        binding.problemContainer.setOnTouchListener(null)
+        binding.solutionContainer.setOnTouchListener(null)
         val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.duration = 100
         anim.addUpdateListener {
             var value = it.animatedValue as Float
             value = value.pow(2)
-            container.x = problemContainer.measuredWidth * value
-            container.alpha = 1 - value
+            binding.container.x = binding.problemContainer.measuredWidth * value
+            binding.container.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {
@@ -1121,17 +1110,17 @@ class SolveActivity : BaseActivity(),
                 anim.addUpdateListener {
                     var value = it.animatedValue as Float
                     value = value.pow(2)
-                    container.x =
-                        -problemContainer.width.toFloat() + problemContainer.measuredWidth.toFloat() * value
-                    container.alpha = value
+                    binding.container.x =
+                        -binding.problemContainer.width.toFloat() + binding.problemContainer.measuredWidth.toFloat() * value
+                    binding.container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                     }
 
                     override fun onAnimationEnd(p0: Animator?) {
-                        problemContainer.setOnTouchListener(problemGesture)
-                        solutionContainer.setOnTouchListener(solutionGesture)
+                        binding.problemContainer.setOnTouchListener(problemGesture)
+                        binding.solutionContainer.setOnTouchListener(solutionGesture)
                     }
 
                     override fun onAnimationCancel(p0: Animator?) {
@@ -1140,15 +1129,15 @@ class SolveActivity : BaseActivity(),
                     override fun onAnimationStart(p0: Animator?) {
                     }
                 })
-                if (speedAnswerView.visibility == View.VISIBLE) {
+                if (binding.speedAnswerView.visibility == View.VISIBLE) {
                     val problems = content?.problems ?: return
                     val index = problems.indexOf(selectedProblem)
 
                     if (index > 0) {
-                        speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
+                        binding.speedAnswerView.changedFocus(focusIndex = index, prevIndex = index+1)
                     }
                 }
-                galleryView.prev()
+                binding.galleryView.prev()
                 anim.start()
             }
 
@@ -1165,15 +1154,15 @@ class SolveActivity : BaseActivity(),
         // shortAnswer 체크 후 editField에 값이 있는데, answer 에 값이 없을 경우 입력
         checkShortAnswer()
 
-        problemContainer.setOnTouchListener(null)
-        solutionContainer.setOnTouchListener(null)
+        binding.problemContainer.setOnTouchListener(null)
+        binding.solutionContainer.setOnTouchListener(null)
         val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.duration = 100
         anim.addUpdateListener {
             var value = it.animatedValue as Float
             value = value.pow(2)
-            container.x = problemContainer.measuredWidth * value * -1
-            container.alpha = 1 - value
+            binding.container.x = binding.problemContainer.measuredWidth * value * -1
+            binding.container.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {}
@@ -1183,20 +1172,20 @@ class SolveActivity : BaseActivity(),
                 anim.addUpdateListener {
                     var value = it.animatedValue as Float
                     value = value.pow(2)
-                    container.x = problemContainer.width.toFloat() - problemContainer.measuredWidth.toFloat() * value
-                    container.alpha = value
+                    binding.container.x = binding.problemContainer.width.toFloat() - binding.problemContainer.measuredWidth.toFloat() * value
+                    binding.container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationEnd(p0: Animator?) {
-                        problemContainer.setOnTouchListener(problemGesture)
-                        solutionContainer.setOnTouchListener(solutionGesture)
+                        binding.problemContainer.setOnTouchListener(problemGesture)
+                        binding.solutionContainer.setOnTouchListener(solutionGesture)
                     }
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {}
                 })
                 anim.start()
-                galleryView.next()
+                binding.galleryView.next()
                 speedAnswerViewNext()
             }
             override fun onAnimationCancel(p0: Animator?) {}
@@ -1207,19 +1196,19 @@ class SolveActivity : BaseActivity(),
 
     fun onGalleryBtnClicked() {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "갤러리 아이콘", itemValue)
-        galleryBtn.visibility = View.GONE
-        answerView.clearFocusOnShortAnswer()
+        binding.galleryBtn.visibility = View.GONE
+        binding.answerView.clearFocusOnShortAnswer()
 
-        val galleyParam = (galleryView.layoutParams as LinearLayout.LayoutParams)
+        val galleyParam = (binding.galleryView.layoutParams as LinearLayout.LayoutParams)
         val animator = ValueAnimator.ofInt(galleyParam.width, 0)
         animator.addUpdateListener {
             val value = it.animatedValue as Int
-            rootView.scrollTo(value, 0)
+            binding.rootView.scrollTo(value, 0)
         }
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {}
             override fun onAnimationEnd(p0: Animator?) {
-                galleryCloser.visibility = View.VISIBLE
+                binding.galleryCloser.visibility = View.VISIBLE
             }
             override fun onAnimationCancel(p0: Animator?) {}
             override fun onAnimationStart(p0: Animator?) {}
@@ -1229,18 +1218,17 @@ class SolveActivity : BaseActivity(),
         animator.start()
 
         val problem = selectedProblem
-        if(problem != null)
-            galleryView.scrollTo(problem)
+        if(problem != null) binding.galleryView.scrollTo(problem)
     }
 
     fun onClearBtnClicked() {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "클리어 버튼", itemValue)
         val problem = selectedProblem ?: return
-        setBtnSelected(clearBtn, !clearBtn.isSelected)
-        ProblemManager.clear(this, user!!, problem, clearBtn.isSelected, content is Test) {
-            problem.isClear = clearBtn.isSelected
+        setBtnSelected(binding.clearBtn, !binding.clearBtn.isSelected)
+        ProblemManager.clear(this, user!!, problem, binding.clearBtn.isSelected, content is Test) {
+            problem.isClear = binding.clearBtn.isSelected
             onProblemSelected(selectedProblem)
-            galleryView.update(problem)
+            binding.galleryView.update(problem)
             showClearToast(problem.isClear)
         }
     }
@@ -1248,11 +1236,11 @@ class SolveActivity : BaseActivity(),
     fun onScrapBtnClicked() {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "즐겨찾기 버튼", itemValue)
         val problem = selectedProblem ?: return
-        setBtnSelected(scrapBtn, !scrapBtn.isSelected)
-        ProblemManager.scrap(this, user!!, problem, scrapBtn.isSelected) {
-            selectedProblem?.isScrap = scrapBtn.isSelected
+        setBtnSelected(binding.scrapBtn, !binding.scrapBtn.isSelected)
+        ProblemManager.scrap(this, user!!, problem, binding.scrapBtn.isSelected) {
+            selectedProblem?.isScrap = binding.scrapBtn.isSelected
             onProblemSelected(selectedProblem)
-            galleryView.update(problem)
+            binding.galleryView.update(problem)
             showScrapToast(problem.isScrap)
         }
     }
@@ -1264,8 +1252,8 @@ class SolveActivity : BaseActivity(),
                 override fun onReportCompleted(problem: Problem) {
                     problem.problemErrorStatus = ProblemErrorStatus.REPORT
                     onProblemSelected(selectedProblem)
-                    galleryView.update(problem)
-                    speedAnswerView.updateAll()
+                    binding.galleryView.update(problem)
+                    binding.speedAnswerView.updateAll()
                 }
             }
 
@@ -1276,51 +1264,51 @@ class SolveActivity : BaseActivity(),
     fun onShowSolutionCheckChanged(isChecked: Boolean) {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "정답/해설표시토글", itemValue)
         if(isChecked) {
-            solutionContainer.visibility = View.VISIBLE
+            binding.solutionContainer.visibility = View.VISIBLE
         } else {
-            solutionContainer.visibility = View.GONE
+            binding.solutionContainer.visibility = View.GONE
         }
     }
 
     fun onSpeedyScoringCheckChanged(isChecked: Boolean) {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른채점토글", itemValue)
-        if(speedAnswerView.delegate == null)
-            speedAnswerView.delegate = this
+        if(binding.speedAnswerView.delegate == null)
+            binding.speedAnswerView.delegate = this
 
         if(isChecked) {
-            speedAnswerView.visibility = View.VISIBLE
-            answerView.visibility = View.INVISIBLE
-            speedAnswerView.recyclerView.adapter?.notifyDataSetChanged()
+            binding.speedAnswerView.visibility = View.VISIBLE
+            binding.answerView.visibility = View.INVISIBLE
+            binding.speedAnswerView.recyclerView.adapter?.notifyDataSetChanged()
             CoroutineScope(Dispatchers.Default).launch {
                 delay(100)
                 withContext(Dispatchers.Main) {
-                    speedAnswerView.scrollTo(selectedProblem,"onSpeedyScoringCheckChanged")
+                    binding.speedAnswerView.scrollTo(selectedProblem,"onSpeedyScoringCheckChanged")
                 }
             }
 
         } else {
-            speedAnswerView.visibility = View.GONE
+            binding.speedAnswerView.visibility = View.GONE
             if(selectedProblem?.problemErrorStatus == ProblemErrorStatus.ERROR
                     || selectedProblem?.problemErrorStatus == ProblemErrorStatus.REPORT
-                    || emptyGuide.visibility == View.VISIBLE)
-                answerView.visibility = View.INVISIBLE
+                    || binding.emptyGuide.visibility == View.VISIBLE)
+                binding.answerView.visibility = View.INVISIBLE
             else
-                answerView.visibility = View.VISIBLE
+                binding.answerView.visibility = View.VISIBLE
         }
     }
 
     private fun setBtnSelected(btn: ImageButton, isSelected: Boolean) {
         btn.isSelected = isSelected
-        val selectedImage = if(btn === scrapBtn)
+        val selectedImage = if(btn === binding.scrapBtn)
             ContextCompat.getDrawable(this, R.drawable.ic_tag_14_selected)
-        else if(btn == clearBtn)
+        else if(btn == binding.clearBtn)
             ContextCompat.getDrawable(this, R.drawable.ic_check_purple_20)
         else
             null
 
-        val unselectedImage = if(btn === scrapBtn)
+        val unselectedImage = if(btn === binding.scrapBtn)
             ContextCompat.getDrawable(this, R.drawable.ic_tag_14_unselected)
-        else if(btn == clearBtn)
+        else if(btn == binding.clearBtn)
             ContextCompat.getDrawable(this, R.drawable.ic_check_grey_20)
         else
             null
@@ -1359,8 +1347,8 @@ class SolveActivity : BaseActivity(),
                 }
 
                 content!!.addSimilarProblem(it)
-                galleryView.add(it)
-                speedAnswerView.updateAll()
+                binding.galleryView.add(it)
+                binding.speedAnswerView.updateAll()
                 showSimilarProblemAddedToast(problem)
             }
         }
@@ -1395,8 +1383,8 @@ class SolveActivity : BaseActivity(),
                     answeredSet.remove(problem)
 
                     content!!.changeSimilarProblem(problem, it)
-                    galleryView.change(problem, it)
-                    speedAnswerView.updateAll()
+                    binding.galleryView.change(problem, it)
+                    binding.speedAnswerView.updateAll()
                     showSimilarProblemAddedToast(problem)
                 }
             }
@@ -1408,11 +1396,11 @@ class SolveActivity : BaseActivity(),
         selectedProblem = problem
         onSetProblem()
         if(problem != null) {
-            speedAnswerView.scrollTo(problem, "onProblemSelected")
-            galleryView.scrollTo(problem)
-            if(selectedProblem?.getResultByScoring() == Result.yet && selectedProblem?.problemType == ProblemType.short && !speedyScoreSwitch.isChecked && !solutionSwitch.isChecked) { // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
-                Log.d("포커스", "autoFocus=$autoFocus, keyPad=${answerView.keyPad}, isShow=${answerView.keyPad?.isShowing}")
-                Log.d("포커스", "galleryCloser.visibility=${galleryCloser.visibility}")
+            binding.speedAnswerView.scrollTo(problem, "onProblemSelected")
+            binding.galleryView.scrollTo(problem)
+            if(selectedProblem?.getResultByScoring() == Result.yet && selectedProblem?.problemType == ProblemType.short && !binding.speedyScoreSwitch.isChecked && !binding.solutionSwitch.isChecked) { // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
+                Log.d("포커스", "autoFocus=$autoFocus, keyPad=${binding.answerView.keyPad}, isShow=${binding.answerView.keyPad?.isShowing}")
+                Log.d("포커스", "galleryCloser.visibility=${binding.galleryCloser.visibility}")
 //                answerView.keyPad?.dismiss()
 
                 // 210513 채점버튼 관련 QA 수정사항으로 '문제 진입시 focus 해제'에 해당함
@@ -1420,7 +1408,7 @@ class SolveActivity : BaseActivity(),
 //                    answerView.postDelayed({ answerView.requestFocusOnShortAnswer() }, 100)
 //                }
             } else {
-                answerView.clearFocusOnShortAnswer()
+                binding.answerView.clearFocusOnShortAnswer()
             }
         }
     }
@@ -1437,25 +1425,25 @@ class SolveActivity : BaseActivity(),
 
         if(selectedProblem?.isSimilarProblem() == true) { // 유사문제 이면
              if(selectedProblem?.userAnswer == null)  { // 답이 없으면 유사문제 가림
-                 changeSimilarProblemCl.visibility = View.VISIBLE
-                 addSimilarProblemCl.visibility = View.GONE
-                 Tutor.showToolTipIfNeed(changeSimilarProblemCl, Tutor.TooltipType.changeSimilar)
+                 binding.changeSimilarProblemCl.visibility = View.VISIBLE
+                 binding.addSimilarProblemCl.visibility = View.GONE
+                 Tutor.showToolTipIfNeed(binding.changeSimilarProblemCl, Tutor.TooltipType.changeSimilar)
             } else {
                 if(selectedProblem?.rootProblem?.isAllAnswered() == false) { // 답이 있으면 부모 문제가 가지고 있는 자식 문제가 모두 답을 했는지 체크
-                    changeSimilarProblemCl.visibility = View.GONE
-                    addSimilarProblemCl.visibility = View.GONE
+                    binding.changeSimilarProblemCl.visibility = View.GONE
+                    binding.addSimilarProblemCl.visibility = View.GONE
                 } else {
                     animAddSimilarShowing()
                 }
             }
         } else {
             if(selectedProblem?.getResultByScoring() == Result.yet) {
-                addSimilarProblemCl.visibility = View.GONE
-                changeSimilarProblemCl.visibility = View.GONE
+                binding.addSimilarProblemCl.visibility = View.GONE
+                binding.changeSimilarProblemCl.visibility = View.GONE
             } else {
                 if(selectedProblem?.isAllAnswered() == false) {
-                    addSimilarProblemCl.visibility = View.GONE
-                    changeSimilarProblemCl.visibility = View.GONE
+                    binding.addSimilarProblemCl.visibility = View.GONE
+                    binding.changeSimilarProblemCl.visibility = View.GONE
                 } else {
                     animAddSimilarShowing()
                 }
@@ -1464,16 +1452,16 @@ class SolveActivity : BaseActivity(),
     }
 
     fun animAddSimilarShowing() {
-        if(addSimilarProblemCl.visibility == View.VISIBLE)
+        if(binding.addSimilarProblemCl.visibility == View.VISIBLE)
             return
 
-        addSimilarProblemCl.visibility = View.VISIBLE
-        changeSimilarProblemCl.visibility = View.GONE
+        binding.addSimilarProblemCl.visibility = View.VISIBLE
+        binding.changeSimilarProblemCl.visibility = View.GONE
 
 
         val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
         anim.duration = 250
-        addSimilarProblemCl.startAnimation(anim)
+        binding.addSimilarProblemCl.startAnimation(anim)
 
         if(Tutor.TooltipType.addSimilar.isNeedToShow()) {
             anim.setAnimationListener(object : Animation.AnimationListener {
@@ -1482,7 +1470,7 @@ class SolveActivity : BaseActivity(),
 
                 override fun onAnimationEnd(p0: Animation?) {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        Tutor.showToolTipIfNeed(addSimilarProblemCl, Tutor.TooltipType.addSimilar)
+                        Tutor.showToolTipIfNeed(binding.addSimilarProblemCl, Tutor.TooltipType.addSimilar)
                     }, 500)
                 }
 
@@ -1492,11 +1480,11 @@ class SolveActivity : BaseActivity(),
     }
 
     fun onSetProblem() {
-        if(writeModeSwitch.isChecked == false)
-            pencilcaseView.setDefaultState()
+        if(!binding.pencilcaseView.writeModeSwitch.isChecked)
+            binding.pencilcaseView.setDefaultState()
 
         val problem = selectedProblem
-        titleTv.text = getTitleText()
+        binding.titleTv.text = getTitleText()
 
 
         Log.d("테스트", "SolveActivity problem=${problem}")
@@ -1505,68 +1493,68 @@ class SolveActivity : BaseActivity(),
         if(problem == null) {
             problemGesture?.init()
             solutionGesture?.init()
-            numTv.text = "-"
-            numExtTv.text = ""
-            totalCntTv.text = "/-"
+            binding.numTv.text = "-"
+            binding.numExtTv.text = ""
+            binding.totalCntTv.text = "/-"
         } else {
             problemGesture?.init()
             solutionGesture?.init()
-            problemIv.setProblemImageURL(problem.getProblemUrl())
-            solutionIv.setProblemImageURL(problem.getSolutionUrl())
-            answerTv.text = "정답 : ${problem.answerData}"
+            binding.problemIv.setProblemImageURL(problem.getProblemUrl())
+            binding.solutionIv.setProblemImageURL(problem.getSolutionUrl())
+            binding.answerTv.text = "정답 : ${problem.answerData}"
 
             if(problem.correctRate == null)
-                correctRateTv.text = "정답률 : -"
+                binding.correctRateTv.text = "정답률 : -"
             else
-                correctRateTv.text = "정답률 : ${TextUtils.percentFormat.format(problem.correctRate)}"
+                binding.correctRateTv.text = "정답률 : ${TextUtils.percentFormat.format(problem.correctRate)}"
 
-            lvTv.text = "난이도 : ${problem.getProblemLevel()}"
-            intentionTv.text = "${problem.unit}"
-            clearContainer.visibility = if(problem.isClear) View.VISIBLE else View.INVISIBLE
-            setBtnSelected(clearBtn, problem.isClear)
-            tag.visibility = if(problem.isScrap) View.VISIBLE else View.INVISIBLE
-            setBtnSelected(scrapBtn, problem.isScrap)
+            binding.lvTv.text = "난이도 : ${problem.getProblemLevel()}"
+            binding.intentionTv.text = "${problem.unit}"
+            binding.clearContainer.visibility = if(problem.isClear) View.VISIBLE else View.INVISIBLE
+            setBtnSelected(binding.clearBtn, problem.isClear)
+            binding.tag.visibility = if(problem.isScrap) View.VISIBLE else View.INVISIBLE
+            setBtnSelected(binding.scrapBtn, problem.isScrap)
 
-            numTv.text = problem.getCurNumberText()
-            numExtTv.text = "${problem.getExtNumberText()}"
+            binding.numTv.text = problem.getCurNumberText()
+            binding.numExtTv.text = "${problem.getExtNumberText()}"
 
             if(content?.similarCount?:0 > 0)
-                totalCntTv.text = "/ ${content?.originCount} (+${content?.similarCount})"
+                binding.totalCntTv.text = "/ ${content?.originCount} (+${content?.similarCount})"
             else
-                totalCntTv.text = "/ ${content?.originCount}"
+                binding.totalCntTv.text = "/ ${content?.originCount}"
 
-            problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p")
-            solutionMemoView.load("${problem.id}_${content?.assignID ?: 0}_s")
+            binding.problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p")
+            binding.solutionMemoView.load("${problem.id}_${content?.assignID ?: 0}_s")
 
-            if(galleryCloser.visibility != View.VISIBLE) {
-                var requestFocus = if(speedAnswerView.visibility == View.GONE) galleryCloser.visibility != View.VISIBLE else false
-                answerView.configureUI(problem, requestFocus)
-                answerView.visibility = getAnswerViewVisibility(problem)
+            if(binding.galleryCloser.visibility != View.VISIBLE) {
+                var requestFocus = if(binding.speedAnswerView.visibility == View.GONE) binding.galleryCloser.visibility != View.VISIBLE else false
+                binding.answerView.configureUI(problem, requestFocus)
+                binding.answerView.visibility = getAnswerViewVisibility(problem)
             }
 
             when(problem.problemErrorStatus) {
                 ProblemErrorStatus.NONE -> {
-                    statusContainer.visibility = View.GONE
+                    binding.statusContainer.visibility = View.GONE
                 }
                 ProblemErrorStatus.REPORT -> {
-                    statusContainer.visibility = View.VISIBLE
-                    statusTv.text = "신고 처리 중입니다.\n" +
+                    binding.statusContainer.visibility = View.VISIBLE
+                    binding.statusTv.text = "신고 처리 중입니다.\n" +
                             "빠른 시일 내에 처리하겠습니다 :)"
-                    statusIcon.setImageResource(R.drawable.ic_siren_w28)
-                    statusContainer.setBackgroundColor(Color.parseColor("#80818181"))
+                    binding.statusIcon.setImageResource(R.drawable.ic_siren_w28)
+                    binding.statusContainer.setBackgroundColor(Color.parseColor("#80818181"))
                 }
                 ProblemErrorStatus.ERROR -> {
-                    statusContainer.visibility = View.VISIBLE
-                    statusTv.text = "오류로 삭제된 문제입니다.\n" +
+                    binding.statusContainer.visibility = View.VISIBLE
+                    binding.statusTv.text = "오류로 삭제된 문제입니다.\n" +
                             "이용에 불편을 드려 죄송합니다."
-                    statusIcon.setImageResource(R.drawable.ic_error_white_w21)
-                    statusContainer.setBackgroundColor(Color.parseColor("#818181"))
+                    binding.statusIcon.setImageResource(R.drawable.ic_error_white_w21)
+                    binding.statusContainer.setBackgroundColor(Color.parseColor("#818181"))
                 }
             }
             if(problem.getResultByScoring() == Result.yet) {
-                clearBtn.visibility = View.GONE
+                binding.clearBtn.visibility = View.GONE
             } else {
-                clearBtn.visibility = View.VISIBLE
+                binding.clearBtn.visibility = View.VISIBLE
             }
 
             configureSimilarUI()
@@ -1597,16 +1585,18 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onEditTypeChanged(type: Pencilcase.EditType?) {
-        if(type == null) {
-            problemContainer.isBlock = false
-            solutionContainer.isBlock = false
-        } else {
-            problemContainer.isBlock = true
-            solutionContainer.isBlock = true
-        }
+        with(binding) {
+            if(type == null) {
+                problemContainer.isBlock = false
+                solutionContainer.isBlock = false
+            } else {
+                problemContainer.isBlock = true
+                solutionContainer.isBlock = true
+            }
 
-        if(type == Pencilcase.EditType.pencil)
-            Tutor.showToolTipIfNeed(pencilcaseView.pencilBtn, Tutor.TooltipType.takeNoteScroll)
+            if(type == Pencilcase.EditType.pencil)
+                Tutor.showToolTipIfNeed(pencilcaseView.pencilBtn, Tutor.TooltipType.takeNoteScroll)
+        }
 
     }
 
@@ -1627,19 +1617,23 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onItemChanged(set: ObservableHashSet<Problem>) {
-        if(set.isEmpty()) {
-            answerView.disableMarking()
-            speedAnswerView.disableMarking()
-        } else {
-            answerView.enableMarking(set.size)
-            speedAnswerView.enableMarking(set.size)
+        with(binding) {
+            if(set.isEmpty()) {
+                answerView.disableMarking()
+                speedAnswerView.disableMarking()
+            } else {
+                answerView.enableMarking(set.size)
+                speedAnswerView.enableMarking(set.size)
+            }
         }
     }
 
     private fun saveMemo() {
-        val problem = selectedProblem ?: return
-        problemMemoView.save("${problem.id}_${content?.assignID ?: 0}_p")
-        solutionMemoView.save("${problem.id}_${content?.assignID ?: 0}_s")
+        with(binding) {
+            val problem = selectedProblem ?: return
+            problemMemoView.save("${problem.id}_${content?.assignID ?: 0}_p")
+            solutionMemoView.save("${problem.id}_${content?.assignID ?: 0}_s")
+        }
     }
 
     fun showNotExistSimilarToast() {
@@ -1670,7 +1664,7 @@ class SolveActivity : BaseActivity(),
                 View.INVISIBLE
             }
             else -> {
-                if(speedAnswerView.visibility == View.VISIBLE || emptyGuide.visibility == View.VISIBLE)
+                if(binding.speedAnswerView.visibility == View.VISIBLE || binding.emptyGuide.visibility == View.VISIBLE)
                     View.INVISIBLE
                 else
                     View.VISIBLE
@@ -1693,65 +1687,67 @@ class SolveActivity : BaseActivity(),
             items.add("타이머 세팅: 5분전")
             items.add("타이머 세팅: 제출직전")
         }
-        builder.setItems(items.toTypedArray()) { dialog, position ->
-            when(position) {
-                0 -> {
-                    content?.let { content ->
-                        answeredSet.addAll(content.problems)
-                        content.problems.forEach { it.userAnswer = it.answerData }
+        with(binding) {
+            builder.setItems(items.toTypedArray()) { dialog, position ->
+                when(position) {
+                    0 -> {
+                        content?.let { content ->
+                            answeredSet.addAll(content.problems)
+                            content.problems.forEach { it.userAnswer = it.answerData }
+                            binding.galleryView.updateAll()
+                            speedAnswerView.updateAll()
+                            onProblemSelected(selectedProblem)
+                        }
+                    }
+                    1 -> {
+                        content?.let { content ->
+                            answeredSet.addAll(content.problems)
+                            content.problems.forEach { it.userAnswer = "3" }
+                            galleryView.updateAll()
+                            speedAnswerView.updateAll()
+                            onProblemSelected(selectedProblem)
+                        }
+                    }
+                    2 -> {
+                        selectedProblem?.problemErrorStatus = ProblemErrorStatus.NONE
                         galleryView.updateAll()
                         speedAnswerView.updateAll()
                         onProblemSelected(selectedProblem)
                     }
-                }
-                1 -> {
-                    content?.let { content ->
-                        answeredSet.addAll(content.problems)
-                        content.problems.forEach { it.userAnswer = "3" }
+                    3 -> {
+                        selectedProblem?.problemErrorStatus = ProblemErrorStatus.REPORT
                         galleryView.updateAll()
                         speedAnswerView.updateAll()
                         onProblemSelected(selectedProblem)
                     }
-                }
-                2 -> {
-                    selectedProblem?.problemErrorStatus = ProblemErrorStatus.NONE
-                    galleryView.updateAll()
-                    speedAnswerView.updateAll()
-                    onProblemSelected(selectedProblem)
-                }
-                3 -> {
-                    selectedProblem?.problemErrorStatus = ProblemErrorStatus.REPORT
-                    galleryView.updateAll()
-                    speedAnswerView.updateAll()
-                    onProblemSelected(selectedProblem)
-                }
-                4 -> {
-                    selectedProblem?.problemErrorStatus = ProblemErrorStatus.ERROR
-                    galleryView.updateAll()
-                    speedAnswerView.updateAll()
-                    onProblemSelected(selectedProblem)
-                }
-                5 -> {
-                    timerView?.elapsedTime = 5695
-                }
-                6 -> {
-                    timerView?.elapsedTime = 5995
+                    4 -> {
+                        selectedProblem?.problemErrorStatus = ProblemErrorStatus.ERROR
+                        galleryView.updateAll()
+                        speedAnswerView.updateAll()
+                        onProblemSelected(selectedProblem)
+                    }
+                    5 -> {
+                        timerView?.elapsedTime = 5695
+                    }
+                    6 -> {
+                        timerView?.elapsedTime = 5995
+                    }
                 }
             }
-        }
 
-        builder.show()
+            builder.show()
+        }
     }
 
     private fun highlightGalleryBtnIfNeed() {
         if(Preferences.galleryClickCnt.get() > 0)
             return
         else {
-            val rotateAnim = ObjectAnimator.ofFloat(galleryBtn, "rotation", 0f, 5f, 0f, -5f, 0f)
+            val rotateAnim = ObjectAnimator.ofFloat(binding.galleryBtn, "rotation", 0f, 5f, 0f, -5f, 0f)
             rotateAnim.setRepeatCount(20)
             rotateAnim.setDuration(200)
             rotateAnim.start()
-            galleryBtn.playAnimation()
+            binding.galleryBtn.playAnimation()
 
             rotateAnim.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(p0: Animator?) {}
@@ -1767,15 +1763,15 @@ class SolveActivity : BaseActivity(),
                 override fun onAnimationStart(p0: Animator?) {}
             })
 
-            galleryBtn.setOnClickListener {
+            binding.galleryBtn.setOnClickListener {
                 Preferences.galleryClickCnt.set(Preferences.galleryClickCnt.get() + 1)
                 rotateAnim.cancel()
                 rotateAnim.repeatCount = 0
 
                 rotateAnim.removeAllListeners()
                 rotateAnim.removeAllUpdateListeners()
-                galleryBtn.cancelAnimation()
-                galleryBtn.frame = 0
+                binding.galleryBtn.cancelAnimation()
+                binding.galleryBtn.frame = 0
                 onGalleryBtnClicked()
             }
         }
@@ -1787,7 +1783,7 @@ class SolveActivity : BaseActivity(),
         sec = sec % 60
 
         runOnUiThread {
-            spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
+            binding.spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
         }
 
 

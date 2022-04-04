@@ -1,118 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
-
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp64"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/dateTv"
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="@dimen/dp72"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:text="03-29"
-            android:textColor="@color/black_4c4c4c"
-            android:textSize="@dimen/sp16" />
-
-        <TextView
-            android:id="@+id/categoryTv"
-            style="@style/TextGrey_9f9f9f.ExtraBold"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp24"
-            android:layout_marginStart="@dimen/dp16"
-            android:background="@drawable/bg_grey_e8e8e8_round"
-            android:gravity="center"
-            android:text="03-29"
-            android:textSize="@dimen/sp12" />
-
-        <TextView
-            android:id="@+id/titleTv"
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_weight="1"
-            android:text="2019년 11월 수능 고3 가형(2) 오답문제(5)"
-            android:textSize="@dimen/sp16" />
-
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="@dimen/dp144"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingEnd="8dp">
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp64"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/problemCntTv"
+                android:id="@+id/dateTv"
                 style="@style/TextBlack_4c4c4c.Bold"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp72"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp12"
-                android:gravity="right"
-                android:text="195"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="03-29"
+                android:textColor="@color/black_4c4c4c"
                 android:textSize="@dimen/sp16" />
 
             <TextView
-                android:id="@+id/problemTotalCntTv"
-                style="@style/TextGrey_c0c0c0.Bold"
-                android:layout_width="wrap_content"
+                android:id="@+id/categoryTv"
+                style="@style/TextGrey_9f9f9f.ExtraBold"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="@dimen/dp24"
+                android:layout_marginStart="@dimen/dp16"
+                android:background="@drawable/bg_grey_e8e8e8_round"
+                android:gravity="center"
+                android:text="03-29"
+                android:textSize="@dimen/sp12" />
+
+            <TextView
+                android:id="@+id/titleTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="/100"
+                android:layout_marginStart="@dimen/dp16"
+                android:layout_weight="1"
+                android:text="2019년 11월 수능 고3 가형(2) 오답문제(5)"
                 android:textSize="@dimen/sp16" />
+
+
+            <LinearLayout
+                android:layout_width="@dimen/dp144"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/problemCntTv"
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp12"
+                    android:gravity="right"
+                    android:text="195"
+                    android:textSize="@dimen/sp16" />
+
+                <TextView
+                    android:id="@+id/problemTotalCntTv"
+                    style="@style/TextGrey_c0c0c0.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="/100"
+                    android:textSize="@dimen/sp16" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/scoreTv"
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="@dimen/dp64"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp16"
+                android:gravity="center"
+                android:text="19점"
+                android:textSize="@dimen/sp16" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/reportBtn"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginStart="@dimen/dp16"
+                android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_report"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.freewheelin.pulley.views.buttons.SecondaryButton
+                android:id="@+id/solveBtn"
+                android:layout_width="@dimen/dp120"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginStart="@dimen/dp16"
+                android:text="풀기 &amp; 리뷰"
+                app:buttonTheme="blue" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/scoreTv"
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="@dimen/dp64"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp16"
-            android:gravity="center"
-            android:text="19점"
-            android:textSize="@dimen/sp16" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/reportBtn"
-            android:layout_width="@dimen/dp36"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp16"
-            android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_report"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
-            android:id="@+id/solveBtn"
-            android:layout_width="@dimen/dp120"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginStart="@dimen/dp16"
-            android:text="풀기 &amp; 리뷰"
-            app:buttonTheme="blue" />
-
+        <View
+            android:id="@+id/borderView"
+            style="@style/Border_Grey_e8e8e8_Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
     </LinearLayout>
-
-    <View
-        android:id="@+id/borderView"
-        style="@style/Border_Grey_e8e8e8_Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
-</LinearLayout>
+</layout>

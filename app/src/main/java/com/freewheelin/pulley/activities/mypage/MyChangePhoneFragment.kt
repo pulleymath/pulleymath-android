@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.activities.mypage
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 
 import com.freewheelin.pulley.R
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
@@ -16,6 +16,7 @@ import com.freewheelin.pulley.core.API.RequestModel.sign.AuthPhoneRequest
 import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.core.API_ANONYMOUS
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.FragmentMyChangePhoneBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.isValidPhoneNum
 import com.freewheelin.pulley.views.CodeConfirmView
@@ -23,9 +24,6 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_confirm_phone.*
-import kotlinx.android.synthetic.main.fragment_my_change_email.*
-import kotlinx.android.synthetic.main.fragment_my_change_email.codeConfirm
 import retrofit2.HttpException
 
 class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmInterface {
@@ -38,9 +36,11 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
     var countryType = "KOR"
     var purposeType = "SIGN_UP"
 
+    lateinit var binding: FragmentMyChangePhoneBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_change_phone, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_change_phone, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,8 +50,11 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
     }
 
     fun initUI() {
-        codeConfirm.codeInterface = this
-        codeConfirm.setText(user.cellPhone)
+        with(binding) {
+            codeConfirm.codeInterface = this@MyChangePhoneFragment
+            codeConfirm.setText(user.cellPhone)
+            backBtn.setOnClickListener { onBackBtnClicked() }
+        }
     }
 
     private fun load() {
@@ -66,12 +69,12 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
 
     private fun setSpinner() {
         val items = countryCodes.map { "(+${it.code}) ${it.title}"}
-        countrySpinner.set(items) {
+        binding.countrySpinner.set(items) {
             val country = countryCodes.get(it)
             countryCode = country.code
             countryType = country.type
         }
-        countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
+        binding.countrySpinner.position = countryCodes.indexOfFirst { it.code == "82" }
     }
 
     override fun requestCode(text: String, type: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {

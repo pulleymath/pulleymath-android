@@ -1,164 +1,169 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootView"
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_white_fafafa_round"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.PhoneSettingFragment">
-
-    <ImageButton
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_toolbar_back"
-        android:paddingTop="@dimen/dp48"
-        android:paddingStart="@dimen/dp48"
-        android:paddingEnd="@dimen/dp48"
-        android:paddingBottom="@dimen/dp24"
-        android:background="@null"
-        app:tint="@color/black_4c4c4c"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/titleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
-        android:text="휴대폰번호 수정하기"
-        android:layout_marginStart="@dimen/dp48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
-
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/phoneLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp48"
-        android:layout_marginStart="@dimen/dp48"
-        android:textSize="@dimen/sp18"
-        android:text="휴대폰번호"
-        app:layout_constraintTop_toBottomOf="@+id/titleLabel"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.freewheelin.pulley.views.editText.DaebakInputField
-        android:id="@+id/phoneTv"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:DaebakInputField_Hint="본인 또는 부모님 휴대폰 번호"
-        app:layout_constraintEnd_toStartOf="@+id/requestCodeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
-        app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-    </com.freewheelin.pulley.views.editText.DaebakInputField>
-
-    <com.freewheelin.pulley.views.editText.DaebakInputField
-        android:id="@+id/codeTv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:DaebakInputField_Hint="인증번호 입력"
-        app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
-        app:layout_constraintTop_toBottomOf="@+id/phoneTv"
-        app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-    </com.freewheelin.pulley.views.editText.DaebakInputField>
-
-
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
-        android:id="@+id/requestCodeBtn"
-        android:layout_width="@dimen/primaryBtn_width_160dp"
-        android:layout_height="56dp"
-        android:textSize="@dimen/sp18"
-        android:layout_marginEnd="@dimen/dp48"
-        android:text="인증번호 받기"
-        app:buttonTheme="blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/phoneTv" />
-
-    <com.freewheelin.pulley.views.buttons.SecondaryButton
-        android:id="@+id/codeConfirmBtn"
-        android:layout_width="@dimen/primaryBtn_width_160dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="@dimen/dp48"
-        android:textSize="@dimen/sp18"
-        android:text="인증 확인"
-        app:buttonTheme="grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/codeTv" />
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/confirmCompleteCl"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_grey_f2f2f2_round"
-        app:layout_constraintStart_toStartOf="@+id/codeConfirmBtn"
-        app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
-        app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn"
-        app:layout_constraintEnd_toEndOf="@+id/codeConfirmBtn">
-        <ImageView
-            android:id="@+id/confirmCompleteIv"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_check_green_circle_w48"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:background="@drawable/bg_white_fafafa_round"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.PhoneSettingFragment">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp48"
+            android:paddingStart="@dimen/dp48"
+            android:paddingEnd="@dimen/dp48"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            app:tint="@color/black_4c4c4c"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/confirmCompleteTv"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             style="@style/TextBlack_4c4c4c.Bold"
-            android:id="@+id/confirmCompleteTv"
+            android:id="@+id/titleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="@dimen/sp16"
-            android:text="확인 완료"
+            android:textSize="@dimen/sp24"
+            android:text="휴대폰번호 수정하기"
+            android:layout_marginStart="@dimen/dp48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/phoneLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp48"
+            android:layout_marginStart="@dimen/dp48"
+            android:textSize="@dimen/sp18"
+            android:text="휴대폰번호"
+            app:layout_constraintTop_toBottomOf="@+id/titleLabel"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.freewheelin.pulley.views.editText.DaebakInputField
+            android:id="@+id/phoneTv"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:DaebakInputField_Hint="본인 또는 부모님 휴대폰 번호"
+            app:layout_constraintEnd_toStartOf="@+id/requestCodeBtn"
+            app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
+            app:layout_constraintStart_toStartOf="@+id/phoneLabel">
+        </com.freewheelin.pulley.views.editText.DaebakInputField>
+
+        <com.freewheelin.pulley.views.editText.DaebakInputField
+            android:id="@+id/codeTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:DaebakInputField_Hint="인증번호 입력"
+            app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
+            app:layout_constraintTop_toBottomOf="@+id/phoneTv"
+            app:layout_constraintStart_toStartOf="@+id/phoneLabel">
+        </com.freewheelin.pulley.views.editText.DaebakInputField>
+
+
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
+            android:id="@+id/requestCodeBtn"
+            android:layout_width="@dimen/primaryBtn_width_160dp"
+            android:layout_height="56dp"
+            android:textSize="@dimen/sp18"
+            android:layout_marginEnd="@dimen/dp48"
+            android:text="인증번호 받기"
+            app:buttonTheme="blue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/confirmCompleteIv"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
+            app:layout_constraintTop_toTopOf="@+id/phoneTv" />
+
+        <com.freewheelin.pulley.views.buttons.SecondaryButton
+            android:id="@+id/codeConfirmBtn"
+            android:layout_width="@dimen/primaryBtn_width_160dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="@dimen/dp48"
+            android:textSize="@dimen/sp18"
+            android:text="인증 확인"
+            app:buttonTheme="grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/codeTv" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmCompleteCl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_grey_f2f2f2_round"
+            app:layout_constraintStart_toStartOf="@+id/codeConfirmBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
+            app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn"
+            app:layout_constraintEnd_toEndOf="@+id/codeConfirmBtn">
+            <ImageView
+                android:id="@+id/confirmCompleteIv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_check_green_circle_w48"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/confirmCompleteTv"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:id="@+id/confirmCompleteTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/sp16"
+                android:text="확인 완료"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/confirmCompleteIv"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            style="@style/TextRed_fe7b67"
+            android:id="@+id/timerTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp24"
+            android:text="3:00"
+            app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
+            app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn"/>
+
+        <ImageView
+            android:id="@+id/codeConfirmIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_green_circle_w16"
+            app:layout_constraintEnd_toEndOf="@+id/timerTv"
+            app:layout_constraintTop_toTopOf="@+id/timerTv"
+            app:layout_constraintBottom_toBottomOf="@+id/timerTv"
+            android:visibility="invisible"/>
+
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
+            android:id="@+id/modifyBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginEnd="@dimen/dp48"
+            android:layout_marginBottom="@dimen/dp48"
+            android:text="@string/text_do_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        style="@style/TextRed_fe7b67"
-        android:id="@+id/timerTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp24"
-        android:text="3:00"
-        app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
-        app:layout_constraintBottom_toBottomOf="@+id/codeConfirmBtn"
-        app:layout_constraintTop_toTopOf="@+id/codeConfirmBtn"/>
-
-    <ImageView
-        android:id="@+id/codeConfirmIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_check_green_circle_w16"
-        app:layout_constraintEnd_toEndOf="@+id/timerTv"
-        app:layout_constraintTop_toTopOf="@+id/timerTv"
-        app:layout_constraintBottom_toBottomOf="@+id/timerTv"
-        android:visibility="invisible"/>
-
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
-        android:id="@+id/modifyBtn"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp56"
-        android:layout_marginStart="@dimen/dp48"
-        android:layout_marginEnd="@dimen/dp48"
-        android:layout_marginBottom="@dimen/dp48"
-        android:text="@string/text_do_edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

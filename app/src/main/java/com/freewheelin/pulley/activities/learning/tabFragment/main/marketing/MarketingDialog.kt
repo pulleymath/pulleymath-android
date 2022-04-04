@@ -7,62 +7,70 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.underMinHeight
 import com.freewheelin.pulley.core.manage.PieceManager
-import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.databinding.DialogMarketingBinding
 import com.freewheelin.pulley.utils.toPx
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.dialog_marketing.*
 import kotlinx.coroutines.*
 
 class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context), MarketingPager.BannerInterface {
 
+    private val binding: DialogMarketingBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_marketing, null, false)
+    }
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setContentView(R.layout.dialog_marketing)
+        setContentView(binding.root)
         initUI()
     }
 
+
     private fun initUI() {
         Log.d("마케팅", "data=$marketing")
-        val pagerAdapter = MarketingPager(marketing.banners, this)
-        marketingPager.adapter = pagerAdapter
+        binding.apply {
 
-        if(marketing.banners.size > 1) {
-            TabLayoutMediator(pagerIndicator, marketingPager) { tab, position ->
-                tab.setIcon(R.drawable.banner_tab_selector)
-            }.attach()
-        }
+            val pagerAdapter = MarketingPager(marketing.banners, this@MarketingDialog)
+            marketingPager.adapter = pagerAdapter
 
-        Log.d("마케팅", "screen height=${context!!.resources.configuration.screenHeightDp}")
+            if (marketing.banners.size > 1) {
+                TabLayoutMediator(pagerIndicator, marketingPager) { tab, position ->
+                    tab.setIcon(R.drawable.banner_tab_selector)
+                }.attach()
+            }
 
-        if(context!!.underMinHeight) {
-            val ratio = 0.5f
+            Log.d("마케팅", "screen height=${context.resources.configuration.screenHeightDp}")
 
-            var pagerParams = marketingPager.layoutParams
-            pagerParams.width = (720 * ratio).toPx().toInt()
-            pagerParams.height = (560 * ratio).toPx().toInt()
+            if (context.underMinHeight) {
+                val ratio = 0.5f
 
-            var buttomParams = marketingButtonLayout.layoutParams
-            buttomParams.width = (720 * ratio).toPx().toInt()
-            buttomParams.height = (64 * ratio).toPx().toInt()
-        }
+                var pagerParams = marketingPager.layoutParams
+                pagerParams.width = (720 * ratio).toPx().toInt()
+                pagerParams.height = (560 * ratio).toPx().toInt()
 
-        btnMarketingClose.setOnClickListener {
-            dismiss()
-        }
+                var buttomParams = marketingButtonLayout.layoutParams
+                buttomParams.width = (720 * ratio).toPx().toInt()
+                buttomParams.height = (64 * ratio).toPx().toInt()
+            }
 
-        btnMarketingNoShow.setOnClickListener {
-            MarketingManager.setNoShow(context!!, marketing)
-            dismiss()
+            btnMarketingClose.setOnClickListener {
+                dismiss()
+            }
+
+            btnMarketingNoShow.setOnClickListener {
+                MarketingManager.setNoShow(context!!, marketing)
+                dismiss()
+            }
         }
     }
 
     override fun openBanner(urlString: String) {
-        loadingContainer.visibility = View.VISIBLE
+        binding.loadingContainer.visibility = View.VISIBLE
 
         if(urlString.startsWith("http")) {
             val uri = Uri.parse(urlString)
@@ -72,7 +80,7 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
             CoroutineScope(Dispatchers.Default).launch {
                 delay(2000)
                 withContext(Dispatchers.Main) {
-                    loadingContainer.visibility = View.GONE
+                    binding.loadingContainer.visibility = View.GONE
                     dismiss()
                 }
             }
@@ -83,7 +91,7 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
 
             CoroutineScope(Dispatchers.Main).launch {
-                loadingContainer.visibility = View.GONE
+                binding.loadingContainer.visibility = View.GONE
                 dismiss()
             }
         }

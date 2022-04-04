@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.adapters.HintableSpinnerAdapter
 
 class SpinnerV2: ConstraintLayout {
 

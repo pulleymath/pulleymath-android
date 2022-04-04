@@ -6,16 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.FragmentTestMainDailySetupBinding
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.hide
 import com.freewheelin.pulley.utils.show
-import kotlinx.android.synthetic.main.fragment_test_main_daily_setup.*
 
 
 class TestMainDailySetupFragment : TestMainBaseFragment() {
-
+    lateinit var binding: FragmentTestMainDailySetupBinding
     override var test: Test? = null
     override var testType: Test.TestType = Test.TestType.daily
 
@@ -29,26 +30,27 @@ class TestMainDailySetupFragment : TestMainBaseFragment() {
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_test_main_daily_setup, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_main_daily_setup, container, false)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBtn.setOnClickListener {
+        binding.setupBtn.setOnClickListener {
             listener?.onSettingBtnClicked(test!!)
         }
     }
 
     override fun showMainContents() {
-        guideTv.show(duration)
-        setupBtn.show(duration)
+        binding.guideTv.show(duration)
+        binding.setupBtn.show(duration)
     }
 
     override fun hideMainContents(cb: () -> Unit) {
-        guideTv.hide(duration)
-        setupBtn.hide(duration)
+        binding.guideTv.hide(duration)
+        binding.setupBtn.hide(duration)
     }
 
     override fun configureUI(test: Test) {}

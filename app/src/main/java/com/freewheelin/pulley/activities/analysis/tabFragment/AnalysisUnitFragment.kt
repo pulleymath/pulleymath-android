@@ -8,18 +8,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
+import com.freewheelin.pulley.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ContentManager
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.FragmentAnalysisUnitBinding
+import com.freewheelin.pulley.databinding.ItemAnalysisUnitBinding
 import com.freewheelin.pulley.dialogs.WrongManagementDialog
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
@@ -36,10 +41,7 @@ import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.views.charts.TriplePenChart
 import com.ht.RecyclerAdapters.ExpandableAdapter.ExpandableAdapter
 import com.ht.RecyclerAdapters.ExpandableAdapter.ExpandableItem
-import kotlinx.android.synthetic.main.activity_analysis_tab.*
-import kotlinx.android.synthetic.main.dialog_wrong_management.*
-import kotlinx.android.synthetic.main.fragment_analysis_unit.*
-import kotlinx.android.synthetic.main.item_analysis_unit.view.*
+
 import org.joda.time.LocalDate
 
 class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDelegate, ObservableHashSetListener<ChapterAnalysis> {
@@ -83,24 +85,31 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         fun newInstance() = AnalysisUnitFragment()
     }
 
+    lateinit var binding: FragmentAnalysisUnitBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_analysis_unit, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_analysis_unit, container, false)
+        return binding.root
 
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        achieveOrderRadio.textSize = 20f
-        achieveOrderRadio.labels = listOf("낮은 성취도 TOP3", "높은 성취도 TOP3")
-        achieveOrderRadio.listener = this
+        with(binding) {
+            achieveOrderRadio.textSize = 20f
+            achieveOrderRadio.labels = listOf("낮은 성취도 TOP3", "높은 성취도 TOP3")
+            achieveOrderRadio.listener = this@AnalysisUnitFragment
 
-        initUI()
-        configureUI(from, to, DateTimeUtils.getPeriod(from, to))
-        unitRv.layoutManager = LinearLayoutManager(context)
-        unitRv.isFocusable = false
-        activity?.scrollView?.scrollTo(0, scrollPosition)
+            initUI()
+            configureUI(from, to, DateTimeUtils.getPeriod(from, to))
+            unitRv.layoutManager = LinearLayoutManager(context)
+            unitRv.isFocusable = false
+
+            (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+            (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+        }
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
@@ -117,45 +126,48 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
     }
 
     override fun onItemChanged(set: ObservableHashSet<ChapterAnalysis>) {
-        if(set.isEmpty()) {
-            unitSelectGuideTv.text = ""
-            learnBtn.toDisableUI()
-            reviewBtn.toDisableUI()
-        } else {
-            val problemCount = set.sumBy { it.problemTotalNumber }
-            unitSelectGuideTv.text = "${problemCount}개의 문제를 학습합니다."
-            learnBtn.toEnableUI()
-            reviewBtn.toEnableUI()
+        with(binding) {
+            if(set.isEmpty()) {
+                unitSelectGuideTv.text = ""
+                learnBtn.toDisableUI()
+                reviewBtn.toDisableUI()
+            } else {
+                val problemCount = set.sumBy { it.problemTotalNumber }
+                unitSelectGuideTv.text = "${problemCount}개의 문제를 학습합니다."
+                learnBtn.toEnableUI()
+                reviewBtn.toEnableUI()
+            }
         }
     }
 
     private fun initUI() {
-        unitSelectGuideTv.text = ""
         selectedChapter.listener = this
         selectedChapter.clear()
-        learnBtn.setOnClickListener {
-            if(learnBtn.isEnableUI()) {
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
-                val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
-                dialog.configureUIByChapter(selectedChapter)
-                dialog.show()
-                dialog.makeBtn.setOnClickListener {
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "단원 학습지 만들기")
-                    dialog.makeBtn.startLoding()
-                    val cntPerProblem = dialog.cnt
-                    val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
-                    val level = dialog.level
+        with(binding) {
+            unitSelectGuideTv.text = ""
+            learnBtn.setOnClickListener {
+                if(learnBtn.isEnableUI()) {
+                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
+                    val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
+                    dialog.configureUIByChapter(selectedChapter)
+                    dialog.show()
+                    dialog.binding.makeBtn.setOnClickListener {
+                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "단원 학습지 만들기")
+                        dialog.binding.makeBtn.startLoding()
+                        val cntPerProblem = dialog.cnt
+                        val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
+                        val level = dialog.level
 
-                    val isIncludeClearProblem = dialog.isClearInclude
+                        val isIncludeClearProblem = dialog.isClearInclude
 
-                    PieceManager.makeWeakPieceUsingChapters(requireContext(), user!!, selectedChapter.toList(),
+                        PieceManager.makeWeakPieceUsingChapters(requireContext(), user!!, selectedChapter.toList(),
                             isSimilar, level, cntPerProblem, isIncludeClearProblem,
                             from.toDate(),
                             to.toDate(),
                             successCB = {
                                 dialog.dismiss()
 
-                                if (dialog.checkbox.isChecked) {
+                                if (dialog.binding.checkbox.isChecked) {
                                     val intent = SolveActivity.getIntent(requireContext(), it)
                                     startActivity(intent)
                                 } else {
@@ -174,16 +186,17 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                                 dialog.dismiss()
                                 DaebakToast.showFailedMakePiece(requireContext())
                             }
-                    )
+                        )
+                    }
                 }
             }
-        }
 
-        reviewBtn.setOnClickListener {
-            if(reviewBtn.isEnableUI()) {
-                ContentManager.getReview(requireContext(), user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
-                    val intent = SolveActivity.getReviewIntent(requireContext(), it, false)
-                    startActivity(intent)
+            reviewBtn.setOnClickListener {
+                if(reviewBtn.isEnableUI()) {
+                    ContentManager.getReview(requireContext(), user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
+                        val intent = SolveActivity.getReviewIntent(requireContext(), it, false)
+                        startActivity(intent)
+                    }
                 }
             }
         }
@@ -196,60 +209,65 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
     }
 
     private fun configureAllCheckBoxUI() {
-        allCheckBox.setOnCheckedChangeListener(null)
-        val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
-        allCheckBox.isChecked = selectedChapter.containsAll(chapters)
-        allCheckBox.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked)
-                selectedChapter.addAll(chapters)
-            else
-                selectedChapter.removeAll(chapters)
-            unitRv.adapter?.notifyDataSetChanged()
+        with(binding) {
+            allCheckBox.setOnCheckedChangeListener(null)
+            val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
+            allCheckBox.isChecked = selectedChapter.containsAll(chapters)
+            allCheckBox.setOnCheckedChangeListener { button, isChecked ->
+                if(isChecked)
+                    selectedChapter.addAll(chapters)
+                else
+                    selectedChapter.removeAll(chapters)
+                unitRv.adapter?.notifyDataSetChanged()
+            }
         }
     }
 
     private fun configureSummarySectionUI(period: Int) {
+        with(binding) {
+            subjectChart.setData(analysis?.getUnitSummaryData() ?: listOf(), true)
+            subjectChart.setDetailBtnVisibility(View.GONE)
 
-        subjectChart.setData(analysis?.getUnitSummaryData() ?: listOf(), true)
-        subjectChart.setDetailBtnVisibility(View.GONE)
+            val myRating = analysis?.myRating
+            if (myRating == 1)
+                subjectChart.setSelectedBarLabel("1등급\n평균", "나의\n정답률", null)
+            else if (myRating != null)
+                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${myRating - 1}등급\n평균")
 
-        val myRating = analysis?.myRating
-        if (myRating == 1)
-            subjectChart.setSelectedBarLabel("1등급\n평균", "나의\n정답률", null)
-        else if (myRating != null)
-            subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${myRating - 1}등급\n평균")
+            subjectChart.selectedBar = subjectChart.bars?.first()
+            subjectChart.bars?.first()?.isSelectedDetailBtn = true
+            subjectChart.requestLayout()
 
-        subjectChart.selectedBar = subjectChart.bars?.first()
-        subjectChart.bars?.first()?.isSelectedDetailBtn = true
-        subjectChart.requestLayout()
-
-        if (analysis == null)
-            summaryTv.text = template.dataNotExistText
-        else
-            summaryTv.text = template.getUnitSummaryQ(period, analysis?.improvement, analysis!!.summaryAnalysis)
+            if (analysis == null)
+                summaryTv.text = template.dataNotExistText
+            else
+                summaryTv.text = template.getUnitSummaryQ(period, analysis?.improvement, analysis!!.summaryAnalysis)
+        }
     }
 
     private fun configureAchieveSectionUI() {
-        val achieveViews = listOf(
+        with(binding) {
+            val achieveViews = listOf(
                 AchieveView(firstSubjectTv, firstUnitTv, firstRatingBorder, firstProblemCntTv, firstTPC, firstAchieveEmptyGuideTv),
                 AchieveView(secondSubjectTv, secondUnitTv, secondRatingBorder, secondProblemCntTv, secondTPC, secondAchieveEmptyGuideTv),
                 AchieveView(thirdSubjectTv, thirdUnitTv, thirdRatingBorder, thirdProblemCntTv, thirdTPC, thirdAchieveEmptyGuideTv)
-        )
+            )
 
-        val achieves = analysis?.getUnitAchieveData(achieveOrderRadio.selectedIndex == 0) ?: listOf()
+            val achieves = analysis?.getUnitAchieveData(achieveOrderRadio.selectedIndex == 0) ?: listOf()
 
-        for(i in 0 until 3) {
-            val achieve = achieves.getOrNull(i)
-            if(achieve == null)
-                achieveViews[i].showEmptyGuide()
-            else {
-                val chapterAnalysis = achieve.second
-                achieveViews[i].set(achieve.first, chapterAnalysis.name, chapterAnalysis.problemTotalNumber, chapterAnalysis.myRate, chapterAnalysis.belowRate)
-                achieveViews[i].tpc.setLabels("내 정답률", "${analysis!!.myRating}등급 평균")
+            for(i in 0 until 3) {
+                val achieve = achieves.getOrNull(i)
+                if(achieve == null)
+                    achieveViews[i].showEmptyGuide()
+                else {
+                    val chapterAnalysis = achieve.second
+                    achieveViews[i].set(achieve.first, chapterAnalysis.name, chapterAnalysis.problemTotalNumber, chapterAnalysis.myRate, chapterAnalysis.belowRate)
+                    achieveViews[i].tpc.setLabels("내 정답률", "${analysis!!.myRating}등급 평균")
+                }
             }
-        }
 
-        achieveGuideTv.text = template.getUnitAchieveQ(achieves.getOrNull(0)?.second, achieveOrderRadio.selectedIndex == 0)
+            achieveGuideTv.text = template.getUnitAchieveQ(achieves.getOrNull(0)?.second, achieveOrderRadio.selectedIndex == 0)
+        }
     }
 
     private fun configureUnitSectionUI() {
@@ -265,65 +283,69 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
             ChapterTreeList(it, children)
         }
-        unitRv.visibility = View.VISIBLE
-        this.chapterTreeList = treeList
-
-        val adapter = UnitAdapter()
-        if(treeList.isNotEmpty()) {
-            adapter.setItems(chapterTreeList!!)
-            unitRv.adapter = adapter
+        with(binding) {
             unitRv.visibility = View.VISIBLE
-            guideView.visibility = View.GONE
-        } else {
-            unitRv.visibility = View.GONE
-            guideView.visibility = View.VISIBLE
-        }
+            chapterTreeList = treeList
 
-        unitGuideTv.text = template.getUnitChapterQ(analysis?.chapterAnalysis)
-        val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
-        allCheckBox.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked)
-                selectedChapter.addAll(chapters)
-            else
-                selectedChapter.removeAll(chapters)
-            adapter.notifyDataSetChanged()
-            Tutor.showToolTipIfNeed(allCheckBox, Tutor.TooltipType.additionalStudyInAnalysis)
+            val adapter = UnitAdapter()
+            if(treeList.isNotEmpty()) {
+                adapter.setItems(chapterTreeList!!)
+                unitRv.adapter = adapter
+                unitRv.visibility = View.VISIBLE
+                guideView.visibility = View.GONE
+            } else {
+                unitRv.visibility = View.GONE
+                guideView.visibility = View.VISIBLE
+            }
+
+            unitGuideTv.text = template.getUnitChapterQ(analysis?.chapterAnalysis)
+            val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
+            allCheckBox.setOnCheckedChangeListener { button, isChecked ->
+                if(isChecked)
+                    selectedChapter.addAll(chapters)
+                else
+                    selectedChapter.removeAll(chapters)
+                adapter.notifyDataSetChanged()
+                Tutor.showToolTipIfNeed(allCheckBox, Tutor.TooltipType.additionalStudyInAnalysis)
+            }
         }
     }
 
     fun configureEmptyUI(from: LocalDate, to: LocalDate) {
-        guideView.visibility = View.VISIBLE
-        val guideEmptyText = notExistDataText
-        unitRv.visibility = View.INVISIBLE
-        subjectChart.setData(listOf(), false)
-        summaryTv.text = guideEmptyText
-        achieveGuideTv.text = guideEmptyText
-        unitGuideTv.text = guideEmptyText
+        with(binding) {
+            guideView.visibility = View.VISIBLE
+            val guideEmptyText = notExistDataText
+            unitRv.visibility = View.INVISIBLE
+            subjectChart.setData(listOf(), false)
+            summaryTv.text = guideEmptyText
+            achieveGuideTv.text = guideEmptyText
+            unitGuideTv.text = guideEmptyText
 
-        firstSubjectTv.visibility = View.GONE
-        secondSubjectTv.visibility = View.GONE
-        thirdSubjectTv.visibility = View.GONE
+            firstSubjectTv.visibility = View.GONE
+            secondSubjectTv.visibility = View.GONE
+            thirdSubjectTv.visibility = View.GONE
 
-        firstUnitTv.visibility = View.GONE
-        secondUnitTv.visibility = View.GONE
-        thirdUnitTv.visibility = View.GONE
+            firstUnitTv.visibility = View.GONE
+            secondUnitTv.visibility = View.GONE
+            thirdUnitTv.visibility = View.GONE
 
-        firstProblemCntTv.visibility = View.GONE
-        secondProblemCntTv.visibility = View.GONE
-        thirdProblemCntTv.visibility = View.GONE
+            firstProblemCntTv.visibility = View.GONE
+            secondProblemCntTv.visibility = View.GONE
+            thirdProblemCntTv.visibility = View.GONE
 
-        firstTPC.visibility = View.GONE
-        secondTPC.visibility = View.GONE
+            firstTPC.visibility = View.GONE
+            secondTPC.visibility = View.GONE
 
-        thirdTPC.visibility = View.GONE
+            thirdTPC.visibility = View.GONE
 
-        firstRatingBorder.visibility = View.GONE
-        secondRatingBorder.visibility = View.GONE
-        thirdRatingBorder.visibility = View.GONE
+            firstRatingBorder.visibility = View.GONE
+            secondRatingBorder.visibility = View.GONE
+            thirdRatingBorder.visibility = View.GONE
 
-        firstAchieveEmptyGuideTv.visibility = View.VISIBLE
-        secondAchieveEmptyGuideTv.visibility = View.VISIBLE
-        thirdAchieveEmptyGuideTv.visibility = View.VISIBLE
+            firstAchieveEmptyGuideTv.visibility = View.VISIBLE
+            secondAchieveEmptyGuideTv.visibility = View.VISIBLE
+            thirdAchieveEmptyGuideTv.visibility = View.VISIBLE
+        }
     }
 
     private fun showSnackBar(text: String, buttonText: String) {
@@ -385,19 +407,20 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnitHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_analysis_unit, parent, false)
-            return UnitHolder(view)
+            val itemBinding: ItemAnalysisUnitBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_analysis_unit, parent, false)
+            return UnitHolder(itemBinding)
         }
     }
 }
 
-class UnitHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val expandableIndicator = view.expandableIndictor
-    val unitTv = view.intentionTv
-    val problemCntTv= view.problemCntTv
-    val correctRateHb = view.correctRateHb
-    val correctRateTv = view.correctRateTv
-    val checkbox = view.checkbox
+class UnitHolder(val itemBinding: ItemAnalysisUnitBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val expandableIndicator = itemBinding.expandableIndictor
+    val unitTv = itemBinding.intentionTv
+    val problemCntTv= itemBinding.problemCntTv
+    val correctRateHb = itemBinding.correctRateHb
+    val correctRateTv = itemBinding.correctRateTv
+    val checkbox = itemBinding.checkbox
+    val viewContext = itemBinding.root.context
 
     init {
         checkbox.extensionTouchArea(12.toPx())
@@ -417,9 +440,9 @@ class UnitHolder(val view: View): RecyclerView.ViewHolder(view) {
         layoutParams.leftMargin = (23 + 14 * depth).toPx()
 
         if(depth == 0)
-            itemView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.white_ffffff))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_ffffff))
         else
-            itemView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.white_fafafa))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_fafafa))
     }
 
     fun set(analysis: ChapterAnalysis) {
@@ -429,11 +452,11 @@ class UnitHolder(val view: View): RecyclerView.ViewHolder(view) {
         correctRateTv.text = TextUtils.percentFormat.format(analysis.myRate)
 
         if(analysis.myRate < 0.3)
-            correctRateHb.progressColor = ContextCompat.getColor(view.context, R.color.red_fe7b67)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.red_fe7b67)
         else if(analysis.myRate >= 0.3 && analysis.myRate < 0.7)
-            correctRateHb.progressColor = ContextCompat.getColor(view.context, R.color.yellow_ffd545)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.yellow_ffd545)
         else
-            correctRateHb.progressColor = ContextCompat.getColor(view.context, R.color.green_70d000)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.green_70d000)
     }
 }
 

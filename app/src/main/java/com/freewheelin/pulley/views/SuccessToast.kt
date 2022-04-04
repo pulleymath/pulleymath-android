@@ -12,11 +12,11 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
+import com.freewheelin.pulley.databinding.ViewSuccessToastBinding
 import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.view_success_toast.view.*
 
 class SuccessToast: PopupWindow() {
     companion object {
@@ -111,23 +111,22 @@ class SuccessToastView: ConstraintLayout {
 
     var title: String
         set(value) {
-            titleTv.text = value
+            binding.titleTv.text = value
         }
         get() {
-            return titleTv.text.toString()
+            return binding.titleTv.text.toString()
         }
 
     var contents: String
         set(value) {
-            contentTv.text = value
+            binding.contentTv.text = value
         }
         get() {
-            return contentTv.text.toString()
+            return binding.contentTv.text.toString()
         }
+    var binding: ViewSuccessToastBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_success_toast, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_success_toast, this)
-//        setBackgroundResource(R.drawable.bg_purple_6d6dff_radius_20_left_only)
-//        setPadding(32.toPx() ,32.toPx() ,32.toPx(), 32.toPx())
+//        LayoutInflater.from(context).inflate(R.layout.view_success_toast, this)
     }
 }

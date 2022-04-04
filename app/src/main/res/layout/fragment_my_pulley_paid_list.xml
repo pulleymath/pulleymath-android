@@ -1,70 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
-    android:orientation="vertical"
-    android:clickable="true"
-    tools:context=".activities.mypage.MySignUpInfoFragment">
-
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white_ffffff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_fafafa"
+        android:orientation="vertical"
+        android:clickable="true"
+        tools:context=".activities.mypage.MySignUpInfoFragment">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@null"
-            android:src="@drawable/ic_toolbar_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black_4c4c4c" />
-
-        <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="어쩌구 구매내역"
-            android:textSize="@dimen/sp24"
+            android:background="@color/white_ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@null"
+                android:src="@drawable/ic_toolbar_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black_4c4c4c" />
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="어쩌구 구매내역"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/myPageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="24dp"
+                android:src="@drawable/ic_close_white_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black_4c4c4c" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/paidRecycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/myPageBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:padding="24dp"
-            android:src="@drawable/ic_close_white_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black_4c4c4c" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_my_pulley_paid_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/paidRecycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        tools:itemCount="10"
-        tools:listitem="@layout/item_my_pulley_paid_list" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

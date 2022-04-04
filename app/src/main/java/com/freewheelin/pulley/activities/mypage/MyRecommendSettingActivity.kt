@@ -3,10 +3,12 @@ package com.freewheelin.pulley.activities.mypage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
@@ -19,21 +21,9 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.ActivityMyRecommendSettingBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.*
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.aheadContainer
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.aheadOptionalButton
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.levelRg
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.myChoiceCommonButton
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.myChoiceContainer
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.myChoiceOptionalButton
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.rangeRg
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.sameCommonButton
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.sameContainerBelow50
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.sameContainerOver50
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.sameMyButton
-import kotlinx.android.synthetic.main.activity_my_recommend_setting.sameOptionalButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +31,9 @@ import retrofit2.Response
 import java.util.*
 
 class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
-
+    private val binding: ActivityMyRecommendSettingBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_my_recommend_setting, null, false)
+    }
     companion object {
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MyRecommendSettingActivity::class.java)
@@ -66,7 +58,7 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_recommend_setting)
+        setContentView(binding.root)
         setUpUI()
     }
 
@@ -82,9 +74,9 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
     fun setScreen() {
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
-        val lp = rootView.layoutParams
+        val lp = binding.rootView.layoutParams
         lp.height = DisplayUtils.getScrenHeight(this) - topBottomMargin.toInt()
-        rootView.layoutParams = lp
+        binding.rootView.layoutParams = lp
     }
 
     fun setUnitTempories() {
@@ -101,66 +93,71 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
     }
 
     fun setButtonUI() {
-        sameCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
-        sameOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
-        sameMyButton.setOnClickListener { moveTo(selectedUnitFragment) }
+        with(binding) {
+            sameCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
+            sameOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
+            sameMyButton.setOnClickListener { moveTo(selectedUnitFragment) }
 
-        aheadOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
+            aheadOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
 
-        myChoiceCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
-        myChoiceOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
+            myChoiceCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
+            myChoiceOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
 
-        cancelBtn.setOnClickListener {
-            cancelConfigure()
-        }
-        saveBtn.setOnClickListener {
-            sendConfigure()
+            cancelBtn.setOnClickListener {
+                cancelConfigure()
+            }
+            saveBtn.setOnClickListener {
+                sendConfigure()
+            }
         }
     }
 
     fun setRadioUI() {
+        with(binding) {
+            val user = user ?: return
 
-        val user = user ?: return
+            val recommendLevel = user.recommendLevel
+            val recommendChapter = user.recommendChapter
 
-        val recommendLevel = user.recommendLevel
-        val recommendChapter = user.recommendChapter
+            if(recommendLevel != null && recommendLevel > -1) {
+                levelRg.check(difficultyButtonIDs[recommendLevel])
+            } else {
+                levelRg.check(R.id.lowButton)
+            }
+            if(recommendChapter != null && recommendChapter > -1) {
+                rangeRg.check(coverRangeButtonIDs[recommendChapter])
+            } else {
+                rangeRg.check(R.id.sameButton)
+            }
 
-        if(recommendLevel != null && recommendLevel > -1) {
-            levelRg.check(difficultyButtonIDs[recommendLevel])
-        } else {
-            levelRg.check(R.id.lowButton)
-        }
-        if(recommendChapter != null && recommendChapter > -1) {
-            rangeRg.check(coverRangeButtonIDs[recommendChapter])
-        } else {
-            rangeRg.check(R.id.sameButton)
-        }
+            levelRg.setOnCheckedChangeListener { group, checkedId ->
+                showSubView()
+            }
+            rangeRg.setOnCheckedChangeListener { group, checkedId ->
+                showSubView()
+            }
 
-        levelRg.setOnCheckedChangeListener { group, checkedId ->
             showSubView()
         }
-        rangeRg.setOnCheckedChangeListener { group, checkedId ->
-            showSubView()
-        }
-
-        showSubView()
     }
 
     fun setSubjectText() {
-        sameCommonText.text = calcNoneText(user?.getCommonSubjectText())
-        sameOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
-        sameMyText.text = calcNoneText(user?.getRecentSubjectText())
+        with(binding) {
+            sameCommonText.text = calcNoneText(user?.getCommonSubjectText())
+            sameOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
+            sameMyText.text = calcNoneText(user?.getRecentSubjectText())
 
 //        aheadCommonText.text = calcNoneText(user?.getCommonSubjectText())
-        aheadOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
+            aheadOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
 
-        myChoiceCommonText.text = calcNoneText(user?.getCommonSubjectText())
-        myChoiceOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
+            myChoiceCommonText.text = calcNoneText(user?.getCommonSubjectText())
+            myChoiceOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
 
-        if(user?.optionalUnit?.isNotEmpty() == true) {
-            myChoiceLabel.text = "수정하기에서 대단원 선택이 가능합니다."
-        } else {
-            myChoiceLabel.text = "선택과목이 없어, 공통과목으로만 5문제를 선별해 출제합니다."
+            if(user?.optionalUnit?.isNotEmpty() == true) {
+                myChoiceLabel.text = "수정하기에서 대단원 선택이 가능합니다."
+            } else {
+                myChoiceLabel.text = "선택과목이 없어, 공통과목으로만 5문제를 선별해 출제합니다."
+            }
         }
     }
 
@@ -170,31 +167,35 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
     }
 
     fun showSubView() {
-        when(rangeRg.checkedRadioButtonId) {
-            R.id.aheadButton -> {showRangeContainer(aheadContainer)}
-            R.id.tailButton -> {showRangeContainer(myChoiceContainer)}
-            else -> {
-                if(user?.recentSubjectCode?.isNotEmpty() == true) {
-                    showRangeContainer(sameContainerOver50)
-                } else {
-                    showRangeContainer(sameContainerBelow50)
+        with(binding) {
+            when(rangeRg.checkedRadioButtonId) {
+                R.id.aheadButton -> {showRangeContainer(aheadContainer)}
+                R.id.tailButton -> {showRangeContainer(myChoiceContainer)}
+                else -> {
+                    if(user?.recentSubjectCode?.isNotEmpty() == true) {
+                        showRangeContainer(sameContainerOver50)
+                    } else {
+                        showRangeContainer(sameContainerBelow50)
+                    }
                 }
             }
         }
     }
 
     fun showRangeContainer(container: View) {
-        sameContainerBelow50.visibility = View.GONE
-        sameContainerOver50.visibility = View.GONE
-        aheadContainer.visibility = View.GONE
-        myChoiceContainer.visibility = View.GONE
+        with(binding) {
+            sameContainerBelow50.visibility = View.GONE
+            sameContainerOver50.visibility = View.GONE
+            aheadContainer.visibility = View.GONE
+            myChoiceContainer.visibility = View.GONE
 
-        container.visibility = View.VISIBLE
+            container.visibility = View.VISIBLE
+        }
     }
 
     fun sendConfigure() {
-        val recommendLevel = difficultyButtonIDs.indexOf(levelRg.checkedRadioButtonId)
-        val recommendChapter = coverRangeButtonIDs.indexOf(rangeRg.checkedRadioButtonId)
+        val recommendLevel = difficultyButtonIDs.indexOf(binding.levelRg.checkedRadioButtonId)
+        val recommendChapter = coverRangeButtonIDs.indexOf(binding.rangeRg.checkedRadioButtonId)
 
         val param: Parameter = Parameter(
                 "recommendLevel" to recommendLevel,

@@ -7,31 +7,31 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.BarHorizontalWithCircleBinding
 import com.freewheelin.pulley.utils.toPx
-import kotlinx.android.synthetic.main.bar_horizontal_with_circle.view.*
 
-class HorizontalWithCircleBar : ConstraintLayout {
+class HorizontalWithCircleBar(context: Context, attributeSet: AttributeSet) :
+    ConstraintLayout(context, attributeSet) {
     var value: Float = 0f
         set(value) {
             field = value
-            clipView.value = value
+            binding.clipView.value = value
             setUI()
         }
 
-    constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
-
-    init {
-        LayoutInflater.from(context).inflate(R.layout.bar_horizontal_with_circle, this)
-    }
+    var binding: BarHorizontalWithCircleBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.bar_horizontal_with_circle, this, true)
 
     fun setUI() {
-        if(value <= 0f)
-            fillView.visibility = View.INVISIBLE
-        else {
-            fillView.visibility = View.VISIBLE
-            fillView.layoutParams.width = (measuredWidth * value).toInt()
-            fillView.requestLayout()
+        with(binding) {
+            if(value <= 0f)
+                fillView.visibility = View.INVISIBLE
+            else {
+                fillView.visibility = View.VISIBLE
+                fillView.layoutParams.width = (measuredWidth * value).toInt()
+                fillView.requestLayout()
+            }
         }
     }
 

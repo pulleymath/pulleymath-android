@@ -22,8 +22,6 @@ import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 import com.freewheelin.pulley.revision2021.viewmodel.FindSchoolViewModel
 
-import kotlinx.android.synthetic.main.dialog_find_school.*
-
 class FindSchoolDialog(val callback: (school: School?) -> Unit): DialogFragment() {
 
     private val viewModel by lazy {
@@ -31,7 +29,7 @@ class FindSchoolDialog(val callback: (school: School?) -> Unit): DialogFragment(
     }
 
     private val binding: DialogFindSchoolBinding by lazy {
-        DataBindingUtil.inflate<DialogFindSchoolBinding>(LayoutInflater.from(context), R.layout.dialog_find_school, null, false)
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_find_school, null, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = binding.root

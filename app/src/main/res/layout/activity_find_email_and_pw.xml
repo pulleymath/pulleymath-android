@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.auth.findEmailAndPw.FindEmailAndPwActivity">
-
-    <View
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white_ffffff"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
+        android:layout_height="match_parent"
+        tools:context=".activities.auth.findEmailAndPw.FindEmailAndPwActivity">
 
-    <View style="@style/Border_Grey_e8e8e8_Horizontal"
-        android:layout_height="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tabLayout"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white_ffffff"
+            app:layout_constraintTop_toTopOf="@+id/tabLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabGravity="center"
-        app:tabMode="fixed"
-        app:tabIndicatorHeight="2dp"
-        app:tabIndicatorColor="@color/purple_6D6DFF"
-        app:tabMaxWidth="0dp"
-        app:tabTextColor="@color/black_4c4c4c"
-        app:tabSelectedTextColor="@color/purple_6D6DFF"
-        app:tabTextAppearance="@style/tab_text">
+        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            android:layout_height="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tabLayout"/>
 
-    </com.google.android.material.tabs.TabLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="center"
+            app:tabMode="fixed"
+            app:tabIndicatorHeight="2dp"
+            app:tabIndicatorColor="@color/purple_6D6DFF"
+            app:tabMaxWidth="0dp"
+            app:tabTextColor="@color/black_4c4c4c"
+            app:tabSelectedTextColor="@color/purple_6D6DFF"
+            app:tabTextAppearance="@style/tab_text">
 
-
-    <ImageButton
-        android:id="@+id/backBtn"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:src="@drawable/ic_toolbar_back"
-        app:tint="@color/black_4c4c4c"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+        </com.google.android.material.tabs.TabLayout>
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:src="@drawable/ic_toolbar_back"
+            app:tint="@color/black_4c4c4c"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tabLayout" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,17 +6,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.assets.URL
-import kotlinx.android.synthetic.main.fragment_my_pulley_paid_list.*
+import com.freewheelin.pulley.databinding.FragmentMyPulleyPaidListBinding
 
 class MyPulleyPaidList : MyPageBaseFragment() {
-
+    lateinit var binding: FragmentMyPulleyPaidListBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_pulley_paid_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pulley_paid_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,13 +27,14 @@ class MyPulleyPaidList : MyPageBaseFragment() {
     }
 
     private fun setViews() {
-        backBtn.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             onBackBtnClicked()
         }
-        myPageBtn.setOnClickListener {
+        binding.myPageBtn.setOnClickListener {
             onBackBtnClicked()
             onBackBtnClicked()
         }
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
     }
 
     fun moveTo(frag: Fragment) {

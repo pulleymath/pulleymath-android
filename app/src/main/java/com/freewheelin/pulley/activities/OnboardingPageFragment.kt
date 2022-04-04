@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.isMobileUI
-import com.freewheelin.pulley.bases.isNeedOnboarding
-import kotlinx.android.synthetic.main.fragment_onboarding_page.*
 
 
 class OnboardingPageFragment : Fragment() {
@@ -58,15 +56,19 @@ class OnboardingPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUI()
+        initUI(view)
     }
 
     fun runAnim() {
-        onboardLottie?.setAnimation(lottieSrc)
-        onboardLottie?.playAnimation()
+
+        onboardLottie.setAnimation(lottieSrc)
+        onboardLottie.playAnimation()
     }
 
-    fun initUI() {
+    lateinit var onboardLottie: LottieAnimationView
+    fun initUI(view: View) {
+        onboardLottie = view.findViewById(R.id.onboardLottie)
+
 //        if(isLast) {
 //            startBtn.visibility = View.VISIBLE
 //            startBtn.setOnClickListener {

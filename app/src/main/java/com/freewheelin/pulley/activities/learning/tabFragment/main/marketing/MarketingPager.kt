@@ -1,17 +1,12 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.marketing
 
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_marketing_banner.view.*
-import kotlin.concurrent.thread
 
 class MarketingPager(val banners: List<Banner>, val bannerInterface:BannerInterface): RecyclerView.Adapter<MarketingPager.Holder>() {
 
@@ -27,11 +22,11 @@ class MarketingPager(val banners: List<Banner>, val bannerInterface:BannerInterf
     override fun getItemCount() = banners.size
 
     inner class Holder(val view: View) : RecyclerView.ViewHolder(view) {
-
+        val imageView = view.findViewById<ImageView>(R.id.imageView)
         lateinit var mBanner:Banner
 
         init {
-            view.imageView.setOnClickListener {
+            imageView.setOnClickListener {
                 bannerInterface.openBanner(mBanner.link)
             }
         }
@@ -42,7 +37,7 @@ class MarketingPager(val banners: List<Banner>, val bannerInterface:BannerInterf
                 .load(banner.imageURL)
                 .fit()
                 .centerCrop()
-                .into(view.imageView)
+                .into(imageView)
         }
     }
 

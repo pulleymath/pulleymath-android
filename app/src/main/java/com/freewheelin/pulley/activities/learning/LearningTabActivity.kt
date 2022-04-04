@@ -13,10 +13,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -31,7 +33,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
-import com.freewheelin.pulley.activities.learning.tabFragment.UnitStudyFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
@@ -57,12 +58,10 @@ import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
 import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
@@ -73,14 +72,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_learning.*
-import kotlinx.android.synthetic.main.activity_learning.container
-import kotlinx.android.synthetic.main.activity_learning.spyBtn
-import kotlinx.android.synthetic.main.activity_solve.*
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.fragment_main_2.*
-import kotlinx.android.synthetic.main.fragment_my_main_page.*
-import kotlinx.android.synthetic.main.fragment_signup_student_info.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -119,6 +110,9 @@ class LearningTabActivity : PermissionActivity(),
     var mypageFragment = MyMainPageFragment()
 
     private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
+    private val binding: ActivityLearningBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_learning, null, false)
+    }
 
     var spySeal1 = 1
     var spySeal2 = 3
@@ -189,128 +183,134 @@ class LearningTabActivity : PermissionActivity(),
             tabFragment.add(AffiliatedTestFragment.newInstance())
         }
 
-        setContentView(R.layout.activity_learning)
+        setContentView(binding.root)
 
         requestNotice()
 
-        viewPager.adapter = TabAdapter(supportFragmentManager)
+        with(binding) {
+            viewPager.adapter = TabAdapter(supportFragmentManager)
 
-        viewPager.setPagingEnabled(false)
-        viewPager.offscreenPageLimit = 5
+            viewPager.setPagingEnabled(false)
+            viewPager.offscreenPageLimit = 5
 
 //        tabLayout.setupWithViewPager(viewPager)
 
-        val isFromInitTest = intent.getBooleanExtra(ARG_FROM_INIT_TEST, false)
-        if(isFromInitTest) {
+            val isFromInitTest = intent.getBooleanExtra(ARG_FROM_INIT_TEST, false)
+            if(isFromInitTest) {
 //            viewPager.currentItem = 3
 //            (tabFragment[3] as BookFragment).isStartWithInitTest = true
-        }
+            }
 
-        viewPager.addOnPageChangeListener(this)
+            viewPager.addOnPageChangeListener(this@LearningTabActivity)
 
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let { position ->
-                    if (isTablet) {
-                        when (position) {
-                            6 -> openLesson()
-                            else -> {
-                                viewPager.currentItem = position
-                                currentPagePosition = position
+            tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.position?.let { position ->
+                        if (isTablet) {
+                            when (position) {
+                                6 -> openLesson()
+                                else -> {
+                                    viewPager.currentItem = position
+                                    currentPagePosition = position
+                                }
                             }
+                        } else {
+                            viewPager.currentItem = position
+                            currentPagePosition = position
                         }
-                    } else {
-                        viewPager.currentItem = position
-                        currentPagePosition = position
                     }
                 }
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab?) { }
+                override fun onTabReselected(tab: TabLayout.Tab?) { }
+            })
 
-        // 핸드폰이면 과외 메뉴 숨기기
-        if(!isTablet) {
-            if(tabLayout.tabCount > 6) tabLayout.removeTabAt(6)
-        }
-
-        drawerView.addDrawerListener(this)
-        drawerView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-
-        moveTo(mypageFragment, false)
-        mypageBtn.setOnClickListener {
-            if(viewPager.currentItem == 0 && firstClickCnt < spySeal1)
-                firstClickCnt += 1
-
-            if(viewPager.currentItem == 2 && firstClickCnt == spySeal1 && secondClickCnt < spySeal2) {
-                secondClickCnt += 1
-            } else if(viewPager.currentItem == 2){
-                firstClickCnt = 0
-                secondClickCnt = 0
-                thirdClickCnt = 0
+            // 핸드폰이면 과외 메뉴 숨기기
+            if(!isTablet) {
+                if(tabLayout.tabCount > 6) tabLayout.removeTabAt(6)
             }
 
-            if(viewPager.currentItem == 4 && firstClickCnt == spySeal1 && secondClickCnt == spySeal2 && thirdClickCnt < spySeal3) {
-                thirdClickCnt += 1
-                if(firstClickCnt == spySeal1 && secondClickCnt == spySeal2 && thirdClickCnt == spySeal3) {
+            drawerView.addDrawerListener(this@LearningTabActivity)
+            drawerView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
+            moveTo(mypageFragment, false)
+            mypageBtn.setOnClickListener {
+                if(viewPager.currentItem == 0 && firstClickCnt < spySeal1)
+                    firstClickCnt += 1
+
+                if(viewPager.currentItem == 2 && firstClickCnt == spySeal1 && secondClickCnt < spySeal2) {
+                    secondClickCnt += 1
+                } else if(viewPager.currentItem == 2){
+                    firstClickCnt = 0
+                    secondClickCnt = 0
+                    thirdClickCnt = 0
+                }
+
+                if(viewPager.currentItem == 4 && firstClickCnt == spySeal1 && secondClickCnt == spySeal2 && thirdClickCnt < spySeal3) {
+                    thirdClickCnt += 1
+                    if(firstClickCnt == spySeal1 && secondClickCnt == spySeal2 && thirdClickCnt == spySeal3) {
+                        isSPYMode = true
+                        mypageFragment.spyOn()
+                        spyBtn.show()
+                    }
+                } else if(viewPager.currentItem == 4) {
+                    firstClickCnt = 0
+                    secondClickCnt = 0
+                    thirdClickCnt = 0
+                }
+
+                if (spyCount == 10) {
                     isSPYMode = true
                     mypageFragment.spyOn()
                     spyBtn.show()
+                    spyCount = 0
                 }
-            } else if(viewPager.currentItem == 4) {
-                firstClickCnt = 0
-                secondClickCnt = 0
-                thirdClickCnt = 0
+
+                onMypageBtnClicked()
             }
 
-            if (spyCount == 10) {
-                isSPYMode = true
-                mypageFragment.spyOn()
+            if(isSPYMode) {
                 spyBtn.show()
-                spyCount = 0
             }
 
-            onMypageBtnClicked()
-        }
-
-        if(isSPYMode) {
-            spyBtn.show()
-        }
-
-        spyBtn.setOnClickListener { onSpyBtnClicked() }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        tabMoveReceiver = object : BroadcastReceiver() {
-            override fun onReceive(p0: Context?, intent: Intent?) {
+            spyBtn.setOnClickListener {
+                val intent = Intent(this@LearningTabActivity, AnalysisTabActivity::class.java)
+                startActivity(intent)
+//            onSpyBtnClicked()
+            }
+            ProcessLifecycleOwner.get().lifecycle.addObserver(this@LearningTabActivity)
+            tabMoveReceiver = object : BroadcastReceiver() {
+                override fun onReceive(p0: Context?, intent: Intent?) {
 //                openStudyHistory("단원 분석", "단원 학습지 만들기")
-                intent?.let { intent ->
-                    val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
-                    setSelectedTab(tabIndex)
-                    when(tabIndex) {
-                        1 -> {
-                            (tabFragment[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
+                    intent?.let { intent ->
+                        val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
+                        setSelectedTab(tabIndex)
+                        when(tabIndex) {
+                            1 -> {
+                                (tabFragment[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
+                            }
                         }
-                    }
 
-                    val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
-                    if (!wantScroll) return
+                        val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
+                        if (!wantScroll) return
 
-                    when {
-                        intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
-                            val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
-                            (tabFragment[3] as BookFragment).scrollToTotalLabel(subject)
+                        when {
+                            intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
+                                val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
+                                (tabFragment[3] as BookFragment).scrollToTotalLabel(subject)
+                            }
+                            else -> {}
                         }
-                        else -> {}
                     }
                 }
             }
+
+            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
+            // for Api.class
+            if(referActivity == null) referActivity = this@LearningTabActivity
+            registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
+
+            userTest()
         }
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
-        // for Api.class
-        if(referActivity == null) referActivity = this
-        registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
-
-        userTest()
     }
 
     var spyCount = 0
@@ -320,7 +320,7 @@ class LearningTabActivity : PermissionActivity(),
         if (spyCount > 10) {
             isSPYMode = true
             mypageFragment.spyOn()
-            spyBtn.show()
+            binding.spyBtn.show()
             spyCount = 0
         }
     }
@@ -333,7 +333,7 @@ class LearningTabActivity : PermissionActivity(),
         startActivity(Intent(baseContext, LessonActivity::class.java))
         thread(start=true) {
             Thread.sleep(500)
-            runOnUiThread { tabLayout.getTabAt(currentPagePosition)?.select() }
+            runOnUiThread { binding.tabLayout.getTabAt(currentPagePosition)?.select() }
         }
     }
 
@@ -356,8 +356,8 @@ class LearningTabActivity : PermissionActivity(),
         val isRegisteredTeacherEmail = response.admins.contains(user?.email)
 
         if(isRegisteredTeacherEmail) {
-            loadStudentBtn.visibility = View.VISIBLE
-            loadStudentBtn.setOnClickListener {
+            binding.loadStudentBtn.visibility = View.VISIBLE
+            binding.loadStudentBtn.setOnClickListener {
                 StudentManagerDialog(this, {},{}).show()
             }
         }
@@ -375,9 +375,9 @@ class LearningTabActivity : PermissionActivity(),
     override fun onResume() {
         super.onResume()
         if (VersionManager.isNeedToUpdate() == true) {
-            updateSignView.visibility = View.VISIBLE
+            binding.updateSignView.visibility = View.VISIBLE
         } else {
-            updateSignView.visibility = View.GONE
+            binding.updateSignView.visibility = View.GONE
         }
         CoroutineScope(Dispatchers.IO).launch {
             ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
@@ -388,9 +388,9 @@ class LearningTabActivity : PermissionActivity(),
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
         if (user?.userUniversityMajorCode == null) {
-            val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return
+            val tabName = binding.tabLayout.getTabAt(binding.tabLayout.tabCount - 1)?.text ?: return
             if (tabName == AffiliatedTestFragment.newInstance().screenName) {
-                tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                binding.tabLayout.removeTabAt(binding.tabLayout.tabCount - 1)
                 return
             }
         }
@@ -404,9 +404,9 @@ class LearningTabActivity : PermissionActivity(),
                 Log.d(javaClass.simpleName, "group list=>${res.data}")
 
                 if (res.data == null) {
-                    val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return@subscribe
+                    val tabName = binding.tabLayout.getTabAt(binding.tabLayout.tabCount - 1)?.text ?: return@subscribe
                     if (tabName == AffiliatedTestFragment.newInstance().screenName) {
-                        tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                        binding.tabLayout.removeTabAt(binding.tabLayout.tabCount - 1)
                     }
 
                     return@subscribe
@@ -415,9 +415,9 @@ class LearningTabActivity : PermissionActivity(),
                 res.data?.let {
                     val groupList = it.group_list
                     if (groupList.isEmpty()) {
-                        val tabName = tabLayout.getTabAt(tabLayout.tabCount - 1)?.text ?: return@let
+                        val tabName = binding.tabLayout.getTabAt(binding.tabLayout.tabCount - 1)?.text ?: return@let
                         if (tabName == AffiliatedTestFragment.newInstance().screenName) {
-                            tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                            binding.tabLayout.removeTabAt(binding.tabLayout.tabCount - 1)
                             return@let
                         }
                     }
@@ -555,12 +555,12 @@ class LearningTabActivity : PermissionActivity(),
             else if(user.isNeedToUpdateGrade()) {
                 val dialog = DialogUtils.updateGradeDialog(this, user)
                 dialog.show()
-                dialog.leftBtn.setOnClickListener { btn ->
+                dialog.binding.leftBtn.setOnClickListener { btn ->
                     dialog.dismiss()
                     user.updateGrade(this@LearningTabActivity, user.grade)
                     DialogUtils.updateGradeNoDialog(this).show()
                 }
-                dialog.rightBtn.setOnClickListener { btn ->
+                dialog.binding.rightBtn.setOnClickListener { btn ->
                     dialog.dismiss()
 //                    if (user.grade == Grade.BeforeHigh || user.grade == Grade.High_1) {
                     MyStudyInfoSettingDialog(this@LearningTabActivity, user, object : MyPageSettingDialogListener {
@@ -594,7 +594,7 @@ class LearningTabActivity : PermissionActivity(),
         this.snackBar?.dismiss()
     }
     fun onMypageBtnClicked() {
-        drawerView.openDrawer(GravityCompat.END)
+        binding.drawerView.openDrawer(GravityCompat.END)
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -625,8 +625,8 @@ class LearningTabActivity : PermissionActivity(),
                 return
             }
         }
-        if (drawerView.isDrawerOpen(GravityCompat.END)) {
-            drawerView.closeDrawer(GravityCompat.END)
+        if (binding.drawerView.isDrawerOpen(GravityCompat.END)) {
+            binding.drawerView.closeDrawer(GravityCompat.END)
             return
         }
 
@@ -636,7 +636,7 @@ class LearningTabActivity : PermissionActivity(),
             return
         }
 
-        if (viewPager.currentItem == 3 && (tabFragment[3] as BookFragment).isStartWithInitTest == true) {
+        if (binding.viewPager.currentItem == 3 && (tabFragment[3] as BookFragment).isStartWithInitTest == true) {
             LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "기기-백버튼", "유형학습화면")
         }
 
@@ -660,7 +660,7 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     fun setSelectedTab(index: Int) {
-        tabLayout.getTabAt(index)?.select()
+        binding.tabLayout.getTabAt(index)?.select()
     }
 
     private fun requestNotice() {
@@ -689,11 +689,11 @@ class LearningTabActivity : PermissionActivity(),
 //            tran?.setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
 //        tran?.remove(frag)
 //        tran?.commit()
-        mypageFragment.rv?.adapter?.notifyDataSetChanged()
+        mypageFragment.binding.rv?.adapter?.notifyDataSetChanged()
     }
 
     fun getSelectedTab(): LearningTabFragment {
-        val index = tabLayout.selectedTabPosition
+        val index = binding.tabLayout.selectedTabPosition
         return tabFragment[index]
     }
 
@@ -732,7 +732,7 @@ class LearningTabActivity : PermissionActivity(),
 
 
     fun spyOff() {
-        spyBtn.hide()
+        binding.spyBtn.hide()
     }
 
     fun onSpyBtnClicked() {
@@ -748,7 +748,7 @@ class LearningTabActivity : PermissionActivity(),
         sec = sec % 60
 
         runOnUiThread {
-            spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
+            binding.spyBtn.text =  String.format("%02d", min) + ":" + String.format("%02d", sec)
         }
 //        Log.d("MONITOR", "[LEARNING] TICK - ${AppUsageMonitor.accumulatedUsageTime }")
     }
@@ -761,7 +761,7 @@ class LearningTabActivity : PermissionActivity(),
     var isOutSideClicked = false
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
-            if (drawerView.isDrawerOpen(container)) {
+            if (binding.drawerView.isDrawerOpen(binding.container)) {
                 val content = findViewById<View>(R.id.container)
                 val contentLocation = IntArray(2)
                 content.getLocationOnScreen(contentLocation)
@@ -795,7 +795,7 @@ class LearningTabActivity : PermissionActivity(),
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                     view.clearFocus()
-                    drawerView.requestFocus()
+                    binding.drawerView.requestFocus()
                 }
             } else {
                 onBackPressed()

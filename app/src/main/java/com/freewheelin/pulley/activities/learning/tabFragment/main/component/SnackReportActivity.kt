@@ -4,24 +4,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.designfactory.*
 import com.freewheelin.pulley.assets.DessertType
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.databinding.ActivitySnackReportBinding
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.show
 import com.freewheelin.pulley.views.DaebakToast
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_snack_report.*
-import kotlinx.android.synthetic.main.activity_snack_report.backBtn
-import kotlinx.android.synthetic.main.activity_snack_report.mailBtn
-import kotlinx.android.synthetic.main.activity_snack_report.mailGuideText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,26 +42,26 @@ class SnackReportActivity : AppCompatActivity(), ReportDesignListener {
             return intent
         }
     }
+    private val binding: ActivitySnackReportBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_snack_report, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_snack_report)
+        setContentView(binding.root)
+
         val type = intent.getSerializableExtra(UserManager.ARG_DESSERT_TYPE) as DessertType
         val designFactory = ReportDesignFactory.createReportDesignFactory(type, this)
         setUpUI(designFactory)
 
-        backBtn.setOnClickListener {
-            onBackPressed()
-        }
 
-        mailGuideText.setOnClickListener {
-            onMailBtnClicked()
-        }
-        mailBtn.setOnClickListener { onMailBtnClicked() }
     }
 
 
     fun setUpUI(factory: ReportDesignFactory) {
-        Picasso.get().load(factory.getIllustResource()).resize(DisplayUtils.getScreenWidth(this), 0).into(illustIv, object: com.squareup.picasso.Callback {
+        with(binding) {
+
+
+        Picasso.get().load(factory.getIllustResource()).resize(DisplayUtils.getScreenWidth(this@SnackReportActivity), 0).into(illustIv, object: com.squareup.picasso.Callback {
             override fun onSuccess() {
                 scrollView.show()
                 mailContainerCl.show()
@@ -75,8 +74,8 @@ class SnackReportActivity : AppCompatActivity(), ReportDesignListener {
 
         bottomGuideIv.setImageResource(factory.getReportBottomImageResource())
 
-        val topLayout = factory.createReportTopUIComponent(this)
-        val bottomLayout = factory.createReportBottomUIComponent(this)
+        val topLayout = factory.createReportTopUIComponent(this@SnackReportActivity)
+        val bottomLayout = factory.createReportBottomUIComponent(this@SnackReportActivity)
 
         topLayout.id = View.generateViewId()
         bottomLayout.id = View.generateViewId()
@@ -102,6 +101,16 @@ class SnackReportActivity : AppCompatActivity(), ReportDesignListener {
         set.connect(bottomGuideIv.id, ConstraintSet.BOTTOM, bottomLayout.id, ConstraintSet.BOTTOM)
 
         set.applyTo(rootView)
+
+        backBtn.setOnClickListener {
+            onBackPressed()
+        }
+
+        mailGuideText.setOnClickListener {
+            onMailBtnClicked()
+        }
+        mailBtn.setOnClickListener { onMailBtnClicked() }
+        }
     }
 
     fun onMailBtnClicked() {

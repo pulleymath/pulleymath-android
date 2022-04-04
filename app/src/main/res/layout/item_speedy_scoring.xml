@@ -1,126 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <ImageView
-        android:id="@+id/resultIv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="@dimen/dp24"
-        android:src="@drawable/ic_correct_new"
-        android:scaleType="centerInside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-    
-    <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:id="@+id/numberTv"
-        android:layout_width="@dimen/speed_answer_number_dp56"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
-        android:text="99-9"
-        android:gravity="center"
-        app:layout_constraintStart_toEndOf="@+id/resultIv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-    
-    <com.freewheelin.pulley.views.AnswerSelectionView
-        android:id="@+id/selectionAnswerView"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="@dimen/dp24"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:selectionTheme="dark"
-        app:buttonHeight="28dp"
-        app:buttonWidth="28dp"
-        app:buttonMargin="@dimen/dp16"
-        app:layout_constraintStart_toEndOf="@+id/numberTv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <LinearLayout
-        android:id="@+id/focusContainer"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/shortAnswerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
-        android:gravity="center_vertical"
-        android:hint="정답 입력"
-        android:inputType="numberSigned"
-        android:maxLength="9"
-        android:paddingStart="@dimen/dp16"
-        android:singleLine="true"
-        android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/selectionAnswerView"
-        app:layout_constraintEnd_toEndOf="@+id/selectionAnswerView"
-        app:layout_constraintStart_toStartOf="@+id/selectionAnswerView"
-        app:layout_constraintTop_toTopOf="@+id/selectionAnswerView" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/infoContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/shortAnswerView"
-        app:layout_constraintTop_toTopOf="@+id/shortAnswerView"
-        app:layout_constraintBottom_toBottomOf="@+id/shortAnswerView">
+        android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
-            android:id="@+id/answerTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp16"
-            android:text="정답: 1"
+        <ImageView
+            android:id="@+id/resultIv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/dp24"
+            android:src="@drawable/ic_correct_new"
+            android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-
         <TextView
-            style="@style/TextRed_fe7b67.Bold"
-            android:id="@+id/infoTv"
-            android:textSize="@dimen/sp16"
-            android:layout_width="wrap_content"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/numberTv"
+            android:layout_width="@dimen/speed_answer_number_dp56"
             android:layout_height="wrap_content"
-            android:text="내입력(3)"
-            android:layout_marginStart="8dp"
-            app:layout_goneMarginStart="0dp"
-            app:layout_constraintStart_toEndOf="@+id/answerTv"
-            app:layout_constraintTop_toTopOf="@+id/answerTv"
-            app:layout_constraintBottom_toBottomOf="@+id/answerTv"/>
+            android:textSize="@dimen/sp24"
+            android:text="99-9"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/resultIv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/errorTv"
-            style="@style/TextGrey_c0c0c0.Bold"
+        <com.freewheelin.pulley.views.AnswerSelectionView
+            android:id="@+id/selectionAnswerView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="삭제된 문제입니다."
-            android:textSize="@dimen/sp16"
+            android:layout_height="48dp"
+            android:layout_marginEnd="@dimen/dp24"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:selectionTheme="dark"
+            app:buttonHeight="28dp"
+            app:buttonWidth="28dp"
+            app:buttonMargin="@dimen/dp16"
+            app:layout_constraintStart_toEndOf="@+id/numberTv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/focusContainer"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/shortAnswerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:gravity="center_vertical"
+            android:hint="정답 입력"
+            android:inputType="numberSigned"
+            android:maxLength="9"
+            android:paddingStart="@dimen/dp16"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/answerTv"
-            app:layout_constraintStart_toEndOf="@+id/answerTv"
-            app:layout_constraintTop_toTopOf="@+id/answerTv"
-            app:layout_goneMarginStart="0dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/selectionAnswerView"
+            app:layout_constraintEnd_toEndOf="@+id/selectionAnswerView"
+            app:layout_constraintStart_toStartOf="@+id/selectionAnswerView"
+            app:layout_constraintTop_toTopOf="@+id/selectionAnswerView" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/infoContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/shortAnswerView"
+            app:layout_constraintTop_toTopOf="@+id/shortAnswerView"
+            app:layout_constraintBottom_toBottomOf="@+id/shortAnswerView">
+
+            <TextView
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:id="@+id/answerTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp16"
+                android:text="정답: 1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            <TextView
+                style="@style/TextRed_fe7b67.Bold"
+                android:id="@+id/infoTv"
+                android:textSize="@dimen/sp16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내입력(3)"
+                android:layout_marginStart="8dp"
+                app:layout_goneMarginStart="0dp"
+                app:layout_constraintStart_toEndOf="@+id/answerTv"
+                app:layout_constraintTop_toTopOf="@+id/answerTv"
+                app:layout_constraintBottom_toBottomOf="@+id/answerTv"/>
+
+            <TextView
+                android:id="@+id/errorTv"
+                style="@style/TextGrey_c0c0c0.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="삭제된 문제입니다."
+                android:textSize="@dimen/sp16"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/answerTv"
+                app:layout_constraintStart_toEndOf="@+id/answerTv"
+                app:layout_constraintTop_toTopOf="@+id/answerTv"
+                app:layout_goneMarginStart="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.MockExamManager
+import com.freewheelin.pulley.databinding.FragmentNewMockBinding
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
@@ -33,8 +35,7 @@ import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
-import kotlinx.android.synthetic.main.fragment_new_mock.*
-import kotlinx.android.synthetic.main.item_new_test.view.*
+import com.freewheelin.pulley.views.buttons.PrimaryButton
 import java.util.*
 
 class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogListener, MockExamGuideDialogListener {
@@ -62,14 +63,16 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             override fun onReceive(context: Context, intent: Intent) {
                 MockExamManager.getNewMockExamList(context, user!!) {
                     this@NewMockFragment.examList = it
-                    var tests = testFilter(examList ?: listOf(), typeFilter)
-                    tests = testFilter(ArrayList(tests), gradeFilter)
-                    tests = testFilter(ArrayList(tests), yearFilter)
-                    tests = testFilter(ArrayList(tests), monthFilter)
+                    with(binding) {
+                        var tests = testFilter(examList ?: listOf(), typeFilter)
+                        tests = testFilter(ArrayList(tests), gradeFilter)
+                        tests = testFilter(ArrayList(tests), yearFilter)
+                        tests = testFilter(ArrayList(tests), monthFilter)
 
-                    filteredMockList = ArrayList(tests)
-                    mockRv.adapter?.notifyDataSetChanged()
-                    setVisibilityEmptyGuide()
+                        filteredMockList = ArrayList(tests)
+                        mockRv.adapter?.notifyDataSetChanged()
+                        setVisibilityEmptyGuide()
+                    }
                 }
             }
         }
@@ -88,11 +91,11 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         super.onDestroy()
     }
-
+    lateinit var binding: FragmentNewMockBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_mock, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_mock, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -109,33 +112,36 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
     }
 
     override fun onItemClicked(view: ArduousSpinner, position: Int) {
-        val itemName = when(view) {
-            typeFilter -> "필터-계열"
-            monthFilter -> "필터-월"
-            gradeFilter -> "필터-학년"
-            else -> "필터-연도"
+        with(binding) {
+            val itemName = when(view) {
+                typeFilter -> "필터-계열"
+                monthFilter -> "필터-월"
+                gradeFilter -> "필터-학년"
+                else -> "필터-연도"
+            }
+
+            val itemValue = view.items[position]
+
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", itemName, itemValue)
+            var tests = testFilter(examList ?: listOf(), typeFilter)
+            tests = testFilter(ArrayList(tests), gradeFilter)
+            tests = testFilter(ArrayList(tests), yearFilter)
+            tests = testFilter(ArrayList(tests), monthFilter)
+
+            filteredMockList = ArrayList(tests)
+            mockRv.adapter?.notifyDataSetChanged()
         }
-
-        val itemValue = view.items[position]
-
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "모의고사", itemName, itemValue)
-        var tests = testFilter(examList ?: listOf(), typeFilter)
-        tests = testFilter(ArrayList(tests), gradeFilter)
-        tests = testFilter(ArrayList(tests), yearFilter)
-        tests = testFilter(ArrayList(tests), monthFilter)
-
-        filteredMockList = ArrayList(tests)
-
-        mockRv.adapter?.notifyDataSetChanged()
     }
 
     private fun setVisibilityEmptyGuide() {
-        if (mockRv.adapter?.itemCount == 0) {
-            mockRv.visibility = View.INVISIBLE
-            emptyGuideContainer.visibility = View.VISIBLE
-        } else {
-            mockRv.visibility = View.VISIBLE
-            emptyGuideContainer.visibility = View.INVISIBLE
+        with(binding) {
+            if (mockRv.adapter?.itemCount == 0) {
+                mockRv.visibility = View.INVISIBLE
+                emptyGuideContainer.visibility = View.VISIBLE
+            } else {
+                mockRv.visibility = View.VISIBLE
+                emptyGuideContainer.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -158,82 +164,86 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
     }
 
     private fun initUI() {
-        mockRv.adapter = MockListAdapter()
-        mockRv.layoutManager = LinearLayoutManager(context)
+        with(binding) {
+            mockRv.adapter = MockListAdapter()
+            mockRv.layoutManager = LinearLayoutManager(context)
 
-        typeFilter.listener = this
-        monthFilter.listener = this
-        gradeFilter.listener = this
-        yearFilter.listener = this
+            typeFilter.listener = this@NewMockFragment
+            monthFilter.listener = this@NewMockFragment
+            gradeFilter.listener = this@NewMockFragment
+            yearFilter.listener = this@NewMockFragment
 
-        typeTreeSet = TreeSet(MockExam.Type.list)
-        gradeTreeSet = TreeSet(listOf(1, 2, 3))
+            typeTreeSet = TreeSet(MockExam.Type.list)
+            gradeTreeSet = TreeSet(listOf(1, 2, 3))
 
-        val typeStrArrayList = typeTreeSet.map {
-            it.getStr()
-        }.toMutableList()
-        typeStrArrayList.add(0, "계열 전체")
-        typeFilter.items = typeStrArrayList
+            val typeStrArrayList = typeTreeSet.map {
+                it.getStr()
+            }.toMutableList()
+            typeStrArrayList.add(0, "계열 전체")
+            typeFilter.items = typeStrArrayList
 
-        val gradeStrArrayList = ArrayList(gradeTreeSet.map {
-            "고$it"
-        })
-        gradeStrArrayList.add(0, "학년 전체")
-        gradeFilter.items = gradeStrArrayList
+            val gradeStrArrayList = ArrayList(gradeTreeSet.map {
+                "고$it"
+            })
+            gradeStrArrayList.add(0, "학년 전체")
+            gradeFilter.items = gradeStrArrayList
 
-        val user = requireActivity().application!!.user!!
-        MockExamManager.getNewMockExamList(requireContext(), user) {
-            this@NewMockFragment.examList = it
-            this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
-            mockRv.adapter?.notifyDataSetChanged()
+            val user = requireActivity().application!!.user!!
+            MockExamManager.getNewMockExamList(requireContext(), user) {
+                this@NewMockFragment.examList = it
+                this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
+                mockRv.adapter?.notifyDataSetChanged()
 
-            examList?.let{ list ->
-                yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
-                monthTreeSet = TreeSet(list.groupBy { item -> item.month }.map { item -> item.key }.sorted())
+                examList?.let{ list ->
+                    yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
+                    monthTreeSet = TreeSet(list.groupBy { item -> item.month }.map { item -> item.key }.sorted())
 
-                val monthStrArrayList = monthTreeSet.map { month -> "${month}월" }.toMutableList()
-                monthStrArrayList.add(0, "출제월 전체")
-                monthFilter.items = monthStrArrayList
+                    val monthStrArrayList = monthTreeSet.map { month -> "${month}월" }.toMutableList()
+                    monthStrArrayList.add(0, "출제월 전체")
+                    monthFilter.items = monthStrArrayList
 
-                val yearStrArrayList = ArrayList(yearTreeSet.reversed().map { "${it}년" })
-                yearStrArrayList.add(0, "출제 연도 전체")
-                yearFilter.items = yearStrArrayList
+                    val yearStrArrayList = ArrayList(yearTreeSet.reversed().map { "${it}년" })
+                    yearStrArrayList.add(0, "출제 연도 전체")
+                    yearFilter.items = yearStrArrayList
+                }
             }
-        }
 
-        mockRv.setOnScrollChangeListener { view, i, i2, i3, i4 ->
-            if (!mockRv.canScrollVertically(-1)){
-                scrollShadow.visibility = View.INVISIBLE
-                view2.visibility = View.VISIBLE
-            } else{
-                scrollShadow.visibility = View.VISIBLE
-                view2.visibility = View.INVISIBLE
+            mockRv.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+                if (!mockRv.canScrollVertically(-1)){
+                    scrollShadow.visibility = View.INVISIBLE
+                    view2.visibility = View.VISIBLE
+                } else{
+                    scrollShadow.visibility = View.VISIBLE
+                    view2.visibility = View.INVISIBLE
+                }
             }
         }
     }
 
     private fun testFilter(exams: List<MockExam>, filter: ArduousSpinner): List<MockExam> {
-        val position = filter.position
-        if (position != null && position > 0) {
-            if (filter === typeFilter) {
-                return exams.filter {
-                    it.type == ArrayList(typeTreeSet).get(position - 1)
-                }
-            } else if (filter === gradeFilter) {
-                return exams.filter {
-                    it.grade == ArrayList(gradeTreeSet).get(position - 1)
-                }
-            } else if (filter === yearFilter) {
-                return exams.filter {
-                    it.year == ArrayList(yearTreeSet.reversed()).get(position - 1)
+        with(binding) {
+            val position = filter.position
+            if (position != null && position > 0) {
+                if (filter === typeFilter) {
+                    return exams.filter {
+                        it.type == ArrayList(typeTreeSet).get(position - 1)
+                    }
+                } else if (filter === gradeFilter) {
+                    return exams.filter {
+                        it.grade == ArrayList(gradeTreeSet).get(position - 1)
+                    }
+                } else if (filter === yearFilter) {
+                    return exams.filter {
+                        it.year == ArrayList(yearTreeSet.reversed()).get(position - 1)
+                    }
+                } else {
+                    return exams.filter {
+                        it.month == ArrayList(monthTreeSet).get(position - 1)
+                    }
                 }
             } else {
-                return exams.filter {
-                    it.month == ArrayList(monthTreeSet).get(position - 1)
-                }
+                return exams
             }
-        } else {
-            return exams
         }
     }
 
@@ -285,7 +295,7 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
     var yearTv = view.findViewById<TextView>(R.id.yearTv)
     var monthTv = view.findViewById<TextView>(R.id.monthTv)
     var titleTv = view.findViewById<TextView>(R.id.titleTv)
-    var testBtn = view.testBtn
+    var testBtn = view.findViewById<PrimaryButton>(R.id.testBtn)
     var horizontalBorder = view.findViewById<View>(R.id.horizontalBorder)
     var updateTag = view.findViewById<TextView>(R.id.updateTag)
     var outContainer = view.findViewById<View>(R.id.outContainer)

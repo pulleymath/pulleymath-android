@@ -7,21 +7,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.freewheelin.pulley.R
-import kotlinx.android.synthetic.main.fragment_my_app_setting.*
 import android.widget.LinearLayout
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.Device
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.FragmentMyDeviceManagerBinding
+import com.freewheelin.pulley.databinding.ItemDeviceBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_my_device_manager.*
-import kotlinx.android.synthetic.main.item_device.view.*
 import retrofit2.HttpException
 
 
@@ -31,10 +30,11 @@ class MyDeviceManagerFragment : MyPageBaseFragment() {
         get() = requireActivity().application.user!!
 
     lateinit var adapter:DeviceListAdapter
-
+    lateinit var binding: FragmentMyDeviceManagerBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_device_manager, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_device_manager, container, false)
+        return binding.root
     }
 
 
@@ -45,6 +45,7 @@ class MyDeviceManagerFragment : MyPageBaseFragment() {
 
     private fun initUI() {
         setAdapter()
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
     }
 
     private fun logoutAll() {
@@ -64,7 +65,7 @@ class MyDeviceManagerFragment : MyPageBaseFragment() {
     }
 
     private fun setAdapter() {
-        adapter = DeviceListAdapter(requireActivity(), deviceListContainer)
+        adapter = DeviceListAdapter(requireActivity(), binding.deviceListContainer)
         adapter.reload()
     }
 }
@@ -91,41 +92,42 @@ class DeviceListAdapter(val activity: Activity, val parent:LinearLayout) {
         var count = devices?.size?:0
 
         for(device in devices?: listOf()) {
-            val view  = LayoutInflater.from(activity).inflate(R.layout.item_device, parent, false)
-            parent.addView(view)
+            val itemBinding: ItemDeviceBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_device, parent, false)
+//            val view  = LayoutInflater.from(activity).inflate(R.layout.item_device, parent, false)
+            parent.addView(itemBinding.root)
 
-            view.textName.text = device.deviceName
-            view.lastAccess.text = device.lastAccessDate
+            itemBinding.textName.text = device.deviceName
+            itemBinding.lastAccess.text = device.lastAccessDate
             if(device.isTarget) {
-                view.currentDevice.visibility = View.VISIBLE
-                view.deleteBtn.visibility = View.GONE
+                itemBinding.currentDevice.visibility = View.VISIBLE
+                itemBinding.deleteBtn.visibility = View.GONE
             }
-            view.deleteBtn.setOnClickListener {
+            itemBinding.deleteBtn.setOnClickListener {
                 DialogUtils.confirmLogoutDevice(activity, device.deviceName) {
-                    deleteDevice(device.id, view)
+                    deleteDevice(device.id, itemBinding)
                 }
             }
-            view.noDeviceContainer.visibility = View.GONE
+            itemBinding.noDeviceContainer.visibility = View.GONE
             Log.d(javaClass.simpleName, "device=$device")
         }
 
         if(count < 3) // 3대 보다 적으면 빈칸
             for(id in count..2) {
-                val view  = LayoutInflater.from(activity).inflate(R.layout.item_device, parent, false)
-                parent.addView(view)
+                val itemBinding: ItemDeviceBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_device, parent, false)
+                parent.addView(itemBinding.root)
             }
     }
 
-    private fun deleteDevice(id:Int, view:View) {
-        startLoading(view)
+    private fun deleteDevice(id:Int, itemBinding: ItemDeviceBinding) {
+        startLoading(itemBinding)
         API_V2.deleteDevice(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
-                stopLoading(view)
+                stopLoading(itemBinding)
                 reload()
             },{
-                stopLoading(view)
+                stopLoading(itemBinding)
                 if(it is HttpException) {
                     val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
                     DaebakToast.show(activity, error.message?:"", overDialog = true)
@@ -135,11 +137,11 @@ class DeviceListAdapter(val activity: Activity, val parent:LinearLayout) {
             })
     }
 
-    private fun startLoading(view:View) {
-        view.loadingContainer.visibility = View.VISIBLE
+    private fun startLoading(itemBinding:ItemDeviceBinding) {
+        itemBinding.loadingContainer.visibility = View.VISIBLE
     }
 
-    private fun stopLoading(view:View) {
-        view.loadingContainer.visibility = View.GONE
+    private fun stopLoading(itemBinding:ItemDeviceBinding) {
+        itemBinding.loadingContainer.visibility = View.GONE
     }
 }

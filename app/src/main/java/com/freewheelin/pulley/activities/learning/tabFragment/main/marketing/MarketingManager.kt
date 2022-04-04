@@ -1,20 +1,12 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.marketing
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
-import android.view.View
 import com.freewheelin.pulley.BuildConfig
-import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.Grade
-import com.freewheelin.pulley.bases.underMinHeight
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
-import com.freewheelin.pulley.utils.toPx
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_main_2.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,8 +43,8 @@ object MarketingManager {
                         }
                     }
                 }
-            }catch (e:Exception) {
-                Log.d("마케팅에러", "error=${e.localizedMessage}")
+            } catch (e:Exception) {
+                Log.d("마케팅에러", "getInfo error=${e.localizedMessage}")
             }
         }
     }
@@ -115,7 +107,7 @@ object MarketingManager {
     fun setMarketingBanner(context: Context, mainProfile: MainProfile) {
         getInfo(context, mainProfile) { marketing ->
             if(marketing != null && isShow(context, mainProfile, marketing)) {
-                val dialog = MarketingDialog(context, marketing)
+                val dialog = MarketingDialog(context, marketing!!)
                 dialog.setCancelable(false)
                 dialog.show()
             }

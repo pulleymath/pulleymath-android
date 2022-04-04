@@ -9,25 +9,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.databinding.ActivityTestReportDailyBinding
+import com.freewheelin.pulley.databinding.ItemTestReportDailyScoringBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.model.curation.TestCuration
 import com.freewheelin.pulley.utils.*
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_test_report_daily.*
-import kotlinx.android.synthetic.main.item_test_report_daily_scoring.view.*
 
 class DailyTestReportActivity : AppCompatActivity() {
+    private val binding: ActivityTestReportDailyBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_test_report_daily,null,false)
+    }
+
     var tests: List<Test>? = null
     val test: Test?
-        get() = tests?.getOrNull(tabLayout.selectedTabPosition)
+        get() = tests?.getOrNull(binding.tabLayout.selectedTabPosition)
     var isFromSolve = false
 
     val curation: TestCuration
@@ -44,7 +49,7 @@ class DailyTestReportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_report_daily)
+        setContentView(binding.root)
         val test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
         initUI(test.scoringTestPieceCount - 1)
@@ -56,66 +61,71 @@ class DailyTestReportActivity : AppCompatActivity() {
     }
 
     private fun configureUI(test: Test?) {
-        if(test == null) {
-            questionCl.visibility = View.VISIBLE
-            questionTv.text = "앗! 아직 ${tabLayout.selectedTabPosition + 1}회차 테스트를 하지 않았네요 :)"
-        } else {
-            questionCl.visibility = View.INVISIBLE
-            scoreTv.text = "${test.score}"
-            scoreGuideTv.text = curation.getDailyReportGuideQ(test.scoreLastTime, test.scoreBeforeLastTime, test.problems)
-            scoringRv.adapter = ScoringAdapter()
-            scoringRv.layoutManager = LinearLayoutManager(this)
-            sameCorrectRateLabel.text = "${test.studentRating}등급 정답률"
+        with(binding) {
+            if(test == null) {
+                questionCl.visibility = View.VISIBLE
+                questionTv.text = "앗! 아직 ${tabLayout.selectedTabPosition + 1}회차 테스트를 하지 않았네요 :)"
+            } else {
+                questionCl.visibility = View.INVISIBLE
+                scoreTv.text = "${test.score}"
+                scoreGuideTv.text = curation.getDailyReportGuideQ(test.scoreLastTime, test.scoreBeforeLastTime, test.problems)
+                scoringRv.adapter = ScoringAdapter()
+                scoringRv.layoutManager = LinearLayoutManager(this@DailyTestReportActivity)
+                sameCorrectRateLabel.text = "${test.studentRating}등급 정답률"
 
-            scoreTv.show()
-            scoreLabel.show()
-            scoreGuideTv.show()
-            reviewBtn.show()
+                scoreTv.show()
+                scoreLabel.show()
+                scoreGuideTv.show()
+                reviewBtn.show()
+            }
         }
     }
 
     private fun initUI(initialIndex: Int) {
-        val dp24 = resources.getDimension(R.dimen.dp24)
-        xBtn.extensionTouchArea(dp24.toInt())
-        xBtn.setOnClickListener {
-            finish()
-        }
+        with(binding) {
+            val dp24 = resources.getDimension(R.dimen.dp24)
+            xBtn.extensionTouchArea(dp24.toInt())
+            xBtn.setOnClickListener {
+                finish()
+            }
 
-        val tabs = listOf(
+            val tabs = listOf(
                 tabLayout.newTab().setText("1회차"),
                 tabLayout.newTab().setText("2회차"),
                 tabLayout.newTab().setText("3회차")
-        )
-        
-        tabLayout.addTab(tabs[0])
-        tabLayout.addTab(tabs[1])
-        tabLayout.addTab(tabs[2])
-        tabs[initialIndex].select()
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(p0: TabLayout.Tab?) {}
+            )
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+            tabLayout.addTab(tabs[0])
+            tabLayout.addTab(tabs[1])
+            tabLayout.addTab(tabs[2])
+            tabs[initialIndex].select()
+            tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+                override fun onTabReselected(p0: TabLayout.Tab?) {}
 
-            override fun onTabSelected(p0: TabLayout.Tab?) {
-                val eventValue = "결과-${tabLayout.selectedTabPosition + 1}회"
-                LogUtils.logEvent(this@DailyTestReportActivity, user, PulleyEvent.BUTTON_CLICK, "테스트", eventValue)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    configureUI(test)
-                }, 250)
+                override fun onTabUnselected(p0: TabLayout.Tab?) {}
 
-            }
-        })
+                override fun onTabSelected(p0: TabLayout.Tab?) {
+                    val eventValue = "결과-${tabLayout.selectedTabPosition + 1}회"
+                    LogUtils.logEvent(this@DailyTestReportActivity, user, PulleyEvent.BUTTON_CLICK, "테스트", eventValue)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        configureUI(test)
+                    }, 250)
 
-        reviewBtn.setOnClickListener { onReviewBtnClikced() }
-        scoreTv.visibility = View.INVISIBLE
-        scoreLabel.visibility = View.INVISIBLE
-        reviewBtn.visibility = View.INVISIBLE
+                }
+            })
+
+            reviewBtn.setOnClickListener { onReviewBtnClikced() }
+            scoreTv.visibility = View.INVISIBLE
+            scoreLabel.visibility = View.INVISIBLE
+            reviewBtn.visibility = View.INVISIBLE
+        }
     }
 
     inner class ScoringAdapter: RecyclerView.Adapter<DailyScoringHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyScoringHolder {
-            val view = LayoutInflater.from(this@DailyTestReportActivity).inflate(R.layout.item_test_report_daily_scoring, parent, false)
-            return DailyScoringHolder(view)
+//            val view = LayoutInflater.from(this@DailyTestReportActivity).inflate(R.layout.item_test_report_daily_scoring, parent, false)
+            val itemBinding: ItemTestReportDailyScoringBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_test_report_daily_scoring, parent, false)
+            return DailyScoringHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -145,12 +155,12 @@ class DailyTestReportActivity : AppCompatActivity() {
     }
 }
 
-class DailyScoringHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val numberTv = view.numberTv
-    val resultIv = view.resultIv
-    val totalCorrectRateTv = view.totalCorrectRateTv
-    val sameCorrectRateTv = view.sameCorrectRateTv
-    val subjectTv = view.subjectTv
+class DailyScoringHolder(val itemBinding: ItemTestReportDailyScoringBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val numberTv = itemBinding.numberTv
+    val resultIv = itemBinding.resultIv
+    val totalCorrectRateTv = itemBinding.totalCorrectRateTv
+    val sameCorrectRateTv = itemBinding.sameCorrectRateTv
+    val subjectTv = itemBinding.subjectTv
 //    val tagLl = view.tagLl
 
     fun set(problem: Problem) {

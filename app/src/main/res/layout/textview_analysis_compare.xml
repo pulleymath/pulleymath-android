@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center">
-    <TextView
-        style="@style/TextGrey_c0c0c0.ExtraBold"
-        android:id="@+id/topLabel"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <merge
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp14"
-        android:text="상단 라벨"/>
-
-    <TextView
-        android:id="@+id/valueTv"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="120"
-        android:textSize="@dimen/sp32" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal|bottom">
-
-
+        android:gravity="center">
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
-            android:id="@+id/bottomLabel"
-            android:text="하단문구"
-            android:layout_marginEnd="4dp"
-            android:textSize="@dimen/sp14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:id="@+id/changeIv"
+            style="@style/TextGrey_c0c0c0.ExtraBold"
+            android:id="@+id/topLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_up_blue"
-            android:layout_marginBottom="3dp"/>
+            android:textSize="@dimen/sp14"
+            android:text="상단 라벨"/>
 
         <TextView
-            style="@style/TextBlue_2287ef.ExtraBold"
-            android:id="@+id/diffTv"
-            android:text="12"
-            android:textSize="@dimen/sp14"
+            android:id="@+id/valueTv"
+            style="@style/TextBlack_4c4c4c.ExtraBold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="120"
+            android:textSize="@dimen/sp32" />
 
-</merge>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal|bottom">
+
+
+            <TextView
+                style="@style/TextBlack_4c4c4c.Bold"
+                android:id="@+id/bottomLabel"
+                android:text="하단문구"
+                android:layout_marginEnd="4dp"
+                android:textSize="@dimen/sp14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/changeIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_up_blue"
+                android:layout_marginBottom="3dp"/>
+
+            <TextView
+                style="@style/TextBlue_2287ef.ExtraBold"
+                android:id="@+id/diffTv"
+                android:text="12"
+                android:textSize="@dimen/sp14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </merge>
+</layout>

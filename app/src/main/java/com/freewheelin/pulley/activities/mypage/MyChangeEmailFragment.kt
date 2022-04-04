@@ -8,10 +8,12 @@ import android.view.ViewGroup
 
 import com.freewheelin.pulley.R
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestChangeEmail
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.FragmentMyChangeEmailBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.isValidEmail
 import com.freewheelin.pulley.views.CodeConfirmView
@@ -19,8 +21,6 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_my_change_email.*
-import kotlinx.android.synthetic.main.view_code_confirm.view.*
 import retrofit2.HttpException
 
 
@@ -29,10 +29,11 @@ class MyChangeEmailFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
     val user
         get() = requireActivity().application.user!!
 
+    lateinit var binding: FragmentMyChangeEmailBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_change_email, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_change_email, container, false)
+        return binding.root
     }
 
 
@@ -42,10 +43,13 @@ class MyChangeEmailFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
     }
 
     fun initUI() {
-        codeConfirm.codeInterface = this
-        codeConfirm.setText(user.email)
-        codeConfirm.setConfirmButtonText(if(user.isValidEmail) "변경하기" else "인증하기")
-        textTitle.text = if(user.isValidEmail) "이메일 변경" else "이메일 인증"
+        with(binding) {
+            codeConfirm.codeInterface = this@MyChangeEmailFragment
+            codeConfirm.setText(user.email)
+            codeConfirm.setConfirmButtonText(if(user.isValidEmail) "변경하기" else "인증하기")
+            textTitle.text = if(user.isValidEmail) "이메일 변경" else "이메일 인증"
+            backBtn.setOnClickListener { onBackBtnClicked() }
+        }
     }
 
     override fun requestCode(text: String, type: String, callback:(status: CodeConfirmView.Status, msg:String?)->Unit) {

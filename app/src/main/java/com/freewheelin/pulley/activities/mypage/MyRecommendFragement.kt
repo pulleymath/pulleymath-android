@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.FragmentMyRecommendFragementBinding
 import com.freewheelin.pulley.model.User
-import kotlinx.android.synthetic.main.fragment_my_recommend_fragement.*
 
 
 class MyRecommendFragement : MyPageBaseFragment(), MyPageSettingDialogListener {
-
+    lateinit var binding: FragmentMyRecommendFragementBinding
     val user: User
         get() = activity?.application?.user!!
 
@@ -22,15 +22,16 @@ class MyRecommendFragement : MyPageBaseFragment(), MyPageSettingDialogListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_recommend_fragement, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_recommend_fragement, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        modifyBtn.setOnClickListener {
+        binding.modifyBtn.setOnClickListener {
             onModifyBtnClicked()
         }
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
         configureUI(user)
     }
 
@@ -48,8 +49,8 @@ class MyRecommendFragement : MyPageBaseFragment(), MyPageSettingDialogListener {
         val recommendChapter = user.recommendChapter
 
         if(recommendLevel != null && recommendChapter != null) {
-            difficultyTv.text = difficultyText[recommendLevel]
-            coverRangeTv.text = coverRangeText[recommendChapter]
+            binding.difficultyTv.text = difficultyText[recommendLevel]
+            binding.coverRangeTv.text = coverRangeText[recommendChapter]
         }
     }
 

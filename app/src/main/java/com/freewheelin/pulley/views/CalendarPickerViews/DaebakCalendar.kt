@@ -1,21 +1,13 @@
 package com.freewheelin.pulley.views.calendarPickerViews
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.CalendarView
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.utils.*
 import org.joda.time.LocalDate
-import java.util.*
 
 interface DaebakCalendarListener {
     fun onSelectDate(calendar: DaebakCalendar, date: LocalDate)

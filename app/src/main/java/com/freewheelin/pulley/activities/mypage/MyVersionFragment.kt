@@ -10,46 +10,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.databinding.FragmentMyAppSettingBinding
+import com.freewheelin.pulley.databinding.FragmentMyVersionBinding
 import com.freewheelin.pulley.views.DaebakToast
-import kotlinx.android.synthetic.main.fragment_my_version.*
 
 
 class MyVersionFragment : MyPageBaseFragment() {
+    lateinit var binding: FragmentMyVersionBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_version, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_version, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentVersionTv.text = "V ${VersionManager.appVersion}"
-        latestVersionTv.text = "V ${VersionManager.info!!.version}"
-
-        if(VersionManager.isNeedToUpdate() == true) {
-            currentVersionTv.typeface = Theme.bold(requireContext())
-            currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
-            updateBtn.text = "업데이트하기"
-            updateBtn.toEnableUI()
-            updateBtn.setOnClickListener {
-                openAppMarket(requireContext())
-            }
-        } else {
-            currentVersionTv.typeface = Theme.regular(requireContext())
-            currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0))
-            updateBtn.text = "최신 버전 사용 중"
-            updateBtn.toDisableUI()
-            updateBtn.setOnClickListener {
-                DaebakToast.show(requireContext(), "이미 최신버전 입니다.")
+        with(binding) {
+            currentVersionTv.text = "V ${VersionManager.appVersion}"
+            latestVersionTv.text = "V ${VersionManager.info!!.version}"
+            backBtn.setOnClickListener { onBackBtnClicked() }
+            if(VersionManager.isNeedToUpdate() == true) {
+                currentVersionTv.typeface = Theme.bold(requireContext())
+                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
+                updateBtn.text = "업데이트하기"
+                updateBtn.toEnableUI()
+                updateBtn.setOnClickListener {
+                    openAppMarket(requireContext())
+                }
+            } else {
+                currentVersionTv.typeface = Theme.regular(requireContext())
+                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0))
+                updateBtn.text = "최신 버전 사용 중"
+                updateBtn.toDisableUI()
+                updateBtn.setOnClickListener {
+                    DaebakToast.show(requireContext(), "이미 최신버전 입니다.")
+                }
             }
         }
     }
 
 
     fun openAppMarket(context: Context) {
+
         // you can also use BuildConfig.APPLICATION_ID
         val appId: String = context.getPackageName()
         val rateIntent = Intent(Intent.ACTION_VIEW,

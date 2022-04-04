@@ -15,11 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import com.crashlytics.android.Crashlytics
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.SplashActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
@@ -32,10 +32,12 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.isSPYMode
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.Version.v1
 import com.freewheelin.pulley.core.manage.*
+import com.freewheelin.pulley.databinding.FragmentMyMainPageBinding
+import com.freewheelin.pulley.databinding.ItemMypageHeaderBinding
+import com.freewheelin.pulley.databinding.ItemMypageListBinding
 import com.freewheelin.pulley.dialogs.UpdateDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.repository.remote.Network
@@ -44,12 +46,6 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.fragment_my_main_page.*
-import kotlinx.android.synthetic.main.item_mypage_list.view.*
-
 
 enum class SettingCategory(val title: String) {
     PRIVATE("개인정보 설정"),
@@ -147,6 +143,7 @@ class MyMainPageFragment : Fragment() {
             SettingCategory.ETC)
 
     lateinit var typeReceiver: BroadcastReceiver
+    lateinit var binding: FragmentMyMainPageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,17 +159,17 @@ class MyMainPageFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_main_page, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_main_page, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
-        rv.layoutManager = LinearLayoutManager(context)
+        binding.rv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
+        binding.rv.layoutManager = LinearLayoutManager(context)
 
-        if(isSPYMode == true) {
+        if(isSPYMode) {
             settingCategory.add(SettingCategory.SPY)
         }
     }
@@ -223,12 +220,12 @@ class MyMainPageFragment : Fragment() {
             Customer -> moveTo(MyCustomerFragment())
 
             Logout -> {
-                DialogUtils.DaebakDialog(requireContext(), true).apply {
+                DialogUtils.DaebakTitleOnlyDialog(requireContext()).apply {
                     title = "로그아웃하시겠습니까?"
                     type = DialogType.alert
-                    leftBtn.text = "아니요"
-                    rightBtn.text = "로그아웃"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "아니요"
+                    binding.rightBtn.text = "로그아웃"
+                    binding.rightBtn.setOnClickListener {
                         this.dismiss()
                         MyApplication.user?.logout { errorMsg ->
                             activity?.finish()
@@ -246,9 +243,9 @@ class MyMainPageFragment : Fragment() {
                     title = "초기설정화면으로 돌아갑니다."
                     contents = "초기설정을 완료해야 다시 Main으로 돌아갈 수 있어요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         activity?.finish()
                         val user = requireActivity().application!!.user!!
                         user.initSettingCompleted = false
@@ -265,9 +262,9 @@ class MyMainPageFragment : Fragment() {
                     title = "모의고사 풀이 내역을 모두 삭제합니다"
                     contents = "나의모의고사에서 전부 지워져요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         MockExamManager.clearExam(context, user!!) {
                             dismiss()
                         }
@@ -280,9 +277,9 @@ class MyMainPageFragment : Fragment() {
                     title = "유형학습 풀이 내역을 모두 삭제합니다"
                     contents = "유형학습 탭에서 전부 지워져요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         BookManager.clearBooks(context,user!!) {
                             dismiss()
                         }
@@ -295,9 +292,9 @@ class MyMainPageFragment : Fragment() {
                     title = "테스트 풀이 내역을 모두 삭제합니다"
                     contents = "전부 지워져요 초기설정까지도"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         TestManager.clearTests(context,user!!) {
                             dismiss()
                         }
@@ -309,9 +306,9 @@ class MyMainPageFragment : Fragment() {
                     title = "클리어 내역을 모두 삭제합니다"
                     contents = "복구 할 수 없어요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         ProblemManager.clearAllClear(context, user!!) {
                             dismiss()
                         }
@@ -324,9 +321,9 @@ class MyMainPageFragment : Fragment() {
                     title = "채점 내역을 모두 삭제합니다"
                     contents = "복구 할 수 없어요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         ProblemManager.clearAllScoring(context, user!!) {
                             dismiss()
                         }
@@ -338,9 +335,9 @@ class MyMainPageFragment : Fragment() {
                     title = "즐겨찾기 내역을 모두 삭제합니다"
                     contents = "복구 할 수 없어요"
                     type = DialogType.alert
-                    leftBtn.text = "취소"
-                    rightBtn.text = "확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text = "취소"
+                    binding.rightBtn.text = "확인"
+                    binding.rightBtn.setOnClickListener {
                         ProblemManager.clearAllScrap(context, user!!) {
                             dismiss()
                         }
@@ -353,9 +350,9 @@ class MyMainPageFragment : Fragment() {
                     title = "강제로 크래시를 냅니다"
                     contents = "앱은 종료되고, 크래시리틱에 보고가 가야해요"
                     type = DialogType.alert
-                    leftBtn.text ="취소"
-                    rightBtn.text="확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text ="취소"
+                    binding.rightBtn.text="확인"
+                    binding.rightBtn.setOnClickListener {
                         throw RuntimeException("Firebase Test Crash")
                     }
                 }.show()
@@ -366,9 +363,9 @@ class MyMainPageFragment : Fragment() {
                     title = "강제로 크래시를 냅니다"
                     contents = "개발용이면 앱이 꺼지고, 배포용이면 앱의 로그가 남습니다"
                     type = DialogType.alert
-                    leftBtn.text ="취소"
-                    rightBtn.text="확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text ="취소"
+                    binding.rightBtn.text="확인"
+                    binding.rightBtn.setOnClickListener {
                         dismiss()
                         LogUtils.assert(false, "SPY에서 심각하지 않은 에러")
                     }
@@ -384,9 +381,9 @@ class MyMainPageFragment : Fragment() {
                     title = "튜토리얼 내역을 모두 삭제합니다"
                     contents = "앱이 종료되었다 다시 켜져야 적용됩니다"
                     type = DialogType.alert
-                    leftBtn.text ="취소"
-                    rightBtn.text="확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text ="취소"
+                    binding.rightBtn.text="확인"
+                    binding.rightBtn.setOnClickListener {
                         Preferences.tooltipShowingCntTakeNoteScroll.set(0)
                         Preferences.tooltipShowingCntAddSimilar.set(0)
                         Preferences.tooltipShowingCntChangeSimilar.set(0)
@@ -497,9 +494,9 @@ class MyMainPageFragment : Fragment() {
                     title="스파이모드를 종료합니다"
                     contents="다시 키려면.. 봉인을 푸셔야해요"
                     type = DialogType.alert
-                    leftBtn.text ="취소"
-                    rightBtn.text="확인"
-                    rightBtn.setOnClickListener {
+                    binding.leftBtn.text ="취소"
+                    binding.rightBtn.text="확인"
+                    binding.rightBtn.setOnClickListener {
                         dismiss()
                         spyOff()
                         (activity as LearningTabActivity).spyOff()
@@ -514,7 +511,7 @@ class MyMainPageFragment : Fragment() {
         isSPYMode = true
         settingCategory.add(SettingCategory.SPY)
         try {
-            rv?.adapter?.notifyDataSetChanged()
+            binding.rv.adapter?.notifyDataSetChanged()
         }catch (e:Exception) {}
     }
 
@@ -522,7 +519,7 @@ class MyMainPageFragment : Fragment() {
         isSPYMode = false
         settingCategory.remove(SettingCategory.SPY)
         try {
-            rv?.adapter?.notifyDataSetChanged()
+            binding.rv.adapter?.notifyDataSetChanged()
         }catch (e:Exception) {}
     }
 
@@ -586,11 +583,12 @@ class MyMainPageFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return if (viewType == 0) {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_header, parent, false)
-                HeaderHolder(view)
+//                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_header, parent, false)
+                HeaderHolder.create(parent)
             } else {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_list, parent, false)
-                ListHolder(view)
+                val binding: ItemMypageListBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mypage_list, parent, false)
+//                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_mypage_list, parent, false)
+                ListHolder(binding)
             }
         }
 
@@ -659,13 +657,13 @@ class MyMainPageFragment : Fragment() {
     }
 }
 
-class ListHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val titleTv = view.titleTv
-    val updateTag = view.updateTag
-    val subTitleTv = view.subTitleTv
-    val clampIv = view.clampIv
-    val switch = view.onOffSwitch
-    val textDescription = view.textDescription
+class ListHolder(val binding: ItemMypageListBinding) : RecyclerView.ViewHolder(binding.root) {
+    val titleTv = binding.titleTv
+    val updateTag = binding.updateTag
+    val subTitleTv = binding.subTitleTv
+    val clampIv = binding.clampIv
+    val switch = binding.onOffSwitch
+    val textDescription = binding.textDescription
 
     fun set(setting: Setting, subText: String) {
         titleTv.text = setting.title

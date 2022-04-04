@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@drawable/bg_white_ffffff_round"
-    android:layout_width="424dp"
-    android:layout_height="wrap_content"
-    android:paddingTop="40dp"
-    android:gravity="center">
-
-    <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/ic_check_green_circle"/>
-
-    <TextView
-        android:id="@+id/titleTv"
-        style="@style/TextGreen_70d000.Bold"
-        android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_ffffff_round"
+        android:layout_width="424dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:lineSpacingExtra="12sp"
-        android:text="업데이트 완료!"
-        android:textSize="24sp" />
+        android:paddingTop="40dp"
+        android:gravity="center">
 
-    <TextView
-        android:id="@+id/guideTv"
-        style="@style/TextGrey_c0c0c0.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:lineSpacingExtra="@dimen/sp8"
-        android:text="메인 > 이름을 눌러서 학년 수정이 가능합니다 :)"
-        android:textSize="14sp" />
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_check_green_circle"/>
 
-    <View
-        style="@style/Border_Grey_f2f2f2_Horizontal"
-        android:id="@+id/horizontalBorder"
-        android:layout_width="match_parent"
-        android:layout_marginTop="28dp"/>
+        <TextView
+            android:id="@+id/titleTv"
+            style="@style/TextGreen_70d000.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:lineSpacingExtra="12sp"
+            android:text="업데이트 완료!"
+            android:textSize="24sp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/guideTv"
+            style="@style/TextGrey_c0c0c0.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/sp8"
+            android:text="메인 > 이름을 눌러서 학년 수정이 가능합니다 :)"
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/confirmBtn"
-            style="@style/TextPurple_6d6dff.ExtraBold"
-            android:layout_width="100dp"
-            android:layout_height="72dp"
-            android:background="@null"
-            android:text="확인"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <View
+            style="@style/Border_Grey_f2f2f2_Horizontal"
+            android:id="@+id/horizontalBorder"
+            android:layout_width="match_parent"
+            android:layout_marginTop="28dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/confirmBtn"
+                style="@style/TextPurple_6d6dff.ExtraBold"
+                android:layout_width="100dp"
+                android:layout_height="72dp"
+                android:background="@null"
+                android:text="확인"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>

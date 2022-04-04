@@ -1,155 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
-    tools:context="com.freewheelin.pulley.activities.StartActivity">
-
-    <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/topLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="수학 등급상승의 비결"
-        android:textSize="@dimen/sp18"
-        android:letterSpacing="0.61"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/dp24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/pulleyIv"/>
-
-    <LinearLayout
-        android:id="@+id/coverLl"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="end"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@+id/topLabel"
-        app:layout_constraintEnd_toEndOf="@+id/topLabel"
-        app:layout_constraintBottom_toBottomOf="@+id/topLabel"
-        app:layout_constraintStart_toStartOf="@+id/topLabel">
-        <View
-            android:id="@+id/topLabelCoverVisible"
-            android:layout_width="0dp"
-            android:layout_weight="0"
-            android:layout_height="match_parent" />
-
-        <View
-            android:id="@+id/topLabelCover"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@color/white_fafafa" />
-    </LinearLayout>
-
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/pulleyIv"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/pulley"-->
-    <!--        android:layout_marginStart="2dp"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/topLabel"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/topLabel"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>-->
-    <ImageView
-        android:id="@+id/pulleyIv"
-        android:layout_width="522dp"
-        android:layout_height="56dp"
-        android:src="@drawable/pulleymath"
-        android:layout_marginStart="2dp"
-        app:layout_constraintStart_toStartOf="@+id/topLabel"
-        app:layout_constraintEnd_toEndOf="@+id/topLabel"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/primaryBtn_width_200dp"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <Button
-        android:id="@+id/startBtn"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp56"
-        android:layout_marginTop="@dimen/dp64"
-        android:text="가입하고 공부 시작하기"
-        app:layout_constraintStart_toStartOf="@+id/topLabel"
-        app:layout_constraintEnd_toEndOf="@+id/topLabel"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        android:background="@drawable/bg_purple_6d6dff_round_40"
-        />
-
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/loginLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp14"
-        android:text="풀리수학 회원이신가요?"
-        android:layout_marginTop="@dimen/dp32"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startBtn"
-        app:layout_constraintEnd_toStartOf="@+id/loginTv"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <TextView
-        style="@style/TextPurple_6d6dff.ExtraBold"
-        android:id="@+id/loginTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="로그인"
-        android:textSize="@dimen/sp14"
-        android:padding="8dp"
-        app:layout_constraintTop_toTopOf="@+id/loginLabel"
-        app:layout_constraintBottom_toBottomOf="@+id/loginLabel"
-        app:layout_constraintStart_toEndOf="@+id/loginLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <View
-        android:id="@+id/loginBorder"
-        android:layout_height="1dp"
-        android:background="@color/purple_6D6DFF"
-        android:layout_width="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/loginTv"
-        app:layout_constraintStart_toStartOf="@+id/loginTv"
-        app:layout_constraintEnd_toEndOf="@+id/loginTv" />
-
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/balloonCl"
-        android:layout_width="136dp"
-        android:layout_height="128dp"
-        android:layout_marginBottom="@dimen/dp28"
-        android:layout_marginStart="28dp"
-        android:background="@drawable/ic_balloon_purple"
-        app:layout_constraintBottom_toBottomOf="@+id/pulleyIv"
-        app:layout_constraintStart_toEndOf="@+id/pulleyIv"
-        app:layout_constraintTop_toBottomOf="@+id/topLabel">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_fafafa"
+        tools:context="com.freewheelin.pulley.activities.StartActivity">
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/topLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수학 등급상승의 비결"
+            android:textSize="@dimen/sp18"
+            android:letterSpacing="0.61"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/dp24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/pulleyIv"/>
+
+        <LinearLayout
+            android:id="@+id/coverLl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="@+id/topLabel"
+            app:layout_constraintEnd_toEndOf="@+id/topLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/topLabel"
+            app:layout_constraintStart_toStartOf="@+id/topLabel">
+            <View
+                android:id="@+id/topLabelCoverVisible"
+                android:layout_width="0dp"
+                android:layout_weight="0"
+                android:layout_height="match_parent" />
+
+            <View
+                android:id="@+id/topLabelCover"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/white_fafafa" />
+        </LinearLayout>
+
+
+        <!--    <ImageView-->
+        <!--        android:id="@+id/pulleyIv"-->
+        <!--        android:layout_width="0dp"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:src="@drawable/pulley"-->
+        <!--        android:layout_marginStart="2dp"-->
+        <!--        app:layout_constraintStart_toStartOf="@+id/topLabel"-->
+        <!--        app:layout_constraintEnd_toEndOf="@+id/topLabel"-->
+        <!--        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>-->
+        <ImageView
+            android:id="@+id/pulleyIv"
+            android:layout_width="522dp"
+            android:layout_height="56dp"
+            android:src="@drawable/pulleymath"
+            android:layout_marginStart="2dp"
+            app:layout_constraintStart_toStartOf="@+id/topLabel"
+            app:layout_constraintEnd_toEndOf="@+id/topLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/primaryBtn_width_200dp"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <Button
+            android:id="@+id/startBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginTop="@dimen/dp64"
+            android:text="가입하고 공부 시작하기"
+            app:layout_constraintStart_toStartOf="@+id/topLabel"
+            app:layout_constraintEnd_toEndOf="@+id/topLabel"
+            app:layout_constraintTop_toBottomOf="@+id/guideline"
+            android:background="@drawable/bg_purple_6d6dff_round_40"
+            />
+
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/loginLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
+            android:text="풀리수학 회원이신가요?"
+            android:layout_marginTop="@dimen/dp32"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startBtn"
+            app:layout_constraintEnd_toStartOf="@+id/loginTv"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <TextView
             style="@style/TextPurple_6d6dff.ExtraBold"
+            android:id="@+id/loginTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:lineSpacingExtra="@dimen/sp8"
-            android:text="빠르게\n등급 상승하기!"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="로그인"
+            android:textSize="@dimen/sp14"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="@+id/loginLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/loginLabel"
+            app:layout_constraintStart_toEndOf="@+id/loginLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <View
+            android:id="@+id/loginBorder"
+            android:layout_height="1dp"
+            android:background="@color/purple_6D6DFF"
+            android:layout_width="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/loginTv"
+            app:layout_constraintStart_toStartOf="@+id/loginTv"
+            app:layout_constraintEnd_toEndOf="@+id/loginTv" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/balloonCl"
+            android:layout_width="136dp"
+            android:layout_height="128dp"
+            android:layout_marginBottom="@dimen/dp28"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/ic_balloon_purple"
+            app:layout_constraintBottom_toBottomOf="@+id/pulleyIv"
+            app:layout_constraintStart_toEndOf="@+id/pulleyIv"
+            app:layout_constraintTop_toBottomOf="@+id/topLabel">
+
+            <TextView
+                style="@style/TextPurple_6d6dff.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/sp8"
+                android:text="빠르게\n등급 상승하기!"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

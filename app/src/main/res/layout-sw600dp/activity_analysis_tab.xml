@@ -1,297 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activities.analysis.AnalysisTabActivity">
-
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp64"
-        android:layout_gravity="center"
-        android:background="@color/white_ffffff"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorHeight="0dp"
-        app:tabMaxWidth="0dp"
-        app:tabGravity="center"
-        app:tabMode="fixed"
-        app:tabTextColor="@color/grey_818181"
-        app:tabSelectedTextColor="@color/white_ffffff"
-        app:tabTextAppearance="@style/AppTheme.TabBar.TabText">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".activities.analysis.AnalysisTabActivity">
 
-    </com.google.android.material.tabs.TabLayout>
 
-    <ImageButton
-        android:id="@+id/backBtn"
-        android:padding="@dimen/dp32"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/ic_toolbar_back"
-        app:tint="@color/black_4c4c4c"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
-        app:layout_constraintStart_toStartOf="@+id/tabLayout"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout" />
-
-    <Button
-        style="@style/TextGrey_9f9f9f.Bold"
-        android:id="@+id/myAnalysisGuideBtn"
-        android:layout_width="153dp"
-        android:layout_height="36dp"
-        android:textSize="@dimen/sp16"
-        app:layout_constraintTop_toTopOf="@+id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
-        app:layout_constraintEnd_toEndOf="@+id/tabLayout"
-        android:layout_marginEnd="@dimen/dp32"
-        android:background="@drawable/bg_grey_f2f2f2_round"
-        android:text="내 전체 분석이란?"/>
-
-    <View
-        android:id="@+id/horizontalBorder"
-        style="@style/Border_Grey_e8e8e8_Horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalBorder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/scrollContentsCl"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white_fafafa">
+            android:layout_height="@dimen/dp64"
+            android:layout_gravity="center"
+            android:background="@color/white_ffffff"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="0dp"
+            app:tabGravity="center"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/grey_818181"
+            app:tabSelectedTextColor="@color/white_ffffff"
+            app:tabTextAppearance="@style/AppTheme.TabBar.TabText">
 
-            <ImageButton
-                android:id="@+id/prevBtn"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:padding="@dimen/dp16"
-                android:background="@null"
-                android:src="@drawable/ic_calendar_arrow_prev"
-                app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
-                app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintEnd_toStartOf="@+id/monthContainerCl">
-            </ImageButton>
+        </com.google.android.material.tabs.TabLayout>
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:padding="@dimen/dp32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_toolbar_back"
+            app:tint="@color/black_4c4c4c"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+            app:layout_constraintStart_toStartOf="@+id/tabLayout"
+            app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
+        <Button
+            style="@style/TextGrey_9f9f9f.Bold"
+            android:id="@+id/myAnalysisGuideBtn"
+            android:layout_width="153dp"
+            android:layout_height="36dp"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintTop_toTopOf="@+id/tabLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
+            app:layout_constraintEnd_toEndOf="@+id/tabLayout"
+            android:layout_marginEnd="@dimen/dp32"
+            android:background="@drawable/bg_grey_f2f2f2_round"
+            android:text="내 전체 분석이란?"/>
+
+        <View
+            android:id="@+id/horizontalBorder"
+            style="@style/Border_Grey_e8e8e8_Horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalBorder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/monthContainerCl"
-                android:layout_width="@dimen/dp400"
-                android:layout_height="@dimen/dp48"
-                android:layout_marginTop="@dimen/dp64"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/bg_white_ffffff_stroke_black_4c4c4c_round_24">
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <ImageView
-                android:id="@+id/calendarIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_calendar"
-                android:layout_marginEnd="@dimen/dp16"
-                app:layout_constraintStart_toStartOf="@+id/monthContainerCl"
-                app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
-                app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintEnd_toStartOf="@+id/calendarRangeTv"
-                app:layout_constraintHorizontal_chainStyle="packed"/>
-
-            <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
-                android:id="@+id/calendarRangeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp24"
-                android:text="2019.03.25 - 2019.03.31"
-                app:layout_constraintStart_toEndOf="@+id/calendarIv"
-                app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
-                app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintEnd_toEndOf="@+id/monthContainerCl"
-                app:layout_constraintHorizontal_chainStyle="packed"/>
-
-            <ImageButton
-                android:id="@+id/nextBtn"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:padding="@dimen/dp16"
-                android:background="@null"
-                android:src="@drawable/ic_calendar_arrow_next"
-                app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
-                app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintStart_toEndOf="@+id/monthContainerCl">
-            </ImageButton>
-
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Vertical"
-                android:id="@+id/leftVerticalBorder"
-                android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toTopOf="@+id/correctRateContainer"
-                app:layout_constraintEnd_toStartOf="@+id/ratingContainer"
-                app:layout_constraintBottom_toBottomOf="@+id/correctRateContainer" />
-
-            <View
-                style="@style/Border_Grey_e8e8e8_Vertical"
-                android:id="@+id/rightVerticalBorder"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@+id/ratingContainer"
-                app:layout_constraintBottom_toBottomOf="@+id/ratingContainer"
-                app:layout_constraintStart_toEndOf="@+id/ratingContainer" />
-
-
-            <LinearLayout
-                android:id="@+id/correctRateContainer"
-                android:layout_width="@dimen/dp184"
-                android:layout_height="@dimen/dp96"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintEnd_toStartOf="@+id/leftVerticalBorder">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
-                    <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
-                        android:id="@+id/correctRateLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp18"
-                        android:text="표준 정답률"
-                        app:layout_constraintTop_toTopOf="@+id/correctRateQuestionIv"
-                        app:layout_constraintBottom_toBottomOf="@+id/correctRateQuestionIv"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/correctRateQuestionIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_question"
-                        android:layout_marginStart="4dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/correctRateLabel" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
-                    android:id="@+id/correctRateTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp40"
-                    android:layout_marginTop="4dp"
-                    android:text="-" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ratingContainer"
-                android:layout_width="@dimen/dp184"
-                android:layout_height="@dimen/dp96"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/dp24"
-                app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
-                    <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
-                        android:id="@+id/ratingLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp18"
-                        android:text="예상 등급"
-                        app:layout_constraintTop_toTopOf="@+id/ratingQuestionIV"
-                        app:layout_constraintBottom_toBottomOf="@+id/ratingQuestionIV"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/ratingQuestionIV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_question"
-                        android:layout_marginStart="4dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ratingLabel" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
-                    android:id="@+id/ratingTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp40"
-                    android:layout_marginTop="4dp"
-                    android:text="-"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/problemCntContainer"
-                android:layout_width="@dimen/dp184"
-                android:layout_height="@dimen/dp96"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/dp24"
-                android:layout_marginStart="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
-                app:layout_constraintStart_toEndOf="@+id/rightVerticalBorder" >
-
-                <TextView
-                    android:id="@+id/problemCntLabel"
-                    style="@style/TextGrey_c0c0c0.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="총 문제 수"
-                    android:textSize="@dimen/sp18" />
-
-                <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
-                    android:id="@+id/problemCntTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp40"
-                    android:text="-"
-                    android:layout_marginTop="8dp" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/fragContainerLl"
+                android:id="@+id/scrollContentsCl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/dp280"
-                app:layout_constraintTop_toTopOf="parent">
+                android:background="@color/white_fafafa">
 
-            </LinearLayout>
+                <ImageButton
+                    android:id="@+id/prevBtn"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="@dimen/dp16"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_arrow_prev"
+                    app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
+                    app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintEnd_toStartOf="@+id/monthContainerCl">
+                </ImageButton>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/monthContainerCl"
+                    android:layout_width="@dimen/dp400"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp64"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@drawable/bg_white_ffffff_stroke_black_4c4c4c_round_24">
 
-    </ScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/calendarIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_marginEnd="@dimen/dp16"
+                    app:layout_constraintStart_toStartOf="@+id/monthContainerCl"
+                    app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
+                    app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintEnd_toStartOf="@+id/calendarRangeTv"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <TextView
+                    style="@style/TextBlack_4c4c4c.Bold"
+                    android:id="@+id/calendarRangeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp24"
+                    android:text="2019.03.25 - 2019.03.31"
+                    app:layout_constraintStart_toEndOf="@+id/calendarIv"
+                    app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
+                    app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintEnd_toEndOf="@+id/monthContainerCl"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <ImageButton
+                    android:id="@+id/nextBtn"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="@dimen/dp16"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_arrow_next"
+                    app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
+                    app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintStart_toEndOf="@+id/monthContainerCl">
+                </ImageButton>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:id="@+id/leftVerticalBorder"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/correctRateContainer"
+                    app:layout_constraintEnd_toStartOf="@+id/ratingContainer"
+                    app:layout_constraintBottom_toBottomOf="@+id/correctRateContainer" />
+
+                <View
+                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:id="@+id/rightVerticalBorder"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintTop_toTopOf="@+id/ratingContainer"
+                    app:layout_constraintBottom_toBottomOf="@+id/ratingContainer"
+                    app:layout_constraintStart_toEndOf="@+id/ratingContainer" />
+
+
+                <LinearLayout
+                    android:id="@+id/correctRateContainer"
+                    android:layout_width="@dimen/dp184"
+                    android:layout_height="@dimen/dp96"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintEnd_toStartOf="@+id/leftVerticalBorder">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp">
+                        <TextView
+                            style="@style/TextGrey_c0c0c0.Bold"
+                            android:id="@+id/correctRateLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp18"
+                            android:text="표준 정답률"
+                            app:layout_constraintTop_toTopOf="@+id/correctRateQuestionIv"
+                            app:layout_constraintBottom_toBottomOf="@+id/correctRateQuestionIv"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/correctRateQuestionIv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_question"
+                            android:layout_marginStart="4dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/correctRateLabel" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:id="@+id/correctRateTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp40"
+                        android:layout_marginTop="4dp"
+                        android:text="-" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ratingContainer"
+                    android:layout_width="@dimen/dp184"
+                    android:layout_height="@dimen/dp96"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp">
+                        <TextView
+                            style="@style/TextGrey_c0c0c0.Bold"
+                            android:id="@+id/ratingLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp18"
+                            android:text="예상 등급"
+                            app:layout_constraintTop_toTopOf="@+id/ratingQuestionIV"
+                            app:layout_constraintBottom_toBottomOf="@+id/ratingQuestionIV"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/ratingQuestionIV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_question"
+                            android:layout_marginStart="4dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ratingLabel" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:id="@+id/ratingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp40"
+                        android:layout_marginTop="4dp"
+                        android:text="-"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/problemCntContainer"
+                    android:layout_width="@dimen/dp184"
+                    android:layout_height="@dimen/dp96"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/monthContainerCl"
+                    app:layout_constraintStart_toEndOf="@+id/rightVerticalBorder" >
+
+                    <TextView
+                        android:id="@+id/problemCntLabel"
+                        style="@style/TextGrey_c0c0c0.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="총 문제 수"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:id="@+id/problemCntTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp40"
+                        android:text="-"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/fragContainerLl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/dp280"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

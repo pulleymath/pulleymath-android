@@ -12,8 +12,10 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
+import com.freewheelin.pulley.databinding.ViewInputPasswordV2Binding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -35,8 +37,8 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
 
     var listener: PasswordFieldV2Listener? = null
     var enterListener: PasswordFieldV2EnterListener? = null
-    var errorTv: TextView
-    var inputLayout: TextInputLayout
+//    var errorTv: TextView
+//    var inputLayout: TextInputLayout
 
     var text: String
         get() {
@@ -50,10 +52,10 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
 
     var errorMsg: String
         get() {
-            return errorTv.text.toString()
+            return binding.errorTv.text.toString()
         }
         set(value) {
-            errorTv.text = value
+            binding.errorTv.text = value
             isShownError = true
         }
 
@@ -65,11 +67,11 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
         set(value) {
             val container = findViewById<LinearLayout>(R.id.errorContainerLl)
             container.visibility = if (value) View.VISIBLE else View.GONE
-            inputLayout.error = if (value) " " else null
+            binding.inputLayout.error = if (value) " " else null
         }
     var inputEt: TextInputEditText
         get() {
-            return findViewById(R.id.inputEt)
+            return binding.inputEt
         }
 
 
@@ -77,15 +79,15 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
         val edit = findViewById<TextInputEditText>(R.id.inputEt)
         edit.isEnabled = enabled
     }
+    var binding: ViewInputPasswordV2Binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_input_password_v2, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_input_password_v2, this)
 
-        errorTv = findViewById(R.id.errorTv)
-        inputEt = findViewById(R.id.inputEt)
-        inputLayout = findViewById(R.id.inputLayout)
+//        errorTv = findViewById(R.id.errorTv)
+        inputEt = binding.inputEt
+//        inputLayout = findViewById(R.id.inputLayout)
 
-        val check = findViewById<CheckBox>(R.id.checkEye)
+//        val check = findViewById<CheckBox>(R.id.checkEye)
 
         inputEt.onFocusChangeListener = this
         inputEt.addTextChangedListener(object: TextWatcher{
@@ -105,7 +107,7 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
                 }
             }
         })
-        check.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.checkEye.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked)
                 inputEt.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             else
@@ -131,10 +133,10 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
 
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.PasswordFieldV2)
-        inputLayout.hint = array.getString(R.styleable.PasswordFieldV2_PasswordFieldV2_Hint)
+        binding.inputLayout.hint = array.getString(R.styleable.PasswordFieldV2_PasswordFieldV2_Hint)
         val showErrorDrawable = array.getBoolean(R.styleable.PasswordFieldV2_PasswordFieldV2_ShowErrorIcon, false)
         if (!showErrorDrawable) {
-            inputLayout.errorIconDrawable = null
+            binding.inputLayout.errorIconDrawable = null
         }
         setMaxLength(array.getInt(R.styleable.PasswordFieldV2_PasswordFieldV2_maxLength, 0))
         array.recycle()

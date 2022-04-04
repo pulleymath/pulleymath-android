@@ -13,9 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -35,6 +35,9 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.FragmentWrongNoteBinding
+import com.freewheelin.pulley.databinding.ItemNoteContentsHeaderBinding
+import com.freewheelin.pulley.databinding.ItemNoteContentsProblemBinding
 import com.freewheelin.pulley.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.dialogs.NoteDetailDialog
 import com.freewheelin.pulley.dialogs.WrongManagementDialog
@@ -53,15 +56,8 @@ import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_note_detail.*
-import kotlinx.android.synthetic.main.dialog_wrong_management.*
-import kotlinx.android.synthetic.main.fragment_wrong_note.*
-import kotlinx.android.synthetic.main.item_note_contents_header.view.*
-import kotlinx.android.synthetic.main.item_note_contents_problem.view.*
-import kotlinx.android.synthetic.main.view_wrong_manage.view.*
 import org.joda.time.LocalDate
 import java.util.*
-import kotlinx.android.synthetic.main.item_note_contents_header.view.guideTv as emptyGuideTv
 
 enum class OrderType(val rawValue: Int) {
     recent(0),
@@ -91,6 +87,8 @@ class WrongNoteFragment : LearningTabFragment(),
     var scrapProblems: List<Problem>? = null
     var groupedProblemsByOrder: List<Pair<String, List<Problem>>> = listOf()
 
+    lateinit var binding: FragmentWrongNoteBinding
+
     override var screenName = "오답노트"
 
     lateinit var changeRecevier: BroadcastReceiver
@@ -107,7 +105,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
     val selectedFragment: NoteFilterFragment
         get() {
-            return if(viewPager.currentItem == 0) wrongNoteFilterFragment else scrapNoteFilterFragment
+            return if(binding.viewPager.currentItem == 0) wrongNoteFilterFragment else scrapNoteFilterFragment
         }
 
     companion object {
@@ -156,7 +154,8 @@ class WrongNoteFragment : LearningTabFragment(),
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wrong_note, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wrong_note, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -172,7 +171,7 @@ class WrongNoteFragment : LearningTabFragment(),
             selectedProblem.removeAll(problems)
 
         if(problems.isNotEmpty())
-            contentsRv.adapter?.notifyDataSetChanged()
+            binding.contentsRv.adapter?.notifyDataSetChanged()
     }
 
     fun onProblemCheckBoxChanged(isChecked: Boolean, problem: Problem, position: Int) {
@@ -181,18 +180,18 @@ class WrongNoteFragment : LearningTabFragment(),
         } else {
             selectedProblem.remove(problem)
         }
-        contentsRv.adapter?.notifyItemChanged(position)
+        binding.contentsRv.adapter?.notifyItemChanged(position)
     }
 
     override fun onOrderBtnClicked(type: OrderType) {
         selectedOrder = type
-        setGroupedProblem(tabLayout.selectedTabPosition)
-        contentsRv.adapter?.notifyDataSetChanged()
+        setGroupedProblem(binding.tabLayout.selectedTabPosition)
+        binding.contentsRv.adapter?.notifyDataSetChanged()
     }
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        val tabPosition = tabLayout.selectedTabPosition
+        val tabPosition = binding.tabLayout.selectedTabPosition
         if (tabPosition == 0) {
             ProblemManager.getWrongProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
                 wrongProblems = it
@@ -208,7 +207,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
     override fun onDateSet(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
 
-        val tabPosition = tabLayout.selectedTabPosition
+        val tabPosition = binding.tabLayout.selectedTabPosition
 
         val fromDate = when(type) {
             DateRangePickerDialog.Type.RECENT7 -> LocalDate.now().minusDays(6)
@@ -240,47 +239,47 @@ class WrongNoteFragment : LearningTabFragment(),
     }
 
     override fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<FilterType>) {
-        setGroupedProblem(tabLayout.selectedTabPosition)
+        setGroupedProblem(binding.tabLayout.selectedTabPosition)
     }
 
     override fun onItemChanged(set: ObservableHashSet<Problem>) {
+        binding.apply {
+            if (set.isEmpty()) {
+                wrongManageView.inactive()
+                wrongManageView.hide(true)
+                viewPager.setPaddingBottom(0)
 
-        if (set.isEmpty()) {
-            wrongManageView.inactive()
-            wrongManageView.hide(true)
-            viewPager.setPaddingBottom(0)
-
-        } else {
-            if(tabLayout.selectedTabPosition == 0) {
-                wrongManageView.studyWrongBtn.text = "오답학습하기"
             } else {
-                wrongManageView.studyWrongBtn.text = "추가학습하기"
+                if (tabLayout.selectedTabPosition == 0) {
+                    wrongManageView.studyWrongBtn.text = "오답학습하기"
+                } else {
+                    wrongManageView.studyWrongBtn.text = "추가학습하기"
+                }
+                wrongManageView.active("${set.size}문제가 선택되었습니다.")
+                wrongManageView.show(true)
+                viewPager.setPaddingBottom(64.toPx())
             }
-            wrongManageView.active("${set.size}문제가 선택되었습니다.")
-            wrongManageView.show(true)
-            viewPager.setPaddingBottom(64.toPx())
         }
-
     }
 
     override fun onStudyBtnClicked(view: WrongManageView) {
-        if(tabLayout.selectedTabPosition == 0)
+        if(binding.tabLayout.selectedTabPosition == 0)
             LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답학습하기")
         else
             LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "추가학습하기")
 
-        val dialogType = if(tabLayout.selectedTabPosition == 0) WrongManagementDialog.Type.wrongProblem
+        val dialogType = if(binding.tabLayout.selectedTabPosition == 0) WrongManagementDialog.Type.wrongProblem
                         else WrongManagementDialog.Type.scrap
         val dialog = WrongManagementDialog(requireContext(), dialogType)
         dialog.wrongCnt = selectedProblem.size
         dialog.show()
 
-        dialog.makeBtn.setOnClickListener {
-            if(tabLayout.selectedTabPosition == 0)
+        dialog.binding.makeBtn.setOnClickListener {
+            if(binding.tabLayout.selectedTabPosition == 0)
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
             else
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
-            dialog.makeBtn.startLoding()
+            dialog.binding.makeBtn.startLoding()
             val problems = selectedProblem.toList()
             val cntPerProblem = dialog.cnt
             val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
@@ -293,7 +292,7 @@ class WrongNoteFragment : LearningTabFragment(),
                     successCB = {
                         dialog.dismiss()
 
-                        if(dialog.checkbox.isChecked) {
+                        if(dialog.binding.checkbox.isChecked) {
                             val intent = SolveActivity.getIntent(requireContext(), it)
                             startActivity(intent)
                         } else {
@@ -302,7 +301,7 @@ class WrongNoteFragment : LearningTabFragment(),
                             (activity as LearningTabActivity).showSnackBar(text, "바로가기")
                         }
                         selectedProblem.clear()
-                        contentsRv.adapter?.notifyDataSetChanged()
+                        binding.contentsRv.adapter?.notifyDataSetChanged()
                     }, failCB = {
                         dialog.dismiss()
                         DaebakToast.showFailedMakePiece(requireContext())
@@ -313,76 +312,98 @@ class WrongNoteFragment : LearningTabFragment(),
 
     override fun onReviewBtnClicked(view: WrongManageView) {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "리뷰하기")
-        val subject = if (tabLayout.selectedTabPosition == 0) "오답노트 리뷰" else "즐겨찾기 리뷰"
+        val subject = if (binding.tabLayout.selectedTabPosition == 0) "오답노트 리뷰" else "즐겨찾기 리뷰"
         val intent = SolveActivity.getReviewIntent(requireContext(), subject, selectedProblem.toList())
         startActivity(intent)
     }
 
     override fun initUI() {
+        binding.apply {
+            viewPager.adapter = TabAdapter(childFragmentManager)
+            viewPager.setPagingEnabled(false)
 
-        viewPager.adapter = TabAdapter(childFragmentManager)
-        viewPager.setPagingEnabled(false)
+            tabLayout.setupWithViewPager(viewPager)
+            tabLayout.getTabAt(0)?.customView = TabTextView(requireContext(), "오답노트")
+            tabLayout.getTabAt(1)?.customView = TabTextView(requireContext(), "즐겨찾기")
 
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.customView = TabTextView(requireContext(), "오답노트")
-        tabLayout.getTabAt(1)?.customView = TabTextView(requireContext(), "즐겨찾기")
+            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
 
-        viewPager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                (activity as LearningTabActivity).hideSnackBar()
-            }
-
-            override fun onPageSelected(position: Int) {}
-
-        })
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                if(tab.position == 0) {
-                    ProblemManager.getWrongProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
-                        wrongProblems = it
-                        setGroupedProblem(tab.position)
-                    }
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    (activity as LearningTabActivity).hideSnackBar()
                 }
 
-                if(tab.position == 1) {
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기")
-                    ProblemManager.getScrapProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
-                        scrapProblems = it
-                        setGroupedProblem(tab.position)
+                override fun onPageSelected(position: Int) {}
+
+            })
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab) {}
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    if (tab.position == 0) {
+                        ProblemManager.getWrongProblems(
+                            requireContext(),
+                            user!!,
+                            from.toDate(),
+                            to.toDate()
+                        ) {
+                            wrongProblems = it
+                            setGroupedProblem(tab.position)
+                        }
+                    }
+
+                    if (tab.position == 1) {
+                        LogUtils.logEvent(
+                            requireContext(),
+                            user!!,
+                            PulleyEvent.BUTTON_CLICK,
+                            "오답노트",
+                            "즐겨찾기"
+                        )
+                        ProblemManager.getScrapProblems(
+                            requireContext(),
+                            user!!,
+                            from.toDate(),
+                            to.toDate()
+                        ) {
+                            scrapProblems = it
+                            setGroupedProblem(tab.position)
+                        }
                     }
                 }
-            }
-        })
+            })
 
-        wrongManageView.listener = this
-        wrongManageView.hide(false)
+            wrongManageView.listener = this@WrongNoteFragment
+            wrongManageView.hide(false)
 
-        val noteAdapter = NoteAdapter()
-        noteAdapter.sectionType = SectionType.header
+            val noteAdapter = NoteAdapter()
+            noteAdapter.sectionType = SectionType.header
 
-        contentsRv.addItemDecoration(SpaceItemDecoration())
+            contentsRv.addItemDecoration(SpaceItemDecoration())
 
 
-        val spanCount = if (requireContext().is10InchUI) 4 else 3
-        contentsRv.layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
-            it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    val indexPath = noteAdapter.getIndexPath(position)
-                    return if (indexPath.type == Type.header) {
-                        spanCount
-                    } else {
-                        1
+            val spanCount = if (requireContext().is10InchUI) 4 else 3
+            contentsRv.layoutManager =
+                GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
+                    it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            val indexPath = noteAdapter.getIndexPath(position)
+                            return if (indexPath.type == Type.header) {
+                                spanCount
+                            } else {
+                                1
+                            }
+                        }
                     }
                 }
-            }
+            contentsRv.adapter = noteAdapter
         }
-        contentsRv.adapter = noteAdapter
     }
 
     private fun setGroupedProblem(tabPosition: Int, withSelectedClear: Boolean = true) {
@@ -420,8 +441,8 @@ class WrongNoteFragment : LearningTabFragment(),
 
         if(withSelectedClear)
             selectedProblem.clear()
-        contentsRv.adapter?.notifyDataSetChanged()
-        contentsRv.scrollToPosition(0)
+        binding.contentsRv.adapter?.notifyDataSetChanged()
+        binding.contentsRv.scrollToPosition(0)
     }
 
     private fun filterProblems(problems: List<Problem>, tabPosition: Int): List<Problem> {
@@ -576,10 +597,8 @@ class WrongNoteFragment : LearningTabFragment(),
         override fun getItemViewType(indexPath: IndexPath): Int {
             return when (indexPath.type) {
                 Type.header -> {
-                    if (indexPath.section == 0)
-                        0
-                    else
-                        1
+                    if (indexPath.section == 0) 0
+                    else 1
                 }
                 else -> 2
             }
@@ -604,28 +623,28 @@ class WrongNoteFragment : LearningTabFragment(),
                 val problems = groupedProblemsByOrder.flatMap { it.second }
 
                 this.selectedOrder = this@WrongNoteFragment.selectedOrder
-                clearGuideTv.text = "전체 ${problems.size}문제 중 ${problems.filter { it.isClear }.size}개 클리어"
-                problemCntTv.text = "${problems.size}개의 문제가 있습니다."
+                itemBinding.clearGuideTv.text = "전체 ${problems.size}문제 중 ${problems.filter { it.isClear }.size}개 클리어"
+                itemBinding.problemCntTv.text = "${problems.size}개의 문제가 있습니다."
 
-                checkBox.setOnCheckedChangeListener(null)
+                itemBinding.checkBox.setOnCheckedChangeListener(null)
 
-                checkBox.isChecked = problems.isNotEmpty() && selectedProblem.containsAll(problems)
-                checkBox.setOnCheckedChangeListener { compoundButton, isChecked ->
-                    checkBox.isChecked = isChecked
+                itemBinding.checkBox.isChecked = problems.isNotEmpty() && selectedProblem.containsAll(problems)
+                itemBinding.checkBox.setOnCheckedChangeListener { compoundButton, isChecked ->
+                    itemBinding.checkBox.isChecked = isChecked
                     listener?.onAllSelectedClicked(isChecked)
                 }
 
                 if (problems.isEmpty()) {
                     itemView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                    if (viewPager.currentItem == 0) {
+                    if (binding.viewPager.currentItem == 0) {
                         setWrongEmptyGuide()
                     } else {
                         setTagEmptyGuide()
                     }
-                    guideView.visibility = View.VISIBLE
+                    itemBinding.guideView.visibility = View.VISIBLE
                 } else {
                     itemView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    guideView.visibility = View.GONE
+                    itemBinding.guideView.visibility = View.GONE
                 }
             }
 
@@ -635,10 +654,11 @@ class WrongNoteFragment : LearningTabFragment(),
             }
 
             (holder as? ProblemHolder)?.apply {
+                val view = binding.root
                 val problem  = groupedProblemsByOrder[section - 1].second[row]
                 holder.set(problem)
 
-                checkBox.setOnCheckedChangeListener(null)
+                itemBinding.checkBox.setOnCheckedChangeListener(null)
 
                 holder.isChecked = selectedProblem.contains(problem)
 
@@ -646,47 +666,47 @@ class WrongNoteFragment : LearningTabFragment(),
                     onProblemCheckBoxChanged(!holder.isChecked, problem, getRawPosition(indexPath))
                 }
 
-                checkBox.setOnCheckedChangeListener { button, isChecked ->
+                itemBinding.checkBox.setOnCheckedChangeListener { button, isChecked ->
                     onProblemCheckBoxChanged(!holder.isChecked, problem, getRawPosition(indexPath))
                 }
 
-                detailBtn.setOnClickListener {
+                itemBinding.detailBtn.setOnClickListener {
                     val dialog = NoteDetailDialog(requireContext(), problem, user!!)
                     dialog.nextProblem = this@NoteAdapter.getNextProblem(problem)
                     dialog.prevProblem = this@NoteAdapter.getPrevProblem(problem)
                     dialog.show()
-                    dialog.leftArrowIb.setOnClickListener {
+                    dialog.binding.leftArrowIb.setOnClickListener {
                         dialog.nextProblem = dialog.problem
                         dialog.configureUI(dialog.prevProblem!!)
                         dialog.prevProblem = getPrevProblem(dialog.problem)
                     }
 
-                    dialog.rightArrowIb.setOnClickListener {
+                    dialog.binding.rightArrowIb.setOnClickListener {
                         dialog.prevProblem = dialog.problem
                         dialog.configureUI(dialog.nextProblem!!)
                         dialog.nextProblem = getNextProblem(dialog.problem)
                     }
 
-                    dialog.clearBtn.setOnClickListener {
+                    dialog.binding.clearBtn.setOnClickListener {
                         val isClear = !dialog.isClear
                         ProblemManager.clear(requireContext(), user!!, dialog.problem, isClear) {
                             dialog.problem.isClear = isClear
                             dialog.problem.clearDateTime = Date()
                             dialog.configureUI(dialog.problem)
-                            setGroupedProblem(tabLayout.selectedTabPosition, false)
+                            setGroupedProblem(binding.tabLayout.selectedTabPosition, false)
                             val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
                             if(problems.contains(dialog.problem) == false)
                                 selectedProblem.remove(problem)
                         }
                     }
 
-                    dialog.scrapBtn.setOnClickListener {
+                    dialog.binding.scrapBtn.setOnClickListener {
                         val isScrap = !dialog.isScrap
                         ProblemManager.scrap(requireContext(), user!!, dialog.problem, isScrap) {
                             dialog.problem.isScrap = isScrap
                             dialog.problem.scrapDateTime = Date()
                             dialog.configureUI(dialog.problem)
-                            setGroupedProblem(tabLayout.selectedTabPosition, false)
+                            setGroupedProblem(binding.tabLayout.selectedTabPosition, false)
                             val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
                             if(problems.contains(dialog.problem) == false)
                                 selectedProblem.remove(problem)
@@ -694,7 +714,7 @@ class WrongNoteFragment : LearningTabFragment(),
                     }
                 }
 
-                if (indexPath.row == 0 && indexPath.section == 1 && viewPager.currentItem == 0 ) {
+                if (indexPath.row == 0 && indexPath.section == 1 && binding.viewPager.currentItem == 0 ) {
                     Tutor.showToolTipIfNeed(holder.itemView, Tutor.TooltipType.additionalStudyInWrongNote)
                 }
             }
@@ -702,8 +722,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if (viewType == 0) {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_note_contents_header, parent, false)
-                val holder =  HeaderHolder(view)
+                val holder = HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_contents_header, parent, false))
                 holder.listener = this@WrongNoteFragment
                 return holder
             } else if (viewType == 1) {
@@ -713,8 +732,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 textView.typeface = Theme.regular(requireContext())
                 return GroupHeaderHolder(textView)
             } else {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_note_contents_problem, parent, false)
-                val holder = ProblemHolder(view)
+                val holder = ProblemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_contents_problem, parent, false))
                 return holder
             }
         }
@@ -785,22 +803,9 @@ class WrongNoteFragment : LearningTabFragment(),
         }
     }
 
-    private class HeaderHolder(val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val clearGuideTv = view.clearGuideTv
-        val problemCntTv = view.problemCntTV
-        val checkBox: CheckBox = view.findViewById<CheckBox>(R.id.checkBox)
-        val recentOrderBtn = view.recentOrder
-        val oldOrderBtn = view.oldOrder
-        val subjectOrderBtn = view.subjectOrder
-        val levelOrderBtn = view.levelOrder
-
-        val guideView = view.guideView
-        val guideIv = view.guideIv
-        val guideTv = view.emptyGuideTv
-
+    private class HeaderHolder(val itemBinding: ItemNoteContentsHeaderBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
         var listener: HeaderHolderListener? = null
-
-        val orderBtns = listOf(recentOrderBtn, oldOrderBtn, subjectOrderBtn, levelOrderBtn)
+        var orderBtns = listOf<Button>()
 
         var selectedOrder: OrderType = OrderType.recent
             set(value) {
@@ -810,126 +815,100 @@ class WrongNoteFragment : LearningTabFragment(),
             }
 
         init {
-            orderBtns.forEach {
-                it.setOnClickListener(this)
+            itemBinding.apply {
+                orderBtns = listOf(recentOrder, oldOrder, subjectOrder, levelOrder)
+                orderBtns.forEach {
+                    it.setOnClickListener(this@HeaderHolder)
+                }
+                checkBox.extensionTouchArea(12.toPx())
             }
-            checkBox.extensionTouchArea(12.toPx())
         }
 
         private fun setOrderBtnUnselected(button: Button) {
+            val view = itemBinding.root
             button.typeface = Theme.regular(view.context)
         }
 
         private fun setOrderBtnSelected(button: Button) {
+            val view = itemBinding.root
             button.typeface = Theme.bold(view.context)
         }
 
         fun setWrongEmptyGuide() {
-            guideIv.setImageResource(R.drawable.guide_empty_wrong)
-            guideTv.text = "오답문제가 이곳에 모여요!\n" +
+            itemBinding.apply {
+                guideIv.setImageResource(R.drawable.guide_empty_wrong)
+                guideTv.text = "오답문제가 이곳에 모여요!\n" +
                     "세상 간편한 오답학습을 경험해보세요 :)"
+            }
         }
 
         fun setTagEmptyGuide() {
-            guideIv.setImageResource(R.drawable.guide_empty_tag)
-            guideTv.text = "즐겨찾기한 문제가 이곳에 모여요!\n" +
+            itemBinding.apply {
+                guideIv.setImageResource(R.drawable.guide_empty_tag)
+                guideTv.text = "즐겨찾기한 문제가 이곳에 모여요!\n" +
                     "다시 보고 싶거나, 중요하다고 생각한 문제를 모아보세요 :)"
+            }
         }
 
         override fun onClick(view: View) {
-            when (view) {
-                recentOrderBtn -> selectedOrder = OrderType.recent
-                oldOrderBtn -> selectedOrder = OrderType.old
-                subjectOrderBtn -> selectedOrder = OrderType.subject
-                levelOrderBtn -> selectedOrder = OrderType.level
+            itemBinding.apply {
+
+                when (view) {
+                    recentOrder -> selectedOrder = OrderType.recent
+                    oldOrder -> selectedOrder = OrderType.old
+                    subjectOrder -> selectedOrder = OrderType.subject
+                    levelOrder -> selectedOrder = OrderType.level
+                }
+                listener?.onOrderBtnClicked(selectedOrder)
             }
-            listener?.onOrderBtnClicked(selectedOrder)
         }
     }
 
-    private class ProblemHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val problemSdv = view.problemSdv
-        val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
-        val resultIv = view.resultIv
-        val detailBtn = view.detailBtn
-        val clearIv = view.clearIv
-        val tagIv = view.tagIv
+    private class ProblemHolder(val itemBinding: ItemNoteContentsProblemBinding): RecyclerView.ViewHolder(itemBinding.root) {
         var isChecked: Boolean = false
             set(value) {
                 field = value
+                val view = itemBinding.root
                 if(value) {
                     view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
                 } else {
                     view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_grey_e8e8e8)
                 }
-                checkBox.isChecked = value
+                itemBinding.checkBox.isChecked = value
             }
 
         fun set(problem: Problem) {
-//            problemSdv.setImageURI(problem.getProblemUrl())
-
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val problemImage = GlideApp.with(problemSdv).asBitmap().load(problem.getProblemUrl()).submit().get()
-//                withContext(Dispatchers.Main) {
-//                    problemSdv.setImageBitmap(problemImage)
-//                }
-//            }
-
-//            GlideApp.with(problemSdv)
-//                    .load(problem.getProblemUrl())
-//                    .into(problemSdv)
-
-            Picasso.get()
+            itemBinding.apply {
+                Picasso.get()
                     .load(problem.getProblemUrl())
                     .fit()
                     .centerInside()
                     .into(problemSdv)
 
-            if (problem.getResultByScoring() == Result.correct) {
-                resultIv.visibility = View.VISIBLE
-                resultIv.setImageResource(R.drawable.ic_result_correct)
-            } else if (problem.getResultByScoring() == Result.incorrect) {
-                resultIv.visibility = View.VISIBLE
-                resultIv.setImageResource(R.drawable.ic_result_incorrect)
-            } else if (problem.getResultByScoring() == Result.yet)
-                resultIv.visibility = View.GONE
+                if (problem.getResultByScoring() == Result.correct) {
+                    resultIv.visibility = View.VISIBLE
+                    resultIv.setImageResource(R.drawable.ic_result_correct)
+                } else if (problem.getResultByScoring() == Result.incorrect) {
+                    resultIv.visibility = View.VISIBLE
+                    resultIv.setImageResource(R.drawable.ic_result_incorrect)
+                } else if (problem.getResultByScoring() == Result.yet)
+                    resultIv.visibility = View.GONE
 
-            if(problem.isClear)
-                clearIv.visibility = View.VISIBLE
-            else
-                clearIv.visibility = View.GONE
+                if (problem.isClear)
+                    clearIv.visibility = View.VISIBLE
+                else
+                    clearIv.visibility = View.GONE
 
-            if(problem.isScrap)
-                tagIv.visibility = View.VISIBLE
-            else
-                tagIv.visibility = View.GONE
-
+                if (problem.isScrap)
+                    tagIv.visibility = View.VISIBLE
+                else
+                    tagIv.visibility = View.GONE
+            }
         }
     }
 
     private class GroupHeaderHolder(val headerTv: TextView) : RecyclerView.ViewHolder(headerTv)
 
-//    object PicassoTransformations {
-//
-//        val targetWidth = 200
-//
-//        val resizeTransformation = object : Transformation {
-//
-//            override fun transform(source:Bitmap) : Bitmap {
-//                val aspectRatio = source.height / source.width
-//                val targetHeight = targetWidth * aspectRatio
-//                val result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false)
-//                if (result != source) {
-//                    source.recycle()
-//                }
-//                return result
-//            }
-//
-//            override fun key() : String{
-//                return "resizeTransformation#" + System.currentTimeMillis()
-//            }
-//        }
-//    }
 }
 
 

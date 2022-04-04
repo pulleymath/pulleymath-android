@@ -7,17 +7,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.databinding.ActivityStudyReportBinding
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_study_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,37 +35,40 @@ class StudyReportActivity : BaseActivity() {
             return intent
         }
     }
-
+    private val binding: ActivityStudyReportBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_study_report, null, false)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_study_report)
+        setContentView(binding.root)
 
-        mailContainerCl.visibility = View.GONE
-        mailGuideText.extensionTouchArea(12.toPx())
-        isFromInit = intent.getBooleanExtra(ARG_FROM_INIT, false)
-        bottomActionButton.visibility = View.GONE
-        if(isFromInit) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                bottomActionButton.show()
-            },5000)
-        } else {
-            headerView.visibility = View.VISIBLE
-        }
-
-        backBtn.setOnClickListener {
-            onBackPressed()
-        }
-
-        API_V2.getReportUrl(user!!.studentID).enqueue(object: Callback<Map<String, String>>{
-            override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
-                responseFailed(this@StudyReportActivity, t)
+        binding.apply {
+            mailContainerCl.visibility = View.GONE
+            mailGuideText.extensionTouchArea(12.toPx())
+            isFromInit = intent.getBooleanExtra(ARG_FROM_INIT, false)
+            bottomActionButton.visibility = View.GONE
+            if(isFromInit) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    bottomActionButton.show()
+                },5000)
+            } else {
+                headerView.visibility = View.VISIBLE
             }
 
-            override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
-                val result = response.body()
-                val reportURL = result?.get("reportURL")
-                if(reportURL != null) {
-                    Picasso. get()
+            backBtn.setOnClickListener {
+                onBackPressed()
+            }
+
+            API_V2.getReportUrl(user!!.studentID).enqueue(object: Callback<Map<String, String>>{
+                override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
+                    responseFailed(this@StudyReportActivity, t)
+                }
+
+                override fun onResponse(call: Call<Map<String, String>>, response: Response<Map<String, String>>) {
+                    val result = response.body()
+                    val reportURL = result?.get("reportURL")
+                    if(reportURL != null) {
+                        Picasso. get()
                             .load(reportURL + "1.5x.jpg")
                             .resize(DisplayUtils.getScreenWidth(this@StudyReportActivity), 0)
                             .into(reportIv, object: com.squareup.picasso.Callback {
@@ -73,24 +78,25 @@ class StudyReportActivity : BaseActivity() {
 
                                 override fun onError(e: Exception?) {}
                             })
-                } else {
-                    responseError(this@StudyReportActivity, response)
+                    } else {
+                        responseError(this@StudyReportActivity, response)
+                    }
                 }
+            })
+            bottomActionButton.setOnClickListener {
+                LogUtils.logEvent(this@StudyReportActivity, user!!, PulleyEvent.INIT_TEST, "스낵보고서", "공부시작")
+                if(!user!!.hasPulleyPlus)
+                    FacebookEvent.log(this@StudyReportActivity, FacebookEvent.TUTORIAL_FINISHED)
+                moveToMain()
             }
-        })
-        bottomActionButton.setOnClickListener {
-            LogUtils.logEvent(this, user!!, PulleyEvent.INIT_TEST, "스낵보고서", "공부시작")
-            if(!user!!.hasPulleyPlus)
-                FacebookEvent.log(this, FacebookEvent.TUTORIAL_FINISHED)
-            moveToMain()
-        }
 
-        mailGuideText.setOnClickListener { onMailBtnClicked() }
-        mailBtn.setOnClickListener { onMailBtnClicked() }
-        if(user!!.hasPulleyPlus)
-            bottomActionButton.text = "${user!!.fullName}님을 위한 첫 단계 시작하기"
-        else
-            bottomActionButton.text = "지금부터 풀리수학으로 공부 시작하기"
+            mailGuideText.setOnClickListener { onMailBtnClicked() }
+            mailBtn.setOnClickListener { onMailBtnClicked() }
+            if(user!!.hasPulleyPlus)
+                bottomActionButton.text = "${user!!.fullName}님을 위한 첫 단계 시작하기"
+            else
+                bottomActionButton.text = "지금부터 풀리수학으로 공부 시작하기"
+        }
     }
 
     override fun onBackPressed() {
@@ -128,26 +134,30 @@ class StudyReportActivity : BaseActivity() {
     }
 
     fun showHeaderView() {
-        if(headerView.translationY == 0f) return
+        binding.apply {
+            if(headerView.translationY == 0f) return
 
-        val showAnimator = ValueAnimator.ofFloat(headerView.translationY, 0f)
-        showAnimator.addUpdateListener {
-            val value = it.animatedValue as Float
-            headerView.translationY = value
+            val showAnimator = ValueAnimator.ofFloat(headerView.translationY, 0f)
+            showAnimator.addUpdateListener {
+                val value = it.animatedValue as Float
+                headerView.translationY = value
+            }
+            showAnimator.duration = 200
+            showAnimator.start()
         }
-        showAnimator.duration = 200
-        showAnimator.start()
     }
 
     fun hideHeaderView() {
-        if(headerView.translationY == headerView.height * -1f) return
+        binding.apply {
+            if(headerView.translationY == headerView.height * -1f) return
 
-        val hideAnimator = ValueAnimator.ofFloat(headerView.translationY, headerView.height * -1f)
-        hideAnimator.addUpdateListener {
-            val value = it.animatedValue as Float
-            headerView.translationY = value
+            val hideAnimator = ValueAnimator.ofFloat(headerView.translationY, headerView.height * -1f)
+            hideAnimator.addUpdateListener {
+                val value = it.animatedValue as Float
+                headerView.translationY = value
+            }
+            hideAnimator.duration = 200
+            hideAnimator.start()
         }
-        hideAnimator.duration = 200
-        hideAnimator.start()
     }
 }

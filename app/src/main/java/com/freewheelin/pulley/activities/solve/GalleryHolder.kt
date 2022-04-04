@@ -5,35 +5,34 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ItemHeaderGalleryBinding
+import com.freewheelin.pulley.databinding.ItemProblemGalleryBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemErrorStatus
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.utils.setImageURL
-import kotlinx.android.synthetic.main.item_header_gallery.view.*
-import kotlinx.android.synthetic.main.item_problem_gallery.view.*
 
-class GalleryHeaderHolder(val view: View):RecyclerView.ViewHolder(view) {
-    val chapterMiddleTv = view.chapterMiddleTv
-    val pageNameTv = view.pageNameTv
+class GalleryHeaderHolder(val headerBinding: ItemHeaderGalleryBinding):RecyclerView.ViewHolder(headerBinding.root) {
+    val chapterMiddleTv = headerBinding.chapterMiddleTv
+    val pageNameTv = headerBinding.pageNameTv
 
 }
-class GalleryHolder(val view: View): RecyclerView.ViewHolder(view) {
+class GalleryHolder(val itemBinding: ItemProblemGalleryBinding): RecyclerView.ViewHolder(itemBinding.root) {
     lateinit var problem: Problem
 
-    val bridgeView = view.bridgeView
-    val triangleView = view.triangleIv
-    val selectView = view.selectView
-    val bgView = view.bgView
-    val resultIv = view.resultIv
+    val bridgeView = itemBinding.bridgeView
+    val triangleView = itemBinding.triangleIv
+    val selectView = itemBinding.selectView
+    val bgView = itemBinding.bgView
+    val resultIv = itemBinding.resultIv
 
-    val imageView = view.imageView
-    val numberTv = view.numberTv
-    val tagView = view.tagIv
-    val clearView = view.clearCoverCl
-    val coverView = view.coverView
-    val statusIv = view.statusIv
+    val imageView = itemBinding.imageView
+    val numberTv = itemBinding.numberTv
+    val tagView = itemBinding.tagIv
+    val clearView = itemBinding.clearCoverCl
+    val coverView = itemBinding.coverView
+    val statusIv = itemBinding.statusIv
 
     fun setProblem(problem: Problem, selectedProblem: Problem?) {
         this.problem = problem
@@ -53,12 +52,12 @@ class GalleryHolder(val view: View): RecyclerView.ViewHolder(view) {
     }
 
     fun select() {
-        triangleView.setColorFilter(ContextCompat.getColor(view.context, R.color.purple_6D6DFF))
+        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.purple_6D6DFF))
         selectView.visibility = View.VISIBLE
     }
 
     fun unselect() {
-        triangleView.setColorFilter(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
+        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.grey_c0c0c0))
         selectView.visibility = View.INVISIBLE
     }
 
@@ -125,8 +124,8 @@ class GalleryHolder(val view: View): RecyclerView.ViewHolder(view) {
 
     fun getResultDrawable(): Drawable? {
         return when(problem.getResultByScoring()) {
-            Result.correct -> ContextCompat.getDrawable(view.context, R.drawable.ic_correct_new)
-            Result.incorrect -> ContextCompat.getDrawable(view.context, R.drawable.ic_incorrect_new)
+            Result.correct -> ContextCompat.getDrawable(itemBinding.root.context, R.drawable.ic_correct_new)
+            Result.incorrect -> ContextCompat.getDrawable(itemBinding.root.context, R.drawable.ic_incorrect_new)
             else -> null
         }
     }

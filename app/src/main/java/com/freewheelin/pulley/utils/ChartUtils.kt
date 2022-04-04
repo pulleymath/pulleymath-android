@@ -6,6 +6,7 @@ import android.graphics.RectF
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.freewheelin.pulley.R
@@ -25,7 +26,6 @@ import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
-import kotlinx.android.synthetic.main.view_balloon_marker.view.*
 import java.lang.ref.WeakReference
 import java.text.DecimalFormat
 
@@ -197,16 +197,16 @@ data class EntryPref(
     var titleText: String? = null
 }
 
-class BalloonMarkerView: MarkerView {
+class BalloonMarkerView(context: Context, layoutResource: Int) :
+    MarkerView(context, layoutResource) {
     enum class BalloonPosition {
         top, bottom
     }
 
-    private var tvContent: TextView
+    private var tvContent: TextView = findViewById(R.id.contentTv)
+    private var balloonIv: ImageView = findViewById(R.id.balloonIv)
+
     private var position: BalloonPosition? = null
-    constructor(context: Context, layoutResource: Int): super(context, layoutResource) {
-        tvContent = findViewById(R.id.contentTv)
-    }
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         var dataPref = e?.data as EntryPref
@@ -219,7 +219,7 @@ class BalloonMarkerView: MarkerView {
             else
                 balloonIv.setImageResource(R.drawable.balloon_top_yellow)
 
-            var param = contentTv.layoutParams as ViewGroup.MarginLayoutParams
+            var param = tvContent.layoutParams as ViewGroup.MarginLayoutParams
             param.setMargins(0,0,0,8.toPx())
         } else {
             if (dataPref.index == 0)
@@ -227,7 +227,7 @@ class BalloonMarkerView: MarkerView {
             else
                 balloonIv.setImageResource(R.drawable.balloon_bottom_yellow)
 
-            var param = contentTv.layoutParams as ViewGroup.MarginLayoutParams
+            var param = tvContent.layoutParams as ViewGroup.MarginLayoutParams
             param.setMargins(0,8.toPx(),0,0)
         }
 

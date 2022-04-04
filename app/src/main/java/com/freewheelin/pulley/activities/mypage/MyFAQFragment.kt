@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.API_V1
+import com.freewheelin.pulley.databinding.FragmentMyFaqBinding
+import com.freewheelin.pulley.databinding.ItemMypageExpandableListBinding
 import com.freewheelin.pulley.model.FAQ
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.utils.DateTimeUtils
@@ -17,8 +19,6 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
-import kotlinx.android.synthetic.main.fragment_my_faq.*
-import kotlinx.android.synthetic.main.item_mypage_expandable_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,15 +27,18 @@ class MyFAQFragment : MyPageBaseFragment() {
     var faqs: List<FAQ>? = null
     var selectedIndex: Int? = null
 
+    lateinit var binding: FragmentMyFaqBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_faq, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_faq, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rv.adapter = FrequentQAdapter()
-        rv.layoutManager = LinearLayoutManager(context)
-
+        binding.rv.adapter = FrequentQAdapter()
+        binding.rv.layoutManager = LinearLayoutManager(context)
+        binding.backBtn.setOnClickListener { onBackBtnClicked() }
         API_V1.getFAQList().enqueue(object: Callback<Template<List<FAQ>>>{
             override fun onFailure(call: Call<Template<List<FAQ>>>, t: Throwable) {
 
@@ -43,7 +46,7 @@ class MyFAQFragment : MyPageBaseFragment() {
 
             override fun onResponse(call: Call<Template<List<FAQ>>>, response: Response<Template<List<FAQ>>>) {
                 faqs = response.body()?.data
-                rv.adapter?.notifyDataSetChanged()
+                binding.rv.adapter?.notifyDataSetChanged()
             }
         })
     }
@@ -100,28 +103,26 @@ class MyFAQFragment : MyPageBaseFragment() {
             return if(viewType == 0)
                 HeaderHolder.create(parent)
             else {
-                val view = LayoutInflater.from(context).inflate(R.layout.item_mypage_expandable_list, parent, false)
-                view.dateTv.visibility = View.GONE
-                view.updateTag.visibility = View.GONE
-                QuestionItemHolder(view)
+                val itemBinding: ItemMypageExpandableListBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.item_mypage_expandable_list, parent, false)
+                itemBinding.dateTv.visibility = View.GONE
+                itemBinding.updateTag.visibility = View.GONE
+                QuestionItemHolder(itemBinding)
             }
-
         }
-
     }
 }
 
-class QuestionItemHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val headerCl = view.headerCl
-    val collapseContainerCl = view.collapseContainerCl
+class QuestionItemHolder(val itemBinding: ItemMypageExpandableListBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    val headerCl = itemBinding.headerCl
+    val collapseContainerCl = itemBinding.collapseContainerCl
 
-    val titleTv = view.titleTv
-    val updateTag = view.updateTag
-    val dateTv = view.dateTv
-    val collapseIndicator = view.collapseIndicateIv
-    val headlineTv = view.headlineTv
-    val contentsTv = view.contentsTv
-    val imageView = view.iv
+    val titleTv = itemBinding.titleTv
+    val updateTag = itemBinding.updateTag
+    val dateTv = itemBinding.dateTv
+    val collapseIndicator = itemBinding.collapseIndicateIv
+    val headlineTv = itemBinding.headlineTv
+    val contentsTv = itemBinding.contentsTv
+    val imageView = itemBinding.iv
 
     fun set(faq: FAQ) {
         titleTv.text = faq.subject

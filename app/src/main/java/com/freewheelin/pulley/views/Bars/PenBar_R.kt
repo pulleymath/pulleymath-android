@@ -10,7 +10,7 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.utils.TextUtils
 import com.freewheelin.pulley.utils.toPx
 
-class PenBar_R: View {
+class PenBar_R(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
 
     var progressColor: Int = ContextCompat.getColor(context, R.color.grey_e0e0e0)
@@ -58,7 +58,7 @@ class PenBar_R: View {
 
     private val textRect = Rect()
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    init {
         setTypedArray(attrs)
     }
 

@@ -11,15 +11,15 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
+import com.freewheelin.pulley.databinding.ViewInputV2Binding
 import com.freewheelin.pulley.utils.setPaddingTop
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.fragment_signup.*
-import kotlinx.android.synthetic.main.view_input_v2.view.*
 
 interface InputFieldV2Listener {
     fun onFieldFocusChanged(view: InputFieldV2, hasFocus: Boolean)
@@ -46,10 +46,10 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
     var enterListener: InputFieldV2EnterListener? = null
     var text: String
         get() {
-            return inputEt.text.toString()
+            return binding.inputEt.text.toString()
         }
         set(value) {
-            inputEt.setText(value)
+            binding.inputEt.setText(value)
         }
 
     var errorMsg: String
@@ -105,9 +105,9 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
     var errorTv: TextView
 
     var errorContainerLl: LinearLayout
+    var binding: ViewInputV2Binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_input_v2, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_input_v2, this)
         this.orientation = LinearLayout.VERTICAL
 
         editText = findViewById(R.id.inputEt)

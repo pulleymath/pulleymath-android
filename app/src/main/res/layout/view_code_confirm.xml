@@ -1,164 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/textTitle"
-        style="@style/TextBlack_4c4c4c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_phone_number"
-        android:textSize="@dimen/sp18" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editValue"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp56"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
-            android:inputType="text"
-            android:maxLines="1"
-            android:paddingStart="@dimen/sp16"
-            android:textColorHint="@color/grey_c0c0c0"
-            android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
-            android:textSize="@dimen/sp16"
-            android:layout_weight="1"
-            android:hint="010-0000-0000"/>
+        <TextView
+            android:id="@+id/textTitle"
+            style="@style/TextBlack_4c4c4c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_phone_number"
+            android:textSize="@dimen/sp18" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
-            android:id="@+id/btnRequestCode"
-            android:layout_width="150dp"
-            android:layout_height="@dimen/dp56"
-            android:layout_marginStart="8dp"
-            android:text="인증번호 받기"
-            app:buttonTheme="blue">
+            <EditText
+                android:id="@+id/editValue"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp56"
+                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="@dimen/sp16"
+                android:textColorHint="@color/grey_c0c0c0"
+                android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
+                android:textSize="@dimen/sp16"
+                android:layout_weight="1"
+                android:hint="010-0000-0000"/>
 
-        </com.freewheelin.pulley.views.buttons.SecondaryButton>
+            <com.freewheelin.pulley.views.buttons.SecondaryButton
+                android:id="@+id/btnRequestCode"
+                android:layout_width="150dp"
+                android:layout_height="@dimen/dp56"
+                android:layout_marginStart="8dp"
+                android:text="인증번호 받기"
+                app:buttonTheme="blue">
+
+            </com.freewheelin.pulley.views.buttons.SecondaryButton>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/containerValueError"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_exclamation_red"/>
+
+            <TextView
+                android:id="@+id/textValueError"
+                style="@style/TextRed_fe7b67.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="입력한 값을 확인하세요"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerCodeConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/editCodeConfirm"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp56"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                android:hint="인증번호 입력"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:maxLines="1"
+                android:paddingStart="@dimen/sp16"
+                android:textColorHint="@color/grey_c0c0c0"
+                android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
+                android:textSize="@dimen/sp16"
+                app:layout_constraintEnd_toStartOf="@+id/btnCodeConfirm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/timerTv"
+                style="@style/TextRed_fe7b67"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp24"
+                android:text="3:00"
+                app:layout_constraintBottom_toBottomOf="@+id/editCodeConfirm"
+                app:layout_constraintEnd_toEndOf="@+id/editCodeConfirm"
+                app:layout_constraintTop_toTopOf="@+id/editCodeConfirm" />
+
+            <com.freewheelin.pulley.views.buttons.SecondaryButton
+                android:id="@+id/btnCodeConfirm"
+                android:layout_width="150dp"
+                android:layout_height="@dimen/dp56"
+                android:text="인증 확인"
+                app:buttonTheme="blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </com.freewheelin.pulley.views.buttons.SecondaryButton>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/containerCodeConfirmError"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_exclamation_red"/>
+
+            <TextView
+                android:id="@+id/textCodeConfirmError"
+                style="@style/TextRed_fe7b67.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="코드 에러"
+                android:textSize="@dimen/sp14" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/phoneAuthTypeCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문자로 인증번호 받기"
+                android:layout_marginRight="@dimen/dp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/phoneMessageSwitch"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/phoneMessageSwitch"
+                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/containerValueError"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_exclamation_red"/>
-
-        <TextView
-            android:id="@+id/textValueError"
-            style="@style/TextRed_fe7b67.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="입력한 값을 확인하세요"
-            android:textSize="@dimen/sp14" />
-    </LinearLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerCodeConfirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-        <EditText
-            android:id="@+id/editCodeConfirm"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp56"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
-            android:hint="인증번호 입력"
-            android:inputType="phone"
-            android:maxLength="4"
-            android:maxLines="1"
-            android:paddingStart="@dimen/sp16"
-            android:textColorHint="@color/grey_c0c0c0"
-            android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
-            android:textSize="@dimen/sp16"
-            app:layout_constraintEnd_toStartOf="@+id/btnCodeConfirm"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/timerTv"
-            style="@style/TextRed_fe7b67"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp24"
-            android:text="3:00"
-            app:layout_constraintBottom_toBottomOf="@+id/editCodeConfirm"
-            app:layout_constraintEnd_toEndOf="@+id/editCodeConfirm"
-            app:layout_constraintTop_toTopOf="@+id/editCodeConfirm" />
-
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
-            android:id="@+id/btnCodeConfirm"
-            android:layout_width="150dp"
-            android:layout_height="@dimen/dp56"
-            android:text="인증 확인"
-            app:buttonTheme="blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </com.freewheelin.pulley.views.buttons.SecondaryButton>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/containerCodeConfirmError"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_exclamation_red"/>
-
-        <TextView
-            android:id="@+id/textCodeConfirmError"
-            style="@style/TextRed_fe7b67.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="코드 에러"
-            android:textSize="@dimen/sp14" />
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/phoneAuthTypeCl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp24"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="문자로 인증번호 받기"
-            android:layout_marginRight="@dimen/dp8"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/phoneMessageSwitch"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Switch
-            android:id="@+id/phoneMessageSwitch"
-            android:background="@null"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</layout>

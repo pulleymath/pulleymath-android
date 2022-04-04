@@ -56,7 +56,6 @@ import kotlin.math.pow
 class AffiliatedTestSolveActivity : AppCompatActivity(),
     AnswerV2Delegate,
     ProblemGestureListener,
-//    ObservableHashSetListener<AffiliatedTestProblem>,
     PencilcaseListener {
 
     private val binding: ActivityAffiliatedTestSolveBinding by lazy {

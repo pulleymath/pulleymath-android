@@ -6,15 +6,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
-import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
-import com.freewheelin.pulley.core.API.ResponseModel.DaySummary
+import com.freewheelin.pulley.databinding.ViewDailySummaryContentsBinding
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.spToPx
-import kotlinx.android.synthetic.main.view_daily_summary_contents.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DailySummaryContentsView: ConstraintLayout {
@@ -22,22 +19,22 @@ class DailySummaryContentsView: ConstraintLayout {
         set(value) {
             field = value
             if(value.isEmpty()) {
-                guideTv.visibility = View.GONE
+                binding.guideTv.visibility = View.GONE
             } else {
-                guideTv.visibility = View.VISIBLE
+                binding.guideTv.visibility = View.VISIBLE
             }
-            guideTv.text = value
+            binding.guideTv.text = value
             changeUI()
         }
     var isPercentVisible: Boolean = true
         set(value) {
             field = value
             if(value) {
-                percentageTv.visibility = View.VISIBLE
-                percentageLabel.visibility = View.VISIBLE
+                binding.percentageTv.visibility = View.VISIBLE
+                binding.percentageLabel.visibility = View.VISIBLE
             } else {
-                percentageTv.visibility = View.GONE
-                percentageLabel.visibility = View.GONE
+                binding.percentageTv.visibility = View.GONE
+                binding.percentageLabel.visibility = View.GONE
             }
             changeUI()
         }
@@ -45,18 +42,19 @@ class DailySummaryContentsView: ConstraintLayout {
         set(value) {
             field = value
             if(value) {
-                dateTv.visibility = View.VISIBLE
+                binding.dateTv.visibility = View.VISIBLE
             } else {
-                dateTv.visibility = View.GONE
+                binding.dateTv.visibility = View.GONE
             }
             changeUI()
         }
 
     constructor(context: Context): super(context)
     constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet)
+    var binding: ViewDailySummaryContentsBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_daily_summary_contents, this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_daily_summary_contents, this)
+//        LayoutInflater.from(context).inflate(R.layout.view_daily_summary_contents, this)
     }
 
     fun changeUI() {
@@ -72,21 +70,25 @@ class DailySummaryContentsView: ConstraintLayout {
 
         val dateTextSize = if(guide.isEmpty()) 24.spToPx() else 14.spToPx()
 
-        studyTimeLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
-        percentageLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
-        problemCntLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
+        with(binding) {
+            studyTimeLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
+            percentageLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
+            problemCntLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTopLabelSize)
 
-        studyTimeTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
-        percentageTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
-        problemCntTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
+            studyTimeTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
+            percentageTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
+            problemCntTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mainTextSize)
 
-        dateTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, dateTextSize)
+            dateTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, dateTextSize)
+        }
     }
 
     fun setUpUI(dailySummary: DailyStudy) {
-        dateTv.text = DateTimeUtils.yyyyMMddFormat.format(Date())
-        problemCntTv.text = "${dailySummary.todayProblemCount}"
-        percentageTv.text = "${dailySummary.todayPercentage}%"
-        studyTimeTv.text = DateTimeUtils.getHourMinSpentTimeStr(dailySummary.totalStudyTime)
+        with(binding) {
+            dateTv.text = DateTimeUtils.yyyyMMddFormat.format(Date())
+            problemCntTv.text = "${dailySummary.todayProblemCount}"
+            percentageTv.text = "${dailySummary.todayPercentage}%"
+            studyTimeTv.text = DateTimeUtils.getHourMinSpentTimeStr(dailySummary.totalStudyTime)
+        }
     }
 }

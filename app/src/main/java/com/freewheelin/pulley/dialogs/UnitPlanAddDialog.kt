@@ -8,9 +8,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.*
+import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.BookCategory
 import com.freewheelin.pulley.core.manage.BookManager
+import com.freewheelin.pulley.databinding.ItemCellBinding
+import com.freewheelin.pulley.databinding.ItemHeaderBinding
+import com.freewheelin.pulley.databinding.ItemStudyPlanAddBinding
+import com.freewheelin.pulley.databinding.ItemTestReportScoringBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
@@ -20,27 +26,26 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
-import kotlinx.android.synthetic.main.dialog_add_plan.*
-import kotlinx.android.synthetic.main.item_cell.view.*
-import kotlinx.android.synthetic.main.item_header.view.*
-import kotlinx.android.synthetic.main.item_study_plan_add.view.*
+
 
 interface UnitPlanAddDialogListener {
     fun onBookAdded(book: Book)
 }
 
-class UnitPlanAddDialog: Dialog {
+class UnitPlanAddDialog(context: Context, val user: User) : Dialog(context) {
 
     var selectedIndexPath = IndexPath(0,0,Type.row)
     var listener: UnitPlanAddDialogListener? = null
     var categories: List<Pair<String,List<BookCategory>>>? = null
     var books: List<Book>? = null
     var selectedBooksByGroup: List<Book> = listOf()
-    val user: User
 
-    constructor(context: Context, user: User): super(context) {
+    lateinit var xBtn: ImageView
+    lateinit var leftRv: RecyclerView
+    lateinit var rightRv: RecyclerView
+
+    init {
         setContentView(R.layout.dialog_add_plan)
-        this.user = user
         initUI()
         BookManager.getNewPlanList(context, user) { books, categories ->
             this.categories = categories
@@ -55,6 +60,10 @@ class UnitPlanAddDialog: Dialog {
     }
 
     private fun initUI() {
+        xBtn = findViewById(R.id.xBtn)
+        leftRv = findViewById(R.id.leftRv)
+        rightRv = findViewById(R.id.rightRv)
+
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setCanceledOnTouchOutside(false)
         xBtn.extensionTouchArea(32.toPx())
@@ -80,8 +89,8 @@ class UnitPlanAddDialog: Dialog {
 
     inner class RightAdapter: RecyclerView.Adapter<StudyPlanViewHolder>() {
         override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): StudyPlanViewHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.item_study_plan_add, viewGroup, false)
-            return StudyPlanViewHolder(view)
+            val itemBinding: ItemStudyPlanAddBinding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.context), R.layout.item_study_plan_add, viewGroup, false)
+            return StudyPlanViewHolder(itemBinding)
         }
 
         override fun getItemCount(): Int {
@@ -123,39 +132,39 @@ class UnitPlanAddDialog: Dialog {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, indexPath: IndexPath) {
             (holder as? HeaderHolder)?.apply {
-                itemView.headerTv.text = categories!![indexPath.section].first
+                itemBinding.headerTv.text = categories!![indexPath.section].first
                 val bookCategories = categories!![indexPath.section].second
                 val scheduleCategories = bookCategories.filter { it.scheduled }
 
                 if(scheduleCategories.isEmpty() && bookCategories.isNotEmpty()) {
-                    itemView.headerTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 } else {
-                    itemView.headerTv.text = "${categories!![indexPath.section].first}(예정)"
-                    itemView.headerTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    itemBinding.headerTv.text = "${categories!![indexPath.section].first}(예정)"
+                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
                 }
             }
 
             (holder as? CellHolder)?.apply {
                 val bookCategory = categories!![indexPath.section].second[indexPath.row]
 
-                itemView.itemTv.text = bookCategory.bookCategory
+                itemBinding.itemTv.text = bookCategory.bookCategory
 
                 if (indexPath == selectedIndexPath)
-                    itemView.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))
+                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))
                 else
-                    itemView.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
 
                 if(bookCategory.scheduled) {
-                    itemView.itemTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                    itemView.itemTv.text = "${bookCategory.bookCategory}(예정)"
+                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    itemBinding.itemTv.text = "${bookCategory.bookCategory}(예정)"
                 } else {
-                    itemView.itemTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
                 }
 
                 if(bookCategory.containUploadNewPlan) {
-                    itemView.updateTag.visibility = View.VISIBLE
+                    itemBinding.updateTag.visibility = View.VISIBLE
                 } else {
-                    itemView.updateTag.visibility = View.GONE
+                    itemBinding.updateTag.visibility = View.GONE
                 }
 
                 itemView.setOnClickListener {
@@ -170,31 +179,32 @@ class UnitPlanAddDialog: Dialog {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return when (viewType) {
                 0 -> {
-                    val view = LayoutInflater.from(context).inflate(R.layout.item_cell, parent, false)
-                    CellHolder(view)
+                    val itemBinding: ItemCellBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_cell, parent, false)
+                    CellHolder(itemBinding)
                 }
                 else -> {
-                    val view = LayoutInflater.from(context).inflate(R.layout.item_header, parent, false)
-                    HeaderHolder(view)
+                    val itemBinding: ItemHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_header, parent, false)
+                    HeaderHolder(itemBinding)
                 }
             }
         }
     }
 }
-class CellHolder(view: View): RecyclerView.ViewHolder(view)
-class HeaderHolder(view: View): RecyclerView.ViewHolder(view)
+class CellHolder(val itemBinding: ItemCellBinding): RecyclerView.ViewHolder(itemBinding.root)
+class HeaderHolder(val itemBinding: ItemHeaderBinding): RecyclerView.ViewHolder(itemBinding.root)
 
-class StudyPlanViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-    var hider = view.hider
-    var bookNameTv = view.bookNameTv
-    val subjectTagTv = view.subjectTagTv
-    val chapterTv = view.chapterTv
-    var problemCntTv = view.problemCntTv
-    var addBtn = view.addBtn
-    var addedDateTv = view.addedDateTv
-    val tagContainerLl = view.tagContainerLl
-    val updateTag = view.cardUpdateTag
-    val activeTag = view.activeTag
+class StudyPlanViewHolder(val itemBinding: ItemStudyPlanAddBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    var hider = itemBinding.hider
+    var bookNameTv = itemBinding.bookNameTv
+    val subjectTagTv = itemBinding.subjectTagTv
+    val chapterTv = itemBinding.chapterTv
+    var problemCntTv = itemBinding.problemCntTv
+    var addBtn = itemBinding.addBtn
+    var addedDateTv = itemBinding.addedDateTv
+    val tagContainerLl = itemBinding.tagContainerLl
+    val updateTag = itemBinding.cardUpdateTag
+    val activeTag = itemBinding.activeTag
+    val viewContext = itemBinding.root.context
 
     fun set(book: Book) {
         bookNameTv.text = book.bookName
@@ -217,7 +227,7 @@ class StudyPlanViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 
         tagContainerLl.removeAllViewsInLayout()
         for (i in 0 until book.tag.size) {
-            val tagLabel = TagTextView(view.context, book.tag[i], view.context.resources.getDimension(R.dimen.sp12)).apply {
+            val tagLabel = TagTextView(viewContext, book.tag[i], viewContext.resources.getDimension(R.dimen.sp12)).apply {
                 setPadding(6.toPx(),4.toPx(),6.toPx(),4.toPx())
             }
             tagContainerLl.addView(tagLabel)

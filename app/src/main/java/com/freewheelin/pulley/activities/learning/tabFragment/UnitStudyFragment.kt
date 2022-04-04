@@ -14,8 +14,13 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Guideline
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -27,6 +32,8 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.BookManager
 import com.freewheelin.pulley.core.manage.BookManager.ARG_BOOK
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.databinding.FragmentUnitStudyBinding
+import com.freewheelin.pulley.databinding.ItemPieceLearnedInFourBinding
 import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.dialogs.UnitPlanAddDialog
@@ -34,15 +41,11 @@ import com.freewheelin.pulley.dialogs.UnitPlanAddDialogListener
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.tooltip.TutorWindow
-import com.ht.balloonwindow.BalloonWindow
-import com.ht.balloonwindow.BalloonWindowListener
-import com.ht.balloonwindow.toPx
-import kotlinx.android.synthetic.main.fragment_unit_study.*
-import kotlinx.android.synthetic.main.item_piece_learned_in_four.*
-import kotlinx.android.synthetic.main.item_piece_learned_in_four.view.*
-import kotlinx.android.synthetic.main.view_studyplan_learned.view.*
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
 import java.lang.Math.PI
 import java.util.*
 import kotlin.math.sin
@@ -75,7 +78,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
         fun newInstance() = UnitStudyFragment()
     }
 
-
+    lateinit var binding: FragmentUnitStudyBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         clearReceiver = object: BroadcastReceiver() {
@@ -100,8 +103,8 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
                 }
 
                 books?.sortByDescending { it.updateDateTime }
-                filteredBooks?.sortedByDescending { it.updateDateTime }
-                onItemClicked(viewTypeSpinner, viewTypeSpinner.position ?: 0)
+                filteredBooks.sortedByDescending { it.updateDateTime }
+                onItemClicked(binding.viewTypeSpinner, binding.viewTypeSpinner.position ?: 0)
 
             }
         }
@@ -129,41 +132,45 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_unit_study, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_unit_study, container, false)
+
+        return binding.root
     }
 
     override fun initUI() {
-        guideTv.text = "학습 플랜이 없습니다.\n우측 상단의 <플랜 추가하기>로 플랜을 추가해보세요."
-        addPieceBtn.setOnClickListener {
-            onAddBookBtnClicked()
-        }
-        pieceVp.adapter = Adapter()
-        pieceVp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(p0: Int) {}
-
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
-
-            override fun onPageSelected(position: Int) {
-                setPageText(position + 1)
+        with(binding) {
+            guideTv.text = "학습 플랜이 없습니다.\n우측 상단의 <플랜 추가하기>로 플랜을 추가해보세요."
+            addPieceBtn.setOnClickListener {
+                onAddBookBtnClicked()
             }
-        })
-        viewTypeSpinner.items = filterList
-        viewTypeSpinner.listener = this
-        configureUI()
+            pieceVp.adapter = Adapter()
+            pieceVp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(p0: Int) {}
 
-        BookManager.getMyBookList(requireContext(), user!!) {
+                override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
+
+                override fun onPageSelected(position: Int) {
+                    setPageText(position + 1)
+                }
+            })
+            viewTypeSpinner.items = filterList
+            viewTypeSpinner.listener = this@UnitStudyFragment
+            configureUI()
+
+            BookManager.getMyBookList(requireContext(), user!!) {
 //            this.books = ArrayList(it)
 //            this.filteredBooks = it
 //            configureUI()
 //            pieceVp.adapter?.notifyDataSetChanged()
+            }
         }
     }
 
     private fun configureUI() {
         if(books?.isEmpty() == true) {
-            guideView.visibility = View.VISIBLE
+            binding.guideView.visibility = View.VISIBLE
         } else {
-            guideView.visibility = View.GONE
+            binding.guideView.visibility = View.GONE
             setPageText(1)
         }
     }
@@ -179,15 +186,15 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
             }
         }
 
-        pieceVp.adapter?.notifyDataSetChanged()
-        pieceVp.setCurrentItem(0, false)
+        binding.pieceVp.adapter?.notifyDataSetChanged()
+        binding.pieceVp.setCurrentItem(0, false)
         setPageText(1)
     }
 
     override fun onBookAdded(book: Book) {
         books?.add(0, book)
         configureUI()
-        onItemClicked(viewTypeSpinner, viewTypeSpinner.position ?: 0)
+        onItemClicked(binding.viewTypeSpinner, binding.viewTypeSpinner.position ?: 0)
     }
 
     fun onAddBookBtnClicked() {
@@ -199,7 +206,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
     private fun setPageText(page: Int) {
         val remainder = filteredBooks.size % cntPerPage
-        pageTv.text = "${page} / ${(filteredBooks.size / cntPerPage) + if (remainder > 0) 1 else 0}"
+        binding.pageTv.text = "${page} / ${(filteredBooks.size / cntPerPage) + if (remainder > 0) 1 else 0}"
     }
 
     override fun onHidden(view: StudyPlanTemplateView, position: Int) {}
@@ -232,44 +239,46 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
     inner class Adapter : PagerAdapter() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val layout = LayoutInflater.from(context).inflate(R.layout.item_piece_learned_in_four, container, false)
-            layout.tag = "page"
-            container.addView(layout)
+//            val layout = LayoutInflater.from(context).inflate(R.layout.item_piece_learned_in_four, container, false)
+            val itemBinding: ItemPieceLearnedInFourBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.fragment_init_setting_personal, container, false)
+//            val layout = itemBinding.root
+            itemBinding.root.tag = "page"
+            container.addView(itemBinding.root)
             val books = filteredBooks
 
-            layout.template1.set(books[(position * cntPerPage)])
-            layout.template1.listener = this@UnitStudyFragment
-            layout.template1.position = (position * cntPerPage)
-            (layout as ViewGroup).layoutTransition = null
+            itemBinding.template1.set(books[(position * cntPerPage)])
+            itemBinding.template1.listener = this@UnitStudyFragment
+            itemBinding.template1.position = (position * cntPerPage)
+            (itemBinding.root as ViewGroup).layoutTransition = null
 
             if (position == 0 && isNeedLeading == false) {
-                Tutor.showToolTipIfNeed(layout.template1.mailBtn, Tutor.TooltipType.mailInUnitStudy)
+                Tutor.showToolTipIfNeed(itemBinding.template1.binding.mailBtn, Tutor.TooltipType.mailInUnitStudy)
             }
 
             if(isNeedLeading) {
-                step7(template1)
+                step7(itemBinding.template1)
                 isNeedLeading = false
             }
 
             val secondPlan = books.getOrNull((position * cntPerPage) + 1)
             val thirdPlan = books.getOrNull((position * cntPerPage) + 2)
             if (secondPlan != null) {
-                layout.template2.set(secondPlan)
-                layout.template2.visibility = View.VISIBLE
-                layout.template2.listener = this@UnitStudyFragment
-                layout.template2.position = (position * cntPerPage) + 1
+                itemBinding.template2.set(secondPlan)
+                itemBinding.template2.visibility = View.VISIBLE
+                itemBinding.template2.listener = this@UnitStudyFragment
+                itemBinding.template2.position = (position * cntPerPage) + 1
 
             } else {
-                layout.template2.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+                itemBinding.template2.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
             }
 
             if (thirdPlan != null) {
-                layout.template3.set(thirdPlan)
-                layout.template3.visibility = View.VISIBLE
-                layout.template3.listener = this@UnitStudyFragment
-                layout.template3.position = (position * cntPerPage) + 2
+                itemBinding.template3.set(thirdPlan)
+                itemBinding.template3.visibility = View.VISIBLE
+                itemBinding.template3.listener = this@UnitStudyFragment
+                itemBinding.template3.position = (position * cntPerPage) + 2
             } else {
-                layout.template3.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+                itemBinding.template3.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
             }
 
 
@@ -277,18 +286,17 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
                 val fourthPlan = books.getOrNull((position * cntPerPage) + 3)
 
                 if (fourthPlan != null) {
-                    layout.template4.set(fourthPlan)
-                    layout.template4.visibility = View.VISIBLE
-                    layout.template4.listener = this@UnitStudyFragment
-                    layout.template4.position = (position * cntPerPage) + 3
+                    itemBinding.template4?.set(fourthPlan)
+                    itemBinding.template4?.visibility = View.VISIBLE
+                    itemBinding.template4?.listener = this@UnitStudyFragment
+                    itemBinding.template4?.position = (position * cntPerPage) + 3
                 } else {
-                    layout.template4.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
+                    itemBinding.template4?.visibility = if (books.size <= 4) View.GONE else View.INVISIBLE
                 }
 
             }
-
-            layout.layoutTransition = LayoutTransition()
-            return layout
+            (itemBinding.root as ViewGroup).layoutTransition = LayoutTransition()
+            return itemBinding.root
         }
 
         override fun getCount(): Int {

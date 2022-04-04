@@ -18,6 +18,7 @@ import android.widget.ScrollView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.MockReportActivity
@@ -36,6 +37,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.ContentManager
 import com.freewheelin.pulley.core.manage.MockExamManager
+import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
@@ -49,7 +51,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import kotlinx.android.synthetic.main.fragment_analysis.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -70,6 +71,8 @@ class AnalysisFragment : LearningTabFragment(),
             return AnalysisFragment()
         }
     }
+    lateinit var binding: FragmentAnalysisBinding
+
     override var screenName = "분석"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,14 +80,13 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analysis, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_analysis, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
 
     override fun onResume() {
@@ -103,43 +105,62 @@ class AnalysisFragment : LearningTabFragment(),
 
     private fun setUpStudyUI(study: DailyStudy) {
         try {
-            mainCurationTv.text = study.mainCuration
-            percentCompareTv.valueText = "${study.todayPercentage}%"
-            cntCompareTv.valueText = "${study.todayProblemCount}"
+            binding.apply {
+                mainCurationTv.text = study.mainCuration
+                percentCompareTv.valueText = "${study.todayPercentage}%"
+                cntCompareTv.valueText = "${study.todayProblemCount}"
 
-            percentCompareTv.diffText = if (study.todayPercentageDiff == 0) "-" else "${abs(study.todayPercentageDiff)}%"
-            cntCompareTv.diffText = if (study.todayProblemCountDiff == 0) "-" else "${abs(study.todayProblemCountDiff)}"
+                percentCompareTv.diffText =
+                    if (study.todayPercentageDiff == 0) "-" else "${abs(study.todayPercentageDiff)}%"
+                cntCompareTv.diffText =
+                    if (study.todayProblemCountDiff == 0) "-" else "${abs(study.todayProblemCountDiff)}"
 
-            percentCompareTv.change = when {
-                study.todayPercentageDiff == 0 -> noChange
-                study.todayPercentageDiff > 0 -> increase
-                else -> decrease
+                percentCompareTv.change = when {
+                    study.todayPercentageDiff == 0 -> noChange
+                    study.todayPercentageDiff > 0 -> increase
+                    else -> decrease
+                }
+
+                cntCompareTv.change = when {
+                    study.todayProblemCountDiff == 0 -> noChange
+                    study.todayProblemCountDiff > 0 -> increase
+                    else -> decrease
+                }
+
+                timeCompareTv.change = noChange
+                timeCompareTv.valueText = DateTimeUtils.getHourMinSpentTimeStr(study.totalStudyTime)
+                timeCompareTv.diffText = DateTimeUtils.getHourMinSpentTimeStr(study.onlyStudyTime)
+                if (study.onlyStudyTime < 60) {
+                    timeCompareTv.setDiffTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.grey_9f9f9f
+                        )
+                    )
+                } else {
+                    timeCompareTv.setDiffTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.blue_2287ef
+                        )
+                    )
+                }
+
+                shareBtn.setOnClickListener {
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "데일리서머리",
+                        "공유하기"
+                    )
+                    val dialog = ShareAnalysisDialog(requireContext(), study)
+                    dialog.listener = this@AnalysisFragment
+                    dialog.show()
+                }
+
+                setChartData(study.weekStudyData)
             }
-
-            cntCompareTv.change = when {
-                study.todayProblemCountDiff == 0 -> noChange
-                study.todayProblemCountDiff > 0 -> increase
-                else -> decrease
-            }
-
-            timeCompareTv.change = noChange
-            timeCompareTv.valueText = DateTimeUtils.getHourMinSpentTimeStr(study.totalStudyTime)
-            timeCompareTv.diffText = DateTimeUtils.getHourMinSpentTimeStr(study.onlyStudyTime)
-            if (study.onlyStudyTime < 60) {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(requireContext(), R.color.grey_9f9f9f))
-            } else {
-                timeCompareTv.setDiffTextColor(ContextCompat.getColor(requireContext(), R.color.blue_2287ef))
-            }
-
-            shareBtn.setOnClickListener {
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공유하기")
-                val dialog = ShareAnalysisDialog(requireContext(), study)
-                dialog.listener = this
-                dialog.show()
-            }
-
-            setChartData(study.weekStudyData)
-
         } catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
         }
@@ -147,7 +168,7 @@ class AnalysisFragment : LearningTabFragment(),
 
     private fun setUpPieceUI(pieces: List<Content>) {
         try {
-            todayStudyView.setUpUI(pieces)
+            binding.todayStudyView.setUpUI(pieces)
         }catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
         }
@@ -156,10 +177,12 @@ class AnalysisFragment : LearningTabFragment(),
     private fun setUpRecommendUI(recommend: DailyRecommend?) {
         if(recommend != null) {
             try {
-                recommendStudyView.setUpUI(recommend.weakChapter, recommend.curation)
-                studyRateView.setUpUI(recommend.compareNormalAndNote, recommend.curation)
-                recommendStudyView.showIfNeed()
-                studyRateView.showIfNeed()
+                binding.apply {
+                    recommendStudyView.setUpUI(recommend.weakChapter, recommend.curation)
+                    studyRateView.setUpUI(recommend.compareNormalAndNote, recommend.curation)
+                    recommendStudyView.showIfNeed()
+                    studyRateView.showIfNeed()
+                }
             }catch(e:Exception) {
                 Log.e("화면크래쉬", "error==>${e.localizedMessage}")
             }
@@ -168,23 +191,29 @@ class AnalysisFragment : LearningTabFragment(),
 
     override fun initUI() {
         try {
-            todayStudyView.listener = this
-            studyRateView.listener = this
-            recommendStudyView.listener = this
-            initChart(timeCountChart)
+            binding.apply {
+                todayStudyView.listener = this@AnalysisFragment
+                studyRateView.listener = this@AnalysisFragment
+                recommendStudyView.listener = this@AnalysisFragment
+                initChart(timeCountChart)
 
-            mainAnalysisBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
-
-            mainAnalysisBtn.setOnClickListener {
-                LogUtils.logEvent(
-                    requireContext(),
-                    user,
-                    PulleyEvent.BUTTON_CLICK,
-                    "데일리서머리",
-                    "전체분석보기"
+                mainAnalysisBtn.setLock(
+                    user!!.hasPulleyPlus,
+                    ButtonLockImage.mid24,
+                    ButtonMode.pulley_plus
                 )
-                val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
-                startActivity(intent)
+
+                mainAnalysisBtn.setOnClickListener {
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "데일리서머리",
+                        "전체분석보기"
+                    )
+                    val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
+                    startActivity(intent)
+                }
             }
 
         }catch(e:Exception) {
@@ -204,20 +233,21 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     private fun setUpUI(summary: DailySummary) {
-        if(summary.isNeedToStudyUI) {
-            recommendStudyView.visibility = View.GONE
-            studyRateView.visibility = View.GONE
-            setChartData(summary.weekStudyData)
+        binding.apply {
+            if (summary.isNeedToStudyUI) {
+                recommendStudyView.visibility = View.GONE
+                studyRateView.visibility = View.GONE
+                setChartData(summary.weekStudyData)
 
-        } else {
-            recommendStudyView.visibility = View.VISIBLE
-            studyRateView.visibility = View.VISIBLE
+            } else {
+                recommendStudyView.visibility = View.VISIBLE
+                studyRateView.visibility = View.VISIBLE
 
-            recommendStudyView.setUpUI(summary.weakChapter, summary.curation)
-            studyRateView.setUpUI(summary.compareNormalAndNote, summary.curation)
-            setChartData(summary.weekStudyData)
+                recommendStudyView.setUpUI(summary.weakChapter, summary.curation)
+                studyRateView.setUpUI(summary.compareNormalAndNote, summary.curation)
+                setChartData(summary.weekStudyData)
+            }
         }
-
     }
 
     private fun initChart(chart: BarChart) {
@@ -274,11 +304,17 @@ class AnalysisFragment : LearningTabFragment(),
             setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_ACACFF))
             setValueTypeface(Theme.bold(requireContext()))
         }
-        val renderer = CustomBarChartRender(timeCountChart, timeCountChart.animator, timeCountChart.viewPortHandler)
-        renderer.setRadius(16f.toPx())
-        chart.renderer = renderer
-        timeCountChart.notifyDataSetChanged()
-        timeCountChart.invalidate()
+        binding.apply {
+            val renderer = CustomBarChartRender(
+                timeCountChart,
+                timeCountChart.animator,
+                timeCountChart.viewPortHandler
+            )
+            renderer.setRadius(16f.toPx())
+            chart.renderer = renderer
+            timeCountChart.notifyDataSetChanged()
+            timeCountChart.invalidate()
+        }
 
     }
 
@@ -292,8 +328,8 @@ class AnalysisFragment : LearningTabFragment(),
 
 
         val barDataSet = BarDataSet(entry, "개수")
-        timeCountChart.axisLeft.axisMinimum = 0f
-        timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
+        binding.timeCountChart.axisLeft.axisMinimum = 0f
+        binding.timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
         val colors = mutableListOf(
                 ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
                 ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
@@ -315,7 +351,7 @@ class AnalysisFragment : LearningTabFragment(),
 
         barDataSet.colors = colors
 
-        timeCountChart.data = BarData(barDataSet).apply {
+        binding.timeCountChart.data = BarData(barDataSet).apply {
             barWidth = 0.7f
             isHighlightEnabled = false
             setDrawValues(false)
@@ -324,8 +360,8 @@ class AnalysisFragment : LearningTabFragment(),
             setValueTypeface(Theme.bold(requireContext()))
         }
 
-        timeCountChart.notifyDataSetChanged()
-        timeCountChart.invalidate()
+        binding.timeCountChart.notifyDataSetChanged()
+        binding.timeCountChart.invalidate()
     }
 
 
@@ -487,8 +523,8 @@ class AnalysisFragment : LearningTabFragment(),
 
     fun setTodayStudyNewOne() {
         Log.d("테스트", "AnalysisFragment => setTodayStudyNewOne.setList(true)")
-        scrollToView(scrollContainer, todayStudyView)
-        todayStudyView.newOne = true
+        scrollToView(binding.scrollContainer, binding.todayStudyView)
+        binding.todayStudyView.newOne = true
     }
 
     private fun scrollToView(scrollViewParent: ScrollView, view: View) {

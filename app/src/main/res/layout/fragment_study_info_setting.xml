@@ -1,122 +1,126 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_white_fafafa_round"
-    tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:background="@drawable/bg_white_fafafa_round"
+        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment">
 
-    <ImageButton
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_toolbar_back"
-        android:paddingTop="@dimen/dp48"
-        android:paddingStart="@dimen/dp48"
-        android:paddingEnd="@dimen/dp48"
-        android:paddingBottom="@dimen/dp24"
-        android:background="@null"
-        app:tint="@color/black_4c4c4c"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp48"
+            android:paddingStart="@dimen/dp48"
+            android:paddingEnd="@dimen/dp48"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            app:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/titleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
-        android:layout_marginStart="@dimen/dp48"
-        android:text="학습추천을 최적화하려면 정보가 필요해요 :)"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/titleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:layout_marginStart="@dimen/dp48"
+            android:text="학습추천을 최적화하려면 정보가 필요해요 :)"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
-        android:id="@+id/guideLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp16"
-        android:lineSpacingExtra="@dimen/sp8"
-        android:text="현재 학교를 다니지 않는다면\n공부해야 하는 학년으로 선택해주세요."
-        android:layout_marginTop="@dimen/dp16"
-        app:layout_constraintStart_toStartOf="@+id/titleLabel"
-        app:layout_constraintTop_toBottomOf="@+id/titleLabel"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/guideLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp16"
+            android:lineSpacingExtra="@dimen/sp8"
+            android:text="현재 학교를 다니지 않는다면\n공부해야 하는 학년으로 선택해주세요."
+            android:layout_marginTop="@dimen/dp16"
+            app:layout_constraintStart_toStartOf="@+id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@+id/titleLabel"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/gradeLabel"
-        android:text="학년"
-        android:textSize="@dimen/sp18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp48"
-        android:layout_marginStart="@dimen/dp48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideLabel"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/gradeLabel"
+            android:text="학년"
+            android:textSize="@dimen/sp18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp48"
+            android:layout_marginStart="@dimen/dp48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideLabel"/>
 
 
 
-    <com.freewheelin.pulley.views.DaebakTabRadio
-        android:id="@+id/gradeTab"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        app:tabWidth="73dp"
-        app:layout_constraintTop_toBottomOf="@+id/gradeLabel"
-        app:layout_constraintStart_toStartOf="@+id/gradeLabel"/>
+        <com.freewheelin.pulley.views.DaebakTabRadio
+            android:id="@+id/gradeTab"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            app:tabWidth="73dp"
+            app:layout_constraintTop_toBottomOf="@+id/gradeLabel"
+            app:layout_constraintStart_toStartOf="@+id/gradeLabel"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/majorLabel"
-        android:text="계열"
-        android:textSize="@dimen/sp18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp40"
-        app:layout_constraintStart_toStartOf="@+id/gradeLabel"
-        app:layout_constraintTop_toBottomOf="@+id/gradeTab"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/majorLabel"
+            android:text="계열"
+            android:textSize="@dimen/sp18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp40"
+            app:layout_constraintStart_toStartOf="@+id/gradeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/gradeTab"/>
 
-    <com.freewheelin.pulley.views.DaebakTabRadio
-        android:id="@+id/majorTab"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        app:tabWidth="78dp"
-        app:layout_constraintTop_toBottomOf="@+id/majorLabel"
-        app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
+        <com.freewheelin.pulley.views.DaebakTabRadio
+            android:id="@+id/majorTab"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            app:tabWidth="78dp"
+            app:layout_constraintTop_toBottomOf="@+id/majorLabel"
+            app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
 
-    <TextView
-        style="@style/TextBlack_4c4c4c"
-        android:id="@+id/ratingLabel"
-        android:text="최근 수학 모의고사 등급"
-        android:textSize="@dimen/sp18"
-        android:layout_marginTop="@dimen/dp48"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/majorTab"
-        app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c"
+            android:id="@+id/ratingLabel"
+            android:text="최근 수학 모의고사 등급"
+            android:textSize="@dimen/sp18"
+            android:layout_marginTop="@dimen/dp48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/majorTab"
+            app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
 
-    <com.freewheelin.pulley.views.DaebakTabRadio
-        android:id="@+id/ratingTab"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        app:tabWidth="@dimen/dp56"
-        app:layout_constraintTop_toBottomOf="@+id/ratingLabel"
-        app:layout_constraintStart_toStartOf="@+id/ratingLabel"/>
+        <com.freewheelin.pulley.views.DaebakTabRadio
+            android:id="@+id/ratingTab"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            app:tabWidth="@dimen/dp56"
+            app:layout_constraintTop_toBottomOf="@+id/ratingLabel"
+            app:layout_constraintStart_toStartOf="@+id/ratingLabel"/>
 
-    <com.freewheelin.pulley.views.buttons.PrimaryButton
-        android:id="@+id/modifyBtn"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp56"
-        android:layout_marginStart="@dimen/dp48"
-        android:layout_marginEnd="@dimen/dp48"
-        android:layout_marginBottom="@dimen/dp48"
-        android:text="@string/text_do_edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
+            android:id="@+id/modifyBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginEnd="@dimen/dp48"
+            android:layout_marginBottom="@dimen/dp48"
+            android:text="@string/text_do_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

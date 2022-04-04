@@ -23,22 +23,16 @@ import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel
 import androidx.databinding.BindingAdapter
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestReportDialog
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.FragmentAffiliatedTestBinding
-import com.freewheelin.pulley.databinding.ItemAffiliatedSolutionLectureBinding
 import com.freewheelin.pulley.databinding.ItemAffiliatedTestBinding
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
-import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import kotlinx.android.synthetic.main.dialog_daebak.*
-import kotlinx.android.synthetic.main.fragment_init_setting_learning.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,7 +62,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_affiliated_test, container, false)
 
         solveResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -88,7 +82,6 @@ class AffiliatedTestFragment: LearningTabFragment() {
             lifecycleOwner = viewLifecycleOwner
             val adapter = UnivTestAdapter(viewModel)
             testListRv.adapter = adapter
-//            testRv.adapter =
             uuiTv.movementMethod = ScrollingMovementMethod()
 
             reportBtn.setOnClickListener {

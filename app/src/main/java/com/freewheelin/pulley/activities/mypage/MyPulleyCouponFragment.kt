@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryCouponItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.databinding.FragmentMyPulleyCouponBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
 import com.freewheelin.pulley.utils.DateTimeUtils
@@ -28,16 +30,12 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 
 class MyPulleyCouponFragment : MyPageBaseFragment() {
-
+    lateinit var binding: FragmentMyPulleyCouponBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_pulley_coupon, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pulley_coupon, container, false)
+        return binding.root
     }
-
-    lateinit var backBtn: ImageButton
-    lateinit var couponEt: EditText
-    lateinit var registBtn: PrimaryButton
-    lateinit var recyclerView: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,54 +44,50 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
     }
 
     private fun setViews(view: View) {
+        with(binding) {
+            backBtn.setOnClickListener {
+                onBackBtnClicked()
+            }
 
-        backBtn = view.findViewById(R.id.backBtn)
-        couponEt = view.findViewById(R.id.couponEt)
-        registBtn = view.findViewById(R.id.registBtn)
-        recyclerView = view.findViewById(R.id.recyclerView)
-
-        backBtn.setOnClickListener {
-            onBackBtnClicked()
-        }
-
-        registBtn.setOnClickListener {
-            val number = couponEt.text.toString()
-            Log.d(javaClass.simpleName, "number=$number")
-            if(number.isNotEmpty()) {
-                val newCoupon = NewCoupon(number)
-                registBtn.toProcessingUI()
-                API_APP.addCoupon(newCoupon)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ result ->
-                        Log.d(javaClass.simpleName, "$result")
-                        if (result.error != null) {
-                            val msg = if(result.error == "NOT_FOUND_DATA") {
-                                "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
+            registBtn.setOnClickListener {
+                val number = couponEt.text.toString()
+                Log.d(javaClass.simpleName, "number=$number")
+                if(number.isNotEmpty()) {
+                    val newCoupon = NewCoupon(number)
+                    registBtn.toProcessingUI()
+                    API_APP.addCoupon(newCoupon)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ result ->
+                            Log.d(javaClass.simpleName, "$result")
+                            if (result.error != null) {
+                                val msg = if(result.error == "NOT_FOUND_DATA") {
+                                    "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
+                                } else {
+                                    "쿠폰을 사용할 수 없습니다."
+                                }
+                                DialogUtils.confirmDialog(requireContext(), "확인", msg)
                             } else {
-                                "쿠폰을 사용할 수 없습니다."
+                                DaebakToast.show(requireContext(), "쿠폰이 등록되었습니다.")
+                                couponEt.setText("")
+                                load()
+                            }
+                            registBtn.toEnableUI()
+                        }, { throwable ->
+                            val msg = if (throwable is HttpException) {
+                                val result = Gson().fromJson(throwable.response()?.errorBody()?.string(), ResponseBody::class.java)
+                                if(result.error == "NOT_FOUND_DATA") {
+                                    "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
+                                } else {
+                                    "쿠폰을 사용할 수 없습니다."
+                                }
+                            } else {
+                                "알수 없는 오류가 발생하였습니다. 다시 시도하세요!"
                             }
                             DialogUtils.confirmDialog(requireContext(), "확인", msg)
-                        } else {
-                            DaebakToast.show(requireContext(), "쿠폰이 등록되었습니다.")
-                            couponEt.setText("")
-                            load()
-                        }
-                        registBtn.toEnableUI()
-                    }, { throwable ->
-                        val msg = if (throwable is HttpException) {
-                            val result = Gson().fromJson(throwable.response()?.errorBody()?.string(), ResponseBody::class.java)
-                            if(result.error == "NOT_FOUND_DATA") {
-                                "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
-                            } else {
-                                "쿠폰을 사용할 수 없습니다."
-                            }
-                        } else {
-                            "알수 없는 오류가 발생하였습니다. 다시 시도하세요!"
-                        }
-                        DialogUtils.confirmDialog(requireContext(), "확인", msg)
-                        registBtn.toEnableUI()
-                    })
+                            registBtn.toEnableUI()
+                        })
+                }
             }
         }
     }
@@ -112,14 +106,16 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
 
     lateinit var adapter: CouponAdapter
     private fun setList(list: List<SummaryCouponItem>) {
-        adapter = CouponAdapter(list.toMutableList())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        with(binding) {
+            adapter = CouponAdapter(list.toMutableList())
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }
     }
 
     private fun removeItemInList(position: Int) {
-        adapter?.list.removeAt(position)
-        adapter?.notifyItemRemoved(position)
+        adapter.list.removeAt(position)
+        adapter.notifyItemRemoved(position)
         DaebakToast.show(requireContext(), "쿠폰이 사용되었습니다")
     }
 
