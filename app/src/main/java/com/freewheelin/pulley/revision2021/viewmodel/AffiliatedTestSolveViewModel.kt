@@ -103,6 +103,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "testproblem list=>${res.data}")
                 // 원본
+                currentTimeString = res.current_time
                 res.data?.let { resData ->
 
                     studentWorkbook = resData.user_workbook
