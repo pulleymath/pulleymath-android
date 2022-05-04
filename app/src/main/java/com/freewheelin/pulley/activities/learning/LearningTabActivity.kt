@@ -46,7 +46,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.main.component.Sna
 import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.MarketingManager
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.snackTest.SnackTestFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.WrongNoteFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
 import com.freewheelin.pulley.activities.mypage.MyMainPageFragment
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener

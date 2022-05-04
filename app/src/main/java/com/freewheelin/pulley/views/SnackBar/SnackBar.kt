@@ -44,7 +44,7 @@ class SnackBar : PopupWindow {
     }
 
     fun show() {
-        var screenHeight = DisplayUtils.getScrenHeight(context)
+        var screenHeight = DisplayUtils.getScreenHeight(context)
 
 
         val yOffset = screenHeight - bottomMargin.toPx() - (contentView as SnackBarView).snackBarViewHeight.toPx()

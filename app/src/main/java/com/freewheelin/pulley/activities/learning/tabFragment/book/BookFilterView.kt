@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Switch
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,7 @@ import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.Type
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType.*
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterButtonHolder
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder2
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ItemFilterSwitchBinding
 import com.freewheelin.pulley.utils.LogUtils
@@ -42,14 +41,10 @@ enum class FilterType {
     과목_미적분,
     과목_기하,
 
-    단계_전체,
-    단계_기출완성,
-    단계_문제풀이,
-    단계_내신대비,
-
-    문항_전체,
-    문항_기출,
-    문항_기출변형,
+    유형_전체,
+    유형_유형서,
+    유형_내신서,
+    유형_기출서,
 
     추천_전체,
     추천_1등급,
@@ -66,7 +61,7 @@ enum class FilterType {
     val text: String
     get() {
         return when(this) {
-            계열_전체, 과목_전체, 단계_전체, 문항_전체, 추천_전체 -> "전체"
+            계열_전체, 과목_전체, 추천_전체, 유형_전체 -> "전체"
             계열_공통 -> "공통"
             계열_가형 -> "가형"
             계열_나형 -> "나형"
@@ -79,20 +74,17 @@ enum class FilterType {
             과목_미적분 -> "미적분"
             과목_기하 -> "기하"
 
-            단계_기출완성 -> "기출완성"
-            단계_문제풀이 -> "문제풀이"
-            단계_내신대비 -> "내신대비"
-
-            문항_기출 -> "기출"
-            문항_기출변형 -> "기출 변형"
+            유형_유형서 -> "유형서"
+            유형_내신서 -> "내신서"
+            유형_기출서 -> "기출서"
 
             추천_1등급 -> "1등급"
             추천_2_3등급 -> "2-3등급"
             추천_3_4등급 -> "3-4등급"
             추천_4등급이하 -> "4등급 이하"
 
-            핀_포함 -> "핀 설정한 플랜 포함"
-            핀_미포함 -> "핀 설정한 플랜 미포함"
+            핀_포함 -> "핀 설정한 문제집 포함"
+            핀_미포함 -> "핀 설정한 문제집 미포함"
 
             워크북_포함 -> "워크북 포함"
             워크북_미포함 -> "워크북 미포함"
@@ -116,15 +108,10 @@ enum class FilterType {
                 과목_미적분 -> return setOf(과목_전체)
                 과목_기하 -> return setOf(과목_전체)
 
-
-                단계_전체 -> return setOf(단계_기출완성, 단계_문제풀이, 단계_내신대비)
-                단계_기출완성 -> return setOf(단계_전체)
-                단계_문제풀이 -> return setOf(단계_전체)
-                단계_내신대비 -> return setOf(단계_전체)
-
-                문항_전체 -> return setOf(문항_기출, 문항_기출변형)
-                문항_기출 -> return setOf(문항_전체)
-                문항_기출변형 -> return setOf(문항_전체)
+                유형_전체 -> setOf(유형_유형서, 유형_내신서, 유형_기출서)
+                유형_유형서 -> setOf(유형_전체)
+                유형_내신서 -> setOf(유형_전체)
+                유형_기출서 -> setOf(유형_전체)
 
                 추천_전체 -> return setOf(추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하)
                 추천_1등급 -> return setOf(추천_전체)
@@ -144,7 +131,6 @@ enum class FilterType {
         get() {
             return when(this) {
                 과목_확통 -> "확률과통계"
-                문항_기출변형 -> "기출변형"
                 핀_포함 -> "핀포함"
                 핀_미포함 -> "핀미포함"
                 워크북_포함 -> "워크북 포함"
@@ -153,22 +139,48 @@ enum class FilterType {
         }
     }
 }
+
+enum class FilterOrder {
+    SUBJECT,
+    LEVEL,
+    SERIES,
+    LAST,
+    PAST;
+
+    val text: String
+        get() {
+            return this.toString()
+        }
+}
+enum class FilterCategory {
+    BASIC,
+    MO, // 모의고사
+    BOOK,   // 유형학습
+    TEST,   // 테스트
+    NOTE,   // 오답학습
+    REFERENCE,
+    COMMERCIAL, // 시중교재
+    CUSTOM_BOOK,    // 워크북
+    RECOMMEND;   // 풀리에서만든 추천 학습지
+    val text: String
+        get() {
+            return this.toString()
+        }
+}
 interface BookFilterListener {
     fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>)
 }
 
 class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
     val filters = listOf(
-//            Pair("계열" , listOf(계열_전체, 계열_가형, 계열_나형, 계열_공통)),
-            Pair("보기설정" , listOf(핀_포함)),
+            Pair("보기설정" , listOf(핀_미포함, 워크북_포함)),
             Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
-            Pair("학습단계" , listOf(단계_전체, 단계_기출완성, 단계_문제풀이, 단계_내신대비)),
-            Pair("문항속성" , listOf(문항_전체, 문항_기출, 문항_기출변형)),
+            Pair("문제집 유형" , listOf(유형_전체, 유형_유형서, 유형_내신서, 유형_기출서)),
             Pair("추천등급" , listOf(추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하))
     )
 
     var selectedFilterTypes: HashSet<FilterType> = hashSetOf(
-            워크북_미포함, 핀_포함, 계열_전체, 과목_전체, 단계_전체, 문항_전체, 추천_전체
+            워크북_미포함, 핀_미포함, 계열_전체, 과목_전체, 유형_전체, 추천_전체
     )
 
     var listener: BookFilterListener? = null
@@ -196,7 +208,7 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
     inner class FilterAdapter: SectionAdapter<ViewHolder>() {
 
         override fun getItemViewType(indexPath: IndexPath): Int {
-            return if(indexPath.type == Type.header) {
+            return if (indexPath.type == Type.header) {
                 0
             } else if(indexPath.section == 0){
                 1
@@ -214,7 +226,7 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
         }
 
         override fun onBindViewHolder(holder: ViewHolder, indexPath: IndexPath) {
-            (holder as? HeaderHolder2)?.apply {
+            (holder as? HeaderHolder)?.apply {
                 if(indexPath.section == 0) {
                     titleTv.height = 0
                 } else
@@ -237,9 +249,8 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
                     val itemName = when(indexPath.section) {
                         0 -> "필터-보기설정"
                         1 -> "필터-과목"
-                        2 -> "필터-학습단계"
-                        3 -> "필터-문항속성"
-                        4 -> "필터-추천등급"
+                        2 -> "필터-문제집 유형"
+                        3 -> "필터-추천등급"
                         else -> ""
 //                        else -> "필터-보기설정"
                     }
@@ -247,11 +258,11 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
                     listener?.onFilterTypeChanged(this@BookFilterView, selectedFilterTypes)
                 }
             }
-            (holder as? FilterSwitchHolder2)?.apply {
+            (holder as? FilterSwitchHolder)?.apply {
                 val row = indexPath.row
 
                 if(row == 0)
-                    holder.text = "핀 설정한 플랜 포함"
+                    holder.text = "핀 설정한 문제집 포함"
                 else
                     holder.text = "워크북 포함"
 
@@ -285,13 +296,11 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             if (viewType == 0) {
-                return HeaderHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
+                return HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
             } else if(viewType == 2) {
                 return FilterButtonHolder(Button(parent.context))
             } else {
-//                val view = LayoutInflater.from(context).inflate(layout.item_filter_switch, parent, false)
-//                return FilterSwitchHolder(view)
-                return FilterSwitchHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_filter_switch, parent, false))
+                return FilterSwitchHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_filter_switch, parent, false))
             }
 
         }
@@ -350,19 +359,10 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
     }
 }
 
-class FilterSwitchHolder2(val itemBinding: ItemFilterSwitchBinding): RecyclerView.ViewHolder(itemBinding.root) {
-//    var switch = itemBinding.filterSwitch
+class FilterSwitchHolder(val itemBinding: ItemFilterSwitchBinding): RecyclerView.ViewHolder(itemBinding.root) {
     var text: String = "필터"
         set(value) {
             field = value
             itemBinding.textView.text = field
         }
-}
-//class FilterSwitchHolder(val view: View): RecyclerView.ViewHolder(view) {
-//    var switch = view.filterSwitch
-//    var text: String = "필터"
-//    set(value) {
-//        field = value
-//        view.textView.text = field
-//    }
-//}
+} 

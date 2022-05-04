@@ -27,7 +27,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
@@ -45,6 +44,7 @@ import com.freewheelin.pulley.model.ProblemErrorStatus
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import kotlinx.coroutines.*
@@ -66,7 +66,7 @@ class SolveActivity : BaseActivity(),
     }
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
-    val screenHeight by lazy { DisplayUtils.getScrenHeight(this) }
+    val screenHeight by lazy { DisplayUtils.getScreenHeight(this) }
 
     var problemGesture: ProblemGestures? = null
     var solutionGesture: SolveGestures? = null
@@ -245,7 +245,6 @@ class SolveActivity : BaseActivity(),
 //    }
 
     fun initReviewContent(content: Content?) {
-
         Log.d("문제풀기", "initReview content======>$content")
         with(binding) {
             onItemChanged(answeredSet)
@@ -255,14 +254,25 @@ class SolveActivity : BaseActivity(),
             when(content) {
                 is Book -> {
                     itemValue = "유형학습-리뷰"
-                    BookManager.review(this@SolveActivity, content, user!!) {
-                        it.arrangeChapter()
-                        this@SolveActivity.content = it
-                        galleryView.set(it)
-                        speedAnswerView.set(it)
-                        answerView.showMarkingBtn()
-                        speedAnswerView.showMarkingBtn()
+                    if (content.pieceCategoryTag == BookType.BOOK) {
+                        BookManager.reviewBookV2(this@SolveActivity, content, user!!) {
+                            it.arrangeChapter()
+                            this@SolveActivity.content = it
+                            galleryView.set(it)
+                            speedAnswerView.set(it)
+                            answerView.showMarkingBtn()
+                            speedAnswerView.showMarkingBtn()
+                        }
+                    } else {
+                        BookManager.reviewCustomBookV2(this@SolveActivity, content, user!!) {
+                            this@SolveActivity.content = it
+                            galleryView.set(it)
+                            speedAnswerView.set(it)
+                            answerView.showMarkingBtn()
+                            speedAnswerView.showMarkingBtn()
+                        }
                     }
+
                 }
                 is Test -> {
                     itemValue = "테스트-리뷰"

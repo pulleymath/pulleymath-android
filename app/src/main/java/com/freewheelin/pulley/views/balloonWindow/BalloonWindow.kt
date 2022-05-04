@@ -107,6 +107,12 @@ open class BalloonWindow : PopupWindow {
         showAtLocation(contentView, Gravity.NO_GRAVITY, 0, 0)
     }
 
+    fun setPadding(padding: Int) {
+        paddingLeft = padding
+        paddingRight = padding
+        paddingTop = padding
+        paddingBottom = padding
+    }
     fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         paddingLeft = left
         paddingRight = right

@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component
+package com.freewheelin.pulley.activities.learning.tabFragment.wrongNote
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,10 +24,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import android.content.res.Resources
+import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterType
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterType.*
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragmentListener
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.assets.Subject
 import com.freewheelin.pulley.bases.is10InchUI
@@ -72,16 +78,18 @@ private interface HeaderHolderListener {
 }
 
 class WrongNoteFragment : LearningTabFragment(),
-        HeaderHolderListener,
-        NoteFilterFragmentListener,
+    HeaderHolderListener,
+    NoteFilterFragmentListener,
         ObservableHashSetListener<Problem>,
         WrongManageViewListener {
 
     var selectedOrder = OrderType.recent
     var selectedProblem: ObservableHashSet<Problem> = ObservableHashSet()
 
-    var wrongNoteFilterFragment: NoteFilterFragment = NoteFilterFragment.newInstance(getWrongNoteFilterAndTitle())
-    var scrapNoteFilterFragment: NoteFilterFragment = NoteFilterFragment.newInstance(getScrapBookFilterAndTitle())
+    var wrongNoteFilterFragment: NoteFilterFragment =
+        NoteFilterFragment.newInstance(getWrongNoteFilterAndTitle())
+    var scrapNoteFilterFragment: NoteFilterFragment =
+        NoteFilterFragment.newInstance(getScrapBookFilterAndTitle())
 
     var wrongProblems: List<Problem>? = null
     var scrapProblems: List<Problem>? = null
@@ -450,13 +458,14 @@ class WrongNoteFragment : LearningTabFragment(),
         val filters = selectedFragment.selectedFilterTypes
 
         if(tabPosition == 0) {
-            filteredProblem = filteredProblem.filter { LocalDate(it.updateDateTime) in from..to }
-            filteredProblem = filteredProblem.filter {
+            filteredProblem = filteredProblem
+                .filter { LocalDate(it.updateDateTime) in from..to }
+                .filter {
                 var clearCondition = false
-                if(filters.contains(exceptClear))
+                if(filters.contains(클리어_미포함))
                     clearCondition = clearCondition || it.isClear == false
 
-                if(filters.contains(includeClear))
+                if(filters.contains(클리어_포함))
                     clearCondition = true
 
                 clearCondition
@@ -464,20 +473,21 @@ class WrongNoteFragment : LearningTabFragment(),
             //스크랩 필터는 초기화
             scrapNoteFilterFragment.setFiltersStatus(filters)
         } else {
-            filteredProblem = filteredProblem.filter { LocalDate(it.scrapDateTime) in from..to }
-            filteredProblem = filteredProblem.filter {
+            filteredProblem = filteredProblem
+                .filter { LocalDate(it.scrapDateTime) in from..to }
+                .filter {
                 var correctCondition = false
 
-                if(filters.contains(allViewType))
+                if(filters.contains(모든_보기설정))
                     correctCondition = true
 
-                if(filters.contains(correctProblem))
+                if(filters.contains(맞은_문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.correct)
 
-                if(filters.contains(incorrectProblem))
+                if(filters.contains(틀린_문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.incorrect)
 
-                if(filters.contains(notSolvedProblem))
+                if(filters.contains(안_푼_문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.yet)
 
                 correctCondition
@@ -492,63 +502,57 @@ class WrongNoteFragment : LearningTabFragment(),
             if(filters.contains(과목_전체))
                 subjectCondition = true
 
-            if(filters.contains(수학_상))
+            if(filters.contains(과목_수학_상))
                 subjectCondition = (subjectCondition || subject == Subject.수학_상)
 
-            if(filters.contains(수학_하))
+            if(filters.contains(과목_수학_하))
                 subjectCondition = (subjectCondition || subject == Subject.수학_하)
 
-            if(filters.contains(math1))
+            if(filters.contains(과목_수학1))
                 subjectCondition = (subjectCondition || subject == Subject.수학I)
 
-            if(filters.contains(math2))
+            if(filters.contains(과목_수학2))
                 subjectCondition = (subjectCondition || subject == Subject.수학II)
 
-            if(filters.contains(probabilityAndStatistics))
+            if(filters.contains(과목_확률과통계))
                 subjectCondition = (subjectCondition || subject == Subject.확률과통계)
 
-            if(filters.contains(calculus))
+            if(filters.contains(과목_미적분))
                 subjectCondition = (subjectCondition || subject == Subject.미적분)
 
-            if(filters.contains(geometry))
+            if(filters.contains(과목_기하))
                 subjectCondition = (subjectCondition || subject == Subject.기하)
 
 
             var levelCondition = false
 
-            if(filters.contains(allLevel))
+            if(filters.contains(모든_난이도))
                 levelCondition = true
 
-            if(filters.contains(low))
-                levelCondition = (levelCondition || it.problemLevel == 1)
+            if(filters.contains(난이도_하)) levelCondition = (levelCondition || it.problemLevel == 1)
+            if(filters.contains(난이도_중하)) levelCondition = (levelCondition || it.problemLevel == 2)
+            if(filters.contains(난이도_중)) levelCondition = (levelCondition || it.problemLevel == 3)
+            if(filters.contains(난이도_상)) levelCondition = (levelCondition || it.problemLevel == 4)
+            if(filters.contains(난이도_최상)) levelCondition = (levelCondition || it.problemLevel == 5)
 
-            if(filters.contains(middleLow))
-                levelCondition = (levelCondition || it.problemLevel == 2)
-
-            if(filters.contains(middle))
-                levelCondition = (levelCondition || it.problemLevel == 3)
-
-            if(filters.contains(high))
-                levelCondition = (levelCondition || it.problemLevel == 4)
-
-            if(filters.contains(highest))
-                levelCondition = (levelCondition || it.problemLevel == 5)
 
             var pieceCategoryCondition = false
 
-            if(filters.contains(allCategory))
+            if(filters.contains(모든_학습유형))
                 pieceCategoryCondition = true
 
-            if(filters.contains(test))
-                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.test))
-
-            if(filters.contains(unitStudy))
-                pieceCategoryCondition = (pieceCategoryCondition ||
-                        it.getPieceCategory().contains(PieceCategory.book))
-
-            if(filters.contains(mockText))
-                pieceCategoryCondition = (pieceCategoryCondition ||
-                        it.getPieceCategory().contains(PieceCategory.mockExam))
+            if (filters.contains(유형_유형학습))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.book))
+            if (filters.contains(유형_워크북))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.workbook))
+            if (filters.contains(유형_모의고사))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.mockExam))
+            if (filters.contains(유형_오답학습))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.note) || it.getPieceCategory().contains(PieceCategory.reference))
+            if (filters.contains(유형_테스트))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.dailyTest))
+            if (filters.contains(유형_추천학습))
+                pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.recommned))
 
             subjectCondition && levelCondition && pieceCategoryCondition
         }
@@ -577,19 +581,19 @@ class WrongNoteFragment : LearningTabFragment(),
 
     fun getWrongNoteFilterAndTitle(): List<Pair<String, List<FilterType>>> {
         return listOf(
-                Pair("과목", listOf(과목_전체, 수학_상, 수학_하, math1, math2, probabilityAndStatistics, calculus, geometry)),
-                Pair("난이도", listOf(allLevel, low, middleLow, middle, high, highest)),
-                Pair("카테고리", listOf(allCategory, test, unitStudy, mockText)),
-                Pair("보기 설정", listOf(includeClear, exceptClear))
+            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
+            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
+            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
+            Pair("보기 설정", listOf(클리어_미포함, 클리어_포함))
         )
     }
 
     fun getScrapBookFilterAndTitle(): List<Pair<String, List<FilterType>>> {
         return listOf(
-                Pair("과목", listOf(과목_전체, 수학_상, 수학_하, math1, math2, probabilityAndStatistics, calculus, geometry)),
-                Pair("난이도", listOf(allLevel, low, middleLow, middle, high, highest)),
-                Pair("카테고리", listOf(allCategory, test, unitStudy, mockText)),
-                Pair("보기 설정", listOf(allViewType, correctProblem, incorrectProblem, notSolvedProblem))
+            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
+            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
+            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
+            Pair("보기 설정", listOf(모든_보기설정, 맞은_문제, 틀린_문제, 안_푼_문제))
         )
     }
 
@@ -821,6 +825,41 @@ class WrongNoteFragment : LearningTabFragment(),
                     it.setOnClickListener(this@HeaderHolder)
                 }
                 checkBox.extensionTouchArea(12.toPx())
+                questionBalloonBtn.setOnClickListener {
+                    val context = itemBinding.root.context
+
+                    val balloonWindow = BalloonWindow(context, questionBalloonBtn, BalloonWindow.Position.below, 8.toPx())
+                    balloonWindow.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
+                    balloonWindow.offset = -120
+                    balloonWindow.setPadding(16.toPx())
+
+                    val linearLayout = LinearLayout(context)
+                    linearLayout.orientation = LinearLayout.VERTICAL
+                    linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+                    val titleTvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    val titleTv = TextView(context)
+                    titleTv.layoutParams = titleTvParams
+                    titleTv.text = "학습과정순이란?"
+                    titleTv.setTextAppearance(R.style.h5)
+                    titleTv.typeface = Theme.extraBold(context)
+                    titleTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+
+                    val contentTvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    contentTvParams.topMargin = 12.toPx()
+                    val contentTv = TextView(context)
+                    contentTv.layoutParams = contentTvParams
+                    contentTv.text = "학습과정순은 아래 과목 및 단원순으로 문제집을 정렬하여 표시합니다.\n" +
+                        "1. 과목: 수학(상) > 수학(하) > 수학1 > 수학2 > 확률과 통계 >\n 미적분 > 기하순으로 표시\n" +
+                        "2. 과목 내 단원: 현행 교육 단원순을 반영하여 표시"
+                    contentTv.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  Resources.getSystem().getDisplayMetrics()), 1.0f);
+                    contentTv.setTextAppearance(R.style.mo_h4_sb)
+                    contentTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+
+                    linearLayout.addView(titleTv)
+                    linearLayout.addView(contentTv)
+                    balloonWindow.show(linearLayout)
+                }
             }
         }
 

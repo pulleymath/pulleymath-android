@@ -21,7 +21,7 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.activities.WrongTestReportActivity

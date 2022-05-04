@@ -72,6 +72,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private PathDrawnListener mPathDrawnListener;
     private PathRedoUndoCountChangeListener mPathRedoUndoCountChangeListener;
 
+    public Bitmap loadedBitmap;
+
     public FreeDrawView(Context context) {
         this(context, null);
     }
@@ -564,6 +566,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
+        if (loadedBitmap != null) {
+          canvas.drawBitmap(loadedBitmap, 0, 0, null);
+        }
         if (mPaths.size() == 0 && mPoints.size() == 0) {
             return;
         }

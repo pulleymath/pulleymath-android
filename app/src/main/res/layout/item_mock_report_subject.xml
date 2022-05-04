@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_fafafa"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/unitAnalysisTv"
+            style="@style/TextGrey_9f9f9f"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="과정별 정답률"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/unitAnalysisContainerCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/dp32"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/unitAnalysisTv">
+
+            <TextView
+                android:id="@+id/subjectAnalysisGuideTv"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp40"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="수학1의 함수 단원을 가장 잘하고 있네요!" />
+
+            <TextView
+                android:id="@+id/subjectAnalysisGuideTv2"
+                style="@style/TextBlack_4c4c4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp8"
+                android:textSize="@dimen/sp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subjectAnalysisGuideTv"
+                tools:text="수학(하)의 이차곡선 단원은 보완이 필요해 보여요." />
+
+            <RadioGroup
+                android:id="@+id/subjectTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/dp64"
+                android:layout_marginTop="@dimen/dp48"
+                app:layout_constraintTop_toBottomOf="@+id/subjectAnalysisGuideTv2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                ></RadioGroup>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subjectTabRingChartContainer"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp72"
+                android:layout_marginTop="@dimen/dp48"
+                android:layout_marginBottom="@dimen/dp48"
+                android:gravity="center_horizontal"
+                app:layout_constraintStart_toEndOf="@id/subjectTab"
+                app:layout_constraintTop_toBottomOf="@id/subjectAnalysisGuideTv2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/lbCorrectRateBySubject"
+                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="과목별 정답률"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.freewheelin.pulley.views.charts.RingChartBinary
+                    android:id="@+id/ringChart"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbCorrectRateBySubject" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/ringChart"
+                    app:layout_constraintEnd_toEndOf="@+id/ringChart"
+                    app:layout_constraintStart_toStartOf="@+id/ringChart"
+                    app:layout_constraintTop_toTopOf="@+id/ringChart">
+
+                    <TextView
+                        android:id="@+id/lbCorrectRateOverRingChart"
+                        style="@style/TextGrey_9f9f9f.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="정답률"
+                        android:textSize="@dimen/sp14" />
+
+                    <TextView
+                        android:id="@+id/tvCorrectRate"
+                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="0%"
+                        android:textSize="@dimen/sp24" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ringChart">
+
+                    <View
+                        android:id="@+id/pointCorrect"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/bg_blue_78beff_circle" />
+
+                    <TextView
+                        android:id="@+id/lbCorrectRate"
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="정답률"
+                        android:textSize="@dimen/sp14" />
+
+                    <View
+                        android:id="@+id/pointWrong"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@drawable/bg_red_fe7b67_circle" />
+
+                    <TextView
+                        android:id="@+id/lbWrongRate"
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="오답률"
+                        android:textSize="@dimen/sp14" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/lbUnitCorrectLate"
+                style="@style/TextGrey_c0c0c0.ExtraBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="단원별 정답률"
+                android:textSize="@dimen/sp16"
+                android:layout_marginTop="@dimen/dp48"
+                app:layout_constraintTop_toBottomOf="@+id/subjectAnalysisGuideTv2"
+                app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+                android:id="@+id/subjectBarChartView1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginStart="@dimen/dp48"
+                android:layout_marginEnd="@dimen/dp80"
+                app:layout_constraintTop_toBottomOf="@id/lbUnitCorrectLate"
+                app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+                android:id="@+id/subjectBarChartView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginEnd="@dimen/dp80"
+                android:layout_marginStart="@dimen/dp48"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
+                app:layout_constraintTop_toBottomOf="@id/subjectBarChartView1"
+                />
+            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+                android:id="@+id/subjectBarChartView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginEnd="@dimen/dp80"
+                android:layout_marginStart="@dimen/dp48"
+                android:layout_marginBottom="@dimen/dp48"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
+                app:layout_constraintTop_toBottomOf="@id/subjectBarChartView2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

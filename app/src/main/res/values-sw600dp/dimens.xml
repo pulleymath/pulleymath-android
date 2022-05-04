@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 태블릿사이즈 대응-->
 <resources>
     <bool name="isTablet">true</bool>
     <dimen name="dialog_mock_exam_width">650dp</dimen>
+    <dimen name="pulley_plus_price_height">400dp</dimen>
 </resources>

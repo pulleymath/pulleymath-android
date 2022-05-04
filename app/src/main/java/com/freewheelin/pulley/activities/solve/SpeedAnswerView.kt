@@ -231,12 +231,12 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
 //                            context.resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height)
 //                    )
 
-                    val height = if(viewContext.isTablet) ((DisplayUtils.getScrenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx()
-                                else ((DisplayUtils.getScrenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.8f).toInt() - 32.toPx()
+                    val height = if(viewContext.isTablet) ((DisplayUtils.getScreenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.5f).toInt() - 32.toPx()
+                                else ((DisplayUtils.getScreenHeight(viewContext) - viewContext.resources.getDimension(R.dimen.dp64)) * 0.8f).toInt() - 32.toPx()
 
                     val width = height * 232 / 296
                     var x = holderBinding.root.getTargetAbsolutePosition().first.toInt()
-                    val y: Int = DisplayUtils.getScrenHeight(viewContext) - height - 16.toPx()
+                    val y: Int = DisplayUtils.getScreenHeight(viewContext) - height - 16.toPx()
                     x = x - 32.toPx() - width
 
                     keypadWindow.showAtLocation(view.rootView, Gravity.NO_GRAVITY, x, y)

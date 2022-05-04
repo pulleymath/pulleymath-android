@@ -28,6 +28,7 @@ class Pdf : BaseDiffItem, Serializable {
 
     var landscape_cover_url: String = ""
     var is_purchased: Boolean = true
+    var is_event_book: Boolean = false // event_book 은 다운로드후 스프링쪽 api를 통해 구매권한체크를 (스프링 서버에서) 추가 한다.
     var shop_id: Long = 0
 
     lateinit var created_at: String

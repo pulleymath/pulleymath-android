@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.utils.APHelper
 import com.freewheelin.pulley.utils.Preferences
@@ -26,16 +27,24 @@ object Network {
         Server.dev.toString() -> "https://mock-dev.pulleymath.com"
         else -> "https://mock-live.pulleymath.com"
     }
+
+    val springUrl = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> URL.PULLEY_API
+        Server.staging.toString() -> URL.PULLEY_STAGING_API
+        Server.dev.toString() -> Preferences.testBaseURL.get()
+        else -> URL.PULLEY_API
+    }
     var token = ""
 
     enum class Type {
-        node, mockTest;
+        node, mockTest, spring;
 
         val url: String
             get() {
                 return when(this) {
                     node -> baseNodeUrl
                     mockTest -> mockTestUrl
+                    spring -> springUrl
                 }
             }
     }

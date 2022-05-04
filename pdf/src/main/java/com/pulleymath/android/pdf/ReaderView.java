@@ -38,10 +38,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
-
 import com.artifex.mupdf.fitz.Link;
-import com.pulleymath.android.pdf.memo.MemoView;
-
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -114,8 +111,7 @@ public class ReaderView
 		setup(context);
 	}
 
-	private void setup(Context context)
-	{
+	private void setup(Context context) {
 		mContext = context;
 		mGestureDetector = new GestureDetector(context, this);
 		mScaleGestureDetector = new ScaleGestureDetector(context, this);
@@ -498,15 +494,28 @@ public class ReaderView
 			float distanceY) {
 //		FrameLayout container = getDisplayedView();
 //		PageView pageView = container.findViewWithTag(PageAdapter.TAG_PAGEVIEW);
-		if (!tapDisabled)
+    float xDiff = getScrollDiff(e2, distanceX);
+    float yDiff = getScrollDiff(e2, distanceY);
+    if (!tapDisabled)
 			onDocMotion();
 		if (!mScaling) {
-			mXScroll -= distanceX;
-			mYScroll -= distanceY;
+			mXScroll -= xDiff;
+			mYScroll -= yDiff;
 			requestLayout();
 		}
 		return true;
 	}
+
+	// PDF Viewer에서 pencil이나 eraser를 클릭해서 사용중인 경우
+  // event.pointCount == 1 일때는 필기가 되고 2일때는 스크롤이 되어야하는데
+  // 2일때 (두손가락 터치시작할때) originDistance가 100이상을 튀는 값이 나와서 pdf의 위치를 "첫 확대한 곳"으로 위치시킨다.
+  // 더 좋은 방법은 "첫 확대한 곳"으로 이동시키는 distance값이 나오는 원인을 찾으면 좋겠지만 못찾았다.
+	private float getScrollDiff(MotionEvent event, float originDistance) {
+    if (event != null && event.getPointerCount() > 1) {
+      return Math.abs(originDistance) > 50 ? 0 : originDistance;
+    }
+    return 0f;
+  }
 
 	public void onShowPress(MotionEvent e) { }
 
@@ -561,10 +570,17 @@ public class ReaderView
 		Log.d(getClass().getSimpleName(), "scale onScaleEnd()");
 	}
 
-	@Override
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent ev) {
+    if (ev.getPointerCount() == 2) {
+      return true;
+    }
+    return super.onInterceptTouchEvent(ev);
+  }
+
+    @Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if ((event.getAction() & event.getActionMasked()) == MotionEvent.ACTION_DOWN)
-		{
+		if ((event.getAction() & event.getActionMasked()) == MotionEvent.ACTION_DOWN) {
 			tapDisabled = false;
 		}
 

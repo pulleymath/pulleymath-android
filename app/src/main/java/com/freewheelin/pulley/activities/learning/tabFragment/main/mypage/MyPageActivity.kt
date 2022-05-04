@@ -48,7 +48,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
 //        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
             val topBottomMargin = resources.getDimension(R.dimen.dp16) * 2
             val lp = rootView.layoutParams
-            lp.height = DisplayUtils.getScrenHeight(this@MyPageActivity) - topBottomMargin.toInt()
+            lp.height = DisplayUtils.getScreenHeight(this@MyPageActivity) - topBottomMargin.toInt()
             rootView.layoutParams = lp
 
             pwModifyBtn.setOnClickListener { onPwModifyBtnClicked() }

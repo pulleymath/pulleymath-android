@@ -24,7 +24,6 @@ package com.pulleymath.android.pdf;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.AsyncTask;
@@ -97,7 +96,7 @@ public class PageAdapter extends BaseAdapter {
 
 			// pageview 가 생성될 때 memoview add
 			final MemoView memoView = new MemoView(mContext);
-			memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 			memoView.set(pencilcase);
 			memoView.setLayoutParams(layoutParams);
 			memoView.setTag(TAG_MEMOVIEW);

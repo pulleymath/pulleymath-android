@@ -11,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
@@ -117,9 +116,9 @@ class AnswerV2View : ConstraintLayout,
                     })
 
                 val height = if(context.isTablet) minOf(
-                                ((DisplayUtils.getScrenHeight(context) - this.height) * 0.5f).toInt() - 32.toPx(),
+                                ((DisplayUtils.getScreenHeight(context) - this.height) * 0.5f).toInt() - 32.toPx(),
                                 resources.getDimensionPixelSize(R.dimen.omrActivity_keypad_height))
-                            else ((DisplayUtils.getScrenHeight(context) - this.height) * 0.8f).toInt() - 32.toPx()
+                            else ((DisplayUtils.getScreenHeight(context) - this.height) * 0.8f).toInt() - 32.toPx()
                 val width = height * 232 / 296
 
                 val position = getTargetAbsolutePosition(false)

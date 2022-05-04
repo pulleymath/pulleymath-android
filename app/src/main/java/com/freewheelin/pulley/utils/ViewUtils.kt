@@ -15,6 +15,7 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -27,6 +28,7 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.abs
 
 object ViewUtils {
     val sNextGeneratedId = AtomicInteger(1)
@@ -196,7 +198,7 @@ fun View.showBalloon(text: String) {
         getLocationOnScreen(this)
     }
 
-    val position = if(location[1] + (measuredHeight * 0.5) < DisplayUtils.getScrenHeight(context) * 0.5)
+    val position = if(location[1] + (measuredHeight * 0.5) < DisplayUtils.getScreenHeight(context) * 0.5)
         BalloonWindow.Position.below
     else
         BalloonWindow.Position.above
@@ -277,7 +279,7 @@ fun View.isAbove():Boolean {
         getLocationOnScreen(this)
     }
 
-    return location[1] + (measuredHeight * 0.5) < DisplayUtils.getScrenHeight(context) * 0.5
+    return location[1] + (measuredHeight * 0.5) < DisplayUtils.getScreenHeight(context) * 0.5
 }
 
 
@@ -428,4 +430,24 @@ class CustomTypefaceSpan(family: String, private val newType: Typeface) : Typefa
 
         paint.setTypeface(tf)
     }
+}
+
+fun ScrollView.scrollToView(view: View) {
+    val y = computeDistanceToView(view)
+    this.scrollTo(0, y)
+}
+
+fun ScrollView.computeDistanceToView(view: View): Int {
+    return abs(view.calculateRectOnScreen().top - (this.scrollY + view.calculateRectOnScreen().top))
+}
+
+fun View.calculateRectOnScreen(): Rect {
+    val location = IntArray(2)
+    this.getLocationOnScreen(location)
+    return Rect(
+        location[0],
+        location[1],
+        location[0] + this.measuredWidth,
+        location[1] + this.measuredHeight
+    )
 }

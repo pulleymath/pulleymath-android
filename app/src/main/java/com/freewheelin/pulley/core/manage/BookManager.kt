@@ -3,6 +3,8 @@ package com.freewheelin.pulley.core.manage
 import android.content.Context
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterCategory
+import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterOrder
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.API_V1
@@ -16,7 +18,6 @@ import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
-import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -138,7 +139,7 @@ object BookManager {
 
     fun getBooks(context: Context, user: User, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
-        API_V2.getBooks(user.studentID, filterString).enqueue(object: Callback<List<Book>> {
+        API_V2.getBooksNew(user.studentID, filterString, FilterOrder.LAST.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
 
             override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {
@@ -294,6 +295,59 @@ object BookManager {
                 }
             }
         })
+    }
+
+    fun reviewBookV2(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+        val param: Parameter = Parameter(
+            "assignID" to book.assignID!!,
+            "studentID" to user.studentID
+        )
+        API_V2.reviewBook(param).enqueue(object : Callback<Template<ResponseBookInfo>> {
+            override fun onResponse(
+                call: Call<Template<ResponseBookInfo>>,
+                response: Response<Template<ResponseBookInfo>>
+            ) {
+                val responseBookPage = response.body()?.data?.bookPage
+                val responseBook = response.body()?.data?.book!!
+                responseBook.assignID = book.assignID
+                if(response.isSuccessful && responseBookPage != null) {
+                    responseBook.bookPage = responseBookPage
+                    responseBook.arrangeProblem()
+
+                    cb(responseBook)
+                }
+            }
+
+            override fun onFailure(call: Call<Template<ResponseBookInfo>>, t: Throwable) {
+                responseFailed(context, t)
+            }
+
+        })
+
+    }
+    fun reviewCustomBookV2(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+        val param: Parameter = Parameter(
+            "assignID" to book.assignID!!,
+            "studentID" to user.studentID
+        )
+
+        API_V2.reviewCustomBook(param).enqueue(object : Callback<ResponseBody<Book>> {
+            override fun onResponse(
+                call: Call<ResponseBody<Book>>,
+                response: Response<ResponseBody<Book>>
+            ) {
+                response.body()?.data?.let {
+                    cb(it)
+                }
+
+            }
+
+            override fun onFailure(call: Call<ResponseBody<Book>>, t: Throwable) {
+                responseFailed(context, t)
+            }
+        })
+
+
     }
 
     fun togglePin(context: Context, book: Book, user: User, cb:() -> Unit) {

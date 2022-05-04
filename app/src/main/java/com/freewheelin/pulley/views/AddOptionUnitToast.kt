@@ -54,7 +54,7 @@ class AddOptionUnitToast: PopupWindow() {
 
             popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, android.R.color.transparent)))
 
-            val offsetY = DisplayUtils.getScrenHeight(context) / 2
+            val offsetY = DisplayUtils.getScreenHeight(context) / 2
 
             val screenWidth = DisplayUtils.getScreenWidth(context)
 

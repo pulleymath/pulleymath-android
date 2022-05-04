@@ -2,17 +2,17 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.mypage.MyRecommendSettingActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="640dp"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_fafafa_round"
-        tools:context=".activities.mypage.MyRecommendSettingActivity">
+        android:background="@drawable/bg_white_fafafa_round">
 
         <LinearLayout
             android:id="@+id/myPageContainer"
-            android:layout_width="0dp"
+            android:layout_width="640dp"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/saveBtn"

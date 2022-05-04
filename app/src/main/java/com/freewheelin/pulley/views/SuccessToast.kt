@@ -45,7 +45,7 @@ class SuccessToast: PopupWindow() {
 
             popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, android.R.color.transparent)))
 
-            val offsetY = DisplayUtils.getScrenHeight(context) / 4
+            val offsetY = DisplayUtils.getScreenHeight(context) / 4
 
             val screenWidth = DisplayUtils.getScreenWidth(context)
 

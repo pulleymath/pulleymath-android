@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ScrollView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -23,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.solve.SolveActivity
@@ -35,13 +33,13 @@ import com.freewheelin.pulley.databinding.FragmentBookBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.model.contents.ClientBookType
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
-import java.lang.Math.abs
 
 class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
 
@@ -186,10 +184,9 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 )
                 val window =
                     BalloonWindow(requireContext(), it, BalloonWindow.Position.below, 16.toPx())
-                window.balloonColor =
-                    ContextCompat.getColor(requireContext(), R.color.purple_ACACFF)
-                window.offset = if (context?.is10InchUI == true) -240 else -210
-                window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx())
+                window.balloonColor = ContextCompat.getColor(requireContext(), R.color.purple_ACACFF)
+                window.offset = if (context?.is10InchUI == true) -240 else -190
+                window.setPadding(if (context?.is10InchUI == true) 32.toPx() else 24.toPx())
                 val tooltipBinding: TooltipAnalysisBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.tooltip_analysis, null, false)
 //                val view = LayoutInflater.from(requireContext()).inflate(R.layout.tooltip_analysis, null)
                 tooltipBinding.chartTopTv.text = "삭제 기준"
@@ -197,7 +194,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     "   그렇게 빠진 플랜은 [전체플랜]에서 다시 볼 수 있습니다.\n" +
                     "\n" +
                     "- 워크북 플랜의 경우,\n" +
-                    "   채점한 문제가 총 2문제 이하이고 최근 30일 동안 학습하지 않았다면 영구 삭제됩니다.\n" +
+                    "   채점한 문제가 총 2문제 이하이고 최근 30일 동안 학습하지 않았다면 \n   영구 삭제됩니다.\n" +
                     "\n" +
                     "- 핀을 꽂아둔 모든 플랜은 빠지거나 삭제되지 않습니다."
 
@@ -217,7 +214,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             recommendBookListViews = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
             recommendBookListViews.forEach { it.visibility = View.GONE }
             recommendLabel.visibility = View.INVISIBLE
-            totalPlanContainer.layoutParams.height = DisplayUtils.getScrenHeight(requireContext())
+            totalPlanContainer.layoutParams.height = DisplayUtils.getScreenHeight(requireContext())
             filterView.listener = this@BookFragment
         }
     }
@@ -298,7 +295,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             val filters = filterView.selectedFilterTypes.toSet()
 
             BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
-                if (filter != null && filter == filterView.selectedFilterTypes) {
+                if (filter == filterView.selectedFilterTypes) {
                     totalBooks = books.toMutableList()
                     totalRv.visibility = View.VISIBLE
                     totalRv.adapter = TotalPlanAdapter()
@@ -417,6 +414,34 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         }
     }
 
+    inner class TotalPlanHolder(override var view: View) : PlanHolder(view) {
+        val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+        val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+        val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
+        val tags = listOf(view.findViewById<TextView>(R.id.tag1), view.findViewById<TextView>(R.id.tag2))
+        val guideTv = view.findViewById<TextView>(R.id.guideTv)
+
+        override fun set(book: Book) {
+            book.clientBookType = ClientBookType.ALL
+            super.set(book)
+
+            setTag(tags) {
+                filterFromTagOnCard(it)
+            }
+            solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
+            problemCntTv.text = book.totalNumber.toString() + "문제"
+            correctRateTv.text = "${book.score}%"
+
+            if (book.markedNumber == 0) {
+                solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
+            } else {
+                solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
+            }
+
+            guideTv.text = book.description
+        }
+    }
+
     override fun onActionBtnClicked(action: ActionType, book: Book, holder: PlanHolder) {
         when (action) {
             ActionType.mail -> {
@@ -516,16 +541,15 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             getTotalList()
         }
     }
-    fun scrollToTotalLabel(subject: String) {
-        val targetHashSet = when (subject) {
+    fun setFilterType(subject: String): HashSet<FilterType> {
+        return when (subject) {
             "미적분" -> hashSetOf(
                 FilterType.워크북_미포함,
                 FilterType.핀_포함,
                 FilterType.계열_전체,
                 FilterType.과목_미적분,
                 FilterType.과목_수학2,
-                FilterType.단계_문제풀이,
-                FilterType.문항_전체,
+                FilterType.유형_전체,
                 FilterType.추천_2_3등급
             )
             "확률과 통계" -> hashSetOf(
@@ -533,8 +557,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 FilterType.핀_포함,
                 FilterType.계열_전체,
                 FilterType.과목_확통,
-                FilterType.단계_문제풀이,
-                FilterType.문항_전체,
+                FilterType.유형_전체,
                 FilterType.추천_2_3등급
             )
             else -> hashSetOf(
@@ -542,11 +565,13 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 FilterType.핀_포함,
                 FilterType.계열_전체,
                 FilterType.과목_확통,
-                FilterType.단계_문제풀이,
-                FilterType.문항_전체,
+                FilterType.유형_전체,
                 FilterType.추천_2_3등급
             )
         }
+    }
+    fun scrollToTotalLabel(subject: String) {
+        val targetHashSet = setFilterType(subject)
 
         binding.filterView.selectedFilterTypes = targetHashSet
         binding.filterView.adapter?.notifyDataSetChanged()
@@ -558,25 +583,17 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
 
         }, 1000)
     }
-}
+    fun filterFromTagOnCard(type: FilterType) {
 
-// TODO 어디론가 옮겨야할것같음
-internal fun ScrollView.computeDistanceToView(view: View): Int {
-    return abs(calculateRectOnScreen(this).top - (this.scrollY + calculateRectOnScreen(view).top))
-}
+        binding.filterView.selectedFilterTypes.add(type)
+        binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
+        binding.filterView.adapter?.notifyDataSetChanged()
 
-internal fun calculateRectOnScreen(view: View): Rect {
-    val location = IntArray(2)
-    view.getLocationOnScreen(location)
-    return Rect(
-        location[0],
-        location[1],
-        location[0] + view.measuredWidth,
-        location[1] + view.measuredHeight
-    )
-}
+        getTotalListWithoutRefresh()
 
-fun ScrollView.scrollToView(view: View) {
-    val y = computeDistanceToView(view)
-    this.scrollTo(0, y)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.rootView.scrollToView(binding.totalLabel)
+
+        }, 1000)
+    }
 }

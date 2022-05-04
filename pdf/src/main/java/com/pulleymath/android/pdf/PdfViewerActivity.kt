@@ -24,15 +24,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.pulleymath.android.pdf.ReaderView.ViewMapper
 import com.pulleymath.android.pdf.log.Network
 import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
 import com.pulleymath.android.pdf.memo.PencilcaseView
 import com.pulleymath.android.pdf.memo.storage.DatabaseHelper
-import com.pulleymath.android.pdf.memo.storage.PdfMemo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,14 +39,6 @@ import java.io.FileInputStream
 import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
-
-/*
-    1. 해설페이지 연결
-    2. 필터
-    3. 사용시간 업데이트
-    TODO: 4. 남은 디스크 용량 체크
-          5. 파일 삭제
- */
 
 open class PdfViewerActivity : Activity() {
     /* The core rendering instance */

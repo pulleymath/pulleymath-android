@@ -26,7 +26,7 @@ class DisplayUtils {
             return metrics.widthPixels
         }
 
-        fun getScrenHeight(context: Context): Int {
+        fun getScreenHeight(context: Context): Int {
             var metrics = DisplayMetrics()
             var display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
             display.getMetrics(metrics)

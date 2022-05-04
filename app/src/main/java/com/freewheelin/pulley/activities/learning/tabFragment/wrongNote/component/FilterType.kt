@@ -2,120 +2,132 @@ package com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.compone
 
 enum class FilterType {
     과목_전체,
-    수학_상,
-    수학_하,
-    math1,
-    math2,
-    probabilityAndStatistics,
-    calculus,
-    geometry,
+    과목_수학_상,
+    과목_수학_하,
+    과목_수학1,
+    과목_수학2,
+    과목_확률과통계,
+    과목_미적분,
+    과목_기하,
 
-    allLevel,
-    low,
-    middleLow,
-    middle,
-    high,
-    highest,
+    모든_난이도,
+    난이도_하,
+    난이도_중하,
+    난이도_중,
+    난이도_상,
+    난이도_최상,
 
-    allCategory,
-    test,
-    unitStudy,
-    mockText,
+    모든_학습유형,
+    유형_유형학습,
+    유형_워크북,
+    유형_모의고사,
+    유형_오답학습,
+    유형_테스트,
+    유형_추천학습,
 
-    allViewType,
-    exceptClear,
-    includeClear,
-    correctProblem,
-    incorrectProblem,
-    notSolvedProblem;
+    모든_보기설정,
+    클리어_미포함,
+    클리어_포함,
+    맞은_문제,
+    틀린_문제,
+    안_푼_문제;
 
     val text: String
         get() {
-            when (this) {
-                과목_전체 -> return "전체"
-                수학_상 -> return "수학(상)"
-                수학_하 -> return "수학(하)"
-                math1 -> return "수학1"
-                math2 -> return "수학2"
-                probabilityAndStatistics -> return "확률과 통계"
-                calculus -> return "미적분"
-                geometry -> return "기하"
+            return when (this) {
+                과목_전체 -> "전체"
+                과목_수학_상 -> "수학(상)"
+                과목_수학_하 -> "수학(하)"
+                과목_수학1 -> "수학1"
+                과목_수학2 -> "수학2"
+                과목_확률과통계 -> "확률과 통계"
+                과목_미적분 -> "미적분"
+                과목_기하 -> "기하"
 
-                allLevel -> return "전체"
-                low -> return "하"
-                middleLow -> return "중하"
-                middle -> return "중"
-                high -> return "상"
-                highest -> return "최상"
+                모든_난이도 -> "전체"
+                난이도_하 -> "하"
+                난이도_중하 -> "중하"
+                난이도_중 -> "중"
+                난이도_상 -> "상"
+                난이도_최상 -> "최상"
 
-                allCategory -> return "전체"
-                test -> return "테스트"
-                unitStudy -> return "유형학습"
-                mockText -> return "모의고사"
+                모든_학습유형 -> "전체"
+                유형_유형학습 -> "유형학습"
+                유형_워크북 -> "워크북"
+                유형_모의고사 -> "모의고사"
+                유형_오답학습 -> "오답학습"
+                유형_테스트 -> "테스트"
+                유형_추천학습 -> "추천학습"
 
-                allViewType -> return "전체"
-                exceptClear -> return "클리어 미포함"
-                includeClear -> return "클리어 포함"
-                correctProblem -> return "맞은 문제"
-                incorrectProblem -> return "틀린 문제"
-                notSolvedProblem -> return "안 푼 문제"
+                모든_보기설정 -> "전체"
+                클리어_미포함 -> "클리어 미포함"
+                클리어_포함 -> "클리어 포함"
+                맞은_문제 -> "맞은 문제"
+                틀린_문제 -> "틀린 문제"
+                안_푼_문제 -> "안 푼 문제"
             }
         }
 
     val exclusiveSet: Set<FilterType>
         get() {
-            when(this) {
-                과목_전체 -> return setOf(수학_상, 수학_하, math1, math2, probabilityAndStatistics, calculus, geometry)
-                수학_상 -> return setOf(과목_전체)
-                수학_하 -> return setOf(과목_전체)
-                math1 -> return setOf(과목_전체)
-                math2 -> return setOf(과목_전체)
-                probabilityAndStatistics -> return setOf(과목_전체)
-                calculus -> return setOf(과목_전체)
-                geometry -> return setOf(과목_전체)
+            return when(this) {
+                과목_전체 -> setOf(과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)
+                과목_수학_상 -> setOf(과목_전체)
+                과목_수학_하 -> setOf(과목_전체)
+                과목_수학1 -> setOf(과목_전체)
+                과목_수학2 -> setOf(과목_전체)
+                과목_확률과통계 -> setOf(과목_전체)
+                과목_미적분 -> setOf(과목_전체)
+                과목_기하 -> setOf(과목_전체)
 
-                allLevel -> return setOf(low, middleLow, middle, high, highest)
-                low -> return setOf(allLevel)
-                middleLow -> return setOf(allLevel)
-                middle -> return setOf(allLevel)
-                high -> return setOf(allLevel)
-                highest -> return setOf(allLevel)
+                모든_난이도 -> setOf(난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)
+                난이도_하 -> setOf(모든_난이도)
+                난이도_중하 -> setOf(모든_난이도)
+                난이도_중 -> setOf(모든_난이도)
+                난이도_상 -> setOf(모든_난이도)
+                난이도_최상 -> setOf(모든_난이도)
 
-                allCategory -> return setOf(test, unitStudy, mockText)
-                test -> return setOf(allCategory)
-                unitStudy -> return setOf(allCategory)
-                mockText -> return setOf(allCategory)
+                모든_학습유형 -> setOf(유형_테스트, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)
+                유형_유형학습 -> setOf(모든_학습유형)
+                유형_워크북 -> setOf(모든_학습유형)
+                유형_모의고사 -> setOf(모든_학습유형)
+                유형_오답학습 -> setOf(모든_학습유형)
+                유형_테스트 -> setOf(모든_학습유형)
+                유형_추천학습 -> setOf(모든_학습유형)
 
-                allViewType -> return setOf(exceptClear, includeClear, correctProblem, incorrectProblem, notSolvedProblem)
-                exceptClear -> return setOf(allViewType, includeClear)
-                includeClear -> return setOf(allViewType, exceptClear)
-                correctProblem -> return setOf(allViewType)
-                incorrectProblem -> return setOf(allViewType)
-                notSolvedProblem -> return setOf(allViewType)
+                모든_보기설정 -> setOf(클리어_미포함, 클리어_포함, 맞은_문제, 틀린_문제, 안_푼_문제)
+                클리어_미포함 -> setOf(모든_보기설정, 클리어_포함)
+                클리어_포함 -> setOf(모든_보기설정, 클리어_미포함)
+                맞은_문제 -> setOf(모든_보기설정)
+                틀린_문제 -> setOf(모든_보기설정)
+                안_푼_문제 -> setOf(모든_보기설정)
             }
         }
 
     val commonSet: Set<FilterType>
         get() {
             return setOf(과목_전체,
-                    수학_상,
-                    수학_하,
-                    math1,
-                    math2,
-                    probabilityAndStatistics,
-                    calculus,
-                    geometry,
+                    과목_수학_상,
+                    과목_수학_하,
+                    과목_수학1,
+                    과목_수학2,
+                    과목_확률과통계,
+                    과목_미적분,
+                    과목_기하,
 
-                    allLevel,
-                    low,
-                    middleLow,
-                    middle,
-                    high,
-                    highest,
+                    모든_난이도,
+                    난이도_하,
+                    난이도_중하,
+                    난이도_중,
+                    난이도_상,
+                    난이도_최상,
 
-                    allCategory,
-                    test,
-                    unitStudy,
-                    mockText)
+                    모든_학습유형,
+                    유형_유형학습,
+                    유형_워크북,
+                    유형_모의고사,
+                    유형_오답학습,
+                    유형_테스트,
+                    유형_추천학습)
         }
 }

@@ -232,6 +232,7 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
                 if(isVisible(it)) { // 현재 화면에 보일 때만
                     it.undoAll()
                     it.erase()
+                    it.clearBitmap()
                 }
             }
         }

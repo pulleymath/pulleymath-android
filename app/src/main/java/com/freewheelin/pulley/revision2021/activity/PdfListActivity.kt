@@ -37,6 +37,9 @@ import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.DaebakToast
 import com.pulleymath.android.pdf.PdfViewerActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -118,7 +121,7 @@ class PdfListActivity : AppCompatActivity() {
                         val adapter = (binding.recyclerPdf.adapter as PdfAdapter)
                         val headerBinding = adapter.headerBinding
                             headerBinding?.purchaseSwtich?.isChecked =
-                                isPurchaseBookSelected.value!!
+                                isOpenableBookSelected.value!!
                     }
                 })
             subjectSelectedPosition.observe(this@PdfListActivity,
@@ -319,7 +322,7 @@ class PdfListActivity : AppCompatActivity() {
             if (!pdf.is_purchased) {
                 openShop(pdf)
             } else if (!pdf.downloading.get() && pdf.is_purchased) { // 다운로드 중이면 disabled
-                if (pdf.downloaded.get()) { open(pdf) } else { download(pdf) }
+                if (pdf.downloaded.get()) { open(pdf) } else { beforeDownload(pdf) }
             } else {
                 showDownloadCancelMsg()
                 downloadThreads.forEach {
@@ -368,7 +371,7 @@ class PdfListActivity : AppCompatActivity() {
             val answerPath = makeLocalPdfName(pdf)
             val file = File(answerPath)
             if(!file.exists()) {
-                download(pdf)
+                beforeDownload(pdf)
             }
             return answerPath
         }
@@ -410,6 +413,15 @@ class PdfListActivity : AppCompatActivity() {
             }
         }
 
+        private fun beforeDownload(pdf: Pdf) {
+            if (pdf.is_event_book) {
+                viewModel.eventBookCheck(pdf.cm_book_id) {
+                    download(pdf)
+                }
+            } else {
+                download(pdf)
+            }
+        }
         private fun download(pdf: Pdf) {
             pdf.downloading.set(true)
             showDownloadingMsg()

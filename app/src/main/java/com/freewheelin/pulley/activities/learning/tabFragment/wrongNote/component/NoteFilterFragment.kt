@@ -109,7 +109,7 @@ class NoteFilterFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_filter, container, false)
         return binding.root
     }
@@ -134,7 +134,7 @@ class NoteFilterFragment : Fragment() {
                             6
                         } else {
                             val filter = filters[indexPath.section - 1].second[indexPath.row]
-                            return if (filter == FilterType.exceptClear || filter == FilterType.includeClear)
+                            return if (filter == FilterType.클리어_미포함 || filter == FilterType.클리어_포함)
                                 3
                             else
                                 2
@@ -147,6 +147,8 @@ class NoteFilterFragment : Fragment() {
         }
     }
 
+    // 한쪽 필터(ex 오답노트) 컨트롤 중인 경우 어떤 클릭이 다른쪽 필터(ex 즐겨찾기)에도 적용되도록 하는 코드임
+    // 다른쪽 필터에 적용되면서도 보기설정은 서로 다르기때문에 그부분만 차이를 두도록 함
     fun setFiltersStatus(filters:HashSet<FilterType>) {
         // 현재 필터 조건에서 공통은 삭제
         selectedFilterTypes.removeAll(selectCommonFilters())
@@ -184,12 +186,12 @@ class NoteFilterFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, indexPath: IndexPath) {
-            (holder as? CalendarHolder2)?.apply {
+            (holder as? CalendarHolder)?.apply {
                 set(from, to, type)
                 monthContainerCl.setOnClickListener { dialog.show() }
             }
 
-            (holder as? HeaderHolder2)?.apply {
+            (holder as? HeaderHolder)?.apply {
                 titleTv.text = filters[indexPath.section - 1].first
             }
 
@@ -212,16 +214,15 @@ class NoteFilterFragment : Fragment() {
 
                 }
             }
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return if (viewType == 0) {
-                HeaderHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
+                HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
             } else if (viewType == 1) {
                 FilterButtonHolder(Button(parent.context))
             } else {
-                CalendarHolder2(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_calendar, parent, false))
+                CalendarHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_calendar, parent, false))
             }
         }
     }
@@ -256,9 +257,9 @@ class NoteFilterFragment : Fragment() {
                 outRect.bottom = 6.toPx()
 
                 val filter = filters[indexPath.section - 1].second[indexPath.row]
-                if (filter == FilterType.exceptClear) {
+                if (filter == FilterType.클리어_포함) {
                     outRect.left = 4
-                } else if (filter == FilterType.includeClear) {
+                } else if (filter == FilterType.클리어_미포함) {
                     outRect.right = 4
                 } else {
                     when {
@@ -275,7 +276,7 @@ class NoteFilterFragment : Fragment() {
     }
 }
 
-class CalendarHolder2(val itemBinding: ItemNoteFilterCalendarBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+class CalendarHolder(val itemBinding: ItemNoteFilterCalendarBinding) : RecyclerView.ViewHolder(itemBinding.root) {
     val monthContainerCl = itemBinding.monthContainerCl
     val calendarRangeTv = itemBinding.calendarRangeTv
 
@@ -292,58 +293,7 @@ class CalendarHolder2(val itemBinding: ItemNoteFilterCalendarBinding) : Recycler
         }
     }
 }
-//class CalendarHolder(val view: View) : RecyclerView.ViewHolder(view) {
-//    val monthContainerCl = view.monthContainerCl
-//    val calendarRangeTv = view.calendarRangeTv
-//
-//    fun set(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
-//        when(type) {
-//            DateRangePickerDialog.Type.RECENT7 -> { calendarRangeTv.text = "최근 7일" }
-//            DateRangePickerDialog.Type.RECENT14 -> { calendarRangeTv.text = "최근 14일" }
-//            DateRangePickerDialog.Type.RECENT30 -> { calendarRangeTv.text = "최근 30일" }
-//            else -> {
-//                calendarRangeTv.text = "${DateTimeUtils.yyyyMMddFormat.format(from.toDate())}" +
-//                        " - " +
-//                        "${DateTimeUtils.yyyyMMddFormat.format(to.toDate())}"
-//            }
-//        }
-//    }
-//}
 
-
-class HeaderHolder2(val headerBinding: ItemNoteFilterHeaderBinding) : RecyclerView.ViewHolder(headerBinding.root) {
+class HeaderHolder(val headerBinding: ItemNoteFilterHeaderBinding) : RecyclerView.ViewHolder(headerBinding.root) {
     var titleTv = headerBinding.titleTv
 }
-//class HeaderHolder(val view: View) : RecyclerView.ViewHolder(view) {
-//    val titleTv = view.titleTv
-//}
-
-class FilterButtonHolder(val filterBtn: Button) : RecyclerView.ViewHolder(filterBtn) {
-
-    val context get() = filterBtn.context
-    var isSelected: Boolean = false
-        set(value) {
-            field = value
-            if (value) {
-                filterBtn.typeface = Theme.extraBold(filterBtn.context)
-                filterBtn.setTextColor(ContextCompat.getColor(filterBtn.context, R.color.purple_6D6DFF))
-                filterBtn.background = ContextCompat.getDrawable(filterBtn.context, R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_18)
-            } else {
-                filterBtn.typeface = Theme.bold(filterBtn.context)
-                filterBtn.setTextColor(ContextCompat.getColor(filterBtn.context, R.color.black_4c4c4c))
-                filterBtn.background = ContextCompat.getDrawable(filterBtn.context, R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_18)
-            }
-        }
-
-    init {
-        filterBtn.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-        filterBtn.typeface = Theme.bold(context)
-        filterBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX, filterBtn.resources.getDimension(R.dimen.sp14))
-        filterBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_18)
-        val height = 36.toPx()
-        filterBtn.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height)
-    }
-
-}
-
-

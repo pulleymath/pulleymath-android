@@ -388,7 +388,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp64"
                     android:layout_marginTop="@dimen/dp48"
-                    android:text="전체 플랜"
+                    android:text="전체 문제집"
                     android:textColor="@color/black_4c4c4c"
                     android:textSize="@dimen/sp36"
                     app:layout_constraintStart_toStartOf="parent"

@@ -61,6 +61,11 @@ interface  ServiceV2 {
     @GET("books/all")
     fun getBooks(@Query("studentID") studentID: String,
                  @Query("filter") filter: String): Call<List<Book>>
+    @GET("books/all/ios/book")
+    fun getBooksNew(@Query("studentID") studentID: String,
+                 @Query("filter") filter: String,
+                 @Query("order") order: String,
+                 @Query("category") category: String): Call<List<Book>>
 
     @DELETE("books/{studentID}/plans/pieces/{pieceID}")
     fun deleteFromMyBook(@Path("studentID") studentID: String,
@@ -261,5 +266,11 @@ interface  ServiceV2 {
 
     @GET("lesson/check")
     fun isPurchasedLesson(@Query("studentID") studentID:String)
+
+    @POST("book/review/book")
+    fun reviewBook(@Body param: Parameter): Call<Template<ResponseBookInfo>>
+
+    @POST("book/review/custom-book")
+    fun reviewCustomBook(@Body param: Parameter): Call<ResponseBody<Book>>
 
 }

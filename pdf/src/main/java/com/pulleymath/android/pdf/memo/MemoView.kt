@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.BUTTON_STYLUS_PRIMARY
 import android.view.View
@@ -57,8 +56,23 @@ class MemoView: FreeDrawView {
         return false
     }
 
+    private var isWaitingExecutionSignal = false
+    private var drawingSaveHandler: Handler? = null
+
     fun saveDrawing() {
-        save()
+        if (isWaitingExecutionSignal) {
+            drawingSaveHandler?.removeCallbacksAndMessages(null)
+            drawingSaveHandler = null
+        }
+        else isWaitingExecutionSignal = true
+        addSaveHandler()
+    }
+    private fun addSaveHandler() {
+        drawingSaveHandler = Handler(Looper.getMainLooper())
+        drawingSaveHandler!!.postDelayed({
+            isWaitingExecutionSignal = false
+            saveImaged()
+        }, 1000)
     }
 
     override fun restoreStateFromSerializable(state: FreeDrawSerializableState) {
@@ -67,6 +81,9 @@ class MemoView: FreeDrawView {
 //        setPaintWidthDp(pencilcase!!.thickness.width)
 //        paintColor = pencilcase!!.penColor.value
 //        paintAlpha = pencilcase!!.penColor.alpha
+    }
+    fun clearMemoState() {
+        undoAll()
     }
 
     fun applyPencilMode() {
@@ -93,10 +110,20 @@ class MemoView: FreeDrawView {
         FileHelper.saveMemo(context, currentViewStateAsSerializable, memoId)
     }
 
+    fun saveImaged() {
+        FileHelper.saveImagedMemo(context, memoId, this)
+    }
+
     fun load() {
         FileHelper.loadMemo(context, memoId, { state ->
             Handler(Looper.getMainLooper()).post {
+                loadedBitmap = null
                 restoreStateFromSerializable(state)
+            }
+        },{
+            Handler(Looper.getMainLooper()).post {
+                clearMemoState()
+                loadedBitmap = it
             }
         }, { error ->
             Handler(Looper.getMainLooper()).post {
@@ -104,9 +131,11 @@ class MemoView: FreeDrawView {
             }
         })
     }
-
     fun erase() {
         FileHelper.eraseMemo(context, memoId)
+    }
+    fun clearBitmap() {
+        loadedBitmap = null
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

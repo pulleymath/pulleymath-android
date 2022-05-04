@@ -32,8 +32,8 @@ class MockExamFragment : LearningTabFragment(),
 
     lateinit var binding: FragmentMockTestBinding
     var tabFragments: MutableList<Fragment> = mutableListOf(
-        MyMockFragment.newInstance(),
-        NewMockFragment.newInstance()
+        NewMockFragment.newInstance(),
+        MyMockFragment.newInstance()
     )
 
     override var screenName = "모의고사"
@@ -43,9 +43,9 @@ class MockExamFragment : LearningTabFragment(),
         var count = 1
         tabFragments.forEach {
             if (count == 1) {
-                (it as MyMockFragment).listener = this
-            } else {
                 (it as NewMockFragment).listener = this
+            } else {
+                (it as MyMockFragment).listener = this
             }
             count += 1
         }

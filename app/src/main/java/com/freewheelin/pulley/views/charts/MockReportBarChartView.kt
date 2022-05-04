@@ -2,19 +2,25 @@ package com.freewheelin.pulley.views.charts
 
 import android.animation.Animator
 import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.ViewMockexamHorizontalBarChartBinding
+import com.freewheelin.pulley.databinding.ViewMockexamBarChartBinding
+import kotlinx.coroutines.*
 
-class MockReportBarChartView(val context: Context, val parent: ViewGroup, val showSub:Boolean=false) {
-//    val view by lazy { LayoutInflater.from(context).inflate(R.layout.view_mockexam_horizontal_bar_chart, parent, false)}
+class MockReportBarChartView: LinearLayout {
+
+    constructor(context: Context): super(context)
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) { setTypedArray(attrs) }
+    fun setTypedArray(attrs: AttributeSet) {}
+
     var mainPercent = 0f
     var subPercent = 0f
-    var binding: ViewMockexamHorizontalBarChartBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_mockexam_horizontal_bar_chart, parent, false)
+    var binding: ViewMockexamBarChartBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_mockexam_bar_chart, this, true)
 
     fun setTitles(leftTitle:String, leftSub:String, rightTitle:String, rightSub:String) {
         binding.leftTitle.text = leftTitle
@@ -38,20 +44,20 @@ class MockReportBarChartView(val context: Context, val parent: ViewGroup, val sh
         subPercent = percent.toFloat()
     }
 
-    fun show() {
+    fun show(showSub: Boolean) {
         if(!showSub) {
             binding.subBar.visibility = View.GONE
             binding.rightSubTitle.visibility = View.GONE
         }
-        parent.addView(binding.root)
-
 
         val mp = mainPercent * 0.01f
         val duration = (mp * 800).toLong()
         binding.mainBar.set(mp, true, listener = animationListener, delay = 30, duration = duration )
+
+        println("tpehf subBar subPercent : ${subPercent}")
         binding.subBar.set(subPercent * 0.01f, false)
-        parent.postInvalidate()
     }
+
 
     val animationListener = object: Animator.AnimatorListener {
         override fun onAnimationRepeat(p0: Animator?) {}

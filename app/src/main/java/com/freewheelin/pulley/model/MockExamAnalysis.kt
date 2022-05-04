@@ -1,9 +1,12 @@
 package com.freewheelin.pulley.model
 
+import com.freewheelin.pulley.core.manage.AndroidID
+import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.text.DecimalFormat
+import java.util.*
 
 class MockExamAnalysis {
 
@@ -11,7 +14,7 @@ class MockExamAnalysis {
     var title: String = ""
     val myTimeStr: String = ""
 
-    val summaryAnalysis:SummaryAnalysis? =null
+    val summaryAnalysis:SummaryAnalysis? = null
     val subjectAnalysis:SubjectAnalysis? = null
     val scoreAnalysis:ScoreAnalysis? = null
     val problemAnalysis:ProblemAnalysis? = null

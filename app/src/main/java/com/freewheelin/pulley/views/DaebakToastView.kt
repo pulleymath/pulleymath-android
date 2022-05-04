@@ -14,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.ViewPolicyLayoutV2Binding
 import com.freewheelin.pulley.databinding.ViewToastBinding
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.toPx
@@ -98,7 +97,7 @@ class DaebakToast: PopupWindow() {
             }
 
             popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, android.R.color.transparent)))
-            val screenHeight = DisplayUtils.getScrenHeight(context)
+            val screenHeight = DisplayUtils.getScreenHeight(context)
 
             try {
                 popupWindow.showAtLocation(toastView, Gravity.NO_GRAVITY, 0, screenHeight - toastView.measuredHeight - bottomOffset)

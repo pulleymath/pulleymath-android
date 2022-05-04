@@ -9,26 +9,25 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 enum class PieceCategory {
     mockExam,
     book,
-    test,
-    theme,
-    recommned,
+    workbook,
+    dailyTest,
+    recommned, // 풀리에서 만든 추천학습지
 
-    reference,
-    note;
+    note,
+    reference; // 오답노트 리뷰
 
     companion object {
         fun init(rawString: String): PieceCategory {
            return when(rawString) {
                "MO" -> mockExam
-               "BOOK", "CUSTOM_BOOK" -> book
-               "THEME" -> theme
+               "BOOK" -> book
+               "CUSTOM_BOOK" -> workbook
                "NOTE" -> note
-               "TEST" -> test
+               "TEST" -> dailyTest
                "RECOMMEND" -> recommned
                "REFERENCE" -> reference
                else -> {
@@ -43,7 +42,8 @@ enum class PieceCategory {
         return when(this) {
             mockExam -> "모의고사"
             book -> "유형학습"
-            test -> "테스트"
+            workbook -> "워크북"
+            dailyTest -> "테스트"
             note -> "오답학습"
             recommned -> "추천학습"
             else -> "오답학습"
@@ -96,11 +96,17 @@ open class Content: Serializable {
             else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.book))
                 return PieceCategory.book
 
-            else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.test))
-                return PieceCategory.test
+            else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.dailyTest))
+                return PieceCategory.dailyTest
 
             else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.reference))
                 return PieceCategory.reference
+
+            else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.workbook))
+                return PieceCategory.workbook
+
+            else if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.recommned))
+                return PieceCategory.recommned
 
             return PieceCategory.note
         }

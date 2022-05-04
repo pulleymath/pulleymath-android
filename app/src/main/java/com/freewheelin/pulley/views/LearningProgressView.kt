@@ -28,8 +28,7 @@ class LearningProgressView: CardView {
     var value: Float = 0f
     set(value) {
         field = value
-        val layoutParams = binding.progressView.layoutParams as LinearLayout.LayoutParams
-        layoutParams.weight = value
+        binding.progressView.layoutParams = LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, value)
     }
     var binding: ViewLearningProgressBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_learning_progress, this, true)
 
@@ -55,9 +54,6 @@ class LearningProgressView: CardView {
             val animator = ObjectAnimator.ofFloat(this, "value", 0f, percentage)
             animator.duration = duration
             animator.startDelay = delay
-            animator.addUpdateListener {
-                binding.progressView.requestLayout()
-            }
             animator.addListener(listener)
             animator.start()
         } else {

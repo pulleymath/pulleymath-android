@@ -157,16 +157,19 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun setTag(tags: List<TextView>) {
+    fun setTag(tags: List<TextView>, cb: ((FilterType) -> Unit) = {}) {
         if (book.isCompleted()) {
             tags.forEach { it.visibility = View.INVISIBLE }
         } else {
             tags.forEach { it.visibility = View.GONE }
-            val tagStrings = book.tag.filter { !it.isEmpty() }
-            for(i in tagStrings.indices) {
+            val tagFilterType = book.tagOnFilterType
+            for(i in tagFilterType.indices) {
                 val tagView = tags.getOrNull(i)
                 tagView?.visibility = View.VISIBLE
-                tagView?.text = tagStrings[i]
+                tagView?.text = tagFilterType[i].text
+                tagView?.setOnClickListener {
+                    cb(tagFilterType[i])
+                }
             }
         }
     }
@@ -375,33 +378,6 @@ class MyPlanHolder(override var view: View) : PlanHolder(view) {
             solveDateTv.visibility = View.VISIBLE
         }
     }
-}
-
-class TotalPlanHolder(override var view: View) : PlanHolder(view) {
-    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
-    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
-    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
-    val tags = listOf(view.findViewById<TextView>(R.id.tag1), view.findViewById<TextView>(R.id.tag2))
-    val guideTv = view.findViewById<TextView>(R.id.guideTv)
-
-    override fun set(book: Book) {
-        book.clientBookType = ClientBookType.ALL
-        super.set(book)
-
-        setTag(tags)
-        solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
-        problemCntTv.text = book.totalNumber.toString() + "문제"
-        correctRateTv.text = "${book.score}%"
-
-        if (book.markedNumber == 0) {
-            solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
-        } else {
-            solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-        }
-
-        guideTv.text = book.description
-    }
-
 }
 
 class RecommendPlanHolder(override var view: View) : PlanHolder(view) {

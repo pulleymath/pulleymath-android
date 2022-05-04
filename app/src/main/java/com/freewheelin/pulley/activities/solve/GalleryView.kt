@@ -103,7 +103,6 @@ class GalleryView : ConstraintLayout {
                 }
 
                 this.adapter = contentAdapter
-
                 if (content.bookPage?.isNotEmpty() == true && content.bookPage!![contentAdapter.selectedIndexPath.section]?.problems?.isNotEmpty() == true) {
                     val selectedProblem = if (adapter is BookAdapter)
                         content.bookPage!![contentAdapter.selectedIndexPath.section].problems[contentAdapter.selectedIndexPath.row]

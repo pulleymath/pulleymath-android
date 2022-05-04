@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.activities.WrongTestReportActivity
@@ -149,7 +149,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
             }
 
             filteredList = when(pieceTypeRadio.selectedIndex) {
-                1 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.test) }
+                1 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.dailyTest) }
                 2 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.book) }
                 3 -> filteredList.filter { it.getPieceCategory().contains(PieceCategory.mockExam) }
                 else -> filteredList
@@ -372,7 +372,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                 startActivity(intent)
             }
 
-            PieceCategory.test -> {
+            PieceCategory.dailyTest -> {
                 LogUtils.assert(false, "unexpected case: onSolveBtn Clicked type: ${content.category}")
                 DialogUtils.showIndevelopingErr(requireContext())
             }
@@ -395,7 +395,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                 startActivity(intent)
             }
 
-            PieceCategory.test -> {
+            PieceCategory.dailyTest -> {
                 val intent = SolveActivity.getReviewIntent(requireContext(), Test(content))
                 startActivity(intent)
             }
@@ -413,7 +413,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                 val intent = MockReportActivity.getIntent(requireContext(), MockExam(content))
                 startActivity(intent)
             }
-            PieceCategory.test -> {
+            PieceCategory.dailyTest -> {
                 val test = Test(content)
                 when(test.getTestType()) {
                     Test.TestType.weekly ->  {
@@ -552,7 +552,7 @@ class MyLogHolder(val itemBinding: ItemLearningTabListBinding): RecyclerView.Vie
 
         if(content.isCompleted() && content.isDerivedContent() == false) {
 
-            if(content.category == PieceCategory.mockExam || content.category == PieceCategory.test)
+            if(content.category == PieceCategory.mockExam || content.category == PieceCategory.dailyTest)
                 reportBtn.visibility = View.VISIBLE
             else
                 reportBtn.visibility = View.INVISIBLE

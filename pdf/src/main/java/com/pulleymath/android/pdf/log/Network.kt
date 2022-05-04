@@ -5,7 +5,9 @@ import com.pulleymath.android.pdf.BuildConfig
 import com.pulleymath.android.pdf.PdfViewerActivity
 import com.pulleymath.android.pdf.memo.storage.PdfMemo
 import okhttp3.Interceptor
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
@@ -98,6 +100,20 @@ object Network {
         })
     }
 
+    fun uploadTestMemo(file: MultipartBody.Part,
+                       id: RequestBody, student_id: RequestBody,
+                       pdf_id: RequestBody, updated_at: RequestBody, page_no: RequestBody,
+                       callback: (() -> Unit)? = null) {
+        pdfMemoService.uploadMemoByteArray(file, id, student_id, pdf_id, updated_at, page_no).enqueue(object: Callback<PdfMemoPostResponse>{
+            override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {
+                callback?.let{ it() }
+            }
+            override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {
+                Log.e("uploadMemo", "${t.localizedMessage}")
+            }
+        })
+    }
+
     fun downloadMemo(studentId:String, pdfId:Int?=null, pageNo:Int?=null, updatedAt:Long?=null, onResponse:(PdfMemoResponse?)->Unit, onFailure:(String)->Unit) {
         pdfMemoService.downloadMemo(studentId, pdfId, pageNo, updatedAt).enqueue(object: Callback<PdfMemoResponse>{
             override fun onResponse(call: Call<PdfMemoResponse>, response: Response<PdfMemoResponse>) {
@@ -124,6 +140,16 @@ interface PdfLogService {
 interface PdfMemoService {
     @POST("/v1/memo/pdf")
     fun uploadMemo(@Body body:List<PdfMemo>) : Call<PdfMemoPostResponse>
+
+    @Multipart
+    @POST("/v1/memo/pdf-image")
+    fun uploadMemoByteArray(@Part image: MultipartBody.Part,
+                            @Part("id") id: RequestBody,
+                            @Part("student_id") student_id: RequestBody,
+                            @Part("pdf_id") pdf_id: RequestBody,
+                            @Part("updated_at") updated_at: RequestBody,
+                            @Part("page_no") page_no: RequestBody,
+    ) : Call<PdfMemoPostResponse>
 
     @GET("/v1/memo/pdf")
     fun downloadMemo(@Query("student_id") studentId:String,

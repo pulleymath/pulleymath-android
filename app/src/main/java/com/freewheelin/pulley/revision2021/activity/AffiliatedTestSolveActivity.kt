@@ -4,8 +4,6 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
-import android.content.res.ColorStateList
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -20,7 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -47,7 +44,6 @@ import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionView
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,7 +67,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     private val solutionViewModel = AffiliatedSolveSolutionViewModel.instance
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
-    val screenHeight by lazy { DisplayUtils.getScrenHeight(this) }
+    val screenHeight by lazy { DisplayUtils.getScreenHeight(this) }
     var problemGesture: ProblemGestures? = null
 //    var solutionGesture: SolveGestures? = null
 

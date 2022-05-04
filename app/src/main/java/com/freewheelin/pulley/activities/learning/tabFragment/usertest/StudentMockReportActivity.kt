@@ -4,38 +4,41 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.ActivityMockReportBinding
-import com.freewheelin.pulley.databinding.ItemMockReportProblemListBinding
+import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.model.curation.MockReportCuration
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.charts.MockReportBarChartView
+import kotlinx.coroutines.*
 import java.lang.Exception
 import java.util.*
 
 class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
-
+    private val binding: ActivityMockReportBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_mock_report,null,false)
+    }
     lateinit var examAnalysis: MockExamAnalysis
-    lateinit var adapter: MockReportProblemAdapter
     lateinit var mockExam: MockExam
     lateinit var studentID: String
 
@@ -48,12 +51,8 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     val template: MockReportCuration
         get() = MockReportCuration(this)
 
-    val subjectTabIds = mutableListOf<Int>()
     val scoreTabIds = mutableListOf<Int>()
 
-    private val binding: ActivityMockReportBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_mock_report, null, false)
-    }
     companion object {
         fun getIntent(context: Context, mockExam: MockExam, studentID: String): Intent {
             val intent = Intent(context, StudentMockReportActivity::class.java)
@@ -65,17 +64,21 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        init()
+
+    }
+    private fun init() {
         mockExam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
         studentID = intent.getStringExtra(MockExamManager.ARG_STUDENT_ID)?: ""
 
         MockExamManager.getStudentMockExamReport(this, mockExam.assignID?:0, studentID,
-                successCB = {
-                    examAnalysis = it
-                    configureUI()
-                },
-                failCB = {
-                    binding.loadingContainer.visibility = View.GONE
-                }
+            successCB = {
+                examAnalysis = it
+                setUI()
+            },
+            failCB = {
+                binding.loadingContainer.visibility = View.GONE
+            }
         )
 
         binding.backBtn.extensionTouchArea(40)
@@ -83,14 +86,29 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
         showSuccessToastIfNeed()
     }
+    private fun setUI() {
+        filteredProblemList.clear()
+        filteredProblemList.addAll(examAnalysis.problemAnalysis?.problemList?: listOf())
+
+        binding.apply {
+            loadingContainer.visibility = View.GONE
+            recyclerView.adapter = ReportAdapter(examAnalysis)
+            recyclerView.layoutManager = LinearLayoutManager(this@StudentMockReportActivity)
+
+        }
+    }
 
     private fun showSuccessToastIfNeed() {
-        Handler(Looper.getMainLooper()).postDelayed({
+        CoroutineScope(Dispatchers.IO).launch {
             val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
-            if (scoredInfo?.isNeedToShowCompletedToast() == true) {
-                SuccessToast.show(this, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
+            delay(2000)
+
+            withContext(Dispatchers.Main) {
+                if (scoredInfo?.isNeedToShowCompletedToast() == true) {
+                    SuccessToast.show(this@StudentMockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
+                }
             }
-        }, 2000)
+        }
     }
 
     fun onReviewBtnClicked(problem: Problem) {
@@ -98,335 +116,475 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
         startActivity(intent)
     }
 
-    fun configureUI() {
-        binding.loadingContainer.visibility = View.GONE
-        configureSummaryUI()
-        setSubjectUI()
-        setScoreUI()
-        setProblemUI()
-        setFilters()
-    }
+    var summeryBinding: ItemMockReportSummaryBinding? = null
+    var subjectBinding: ItemMockReportSubjectBinding? = null
+    var scoreBinding: ItemMockReportScoreBinding? = null
+    var problemTopBinding: ItemMockReportProblemTopBinding? = null
+    var problemMiddleBinding: ItemMockReportProblemMiddleBinding? = null
 
-    private fun setFilters() {
-        with(binding) {
-            subjectFilter.listener = this@StudentMockReportActivity
-            scoreFilter.listener = this@StudentMockReportActivity
-            killerFilter.listener = this@StudentMockReportActivity
-            scoreResultFilter.listener = this@StudentMockReportActivity
-
-            val subjectFilterList = mutableListOf<String>()
-            subjectFilterList.add(0, "과목 전체")
-            subjectTreeSet = examAnalysis.problemAnalysis?.problemList?.map { it.subject }?.toHashSet()?: hashSetOf()
-            subjectFilterList.addAll(subjectTreeSet)
-            subjectFilter.items = subjectFilterList
-
-            scoreTreeSet = hashSetOf(2,3,4)
-            scoreFilter.items = listOf("배점 전체", "2점", "3점", "4점")
-            killerTreeSet = hashSetOf(true, false)
-            killerFilter.items = listOf("킬러 전체", "킬러 있음", "킬러 없음")
-            scoreResultTreeSet = hashSetOf(true, false)
-            scoreResultFilter.items = listOf("채점결과 전체", "정답", "오답")
-        }
-
-    }
-
-    private fun configureSummaryUI() {
-        Log.d("모의고사보고서", "showAllSummary=${examAnalysis.showAllSummary}")
-        if(examAnalysis.showAllSummary) {
-            setAllSummaryHeader()
-        } else {
-            setOneSummaryHeader()
-        }
-    }
-
-    private fun setOneSummaryHeader() {
-        with(binding) {
-            oneSummaryContainerCl.visibility = View.VISIBLE
-            summaryContainerCl.visibility = View.INVISIBLE
-
-            val correctRate = examAnalysis.summaryAnalysis?.correctRate?:0
-            val totalCount = examAnalysis.summaryAnalysis?.totalNumber?:0
-            val correctCount = examAnalysis.summaryAnalysis?.correctCount?:0
-
-            titleTv.text = mockExam.getMockTitle()
-            ratingGuideTv2.text = template.getSummaryP(correctRate)
-
-            scorePercentTv2.text = "${correctRate}%"
-            scoreCountTv2.text = "${correctCount}/${totalCount}"
-
-            timeTv2.text = "걸린시간 : " + examAnalysis.myTimeStr
-
-
-            myScoreArrowTv2.text = "정답률\n${correctRate}%"
-            myScoreGuide2.layoutParams = (myScoreGuide2.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
-                guidePercent = correctRate * 0.01f
+    inner class ReportAdapter(private val mockExamAnalysis: MockExamAnalysis): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        private val typeSummary = 0
+        private val typeSubject = 1
+        private val typeScore = 2
+        private val typeProblemTop = 3
+        private val typeProblemMiddle = 4
+        private val typeProblemBottom = 5
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return when (viewType) {
+                typeSummary -> {
+                    ReportSummaryHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_summary, parent, false))
+                }
+                typeSubject -> {
+                    ReportSubjectHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_subject, parent, false))
+                }
+                typeScore -> {
+                    ReportScoreHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_score, parent, false))
+                }
+                typeProblemTop -> {
+                    ReportProblemTopHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_problem_top, parent, false))
+                }
+                typeProblemMiddle -> {
+                    ReportProblemMiddleHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_problem_middle, parent, false))
+                }
+                else -> { // typeProblemBottom
+                    ReportProblemBottomHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_problem_bottom, parent, false))
+                }
             }
+        }
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val totalListSize = filteredProblemList.size + 5
+            val problemBottomIdx = totalListSize - 1
 
-            val animationListener = object: Animator.AnimatorListener {
-                override fun onAnimationRepeat(p0: Animator?) {}
-                override fun onAnimationEnd(p0: Animator?) {
-                    myScoreArrowIv2.show()
-                    myScoreArrowTv2.show()
-                }
-                override fun onAnimationStart(p0: Animator?) {}
-                override fun onAnimationCancel(p0: Animator?) {}
+            when (position) {
+                typeSummary -> { (holder as ReportSummaryHolder).bind(mockExamAnalysis) }
+                typeSubject -> { (holder as ReportSubjectHolder).bind(mockExamAnalysis) }
+                typeScore -> { (holder as ReportScoreHolder).bind(mockExamAnalysis) }
+                typeProblemTop -> { (holder as ReportProblemTopHolder).bind(mockExamAnalysis) }
+                problemBottomIdx -> { (holder as ReportProblemBottomHolder).bind(mockExamAnalysis) }
+                else -> { (holder as ReportProblemMiddleHolder).bind(position - 4) }
             }
+        }
+        override fun getItemViewType(position: Int): Int {
+            val totalListSize = filteredProblemList.size + 5
+            val problemBottomIdx = totalListSize - 1
 
-            Log.d("모의고사보고서", "correctRate=${correctRate}")
+            return when(position) {
+                0 -> typeSummary
+                1 -> typeSubject
+                2 -> typeScore
+                3 -> typeProblemTop
+                problemBottomIdx -> typeProblemBottom
+                else -> typeProblemMiddle
+            }
+        }
 
-            scoreBarView2.set(correctRate.toFloat() * 0.01f, true, listener = animationListener, delay = 100)
+        override fun getItemCount(): Int {
+            val totalListSize = filteredProblemList.size + 5
+            return totalListSize
         }
     }
 
-    private fun setAllSummaryHeader() {
-        with(binding) {
-            oneSummaryContainerCl.visibility = View.INVISIBLE
-            summaryContainerCl.visibility = View.VISIBLE
+    inner class ReportSummaryHolder(private val itemBinding: ItemMockReportSummaryBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        init {
+            summeryBinding = itemBinding
+        }
+        fun bind(analysis: MockExamAnalysis) {
+            val summaryAnalysis = analysis.summaryAnalysis
+            itemBinding.apply {
+                oneSummaryContainerCl.visibility = if (examAnalysis.showAllSummary) View.INVISIBLE else View.VISIBLE
+                summaryContainerCl.visibility = if (examAnalysis.showAllSummary) View.VISIBLE else View.INVISIBLE
 
-            examAnalysis.summaryAnalysis?.let{
-                scorePercentTv.text = "${it.correctRate}%"
-                scoreCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
-                titleTv.text = mockExam.getMockTitle()
-                scoreTv.text = it.score.toString() + "점"
-                percentageTv.text = "${it.percent}%"
-                ratingTv.text = it.rating.toString() + "등급"
-                timeTv.text = "걸린시간 : " + examAnalysis.myTimeStr
+                if(examAnalysis.showAllSummary) {
+                    summaryAnalysis?.let{
+                        scorePercentTv.text = "${it.correctRate}%"
+                        scoreCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
-                ratingGuideTv.text = template.getSummaryQ(it.rating, it.score, it.higherRatingScore)
+                        binding.titleTv.text = mockExam.getMockTitle()
+                        binding.twinsSupportTv?.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
 
-                myScoreArrowTv.text = "내 위치\n${it.score}점"
-                myScoreGuide.layoutParams = (myScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
-                    guidePercent = it.score * 0.01f
-                }
+                        scoreTv.text = it.score.toString() + "점"
+                        percentageTv.text = "${it.percent}%"
+                        ratingTv.text = it.rating.toString() + "등급"
+                        timeTv.text = "걸린시간 : " + examAnalysis.myTimeStr
 
-                belowScoreArrowTv.text = "${it.rating}등급\n${it.sameRatingScore}점"
-                belowScoreGuide.layoutParams = (belowScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
-                    guidePercent = it.sameRatingScore * 0.01f
-                }
+                        ratingGuideTv.text = template.getSummaryQ(it.rating, it.score, it.higherRatingScore)
 
-                if(it.rating - 1 > 0) {
-                    upperScoreArrowTv.text = "${it.rating- 1}등급\n${it.higherRatingScore}점"
-                    upperScoreGuide.layoutParams = (upperScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
-                        guidePercent = it.higherRatingScore * 0.01f
-                    }
-                }
-
-                val animationListener = object: Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationEnd(p0: Animator?) {
-                        belowScoreArrowTv.show()
-                        belowScoreArrowIv.show()
-                        belowScoreBorder.show()
-                        if(it.rating - 1 > 0) {
-                            upperArrowIv.show()
-                            upperScoreBorder.show()
-                            upperScoreArrowTv.show()
+                        myScoreArrowTv.text = "내 위치\n${it.score}점"
+                        myScoreGuide.layoutParams = (myScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
+                            guidePercent = it.score * 0.01f
                         }
-                        myScoreArrowIv.show()
-                        myScoreArrowTv.show()
+
+                        belowScoreArrowTv.text = "${it.rating}등급\n${it.sameRatingScore}점"
+                        belowScoreGuide.layoutParams = (belowScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
+                            guidePercent = it.sameRatingScore * 0.01f
+                        }
+
+                        if(it.rating - 1 > 0) {
+                            upperScoreArrowTv.text = "${it.rating- 1}등급\n${it.higherRatingScore}점"
+                            upperScoreGuide.layoutParams = (upperScoreGuide.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
+                                guidePercent = it.higherRatingScore * 0.01f
+                            }
+                        }
+
+                        val animationListener = object: Animator.AnimatorListener {
+                            override fun onAnimationRepeat(p0: Animator?) {}
+                            override fun onAnimationEnd(p0: Animator?) {
+                                belowScoreArrowTv.show()
+                                belowScoreArrowIv.show()
+                                belowScoreBorder.show()
+                                if(it.rating - 1 > 0) {
+                                    upperArrowIv.show()
+                                    upperScoreBorder.show()
+                                    upperScoreArrowTv.show()
+                                }
+                                myScoreArrowIv.show()
+                                myScoreArrowTv.show()
+                            }
+                            override fun onAnimationStart(p0: Animator?) {}
+                            override fun onAnimationCancel(p0: Animator?) {}
+                        }
+
+                        belowScoreArrowIv.visibility = View.GONE
+                        belowScoreArrowTv.visibility = View.GONE
+                        belowScoreBorder.visibility = View.GONE
+                        upperArrowIv.visibility = View.GONE
+                        upperScoreArrowTv.visibility = View.GONE
+                        upperScoreBorder.visibility = View. GONE
+
+                        myScoreArrowIv.visibility = View.GONE
+                        myScoreArrowTv.visibility = View.GONE
+                        scoreBarView.set(it.score.toFloat() * 0.01f, true, listener = animationListener, delay = 100)
                     }
-                    override fun onAnimationStart(p0: Animator?) {}
-                    override fun onAnimationCancel(p0: Animator?) {}
+
+                } else {
+                    val correctRate = summaryAnalysis?.correctRate ?: 0
+                    val totalCount = summaryAnalysis?.totalNumber ?: 0
+                    val correctCount = summaryAnalysis?.correctCount ?: 0
+
+                    binding.titleTv.text = mockExam.getMockTitle()
+                    binding.twinsSupportTv?.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
+                    ratingGuideTv2.text = template.getSummaryP(correctRate)
+
+                    scorePercentTv2.text = "${correctRate}%"
+                    scoreCountTv2.text = "${correctCount}/${totalCount}"
+
+                    timeTv2.text = "걸린시간 : " + examAnalysis.myTimeStr
+
+
+                    myScoreArrowTv2.text = "정답률\n${correctRate}%"
+                    myScoreGuide2.layoutParams = (myScoreGuide2.layoutParams as? ConstraintLayout.LayoutParams)?.apply {
+                        guidePercent = correctRate * 0.01f
+                    }
+
+                    val animationListener = object: Animator.AnimatorListener {
+                        override fun onAnimationRepeat(p0: Animator?) {}
+                        override fun onAnimationEnd(p0: Animator?) {
+                            myScoreArrowIv2.show()
+                            myScoreArrowTv2.show()
+                        }
+                        override fun onAnimationStart(p0: Animator?) {}
+                        override fun onAnimationCancel(p0: Animator?) {}
+                    }
+
+                    Log.d("모의고사보고서", "correctRate=${correctRate}")
+
+                    scoreBarView2.set(correctRate.toFloat() * 0.01f, true, listener = animationListener, delay = 100)
                 }
 
-                belowScoreArrowIv.visibility = View.GONE
-                belowScoreArrowTv.visibility = View.GONE
-                belowScoreBorder.visibility = View.GONE
-                upperArrowIv.visibility = View.GONE
-                upperScoreArrowTv.visibility = View.GONE
-                upperScoreBorder.visibility = View. GONE
-
-                myScoreArrowIv.visibility = View.GONE
-                myScoreArrowTv.visibility = View.GONE
-                scoreBarView.set(it.score.toFloat() * 0.01f, true, listener = animationListener, delay = 100)
             }
         }
     }
+    inner class ReportSubjectHolder(private val itemBinding: ItemMockReportSubjectBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        val subjectTabIds = mutableListOf<Int>()
 
-    fun setSubjectUI() {
+        private var subjectAnalysis: SubjectAnalysis? = null
+        init {
+            subjectBinding = itemBinding
+        }
+        fun bind(analysis: MockExamAnalysis) {
+            subjectAnalysis = analysis.subjectAnalysis
+            itemBinding.apply {
 
-        setSubjectCuration(examAnalysis.subjectAnalysis?.goodCuration, examAnalysis.subjectAnalysis?.badCuration)
+                setSubjectCuration(subjectAnalysis?.goodCuration, subjectAnalysis?.badCuration)
 
-        examAnalysis.subjectAnalysis?.report?.firstOrNull { it.subjectCode == "NONE"}?.let { none ->
-            examAnalysis.subjectAnalysis?.report?.remove(none)
-            examAnalysis.subjectAnalysis?.report?.add(none)
+                subjectAnalysis?.report?.firstOrNull { it.subjectCode == "NONE"}?.let { none ->
+                    if (subjectAnalysis?.report?.contains(none) == false) {
+                        subjectAnalysis?.report?.add(none)
+                    }
+                }
+
+                var tabTitles = subjectAnalysis?.report?.map { it.subjectName }?.toMutableList()?: mutableListOf()
+
+                setTabs(tabTitles, subjectTab, subjectTabIds)
+                subjectTab.setOnCheckedChangeListener { group, checkedId ->
+
+                    for ((idx, tabId) in subjectTabIds.withIndex()) {
+                        if (tabId == checkedId) {
+                            subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
+                                setRingChart(idx)
+                                setSubjectBarChart(idx)
+                            }
+                        }
+                    }
+                }
+                defaultSelectFirstIdx(itemBinding.subjectTab.children.iterator())
+            }
         }
 
-        var tabTitles = examAnalysis.subjectAnalysis?.report?.map { it.subjectName }?.toMutableList()?: mutableListOf()
+        private fun setSubjectCuration(good: CurationTitle?, bad:CurationTitle?) {
+            try {
+                if (good != null) {
+                    val text = makeCurationText(good.template, good.values)
+                    itemBinding.subjectAnalysisGuideTv.text = text
+                } else {
+                    itemBinding.subjectAnalysisGuideTv2.setPaddingTop(resources.getDimensionPixelSize(R.dimen.dp40))
+                    itemBinding.subjectAnalysisGuideTv.visibility = View.GONE
+                }
 
-        setTabs(tabTitles, binding.subjectTab, subjectTabIds)
-        binding.subjectTab.setOnCheckedChangeListener { group, checkedId ->
-            for ((idx, tabId) in subjectTabIds.withIndex()) {
-                if (tabId == checkedId) {
-                    examAnalysis.subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
-                        setRingChart(idx)
-                        setSubjectBarChart(idx)
+                if (bad != null) {
+                    val text = makeCurationText(bad.template, bad.values)
+                    itemBinding.subjectAnalysisGuideTv2.text = text
+                } else itemBinding.subjectAnalysisGuideTv2.visibility = View.GONE
+            } catch ( e:Exception) {
+                Log.e("StudentMockReportActivity", "error=${e.localizedMessage}")
+            }
+        }
+        private fun setTabs(tabTitles:List<String>, container: LinearLayout, idList:MutableList<Int>) {
+            if (container.childCount > 0) return
+            for((idx,title) in tabTitles.withIndex()) {
+                val viewId = ViewUtils.generateViewId()
+                idList.add(idx, viewId)
+                addTab(title, container, viewId)
+            }
+        }
+        private fun addTab(tabTitle: String, container: LinearLayout, id:Int) {
+            val tab = LayoutInflater.from(itemBinding.root.context).inflate(R.layout.item_mock_report_subject_tab_bg, container, false) as RadioButton
+            tab.id = id
+            tab.text = tabTitle
+            container.addView(tab)
+        }
+
+        private fun setRingChart(idx:Int) {
+            subjectAnalysis?.report?.get(idx)?.let { report ->
+                val correct = report.totalCorrectRate
+                val wrong = 100 - report.totalCorrectRate
+                itemBinding.ringChart.visibility = View.VISIBLE
+                itemBinding.ringChart.setData(wrong.toFloat(), correct.toFloat())
+                itemBinding.tvCorrectRate.text = "${correct}%"
+            }
+        }
+
+        fun setSubjectBarChart(idx: Int) {
+            examAnalysis.subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
+                val barChartList: List<MockReportBarChartView> = listOf(itemBinding.subjectBarChartView1, itemBinding.subjectBarChartView2, itemBinding.subjectBarChartView3)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        barChartList.forEachIndexed { index, chartView ->
+                            chartView.visibility = if (index >= subjectReport.chapterList.size) View.INVISIBLE else View.VISIBLE
+                        }
+                        subjectReport.chapterList.forEachIndexed { idx, chapter ->
+                            val barChart = barChartList[idx]
+                            val leftTitle = chapter.chapterName
+                            val leftSub = "${chapter.totalNumber}문항"
+                            val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
+                            val rightSub =
+                                "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
+                            barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
+                            barChart.setMainColorWithPercent(chapter.myCorrectRate)
+                            barChart.setSubPercent(chapter.sameRatingCorrectRate)
+                            barChart.show(examAnalysis.showAllSummary)
+                        }
                     }
                 }
             }
         }
-
-        subjectTabIds.firstOrNull()?.let {
-            findViewById<RadioButton>(it).isChecked = true
-        }
     }
+    inner class ReportScoreHolder(private val itemBinding: ItemMockReportScoreBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        init {
+            scoreBinding = itemBinding
+        }
+        fun bind(analysis: MockExamAnalysis) {
+            val scoreAnalysis = analysis.scoreAnalysis
+            itemBinding.apply {
+                setScoreCuration(examAnalysis.scoreAnalysis?.goodCuration, examAnalysis.scoreAnalysis?.badCuration)
 
-    fun setSubjectCuration(good: CurationTitle?, bad:CurationTitle?) {
-        try {
-            if (good != null) {
-                val text = makeCurationText(good.template, good.values)
-                binding.subjectAnalysisGuideTv.text = text
-            } else {
-                binding.subjectAnalysisGuideTv2.setPaddingTop(resources.getDimensionPixelSize(R.dimen.dp40))
-                binding.subjectAnalysisGuideTv.visibility = View.GONE
+                scoreAnalysis?.report?.firstOrNull { it.subject == "교육과정 외"}?.let { none ->
+                    scoreAnalysis.report.remove(none)
+                    scoreAnalysis.report.add(none)
+                }
+
+                var tabTitles = scoreAnalysis?.report?.map { it.subject }?.toMutableList()?: mutableListOf()
+
+                setTabs(tabTitles, scoreTab, scoreTabIds)
+                scoreTab.setOnCheckedChangeListener { group, checkedId ->
+                    for((idx, tabId) in scoreTabIds.withIndex()) {
+                        if(tabId == checkedId) {
+                            scoreAnalysis?.report?.get(idx)?.let { scoreReport ->
+                                setScoreBarChart(idx)
+                            }
+                        }
+                    }
+                }
+
+                setScoreBarChart(0)
+
+                defaultSelectFirstIdx(itemBinding.scoreTab.children.iterator())
             }
-
-            if (bad != null) {
-                val text = makeCurationText(bad.template, bad.values)
-                binding.subjectAnalysisGuideTv2.text = text
-            } else binding.subjectAnalysisGuideTv2.visibility = View.GONE
-        } catch ( e:Exception) {
-            Log.e("MockReportActivity", "error=${e.localizedMessage}")
-        }
-    }
-
-    fun setScoreUI() {
-
-        setScoreCuration(examAnalysis.scoreAnalysis?.goodCuration, examAnalysis.scoreAnalysis?.badCuration)
-
-        examAnalysis.scoreAnalysis?.report?.firstOrNull { it.subject == "교육과정 외"}?.let { none ->
-            examAnalysis.scoreAnalysis?.report?.remove(none)
-            examAnalysis.scoreAnalysis?.report?.add(none)
         }
 
-        var tabTitles = examAnalysis.scoreAnalysis?.report?.map { it.subject }?.toMutableList()?: mutableListOf()
+        private fun setScoreCuration(good: CurationTitle?, bad:CurationTitle?) {
+            try {
+                if (good != null) {
+                    val text = makeCurationText(good.template, good.values)
+                    itemBinding.scoreAnalysisGuideTv.text = text
+                } else {
+                    itemBinding.scoreAnalysisGuideTv2.setPaddingTop(resources.getDimensionPixelSize(R.dimen.dp40))
+                    itemBinding.scoreAnalysisGuideTv.visibility = View.GONE
+                }
 
-        setTabs(tabTitles, binding.scoreTab, scoreTabIds)
-        binding.scoreTab.setOnCheckedChangeListener { group, checkedId ->
-            for((idx, tabId) in scoreTabIds.withIndex()) {
-                if(tabId == checkedId) {
-                    examAnalysis.scoreAnalysis?.report?.get(idx)?.let { scoreReport ->
-                        setScoreBarChart(idx)
+                if (bad != null) {
+                    val text = makeCurationText(bad.template, bad.values)
+                    itemBinding.scoreAnalysisGuideTv2.text = text
+                } else itemBinding.scoreAnalysisGuideTv2.visibility = View.GONE
+            } catch ( e:Exception) {
+                Log.e("StudentMockReportActivity", "error=${e.localizedMessage}")
+            }
+        }
+        private fun setTabs(tabTitles:List<String>, container: LinearLayout, idList:MutableList<Int>) {
+            if (container.childCount > 0) return
+            for((idx,title) in tabTitles.withIndex()) {
+                val viewId = ViewUtils.generateViewId()
+                idList.add(idx, viewId)
+                addTab(title, container, viewId)
+            }
+        }
+        private fun setScoreBarChart(idx:Int) {
+            examAnalysis.scoreAnalysis?.report?.get(idx)?.let { scoreReport ->
+
+                val barChartList: List<MockReportBarChartView> = listOf(itemBinding.scoreBarChartView1, itemBinding.scoreBarChartView2, itemBinding.scoreBarChartView3)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        println("tpehf , scoreReport.pointProblemList : ${scoreReport.pointProblemList.size}")
+                        barChartList.forEachIndexed { index, chartView ->
+                            chartView.visibility = if (index >= scoreReport.pointProblemList.size) View.INVISIBLE else View.VISIBLE
+                        }
+                        scoreReport.pointProblemList.forEachIndexed { idx, problem ->
+                            val barChart = barChartList[idx]
+
+                            val leftTitle = "${problem.point}점 문항"
+                            val leftSub = "${problem.totalNumber}문항"
+                            val rightTitle = "내 정답률 ${problem.myCorrectRate}%"
+                            val rightSub = "${problem.myRating}등급 평균 ${problem.sameRatingCorrectRate}%"
+
+                            barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
+                            barChart.setMainColorWithPercent(problem.myCorrectRate)
+                            barChart.setSubPercent(problem.sameRatingCorrectRate)
+                            barChart.show(examAnalysis.showAllSummary)
+                        }
                     }
                 }
             }
         }
-
-        setScoreBarChart(0)
-
-        scoreTabIds.firstOrNull()?.let {
-            findViewById<RadioButton>(it).isChecked = true
-        }
     }
+    inner class ReportProblemTopHolder(private val itemBinding: ItemMockReportProblemTopBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        init {
+            problemTopBinding = itemBinding
+        }
+        fun bind(analysis: MockExamAnalysis) {
+            val problemAnalysis = analysis.problemAnalysis
+            itemBinding.apply {
+                setProblemCuration(examAnalysis.problemAnalysis?.curation)
+                setFilters()
 
-    fun setScoreCuration(good: CurationTitle?, bad:CurationTitle?) {
-        try {
-            if (good != null) {
-                val text = makeCurationText(good.template, good.values)
-                binding.scoreAnalysisGuideTv.text = text
-            } else {
-                binding.scoreAnalysisGuideTv2.setPaddingTop(resources.getDimensionPixelSize(R.dimen.dp40))
-                binding.scoreAnalysisGuideTv.visibility = View.GONE
             }
+        }
+        fun setProblemCuration(curation: CurationTitle?) {
+            try {
+                if (curation != null) {
+                    val text = makeCurationText(curation.template, curation.values)
+                    itemBinding.problemAnalysisGuideTv.text = text
+                } else {
+                    scoreBinding?.scoreAnalysisGuideTv?.visibility = View.GONE
+                }
 
-            if (bad != null) {
-                val text = makeCurationText(bad.template, bad.values)
-                binding.scoreAnalysisGuideTv2.text = text
-            } else binding.scoreAnalysisGuideTv2.visibility = View.GONE
-        } catch ( e:Exception) {
-            Log.e("MockReportActivity", "error=${e.localizedMessage}")
+            } catch ( e:Exception) {
+                Log.e("StudentMockReportActivity", "error=${e.localizedMessage}")
+            }
+        }
+        private fun setFilters() {
+            with(itemBinding) {
+                subjectFilter.listener = this@StudentMockReportActivity
+                scoreFilter.listener = this@StudentMockReportActivity
+                killerFilter.listener = this@StudentMockReportActivity
+                scoreResultFilter.listener = this@StudentMockReportActivity
+
+                val subjectFilterList = mutableListOf<String>()
+                subjectFilterList.add(0, "과목 전체")
+                examAnalysis.problemAnalysis?.problemList?.map { it.subject }?.toHashSet()?.let {
+                    subjectTreeSet = it
+                }
+
+                subjectFilterList.addAll(subjectTreeSet)
+                subjectFilter.items = subjectFilterList
+
+                scoreTreeSet = hashSetOf(2, 3, 4)
+                scoreFilter.items = listOf("배점 전체", "2점", "3점", "4점")
+                killerTreeSet = hashSetOf(true, false)
+                killerFilter.items = listOf("킬러 전체", "킬러 있음", "킬러 없음")
+                scoreResultTreeSet = hashSetOf(true, false)
+                scoreResultFilter.items = listOf("채점결과 전체", "정답", "오답")
+            }
         }
     }
+    inner class ReportProblemMiddleHolder(private val itemBinding: ItemMockReportProblemMiddleBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        init {
+            problemMiddleBinding = itemBinding
+        }
+        fun bind(idx: Int) {
+            val problem = filteredProblemList[idx]
+            itemBinding.apply {
+                val bgDrawable = if(idx % 2 == 0) R.drawable.bg_gray_300_stroke_top_gray else R.drawable.bg_gray_300_stroke_top
+                problemMiddleLl.setBackgroundResource(bgDrawable)
 
-    fun setProblemUI() {
-        setProblemCuration(examAnalysis.problemAnalysis?.curation)
-        filteredProblemList.clear()
-        filteredProblemList.addAll(examAnalysis.problemAnalysis?.problemList?: listOf())
-        adapter = MockReportProblemAdapter(filteredProblemList, binding.problemRv)
-        adapter.notifyDataSetChanged()
-    }
+                tvNum.text = "${problem.problemNum}"
+                tvSubject.text = problem.subject
+                tvBigUnit.text = problem.bigChapter
+                tvType.text = problem.unit
+                tvPoint.text = "${problem.point}"
 
-    fun setProblemCuration(curation: CurationTitle?) {
-        try {
-            if (curation != null) {
-                val text = makeCurationText(curation.template, curation.values)
-                binding.problemAnalysisGuideTv.text = text
-            } else binding.scoreAnalysisGuideTv.visibility = View.GONE
+                ivKiller.visibility = if(problem.isKiller) View.VISIBLE else View.INVISIBLE
 
-        } catch ( e:Exception) {
-            Log.e("MockReportActivity", "error=${e.localizedMessage}")
+                if(problem.isCorrect){
+                    ivResult.setImageResource(R.drawable.ic_mock_report_result_o)
+                } else {
+                    ivResult.setImageResource(R.drawable.ic_mock_report_result_x)
+                }
+            }
         }
     }
+    inner class ReportProblemBottomHolder(private val itemBinding: ItemMockReportProblemBottomBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(analysis: MockExamAnalysis) {
 
+        }
 
-    fun setTabs(tabTitles:List<String>, container: LinearLayout, idList:MutableList<Int>) {
-        for((idx,title) in tabTitles.withIndex()) {
-            val viewId = ViewUtils.generateViewId()
-            idList.add(idx, viewId)
-            addTab(title, container, viewId)
+    }
+    private fun defaultSelectFirstIdx (tabs: Iterator<View>) {
+        var count = 0
+        for (child in tabs) {
+            if (count == 0) {
+                (child as AppCompatRadioButton).isChecked = true
+            }
+            count += 1
         }
     }
-
     fun addTab(tabTitle: String, container: LinearLayout, id:Int) {
         val tab = LayoutInflater.from(this).inflate(R.layout.item_mock_report_subject_tab_bg, container, false) as RadioButton
         tab.id = id
         tab.text = tabTitle
         container.addView(tab)
-    }
-
-    fun setRingChart(idx:Int) {
-        examAnalysis.subjectAnalysis?.report?.get(idx)?.let { report ->
-            val correct = report.totalCorrectRate
-            val wrong = 100 - report.totalCorrectRate
-            binding.ringChart.visibility = View.VISIBLE
-            binding.ringChart.setData(wrong.toFloat(), correct.toFloat())
-            binding.tvCorrectRate.text = "${correct}%"
-        }
-    }
-
-    fun setSubjectBarChart(idx:Int) {
-        binding.subjectBarCharContainer.removeAllViews()
-        examAnalysis.subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
-            for((idx, chapter) in subjectReport.chapterList.withIndex()) {
-                val bar = MockReportBarChartView(this, binding.subjectBarCharContainer, examAnalysis.showAllSummary)
-
-                val leftTitle = chapter.chapterName
-                val leftSub = "${chapter.totalNumber}문항"
-                val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
-                val rightSub = "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
-
-                bar.setTitles(leftTitle, leftSub, rightTitle, rightSub)
-                bar.setMainColorWithPercent(chapter.myCorrectRate)
-                bar.setSubPercent(chapter.sameRatingCorrectRate)
-
-                if(idx > 0) bar.binding.root.setPaddingTop(resources.getDimensionPixelSize(R.dimen.dp32))
-                bar.show()
-            }
-        }
-        binding.subjectBarCharContainer.postInvalidate()
-    }
-
-    fun setScoreBarChart(idx:Int) {
-        binding.scoreBarCharContainer.removeAllViews()
-        examAnalysis.scoreAnalysis?.report?.get(idx)?.let { scoreReport ->
-            for((idx, chapter) in scoreReport.pointProblemList.withIndex()) {
-                val bar = MockReportBarChartView(this, binding.scoreBarCharContainer, examAnalysis.showAllSummary)
-
-                val leftTitle = "${chapter.point}점 문항"
-                val leftSub = "${chapter.totalNumber}문항"
-                val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
-                val rightSub = "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
-
-                bar.setTitles(leftTitle, leftSub, rightTitle, rightSub)
-                bar.setMainColorWithPercent(chapter.myCorrectRate)
-                bar.setSubPercent(chapter.sameRatingCorrectRate)
-
-                if(idx > 0) bar.binding.root.setPaddingTop(32.toPx())
-                bar.show()
-            }
-        }
-        binding.scoreBarCharContainer.postInvalidate()
     }
 
     private fun makeCurationText(text:String, values:List<String>?) : CharSequence {
@@ -447,40 +605,43 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     }
 
     override fun onItemClicked(view: ArduousSpinner, position: Int) {
-        val itemName = when(view) {
-            binding.subjectFilter -> "필터-과목"
-            binding.scoreFilter -> "필터-배점"
-            binding.killerFilter -> "필터-킬러"
-            else -> "필터-채점결과"
+        problemTopBinding?.apply {
+            val itemName = when(view) {
+                subjectFilter -> "필터-과목"
+                scoreFilter -> "필터-배점"
+                killerFilter -> "필터-킬러"
+                else -> "필터-채점결과"
+            }
+
+            val itemValue = view.items[position]
+            LogUtils.logEvent(this@StudentMockReportActivity, user!!, PulleyEvent.BUTTON_CLICK, "모의고사보고서", itemName, itemValue)
+
+            var filtered = testFilter(examAnalysis.problemAnalysis?.problemList ?: listOf(), subjectFilter)
+
+            filtered = testFilter(ArrayList(filtered), scoreFilter)
+            filtered = testFilter(ArrayList(filtered), killerFilter)
+            filtered = testFilter(ArrayList(filtered), scoreResultFilter)
+
+            filteredProblemList.clear()
+            filteredProblemList.addAll(filtered)
+            binding.recyclerView.adapter?.notifyDataSetChanged()
+            //        adapter.notifyDataSetChanged()
         }
 
-        val itemValue = view.items[position]
-        LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "모의고사보고서", itemName, itemValue)
-
-        var filtered = testFilter(examAnalysis.problemAnalysis?.problemList ?: listOf(), binding.subjectFilter)
-
-        filtered = testFilter(ArrayList(filtered), binding.scoreFilter)
-        filtered = testFilter(ArrayList(filtered), binding.killerFilter)
-        filtered = testFilter(ArrayList(filtered), binding.scoreResultFilter)
-
-        filteredProblemList.clear()
-        filteredProblemList.addAll(filtered)
-
-        adapter.notifyDataSetChanged()
     }
 
     private fun testFilter(exams: List<MockExamProblem>, filter: ArduousSpinner): List<MockExamProblem> {
         val position = filter.position
         if (position != null && position > 0) {
-            if (filter === binding.subjectFilter) {
+            if (filter === problemTopBinding?.subjectFilter) {
                 return exams.filter {
                     it.subject == ArrayList(subjectTreeSet).get(position - 1)
                 }
-            } else if (filter === binding.scoreFilter) {
+            } else if (filter === problemTopBinding?.scoreFilter) {
                 return exams.filter {
                     it.point == ArrayList(scoreTreeSet).get(position - 1)
                 }
-            } else if (filter === binding.killerFilter) {
+            } else if (filter === problemTopBinding?.killerFilter) {
                 return exams.filter {
                     it.isKiller == ArrayList(killerTreeSet.reversed()).get(position - 1)
                 }
@@ -494,39 +655,5 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
         }
     }
 }
-
-class MockReportProblemAdapter(val problems: List<MockExamProblem>, val parent:LinearLayout) {
-    fun notifyDataSetChanged() {
-        parent.removeAllViews()
-        for((idx, problem) in problems.withIndex()) {
-            val view = getView(problem, idx)
-            parent.addView(view)
-        }
-    }
-
-    private fun getView(problem:MockExamProblem, idx:Int): View {
-        val itemBinding: ItemMockReportProblemListBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mock_report_problem_list, parent, false)
-        set(itemBinding, problem)
-        itemBinding.root.setBackgroundColor(if(idx%2 == 0) ContextCompat.getColor(parent.context, R.color.white_fafafa) else ContextCompat.getColor(parent.context, R.color.white_ffffff))
-        return itemBinding.root
-    }
-
-    fun set(itemBinding:ItemMockReportProblemListBinding, problem:MockExamProblem) {
-        itemBinding.tvNum.text = "${problem.problemNum}"
-        itemBinding.tvSubject.text = problem.subject
-        itemBinding.tvBigUnit.text = problem.bigChapter
-        itemBinding.tvType.text = problem.unit
-        itemBinding.tvPoint.text = "${problem.point}"
-
-        itemBinding.ivKiller.visibility = if(problem.isKiller) View.VISIBLE else View.INVISIBLE
-
-        if(problem.isCorrect){
-            itemBinding.ivResult.setImageResource(R.drawable.ic_mock_report_result_o)
-        } else {
-            itemBinding.ivResult.setImageResource(R.drawable.ic_mock_report_result_x)
-        }
-    }
-}
-
 
 

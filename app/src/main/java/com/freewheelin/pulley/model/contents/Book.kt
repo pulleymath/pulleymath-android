@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.model.contents
 
+import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import java.io.Serializable
@@ -55,8 +56,13 @@ class Book: Content {
             return if(bookTag == null)
                 return listOf()
             else {
-                bookTag!!.split(",")
+                bookTag!!.split(",").map { tag -> convertTag(tag) }
             }
+        }
+    val tagOnFilterType: List<FilterType>
+        get() {
+            return if (bookTag == null) listOf()
+            else bookTag!!.split(",").map { tag -> convertTagAtFiltertType(tag) }
         }
 
     var addNewAssignPlan: Boolean = false
@@ -81,7 +87,7 @@ class Book: Content {
     constructor(content: Content): super(content)
 
     fun arrangeChapter() {
-        bookPage!!.forEach {
+        bookPage?.forEach {
             it.problems = problems.filter { problem  -> problem.page == it.page}.toMutableList()
         }
     }
@@ -98,6 +104,27 @@ class Book: Content {
         }
 
         return bookPage.filter { (it.filteredProblems != null && it.filteredProblems!!.isNotEmpty()) }
+    }
+    private fun convertTag(tag: String): String {
+        return when (tag) {
+            "기출" -> "기출서"
+            "문제풀이" -> "유형서"
+            "내신대비" -> "내신서"
+            else -> tag
+        }
+    }
+    private fun convertTagAtFiltertType(tag: String): FilterType {
+        return when (tag) {
+            "기출" -> FilterType.유형_기출서
+            "문제풀이" -> FilterType.유형_유형서
+            "내신대비" -> FilterType.유형_내신서
+            "내신대비" -> FilterType.유형_내신서
+            "1등급" -> FilterType.추천_1등급
+            "2~3등급" -> FilterType.추천_2_3등급
+            "3~4등급" -> FilterType.추천_3_4등급
+            "4등급이하" -> FilterType.추천_4등급이하
+            else -> FilterType.추천_1등급
+        }
     }
 }
 

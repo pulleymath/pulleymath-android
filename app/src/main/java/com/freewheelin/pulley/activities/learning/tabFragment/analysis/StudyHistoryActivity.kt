@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.MockReportActivity
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.activities.OMRActivity
 import com.freewheelin.pulley.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.activities.WrongTestReportActivity
@@ -36,10 +36,10 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
             var filteredList = contents
 
             filteredList = when(categoryTab.selectedIndex) {
-                1 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
-                2 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK}
-                3 -> filteredList.filter { it.pieceCategoryTag == BookType.MO }
-                4 -> filteredList.filter { it.pieceCategoryTag == BookType.NOTE }
+                1 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK }
+                2 -> filteredList.filter { it.pieceCategoryTag == BookType.MO  }
+                3 -> filteredList.filter { it.pieceCategoryTag == BookType.NOTE }
+                4 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
                 5 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND }
                 else -> filteredList
             }
@@ -115,21 +115,12 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
     fun setUpUI() {
         binding.apply {
             backBtn.setOnClickListener { finish() }
-            categoryTab.labels = listOf("전체", "테스트", "유형학습", "모의고사", "오답학습", "추천학습")
+            categoryTab.labels = listOf("전체", "유형학습", "모의고사", "오답학습", "테스트", "추천학습")
             ingTab.labels = listOf("전체", "학습 중", "학습 완료")
 
             categoryTab.listener = this@StudyHistoryActivity
             ingTab.listener = this@StudyHistoryActivity
 
-//        problemCntContainer.setOnClickListener {
-//            val balloonWindow = BalloonWindow(this, questionIv, BalloonWindow.Position.below, 8.toPx())
-//            balloonWindow.balloonColor = ContextCompat.getColor(this, R.color.purple_ACACFF)
-//            val textView = TextView(this)
-//            textView.text = "푼 문제 수(+오답학습 수)"
-//            textView.typeface = Theme.bold(this)
-//            textView.setTextColor(ContextCompat.getColor(this, R.color.white_ffffff))
-//            balloonWindow.show(textView)
-//        }
         }
 
 

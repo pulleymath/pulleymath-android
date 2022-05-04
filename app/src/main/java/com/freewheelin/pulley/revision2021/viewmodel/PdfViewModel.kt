@@ -1,11 +1,14 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
@@ -23,7 +26,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     var categoryFilter: String? = ""
     var subjectFilter: String? = ""
     var searchTextFilter: String = ""
-    var purchaseBookFilter: Boolean = false
+    var openableBookFilter: Boolean = false
     var searchText = MutableLiveData("")
     var currSearchText = MutableLiveData("")
 
@@ -36,7 +39,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
 
     val categorySelectedPosition = MutableLiveData(0)
     val subjectSelectedPosition = MutableLiveData(0)
-    val isPurchaseBookSelected = MutableLiveData(false)
+    val isOpenableBookSelected = MutableLiveData(false)
 
     val pdfListLength = MutableLiveData("0")
 
@@ -89,8 +92,8 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
                 }
             }
 
-            if(purchaseBookFilter) {
-                result = result.filter { it.is_purchased }
+            if(openableBookFilter) {
+                result = result.filter { it.is_purchased && it.is_event_book }
             }
 
             showEmpty.postValue(result.isEmpty())
@@ -103,6 +106,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
+    @SuppressLint("CheckResult")
     fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit) {
         pdfRepository.answer(cmBookId)
             .subscribeOn(Schedulers.io())
@@ -112,6 +116,20 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             }, { error ->
                 callback(null)
                 Log.e(javaClass.simpleName, "answer=${error.localizedMessage}")
+            })
+    }
+
+    @SuppressLint("CheckResult")
+    fun eventBookCheck(cmBookId:Int, callback: () -> Unit = {}) {
+        val eventBook = EventBook(cmBookId)
+        pdfRepository.eventBookCheck(eventBook)
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ response ->
+                callback()
+            }, { error ->
+                callback()
+                Log.e(javaClass.simpleName, "eventBookCheck=${error.localizedMessage}")
             })
     }
 
@@ -188,9 +206,11 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             }
         }
     }
-    fun purchaseBookListener(isChecked: Boolean) {
-        purchaseBookFilter = isChecked
-        isPurchaseBookSelected.postValue(isChecked)
+    // 구매한 책 보기 에서 열람할수있는 책 보기 로 바뀜.
+    // 무료책에 대해서 구매안해도 볼수있어야 하기 때문.
+    fun openableBookListener(isChecked: Boolean) {
+        openableBookFilter = isChecked
+        isOpenableBookSelected.postValue(isChecked)
         filter()
         ySum = 0
     }

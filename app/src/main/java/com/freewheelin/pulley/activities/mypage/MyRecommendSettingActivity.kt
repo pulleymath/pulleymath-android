@@ -2,11 +2,11 @@ package com.freewheelin.pulley.activities.mypage
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -72,10 +72,9 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
     }
 
     fun setScreen() {
-//        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
         val lp = binding.rootView.layoutParams
-        lp.height = DisplayUtils.getScrenHeight(this) - topBottomMargin.toInt()
+        lp.height = DisplayUtils.getScreenHeight(this) - topBottomMargin.toInt()
         binding.rootView.layoutParams = lp
     }
 
