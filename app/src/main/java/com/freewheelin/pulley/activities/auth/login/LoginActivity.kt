@@ -325,7 +325,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     private fun goLearningTab() {
 
-//        putFcmToken(user)
+        putFcmToken(user)
 
         startActivity(Intent(this, LearningTabActivity::class.java))
         finishAffinity()

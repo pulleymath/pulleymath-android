@@ -465,7 +465,6 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     withContext(Dispatchers.Main) {
-                        println("tpehf , scoreReport.pointProblemList : ${scoreReport.pointProblemList.size}")
                         barChartList.forEachIndexed { index, chartView ->
                             chartView.visibility = if (index >= scoreReport.pointProblemList.size) View.INVISIBLE else View.VISIBLE
                         }

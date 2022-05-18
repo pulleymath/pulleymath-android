@@ -217,7 +217,12 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             else -> {
                 loadAlimSetting(user)
                 putFcmToken(user)
-                startActivity(LearningTabActivity::class.java)
+
+                val pushParam = intent.getStringExtra("target_android")
+                Intent(this, LearningTabActivity::class.java)
+                    .putExtra("target_android", pushParam).apply {
+                        startActivity(this)
+                    }
             }
         }
         finish()

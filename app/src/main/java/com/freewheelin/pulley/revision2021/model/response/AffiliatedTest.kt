@@ -207,7 +207,7 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
     }
     fun getOrderDrawable (wb: AffiliatedTestWorkbook, num: Int): Int {
         if (wb.isFinished()) return R.drawable.ic_check_green_circle_24
-        return when(num) {
+        return when(num) { 
             1 ->  R.drawable.ic_1_grey_24
             2 -> R.drawable.ic_2_grey_24
             else -> R.drawable.ic_3_grey_24

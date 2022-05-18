@@ -40,7 +40,7 @@ import com.freewheelin.pulley.views.OMRView.OMRViewType
 import kotlin.collections.ArrayList
 
 
-class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, TimerViewListener, AppUsageMonitorListener {
+class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, SolveTimerViewListener, AppUsageMonitorListener {
     private val binding: ActivityOmrBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_omr,null,false)
     }
@@ -128,7 +128,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
         if (mockExam.time != null && !mockExam.isRestart) {
             val time = mockExam.time!!
             if(time >= 6000) {
-                binding.timerView.submitType = TimerView.SubmitType.lenient
+                binding.timerView.submitType = SolveTimerView.SubmitType.lenient
                 binding.timerView.setLenientOvetimeUI()
             }
             binding.timerView.elapsedTime = time
@@ -354,13 +354,13 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
 
                     2 -> {
                         timerView.elapsedTime = 5695
-                        timerView.typeRadioGroup?.visibility = View.VISIBLE
-                        timerView.overTimerTextView?.visibility = View.GONE
+                        timerView.binding.typeRg.visibility = View.VISIBLE
+//                        timerView.binding.overTimerTextView?.visibility = View.GONE
                     }
                     3 -> {
                         timerView.elapsedTime = 5995
-                        timerView.typeRadioGroup?.visibility = View.VISIBLE
-                        timerView.overTimerTextView?.visibility = View.GONE
+                        timerView.binding.typeRg.visibility = View.VISIBLE
+//                        timerView.overTimerTextView?.visibility = View.GONE
                     }
                 }
             }
@@ -370,8 +370,8 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
     }
     
 
-    override fun onSubmitTypeChanged(submitType: TimerView.SubmitType) {
-        val itemName = if(submitType == TimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
+    override fun onSubmitTypeChanged(submitType: SolveTimerView.SubmitType) {
+        val itemName = if(submitType == SolveTimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "모의고사", itemName)
     }
 
@@ -383,8 +383,8 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "모의고사", "일시정지")
     }
 
-    override fun onTimerExpired(timerView: TimerView, type: TimerView.SubmitType) {
-        if(type == TimerView.SubmitType.lenient)
+    override fun onTimerExpired(timerView: SolveTimerView, type: SolveTimerView.SubmitType) {
+        if(type == SolveTimerView.SubmitType.lenient)
             return
 
         timerView.stop()
@@ -392,8 +392,8 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, Ti
 
         DialogUtils.showExamExpiredDialog(this, notSolvedProblem.size,
                 onSolveClicked = {
-                    if(timerView.isTimerShown())
-                        timerView.showOverTimerView()
+//                    if(timerView.isTimerShown())
+//                        timerView.showOverTimerView()
                     timerView.hideTypeRadio()
                     timerView.runTimer()
                 },

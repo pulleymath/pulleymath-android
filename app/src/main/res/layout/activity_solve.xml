@@ -221,7 +221,7 @@
                             android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"/>
                     </LinearLayout>
 
-                    <com.freewheelin.pulley.views.TimerView
+                    <com.freewheelin.pulley.views.SolveTimerView
                         android:id="@+id/timerView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                         app:layout_constraintStart_toEndOf="@+id/controlTool"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:orientation="solve">
-                    </com.freewheelin.pulley.views.TimerView>
+                    </com.freewheelin.pulley.views.SolveTimerView>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/mainFormatTool"

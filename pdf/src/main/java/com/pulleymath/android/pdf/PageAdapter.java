@@ -152,7 +152,8 @@ public class PageAdapter extends BaseAdapter {
 	private void loadDrawing(View container, int position) {
 		MemoView memoView = container.findViewWithTag(TAG_MEMOVIEW);
 		String memoId = drawingId + position;
-		memoView.setMemoId(memoId);
+    memoView.setMemoId(memoId);
+    memoView.clearBitmap();
 		memoView.load();
 	}
 

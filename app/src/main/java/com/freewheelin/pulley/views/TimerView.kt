@@ -143,7 +143,9 @@ class TimerView : ConstraintLayout {
         initBinding()
         initView()
     }
+    init {
 
+    }
     lateinit var binding: ViewDataBinding
 
     private fun initBinding() {
@@ -278,6 +280,8 @@ class TimerView : ConstraintLayout {
             }
             SOLVE -> {
                 with(binding as ViewTimerSolveBinding) {
+                    println("tpehf, timerview SOLVE INIT!")
+
                     timerSwitch.setOnCheckedChangeListener { button, isChecked ->
                         if(isChecked) {
                             hourMinTv.visibility = View.VISIBLE
@@ -324,7 +328,9 @@ class TimerView : ConstraintLayout {
                     }
                 }
             }
-            else -> {}
+            else -> {
+                println("tpehf, timerview init else!")
+            }
         }
 
         timerSwitch = when (orientation) {

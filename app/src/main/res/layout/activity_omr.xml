@@ -47,7 +47,7 @@
                 app:autoSizeTextType="uniform" />
         </androidx.appcompat.widget.Toolbar>
 
-        <com.freewheelin.pulley.views.TimerView
+        <com.freewheelin.pulley.views.SolveTimerView
             android:id="@+id/timerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             app:layout_constraintStart_toStartOf="@+id/omrViewLeftContainer"
             app:layout_constraintEnd_toStartOf="@+id/submitBtn"
             app:orientation="solve">
-        </com.freewheelin.pulley.views.TimerView>
+        </com.freewheelin.pulley.views.SolveTimerView>
 
         <com.freewheelin.pulley.views.buttons.PrimaryButton
             android:id="@+id/submitBtn"

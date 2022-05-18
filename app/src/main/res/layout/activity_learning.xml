@@ -108,6 +108,32 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="40dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageView
+                        android:id="@+id/alarmBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_bell"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <View
+                        android:id="@+id/updateAlarmView"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/bg_red_fe7b67_circle"
+                        app:layout_constraintTop_toTopOf="@+id/alarmBtn"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <Button
                     android:id="@+id/spyBtn"
                     style="@style/TextBlack_333333.Bold"

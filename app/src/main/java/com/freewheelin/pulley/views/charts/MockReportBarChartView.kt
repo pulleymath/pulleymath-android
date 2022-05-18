@@ -54,7 +54,6 @@ class MockReportBarChartView: LinearLayout {
         val duration = (mp * 800).toLong()
         binding.mainBar.set(mp, true, listener = animationListener, delay = 30, duration = duration )
 
-        println("tpehf subBar subPercent : ${subPercent}")
         binding.subBar.set(subPercent * 0.01f, false)
     }
 

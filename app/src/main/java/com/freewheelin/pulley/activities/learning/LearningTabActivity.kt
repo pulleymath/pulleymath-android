@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -30,6 +32,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.revision2021.activity.fragments.AlarmDetailFragment
 import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
@@ -47,22 +50,21 @@ import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.Mar
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.snackTest.SnackTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
-import com.freewheelin.pulley.activities.mypage.MyMainPageFragment
-import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
-import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
-import com.freewheelin.pulley.activities.mypage.MyStudyInfoSettingDialog
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
+import com.freewheelin.pulley.activities.mypage.*
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2021.activity.AlarmActivity
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
+import com.freewheelin.pulley.revision2021.repository.AlarmRepository
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.snackBar.SnackBar
@@ -75,10 +77,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
@@ -168,6 +175,9 @@ class LearningTabActivity : PermissionActivity(),
         super.onCreate(savedInstanceState)
         AppUsageMonitor.startAppUsage()
 
+        // TODO 추후 푸시알람 실행시 어딘가로 보내야할수도 있다.
+        val target = intent.getStringExtra("target_android")
+
         if (tabFragment == null) {
             tabFragment = mutableListOf(
                 MainFragment.newInstance(),
@@ -233,6 +243,10 @@ class LearningTabActivity : PermissionActivity(),
             drawerView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
             moveTo(mypageFragment, false)
+            alarmBtn.setOnClickListener {
+                val intent = AlarmActivity.getIntent(this@LearningTabActivity)
+                startActivity(intent)
+            }
             mypageBtn.setOnClickListener {
                 if(viewPager.currentItem == 0 && firstClickCnt < spySeal1)
                     firstClickCnt += 1
@@ -308,6 +322,7 @@ class LearningTabActivity : PermissionActivity(),
             // for Api.class
             if(referActivity == null) referActivity = this@LearningTabActivity
             registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
+//            registerReceiver(firebasePushEventReceiver, IntentFilter("FIREBASE-PUSH"))
 
             userTest()
         }
@@ -371,6 +386,14 @@ class LearningTabActivity : PermissionActivity(),
             DialogUtils.expiredSessionDialog(this@LearningTabActivity)
         }
     }
+//    var firebasePushEventReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context, intent: Intent) {
+//            Log.d(javaClass.simpleName, "firebase push intent=${intent}")
+//
+//            println("tpehf, call firebasePushEventReceiver, check new alarm ")
+//            checkNewAlarm()
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -384,6 +407,7 @@ class LearningTabActivity : PermissionActivity(),
         }
 
         checkAffiliatedTestExist()
+        checkNewAlarm()
     }
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
@@ -427,6 +451,38 @@ class LearningTabActivity : PermissionActivity(),
             })
     }
 
+    @SuppressLint("CheckResult")
+    private fun checkNewAlarm() {
+        // TODO 새 알람 있는지 체크하는 api가 생기면 바꿔야함
+        AlarmRepository().fetchMessages()
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ res ->
+                Log.d(javaClass.simpleName, "fetchMessages list=>${res.data}")
+
+                var isNewAlarmExist = false
+                res.data.forEach {
+                    if (!it.isRead) {
+                        isNewAlarmExist = true
+                        return@forEach
+                    }
+                }
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        binding.updateAlarmView.visibility = if (isNewAlarmExist) {
+                            View.VISIBLE
+                        } else {
+                            View.GONE
+                        }
+                    }
+                }
+
+            }, { error ->
+                Log.e(javaClass.simpleName, "fetchMessages error=${error.localizedMessage}")
+            })
+    }
+
     private fun openStudyHistory(category: String, item_name: String) {
         LogUtils.logEvent(baseContext, user, PulleyEvent.BUTTON_CLICK, category, item_name)
         val intent = StudyHistoryActivity.getIntent(baseContext)
@@ -463,13 +519,13 @@ class LearningTabActivity : PermissionActivity(),
 
         referActivity = null
         unregisterReceiver(mainEventReceiver)
+//        unregisterReceiver(firebasePushEventReceiver)
 
         super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        println("SAVEINSTANCE, tabFragment.size : ${tabFragment.size}")
 
         if(tabFragment[0].isAdded)
             supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
@@ -594,6 +650,7 @@ class LearningTabActivity : PermissionActivity(),
         this.snackBar?.dismiss()
     }
     fun onMypageBtnClicked() {
+//        replaceTo(mypageFragment, false)
         binding.drawerView.openDrawer(GravityCompat.END)
     }
 
@@ -674,12 +731,12 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     fun moveTo(frag: Fragment, withAnim: Boolean = true) {
-        val tran = supportFragmentManager.beginTransaction()
-        if (withAnim)
-            tran?.setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right, R.anim.enter_to_left, R.anim.exit_to_right)
-        tran.add(R.id.container, frag)
-        tran.addToBackStack(null)
-        tran.commit()
+        supportFragmentManager.beginTransaction().apply {
+            if (withAnim) setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right, R.anim.enter_to_left, R.anim.exit_to_right)
+            add(R.id.container, frag)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     fun back(frag: Fragment, withAnim: Boolean = true) {

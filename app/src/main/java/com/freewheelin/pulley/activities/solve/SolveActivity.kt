@@ -393,9 +393,9 @@ class SolveActivity : BaseActivity(),
                     solutionSwitch.visibility = View.GONE
                     val isRestart = intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
                     timerView.visibility = View.VISIBLE
-                    timerView.setTimerViewListener(object : TimerViewListener {
-                        override fun onSubmitTypeChanged(submitType: TimerView.SubmitType) {
-                            val itemName = if (submitType == TimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
+                    timerView.setTimerViewListener(object : SolveTimerViewListener {
+                        override fun onSubmitTypeChanged(submitType: SolveTimerView.SubmitType) {
+                            val itemName = if (submitType == SolveTimerView.SubmitType.lenient) "시간제한없음" else "100분자동제출"
                             LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", itemName, itemValue)
                         }
 
@@ -407,21 +407,21 @@ class SolveActivity : BaseActivity(),
                             LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "일시정지", itemValue)
                         }
 
-                        override fun onTimerExpired(timerView: TimerView, type: TimerView.SubmitType) {
-                            if (type == TimerView.SubmitType.lenient) return
+                        override fun onTimerExpired(solveTimerView: SolveTimerView, type: SolveTimerView.SubmitType) {
+                            if (type == SolveTimerView.SubmitType.lenient) return
 
-                            timerView.stop()
+                            solveTimerView.stop()
                             val notSolvedProblem = content.problems.filter { !it.isUserAnswerInput() }
 
                             DialogUtils.showExamExpiredDialog(this@SolveActivity, notSolvedProblem.size,
                                 onSolveClicked = {
-                                    if (timerView.isTimerShown())
-                                        timerView.showOverTimerView()
-                                    timerView.hideTypeRadio()
-                                    timerView.runTimer()
+//                                    if (timerView.isTimerShown())
+//                                        timerView.showOverTimerView()
+                                    solveTimerView.hideTypeRadio()
+                                    solveTimerView.runTimer()
                                 },
                                 onSubmitClicked = {
-                                    val time = timerView.elapsedTime
+                                    val time = solveTimerView.elapsedTime
                                     ContentManager.score(this@SolveActivity, user!!, content, content.problems.toSet(), time) {
                                         val intent = MockReportActivity.getIntent(this@SolveActivity, content, it)
                                         startActivity(intent)
@@ -446,7 +446,7 @@ class SolveActivity : BaseActivity(),
                         if (content.time != null && !isRestart) {
                             val time = content.time!!
                             if (time >= 6000) {
-                                timerView.submitType = TimerView.SubmitType.lenient
+                                timerView.submitType = SolveTimerView.SubmitType.lenient
                                 timerView.setLenientOvetimeUI()
                             }
                             timerView.elapsedTime = time

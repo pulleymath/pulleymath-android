@@ -5,4 +5,8 @@
     <string name="guide_use_only_tablet">앗 그런데 ㅠㅠ\n풀리수학은 태블릿/PC로 이용하실 수 있어요.</string>
     <string name="text_tablet_and_pc">태블릿/PC</string>
     <string name="guide_mobile_study_with_pulley">등급이 상승할 수밖에 없는\n수학 공부, 같이해요!</string>
+    <string name="default_notification_channel_id">noti_channel_id</string>
+    <string name="default_notification_channel_name" translatable="true">풀리수학알림</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

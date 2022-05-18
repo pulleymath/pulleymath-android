@@ -53,3 +53,9 @@ abstract class BaseSingleResponseNode<T> : Serializable {
     var current_time: String? = null
 }
 
+abstract class BaseAlarmResponse<T>: Serializable {
+    lateinit var data: List<T>
+    lateinit var error: Any
+    lateinit var message: Any
+    var current_time: String? = null
+}

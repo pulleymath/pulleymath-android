@@ -36,6 +36,12 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2021.activity.AlarmActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity
             android:name=".revision2021.activity.VideoPlayerActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
@@ -213,6 +219,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_small_icon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
         <activity
             android:name=".revision2021.activity.PdfListActivity"
