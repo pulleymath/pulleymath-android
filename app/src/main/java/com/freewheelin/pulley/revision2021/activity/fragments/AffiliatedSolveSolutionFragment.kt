@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,11 +14,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.VideoPlayerActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 
 class AffiliatedSolveSolutionFragment : Fragment() {
 
@@ -97,6 +101,7 @@ class AffiliatedSolveSolutionFragment : Fragment() {
                     AffiliatedSolution.ItemType.videoFooter -> {
                         it.videoFooterContainer.visibility = View.VISIBLE
                     }
+                    else -> {}
                 }
             }
         }
@@ -117,8 +122,7 @@ class AffiliatedSolveSolutionFragment : Fragment() {
                 AffiliatedSolution.ItemType.textHeader, AffiliatedSolution.ItemType.videoTextHeader -> {}
                 AffiliatedSolution.ItemType.pdfItem -> {
                     viewModel.makeMediaLog(item)
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.fileurl))
-                    startActivity(intent)
+                    IntentUtils.openWebLink(requireContext(), item.fileurl, requireContext().packageManager)
                 }
                 AffiliatedSolution.ItemType.videoGroupHeader -> {
                     item.isSelected = !item.isSelected
@@ -129,6 +133,7 @@ class AffiliatedSolveSolutionFragment : Fragment() {
                     startActivity(intent)
                 }
                 AffiliatedSolution.ItemType.videoFooter -> { }
+                else -> {}
             }
         }
     }

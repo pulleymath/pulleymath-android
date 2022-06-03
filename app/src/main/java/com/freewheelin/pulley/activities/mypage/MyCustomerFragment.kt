@@ -1,9 +1,11 @@
 package com.freewheelin.pulley.activities.mypage
 
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,9 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyCustomerBinding
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
+import java.lang.Exception
 
 class MyCustomerFragment : MyPageBaseFragment() {
 
@@ -35,21 +40,15 @@ class MyCustomerFragment : MyPageBaseFragment() {
     fun initUI() {
         with(binding) {
             faqBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.FAQ)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.FAQ, requireContext().packageManager)
             }
 
             termsBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.이용약관)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.이용약관, requireContext().packageManager)
             }
 
             privacyBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.개인정보취급방침)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.개인정보취급방침, requireContext().packageManager)
             }
             backBtn.setOnClickListener { onBackBtnClicked() }
         }

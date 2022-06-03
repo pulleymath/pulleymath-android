@@ -315,10 +315,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
     private fun onStartBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "구독하기버튼")
         FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
-
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(URL.구매촉구_메인)
-        startActivity(intent)
+        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
     }
 
     private fun onReportBtnClicked() {

@@ -1,15 +1,19 @@
 package com.freewheelin.pulley.dialogs
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 
 class PulleyPlusPriceDialog(context: Context) : Dialog(context) {
 
@@ -29,9 +33,7 @@ class PulleyPlusPriceDialog(context: Context) : Dialog(context) {
             .load(URL.풀리플러스가격이미지)
             .into(priceIv)
         buyBtn.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(URL.풀리플러스다이얼로그구매)
-            context.startActivity(intent)
+            IntentUtils.openWebLink(context, URL.풀리플러스다이얼로그구매, context.packageManager)
         }
     }
 }

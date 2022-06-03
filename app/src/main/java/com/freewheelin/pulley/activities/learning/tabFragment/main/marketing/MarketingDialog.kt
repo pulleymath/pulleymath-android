@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.marketing
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -12,12 +13,16 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.underMinHeight
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.DialogMarketingBinding
+import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.views.DaebakToast
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
+import java.lang.Exception
 
 class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context), MarketingPager.BannerInterface {
 
@@ -73,9 +78,7 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
         binding.loadingContainer.visibility = View.VISIBLE
 
         if(urlString.startsWith("http")) {
-            val uri = Uri.parse(urlString)
-            val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-            context.startActivity(browserIntent)
+            IntentUtils.openWebLink(context, urlString, context.packageManager)
 
             CoroutineScope(Dispatchers.Default).launch {
                 delay(2000)

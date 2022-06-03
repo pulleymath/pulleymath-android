@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.auth.signup
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
@@ -310,9 +311,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             serviceAgreeCb.isClickable = true
             serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(URL.이용약관)
-                    startActivity(intent)
+                    IntentUtils.openWebLink(requireContext(), URL.이용약관, requireContext().packageManager)
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 
@@ -320,9 +319,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             personalAgreeCb.isClickable = true
             personalAgreeCb.allDocuText = personalAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(URL.개인정보취급방침)
-                    startActivity(intent)
+                    IntentUtils.openWebLink(requireContext(), URL.개인정보취급방침, requireContext().packageManager)
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 
@@ -330,9 +327,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             marketingAgreeCb.isClickable = true
             marketingAgreeCb.allDocuText = marketingAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(URL.마케팅활용동의방안)
-                    startActivity(intent)
+                    IntentUtils.openWebLink(requireContext(), URL.마케팅활용동의방안, requireContext().packageManager)
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 

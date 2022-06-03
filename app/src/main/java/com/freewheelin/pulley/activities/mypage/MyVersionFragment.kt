@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.VersionManager
 import com.freewheelin.pulley.databinding.FragmentMyAppSettingBinding
 import com.freewheelin.pulley.databinding.FragmentMyVersionBinding
+import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.views.DaebakToast
 
 
@@ -93,9 +95,8 @@ class MyVersionFragment : MyPageBaseFragment() {
 
         // if GP not present on device, open web browser
         if (!marketFound) {
-            val webIntent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$appId"))
-            context.startActivity(webIntent)
+            val url = "https://play.google.com/store/apps/details?id=$appId"
+            IntentUtils.openWebLink(requireContext(), url, requireContext().packageManager)
         }
     }
 }

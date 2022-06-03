@@ -68,6 +68,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         }
         bookNameTv.setTextColor(textColor)
         subjectTv.setTextColor(textColor)
+        chapterTv.setTextColor(textColor)
 
         seriesTv.text = book.bookCategoryList?.bookSeries
 

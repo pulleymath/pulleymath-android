@@ -15,6 +15,7 @@ import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.InitTestActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
+import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.manage.ServerStatusManager
@@ -24,10 +25,7 @@ import com.freewheelin.pulley.databinding.ActivityOnboardingBinding
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.Preferences
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -145,9 +143,9 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         // BETA 앱은 앱스토어에 없기 때문에 제대로 동작하지 않음
         // BETA앱으로 테스트 시 packageName에 com.freewheelin.pulley 를 입력해야한다.
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${packageName}")))
+            IntentUtils.openMarketLink(this, packageName)
         } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${packageName}")))
+            IntentUtils.openWebLink(this, "https://play.google.com/store/apps/details?id=${packageName}", this.packageManager)
             Log.e("테스트", "requestAppStore error=${e.localizedMessage}")
         }
     }

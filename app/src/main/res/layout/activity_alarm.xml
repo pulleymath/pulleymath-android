@@ -77,7 +77,7 @@
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{vm.alarmList.size == 0 ? View.VISIBLE : View.GONE }"
+                android:visibility="@{vm.showAlarmProgress ? View.VISIBLE : View.GONE }"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

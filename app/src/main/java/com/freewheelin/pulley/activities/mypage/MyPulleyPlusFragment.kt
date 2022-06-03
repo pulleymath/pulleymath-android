@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.mypage
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,8 @@ import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryPlusItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyPlusBinding
 import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -69,14 +72,10 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
             onBackBtnClicked()
         }
         btnOpenPulleyPlus.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(URL.풀리플러스구매)
-            startActivity(intent)
+            IntentUtils.openWebLink(requireContext(), URL.풀리플러스구매, requireContext().packageManager)
         }
         btnShowPaidList.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(URL.구매내역)
-            startActivity(intent)
+            IntentUtils.openWebLink(requireContext(), URL.구매내역, requireContext().packageManager)
         }
     }
 

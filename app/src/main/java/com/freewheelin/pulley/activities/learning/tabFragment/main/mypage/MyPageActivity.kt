@@ -1,9 +1,11 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.mypage
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -20,6 +22,8 @@ import com.freewheelin.pulley.databinding.ActivityMyPageBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.DaebakToast
+import java.lang.Exception
 
 class MyPageActivity : AppCompatActivity(), MyPageActionListener {
     private val binding: ActivityMyPageBinding by lazy {
@@ -130,9 +134,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
         FacebookEvent.log(this, FacebookEvent.SUBSCRIBE_STARTED)
 
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "마이페이지", "구독하기버튼")
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(URL.구매촉구_마이페이지)
-        startActivity(intent)
+        IntentUtils.openWebLink(this, URL.구매촉구_마이페이지, this.packageManager)
     }
 
     private fun onRecommendUnitSettingBtnClickked() {

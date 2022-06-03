@@ -2,12 +2,14 @@ package com.freewheelin.pulley.utils
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,8 @@ import com.freewheelin.pulley.databinding.DialogDaebakTitleOnlyBinding
 import com.freewheelin.pulley.databinding.DialogDaebakV2ConfirmBinding
 import com.freewheelin.pulley.dialogs.BannerDialog
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.views.DaebakToast
+import java.lang.Exception
 import java.util.*
 
 enum class DialogType {
@@ -212,9 +216,7 @@ class DialogUtils {
             dialog.binding.rightBtn.setOnClickListener {
                 dialog.dismiss()
                 FacebookEvent.log(context, FacebookEvent.SUBSCRIBE_STARTED)
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.홈페이지)
-                context.startActivity(intent)
+                IntentUtils.openWebLink(context, URL.홈페이지, context.packageManager)
             }
             dialog.show()
         }

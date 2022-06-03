@@ -145,7 +145,8 @@ enum class FilterOrder {
     LEVEL,
     SERIES,
     LAST,
-    PAST;
+    PAST,
+    DEFAULT;
 
     val text: String
         get() {

@@ -1,9 +1,11 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,8 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentAlarmDetailBinding
 import com.freewheelin.pulley.revision2021.model.response.Alarm
 import com.freewheelin.pulley.revision2021.viewmodel.AlarmViewModel
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 
 class AlarmDetailFragment : Fragment() {
     lateinit var binding: FragmentAlarmDetailBinding
@@ -66,9 +70,7 @@ class AlarmDetailFragment : Fragment() {
         })
         viewModel.sendLinkUrl.observe(viewLifecycleOwner, {
             if (it.isEmpty()) return@observe
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(it)
-            startActivity(intent)
+            IntentUtils.openWebLink(requireContext(), it, requireContext().packageManager)
         })
     }
 

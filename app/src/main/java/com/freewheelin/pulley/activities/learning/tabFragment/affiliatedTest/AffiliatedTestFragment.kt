@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +35,7 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -93,9 +96,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
             }
 
             webLinkTv.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.건국대_시험_로그인)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.건국대_시험_로그인, requireContext().packageManager)
             }
             webLinkTv.text = webLinkTv.text
                 .partialUnderline("웹으로 시험 응시하기") {

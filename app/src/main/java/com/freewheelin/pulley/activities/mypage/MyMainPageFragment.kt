@@ -4,12 +4,10 @@ package com.freewheelin.pulley.activities.mypage
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +40,7 @@ import com.freewheelin.pulley.dialogs.UpdateDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.DaebakToast
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
@@ -192,26 +191,18 @@ class MyMainPageFragment : Fragment() {
             Recommend -> moveTo(MyRecommendFragement())
             AppSetting -> moveTo(MyAppSettingFragment())
             Home -> {
-                val intent = Intent(Intent.ACTION_VIEW)
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","홈페이지 바로 가기")
-                intent.data = Uri.parse(URL.홈페이지)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.홈페이지, requireContext().packageManager)
             }
             Guide -> {
-                val intent = Intent(Intent.ACTION_VIEW)
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","활용가이드보기")
-                intent.data = Uri.parse(URL.풀리활용가이드_마이페이지)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.풀리활용가이드_마이페이지, requireContext().packageManager)
             }
             Notice -> {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.공지사항)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.공지사항, requireContext().packageManager)
             }
             FAQ -> {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.FAQ)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.FAQ, requireContext().packageManager)
             }
             Contact -> moveTo(MyContactFragment())
             Policy -> moveTo(MyPolicyFragment())

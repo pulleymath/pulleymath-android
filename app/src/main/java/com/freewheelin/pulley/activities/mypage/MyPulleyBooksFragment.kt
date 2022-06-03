@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.mypage
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,8 +21,11 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryBooksItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyBooksBinding
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 
 class MyPulleyBooksFragment : MyPageBaseFragment() {
     lateinit var binding: FragmentMyPulleyBooksBinding
@@ -44,14 +48,10 @@ class MyPulleyBooksFragment : MyPageBaseFragment() {
                 onBackBtnClicked()
             }
             btnOpenPulleyBooks.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.풀리북스구매)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.풀리북스구매, requireContext().packageManager)
             }
             btnShowPaidList.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(URL.구매내역)
-                startActivity(intent)
+                IntentUtils.openWebLink(requireContext(), URL.구매내역, requireContext().packageManager)
             }
         }
     }

@@ -139,7 +139,7 @@ object BookManager {
 
     fun getBooks(context: Context, user: User, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
-        API_V2.getBooksNew(user.studentID, filterString, FilterOrder.LAST.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
+        API_V2.getBooksNew(user.studentID, filterString, FilterOrder.DEFAULT.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
 
             override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {

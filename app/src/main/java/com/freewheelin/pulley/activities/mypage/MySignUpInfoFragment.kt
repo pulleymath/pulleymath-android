@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.activities.mypage
 
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,8 @@ import com.freewheelin.pulley.databinding.FragmentMySignupInfoBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.FacebookEvent
+import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -117,10 +120,7 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     fun onMemebershipBtnClicked() {
         // facebook
         FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
-
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(URL.홈페이지)
-        requireContext().startActivity(intent)
+        IntentUtils.openWebLink(requireContext(), URL.홈페이지, requireContext().packageManager)
     }
 
     fun moveTo(fragment: Fragment) {
