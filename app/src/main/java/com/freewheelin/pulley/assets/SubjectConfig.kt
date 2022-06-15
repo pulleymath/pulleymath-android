@@ -132,5 +132,35 @@ enum class BigUnit(val subject: Subject, val title: String, val suffixId: Int) {
                 }
             }
         }
+
+        fun initOrNull(id: Int): BigUnit? {
+            return when (id) {
+                다항식.id -> 다항식
+                방정식과_부등식.id -> 방정식과_부등식
+                도형의_방정식.id -> 도형의_방정식
+                집합과_명제.id -> 집합과_명제
+                함수.id -> 함수
+                순열과_조합.id -> 순열과_조합
+                지수함수와_로그함수.id -> 지수함수와_로그함수
+                삼각함수.id -> 삼각함수
+                수열.id -> 수열
+                함수의_극한과_연속.id -> 함수의_극한과_연속
+                미분.id -> 미분
+                적분.id -> 적분
+                경우의_수.id -> 경우의_수
+                확률.id -> 확률
+                통계.id -> 통계
+                수열의_극한.id -> 수열의_극한
+                미분법.id -> 미분법
+                적분법.id -> 적분법
+                이차곡선.id -> 이차곡선
+                벡터.id -> 벡터
+                공간도형.id -> 공간도형
+                else -> {
+                    LogUtils.errorEvent(PulleyEvent.ERROR, null, msg="\"예상하지 못한 ID: ${id}\"")
+                    null
+                }
+            }
+        }
     }
 }

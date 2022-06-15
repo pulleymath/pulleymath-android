@@ -93,7 +93,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             }
 
             if(openableBookFilter) {
-                result = result.filter { it.is_purchased && it.is_event_book }
+                result = result.filter { it.is_purchased || it.is_event_book }
             }
 
             showEmpty.postValue(result.isEmpty())

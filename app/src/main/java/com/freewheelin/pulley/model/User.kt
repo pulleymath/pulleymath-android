@@ -146,25 +146,29 @@ class User {
     val studiedUnit: Set<BigUnit>
         get() {
             val ids = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.map { BigUnit.init(it) }.toSet()
+            return ids.mapNotNull { BigUnit.initOrNull(it) }
+                .toSet()
         }
 
     val optionalUnit: Set<BigUnit>
         get() {
             val ids = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.map { BigUnit.init(it) }.toSet()
+            return ids.mapNotNull { BigUnit.initOrNull(it) }
+                .toSet()
         }
 
     val recentUnit: Set<BigUnit>
         get() {
             val ids = recentSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.map { BigUnit.init(it) }.toSet()
+            return ids.mapNotNull { BigUnit.initOrNull(it) }
+                .toSet()
         }
 
     val recentExcludedUnit: Set<BigUnit>
         get() {
             val ids = excludeSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.map { BigUnit.init(it) }.toSet()
+            return ids.mapNotNull { BigUnit.initOrNull(it) }
+                .toSet()
         }
 
     var firstDate: Date = Date()
