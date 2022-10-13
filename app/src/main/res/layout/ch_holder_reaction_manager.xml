@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="40dp"
+    android:orientation="horizontal"
+    android:paddingStart="14dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="5dp">
+
+    <com.zoyi.channel.plugin.android.view.layout.AvatarLayout
+        android:id="@+id/ch_avatarReactionManager"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:ch_avatar_border_radius="15dp" />
+
+    <TextView
+        android:id="@+id/ch_textReactionManagerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingLeft="14dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:singleLine="true"
+        android:textColor="@color/ch_grey900"
+        android:textSize="16sp"
+        tools:text="asdf" />
+
+</LinearLayout>

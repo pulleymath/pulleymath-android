@@ -402,7 +402,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     private fun set5MinTimer() {
-        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() ?: return // todo dummy
+        val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() ?: return
         val currentServerTimeString = viewModel.currentTimeString ?: return
 //        val before5MinItEnds = "2022-02-07 11:36:00"
 
@@ -425,7 +425,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     private fun setScreenDimComeInBeforeTestStart() {
-        val startedAt = viewModel.getStartedTime() ?: return // TODO dummy
+        val startedAt = viewModel.getStartedTime() ?: return
         val currentServerTimeString = viewModel.currentTimeString ?: return
 //        val startedAt = "2022-02-07 10:00:00"
 
@@ -460,7 +460,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     private fun setRemainingTimer() {
         if (!viewModel.showTimer) return
 
-        val finishedAt = viewModel.getFinishedTime() ?: return // TODO dummy
+        val finishedAt = viewModel.getFinishedTime() ?: return
         //        val finishedAt = "2022-02-07 23:20:00"
         val currentServerTimeString = viewModel.currentTimeString ?: return
 
@@ -571,9 +571,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             binding.solveCl.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 val anim = ValueAnimator.ofFloat(0f, 1f)
                 anim.duration = 100
                 anim.addUpdateListener {
@@ -584,8 +584,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                     binding.solveCl.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator) {}
+                    override fun onAnimationEnd(p0: Animator) {
                         binding.apply {
                             problemContainer.setOnTouchListener(problemGesture)
                             val conceptFragment = supportFragmentManager.findFragmentByTag(
@@ -595,8 +595,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                         }
                     }
 
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationStart(p0: Animator) {
                         val prevIndex = viewModel.problemIndex.value?.minus(1)
                         viewModel.problemIndex.postValue(prevIndex)
                         val prevProblem = prevIndex?.let { viewModel.problemList.value?.get(it) }
@@ -606,8 +606,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 anim.start()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
+            override fun onAnimationStart(p0: Animator) {}
         })
         anim.start()
     }
@@ -631,8 +631,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             binding.solveCl.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {}
+            override fun onAnimationEnd(p0: Animator) {
                 val anim = ValueAnimator.ofFloat(0f, 1f)
                 anim.duration = 100
                 anim.addUpdateListener {
@@ -643,8 +643,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                     binding.solveCl.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator) {}
+                    override fun onAnimationEnd(p0: Animator) {
                         binding.apply {
                             problemContainer.setOnTouchListener(problemGesture)
                             val conceptFragment = supportFragmentManager.findFragmentByTag(
@@ -657,8 +657,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
                     }
 
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationStart(p0: Animator) {
                         val nextIndex = viewModel.problemIndex.value?.plus(1)
                         viewModel.problemIndex.postValue(nextIndex)
                         val nextProblem = nextIndex?.let { viewModel.problemList.value?.get(it) }
@@ -668,8 +668,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 anim.start()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
+            override fun onAnimationStart(p0: Animator) {}
         })
         anim.start()
     }

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
+<!--        StudyChapterViewHolder 에서 인입 -->
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
+        <variable name="isLastItem" type="Boolean"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_100"
+        android:paddingHorizontal="43dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:paddingTop="43dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headerTextCl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/titleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/h3"
+                    android:text="풀리 개념 학습"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/subTitleTv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="단원별 "
+                    style="@style/b2"
+                    android:textColor="@color/gray_700"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="24dp"/>
+
+                <TextView
+                    android:id="@+id/subTitleTv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="미리 알아두어야 하는 개념부터 예제, 유형별 문제 "
+                    style="@style/b2"
+                    android:textColor="@color/purple_300"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTv"
+                    app:layout_constraintStart_toEndOf="@+id/subTitleTv1"
+                    android:layout_marginTop="24dp"/>
+
+                <TextView
+                    android:id="@+id/subTitleTv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="까지!"
+                    style="@style/b2"
+                    android:textColor="@color/gray_700"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTv"
+                    app:layout_constraintStart_toEndOf="@+id/subTitleTv2"
+                    android:layout_marginTop="24dp"/>
+                <TextView
+                    android:id="@+id/subTitleTv4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="풀리에 새로 추가된 개념 학습을 경험해보세요"
+                    style="@style/b2"
+                    android:textColor="@color/gray_700"
+                    app:layout_constraintTop_toBottomOf="@+id/subTitleTv1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="2dp"/>
+
+                <TextView
+                    android:id="@+id/subTitle5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="* 진행률은 채점한 문제를 기준으로 계산됩니다."
+                    style="@style/b2"
+                    android:textColor="@color/gray_700"
+                    app:layout_constraintTop_toBottomOf="@+id/subTitleTv4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="18dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <ImageView
+                android:id="@+id/mainHeaderIv"
+                android:layout_width="350dp"
+                android:layout_height="140dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/concept_course_main_img"/>
+
+            <LinearLayout
+                android:id="@+id/readyToOtherSubjectLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:visibility="@{ vm.lastSubjectId &lt; 9 ? View.VISIBLE : View.GONE }"
+                app:layout_constraintEnd_toEndOf="@+id/mainHeaderIv"
+                app:layout_constraintTop_toBottomOf="@+id/mainHeaderIv">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_round_info_gray"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="다른 과목은 준비 중입니다. 조금만 기다려주세요 :)"
+                    android:textColor="@color/gray_500"
+                    style="@style/b2"
+                    android:layout_marginStart="4dp"
+                    />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headerBtnWrapperLl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="60dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="5dp"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toBottomOf="@+id/headerTextCl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+                <LinearLayout
+                    android:id="@+id/mathSangWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/mathHaWrapperLl">
+                    <Button
+                        android:id="@+id/mathSangBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 0 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(0)}"
+                        android:background="@{ vm.subjectIndex == 0 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.MathSang.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="수학(상)"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathHaWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathSangWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/math1WrapperLl">
+                    <Button
+                        android:id="@+id/mathHaBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 1 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(1)}"
+                        android:background="@{ vm.subjectIndex == 1 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.MathHa.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="수학(하)"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/mathSangWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@+id/math1WrapperLl"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/math1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathHaWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/math2WrapperLl">
+                    <Button
+                        android:id="@+id/math1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 2 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(2)}"
+                        android:background="@{ vm.subjectIndex == 2 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.Math1.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="수학1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/math2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/math1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathProbabilityAndStatisticsWrapperLl">
+                    <Button
+                        android:id="@+id/math2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 3 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(3)}"
+                        android:background="@{ vm.subjectIndex == 3 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.Math2.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="수학2"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathProbabilityAndStatisticsWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/math2WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathCalculusWrapperLl">
+                    <Button
+                        android:id="@+id/mathProbabilityAndStatisticsBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 4 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(4)}"
+                        android:background="@{ vm.subjectIndex == 4 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.MathProbabilityAndStatistics.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="확률과 통계"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathCalculusWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathProbabilityAndStatisticsWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathKihaWrapperLl">
+                    <Button
+                        android:id="@+id/mathCalculusBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 5 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(5)}"
+                        android:background="@{ vm.subjectIndex == 5 ? @drawable/bg_study_frag_header_btn_selected_custom_shadow : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.MathCalculus.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="미적분" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathKihaWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathCalculusWrapperLl"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <Button
+                        android:id="@+id/mathKihaBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@{ vm.subjectIndex == 6 ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(6)}"
+                        android:background="@{ vm.subjectIndex == 6 ? @drawable/bg_study_fragment_header_btn_selected : @drawable/bg_study_frag_header_btn_common_custom_shadow }"
+                        android:visibility="@{ vm.lastSubjectId >= SubjectIndicator.MathKiha.rawValue ? View.VISIBLE : View.GONE }"
+                        android:text="기하" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/customShadow"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:paddingHorizontal="5dp"
+                android:src="@drawable/gradient_shadow_under_list_header_cooking"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/chapterCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/chapterInnerCl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_blue_100"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <include
+                    android:id="@+id/largeChapter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_large_chapter"
+                    app:item="@{ item }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:background="@color/purple_gray_200"
+                    android:visibility="@{ isLastItem ? View.GONE : View.VISIBLE }"
+                    android:layout_marginHorizontal="32dp"
+                    app:layout_constraintTop_toBottomOf="@+id/largeChapter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/chapterClLeftShadow"
+                android:layout_width="8dp"
+                android:layout_height="0dp"
+                android:src="@drawable/gradient_shadow_under_list_header_left"
+                app:layout_constraintEnd_toStartOf="@+id/chapterInnerCl"
+                app:layout_constraintTop_toTopOf="@+id/chapterInnerCl"
+                app:layout_constraintBottom_toBottomOf="@id/chapterInnerCl"/>
+            <ImageView
+                android:id="@+id/chapterClRightShadow"
+                android:layout_width="8dp"
+                android:layout_height="0dp"
+                android:src="@drawable/gradient_shadow_under_list_header_right"
+                app:layout_constraintStart_toEndOf="@+id/chapterInnerCl"
+                app:layout_constraintTop_toTopOf="@+id/chapterInnerCl"
+                app:layout_constraintBottom_toBottomOf="@id/chapterInnerCl"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/footerCl"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            android:paddingStart="3dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <View
+                android:id="@+id/footerView"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_study_footer"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

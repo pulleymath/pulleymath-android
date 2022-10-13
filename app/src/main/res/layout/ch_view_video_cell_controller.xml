@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ch_black_10"
+    android:orientation="vertical">
+
+    <com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+        android:id="@id/ch_exo_play"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        app:ch_bl_backColor="@color/ch_bgtxt_absolute_black_light"
+        app:ch_bl_borderRadius="24dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_play"
+            app:tint="@color/ch_white" />
+
+    </com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>
+
+    <com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+        android:id="@id/ch_exo_pause"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        app:ch_bl_backColor="@color/ch_bgtxt_absolute_black_light"
+        app:ch_bl_borderRadius="24dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_pause"
+            app:tint="@color/ch_white" />
+
+    </com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>
+
+    <FrameLayout
+        android:id="@+id/ch_buttonVideoVolumeOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ch_volume_up_filled"
+            app:tint="@color/ch_white" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ch_buttonVideoVolumeOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ch_volume_off_filled"
+            app:tint="@color/ch_white" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ch_buttonVideoFullscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ch_fullscreen"
+            app:tint="@color/ch_white" />
+
+    </FrameLayout>
+
+</FrameLayout>

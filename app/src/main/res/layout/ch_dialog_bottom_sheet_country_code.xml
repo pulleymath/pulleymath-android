@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ch_layoutDialogRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/ch_transparent"
+    app:cardBackgroundColor="@color/ch_white"
+    app:cardCornerRadius="14dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/ch_txt_black_dark"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:ch_tv_textKey="ch.phone_number.list.label" />
+
+            <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+                android:id="@+id/ch_buttonDialogCountryCodeClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ch_btn_backColor="@color/ch_bg_black_lighter"
+                app:ch_btn_contentColor="@color/ch_txt_black_dark"
+                app:ch_btn_leftIcon="@drawable/ch_icon_cancel"
+                app:ch_btn_size="xs"
+                app:ch_btn_type="secondary" />
+
+        </LinearLayout>
+
+        <com.zoyi.channel.plugin.android.view.text_field.CHSearchView
+            android:id="@+id/ch_searchFieldDialogCountryCodeKeyword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            app:ch_search_hintKey="ch.common.search.placeholder" />
+
+        <io.channel.plugin.android.view.ChLoadWrapperLayout
+            android:id="@+id/ch_loadWrapperDialogCountryCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ch_recyclerDialogCountryCodeEntries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/ch_holder_item_country_entry" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="14dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:ch_layout_lwl_contentType="empty">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ch_icon_search"
+                    app:tint="@color/ch_txt_black_dark" />
+
+                <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="2sp"
+                    android:textColor="@color/ch_txt_black_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:ch_tv_textKey="ch.common.no_result" />
+
+            </LinearLayout>
+
+        </io.channel.plugin.android.view.ChLoadWrapperLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="6dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="12dp"
+        android:showDividers="middle">
+
+        <com.zoyi.channel.plugin.android.view.layout.AvatarLayout
+            android:id="@+id/ch_avatarSingle"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:ch_avatar_border_radius="15dp"
+            app:ch_clear_on_detach="false" />
+
+        <!-- Name and message -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <io.channel.com.google.android.flexbox.ChFlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                app:ch_alignItems="center">
+
+                <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                    android:id="@+id/ch_textUserChatName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ch_txt_black_darkest"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:ch_layout_flexGrow="0"
+                    app:ch_layout_flexShrink="1"
+                    tools:text="Name" />
+
+                <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                    android:id="@+id/ch_textUserChatTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ch_txt_black_dark"
+                    android:textSize="11sp"
+                    app:ch_layout_flexGrow="0"
+                    app:ch_layout_flexShrink="0"
+                    tools:text="time" />
+
+            </io.channel.com.google.android.flexbox.ChFlexboxLayout>
+
+            <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                android:id="@+id/ch_textUserChatMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lineSpacingExtra="1sp"
+                android:maxLines="2"
+                android:textColor="@color/ch_txt_black_darkest"
+                android:textSize="15sp"
+                tools:text="preview message" />
+
+            <com.zoyi.channel.plugin.android.view.textview.FileRowTextView
+                android:id="@+id/ch_viewFileRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:ch_cfr_fileNameTextSize="15sp"
+                app:ch_cfr_useOnlyName="true"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <com.zoyi.channel.plugin.android.view.textview.CHTextView
+            android:id="@+id/ch_textUserChatBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/ch_plugin_badge"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="20dp"
+            android:paddingStart="6.5dp"
+            android:paddingEnd="6.5dp"
+            android:textColor="@color/ch_bgtxt_absolute_white_dark"
+            android:textSize="13dp"
+            tools:text="1" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ch_icon_chevron_right"
+            app:tint="@color/ch_txt_black_dark" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

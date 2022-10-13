@@ -45,11 +45,11 @@ class TestMainNeedMoreFragment : TestMainBaseFragment() {
             containerCl.show(duration) {
                 val value = test!!.weeklyInfo.weeklyProblemCount / 30f
                 progressBar.set(value, true, 400, 0, object: Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {}
+                    override fun onAnimationRepeat(p0: Animator) {}
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationStart(p0: Animator) {}
 
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationEnd(p0: Animator) {
                         if(context == null) return
 
                         val width = progressBar.measuredWidth * value

@@ -97,7 +97,7 @@ class MyRecommendSettingDialog(context: Context, override val user: User, listen
         with(binding) {
             when(rangeRg.checkedRadioButtonId) {
                 R.id.sameButton -> {
-                    if(user?.recentSubjectCode?.isNotEmpty()) {
+                    if(user.recentSubjectCode.isNotEmpty()) {
                         showRangeContainer(sameContainerOver50)
                     } else {
                         showRangeContainer(sameContainerBelow50)

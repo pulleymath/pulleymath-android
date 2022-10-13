@@ -18,6 +18,8 @@ import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
@@ -26,7 +28,12 @@ import com.freewheelin.pulley.views.TooltipWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 
@@ -348,9 +355,7 @@ fun ImageView.setProblemImageURL(url: String) {
             .centerInside()
             .into(this, object: Callback {
                 override fun onSuccess() {
-                    val bitmap = (drawable as BitmapDrawable).bitmap
-                    if(bitmap == null)
-                        return
+                    val bitmap = (drawable as BitmapDrawable).bitmap ?: return
 
                     var scale = bitmap.width / resizeVal.toFloat()
                     val ratio = bitmap.height.toFloat() / bitmap.width.toFloat()
@@ -450,4 +455,47 @@ fun View.calculateRectOnScreen(): Rect {
         location[0] + this.measuredWidth,
         location[1] + this.measuredHeight
     )
+}
+fun ImageView.setImageUrlGlide(url: String) {
+
+    Glide.with(this.context)
+        .load("${url}?time=${Date().time}")
+        .into(this)
+}
+
+fun ImageView.setCookingImageURL(url: String) {
+    if (url.isEmpty()) return
+    val screenWidth by lazy { DisplayUtils.getScreenWidth(this.context) }
+
+    CoroutineScope(Dispatchers.IO).launch {
+//        val downloadedImage: Bitmap = Picasso.get().load(url).get()
+        // 피카소 쓰는거보다 글라이드가좀더 빠름
+        val downloadedImage: Bitmap = Glide.with(this@setCookingImageURL.context)
+            .asBitmap()
+            .load("${url}?time=${Date().time}")
+            .submit().get()
+
+
+        val originalWidth = downloadedImage.width
+        val originalHeight = downloadedImage.height
+
+//        val ratio = originalWidth.toFloat() / screenWidth.toFloat()
+
+        // tab s6 lite의 landscape일때 screenWidth는 2000 이고 tab s7의 width 는 2560이다.
+        // originalWidth는 문제일때 약 900, 힌트가 포함되었을때 최대 1800 이다.
+        // screenWidth 대비 originalWidth 의 사이즈가 tab s6lite 에서 너무 크기 때문에
+
+        // screenWidth가 2200 이하일땐 20%정도 문제사이즈를 줄여서 표현하도록 하였다.
+        // 추후에 다른 기기를 대응해야 할때 더 복잡하게 들어가야 할 수도 있다.
+        val maxWidth = if(screenWidth < 2200) (originalWidth * 0.8).toInt() else originalWidth
+
+
+        withContext(Dispatchers.Main) {
+            Glide.with(this@setCookingImageURL.context)
+                .load("${url}?time=${Date().time}")
+                .apply(RequestOptions().override(maxWidth, originalHeight))
+                .into(this@setCookingImageURL)
+
+        }
+    }
 }

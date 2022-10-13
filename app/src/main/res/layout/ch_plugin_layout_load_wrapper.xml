@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ch_rootLoadWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zoyi.channel.plugin.android.view.external.cpv.CircularProgressView
+        android:id="@+id/ch_progressLoadWrapperDefault"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:ch_cpv_animAutostart="true"
+        app:ch_cpv_color="@color/ch_grey900"
+        app:ch_cpv_indeterminate="true"
+        app:ch_cpv_thickness="2dp" />
+
+    <com.zoyi.channel.plugin.android.activity.common.error.ErrorRefreshView
+        android:id="@+id/ch_errorLoadWrapperDefault"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/ch_layoutLoadWrapperProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/ch_layoutLoadWrapperError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/ch_layoutLoadWrapperEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/ch_layoutLoadWrapperContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false" />
+
+</FrameLayout>

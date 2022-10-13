@@ -31,7 +31,7 @@ open class BalloonWindow : PopupWindow {
     var targetView: View
     var position: Position
     var arrowHeight = 12.toPx()
-    var offset: Int
+    var offset: Int // arrow의 위치 offset
     var margin: Int = 4.toPx()
     var paddingLeft = 32.toPx()
     var paddingRight = 32.toPx()

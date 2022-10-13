@@ -22,7 +22,7 @@ class TwoFingerScrollView: ScrollView {
         return super.onTouchEvent(ev)
     }
 
-    override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (event?.pointerCount == 2)
             return true
 
@@ -49,7 +49,7 @@ class DisableHorizontalScrollView: HorizontalScrollView {
         return false
     }
 
-    override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         return false
     }
 
@@ -63,7 +63,7 @@ class DisableVerticalScrollView: ScrollView {
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     var isBlock = false
 
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+    override fun onTouchEvent(ev: MotionEvent): Boolean {
         return false
     }
 

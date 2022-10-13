@@ -36,6 +36,7 @@
     <color name="red_dd2c00">#dd2c00</color>
     <color name="red_ffc6bc">#ffc6bc</color>
     <color name="white_ffffff">#ffffff</color>
+    <color name="white">#ffffff</color>
     <color name="white_4cffffff">#4cffffff</color>
     <color name="white_f2f2f2">#f2f2f2</color>
     <color name="white_ccffffff">#ccffffff</color>
@@ -91,7 +92,32 @@
 
     <color name="black_100">#3d3d3d</color>
     <color name="black_200">#333333</color>
+    <color name="black">#000000</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">#c0c0c0</color>
+
+
+    <!--    주혜쌤 커스텀 컬러 -->
+    <color name="gray_750">#5E5E5E</color>
+    <color name="gray_50">#FCFCFC</color>
+
+    <color name="red_250">#FF9B8C</color>
+
+    <color name="green_100">#EAF8D9</color>
+
+    <color name="purple_250">#7E7EFF</color>
+    <color name="purple_150">#F0EFFF</color>
+
+    <color name="gray_blue_100">#FAFAFE</color>
+
+    <color name="blue_black_200">#4A4A66</color>
+
+    <color name="purple_gray_100">#FAFAFE</color>
+    <color name="purple_gray_200">#ECEBFF</color>
+    <color name="purple_gray_300">#BEBEDF</color>
+    <color name="purple_200_opa_50">#D5D5FF</color>
+    <color name="purple_250_opa_50">#BEBEFF</color>
+    <color name="purple_300_opa_50">#7E7EFF</color>
+    <color name="purple_gray_300_opa_50">#DEDEEF</color>
 
 </resources>

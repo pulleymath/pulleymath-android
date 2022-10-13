@@ -395,6 +395,7 @@ class UserAnalysisActivity : AppCompatActivity(),
                     SolveActivity.getIntent(this, Test(content))
                 startActivity(intent)
             }
+            else -> {}
         }
     }
 

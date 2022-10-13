@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="14dp"
+    android:paddingStart="18dp"
+    android:paddingEnd="23dp">
+
+    <com.zoyi.channel.plugin.android.view.layout.AvatarLayout
+        android:id="@+id/ch_avatarSettingsChannel"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        app:ch_avatar_border_radius="22dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ch_textSettingsChannelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ch_txt_black_darkest"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="채널톡" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ch_textSettingsChannelUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ch_txt_black_dark"
+            android:textSize="13sp"
+            tools:text="https://channel.io" />
+
+    </LinearLayout>
+
+</LinearLayout>

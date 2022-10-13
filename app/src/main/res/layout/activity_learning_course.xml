@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2021.activity.LearningCourseActivity">
+
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerCl"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/black_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:focusable="false"
+                android:src="@drawable/ic_arrow_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/headerChipTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사전 개념"
+                style="@style/c1"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:visibility="@{ vm.isPriorConceptScene ? View.VISIBLE : View.GONE }"
+                android:background="@drawable/bg_purple_250_round"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toEndOf="@+id/backBtn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                style="@style/b1r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ vm.headerTitle }"
+                android:maxLines="1"
+                android:textColor="@color/gray_600"
+                android:ellipsize="end"
+                layout_margin_start_dimen="@{ vm.isPriorConceptScene ? @dimen/dp10 : @dimen/dp0 }"
+                app:layout_constraintStart_toEndOf="@+id/headerChipTv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/headerTitleCl"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headerTitleCl"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerPriorConceptCl"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:background="@{ vm.isCurrentPagePriorConcept ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_passed }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/priorConceptTv"
+                        style="@style/h5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="사전 개념"
+                        android:textColor="@{ vm.isCurrentPagePriorConcept ? @color/white : @color/gray_600 }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/priorConceptDropdownIv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/priorConceptDropdownIv"
+                        layout_margin_start_dimen="@{ vm.isCurrentPagePriorConcept ? @dimen/dp24 : @dimen/dp8 }"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@{ vm.isCurrentPagePriorConcept ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/priorConceptToCookingBridge"
+                    android:layout_width="16dp"
+                    android:layout_height="1dp"
+                    android:background="@{ vm.isCurrentPagePriorConcept ? @color/gray_700 : @color/purple_250 }"
+                    app:layout_constraintBottom_toBottomOf="@+id/headerPriorConceptCl"
+                    app:layout_constraintEnd_toStartOf="@+id/headerCookingCl"
+                    app:layout_constraintStart_toEndOf="@+id/headerPriorConceptCl"
+                    app:layout_constraintTop_toTopOf="@+id/headerPriorConceptCl" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerCookingCl"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:background="@{ vm.isCurrentPagePriorConcept ? @drawable/bg_lc_header_btn_common : vm.isCurrentPageCooking ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_passed }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/priorConceptToCookingBridge"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/cookingTv"
+                        style="@style/h5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@{ vm.headerCookingBtnText }"
+                        android:textColor="@{ vm.isCurrentPageCooking ? @color/white : @color/gray_600 }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cookingDropdownIv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <!--                    layout_margin_start_dimen="@{ vm.isCurrentPageCooking ? @dimen/dp32 : @dimen/dp12 }"-->
+
+
+                    <ImageView
+                        android:id="@+id/cookingDropdownIv"
+                        layout_margin_start_dimen="@{ vm.isCurrentPageCooking ? @dimen/dp24 : @dimen/dp8 }"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@{ vm.isCurrentPageCooking ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/cookingPatternBridge"
+                    android:layout_width="16dp"
+                    android:layout_height="1dp"
+                    android:background="@{ vm.isCurrentPagePattern || vm.isCurrentPageWrongNote ? @color/purple_250 : @color/gray_700 }"
+                    app:layout_constraintBottom_toBottomOf="@+id/headerCookingCl"
+                    app:layout_constraintEnd_toStartOf="@+id/headerPatternCl"
+                    app:layout_constraintStart_toEndOf="@+id/headerCookingCl"
+                    app:layout_constraintTop_toTopOf="@+id/headerCookingCl" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerPatternCl"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:background="@{ vm.isCurrentPagePattern ? @drawable/bg_lc_header_btn_selected : vm.isCurrentPageWrongNote ? @drawable/bg_lc_header_btn_passed : @drawable/bg_lc_header_btn_common }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cookingPatternBridge"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/patternTv"
+                        style="@style/h5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@{ vm.headerPatternBtnText }"
+
+                        android:textColor="@{ vm.isCurrentPagePattern ? @color/white : @color/gray_600 }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/patternDropdownIv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/patternDropdownIv"
+                        layout_margin_start_dimen="@{ vm.isCurrentPagePattern ? @dimen/dp24 : @dimen/dp8 }"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginEnd="12dp"
+                        android:src="@{ vm.isCurrentPagePattern ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <View
+                    android:id="@+id/cookingWrongNoteBridge"
+                    android:layout_width="16dp"
+                    android:layout_height="1dp"
+                    android:background="@{ vm.isCurrentPageWrongNote ? @color/purple_250 : @color/gray_700 }"
+                    app:layout_constraintBottom_toBottomOf="@+id/headerPatternCl"
+                    app:layout_constraintEnd_toStartOf="@+id/headerWrongNoteCl"
+                    app:layout_constraintStart_toEndOf="@+id/headerPatternCl"
+                    app:layout_constraintTop_toTopOf="@+id/headerPatternCl" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerWrongNoteCl"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:background="@{ vm.isCurrentPageWrongNote ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_common }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cookingWrongNoteBridge"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/wrongNoteTv"
+                        style="@style/h5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오답 학습"
+                        android:textColor="@{ vm.isCurrentPageWrongNote ? @color/white : @color/gray_600 }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_gray_750_round"
+                app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
+                app:layout_constraintEnd_toStartOf="@id/navPrevBtn"
+                app:layout_constraintTop_toTopOf="@id/navPrevBtn" />
+
+            <ImageButton
+                android:id="@+id/navPrevBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_black_200_round_ripple"
+                android:focusable="false"
+                android:src="@drawable/ic_nav_arrow_left"
+                android:enabled="@{ vm.isPagerFirstIndex == false }"
+                imageview_tint="@{ vm.isPagerFirstIndex ? @color/gray_800 : @color/gray_600 }"
+                app:layout_constraintBottom_toBottomOf="@+id/navNextBtn"
+                app:layout_constraintEnd_toStartOf="@+id/navNextBtn"
+                app:layout_constraintTop_toTopOf="@+id/navNextBtn" />
+
+            <ImageButton
+                android:id="@+id/navNextBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_black_200_round_ripple"
+                android:src="@drawable/ic_nav_arrow_right"
+                android:enabled="@{ vm.isPagerLastIndex == false}"
+                imageview_tint="@{ vm.isPagerLastIndex ? @color/gray_800 : @color/gray_600 }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pencilContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0">
+
+
+            <com.freewheelin.pulley.revision2021.views.CookingPencilcaseView
+                android:id="@+id/pencilcaseView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="122dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerCl"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="410dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:background="@drawable/shadow_card_white"-->
+        <!--            android:padding="24dp"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/headerCl"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent">-->
+        <!--            <FrameLayout-->
+        <!--                android:id="@+id/channelIoFrame"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent" />-->
+        <!--        </LinearLayout>-->
+
+        <!--            android:layout_width="410dp"-->
+        <FrameLayout
+            android:id="@+id/channelIoFrame"
+            android:layout_width="438dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="32dp"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/shadow_question_floating"
+            android:padding="16dp"
+            android:visibility="@{ vm.showChannelIoFrame ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerCl" />
+
+        <!--        TODO Dummy 주석풀어야함-->
+        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView
+            android:layout_width="700dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminateTint="@color/purple_200"
+            android:visibility="@{ vm.showProgress ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        <com.airbnb.lottie.LottieAnimationView-->
+        <!--            android:id="@+id/lottie"-->
+        <!--            android:layout_width="520dp"-->
+        <!--            android:layout_height="520dp"-->
+        <!--            android:layout_marginTop="24dp"-->
+        <!--            android:background="@drawable/bg_white_ffffff_round_top_only"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:lottie_fileName="sprinkle_effect.json" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

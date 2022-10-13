@@ -22,6 +22,8 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
 
     val selectedUnivTestCard by lazy { MutableLiveData<AffiliatedTestCard>() }
     val currentTimeString by lazy { MutableLiveData<String>() }
+    val selectedTabIndex by lazy { MutableLiveData<Int>(0) }
+    val showNothingDataView by lazy { MutableLiveData(false) }
 
     @SuppressLint("CheckResult")
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
@@ -34,6 +36,7 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "group list=>${res.data}")
                 currentTimeString.postValue(res.current_time)
+                showNothingDataView.postValue(res.data == null)
                 res.data?.let {
                     val groupList = it.group_list
                     val workbookList = it.workbook_list
@@ -136,5 +139,9 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
 
     fun onTimerSwitch(isChecked: Boolean) {
         selectedUnivTestCard.value?.selectedWorkbook?.showTimer = isChecked
+    }
+
+    fun setTabIndex(index: Int) {
+        selectedTabIndex.postValue(index)
     }
 }

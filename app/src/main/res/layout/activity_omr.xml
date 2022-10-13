@@ -57,7 +57,8 @@
             app:layout_constraintBottom_toTopOf="@+id/omrViewLeftContainer"
             app:layout_constraintStart_toStartOf="@+id/omrViewLeftContainer"
             app:layout_constraintEnd_toStartOf="@+id/submitBtn"
-            app:orientation="solve">
+            app:orientation_subname="solve"
+            >
         </com.freewheelin.pulley.views.SolveTimerView>
 
         <com.freewheelin.pulley.views.buttons.PrimaryButton

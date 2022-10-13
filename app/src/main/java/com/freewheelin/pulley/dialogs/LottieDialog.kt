@@ -30,16 +30,16 @@ class LottieDialog(context: Context, val text: String, val lottieFile: String): 
         lottie.playAnimation()
         guideTv.visibility = View.INVISIBLE
         lottie.addAnimatorListener(object: Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 dismiss()
                 listener?.onDismissDialog()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
 
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator) {}
         })
         guideTv.text = text
         guideTv.show(300)

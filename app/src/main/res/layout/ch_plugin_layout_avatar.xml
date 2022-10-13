@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ch_rootAvatarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:ch_bl_backColor="@color/ch_bg_transparent">
+
+    <ImageView
+        android:id="@+id/ch_imageAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+</com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>

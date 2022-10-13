@@ -803,6 +803,7 @@ class WrongNoteFragment : LearningTabFragment(),
                         }
                     }
                 }
+                else -> {}
             }
         }
     }

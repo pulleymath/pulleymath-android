@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.channel.plugin.android.view.ChLoadWrapperLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:orientation="vertical">
+
+            <!-- 이름 -->
+
+            <LinearLayout
+                android:id="@+id/ch_layoutFollowUpContactSettingsName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditLabelName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:textColor="@color/ch_txt_black_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:ch_tv_textKey="이름" />
+
+                <io.channel.plugin.android.view.form.ChTextField
+                    android:id="@+id/ch_textFieldFollowUpContactEntryEditName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="8dp"
+                    app:ch_tf_hintKey="ch.profile_form.placeholder"
+                    app:ch_tf_inputType="text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditErrorMessageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/ch_bgtxt_orange_normal"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    tools:text="오류 메시지예요"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+            <!-- 전화번호 -->
+
+            <LinearLayout
+                android:id="@+id/ch_layoutFollowUpContactSettingsMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditLabelMobileNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:textColor="@color/ch_txt_black_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:ch_tv_textKey="전화번호" />
+
+                <io.channel.plugin.android.view.form.custom.ChMobileNumberInput
+                    android:id="@+id/ch_textFieldFollowUpContactEntryEditMobileNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="8dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditErrorMessageMobileNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/ch_bgtxt_orange_normal"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    tools:text="오류 메시지예요"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+            <!-- 이메일 -->
+
+            <LinearLayout
+                android:id="@+id/ch_layoutFollowUpContactSettingsEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditLabelEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:textColor="@color/ch_txt_black_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:ch_tv_textKey="이메일" />
+
+                <io.channel.plugin.android.view.form.ChTextField
+                    android:id="@+id/ch_textFieldFollowUpContactEntryEditEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="8dp"
+                    app:ch_tf_hintKey="ch.profile_form.placeholder"
+                    app:ch_tf_inputType="email" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textFollowUpContactEntryEditErrorMessageEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/ch_bgtxt_orange_normal"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    tools:text="오류 메시지예요"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</io.channel.plugin.android.view.ChLoadWrapperLayout>

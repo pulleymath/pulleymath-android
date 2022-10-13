@@ -330,6 +330,7 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
                 testBtn.text = "다시 풀기"
                 testBtn.toEnableUI()
             }
+            else -> {}
         }
 
         if (exam.getMakringState() == MarkingState.ING) {

@@ -161,7 +161,7 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
                 }
             }
             showAnimator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                 }
             })
             showAnimator.duration = 150

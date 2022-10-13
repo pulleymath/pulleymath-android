@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.mypage
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -67,6 +68,7 @@ class MyPulleyLessonFragment : MyPageBaseFragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun load() {
         API_APP.summaryLesson()
             .subscribeOn(Schedulers.io())
@@ -79,11 +81,11 @@ class MyPulleyLessonFragment : MyPageBaseFragment() {
                 } else {
                     freeContainer.visibility = View.GONE
                     paidContainer.visibility = View.VISIBLE
-                    val sortedList = result.data!!.sortedByDescending { it.detail.startedAt }
+                    val sortedList = result.data.sortedByDescending { it.detail?.startedAt }
                     setList(sortedList)
                 }
             }, {
-
+                Log.e("MyPulleyLessonFragment", "error=${it.localizedMessage}")
             })
     }
 
@@ -132,14 +134,14 @@ class MyPulleyLessonFragment : MyPageBaseFragment() {
                     nextPayDateContainer.visibility = View.GONE
                 } else {
                     nextPayDateContainer.visibility = View.VISIBLE
-                    paymentTv.text = DateTimeUtils.convertServerStr(item.detail.nextPaymentAt)
+                    paymentTv.text = DateTimeUtils.convertServerStr(item.detail?.nextPaymentAt)
                 }
 
                 val period = if (item.isWait || item.detail == null) {
                     "미정"
                 } else {
-                    val start = DateTimeUtils.convertServerStr(item.detail.startedAt)
-                    val end = DateTimeUtils.convertServerStr(item.detail.endAt)
+                    val start = DateTimeUtils.convertServerStr(item.detail?.startedAt)
+                    val end = DateTimeUtils.convertServerStr(item.detail?.endAt)
                     "$start ~ $end"
                 }
                 usePeriodTv.text = period

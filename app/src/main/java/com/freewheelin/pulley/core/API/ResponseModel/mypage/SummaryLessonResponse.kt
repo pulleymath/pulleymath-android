@@ -10,7 +10,7 @@ data class SummaryLessonItem (
     var userLessonID: Long,
     var title: String,
     var isWait: Boolean,
-    var detail: SummaryLessonItemDetail
+    var detail: SummaryLessonItemDetail? = null
 )
 
 data class SummaryLessonItemDetail (

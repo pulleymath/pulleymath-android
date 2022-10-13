@@ -132,9 +132,7 @@ class SolveTimerView : ConstraintLayout {
         this.listenerSolve = listenerSolve
     }
     private fun setTypedArray(attrs: AttributeSet) {
-        val array = context.obtainStyledAttributes(attrs, R.styleable.TimerView)
-//        val rawValueForOrientation = array.getInt(R.styleable.TimerView_orientation, 0)
-//        orientation = rawValueForOrientation
+        val array = context.obtainStyledAttributes(attrs, R.styleable.PulleyTimerView)
         array.recycle()
     }
 

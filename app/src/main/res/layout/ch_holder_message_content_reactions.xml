@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-7dp"
+    android:layout_marginBottom="@dimen/ch_chat_message_divide_height"
+    app:ch_bl_backColor="@color/ch_grey100"
+    app:ch_bl_borderColor="@color/ch_white"
+    app:ch_bl_borderRadius="12dp"
+    app:ch_bl_borderWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="7dp"
+        android:paddingRight="7dp"
+        android:paddingBottom="6dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageMessageReaction1"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageMessageReaction2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            tools:background="@color/ch_green300" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageMessageReaction3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            tools:background="@color/ch_blue200" />
+
+        <TextView
+            android:id="@+id/ch_textMessageReactionsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:lineSpacingExtra="4sp"
+            android:textColor="@color/ch_grey700"
+            android:textSize="14sp"
+            tools:text="4" />
+
+    </LinearLayout>
+
+</com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>

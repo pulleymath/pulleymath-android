@@ -33,8 +33,9 @@
     </declare-styleable>
 
 
-    <declare-styleable name="TimerView">
-        <attr name="orientation" format="enum">
+    <declare-styleable name="PulleyTimerView">
+<!--        attr 이름이 orientaion 이면 에러 -->
+        <attr name="orientation_subname" format="enum">
             <enum name="vertical" value="0" />
             <enum name="horizontal" value="1" />
             <enum name="solve" value="2"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ch_network_error_illust" />
+
+    <com.zoyi.channel.plugin.android.view.textview.CHTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="21dp"
+        android:textColor="@color/ch_grey500"
+        android:textStyle="bold"
+        app:ch_tv_textKey="ch.error.common.description"
+        tools:text="앗, 내용을 불러오는데 실패했습니다." />
+
+    <com.zoyi.channel.plugin.android.view.button.RefreshButton
+        android:id="@+id/ch_buttonErrorRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

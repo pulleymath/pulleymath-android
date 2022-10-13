@@ -495,6 +495,7 @@ class MyMainPageFragment : Fragment() {
                     }
                 }.show()
             }
+            else -> {}
         }
     }
 
@@ -553,6 +554,7 @@ class MyMainPageFragment : Fragment() {
                 Preferences.onSuccessToast.set(value)
             }
 
+            else -> {}
         }
     }
     inner class MenuAdapter : SectionAdapter<RecyclerView.ViewHolder>() {

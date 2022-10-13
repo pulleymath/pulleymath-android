@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zoyi.channel.plugin.android.view.viewgroup.MaxWidthLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="40dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:ch_mwll_maxWidth="480dp">
+
+        <com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ch_bl_backColor="@color/ch_bg_white_normal"
+            app:ch_bl_borderRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/ch_textDialogTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/ch_txt_black_darkest"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/ch_layoutDialogContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/ch_layoutDialogButtonFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:divider="@drawable/ch_divider_8dp"
+                    android:orientation="horizontal"
+                    android:showDividers="middle" />
+
+            </LinearLayout>
+
+        </com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>
+
+    </com.zoyi.channel.plugin.android.view.viewgroup.MaxWidthLinearLayout>
+
+</FrameLayout>

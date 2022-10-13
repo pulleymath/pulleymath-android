@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="42dp"
+    android:layout_height="42dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    tool:visibility="visible">
+
+
+
+<!--    <com.zoyi.channel.plugin.android.view.channel_button.ChannelButton-->
+    <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelButton
+        android:id="@+id/ch_fabLauncher"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:clipChildren="false"
+        android:clipToPadding="false" />
+
+<!--    <Button-->
+<!--        android:id="@+id/test"-->
+<!--        android:layout_width="42dp"-->
+<!--        android:layout_height="42dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:clipChildren="false"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:text="X"-->
+<!--        />-->
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textLauncherBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="-6dp"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginRight="-2dp"
+        android:background="@drawable/ch_plugin_badge"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:minWidth="20dp"
+        android:paddingStart="6dp"
+        android:paddingLeft="6dp"
+        android:paddingTop="1dp"
+        android:paddingEnd="6dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="1dp"
+        android:textColor="@color/ch_bgtxt_absolute_white_dark"
+        android:textSize="13sp"
+        tool:text="12" />
+
+</FrameLayout>

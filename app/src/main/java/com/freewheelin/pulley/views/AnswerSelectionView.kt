@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.model.ProblemType
+import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.spToPx
 import com.freewheelin.pulley.utils.toPx
@@ -235,6 +236,12 @@ class AnswerSelectionView: LinearLayout, NumberingButtonListener {
 
     fun setAnswerType(type: ProblemType) {
         if(type == ProblemType.single)
+            this.answerType = SINGLE
+        else
+            this.answerType = MULTI
+    }
+    fun setQuizFormat(type: QuizFormat) {
+        if(type == QuizFormat.Single)
             this.answerType = SINGLE
         else
             this.answerType = MULTI

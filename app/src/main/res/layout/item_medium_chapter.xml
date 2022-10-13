@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
+        <variable name="parent" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.ChapterItemClickListener"/>
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/mediumChapterTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/h5"
+            android:text="@{ item.getItemPosition(parent) + `. ` + item.name }"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/blue_black_200"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+<!--        android:text="@{ item.mediumTitle }"-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/smallChapterRv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            bind_small_chapter="@{ item.children }"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/mediumChapterTitleTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

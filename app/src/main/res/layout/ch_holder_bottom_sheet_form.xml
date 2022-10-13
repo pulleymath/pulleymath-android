@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textHolderBottomSheetForm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:lineSpacingExtra="2sp"
+        android:textColor="@color/ch_txt_black_darkest"
+        android:textSize="15sp"
+        tools:text="폼 입력 데이터" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ch_imageHolderBottomSheetForm"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ch_icon_check"
+        android:visibility="gone"
+        app:tint="@color/ch_bgtxt_green_normal"
+        tools:visibility="visible" />
+
+</LinearLayout>

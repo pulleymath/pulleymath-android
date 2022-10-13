@@ -228,8 +228,8 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
                         }
 
                         val animationListener = object: Animator.AnimatorListener {
-                            override fun onAnimationRepeat(p0: Animator?) {}
-                            override fun onAnimationEnd(p0: Animator?) {
+                            override fun onAnimationRepeat(p0: Animator) {}
+                            override fun onAnimationEnd(p0: Animator) {
                                 belowScoreArrowTv.show()
                                 belowScoreArrowIv.show()
                                 belowScoreBorder.show()
@@ -241,8 +241,8 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
                                 myScoreArrowIv.show()
                                 myScoreArrowTv.show()
                             }
-                            override fun onAnimationStart(p0: Animator?) {}
-                            override fun onAnimationCancel(p0: Animator?) {}
+                            override fun onAnimationStart(p0: Animator) {}
+                            override fun onAnimationCancel(p0: Animator) {}
                         }
 
                         belowScoreArrowIv.visibility = View.GONE
@@ -278,13 +278,13 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
                     }
 
                     val animationListener = object: Animator.AnimatorListener {
-                        override fun onAnimationRepeat(p0: Animator?) {}
-                        override fun onAnimationEnd(p0: Animator?) {
+                        override fun onAnimationRepeat(p0: Animator) {}
+                        override fun onAnimationEnd(p0: Animator) {
                             myScoreArrowIv2.show()
                             myScoreArrowTv2.show()
                         }
-                        override fun onAnimationStart(p0: Animator?) {}
-                        override fun onAnimationCancel(p0: Animator?) {}
+                        override fun onAnimationStart(p0: Animator) {}
+                        override fun onAnimationCancel(p0: Animator) {}
                     }
 
                     Log.d("모의고사보고서", "correctRate=${correctRate}")

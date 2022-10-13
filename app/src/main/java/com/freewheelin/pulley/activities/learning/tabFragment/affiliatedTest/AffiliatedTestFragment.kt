@@ -1,43 +1,47 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest
 
-import android.content.ActivityNotFoundException
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
+import android.os.*
+import android.provider.MediaStore
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.*
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel
-import androidx.databinding.BindingAdapter
+import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.component.CommunityJavascriptInterface
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.FragmentAffiliatedTestBinding
 import com.freewheelin.pulley.databinding.ItemAffiliatedTestBinding
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
+import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import java.lang.Exception
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class AffiliatedTestFragment: LearningTabFragment() {
     companion object {
@@ -50,7 +54,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
     private val viewModel: AffiliatedTestViewModel by viewModels()
 
-    override var screenName = "KU진단"
+    override var screenName = "KU"
     override fun initUI() {
 
     }
@@ -125,9 +129,91 @@ class AffiliatedTestFragment: LearningTabFragment() {
                     }
                 }
             }
+
+            initWebView()
         }
     }
 
+    fun initWebView() {
+        binding.apply {
+            val token = user?.token ?: "-1"
+
+            val API_COMMUNITY_DOMAIN = when (Preferences.onServerAPI.get()) {
+                Network.Server.live.toString() -> "https://pulleymath.com/community?is_mobile=true&token=${token}"
+                Network.Server.staging.toString() -> "https://dev.pulleymath.com/community?is_mobile=true&token=${token}"
+                Network.Server.dev.toString() -> "https://dev.pulleymath.com/community?is_mobile=true&token=${token}"
+                else -> "https://pulleymath.com"
+            }
+
+            webView.webViewClient = object: WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url);
+                }
+
+                override fun onReceivedError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?
+                ) {
+                    super.onReceivedError(view, request, error)
+                    Toast.makeText(requireContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+            webView.webChromeClient = UnivCommunityClient()
+            webView.settings.apply {
+                javaScriptEnabled = true
+                mediaPlaybackRequiresUserGesture = false
+                domStorageEnabled = true
+                allowFileAccess = true
+            }
+
+            webView.loadUrl(API_COMMUNITY_DOMAIN)
+            webView.addJavascriptInterface(CommunityJavascriptInterface(requireContext()), "AndroidFunction");
+
+            println("asoaso, url : ${API_COMMUNITY_DOMAIN}")
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        var results: Array<Uri?>? = null
+
+        if (resultCode == Activity.RESULT_OK && requestCode == FILECHOOSER_RESULTCODE) {
+            if (callbackArray == null) return
+
+            when (intent) {
+                null -> photoPath?.let { results = arrayOf(Uri.parse(it))}
+                else -> {
+                    intent.dataString?.let {
+                        results = arrayOf(Uri.parse(it))
+                    }
+                }
+            }
+        }
+        callbackArray!!.onReceiveValue(results)
+        callbackArray = null
+    }
+
+    var callbackArray: ValueCallback<Array<Uri?>?>? = null
+    private var photoPath: String? = null
+    private val FILECHOOSER_RESULTCODE = 1
+
+    private fun createImageFile(): File? {
+        @SuppressLint("SimpleDateFormat")
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "img_" + timeStamp + "_"
+        val storageDir: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName, ".jpg", storageDir)
+    }
+
+    private fun releaseWebView() {
+        binding.apply {
+            webView.clearHistory();
+            webView.clearCache(true);
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initUI()
     }
@@ -283,6 +369,50 @@ class AffiliatedTestFragment: LearningTabFragment() {
     }
     interface TestStartClickListener {
         fun onItemClick()
+    }
+
+    inner class UnivCommunityClient: WebChromeClient() {
+        // https://stackoverflow.com/questions/29045637/html-input-type-file-is-not-working-on-webview-in-android-is-there-any-way-to
+        override fun onShowFileChooser(
+            webView: WebView?, filePathCallback: ValueCallback<Array<Uri?>?>,
+            fileChooserParams: FileChooserParams?
+        ): Boolean {
+            callbackArray?.onReceiveValue(null)
+            callbackArray = filePathCallback
+
+            var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if (takePictureIntent!!.resolveActivity(requireContext().packageManager) != null) {
+                var photoFile: File? = null
+                try {
+                    photoFile = createImageFile()
+                    takePictureIntent.putExtra("PhotoPath", photoPath)
+                } catch (ex: IOException) {
+                    println("onShowFile Image file creation failed ${ex}")
+                }
+                if (photoFile != null) {
+                    photoPath = "file:" + photoFile.absolutePath
+                    takePictureIntent.putExtra(
+                        MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile)
+                    )
+                } else {
+                    takePictureIntent = null
+                }
+            }
+            val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+            }
+            val intentArray: Array<Intent?> = takePictureIntent?.let { arrayOf(it) } ?: arrayOfNulls(0)
+            val chooserIntent = Intent(Intent.ACTION_CHOOSER).apply {
+                putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+                putExtra(Intent.EXTRA_TITLE, "Image Chooser")
+                putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
+            }
+
+            startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE)
+            return true
+        }
     }
 }
 @BindingAdapter("bind_affiliated_test_list")

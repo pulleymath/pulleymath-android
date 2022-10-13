@@ -80,6 +80,7 @@ class FindPwFragment : Fragment() {
                     completeContainerCl.setPaddingTop(60.toPx())
                     toLoginBtn.visibility = View.GONE // 로긴 버튼 가리기
                 }
+                else -> {}
             }
 
             resultContainerCl.visibility = View.GONE

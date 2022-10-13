@@ -71,6 +71,7 @@ class MemoView: FreeDrawView {
         drawingSaveHandler = Handler(Looper.getMainLooper())
         drawingSaveHandler!!.postDelayed({
             isWaitingExecutionSignal = false
+            println("memoview:: addSaveHandler")
             saveImaged()
         }, 1000)
     }

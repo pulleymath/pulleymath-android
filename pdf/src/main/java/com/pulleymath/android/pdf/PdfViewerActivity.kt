@@ -496,13 +496,13 @@ open class PdfViewerActivity : Activity() {
         val animator = ObjectAnimator.ofFloat(mDocView, View.ALPHA, 0f, 1f)
         animator.duration = 1000
         animator.addListener(object: Animator.AnimatorListener{
-            override fun onAnimationStart(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 rootLayout.removeView(bgPdfLoading)
                 rootLayout.removeView(bgPdfProgress)
             }
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationRepeat(animation: Animator?) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
         animator.start()
     }

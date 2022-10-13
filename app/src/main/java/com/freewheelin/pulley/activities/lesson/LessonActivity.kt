@@ -28,7 +28,7 @@ class LessonActivity : BaseActivity() {
 
     val API_LESSON_DOMAIN = when (Preferences.onServerAPI.get().toString()) {
         Network.Server.live.toString() -> "https://pulleymath.com"
-        Network.Server.staging.toString() -> "https://staging.pulleymath.com"
+        Network.Server.staging.toString() -> "https://dev.pulleymath.com"
         Network.Server.dev.toString() -> "https://dev.pulleymath.com"
         else -> "https://pulleymath.com"
     }

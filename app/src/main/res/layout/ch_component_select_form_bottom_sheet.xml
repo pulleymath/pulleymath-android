@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ch_bg_white_normal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
+
+        <com.zoyi.channel.plugin.android.view.textview.CHTextView
+            android:id="@+id/ch_textSelectFormBottomSheetTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ch_txt_black_dark"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="복수선택" />
+
+        <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+            android:id="@+id/ch_buttonSelectFormBottomSheetClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ch_btn_backColor="@color/ch_bg_black_lighter"
+            app:ch_btn_contentColor="@color/ch_txt_black_dark"
+            app:ch_btn_leftIcon="@drawable/ch_icon_cancel"
+            app:ch_btn_size="xs"
+            app:ch_btn_type="secondary" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ch_recyclerSelectFormBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="10"
+        tools:listitem="@layout/ch_holder_bottom_sheet_form" />
+
+    <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+        android:id="@+id/ch_buttonSelectFormBottomSheetSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:ch_btn_enabled="false"
+        app:ch_btn_size="m"
+        app:ch_btn_textKey="ch.common_confirm"
+        tools:ch_btn_backColor="@color/ch_bgtxt_blue_normal"
+        tools:ch_btn_enabled="true" />
+
+</LinearLayout>

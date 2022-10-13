@@ -231,7 +231,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/controlTool"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:orientation="solve">
+                        app:orientation_subname="solve"
+                        >
                     </com.freewheelin.pulley.views.SolveTimerView>
 
                     <androidx.constraintlayout.widget.ConstraintLayout

@@ -95,19 +95,20 @@ object AppUsageMonitor {
                 "onlyStudyTime" to studyTime,
                 "studentID" to user.studentID
         )
-        API_V2.postStudyTime(param).enqueue(object: Callback<Void> {
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                isSynchronizing = false
-            }
-
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                accumulatedUsageTime = 0
-                accumulatedStudyTime = 0
-                isSynchronizing = false
-                lastSaveDuration = Date()
-            }
-
-        })
+        // TODO dummy post studytime 짜증나서 접어둠
+//        API_V2.postStudyTime(param).enqueue(object: Callback<Void> {
+//            override fun onFailure(call: Call<Void>, t: Throwable) {
+//                isSynchronizing = false
+//            }
+//
+//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                accumulatedUsageTime = 0
+//                accumulatedStudyTime = 0
+//                isSynchronizing = false
+//                lastSaveDuration = Date()
+//            }
+//
+//        })
     }
 }
 

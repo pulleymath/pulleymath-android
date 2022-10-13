@@ -116,6 +116,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             BookType.COMMERCIAL -> setCommercialUI()
             BookType.BOOK -> setBookUI()
             BookType.CUSTOM_BOOK -> setCustomBookUI()
+            else -> {}
         }
     }
 
@@ -249,16 +250,16 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         }
 
         expandAnim?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 if (cb != null)
                     cb()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
 
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator) {}
 
         })
     }
@@ -279,16 +280,16 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         }
 
         scaleAnim?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 if (cb != null)
                     cb()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
 
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator) {}
 
         })
     }

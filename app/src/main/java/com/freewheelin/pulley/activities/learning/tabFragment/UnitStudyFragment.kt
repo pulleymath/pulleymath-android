@@ -340,20 +340,19 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
         anim.duration = 1200
         anim.repeatCount = 3
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
+
                 Handler(Looper.getMainLooper()).postDelayed({
                     window.dismiss()
                 }, 1000)
             }
-
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationStart(animation: Animator?) {
-
+            override fun onAnimationStart(p0: Animator) {
             }
         })
         window.setBalloonListener(object: BalloonWindowListener {

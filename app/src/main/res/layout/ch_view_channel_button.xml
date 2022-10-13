@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="42dp"
+    android:layout_height="42dp"
+    android:clipChildren="false"
+    android:background="@color/ch_bg_transparent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ch_cardChannelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.85"
+            android:clipChildren="false"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@color/ch_bg_white_normal"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:cardMaxElevation="6dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ch_layoutChannelButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_root" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageChannelButtonRoot"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_root_tint_target"
+            tools:tint="#ffc3b6" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_body" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageChannelButtonBody"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_body_tint_target"
+            tools:tint="#ffc3b6" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_imageChannelButtonFace"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_face_tint_target"
+            tools:tint="#ffc3b6" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ch_front_face" />
+
+    </FrameLayout>
+
+</FrameLayout>

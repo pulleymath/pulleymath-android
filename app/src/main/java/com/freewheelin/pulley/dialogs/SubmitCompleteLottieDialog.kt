@@ -51,6 +51,7 @@ class SubmitCompleteLottieDialog(context: Context, content: Content): Dialog(con
                         completeGuideTv.text = "이번 주 주간테스트 클리어!\n" +
                                 "꼭 확인할 문제는 무엇일까요?"
                     }
+                    else -> {}
                 }
             }
         }
@@ -77,21 +78,21 @@ class SubmitCompleteLottieDialog(context: Context, content: Content): Dialog(con
     fun playAnim(cb: (() -> Unit)? = null) {
         submitLottie.playAnimation()
         submitLottie.addAnimatorListener(object: Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
 
             }
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 submitLottie.visibility = View.INVISIBLE
                 showScoreInfo()
                 if(cb != null)
                     cb()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationStart(p0: Animator?) {
+            override fun onAnimationStart(p0: Animator) {
             }
         })
     }
@@ -117,6 +118,7 @@ class SubmitCompleteLottieDialog(context: Context, content: Content): Dialog(con
                         val intent = WrongTestReportActivity.getIntent(context, content, true)
                         context.startActivity(intent)
                     }
+                    else -> {}
                 }
             }
         }

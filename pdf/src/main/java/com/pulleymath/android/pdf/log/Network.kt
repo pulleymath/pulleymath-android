@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit
 
 object Network {
     private val BASE_URL = when(PdfViewerActivity.onServerApi) {
-        Server.live.toString() -> "https://pdf-live.pulleymath.net"
-        Server.staging.toString() -> "http://3.36.127.47:3000"
-        Server.dev.toString() -> "http://3.36.127.47:3000"
-        else -> "https://pdf-live.pulleymath.net"
+        Server.live.toString() -> "https://pdf-live.pulleymath.com"
+        Server.staging.toString() -> "https://pdf-staging.pulleymath.com"
+        Server.dev.toString() -> "https://pdf-staging.pulleymath.com"
+        else -> "https://pdf-live.pulleymath.com"
     }
     var token = ""
 
@@ -33,11 +33,11 @@ object Network {
     private val retrofit = Retrofit.Builder().baseUrl(BASE_URL).apply {
         val client = OkHttpClient.Builder().apply {
             // add logging
-            if(BuildConfig.DEBUG) { // 개발모드에서만 로깅처리
+//            if(BuildConfig.DEBUG) { // 개발모드에서만 로깅처리
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY
                 addInterceptor(interceptor)
-            }
+//            }
             // add bearer token
             addInterceptor(
                 Interceptor { chain ->

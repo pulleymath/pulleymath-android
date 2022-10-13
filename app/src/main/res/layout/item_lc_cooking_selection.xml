@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.dialog.CookingQuizAnswerSelectDialog.CookingSelectionItemClickListener" />
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.CookingQuizSelection"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.cooking.CookingQuizAnswerSelectViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:focusable="true"
+        android:onClick="@{ () -> listener.onItemClick(item) }">
+
+        <ImageView
+            android:id="@+id/answerIv"
+            android:layout_width="wrap_content"
+            android:maxWidth="96dp"
+            android:layout_height="32dp"
+            android:layout_margin="8dp"
+            cookingImgRes="@{ item.imageUrl }"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

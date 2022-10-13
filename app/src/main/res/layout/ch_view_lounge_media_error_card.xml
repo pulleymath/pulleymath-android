@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingTop="28dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="28dp">
+
+            <ImageView
+                android:id="@+id/ch_imageLoungeMediaError"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ch_error_illust" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ch_textLoungeMediaErrorDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/ch_black_40"
+                    android:textSize="13sp"
+                    tools:text="앗, 인스타그램을 불러오는데 실패했습니다." />
+
+                <com.zoyi.channel.plugin.android.view.textview.CHTextView
+                    android:id="@+id/ch_textLoungeMediaErrorRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ch_black_40"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:ch_tv_textKey="ch.lounge.media.refresh"
+                    tools:text="@string/ch.lounge.media.refresh" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

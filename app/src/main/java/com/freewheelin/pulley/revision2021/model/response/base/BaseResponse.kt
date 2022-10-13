@@ -59,3 +59,17 @@ abstract class BaseAlarmResponse<T>: Serializable {
     lateinit var message: Any
     var current_time: String? = null
 }
+
+class BaseCookingResponse<T> : Serializable {
+    var data: T? = null
+    var error: Any? = null
+    var message: Any? = null
+    var current_time: String? = null
+}
+
+class BaseCookingListResponse<T> : Serializable {
+    var data: List<T>? = null
+    var error: Any? = null
+    var message: Any? = null
+    var current_time: String? = null
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoyi.com.google.android.exoplayer2.ui.PlayerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ch_playerInstagram"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ch_grey900"
+    app:ch_exo_show_timeout="3000" />

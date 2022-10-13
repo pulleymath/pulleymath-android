@@ -37,19 +37,19 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
         anim.duration = 1200
         anim.repeatCount = 2
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     dismiss()
                 }, 1000)
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
 
             }
         })

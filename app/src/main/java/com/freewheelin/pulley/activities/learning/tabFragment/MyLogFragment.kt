@@ -376,6 +376,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
                 LogUtils.assert(false, "unexpected case: onSolveBtn Clicked type: ${content.category}")
                 DialogUtils.showIndevelopingErr(requireContext())
             }
+            else -> {}
         }
     }
 

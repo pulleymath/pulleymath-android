@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ch_cardBubbleContents"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:cardBackgroundColor="@color/ch_bg_white_normal"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="20dp"
+        app:cardMaxElevation="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/ch_layoutBubbleForms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/ch_popup_max_width"
+        app:layout_constraintWidth_min="@dimen/ch_popup_min_width">
+
+        <LinearLayout
+            android:id="@+id/ch_rootPopUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ch_white"
+            android:divider="@drawable/ch_divider_10dp"
+            android:minWidth="@dimen/ch_popup_min_width"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:showDividers="middle">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/ch_viewPopUpMedia"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/ch_bg_white_normal"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ch_layoutPopupProfileContentLayout"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_constraintDimensionRatio="1:1"
+                    tools:visibility="visible">
+
+                    <io.channel.plugin.android.view.video.PopupMediaView
+                        android:id="@+id/ch_popUpMedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ch_imagePopUpImageMultiple"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ch_icon_squares_filled"
+                    android:visibility="gone"
+                    app:layout_constraintRight_toRightOf="@id/ch_viewPopUpMedia"
+                    app:layout_constraintTop_toTopOf="@id/ch_viewPopUpMedia"
+                    app:tint="@color/ch_bgtxt_absolute_white_dark"
+                    tools:visibility="visible" />
+
+                <io.channel.com.google.android.flexbox.ChFlexboxLayout
+                    android:id="@+id/ch_layoutPopupProfileContentLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="10dp"
+                    app:ch_alignItems="center"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toTopOf="@+id/ch_layoutPopupContentLayout"
+                    app:layout_constraintLeft_toRightOf="@id/ch_viewPopUpMedia"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginLeft="0dp">
+
+                    <com.zoyi.channel.plugin.android.view.layout.AvatarLayout
+                        android:id="@+id/ch_avatarPopUp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="6dp"
+                        app:ch_avatar_border_radius="8dp"
+                        app:ch_layout_flexGrow="0"
+                        app:ch_layout_flexShrink="0" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/ch_textPopUpName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="3sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/ch_txt_black_darkest"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:ch_layout_flexGrow="0"
+                        app:ch_layout_flexShrink="1"
+                        tools:text="젤라또팩토리젤라또팩토리젤라또팩토리젤라또팩토리젤라또팩토리" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/ch_textPopUpTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="5sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/ch_txt_black_dark"
+                        android:textSize="11sp"
+                        app:ch_layout_flexGrow="1"
+                        app:ch_layout_flexShrink="0"
+                        tools:text="3:12 PM" />
+
+                    <FrameLayout
+                        android:id="@+id/ch_buttonPopUpClose"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ch_background_bg_black_lighter_oval"
+                        app:ch_layout_flexGrow="0"
+                        app:ch_layout_flexShrink="0"
+                        tools:ignore="MissingPrefix">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ch_icon_cancel"
+                            app:tint="@color/ch_txt_black_dark" />
+
+                    </FrameLayout>
+
+                </io.channel.com.google.android.flexbox.ChFlexboxLayout>
+
+                <LinearLayout
+                    android:id="@+id/ch_layoutPopupContentLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="4dp"
+                    android:divider="@drawable/ch_divider_4dp"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintLeft_toRightOf="@id/ch_viewPopUpMedia"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ch_layoutPopupProfileContentLayout"
+                    app:layout_goneMarginLeft="2dp">
+
+                    <com.zoyi.channel.plugin.android.view.layout.message.TextMessageView
+                        android:id="@+id/ch_viewPopUpMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ch_tmv_lineSpacingExtra="2sp"
+                        app:ch_tmv_maxLines="2"
+                        app:ch_tmv_renderMode="TRIM_MULTI_NEWLINE"
+                        app:ch_tmv_textColor="@color/ch_txt_black_darkest"
+                        app:ch_tmv_textLinkColor="@color/ch_cobalt400"
+                        app:ch_tmv_textSize="15sp" />
+
+                    <com.zoyi.channel.plugin.android.view.textview.FileRowTextView
+                        android:id="@+id/ch_textPopUpFileName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:ch_cfr_fileCountTextSize="13sp"
+                        app:ch_cfr_fileNameTextSize="13sp"
+                        app:ch_cfr_fileSizeTextSize="13sp"
+                        app:ch_cfr_iconSize="16dp" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/ch_layoutPopUpLinkButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/ch_divider_6dp"
+                android:orientation="horizontal"
+                android:showDividers="middle"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ch_layoutBubbleForms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="6dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/ch_bg_white_normal"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="20dp"
+        app:cardMaxElevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ch_cardBubbleContents"
+        app:layout_constraintWidth_max="@dimen/ch_popup_max_width"
+        app:layout_constraintWidth_min="@dimen/ch_popup_min_width"
+        app:layout_goneMarginTop="20dp"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ch_white"
+            android:minWidth="@dimen/ch_popup_min_width"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ch_cardBubblePopupForm"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:cardCornerRadius="10.8dp"
+                app:cardElevation="0dp"
+                tools:cardBackgroundColor="@color/ch_bgtxt_blue_normal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ch_imageBubblePopupForm"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ch_icon_survey"
+                    tools:tint="@color/ch_bg_white_normal" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textBubblePopupFormTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ch_txt_black_darkest"
+                    android:textSize="14sp"
+                    tools:text="안녕하세요 설문에 참여하세요~" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ch_textBubblePopupFormDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ch_txt_black_darker"
+                    android:textSize="13sp"
+                    tools:text="4개의 질문 보기" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/ch_buttonBubblePopupFormClose"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/ch_background_bg_black_lighter_oval">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ch_icon_cancel"
+                    app:tint="@color/ch_txt_black_dark" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

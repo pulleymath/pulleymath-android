@@ -91,13 +91,13 @@ class BarVerticalChartView: ConstraintLayout, VerticalBarListener {
         animator.duration = 700
         animator.addListener(object: Animator.AnimatorListener{
 
-            override fun onAnimationEnd(p0: Animator?) {}
+            override fun onAnimationEnd(p0: Animator) {}
 
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
 
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator) {}
         })
         animator.addUpdateListener {
             val value = it.animatedValue as Float

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.channel.libs.youtube.player.views.ChYouTubePlayerView
+        android:id="@+id/ch_videoYoutubeVideo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ch_autoPlay="false"
+        app:ch_enableAutomaticInitialization="false" />
+
+    <ProgressBar
+        android:id="@+id/ch_progressYoutubePlayer"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom"
+        android:progressBackgroundTint="@color/ch_bgtxt_absolute_black_lighter"
+        android:progressTint="@color/ch_bgtxt_absolute_white_normal"
+        android:visibility="gone"
+        tools:progress="38"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/ch_layoutYoutubePlayerCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

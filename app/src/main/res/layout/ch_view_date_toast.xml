@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:ch_bl_backColor="@color/ch_black_50"
+    app:ch_bl_borderRadius="10dp">
+
+    <TextView
+        android:id="@+id/ch_textDateToast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:singleLine="true"
+        android:textColor="@color/ch_white"
+        android:textSize="12sp"
+        tools:text="2020년 12월 17일" />
+
+</com.zoyi.channel.plugin.android.view.layout.ChBorderLayout>

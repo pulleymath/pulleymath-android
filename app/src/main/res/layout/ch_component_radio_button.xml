@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="2dp">
+
+    <com.zoyi.channel.plugin.android.view.layout.ChBorderLayout
+        android:id="@+id/ch_layoutRadioButton"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="2dp"
+        app:ch_bl_backColor="@color/ch_bg_white_normal"
+        app:ch_bl_borderColor="@color/ch_bg_black_dark"
+        app:ch_bl_borderRadius="9dp"
+        app:ch_bl_borderWidth="2dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textRadioButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/ch_txt_black_darkest"
+        android:textSize="15sp"
+        tools:text="라디오라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼라디오버튼" />
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity.WrongNoteSelectorItemClickListener" />
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel"/>
+        <variable name="position" type="Integer"/>
+        <variable name="isLastPosition" type="Boolean"/>
+        <variable name="isSelected" type="Boolean"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        >
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="@{ (position + 1) + `` }"
+            android:gravity="center"
+            android:textColor="@{ item.isComplete() ? @color/purple_300 : @color/gray_800 }"
+            android:background="@{ vm.currentCardIndex == position ? (item.isComplete() ? @drawable/bg_purple_100_stroke_purple_300_round_5_ripple : @drawable/bg_gray_300_stroke_purple_300_round_5_ripple) : (item.isComplete() ? @drawable/bg_purple_100_round_5 : @drawable/bg_gray_300_round_5_ripple) }"
+            layout_margin_end_dimen="@{ isLastPosition ? @dimen/dp0 : @dimen/dp12 }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> listener.onItemClick(position)}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -227,6 +227,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                             SolveActivity.getIntent(this@StudyHistoryActivity, Test(content))
                         startActivity(intent)
                     }
+                    else -> {}
                 }
             }
         }

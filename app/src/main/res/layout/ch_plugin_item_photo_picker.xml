@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ch_layoutPhotoPicker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ch_grey200"
+    android:foregroundGravity="center"
+    android:padding="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/ch_white">
+
+        <ImageView
+            android:id="@+id/ch_imagePhotoPicker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="center" />
+
+    </RelativeLayout>
+
+    <com.zoyi.channel.plugin.android.view.external.smooth_checkbox.SmoothCheckBox
+        android:id="@+id/ch_checkboxPhotoPicker"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:clickable="false"
+        app:ch_color_checked="@color/ch_cobalt400"
+        app:ch_color_unchecked="@color/ch_black_40"
+        app:ch_color_unchecked_stroke="@color/ch_white"
+        app:ch_duration="150"
+        app:ch_stroke_width="2dp"
+        app:ch_tick_speed="10" />
+
+    <TextView
+        android:id="@+id/ch_textPhotoPickerItemDuration"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|end"
+        android:background="@drawable/ch_rect__black_gradient_70"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/ch_white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="0:50"
+        tools:visibility="visible" />
+
+</RelativeLayout>

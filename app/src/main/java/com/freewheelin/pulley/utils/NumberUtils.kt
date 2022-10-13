@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.utils
 
 import android.content.res.Resources
+import android.util.TypedValue
 import java.util.*
 
 
@@ -35,7 +36,10 @@ fun Float.toDp(): Float {
 fun Int.toPx(): Int {
     return Math.round(this * Resources.getSystem().displayMetrics.density)
 }
-
+fun Int.dpToPx(): Int {
+    val metrics = Resources.getSystem().displayMetrics
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
+}
 fun Float.toPx(): Float {
     return this * Resources.getSystem().displayMetrics.density
 }

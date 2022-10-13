@@ -430,6 +430,7 @@ class AnalysisFragment : LearningTabFragment(),
                     SolveActivity.getIntent(requireContext(), Test(content))
                 startActivity(intent)
             }
+            else -> {}
         }
     }
 

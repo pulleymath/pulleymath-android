@@ -155,6 +155,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 val intent = WrongTestReportActivity.getIntent(requireContext(), test)
                 startActivity(intent)
             }
+            else -> {}
         }
     }
 
@@ -204,6 +205,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                         Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
                         Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
                         Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                        else -> {}
                     }
                 } else {
                     val testType = currentMainFragment!!.testType
@@ -211,6 +213,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                         Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
                         Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
                         Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                        else -> {}
                     }
                 }
             }
@@ -342,6 +345,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 else
                     addMainFragment(TestMainWrongFragment.newInstance(test))
             }
+            else -> {}
         }
     }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <io.channel.libs.youtube.player.views.ChYouTubePlayerView
+        android:id="@+id/ch_playerYouTube"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ch_autoPlay="false"
+        app:ch_enableAutomaticInitialization="false" />
+
+</FrameLayout>

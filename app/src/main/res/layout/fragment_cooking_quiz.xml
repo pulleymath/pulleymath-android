@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.lc.fragments.cooking.CookingQuizFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="com.freewheelin.pulley.revision2021.model.QuizFormat" />
+        <variable name="cookingExercise" type="com.freewheelin.pulley.revision2021.model.CookingExercise"/>
+        <variable name="number" type="String"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/quizRootView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:weightSum="10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/titleChipTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ `0`+ number + `. ` + cookingExercise.name }"
+                style="@style/mo_h6"
+                android:background="@drawable/bg_purple_100_round_5"
+                android:textColor="@color/purple_300"
+                android:layout_marginTop="8dp"
+                android:paddingVertical="3dp"
+                android:paddingHorizontal="8dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:weightSum="10">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:scaleType="fitStart"
+                    cookingImgRes="@{ cookingExercise.imageUrl }"/>
+    <!--                android:src="@drawable/cooking_quiz1"/>-->
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:text=""/>
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/quizDetail0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz0 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz0 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz1 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz1 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz1 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz2 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz2 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz2 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz3 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz3 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz3 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz4 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz4 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz4 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+
+        </LinearLayout>
+
+        <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
+            android:id="@+id/cookingMemoView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.6"
+            app:layout_constraintHorizontal_bias="0"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

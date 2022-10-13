@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.zoyi.channel.plugin.android.view.textview.CHTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ch_txt_black_dark"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:ch_tv_textKey="ch.integrations.title" />
+
+        <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+            android:id="@+id/ch_buttonDialogAppMessenger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ch_btn_backColor="@color/ch_bg_black_lighter"
+            app:ch_btn_contentColor="@color/ch_txt_black_dark"
+            app:ch_btn_leftIcon="@drawable/ch_icon_cancel"
+            app:ch_btn_size="xs"
+            app:ch_btn_type="tertiary" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <io.channel.plugin.android.feature.lounge.view.LoungeIntegrationView
+            android:id="@+id/ch_viewDialogAppMessengerIntegration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="60dp" />
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

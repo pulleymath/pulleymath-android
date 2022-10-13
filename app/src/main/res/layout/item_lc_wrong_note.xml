@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+<!--        StudyChapterViewHolder 에서 인입 -->
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteMapViewModel"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteMapFragment.NoteCardItemClickListener" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.NoteLearningStatus" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_100">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="48dp"
+            android:visibility="gone"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/stepTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STEP 3."
+                style="@style/mo_h6"
+                android:textColor="@color/purple_300"
+                app:layout_constraintTop_toTopOf="@+id/titleTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/titleTv"
+                />
+            <TextView
+                android:id="@+id/titleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오답 학습하기"
+                style="@style/mo_h3"
+                android:layout_marginStart="4dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/stepTv"
+                />
+
+            <TextView
+                android:id="@+id/subTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아래의 오답 문항을 다시 풀고 정답률을 올려보세요!"
+                style="@style/b2"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/gray_700"
+                app:layout_constraintTop_toBottomOf="@+id/titleTv"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/countTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ `총 ` + vm.noteCardCount + `문제`}"
+                style="@style/b1"
+                android:layout_marginTop="48dp"
+                app:layout_constraintTop_toBottomOf="@+id/subTitleTv"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/toggleSubTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="채점한 문제 포함"
+                style="@style/b2"
+                android:textColor="@color/gray_600"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintTop_toTopOf="@+id/wrongNoteSwtich"
+                app:layout_constraintEnd_toStartOf="@+id/wrongNoteSwtich"
+                app:layout_constraintBottom_toBottomOf="@+id/wrongNoteSwtich"
+                />
+
+            <Switch
+                android:id="@+id/wrongNoteSwtich"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={ vm.isIncludedCompleteWrongNote }"
+                android:onCheckedChanged="@{(switch, flag) -> vm.noteFilterChangeListener(flag)}"
+                app:layout_constraintTop_toTopOf="@+id/countTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/countTv"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/nothingRoot"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="@{ vm.isNoteCardCount0 ? View.VISIBLE : View.GONE }"
+                app:layout_constraintTop_toBottomOf="@+id/countTv">
+<!--                android:visibility="@{ vm.isNoteCardCount0 ? View.VISIBLE : View.GONE }"-->
+
+                <ImageView
+                    android:id="@+id/emptyIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@{ vm.learningStatus == NoteLearningStatus.NONE ? @drawable/guide_empty_wrong : vm.learningStatus == NoteLearningStatus.ING ? @drawable/guide_empty_wrong : vm.learningStatus == NoteLearningStatus.DONE ? @drawable/ic_round_check_60 : @drawable/ic_plan_empty}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="120dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ vm.emptyText }"
+                    android:layout_marginTop="24dp"
+                    style="@style/b1"
+                    android:textColor="@color/gray_500"
+                    android:lineHeight="24dp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@+id/emptyIv"
+                    app:layout_constraintStart_toStartOf="@+id/emptyIv"
+                    app:layout_constraintEnd_toEndOf="@+id/emptyIv"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardCl"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:background="@drawable/shadow_wrong_answer_page_card"
+            android:padding="9dp"
+            android:visibility="visible"
+            android:clickable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="@{() -> listener.onItemClick(item)}"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="16dp"
+                cookingImgRes="@{ item.quizImageUrl }"
+                android:scaleType="fitStart"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="12dp"
+                android:background="@drawable/bg_white_transparent_75"
+                android:visibility="@{ item.isComplete ? View.VISIBLE : View.GONE }"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+<!--                <ImageView-->
+<!--                    android:layout_width="96dp"-->
+<!--                    android:layout_height="96dp"-->
+<!--                    android:src="@drawable/ic_check_green_circle"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            <ImageView-->
+<!--                android:layout_width="68dp"-->
+<!--                android:layout_height="68dp"-->
+<!--                android:src="@drawable/ic_lc_wrong_note_study"-->
+<!--                android:padding="15dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                android:onClick="@{() -> listener.onItemClick(item)}"-->
+<!--                />-->
+
+            <ImageView
+                android:id="@+id/indicatorIv"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:visibility="@{ item.isComplete ? View.VISIBLE : View.GONE }"
+                android:src="@{ item.isCorrect ? @drawable/ic_o_right_answer : @drawable/ic_x_wrong_answer }"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/footerCl"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:visibility="gone"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

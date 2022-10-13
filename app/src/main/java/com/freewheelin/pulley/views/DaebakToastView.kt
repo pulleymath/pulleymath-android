@@ -84,7 +84,7 @@ class DaebakToast: PopupWindow() {
             startAnimator!!.start()
             alreadyShownWindow = popupWindow
             startAnimator!!.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     hideToast(3000, leftOffset)
                 }
             })

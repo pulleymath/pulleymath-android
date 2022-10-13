@@ -41,6 +41,7 @@
     <dimen name="dp200">180dp</dimen>
     <dimen name="dp184">160dp</dimen>
     <dimen name="dp168">144dp</dimen>
+    <dimen name="dp160">140dp</dimen>
     <dimen name="dp144">120dp</dimen>
     <dimen name="dp120">100dp</dimen>
     <dimen name="dp104">96dp</dimen>
@@ -59,16 +60,22 @@
     <dimen name="dp42">36dp</dimen>
     <dimen name="dp40">32dp</dimen>
     <dimen name="dp36">32dp</dimen>
+    <dimen name="dp34">28dp</dimen>
     <dimen name="dp32">24dp</dimen>
+    <dimen name="dp30">22dp</dimen>
     <dimen name="dp28">20dp</dimen>
     <dimen name="dp24">16dp</dimen>
     <dimen name="dp20">16dp</dimen>
+    <dimen name="dp19_5">19.5dp</dimen>
     <dimen name="dp18">14dp</dimen>
     <dimen name="dp16">12dp</dimen>
     <dimen name="dp14">10dp</dimen>
     <dimen name="dp12">8dp</dimen>
     <dimen name="dp10">8dp</dimen>
     <dimen name="dp8">5dp</dimen>
+    <dimen name="dp6">4dp</dimen>
+    <dimen name="dp5">4dp</dimen>
+    <dimen name="dp1">1dp</dimen>
     <dimen name="dp0">0dp</dimen>
 
     <dimen name="borderThickness">1.5dp</dimen>

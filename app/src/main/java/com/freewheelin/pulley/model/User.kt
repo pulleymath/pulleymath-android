@@ -104,6 +104,10 @@ class User {
     var hasPulleyPlus = false
 
     var userUniversityMajorCode: String? = null
+    val showMainKUTab: Boolean
+        get () {
+            return schoolID == 6000
+        }
 
     companion object {
         val TYPE_FREE_ING = "FREE_ING"

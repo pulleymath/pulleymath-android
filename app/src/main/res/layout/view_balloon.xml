@@ -5,6 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
+        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -12,8 +13,9 @@
             android:id="@+id/contentsLl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_blue_30a4ff_round"
+            android:background="@color/black"
             android:orientation="vertical">
+<!--            android:background="@drawable/bg_blue_30a4ff_round"-->
 
         </LinearLayout>
 

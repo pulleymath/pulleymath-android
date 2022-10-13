@@ -345,8 +345,8 @@ class TimerView : ConstraintLayout {
         this.listener = listener
     }
     private fun setTypedArray(attrs: AttributeSet) {
-        val array = context.obtainStyledAttributes(attrs, R.styleable.TimerView)
-        val rawValueForOrientation = array.getInt(R.styleable.TimerView_orientation, VERTICAL)
+        val array = context.obtainStyledAttributes(attrs, R.styleable.PulleyTimerView)
+        val rawValueForOrientation = array.getInt(R.styleable.PulleyTimerView_orientation_subname, VERTICAL)
         orientation = rawValueForOrientation
         array.recycle()
     }
@@ -373,7 +373,7 @@ class TimerView : ConstraintLayout {
     }
 
     fun isTimerShown(): Boolean {
-        return timerSwitch?.isChecked
+        return timerSwitch.isChecked
     }
 
     private fun setTimerText(timeLimitSec: Int) {

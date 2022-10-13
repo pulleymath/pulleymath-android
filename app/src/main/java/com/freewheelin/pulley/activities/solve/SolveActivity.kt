@@ -945,6 +945,7 @@ class SolveActivity : BaseActivity(),
             when (selectedProblem?.problemType){
                 ProblemType.single, ProblemType.multi ->
                     binding.answerView.enterNumberBtnClickedFromSolve("$num", selectedProblem!!.problemType)
+                else -> {}
             }
         }
     }
@@ -954,6 +955,7 @@ class SolveActivity : BaseActivity(),
         if(selectedProblem?.getResultByScoring() == Result.yet) { // 아직 채점하지 않았고,
             when (selectedProblem?.problemType){
                 ProblemType.short -> binding.answerView.deleteBtnClicked()
+                else -> {}
             }
         } else {
             onBackPressed()
@@ -1000,18 +1002,18 @@ class SolveActivity : BaseActivity(),
         }
 
         animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
 
             }
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 binding.galleryBtn.visibility = View.VISIBLE
             }
 
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationStart(p0: Animator?) {
+            override fun onAnimationStart(p0: Animator) {
             }
 
         })
@@ -1091,7 +1093,7 @@ class SolveActivity : BaseActivity(),
     private fun checkShortAnswer() {
         if(selectedProblem?.problemType == ProblemType.short) {
             val textValue = binding.answerView.getShortAnswerText()
-            if(textValue?.length > 0 && selectedProblem?.userAnswer?.length ?:0 < 1) {
+            if(textValue?.length!! > 0 && selectedProblem?.userAnswer?.length ?:0 < 1) {
                 selectedProblem?.userAnswer = textValue
             }
         }
@@ -1111,10 +1113,10 @@ class SolveActivity : BaseActivity(),
             binding.container.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {
             }
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 val anim = ValueAnimator.ofFloat(0f, 1f)
                 anim.duration = 100
                 anim.addUpdateListener {
@@ -1125,18 +1127,18 @@ class SolveActivity : BaseActivity(),
                     binding.container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator) {
                     }
 
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationEnd(p0: Animator) {
                         binding.problemContainer.setOnTouchListener(problemGesture)
                         binding.solutionContainer.setOnTouchListener(solutionGesture)
                     }
 
-                    override fun onAnimationCancel(p0: Animator?) {
+                    override fun onAnimationCancel(p0: Animator) {
                     }
 
-                    override fun onAnimationStart(p0: Animator?) {
+                    override fun onAnimationStart(p0: Animator) {
                     }
                 })
                 if (binding.speedAnswerView.visibility == View.VISIBLE) {
@@ -1151,10 +1153,10 @@ class SolveActivity : BaseActivity(),
                 anim.start()
             }
 
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
             }
 
-            override fun onAnimationStart(p0: Animator?) {
+            override fun onAnimationStart(p0: Animator) {
             }
         })
         anim.start()
@@ -1175,8 +1177,8 @@ class SolveActivity : BaseActivity(),
             binding.container.alpha = 1 - value
         }
         anim.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {}
+            override fun onAnimationEnd(p0: Animator) {
                 val anim = ValueAnimator.ofFloat(0f, 1f)
                 anim.duration = 100
                 anim.addUpdateListener {
@@ -1186,20 +1188,21 @@ class SolveActivity : BaseActivity(),
                     binding.container.alpha = value
                 }
                 anim.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationEnd(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator) {}
+                    override fun onAnimationEnd(p0: Animator) {
                         binding.problemContainer.setOnTouchListener(problemGesture)
                         binding.solutionContainer.setOnTouchListener(solutionGesture)
                     }
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {}
+                    override fun onAnimationCancel(p0: Animator) {}
+                    override fun onAnimationStart(p0: Animator) {}
                 })
                 anim.start()
                 binding.galleryView.next()
                 speedAnswerViewNext()
             }
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
+            override fun onAnimationStart(p0: Animator) {}
+
         })
         anim.start()
     }
@@ -1216,12 +1219,12 @@ class SolveActivity : BaseActivity(),
             binding.rootView.scrollTo(value, 0)
         }
         animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationRepeat(p0: Animator) {}
+            override fun onAnimationEnd(p0: Animator) {
                 binding.galleryCloser.visibility = View.VISIBLE
             }
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator) {}
+            override fun onAnimationStart(p0: Animator) {}
         })
         speedAnswerViewPrev()
         animator.duration = 150
@@ -1760,17 +1763,17 @@ class SolveActivity : BaseActivity(),
             binding.galleryBtn.playAnimation()
 
             rotateAnim.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(p0: Animator?) {}
+                override fun onAnimationRepeat(p0: Animator) {}
 
-                override fun onAnimationEnd(p0: Animator?) {
+                override fun onAnimationEnd(p0: Animator) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         rotateAnim.start()
                     }, 500)
                 }
 
-                override fun onAnimationCancel(p0: Animator?) {}
+                override fun onAnimationCancel(p0: Animator) {}
 
-                override fun onAnimationStart(p0: Animator?) {}
+                override fun onAnimationStart(p0: Animator) {}
             })
 
             binding.galleryBtn.setOnClickListener {

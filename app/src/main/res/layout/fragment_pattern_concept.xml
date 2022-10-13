@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".revision2021.activity.learningcourse.fragments.pattern.PatternConceptFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.PatternConceptViewModel"/>
+    </data>
+
+
+    <ScrollView
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/scrollRootLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/conceptTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="유형별 개념"
+                style="@style/mo_h2"/>
+
+            <!--            이외의 이미지나 텍스트뷰는 addView로 집어넣음-->
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

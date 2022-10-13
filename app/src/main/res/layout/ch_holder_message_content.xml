@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/ch_holder_host_message">
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.viewholder.GiantEmojiTextView
+        android:id="@+id/ch_viewMessageContentGiantEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/ch_grey900"
+        android:textSize="54sp"
+        tools:text="Text" />
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.viewholder.WebPageContentView
+        android:id="@+id/ch_viewMessageContentWebPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.attachment.AttachmentsLayout
+        android:id="@+id/ch_viewMessageContentAttachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.viewholder.ReactionsView
+        android:id="@+id/ch_viewMessageContentReactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</merge>

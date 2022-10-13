@@ -481,6 +481,7 @@ class GalleryView : ConstraintLayout {
                         delegate?.onProblemSelected(problem)
                     }
                 }
+                else -> {}
             }
         }
 

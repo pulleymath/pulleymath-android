@@ -50,6 +50,9 @@ object Preferences {
 
     val forceUpdateDialogCount = APPreference(0)
 
+    var channelTalkCurrChatId = APPreference("")
+    var studentIdWhenIssuingChatId = APPreference("")
+    var channelTalkUserId = APPreference("")
 }
 
 

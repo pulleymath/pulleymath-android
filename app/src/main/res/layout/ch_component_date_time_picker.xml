@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ch_bg_white_normal"
+    android:clipChildren="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
+
+        <com.zoyi.channel.plugin.android.view.textview.CHTextView
+            android:id="@+id/ch_textDateTimePickerTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ch_txt_black_dark"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:ch_tv_hintKey="ch.profile_form.datetime_pick" />
+
+        <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+            android:id="@+id/ch_buttonDateTimePickerClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ch_btn_backColor="@color/ch_bg_black_lighter"
+            app:ch_btn_contentColor="@color/ch_txt_black_dark"
+            app:ch_btn_leftIcon="@drawable/ch_icon_cancel"
+            app:ch_btn_size="xs"
+            app:ch_btn_type="secondary" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clipChildren="false"
+        android:divider="@drawable/ch_divider_8dp"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <io.channel.plugin.android.view.form.ChTextField
+            android:id="@+id/ch_buttonDateTimePickerCalendar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:ch_tf_readOnly="true"
+            app:ch_tf_style="normal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ch_icon_calendar"
+                app:tint="@color/ch_txt_black_dark" />
+
+        </io.channel.plugin.android.view.form.ChTextField>
+
+        <io.channel.plugin.android.view.form.ChTextField
+            android:id="@+id/ch_buttonDateTimePickerTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:ch_tf_readOnly="true"
+            app:ch_tf_style="normal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ch_icon_clock"
+                app:tint="@color/ch_txt_black_dark" />
+
+        </io.channel.plugin.android.view.form.ChTextField>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ch_layoutDateTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp">
+
+        <DatePicker
+            android:id="@+id/ch_datePickerDateTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:datePickerMode="calendar"
+            android:theme="@style/DatePickerStyle"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <DatePicker
+            android:id="@+id/ch_datePickerDateTimePickerLegacy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:theme="@style/DatePickerStyle"
+            android:visibility="gone" />
+
+        <TimePicker
+            android:id="@+id/ch_timePickerDateTimePicker"
+            style="@style/TimePickerStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:timePickerMode="clock"
+            android:visibility="gone" />
+
+        <TimePicker
+            android:id="@+id/ch_timePickerDateTimePickerLegacy"
+            style="@style/TimePickerStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:timePickerMode="spinner"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+        android:id="@+id/ch_buttonDateTimePickerSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:ch_btn_size="m"
+        app:ch_btn_textKey="ch.common_confirm"
+        tools:ch_btn_backColor="@color/ch_bgtxt_blue_lightest"
+        tools:ch_btn_contentColor="@color/ch_bgtxt_blue_normal" />
+
+    <com.zoyi.channel.plugin.android.component.bezier.BezierButton
+        android:id="@+id/ch_buttonDateTimePickerClear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:ch_btn_size="m"
+        app:ch_btn_textKey="ch.form.select.cancel"
+        tools:ch_btn_backColor="@color/ch_bg_transparent"
+        tools:ch_btn_contentColor="@color/ch_bgtxt_blue_normal" />
+
+</LinearLayout>

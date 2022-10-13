@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ch_imageCountryCode"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        tools:src="@drawable/ch_icon_youtube" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textCountryCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/ch_txt_black_darkest"
+        android:textSize="15sp"
+        tools:text="+82" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ch_icon_chevron_small_down"
+        android:tint="@color/ch_txt_black_darker" />
+
+</LinearLayout>

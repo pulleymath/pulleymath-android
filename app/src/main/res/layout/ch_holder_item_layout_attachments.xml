@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/ch_chat_message_attachment_inverse_start_margin"
+    android:layout_marginEnd="@dimen/ch_chat_message_attachment_inverse_end_margin"
+    android:orientation="vertical">
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.attachment.AttachmentGroupLinearLayout
+        android:id="@+id/ch_layoutAttachmentsGroupOrigin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Grid layout only has margin. because grid layout measure without outer margin -->
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.attachment.AttachmentGroupGridLayout
+        android:id="@+id/ch_layoutAttachmentsGroupGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ch_chat_message_divide_height"
+        app:ch_aggl_columnSize="2"
+        app:ch_aggl_margin="@dimen/ch_chat_message_attachment_margin" />
+
+    <com.zoyi.channel.plugin.android.activity.chat.view.attachment.AttachmentGroupLinearLayout
+        android:id="@+id/ch_layoutAttachmentsGroupOthers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

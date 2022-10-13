@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/ch_chatRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ch_white">
+
+        <io.channel.plugin.android.view.ChLoadWrapperLayout
+            android:id="@+id/ch_loaderChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp">
+                        <ImageButton
+                            android:id="@+id/backBtn"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:src="@drawable/ic_nav_arrow_left"
+                            android:background="@null"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageButton
+                            android:id="@+id/exitBtn"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:src="@drawable/ic_x_grey_19dp"
+                            android:background="@null"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/ch_recyclerViewChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:paddingTop="@dimen/ch_global_navigation_height" />
+
+                </LinearLayout>
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/ch_recyclerViewChat"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:clipToPadding="false"-->
+<!--                    android:paddingTop="@dimen/ch_global_navigation_height" />-->
+
+                <com.zoyi.channel.plugin.android.activity.chat.view.chat.NewMessageAlertView
+                    android:id="@+id/ch_viewNewMessageAlert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:visibility="gone" />
+
+                <com.zoyi.channel.plugin.android.view.toast.DateToastView
+                    android:id="@+id/ch_viewChatDateToast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:paddingTop="@dimen/ch_global_navigation_height"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
+            <com.zoyi.channel.plugin.android.view.scrollview.RecyclerBottomPlaceholderLayout
+                android:id="@+id/ch_bottomLayoutChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:clipChildren="false">
+
+                <com.zoyi.channel.plugin.android.activity.chat.view.chat.ChatInteractionView
+                    android:id="@+id/ch_viewChatInteraction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false" />
+
+            </com.zoyi.channel.plugin.android.view.scrollview.RecyclerBottomPlaceholderLayout>
+
+        </io.channel.plugin.android.view.ChLoadWrapperLayout>
+
+        <com.zoyi.channel.plugin.android.view.toast.SocketErrorToast
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+</layout>

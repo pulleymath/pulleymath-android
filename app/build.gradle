@@ -18,14 +18,14 @@ android {
         }
     }
 
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 259
-        versionName '1.4.35'
+        targetSdkVersion 33
+        versionCode 264
+        versionName '1.4.40'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,8 +41,11 @@ android {
         }
     }
 
-    buildFeatures {
-        dataBinding true
+    dataBinding {
+        enabled = true
+    }
+    viewBinding {
+        enabled = true
     }
 
     flavorDimensions "type"
@@ -76,8 +79,8 @@ android {
     useLibrary 'android.test.mock'
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -94,8 +97,8 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     // rx
@@ -149,8 +152,12 @@ dependencies {
     // facebook sdk
     implementation 'com.facebook.android:facebook-android-sdk:7.1.0'
     // play console
-    implementation 'com.google.android.play:core:1.10.0'
-    implementation 'com.google.android.play:core-ktx:1.8.0'
+    implementation 'com.google.android.play:core:1.10.3'
+    implementation 'com.google.android.play:core-ktx:1.8.1'
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+
+
 
     // pdf
     implementation project(":pdf")
@@ -183,6 +190,19 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.16.1'
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.16.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.16.1'
+
+    kapt 'com.android.databinding:compiler:3.1.4'
+
+    def roomVersion = "2.4.3"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // 사용하던 custom view는 남아있으나 webview로 변경하여서 추후 삭제해야할것같음
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
+
+    implementation 'io.channel:plugin-android:10.0.4'
+    implementation 'io.channel:plugin-android-fcm:10.0.4'
 
     // lesson pagecall
     // host 처리 문제로 사용안함

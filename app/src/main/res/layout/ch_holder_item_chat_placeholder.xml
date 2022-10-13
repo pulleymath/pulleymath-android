@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="24dp">
+
+    <com.zoyi.channel.plugin.android.view.layout.AvatarLayout
+        android:id="@+id/ch_avatarChatPlaceholder"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        app:ch_avatar_border_radius="40dp"
+        app:ch_clear_on_detach="false" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textChatPlaceholderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/ch_txt_black_darkest"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="~~에 문의하기" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ch_textChatPlaceholderDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/ch_txt_black_dark"
+        android:textSize="16sp"
+        tools:text="Description" />
+
+    <io.channel.com.google.android.flexbox.ChFlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:ch_alignItems="center"
+        app:ch_justifyContent="center">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ch_iconChatPlaceholderOperationTime"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            app:ch_layout_flexGrow="0"
+            app:ch_layout_flexShrink="0"
+            tools:src="@drawable/ch_icon_lightning_filled"
+            tools:tint="@color/ch_bgtxt_green_normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ch_textChatPlaceholderOperationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            app:ch_layout_flexGrow="0"
+            app:ch_layout_flexShrink="1"
+            tools:text="@string/ch.chat.expect_response_delay.instant.short_description" />
+
+    </io.channel.com.google.android.flexbox.ChFlexboxLayout>
+
+</LinearLayout>

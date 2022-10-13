@@ -28,7 +28,7 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
     var didSwipe: Boolean = false
     var blockSwipe: Boolean = false
 
-    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+    override fun onTouch(view: View?, event: MotionEvent): Boolean {
         if(event != null)
             gesture.onTouchEvent(event)
         gestureScale.onTouchEvent(event)
@@ -43,17 +43,17 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
         return true
     }
 
-    override fun onDown(event: MotionEvent?): Boolean {
+    override fun onDown(event: MotionEvent): Boolean {
         return true
     }
 
-    override fun onFling(event1: MotionEvent?, event2: MotionEvent?, x: Float, y: Float): Boolean {
+    override fun onFling(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
         return true
     }
 
-    override fun onLongPress(event: MotionEvent?) {}
+    override fun onLongPress(event: MotionEvent) {}
 
-    override  fun onScroll(event1: MotionEvent?, event2: MotionEvent?, x: Float, y: Float): Boolean {
+    override  fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
         val minX = getMinX()
         val minY = getMinY()
 
@@ -102,9 +102,9 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
         return false
     }
 
-    override fun onShowPress(event: MotionEvent?) {}
+    override fun onShowPress(event: MotionEvent) {}
 
-    override fun onSingleTapUp(event: MotionEvent?): Boolean { return true }
+    override fun onSingleTapUp(event: MotionEvent): Boolean { return true }
 
     override fun onDoubleTap(event: MotionEvent): Boolean { return true }
 

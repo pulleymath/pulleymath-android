@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/largeChapter1ElevationWrapperCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/largeChapter1Cl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/largeChapterTitleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.largeTitle }"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="32dp"
+                    style="@style/h4"
+                    android:textColor="@color/blue_black_200"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <include
+                    android:id="@+id/mediumChapter1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="27dp"
+                    android:visibility="@{ item.isChildExist(0) ? View.VISIBLE : View.GONE }"
+                    app:item="@{ item.children[0] }"
+                    app:parent="@{ item }"
+                    app:layout_constraintTop_toBottomOf="@id/largeChapterTitleTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    layout="@layout/item_medium_chapter"/>
+                <include
+                    android:id="@+id/mediumChapter2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="27dp"
+                    android:visibility="@{ item.isChildExist(1) ? View.VISIBLE : View.GONE }"
+                    app:item="@{ item.children[1] }"
+                    app:parent="@{ item }"
+                    app:layout_constraintTop_toBottomOf="@id/mediumChapter1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    layout="@layout/item_medium_chapter"/>
+                <include
+                    android:id="@+id/mediumChapter3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="27dp"
+                    android:visibility="@{ item.isChildExist(2) ? View.VISIBLE : View.GONE }"
+                    app:item="@{ item.children[2] }"
+                    app:parent="@{ item }"
+                    app:layout_constraintTop_toBottomOf="@id/mediumChapter2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    layout="@layout/item_medium_chapter"/>
+                <include
+                    android:id="@+id/mediumChapter4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="27dp"
+                    android:visibility="@{ item.isChildExist(3) ? View.VISIBLE : View.GONE }"
+                    app:item="@{ item.children[3] }"
+                    app:parent="@{ item }"
+                    app:layout_constraintTop_toBottomOf="@id/mediumChapter3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    layout="@layout/item_medium_chapter"/>
+                <include
+                    android:id="@+id/mediumChapter5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="27dp"
+                    android:visibility="@{ item.isChildExist(4) ? View.VISIBLE : View.GONE }"
+                    app:item="@{ item.children[4] }"
+                    app:parent="@{ item }"
+                    app:layout_constraintTop_toBottomOf="@id/mediumChapter4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    layout="@layout/item_medium_chapter"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

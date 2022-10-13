@@ -59,20 +59,20 @@ class TimerDialog: Dialog {
         }, 1500)
 
         timerLottie.addAnimatorListener(object: Animator.AnimatorListener{
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
                 listener?.onAnimationCancel()
                 timerLottie.removeAllAnimatorListeners()
             }
 
-            override fun onAnimationStart(p0: Animator?) {
+            override fun onAnimationStart(p0: Animator) {
                 this@TimerDialog.endTv.text = endText
                 this@TimerDialog.timerTv.visibility = View.GONE
                 this@TimerDialog.endTv.visibility = View.VISIBLE
             }
 
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {
+            override fun onAnimationEnd(p0: Animator) {
                 this@TimerDialog.dismiss()
                 listener?.onAnimationEnd()
             }

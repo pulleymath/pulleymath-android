@@ -45,22 +45,22 @@
                         android:id="@+id/tab1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="분석" />
+                        android:text="개념" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="테스트" />
+                        android:text="유형" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="유형학습" />
+                        android:text="모의고사" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="모의고사" />
+                        android:text="테스트" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab5"
                         android:layout_width="wrap_content"
@@ -70,12 +70,17 @@
                         android:id="@+id/tab6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="과외" />
+                        android:text="분석" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="KU진단" />
+                        android:text="과외" />
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/tab8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KU" />
 
                 </com.google.android.material.tabs.TabLayout>
 
