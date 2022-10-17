@@ -98,19 +98,7 @@ class LCPatternMapFragment : Fragment() {
                     }
 
                 nextStepBtnCl.setOnClickListener {
-                    val exitCallback: () -> Unit = {
-                        //TODO
-                        (activity as LearningCourseActivity).finish()
-                    }
-                    val moreStudyCallback: () -> Unit = {
-                        //TODO
-                        Toast.makeText(requireContext(), "현재 준비 중인 기능입니다.", Toast.LENGTH_SHORT).show()
-                    }
-                    // TODO dialog
-//                    val dialog =
-//                        LCPatternEndDialog(requireContext(), viewModel.solvedPatternCount, exitCallback, moreStudyCallback)
-//                    childFragmentManager.let { dialog.show(it, "LCPatternEndDialog") }
-
+                    (activity as LearningCourseActivity).setPagerToWrongNoteMap()
                 }
             }
         }

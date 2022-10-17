@@ -17,16 +17,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
-import com.freewheelin.pulley.revision2021.model.StudyChapter
+import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
@@ -38,11 +40,11 @@ class LCWrongNoteActivity : AppCompatActivity() {
         val NOTE_CARD_ITEM = "NOTE_CARD_ITEM"
         val HEADER_TITLE = "HEADER_TITLE"
         val CURR_CHAPTER = "CURR_CHAPTER"
-        fun getIntent(context: Context, list: ArrayList<LCWrongNoteMapCard>?, item: LCWrongNoteMapCard, headerTitle: String?) : Intent {
+        fun getIntent(context: Context, list: ArrayList<LCWrongNoteMapCard>?, item: LCWrongNoteMapCard, headerTitle: String?, chapterId: Int?) : Intent {
             return Intent(context, LCWrongNoteActivity::class.java).apply {
                 putExtra(NOTE_CARD_LIST, list)
                 putExtra(NOTE_CARD_ITEM, item)
-//                putExtra(CURR_CHAPTER, chapterId)
+                putExtra(CURR_CHAPTER, chapterId)
                 putExtra(HEADER_TITLE, headerTitle)
 
             }
@@ -60,18 +62,18 @@ class LCWrongNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         hideSystemUI()
+        AppUsageMonitor.startConceptLearningUsage()
 
         val noteCardList: ArrayList<LCWrongNoteMapCard> = intent.getSerializableExtra(NOTE_CARD_LIST) as ArrayList<LCWrongNoteMapCard>
         val noteCardItem = intent.getSerializableExtra(NOTE_CARD_ITEM) as LCWrongNoteMapCard
-//        val currChapter = intent.getSerializableExtra(CURR_CHAPTER) as StudyChapter
+        val chapterId = intent.getIntExtra(CURR_CHAPTER, -1)
         val title = intent.getStringExtra(HEADER_TITLE) ?: ""
 
-        println("zxozxo, noteCardItem hint size : ${noteCardItem.hints.size}")
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@LCWrongNoteActivity
 
-            viewModel.init(noteCardList, noteCardItem, title)
+            viewModel.init(noteCardList, noteCardItem, title, chapterId)
             val frags = noteCardList.map {
                 return@map LCWrongNoteFragment.newInstance(it)
             }
@@ -120,19 +122,17 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
             appendHintBtn.setOnClickListener {
                 viewModel.remainingHintSize.value?.let { hintSize ->
-//                    viewModel.usePatternQuizHint { // TODO 힌트 사용할때 API 날릴까 말까?
-                        val nextHintSize = hintSize - 1
-                        viewModel.setHintBtnText(nextHintSize) //
-//
-                        val children = getChildrenPage()
+                    val nextHintSize = hintSize - 1
+                    viewModel.setHintBtnText(nextHintSize)
 
-                        children.forEach {
-                            val quizFrag = (it as LCWrongNoteFragment)
-                            if (quizFrag.hasMoreHint()) {
-                                quizFrag.setNextHint(nextHintSize)
-                            }
+                    val children = getChildrenPage()
+
+                    children.forEach {
+                        val quizFrag = (it as LCWrongNoteFragment)
+                        if (quizFrag.hasMoreHint()) {
+                            quizFrag.setNextHint(nextHintSize)
                         }
-//                    }
+                    }
                 }
             }
 
@@ -180,6 +180,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        AppUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
 
         CoroutineScope(Dispatchers.IO).launch {
             delay(500)
@@ -189,6 +190,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        AppUsageMonitor.pauseConceptLearning()
+    }
     fun goInitialPosition() {
         val list = viewModel.filteredNoteCardList.value
         val noteItem = viewModel.currNoteCard.value
@@ -232,6 +237,15 @@ class LCWrongNoteActivity : AppCompatActivity() {
 //        )
     }
 
+    fun scoringPatternQuiz(scoring: LCPatternScoring) {
+        viewModel.filteredNoteCardList.value?.forEach { quiz ->
+            if (quiz.refPatternQuizId == scoring.patternQuizId) {
+                quiz.isCorrect = scoring.isCorrect
+                quiz.isAnswerSubmitted.set(true)
+                viewModel.forceUpdateNoteCardList()
+            }
+        }
+    }
     fun hidePencilcasePanel() {
         binding.pencilcaseView.pencilOptionLl.isSelected = false
         binding.pencilcaseView.pencilOptionLl.visibility = View.GONE

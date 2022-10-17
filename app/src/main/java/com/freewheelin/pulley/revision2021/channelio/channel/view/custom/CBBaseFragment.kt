@@ -244,15 +244,12 @@ abstract class CBBaseFragment : Fragment(), BaseView, BinderController,
     override fun onButtonClick(button: GlobalNavigation.Button?) {
         when (button) {
             GlobalNavigation.Button.EXIT -> {
-                println("zxozxo onGlobal ButtonClick EXIT")
                 Action.invoke(ActionType.EXIT)
             }
             GlobalNavigation.Button.BACK -> {
-                println("zxozxo onGlobal ButtonClick BACK")
                 activity?.onBackPressed()
             }
             else -> {
-                println("zxozxo onGlobal ButtonClick ELSE")
 
             }
         }

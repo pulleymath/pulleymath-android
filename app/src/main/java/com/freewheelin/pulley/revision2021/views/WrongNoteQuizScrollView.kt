@@ -86,7 +86,6 @@ class WrongNoteQuizScrollView: ScrollView,
     // true 일때 scale처리를 해야함
     //
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        println("zxozxo onInterceptTouchEvent ")
 //        return false // 한손가락 필기중일때 false
         return if(isBlock) {
             ev.pointerCount == 2

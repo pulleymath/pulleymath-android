@@ -32,15 +32,16 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
 
     val isPagerFirstIndex by lazy { MutableLiveData(true) }
     val isPagerLastIndex by lazy { MutableLiveData(false) }
+    var selectedChapterId: Int = -1
 
-    fun init(list: ArrayList<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String) {
+    fun init(list: ArrayList<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String, chapterId: Int) {
         headerTitle.postValue(title)
         filteredNoteCardList.postValue(list.toList())
         currNoteCard.postValue(noteItem)
 //        selectedChapter = chapter
 
         patternName.postValue(noteItem.patternName)
-
+        selectedChapterId = chapterId
     }
 
     fun setHintBtnText(size: Int) {
@@ -52,11 +53,14 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
         filteredNoteCardList.value?.let { list ->
             currentCardIndex.value?.let { index ->
                 val hintSize = list[index].hints.size
-//                remainingHintSizeLive.postValue(hintSize)
                 setHintBtnText(hintSize)
             }
         }
-        // TODO 이미지 리셋
 
+
+    }
+
+    fun forceUpdateNoteCardList() {
+        filteredNoteCardList.postValue(filteredNoteCardList.value)
     }
 }

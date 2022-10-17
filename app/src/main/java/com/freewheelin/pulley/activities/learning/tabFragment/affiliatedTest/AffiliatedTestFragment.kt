@@ -170,9 +170,6 @@ class AffiliatedTestFragment: LearningTabFragment() {
 
             webView.loadUrl(API_COMMUNITY_DOMAIN)
             webView.addJavascriptInterface(CommunityJavascriptInterface(requireContext()), "AndroidFunction");
-
-            println("asoaso, url : ${API_COMMUNITY_DOMAIN}")
-
         }
     }
 

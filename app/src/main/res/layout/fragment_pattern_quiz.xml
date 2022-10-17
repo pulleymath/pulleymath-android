@@ -225,7 +225,7 @@
                         android:layout_width="140dp"
                         android:layout_height="140dp"
                         android:visibility="@{ vm.patternQuiz.isCorrect == null ? View.GONE : View.VISIBLE }"
-                        android:src="@{ vm.patternQuiz.isCorrect ? @drawable/ic_o_right_answer : vm.patternQuiz.isCorrect == null ? null : @drawable/ic_x_wrong_answer }"
+                        android:src="@{ vm.patternQuiz.isCorrect == false ? @drawable/ic_x_wrong_answer : vm.patternQuiz.isFirstTry == true ? @drawable/ic_o_right_answer : @drawable/ic_triangle_wrong_right_green }"
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="@+id/quizIv"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -318,15 +318,5 @@
             app:floatingSheetAnswerType="@{ vm.patternQuiz.isShortFormat() }"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:id="@+id/timerLottie"-->
-<!--            android:layout_width="64dp"-->
-<!--            android:layout_height="64dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:lottie_fileName="timer.json" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -89,7 +89,6 @@ class AlarmViewModel  : BaseViewModel(), LifecycleObserver {
         wantClose.postValue(true)
     }
     fun backToList() {
-        println("tpehf, back to list")
         wantGoAlarmList.postValue(true)
     }
     fun goLinkUrl(url: String, v: View) {

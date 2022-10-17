@@ -27,7 +27,6 @@ class Alarm : BaseDiffItem, Serializable {
     fun whenDidYouGetMessage(currentTime: String?): String {
         // 리턴은 오늘, 1일 전 - 7일 전, 2020.05.12 이런식이다.
         if (currentTime == null) {
-            println("tpehf, current TIME ERROR")
             return ""
         }
         val createdDate = sdf.parse(createdAt)

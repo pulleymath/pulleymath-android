@@ -342,7 +342,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerCl" />
 
-        <!--        TODO Dummy 주석풀어야함-->
         <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView
             android:layout_width="700dp"
             android:layout_height="200dp"
@@ -359,16 +358,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!--        <com.airbnb.lottie.LottieAnimationView-->
-        <!--            android:id="@+id/lottie"-->
-        <!--            android:layout_width="520dp"-->
-        <!--            android:layout_height="520dp"-->
-        <!--            android:layout_marginTop="24dp"-->
-        <!--            android:background="@drawable/bg_white_ffffff_round_top_only"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:lottie_fileName="sprinkle_effect.json" />-->
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

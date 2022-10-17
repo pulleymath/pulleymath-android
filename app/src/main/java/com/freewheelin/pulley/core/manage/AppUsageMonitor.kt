@@ -1,18 +1,19 @@
 package com.freewheelin.pulley.core.manage
 
-import android.app.ActivityManager
-import android.app.Instrumentation
+import android.annotation.SuppressLint
 import android.util.Log
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.revision2021.model.CourseType
+import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
+import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.timerTask
 
 interface AppUsageMonitorListener {
@@ -25,6 +26,8 @@ object AppUsageMonitor {
 
     var accumulatedStudyTime: Long = 0
 
+    var accumulatedConceptLearningTime: Long = 0
+
     var timer: Timer? = null
 
     var listeners: ArrayList<AppUsageMonitorListener> = arrayListOf()
@@ -34,13 +37,30 @@ object AppUsageMonitor {
 
     val saveDuration: Long = 15 * 1000
 
+    val saveDuration10Sec: Long = 9 * 1000
+
     var lastSaveDuration = Date()
 
     var isForeground: Boolean = true
 
     var isStudying = false
+    var isConceptLearning = false
+    var learningChapterId: Int? = null
 
-
+    fun startConceptLearningUsage() {
+        timer?.cancel()
+        timer = null
+        timer = Timer()
+        val task = timerTask {
+            if (isForeground && isConceptLearning) {
+                accumulatedConceptLearningTime += 1
+                if (lastSaveDuration.time + saveDuration10Sec < Date().time) {
+                    postConceptLearningTime()
+                }
+            }
+        }
+        timer?.schedule(task, 1000, 1000)
+    }
 
     fun startAppUsage(listener: AppUsageMonitorListener? = null) {
         if(listener != null) listeners.add(listener)
@@ -78,6 +98,26 @@ object AppUsageMonitor {
         isStudying = false
     }
 
+    fun startConceptLearning(chapterId: Int?) {
+        learningChapterId = chapterId
+        isConceptLearning = true
+        lastSaveDuration = Date()
+    }
+
+    fun finishConceptLearning() {
+        postConceptLearningTime()
+
+        learningChapterId = null
+        isConceptLearning = false
+        timer?.cancel()
+        timer = null
+    }
+
+    fun pauseConceptLearning() {
+//        learningChapterId = null
+        isConceptLearning = false
+    }
+
     fun addMonitorTimeIfNeed() {
         val user = user ?: return
         if((isSynchronizing
@@ -95,20 +135,44 @@ object AppUsageMonitor {
                 "onlyStudyTime" to studyTime,
                 "studentID" to user.studentID
         )
-        // TODO dummy post studytime 짜증나서 접어둠
-//        API_V2.postStudyTime(param).enqueue(object: Callback<Void> {
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                isSynchronizing = false
-//            }
-//
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                accumulatedUsageTime = 0
-//                accumulatedStudyTime = 0
-//                isSynchronizing = false
-//                lastSaveDuration = Date()
-//            }
-//
-//        })
+
+        API_V2.postStudyTime(param).enqueue(object: Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                isSynchronizing = false
+            }
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                accumulatedUsageTime = 0
+                accumulatedStudyTime = 0
+                isSynchronizing = false
+                lastSaveDuration = Date()
+            }
+
+        })
+    }
+
+    private val courseRepository: LearningCourseRepository by lazy { LearningCourseRepository() }
+
+    @SuppressLint("CheckResult")
+    fun postConceptLearningTime() {
+        val param: Parameter = Parameter(
+            "type" to "STUDY_TIME",
+            "time" to accumulatedConceptLearningTime
+        )
+
+        val studentId = user?.studentID ?: return
+        val chapterId = learningChapterId ?: return
+        courseRepository.postUserConceptLearningTime(studentId, chapterId, param)
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ response ->
+                Log.d(javaClass.simpleName, "postUserConceptLearningTime =>${response.data}")
+                lastSaveDuration = Date()
+                accumulatedConceptLearningTime = 0
+            }, { error ->
+                lastSaveDuration = Date()
+                Log.e(javaClass.simpleName, "postUserConceptLearningTime error=${error.localizedMessage}")
+            })
     }
 }
 

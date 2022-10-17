@@ -60,20 +60,10 @@ class PatternConceptFragment : Fragment() {
 
     }
     fun addBaseConcept() {
-        println("zxozxo, add base Concept 1 ")
         binding.apply {
-//            println("zxozxo, add base Concept 1 - 1 :${viewModel.patternQuiz.value?.concepts!![0].conceptTypeEnum}")
-            println("zxozxo, add base Concept 1 - 2 :${viewModel.patternQuiz.value?.concepts == null}")
-
-            viewModel.patternQuiz.value?.concepts?.forEach {
-                println("zxozxo, 123 add base Concept it.conceptTypeEnum : ${it.conceptTypeEnum} ")
-            }
             viewModel.patternQuiz.value?.concepts?.filter {
-                println("zxozxo, add base Concept it.conceptTypeEnum : ${it.conceptTypeEnum} ")
-
                 it.conceptTypeEnum == LCPatternConcept.ConceptType.base
             }?.forEach {
-                println("zxozxo, add base Concept 2")
                 val iv = ImageView(context)
                 val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 layoutParams.setMargins(0, 16.toPx(), 0, 0)
@@ -82,7 +72,6 @@ class PatternConceptFragment : Fragment() {
                 iv.id = View.generateViewId()
                 iv.setImageUrlGlide(it.conceptImageUrl)
                 scrollRootLl.addView(iv)
-                println("zxozxo, add base Concept 3")
             }
         }
     }

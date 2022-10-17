@@ -10,7 +10,6 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper
-import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.NoteLearningStatus
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteMapRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteRepository
@@ -69,11 +68,11 @@ class LCWrongNoteFViewModel : BaseViewModel(), LifecycleObserver {
                     response.data?.let {
                         note.isCorrect = it.isCorrect
                         noteCard.postValue(note)
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            withContext(Dispatchers.Main) {
-//                                callback(it)
-//                            }
-//                        }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            withContext(Dispatchers.Main) {
+                                callback(it)
+                            }
+                        }
                     }
                 }, { error ->
                     Log.e(javaClass.simpleName, "quizScoring error=${error.localizedMessage}")

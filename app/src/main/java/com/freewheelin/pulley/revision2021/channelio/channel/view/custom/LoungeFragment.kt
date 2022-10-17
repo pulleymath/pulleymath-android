@@ -285,17 +285,14 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
     override fun onButtonClick(button: GlobalNavigation.Button?) {
         when (button) {
             GlobalNavigation.Button.SETTINGS -> {
-                println("zxozxo Lounge ButtonClick SETTINGS")
                 IntentUtils.setNextActivity(requireContext(), SettingsActivity::class.java).startActivity()
             }
             GlobalNavigation.Button.EXIT -> {
-                println("zxozxo Lounge ButtonClick EXIT")
                 (activity as LearningCourseActivity).beginBlackChannelIoFrame()
 //                Action.invoke(ActionType.MESSENGER_CLOSED)
 //                this.finish()
             }
             else -> {
-                println("zxozxo Lounge ButtonClick ELSE")
             }
         }
     }
@@ -391,7 +388,6 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
             PResUtils.getColor(R.color.ch_bgtxt_red_normal),
             PResUtils.getColor(R.color.ch_bgtxt_absolute_white_dark)
         ) { v: View? ->
-            println("zxozxo, leave chat! ")
             presenter!!.leaveChat(
                 chatItem
             )
@@ -425,12 +421,10 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
     }
 
     private fun startChat(transition: Transition) {
-        println("zxozxo startChat 1")
         this.startChat(null as String?, transition)
     }
 
     private fun startChat(presetMessage: String?, transition: Transition) {
-        println("zxozxo startChat 2")
 //        ChatUtils.createChatActivityIntent(requireActivity(), page).putExtra("chatPresetMessage", presetMessage)
 //            .setTransition(transition).startActivityForResult(21)
         DaebakToast.show(requireContext(),"새로운 질문은 질문하기 버튼을 통해 진행해주세요.", overDialog = true)
@@ -439,7 +433,6 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
 
     private fun startChat(contentType: ChatContentType, chatId: String?, transition: Transition) {
         if (contentType == ChatContentType.USER_CHAT && chatId != null) {
-            println("zxozxo startChat 3 : chatId ${chatId}")
 //            ChatUtils.createChatActivityIntent(requireActivity(), page).putExtra("chatId", chatId)
 //                .setTransition(transition).startActivityForResult(21)
             (activity as LearningCourseActivity).beginChatFragment(chatId, null)
@@ -454,9 +447,6 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
     }
 
     private fun showChats() {
-        Log.d("tpehf", " showChats!")
-        println("zxozxo startChat 4")
-
         IntentUtils.setNextActivity(requireContext(), ChatsActivity::class.java).putExtra("page", page)
             .startActivity()
     }

@@ -17,6 +17,7 @@ import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -123,6 +124,7 @@ class LCCookingFragment() : Fragment(),
 
     val quizMemoViewList: MutableList<CookingMemoView> = mutableListOf()
     var cookingItemBinding: ItemCookingItemBinding? = null
+    var focusedQuizList: MutableList<CookingQuiz> = mutableListOf()
     inner class CookingItemHolder(private val itemBinding: ItemCookingItemBinding): RecyclerView.ViewHolder(itemBinding.root),
         CookingItemClickListener {
         lateinit var itemType: CookingInfoItem.ItemType
@@ -137,6 +139,7 @@ class LCCookingFragment() : Fragment(),
                 itemType = item.type
                 vm = viewModel
                 listener = this@CookingItemHolder
+                lifecycleOwner = viewLifecycleOwner
                 setAllContainerViewGone(this)
                 setQuizWidth(itemBinding)
 
@@ -280,6 +283,7 @@ class LCCookingFragment() : Fragment(),
                 else -> quizBinding.quizDetail0
             }
         }
+
         private fun setOnDetailView (itemBinding: ItemCookingQuizDetailBinding, quiz: CookingQuiz) {
             itemBinding.let {
                 it.hintBtn.setOnClickListener { view ->
@@ -302,6 +306,7 @@ class LCCookingFragment() : Fragment(),
                     it.quizSingleAnswer.setOnClickListener { view ->
                         quiz.afterTryAnswered.set(true)
                         onSingleAnswerClick(quiz, view)
+                        focusedQuizList.add(quiz)
                     }
 
                     it.quizAnswerEt.setOnKeyListener { v, keyCode, event ->
@@ -329,8 +334,9 @@ class LCCookingFragment() : Fragment(),
                 }
             }
 
-            childFragmentManager.let { dialog.show(it, "CookingQuizAnswerSelectDialog") }
+            childFragmentManager.let { dialog.show(it, "CookingQuizAnswerSelectDialog${dialog.hashCode()}") }
             childFragmentManager.executePendingTransactions()
+
 
             dialog.dialog?.setOnDismissListener {
                 // dim click dismiss 일때
@@ -463,8 +469,15 @@ class LCCookingFragment() : Fragment(),
         super.onResume()
         resetMemoView()
         resumePencilcaseView()
+        recoveryQuizSingleAnswer()
     }
 
+    private fun recoveryQuizSingleAnswer() {
+        focusedQuizList.forEach {
+            it.afterTryAnswered.set(false)
+        }
+        focusedQuizList.clear()
+    }
     private fun resetMemoView() {
         val lcActivity = (activity as LearningCourseActivity)
         lcActivity.binding.pencilcaseView.memoViews.clear()

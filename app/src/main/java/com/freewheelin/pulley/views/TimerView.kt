@@ -280,7 +280,6 @@ class TimerView : ConstraintLayout {
             }
             SOLVE -> {
                 with(binding as ViewTimerSolveBinding) {
-                    println("tpehf, timerview SOLVE INIT!")
 
                     timerSwitch.setOnCheckedChangeListener { button, isChecked ->
                         if(isChecked) {
@@ -329,7 +328,7 @@ class TimerView : ConstraintLayout {
                 }
             }
             else -> {
-                println("tpehf, timerview init else!")
+
             }
         }
 

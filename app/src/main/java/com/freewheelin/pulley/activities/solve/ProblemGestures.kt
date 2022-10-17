@@ -29,8 +29,12 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
     var blockSwipe: Boolean = false
 
     override fun onTouch(view: View?, event: MotionEvent): Boolean {
-        if(event != null)
-            gesture.onTouchEvent(event)
+        try {
+            if (event != null) { gesture.onTouchEvent(event) }
+        } catch (e: NullPointerException) {
+            println("Error: ${e}")
+        }
+
         gestureScale.onTouchEvent(event)
 
         logTouchEvetn(event)

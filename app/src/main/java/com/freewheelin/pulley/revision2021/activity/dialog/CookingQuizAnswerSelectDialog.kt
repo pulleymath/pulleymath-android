@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2021.activity.dialog
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.BindingAdapter
@@ -37,6 +38,8 @@ class CookingQuizAnswerSelectDialog(
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_lc_cooking_quiz_select, null, false)
     }
 
+    var dialogDismissed = false
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.let {
@@ -44,6 +47,18 @@ class CookingQuizAnswerSelectDialog(
             params.dimAmount = 0.2f
             it.attributes = params
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (dialogDismissed && dialog != null) {
+            this.dismiss()
+        }
+    }
+
+    override fun onPause() {
+        dialogDismissed = true
+        super.onPause()
     }
 
     override fun onCreateView(
@@ -111,8 +126,8 @@ class CookingQuizAnswerSelectDialog(
         }
 
         override fun onItemClick(content: CookingQuizSelection) {
-            dismiss()
             answerBtnCallback(content)
+            dismiss()
         }
     }
     interface CookingSelectionItemClickListener {

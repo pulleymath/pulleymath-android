@@ -70,15 +70,17 @@
                 <TextView
                     android:id="@+id/patternTitleTv"
                     style="@style/h5"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{ item.name }"
                     android:textColor="@color/purple_300"
                     android:layout_marginStart="8dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     app:layout_constraintStart_toEndOf="@+id/patternTitleChipTv"
                     app:layout_constraintBottom_toBottomOf="@+id/patternTitleChipTv"
-                    app:layout_constraintTop_toTopOf="@+id/patternTitleChipTv" />
-    <!--                android:text="@{ item.name }"-->
+                    app:layout_constraintTop_toTopOf="@+id/patternTitleChipTv"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <LinearLayout
                     android:id="@+id/patternIvWrapper"
@@ -206,6 +208,7 @@
             android:layout_marginStart="4dp"
             layout_margin_end_dimen="@{ isRightPosition ? @dimen/dp34 : @dimen/dp0 }"
             android:src="@drawable/ic_study_arrow_right"
+            app:tint="@color/purple_200"
             android:visibility="@{ isFinalCard ? View.GONE : View.VISIBLE }"
             app:layout_constraintTop_toTopOf="@+id/cardRootCl"
             app:layout_constraintBottom_toBottomOf="parent"

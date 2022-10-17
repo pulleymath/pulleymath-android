@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.model.response
 
+import androidx.databinding.ObservableBoolean
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
@@ -8,28 +9,38 @@ import com.freewheelin.pulley.revision2021.model.QuizFormat
 import java.io.Serializable
 
 class LCWrongNoteMapCardWrapper: Serializable {
-    var patternLearningStatus: String = ""
+    var conceptLearningStatus: String = "DONE"
+    var patternLearningStatus: String = "DONE"
     var wrongQuizzes: List<LCWrongNoteMapCard> = listOf()
 
-    val learningStatus: NoteLearningStatus
+    val patternStatus: PatternLearningStatus
         get() {
             return when (patternLearningStatus) {
-                "ING" -> NoteLearningStatus.ING
-                "NONE" -> NoteLearningStatus.NONE
+                "NONE" -> PatternLearningStatus.NONE // 개념을 다 푼후 유형을 풀지 않았을 때
+                "ING" -> PatternLearningStatus.ING // 개념을 다 푼후 유형을 푸는 중일 때
                 "DONE" -> {
                     if (wrongQuizzes.isEmpty()) {
-                        NoteLearningStatus.PERFECT_DONE
+                        PatternLearningStatus.PERFECT // 처음부터 모든문제를 다 맞춘 경우
                     } else {
-                        NoteLearningStatus.DONE
+                        PatternLearningStatus.DONE
                     }
                 }
-                else -> NoteLearningStatus.NONE
+                else -> PatternLearningStatus.NONE
             }
         }
-
-
-    enum class NoteLearningStatus {
-        ING, NONE, DONE, PERFECT_DONE
+    val conceptStatus: ConceptLearningStatus
+        get() {
+            return when (conceptLearningStatus) {
+                "ING" -> ConceptLearningStatus.ING
+                "DONE" -> ConceptLearningStatus.DONE
+                else -> ConceptLearningStatus.DONE
+            }
+        }
+    enum class PatternLearningStatus {
+        NONE, ING, DONE, PERFECT,
+    }
+    enum class ConceptLearningStatus {
+        ING, DONE
     }
 }
 class LCWrongNoteMapCard: BaseDiffItem, Serializable {
@@ -51,6 +62,8 @@ class LCWrongNoteMapCard: BaseDiffItem, Serializable {
 
     var cardType: CardType = CardType.Card
 
+    var isAnswerSubmitted: ObservableBoolean = ObservableBoolean(false)
+
     val quizFormat: QuizFormat
         get() {
             return when(questionFormat) {
@@ -67,9 +80,6 @@ class LCWrongNoteMapCard: BaseDiffItem, Serializable {
         return isCorrect == null
     }
     fun isComplete(): Boolean {
-        return isCorrect != null
-    }
-    fun isComplete2(): Boolean {
         return isCorrect != null
     }
 

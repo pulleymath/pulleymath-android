@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -22,7 +23,7 @@ class BalloonCourseRoadView: ConstraintLayout {
 
 
     init {
-
+        id = View.generateViewId()
     }
 
 
@@ -68,6 +69,7 @@ class BalloonCourseRoadView: ConstraintLayout {
                 CourseType.pattern -> "유형 0${course.sequence}. ${course.name}"
                 else -> { "유형 0${course.sequence}. ${course.name}" }
             }
+            binding.arrowIv.visibility = if (isCurrentCourse) View.GONE else View.VISIBLE
         }
     }
     fun setPeakViewBias(selectedType: CourseType) {

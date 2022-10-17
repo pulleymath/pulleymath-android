@@ -13,9 +13,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.core.content.FileProvider
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -28,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
@@ -43,7 +41,6 @@ import com.freewheelin.pulley.revision2021.views.BalloonCourseRoadView
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.utils.dpToPx
-import com.freewheelin.pulley.utils.toDp
 import com.freewheelin.pulley.utils.toPx
 import com.zoyi.channel.plugin.android.model.source.photopicker.PhotoItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
@@ -122,6 +119,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         super.onCreate(savedInstanceState)
         hideSystemUI()
         setContentView(binding.root)
+        AppUsageMonitor.startConceptLearningUsage()
 
         ChannelIOWrapper.initialize(application, this)
 
@@ -286,7 +284,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             list.forEachIndexed { index, singleCourseDesc ->
                 val isEqualType = singleCourseDesc.courseType == CourseType.cooking
                 val isEqualId = singleCourseDesc.learningCourseDetailId == cookingId
-                    println("asoaso index : ${index} , singleCourseDesc.courseType : ${singleCourseDesc.courseType},  singleCourseDesc.learningCourseDetailId : ${singleCourseDesc.learningCourseDetailId}, cookingId : ${cookingId}")
                     if (isEqualType && isEqualId) return@let index
                 }
                 return@let -1
@@ -343,13 +340,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val courseList = viewModel.getHeaderCourseListOnType(selectedType)
         val currentCourse = viewModel.courseContentTable.value?.get(binding.pager.currentItem)
         val roadView = BalloonCourseRoadView(this)
-        roadView.id = View.generateViewId()
         roadView.setPeakViewBias(selectedType)
         roadView.setCourseList(courseList, currentCourse) { course ->
             if (viewModel.isPriorConcept(course)) {
-                // TODO 새로운 lesson activity로 가야함
-//                                startActivity(getIntent(this@LearningCourseActivity))
-                println("course, review Course!! courseType: ${course.courseType}, learningCourseType: ${course.learningCourseType}, learningCourseDetailId: ${course.learningCourseDetailId}, learningCourseType: ${course.learningCourseType}, targetChapterId: ${course.targetChapterId}, targetConceptCookingId: ${course.targetConceptCookingId}, sequence: ${course.sequence}")
                 val chapterId = course.targetChapterId ?: -1
                 viewModel.createLearningCourseOnStudentId(chapterId) {
                     val name = course.name ?: ""
@@ -375,7 +368,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val height = roadView.getBalloonHeight()
         val xOffset = roadView.getXOffset(selectedType).dpToPx()
 
-        println("asoaso, type: ${selectedType}, xoffset: ${xOffset}")
 
 
         popWindow = PopupWindow(roadView, width, height, true).apply {
@@ -503,6 +495,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
 //        ChannelIO.shutdown()
         super.onDestroy()
+        AppUsageMonitor.finishConceptLearning()
     }
 
     inner class LCViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
@@ -578,6 +571,15 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         println("channelIO, channelIO, onPopupDataReceived")
     }
 
+    override fun onResume() {
+        super.onResume()
+        AppUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppUsageMonitor.pauseConceptLearning()
+    }
 }
 
 @BindingAdapter("layout_margin_top_dimen")

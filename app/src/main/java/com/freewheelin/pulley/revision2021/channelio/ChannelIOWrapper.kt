@@ -53,16 +53,11 @@ object ChannelIOWrapper {
         ChannelIO.boot(bootConfig) { bootStatus, user ->
             val jwt = PrefSupervisor.getJwt(PChannelIO.getAppContext())
             val channelId = ChannelStore.get().channelState.get()?.id
-            println("tpehf, boot end jwt? : ${jwt}")
-            println("tpehf, boot end channelId? : ${channelId}")
-            println("tpehf, boot end userId : ${user?.id}")
-            println("tpehf, boot end bootStatus : ${bootStatus}")
             Preferences.channelTalkUserId.set(user?.id ?: "")
             if (bootStatus == BootStatus.SUCCESS && user != null) {
-                println("tpehf, boot end ")
                 ChannelIO.showChannelButton()
             } else {
-                println("tpehf, boot 몬가일어나고잇다.. ")
+                println("error, boot 몬가일어나고잇다.. ")
             }
         }
     }

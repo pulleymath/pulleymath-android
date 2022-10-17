@@ -28,7 +28,7 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
     val patternQuiz3 by lazy { MutableLiveData<LCPatternQuiz>() }
 
     val selectedQuizIndex by lazy { MutableLiveData<Int>(0) }
-//    val showConceptSolutionView by lazy { MutableLiveData<Boolean>(false) }
+    val isPatternQuizOnResume by lazy { MutableLiveData<Boolean>(false) }
     val isHintBtnDisabled by lazy { MutableLiveData<Boolean>(false) }
 //    var remainingHintSize = 0
     val remainingHintSizeLive by lazy { MutableLiveData(0) }
@@ -110,7 +110,7 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
         return position == patternQuizList.value?.lastIndex
     }
     fun updatePatternQuizList() {
-        patternQuizList.postValue(patternQuizList.value!!)
+        patternQuizList.postValue(patternQuizList.value)
     }
 
     fun isPagerLastIndex(): Boolean {
@@ -129,14 +129,10 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
     fun resetHint() {
         patternQuizList.value?.let { list ->
             selectedQuizIndex.value?.let { index ->
-                println("zxozxo, index : ${index}")
                 val hintSize = list[index].hints.size
-                println("zxozxo, hintSize : ${hintSize}")
-//                remainingHintSizeLive.postValue(hintSize)
                 setHintBtnText(hintSize)
             }
         }
-        // TODO 이미지 리셋
 
     }
 

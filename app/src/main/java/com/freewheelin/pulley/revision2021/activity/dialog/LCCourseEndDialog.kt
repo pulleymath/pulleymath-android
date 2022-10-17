@@ -19,10 +19,10 @@ class LCCourseEndDialog(context: Context,
                         private val moreStudyBtnCallback: () -> Unit,
 ): DialogFragment() {
 
-    private val binding: DialogLcWrongNoteEndBinding by lazy {
+    val binding: DialogLcWrongNoteEndBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_lc_wrong_note_end, null, false)
     }
-    private val viewModel by lazy {
+    val viewModel by lazy {
         ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
             LCCourseEndDialogViewModel::class.java)
     }
@@ -37,8 +37,14 @@ class LCCourseEndDialog(context: Context,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchCourseSummary(chapterId)
         binding.apply {
+            viewModel.fetchCourseSummary(chapterId)
+
+
+            viewModel.showSprinkleView.observe(viewLifecycleOwner) { showView ->
+                if (showView) sprinkleLottieView.playAnimation()
+            }
+
             lifecycleOwner = this@LCCourseEndDialog
             vm = viewModel
 //            count = "$solvedPatternCount"
@@ -56,7 +62,6 @@ class LCCourseEndDialog(context: Context,
                 moreStudyBtnCallback()
                 dismiss()
             }
-
         }
     }
 }

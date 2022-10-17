@@ -37,6 +37,7 @@ class MyApplication: Application(), LifecycleObserver {
 //        var user:User? = null
 
         var user:User? = null
+        var firstLaunchGoConceptFlag: Boolean = false
     }
 
     override fun onCreate() {

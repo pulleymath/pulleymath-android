@@ -81,48 +81,30 @@ class ConceptCourseFragment : LearningTabFragment() {
             viewModel.showProgress.postValue(true)
             viewModel.subjectIndex.observe(this@ConceptCourseFragment) { selectedSubjectIndex ->
 
-                // TODO vm.subjectIndex 바인딩이 작동하지 않음 왤까
+//                // TODO vm.subjectIndex 바인딩이 작동하지 않음 왤까
                 rvHeaderBinding?.apply {
                     listOf(
-                        mathSangBtn,
-                        mathHaBtn,
-                        math1Btn,
-                        math2Btn,
-                        mathProbabilityAndStatisticsBtn,
-                        mathCalculusBtn,
-                        mathKihaBtn
+                        mathSangBtn, mathHaBtn,
+                        math1Btn, math2Btn, mathProbabilityAndStatisticsBtn,
+                        mathCalculusBtn, mathKihaBtn
                     )
                         .forEachIndexed { index, button ->
                             when (index) {
                                 selectedSubjectIndex -> {
                                     button.let {
-                                        it.setTextColor(
-                                            ContextCompat.getColor(
-                                                requireContext(),
-                                                R.color.white
-                                            )
-                                        )
-                                        it.setBackgroundResource(R.drawable.bg_study_frag_header_btn_selected_custom_shadow)
-//                                        it.elevation = resources.getDimension(R.dimen.dp0)
+                                        it.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                                        it.setBackgroundResource(R.drawable.shadow_main_page_tab_focused)
                                     }
-
                                 }
                                 else -> {
                                     button.let {
-                                        it.setTextColor(
-                                            ContextCompat.getColor(
-                                                requireContext(),
-                                                R.color.gray_600
-                                            )
-                                        )
-                                        it.setBackgroundResource(R.drawable.bg_study_frag_header_btn_common_custom_shadow)
-//                                        it.elevation = resources.getDimension(R.dimen.dp5)
+                                        it.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
+                                        it.setBackgroundResource(R.drawable.shadow_main_page_tab_default)
                                     }
 
                                 }
                             }
                         }
-
                 }
             }
             studyRv.adapter = StudyChapterAdapter()

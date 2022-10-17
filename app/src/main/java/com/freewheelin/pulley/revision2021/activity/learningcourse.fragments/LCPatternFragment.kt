@@ -84,10 +84,17 @@ class LCPatternFragment : Fragment() {
                     }
                     pagerWrapper.pager.adapter = LCPatternViewPagerAdapter(tabFragments, childFragmentManager, lifecycle)
                     pagerWrapper.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                        override fun onPageScrolled(
+                            position: Int,
+                            positionOffset: Float,
+                            positionOffsetPixels: Int
+                        ) {
+                            super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                            viewModel.selectedQuizIndex.postValue(position)
+                        }
 
                         override fun onPageSelected(position: Int) {
                             super.onPageSelected(position)
-                            viewModel.selectedQuizIndex.postValue(position)
                             when (position) {
                                 0 -> {
                                     pagerWrapper.setStartIndex()
@@ -218,7 +225,8 @@ class LCPatternFragment : Fragment() {
         viewModel.patternQuizList.value?.forEach { quiz ->
             if (quiz.patternQuizId == scoring.patternQuizId) {
                 quiz.isCorrect = scoring.isCorrect
-//                viewModel.updatePatternQuizList()
+                quiz.isFirstTry = true
+                viewModel.updatePatternQuizList()
             }
         }
     }

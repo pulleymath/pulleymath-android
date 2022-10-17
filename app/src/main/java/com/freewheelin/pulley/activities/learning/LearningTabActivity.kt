@@ -18,8 +18,12 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.allViews
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -75,14 +79,12 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Runnable
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -218,8 +220,18 @@ class LearningTabActivity : PermissionActivity(),
 
             viewPager.addOnPageChangeListener(this@LearningTabActivity)
 
+            // 베타이미지 제거할때 tabName 관련된 항목 제거
+            val tabName = listOf("메인", "개념", "유형", "모의고사", "테스트", "오답노트", "분석", "과외", "KU")
+
             tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
+                    // 베타 이미지 제거할 때 tabTitleTv사용하는부분까지 제거
+                    for (index in 0 .. tabLayout.tabCount) {
+                        tabLayout.getTabAt(index)?.view?.findViewById<TextView>(R.id.tabTitleTv)?.setTextColor(
+                            ContextCompat.getColor(this@LearningTabActivity, R.color.gray_700))
+                    }
+                    tab?.view?.findViewById<TextView>(R.id.tabTitleTv)?.setTextColor(ContextCompat.getColor(this@LearningTabActivity, R.color.white))
+
                     tab?.position?.let { position ->
                         if (isTablet) {
                             when (position) {
@@ -238,6 +250,13 @@ class LearningTabActivity : PermissionActivity(),
                 override fun onTabUnselected(tab: TabLayout.Tab?) { }
                 override fun onTabReselected(tab: TabLayout.Tab?) { }
             })
+
+            // 베타이미지 제거할때 for문 제거
+            for (index in 0 .. tabLayout.tabCount) {
+                if (tabName.size > index) {
+                    tabLayout.getTabAt(index)?.view?.findViewById<TextView>(R.id.tabTitleTv)?.text = tabName[index]
+                }
+            }
 
             // 핸드폰이면 과외 메뉴 숨기기
             if(!isTablet) {
@@ -402,17 +421,29 @@ class LearningTabActivity : PermissionActivity(),
 
     override fun onResume() {
         super.onResume()
-        if (VersionManager.isNeedToUpdate() == true) {
-            binding.updateSignView.visibility = View.VISIBLE
-        } else {
-            binding.updateSignView.visibility = View.GONE
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
+        binding.apply {
+            updateSignView.visibility =
+                if (VersionManager.isNeedToUpdate() == true) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
+                delay(500)
+                withContext(Dispatchers.Main) {
+                    if (!MyApplication.firstLaunchGoConceptFlag) {
+                        tabLayout.selectTab(tabLayout.getTabAt(1))
+                        MyApplication.firstLaunchGoConceptFlag = true
+                    }
+                }
+            }
+
+            checkAffiliatedTestExist()
+            checkNewAlarm()
         }
 
-        checkAffiliatedTestExist()
-        checkNewAlarm()
     }
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {

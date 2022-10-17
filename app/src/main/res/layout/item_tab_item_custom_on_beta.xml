@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="title" type="String"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp12"
+        >
+
+        <TextView
+            android:id="@+id/tabTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TabBar.TabText"
+            android:textColor="@color/grey_818181"
+            android:text="@{ title }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="8dp"
+            android:src="@drawable/ic_main_beta"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/tabTitleTv"
+            app:layout_constraintBottom_toTopOf="@+id/tabTitleTv"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

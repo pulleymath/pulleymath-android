@@ -9,7 +9,7 @@
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteMapViewModel"/>
         <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteMapFragment.NoteCardItemClickListener" />
-        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.NoteLearningStatus" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.PatternLearningStatus" />
     </data>
 
 
@@ -113,7 +113,7 @@
                     android:id="@+id/emptyIv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@{ vm.learningStatus == NoteLearningStatus.NONE ? @drawable/guide_empty_wrong : vm.learningStatus == NoteLearningStatus.ING ? @drawable/guide_empty_wrong : vm.learningStatus == NoteLearningStatus.DONE ? @drawable/ic_round_check_60 : @drawable/ic_plan_empty}"
+                    android:src="@{ vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.NONE ? @drawable/guide_empty_wrong : vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.ING ? @drawable/guide_empty_wrong : vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.DONE ? @drawable/ic_round_check_60 : @drawable/ic_plan_empty}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -152,7 +152,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginHorizontal="16dp"
                 cookingImgRes="@{ item.quizImageUrl }"
@@ -160,13 +160,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0"/>
             
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="12dp"
                 android:background="@drawable/bg_white_transparent_75"
                 android:visibility="@{ item.isComplete ? View.VISIBLE : View.GONE }"
                 app:layout_constraintTop_toTopOf="parent"
@@ -174,26 +175,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-<!--                <ImageView-->
-<!--                    android:layout_width="96dp"-->
-<!--                    android:layout_height="96dp"-->
-<!--                    android:src="@drawable/ic_check_green_circle"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--            <ImageView-->
-<!--                android:layout_width="68dp"-->
-<!--                android:layout_height="68dp"-->
-<!--                android:src="@drawable/ic_lc_wrong_note_study"-->
-<!--                android:padding="15dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                android:onClick="@{() -> listener.onItemClick(item)}"-->
-<!--                />-->
 
             <ImageView
                 android:id="@+id/indicatorIv"

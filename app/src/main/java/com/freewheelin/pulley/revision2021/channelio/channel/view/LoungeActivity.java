@@ -410,7 +410,6 @@ public class LoungeActivity extends CHBaseActivity implements LoungeContract.Vie
     }
 
     private void showChats() {
-        Log.d("tpehf", " showChats!");
         IntentUtils.setNextActivity(this, ChatsActivity.class).putExtra("page", this.page).startActivity();
     }
 

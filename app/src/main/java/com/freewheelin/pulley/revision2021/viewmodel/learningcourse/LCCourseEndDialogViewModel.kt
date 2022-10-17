@@ -17,6 +17,7 @@ class LCCourseEndDialogViewModel: BaseViewModel(), LifecycleObserver {
 
     val courseSummary by lazy { MutableLiveData<CourseSummary>() }
 
+    val showSprinkleView by lazy { MutableLiveData<Boolean>(false) }
 
     @SuppressLint("CheckResult")
     fun fetchCourseSummary(cid: Int?) {
@@ -28,8 +29,8 @@ class LCCourseEndDialogViewModel: BaseViewModel(), LifecycleObserver {
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchCourseSummary =>${response.data}")
                 response.data?.let { summary ->
-                    println("zxozxo, summary : ${summary.studyTime}")
                     courseSummary.postValue(summary)
+                    showSprinkleView.postValue(summary.isCourseCompleted)
                 }
             }, { error ->
 

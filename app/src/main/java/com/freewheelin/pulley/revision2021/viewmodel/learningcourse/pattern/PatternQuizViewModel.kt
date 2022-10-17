@@ -35,6 +35,7 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
 
     var tempConceptSolutionViewFlag: Boolean? = false
     val currentAnswerOfSingle by lazy { MutableLiveData<String>("") }
+    var preventScoringBtnDoubleClickFlag = false
 
 
     fun initQuiz(quiz: LCPatternQuiz, currQuizIndex: Int, quizSize: Int) {
@@ -116,11 +117,11 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
                     response.data?.let {
                         quiz.isCorrect = it.isCorrect
                         patternQuiz.postValue(quiz)
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            withContext(Dispatchers.Main) {
-//                                callback(it)
-//                            }
-//                        }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            withContext(Dispatchers.Main) {
+                                callback(it)
+                            }
+                        }
                     }
                 }, { error ->
                     Log.e(javaClass.simpleName, "quizScoring error=${error.localizedMessage}")
@@ -128,18 +129,6 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
         }
     }
 
-//    fun scoring(callback: (scoring: LCPatternScoring) -> Unit) {
-//        // TODO 채점 api 쏴야함
-//        val quiz = patternQuiz.value?.also {
-//            // to API!
-//
-//            it.isCorrect = true
-//        }
-//        patternQuiz.postValue(quiz)
-//        quiz?.patternQuizId?.let { callback(LCPatternScoring(it, true)) }
-//
-//
-//    }
     fun quizLastIndex(): Int {
         return quizSize - 1
     }

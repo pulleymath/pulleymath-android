@@ -89,23 +89,6 @@
                 android:layout_marginTop="56dp"
                 />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/solutionIv"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                cookingImgRes="@{ vm.solutionUrl }"-->
-<!--                android:layout_marginTop="16dp" />-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toBottomOf="@id/solutionTextLl"-->
-
-<!--            <View-->
-<!--                android:id="@+id/barView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:background="@color/gray_800"-->
-<!--                android:layout_marginTop="24dp"/>-->
         </LinearLayout>
     </ScrollView>
 </layout>

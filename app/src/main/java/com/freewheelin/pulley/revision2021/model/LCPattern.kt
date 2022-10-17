@@ -89,7 +89,6 @@ open class LCPatternQuiz: BaseDiffItem, Serializable {
         }
     fun scoring() {
         isCorrect = userAnswer == answer
-        println("tpehf, isCorrect : ${isCorrect}")
     }
 
     fun answerWithIcon(): String {

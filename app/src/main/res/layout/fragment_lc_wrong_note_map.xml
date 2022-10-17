@@ -6,7 +6,8 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.NoteLearningStatus" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.PatternLearningStatus" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.ConceptLearningStatus" />
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteMapViewModel"/>
     </data>
 
@@ -42,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{ vm.showProgress ? View.GONE : View.VISIBLE }"
-                android:background="@{ vm.learningStatus == NoteLearningStatus.DONE || vm.learningStatus == NoteLearningStatus.PERFECT_DONE ? @drawable/shadow_wrong_answer_bottom_btn : @drawable/shadow_pattern_map_purple_150 }"
+                android:background="@{ vm.originalNoteCardWrapper.conceptStatus == ConceptLearningStatus.ING ? @drawable/shadow_pattern_map_purple_150 : vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.DONE || vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.PERFECT ? @drawable/shadow_wrong_answer_bottom_btn : @drawable/shadow_pattern_map_purple_150 }"
                 >
 
                 <TextView
@@ -50,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{ vm.bottomBtnText }"
-                    android:textColor="@{ vm.learningStatus == NoteLearningStatus.DONE || vm.learningStatus == NoteLearningStatus.PERFECT_DONE ? @color/white : @color/purple_300 }"
+                    android:textColor="@{ vm.originalNoteCardWrapper.conceptStatus == ConceptLearningStatus.ING ? @color/purple_300 : vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.DONE || vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.PERFECT ? @color/white : @color/purple_300 }"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
                     android:lineHeight="26dp"
@@ -63,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    imageview_tint="@{ vm.learningStatus == NoteLearningStatus.DONE || vm.learningStatus == NoteLearningStatus.PERFECT_DONE ? @color/white : @color/purple_300 }"
+                    imageview_tint="@{ vm.originalNoteCardWrapper.conceptStatus == ConceptLearningStatus.ING ? @color/purple_300 : vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.DONE || vm.originalNoteCardWrapper.patternStatus == PatternLearningStatus.PERFECT ? @color/white : @color/purple_300 }"
                     android:src="@drawable/ic_review_next_btn"
                     app:layout_constraintTop_toTopOf="@+id/scoringBtn"
                     app:layout_constraintStart_toEndOf="@+id/scoringBtn"

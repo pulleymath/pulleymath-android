@@ -29,6 +29,7 @@ import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.manage.BookManager
+import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.databinding.FragmentBookBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
@@ -40,6 +41,7 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import kotlinx.coroutines.*
 
 class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
 

@@ -64,7 +64,6 @@ class LCWrongNoteFragment : Fragment(),
         viewModel = ViewModelProvider(this).get(LCWrongNoteFViewModel::class.java)
         arguments?.let {
             val noteCard = it.getSerializable(NOTECARD) as LCWrongNoteMapCard
-            println("zxozxo, noteCard- hint size : ${noteCard.hints.size}")
 
             binding.apply {
                 vm = viewModel
@@ -128,7 +127,7 @@ class LCWrongNoteFragment : Fragment(),
                 floatingAnswerSheet.delegate = this@LCWrongNoteFragment
                 floatingAnswerSheet.binding.scoringBtn.setOnClickListener {
                     viewModel.quizScoring {
-                        (parentFragment as LCPatternFragment).scoringPatternQuiz(it)
+                        (activity as LCWrongNoteActivity).scoringPatternQuiz(it)
                     }
                 }
 

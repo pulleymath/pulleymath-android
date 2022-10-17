@@ -123,8 +123,6 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
         isCurrentPagePattern.postValue(courseType == CourseType.patternMap || courseType == CourseType.pattern)
         isCurrentPageWrongNote.postValue(courseType == CourseType.wrongNoteMap)
 
-//        val course = courseContentTable.value?.get(currItemPosition)
-        // TODO 이게 뭔지 전혀모르겟음  타입안에서 현재포지션을 구할때?
         val prevTypeCount = when (courseType) {
             CourseType.cooking -> courseContentTable.value?.count { it.courseType == CourseType.priorConceptMap || it.courseType == CourseType.priorConcept }
             CourseType.patternMap -> 999

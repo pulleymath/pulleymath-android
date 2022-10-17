@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.activity.learningcourse.fragments
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentLcWrongNoteMapBinding
@@ -23,6 +25,8 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteMapViewModel
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.freewheelin.pulley.core.manage.PieceManager
+import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteBinding
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -30,6 +34,7 @@ import com.freewheelin.pulley.revision2021.activity.dialog.LCCourseEndDialog
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
+import kotlinx.coroutines.*
 
 class LCWrongNoteMapFragment : Fragment() {
     companion object {
@@ -59,8 +64,7 @@ class LCWrongNoteMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(LCWrongNoteMapViewModel::class.java)
         arguments?.let {
-//            val chapter = it.getSerializable(STUDY_CHAPTER_FLAG) as StudyChapter?
-//            viewModel.setChapterName(chapter)
+
 
             val headerTitle = (activity as LearningCourseActivity).viewModel.headerTitle.value
             viewModel.setChapterHeaderTitle(headerTitle)
@@ -88,12 +92,22 @@ class LCWrongNoteMapFragment : Fragment() {
 
 
                 val exitCallback: () -> Unit = {
-                    //TODO
                     (activity as LearningCourseActivity).finish()
                 }
                 val moreStudyCallback: () -> Unit = {
-                    //TODO
-                    Toast.makeText(requireContext(), "어디로 가야할지 논의 해야함.", Toast.LENGTH_SHORT).show()
+                    (activity as LearningCourseActivity).finish()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(200)
+
+                        withContext(Dispatchers.Main) {
+                            val intent = Intent(PieceManager.EVENT_MOVE_TAB)
+                            intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
+                            intent.putExtra(PieceManager.EVENT_SCROLL, true)
+                            intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
+                            intent.putExtra(PieceManager.EVENT_FILTER, "확률과 통계")
+                            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+                        }
+                    }
                 }
 
                 val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId
@@ -129,8 +143,6 @@ class LCWrongNoteMapFragment : Fragment() {
     inner class WrongNoteViewHolder(private val itemBinding: ItemLcWrongNoteBinding): RecyclerView.ViewHolder(itemBinding.root)
         , NoteCardItemClickListener {
 
-        var scaleAnim: ValueAnimator? = null
-        var expandAnim: ValueAnimator? = null
 
         fun bind(item: LCWrongNoteMapCard) {
             itemBinding.apply {
@@ -149,9 +161,7 @@ class LCWrongNoteMapFragment : Fragment() {
                         headerCl.visibility = View.GONE
                         cardCl.visibility = View.VISIBLE
                         footerCl.visibility = View.GONE
-
                         cardCl.setOnTouchListener(BoongthEffect())
-
 
                     }
                     LCWrongNoteMapCard.CardType.Footer -> {
@@ -168,7 +178,8 @@ class LCWrongNoteMapFragment : Fragment() {
                 it.cardType == LCWrongNoteMapCard.CardType.Card
             }?.let { return@let ArrayList(it) }
             val headerTitle = (activity as LearningCourseActivity).viewModel.headerTitle.value
-            startActivity(LCWrongNoteActivity.getIntent(requireContext(), filteredNoteCardList, noteCard, headerTitle))
+            val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId
+            startActivity(LCWrongNoteActivity.getIntent(requireContext(), filteredNoteCardList, noteCard, headerTitle, chapterId))
 
         }
     }

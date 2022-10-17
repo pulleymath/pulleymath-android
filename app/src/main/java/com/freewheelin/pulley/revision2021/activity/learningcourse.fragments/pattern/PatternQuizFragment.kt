@@ -204,8 +204,13 @@ class PatternQuizFragment() : Fragment(),
 
                 floatingAnswerSheet.delegate = this@PatternQuizFragment
                 floatingAnswerSheet.binding.scoringBtn.setOnClickListener {
-                    viewModel.quizScoring {
-                        (parentFragment as LCPatternFragment).scoringPatternQuiz(it)
+                    if (viewModel.preventScoringBtnDoubleClickFlag) return@setOnClickListener
+                    viewModel.apply {
+                        preventScoringBtnDoubleClickFlag = true
+                        quizScoring {
+                            viewModel.preventScoringBtnDoubleClickFlag = false
+                            (parentFragment as LCPatternFragment).scoringPatternQuiz(it)
+                        }
                     }
                 }
 
@@ -222,14 +227,12 @@ class PatternQuizFragment() : Fragment(),
             }
         }
     }
-
     fun openChannelIoDialog () {
         binding.apply {
 
             val screenShotBitmap = leftScrollRootCl.getBitmap(leftScrollRootCl.width, leftScrollRootCl.height)
 
             val dialog = ChannelIoQuestionDialog(requireContext(), screenShotBitmap) { radioMsg, additinalMsg ->
-                println("tpehf, dialog summit! ")
                 val message = "${radioMsg}\n\n${additinalMsg}"
                 val activity = (activity as LearningCourseActivity)
 //
@@ -238,7 +241,7 @@ class PatternQuizFragment() : Fragment(),
                     val chatId = Preferences.channelTalkCurrChatId.get()
                     val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
                     val currentStudentId = user?.studentID ?: ""
-                    println("zxozxo studentIdWhenIssuingChatId : ${studentIdWhenIssuingChatId}, currentStudentId : ${currentStudentId}, chatId : ${chatId}")
+
                     if (studentIdWhenIssuingChatId == currentStudentId && chatId.isNotEmpty()) {
                         postImageMessage(it, message, false)
                     } else {
@@ -294,7 +297,6 @@ class PatternQuizFragment() : Fragment(),
                 iv.id = View.generateViewId()
                 iv.setImageUrlGlide(it.conceptImageUrl)
                 conceptScrollRootLl.addView(iv)
-                println("zxozxo, addRelatedConcepts add view ")
             }
         }
     }
@@ -325,7 +327,6 @@ class PatternQuizFragment() : Fragment(),
             val url = quiz.solutionImageUrl
             iv.setImageUrlGlide(url)
             solutionScrollRootLl.addView(iv)
-            println("zxozxo, addQuizMainSolution add view ")
 
         }
 

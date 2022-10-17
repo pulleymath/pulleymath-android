@@ -2,18 +2,17 @@ package com.freewheelin.pulley.revision2021.viewmodel.learningcourse
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper
-import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.NoteLearningStatus
+import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.PatternLearningStatus
+import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper.ConceptLearningStatus
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteMapRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
 class LCWrongNoteMapViewModel : BaseViewModel(), LifecycleObserver {
@@ -34,7 +33,7 @@ class LCWrongNoteMapViewModel : BaseViewModel(), LifecycleObserver {
     val noteCardCount by lazy { MutableLiveData(0) }
     var headerTitle: String = ""
     val bottomBtnText by lazy { MutableLiveData<String>("") }
-    val learningStatus by lazy { MutableLiveData(NoteLearningStatus.NONE) }
+
     val showProgress by lazy { MutableLiveData<Boolean>(true) }
 
     val emptyText by lazy { MutableLiveData<String>("") }
@@ -63,7 +62,7 @@ class LCWrongNoteMapViewModel : BaseViewModel(), LifecycleObserver {
 
                     val filteredCardList = listOf(headerCard) + result + listOf(footerCard)
 
-                    checkLearningStatus(cardWrapper.learningStatus)
+                    checkLearningStatus(cardWrapper)
 
                     noteCardCount.postValue(result.size)
                     isNoteCardCount0.postValue(result.isEmpty())
@@ -79,32 +78,28 @@ class LCWrongNoteMapViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    private fun checkLearningStatus(status: NoteLearningStatus) {
-        learningStatus.postValue(status)
-        when (status) {
-            NoteLearningStatus.NONE -> {
-                bottomBtnText.postValue("$headerTitle 학습 완료!")
-                emptyText.postValue("오답 문제가 이곳에 모여요!\n간편한 오답 학습을 경험해보세요")
+    private fun checkLearningStatus(item: LCWrongNoteMapCardWrapper) {
+
+        when (item.patternStatus) {
+            PatternLearningStatus.NONE -> {
+                bottomBtnText.postValue("$headerTitle 학습 종료!")
+                emptyText.postValue("아직 유형 학습 내역이 없네요!\n유형을 풀고 오답을 학습해보세요")
             }
-            NoteLearningStatus.ING -> {
-                bottomBtnText.postValue("$headerTitle 학습 완료!")
-                emptyText.postValue("아직 풀지 않은 유형이 있어요!\n남은 유형을 풀고 오답을 학습하세요")
+            PatternLearningStatus.ING -> {
+                bottomBtnText.postValue("$headerTitle 학습 종료!")
+                emptyText.postValue("앗, 아직 풀지 않은 유형이 있어요!\n남은 유형을 풀고 오답을 학습하세요")
             }
-            NoteLearningStatus.PERFECT_DONE -> {
-                bottomBtnText.postValue("$headerTitle 학습 완료!")
-                emptyText.postValue("와! 틀린 문제가 없네요 :)\n아래의 버튼을 클릭해 학습을 완료하세요!")
-            }
-            NoteLearningStatus.DONE -> {
+            PatternLearningStatus.DONE -> {
                 bottomBtnText.postValue("$headerTitle 학습 완료!")
                 emptyText.postValue("와! 모든 오답을 학습했어요 :)\n아래의 버튼을 클릭해 학습을 완료하세요!")
+            }
+            PatternLearningStatus.PERFECT -> {
+                bottomBtnText.postValue("$headerTitle 학습 완료!")
+                emptyText.postValue("와! 틀린 문제가 없네요 :)\n아래의 버튼을 클릭해 학습을 완료하세요!")
             }
         }
 
     }
-
-//    fun setChapterName(chapter: StudyChapter?) {
-//        selectedChapter.postValue(chapter)
-//    }
 
     fun noteFilterChangeListener(isChecked: Boolean) {
         noteFilterFlag = isChecked
@@ -126,7 +121,7 @@ class LCWrongNoteMapViewModel : BaseViewModel(), LifecycleObserver {
 
 
 //            result = result.sortedByDescending { it.isIncomplete() }
-            result = result.sortedWith (compareBy({ it.isComplete() }, { it.sequence }) )
+            result = result.sortedWith (compareBy({ it.isIncomplete() }, { it.sequence }) )
 
             noteCardCount.postValue(result.size)
             isNoteCardCount0.postValue(result.isEmpty())
