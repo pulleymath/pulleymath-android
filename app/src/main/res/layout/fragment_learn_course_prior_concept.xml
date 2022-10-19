@@ -54,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="아래의 개념들을 알고있나요? 헷갈린다면 복습해보세요!"
                 style="@style/b2"
+                android:visibility="@{ vm.priorConceptCount > 0 ? View.VISIBLE : View.GONE }"
                 android:layout_marginTop="24dp"
                 android:textColor="@color/gray_700"
                 android:layout_marginStart="4dp"
@@ -62,14 +63,50 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 
+            <!--                android:visibility="@{ vm.isNoteCardCount0 ? View.VISIBLE : View.GONE }"-->
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/nothingRoot"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{ vm.priorConceptCount == 0 ? View.VISIBLE : View.GONE }"
+            android:layout_marginBottom="120dp"
+            app:layout_constraintTop_toBottomOf="@+id/headerCl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/nothingIv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_round_info_gray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="본 소단원을 배우기 위해 확인해야 할 사전 개념 학습 내용이 없어요!\nSTEP 1로 넘어가 개념과 예제를 공부하러 가볼까요?"
+                android:textColor="@color/gray_500"
+                style="@style/b1"
+                android:gravity="center"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/nothingIv"
+                app:layout_constraintStart_toStartOf="@+id/nothingIv"
+                app:layout_constraintEnd_toEndOf="@+id/nothingIv"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/priorConceptRv"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
+            android:visibility="@{ vm.priorConceptCount > 0 ? View.VISIBLE : View.GONE }"
             bind_prior_concept_card="@{vm.priorConceptInfoList}"
             android:background="@color/gray_100"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

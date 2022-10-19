@@ -245,6 +245,7 @@
                 android:layout_width="2dp"
                 android:layout_height="12dp"
                 android:layout_marginEnd="12dp"
+                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 android:background="@drawable/bg_gray_750_round"
                 app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
                 app:layout_constraintEnd_toStartOf="@id/navPrevBtn"
@@ -295,6 +296,7 @@
                 android:id="@+id/pencilcaseView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="122dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -314,21 +316,18 @@
             app:layout_constraintTop_toBottomOf="@id/headerCl"
             app:layout_constraintVertical_bias="1.0" />
 
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="410dp"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:background="@drawable/shadow_card_white"-->
-        <!--            android:padding="24dp"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/headerCl"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent">-->
-        <!--            <FrameLayout-->
-        <!--                android:id="@+id/channelIoFrame"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent" />-->
-        <!--        </LinearLayout>-->
+        <FrameLayout
+            android:id="@+id/naviFl"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{ vm.showHeaderNaviDialog ? View.VISIBLE : View.GONE }"
+            app:layout_constraintTop_toBottomOf="@+id/headerCl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <!--            android:layout_width="410dp"-->
+        </FrameLayout>
+
         <FrameLayout
             android:id="@+id/channelIoFrame"
             android:layout_width="438dp"

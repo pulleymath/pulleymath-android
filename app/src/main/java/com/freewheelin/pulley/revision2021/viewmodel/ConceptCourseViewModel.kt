@@ -8,7 +8,6 @@ import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
-import com.freewheelin.pulley.utils.Preferences
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -22,9 +21,10 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
     val largeChapter2 by lazy { MutableLiveData<StudyChapter>() }
     val largeChapter3 by lazy { MutableLiveData<StudyChapter>() }
 
-    val subjectIndex = MutableLiveData<Int>(1)
+//    val subjectIndex = MutableLiveData<Int>(3)
     val showProgress = MutableLiveData<Boolean>(true)
-    val lastSubjectId = MutableLiveData<Int>(-1)
+    val selectedSubjectId = MutableLiveData<Int>(-1)
+    val availableLastSubjectId = MutableLiveData<Int>(7)
 
 
     @SuppressLint("CheckResult")
@@ -38,7 +38,7 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
                     it.sortedBy { it.subjectId }.let {
                         subjectList.postValue(it)
                         val lastId = it.last().subjectId
-                        lastSubjectId.postValue(lastId)
+                        availableLastSubjectId.postValue(lastId)
                     }
                 }
             }, { error ->
@@ -46,10 +46,12 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
             })
     }
 
+    var studyChapterHeader: StudyChapter? = null
+    var studyChapterFooter: StudyChapter? = null
     @SuppressLint("CheckResult")
-    fun fetch() {
+    fun fetch(subjectId: Int) {
         val studentId = user?.studentID ?: return
-        studyRepository.getChapterOnSubject(studentId = studentId)
+        studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -57,7 +59,9 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
                 showProgress.postValue(false)
                 response.data?.let {
 
-                    val listWithHeaderAndFooter = listOf(StudyChapter.createHeader()) + it + listOf(StudyChapter.createFooter())
+                    studyChapterHeader = studyChapterHeader ?: StudyChapter.createHeader()
+                    studyChapterFooter = studyChapterFooter ?: StudyChapter.createFooter()
+                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + it + listOf(studyChapterFooter!!)
                     chapterList.postValue(listWithHeaderAndFooter)
 
                     it.forEachIndexed { index, sc ->
@@ -92,8 +96,8 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
     }
 
 
-    fun onHeaderSubjectBtnClick(subjectIndex: Int) {
-        this.subjectIndex.postValue(subjectIndex)
+    fun onHeaderSubjectBtnClick(subjectId: Int) {
+        this.selectedSubjectId.postValue(subjectId)
     }
 
 }

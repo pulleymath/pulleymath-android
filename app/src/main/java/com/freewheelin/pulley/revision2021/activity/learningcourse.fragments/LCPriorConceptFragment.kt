@@ -31,6 +31,7 @@ import com.freewheelin.pulley.revision2021.views.LabelFlowView
 //import com.freewheelin.pulley.revision2021.views.LCPatternDetailDialog
 import com.freewheelin.pulley.utils.Preferences
 import com.zoyi.channel.plugin.android.ChannelIO
+import kotlinx.coroutines.*
 
 class LCPriorConceptFragment : Fragment() {
 
@@ -47,6 +48,11 @@ class LCPriorConceptFragment : Fragment() {
 
     val binding: FragmentLearnCoursePriorConceptBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_learn_course_prior_concept, null, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     private lateinit var viewModel: LCPriorConceptViewModel
@@ -74,6 +80,17 @@ class LCPriorConceptFragment : Fragment() {
 
                 priorConceptBottomNextBtnWrapperLl.setOnClickListener {
                     (activity as LearningCourseActivity).setPagerToCookingFirstPage()
+                }
+
+                viewModel.priorConceptCount.observe(viewLifecycleOwner) {
+//                    if (it == 0) {
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            delay(2000)
+//                            withContext(Dispatchers.Main) {
+//                                (activity as LearningCourseActivity).setPagerToCookingFirstPage()
+//                            }
+//                        }
+//                    }
                 }
 
             }

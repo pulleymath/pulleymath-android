@@ -1,7 +1,9 @@
 package com.freewheelin.pulley.revision2021.model
 
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable
 
@@ -63,6 +65,42 @@ class CookingExercise: Serializable {
         get() {
             exerciseQuizzes?.let {
                 if (it.size > 4) return it[4]
+            }
+            return null
+        }
+
+    val cookingQuiz5: CookingQuiz?
+        get() {
+            exerciseQuizzes?.let {
+                if (it.size > 5) return it[5]
+            }
+            return null
+        }
+    val cookingQuiz6: CookingQuiz?
+        get() {
+            exerciseQuizzes?.let {
+                if (it.size > 6) return it[6]
+            }
+            return null
+        }
+    val cookingQuiz7: CookingQuiz?
+        get() {
+            exerciseQuizzes?.let {
+                if (it.size > 7) return it[7]
+            }
+            return null
+        }
+    val cookingQuiz8: CookingQuiz?
+        get() {
+            exerciseQuizzes?.let {
+                if (it.size > 8) return it[8]
+            }
+            return null
+        }
+    val cookingQuiz9: CookingQuiz?
+        get() {
+            exerciseQuizzes?.let {
+                if (it.size > 9) return it[9]
             }
             return null
         }
@@ -192,12 +230,19 @@ class CookingQuizSelection: BaseDiffItem, Serializable {
     var id: Int = hashCode()
     var seq: Int = 0
     var imageUrl : String = ""
+
+    var parentQuiz: CookingQuiz
+    var parentView: View
+    var binding: ItemCookingQuizDetailBinding
     override fun getId(): String {
         return "$id"
     }
 
-    constructor(url: String, index: Int) {
+    constructor(url: String, index: Int, parent: CookingQuiz, view: View, binding: ItemCookingQuizDetailBinding) {
         imageUrl = url
         seq = index
+        parentQuiz = parent
+        parentView = view
+        this.binding = binding
     }
 }

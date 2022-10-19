@@ -10,9 +10,9 @@ class CookingQuizAnswerSelectViewModel: BaseViewModel(), LifecycleObserver {
     val selectionImageUrlList by lazy { MutableLiveData<List<CookingQuizSelection>>() }
 
     fun initImageUrlList(list: List<String>?) {
-        val quizSelectionList = list?.mapIndexed { index, s ->
-            CookingQuizSelection(s, index + 1)
-        }
-        selectionImageUrlList.postValue(quizSelectionList)
+//        val quizSelectionList = list?.mapIndexed { index, s ->
+//            CookingQuizSelection(s, index + 1)
+//        }
+//        selectionImageUrlList.postValue(quizSelectionList)
     }
 }

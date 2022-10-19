@@ -21,6 +21,7 @@ import com.freewheelin.pulley.R
 //import com.facebook.drawee.backends.pipeline.Fresco
 //import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
+import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
@@ -70,14 +71,17 @@ class MyApplication: Application(), LifecycleObserver {
         LogUtils.logEvent(this, user, PulleyEvent.ACTIVE)
         Log.d("APP LIFE CYCLE TEST", "그라운드냥?")
         AppUsageMonitor.isForeground = true
+        ConceptLearningUsageMonitor.isForeground = true
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackground() {
         Log.d("APP LIFE CYCLE TEST", "백그라운드냥?")
 
-        AppUsageMonitor.addMonitorTimeIfNeed()
+        AppUsageMonitor.postUsageTime()
         AppUsageMonitor.isForeground = false
+        ConceptLearningUsageMonitor.isForeground = false
+        ConceptLearningUsageMonitor.postConceptLearningTime()
     }
 
     override fun onTerminate() {

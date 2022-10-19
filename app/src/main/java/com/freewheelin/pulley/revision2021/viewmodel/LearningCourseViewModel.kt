@@ -63,6 +63,11 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     val isPagerLastIndex by lazy { MutableLiveData(false) }
     val isPriorConceptScene by lazy { MutableLiveData(false) }
 
+    val showHeaderNaviDialog by lazy { MutableLiveData(false) }
+    val flagPriorConceptNavi by lazy { MutableLiveData(false) }
+    val flagCookingNavi by lazy { MutableLiveData(false) }
+    val flagPatternNavi by lazy { MutableLiveData(false) }
+
     var currPagerPosition = 0
 
     var currChannelIOImage: ChannelIOImageUploadRes? = null
@@ -311,5 +316,24 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             }, { error ->
                 Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
             })
+    }
+    fun naviViewDismiss() {
+        showHeaderNaviDialog.postValue(false)
+        flagPriorConceptNavi.postValue(false)
+        flagCookingNavi.postValue(false)
+        flagPatternNavi.postValue(false)
+    }
+    fun showNaviView() {
+        showHeaderNaviDialog.postValue(true)
+    }
+
+    fun setNaviFlag(selectedType: CourseType) {
+        when(selectedType) {
+            CourseType.priorConcept -> flagPriorConceptNavi.postValue(true)
+            CourseType.cooking -> flagCookingNavi.postValue(true)
+            CourseType.pattern -> flagPatternNavi.postValue(true)
+            else -> {}
+        }
+
     }
 }

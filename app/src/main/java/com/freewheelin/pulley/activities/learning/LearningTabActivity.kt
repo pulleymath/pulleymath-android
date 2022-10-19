@@ -167,34 +167,44 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     var tabFragment: MutableList<LearningTabFragment> = mutableListOf(
-        MainFragment.newInstance(),
-        ConceptCourseFragment.newInstance(),
-        BookFragment.newInstance(),
-        MockExamFragment.newInstance(),
-        SnackTestFragment.newInstance(),
-        WrongNoteFragment.newInstance(),
-        AnalysisFragment.newInstance()
+//        MainFragment.newInstance(),
+//        ConceptCourseFragment.newInstance(),
+//        BookFragment.newInstance(),
+//        MockExamFragment.newInstance(),
+//        SnackTestFragment.newInstance(),
+//        WrongNoteFragment.newInstance(),
+//        AnalysisFragment.newInstance()
     )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppUsageMonitor.startAppUsage()
 
         // TODO 추후 푸시알람 실행시 어딘가로 보내야할수도 있다.
         val target = intent.getStringExtra("target_android")
 
-        if (tabFragment == null) {
-            tabFragment = mutableListOf(
-                MainFragment.newInstance(),
-                ConceptCourseFragment.newInstance(),
-                BookFragment.newInstance(),
-                MockExamFragment.newInstance(),
-                SnackTestFragment.newInstance(),
-                WrongNoteFragment.newInstance(),
-                AnalysisFragment.newInstance()
-            )
-        }
+//        if (tabFragment == null) {
+            if (isTablet) {
+                tabFragment = mutableListOf(
+                    MainFragment.newInstance(),
+                    ConceptCourseFragment.newInstance(),
+                    BookFragment.newInstance(),
+                    MockExamFragment.newInstance(),
+                    SnackTestFragment.newInstance(),
+                    WrongNoteFragment.newInstance(),
+                    AnalysisFragment.newInstance()
+                )
+            } else {
+                tabFragment = mutableListOf(
+                    MainFragment.newInstance(),
+                    BookFragment.newInstance(),
+                    MockExamFragment.newInstance(),
+                    SnackTestFragment.newInstance(),
+                    WrongNoteFragment.newInstance(),
+                    AnalysisFragment.newInstance()
+                )
+            }
+//        }
 
         if (user?.showMainKUTab == true) {
             tabFragment.add(AffiliatedTestFragment.newInstance())
@@ -261,6 +271,7 @@ class LearningTabActivity : PermissionActivity(),
             // 핸드폰이면 과외 메뉴 숨기기
             if(!isTablet) {
                 if(tabLayout.tabCount > 7) tabLayout.removeTabAt(7)
+                tabLayout.removeTabAt(1)
             }
 
             drawerView.addDrawerListener(this@LearningTabActivity)
@@ -421,6 +432,8 @@ class LearningTabActivity : PermissionActivity(),
 
     override fun onResume() {
         super.onResume()
+        AppUsageMonitor.startAppUsage()
+
         binding.apply {
             updateSignView.visibility =
                 if (VersionManager.isNeedToUpdate() == true) {
@@ -431,11 +444,13 @@ class LearningTabActivity : PermissionActivity(),
 
             CoroutineScope(Dispatchers.IO).launch {
                 ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
-                delay(500)
-                withContext(Dispatchers.Main) {
-                    if (!MyApplication.firstLaunchGoConceptFlag) {
-                        tabLayout.selectTab(tabLayout.getTabAt(1))
-                        MyApplication.firstLaunchGoConceptFlag = true
+                if (isTablet) {
+                    delay(500)
+                    withContext(Dispatchers.Main) {
+                        if (!MyApplication.firstLaunchGoConceptFlag) {
+                            tabLayout.selectTab(tabLayout.getTabAt(1))
+                            MyApplication.firstLaunchGoConceptFlag = true
+                        }
                     }
                 }
             }
@@ -443,7 +458,6 @@ class LearningTabActivity : PermissionActivity(),
             checkAffiliatedTestExist()
             checkNewAlarm()
         }
-
     }
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
@@ -532,27 +546,51 @@ class LearningTabActivity : PermissionActivity(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        if(tabFragment[0].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
-        if(tabFragment[1].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_COURSE, tabFragment[1])
-        if(tabFragment[2].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
-        if(tabFragment[3].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[3])
-        if(tabFragment[4].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[4])
-        if(tabFragment[5].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_NOTE, tabFragment[5])
-        if(tabFragment[6].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_ANALYSIS, tabFragment[6])
+        if (isTablet) {
+            if(tabFragment[0].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
+            if(tabFragment[1].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_COURSE, tabFragment[1])
+            if(tabFragment[2].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[2])
+            if(tabFragment[3].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[3])
+            if(tabFragment[4].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[4])
+            if(tabFragment[5].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_NOTE, tabFragment[5])
+            if(tabFragment[6].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_ANALYSIS, tabFragment[6])
 
-        if (tabFragment.size > 7 && tabFragment[7].isAdded)
-            supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[7])
+            if (tabFragment.size > 7 && tabFragment[7].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[7])
 
-        if (user?.showMainKUTab == true) {
-            if (tabFragment.size > 8 && tabFragment[8].isAdded) {
-                supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[7])
+            if (user?.showMainKUTab == true) {
+                if (tabFragment.size > 8 && tabFragment[8].isAdded) {
+                    supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[7])
+                }
+            }
+        } else {
+            if(tabFragment[0].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_MAIN, tabFragment[0])
+            if(tabFragment[1].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_UNIT, tabFragment[1])
+            if(tabFragment[2].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_MOCK, tabFragment[2])
+            if(tabFragment[3].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_TEST, tabFragment[3])
+            if(tabFragment[4].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_NOTE, tabFragment[4])
+            if(tabFragment[5].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_ANALYSIS, tabFragment[5])
+
+            if (tabFragment.size > 6 && tabFragment[6].isAdded)
+                supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[6])
+
+            if (user?.showMainKUTab == true) {
+                if (tabFragment.size > 7 && tabFragment[7].isAdded) {
+                    supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[6])
+                }
             }
         }
     }

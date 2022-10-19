@@ -20,6 +20,7 @@ class LCPriorConceptViewModel : BaseViewModel(), LifecycleObserver {
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     val priorConceptInfoList by lazy { MutableLiveData<List<LCPriorConceptInfo>>() }
+    val priorConceptCount by lazy { MutableLiveData(-1) }
 
     @SuppressLint("CheckResult")
     fun fetchPriorConcept(lessonTitle: String, chapterId: Int?) {
@@ -34,6 +35,7 @@ class LCPriorConceptViewModel : BaseViewModel(), LifecycleObserver {
                 response.data?.let {
                     it.sortedBy { it.learningCoursePriorConceptId }.let { list ->
                         priorConceptInfoList.postValue(list)
+                        priorConceptCount.postValue(list.size)
                     }
                 }
             }, { error ->

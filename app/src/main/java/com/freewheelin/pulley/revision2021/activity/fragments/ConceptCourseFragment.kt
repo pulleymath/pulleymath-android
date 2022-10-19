@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -33,6 +34,7 @@ import com.freewheelin.pulley.databinding.ItemLargeChapterBinding
 import com.freewheelin.pulley.databinding.ItemMediumChapterBinding
 import com.freewheelin.pulley.databinding.ItemSmallChapterBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
 import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
 
@@ -54,7 +56,9 @@ class ConceptCourseFragment : LearningTabFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.fetchAvailableSubjects()
-        viewModel.fetch()
+        viewModel.selectedSubjectId.value?.let {
+            if (it != -1) { viewModel.fetch(it) }
+        }
     }
 
     override fun onCreateView(
@@ -79,40 +83,46 @@ class ConceptCourseFragment : LearningTabFragment() {
             lifecycleOwner = viewLifecycleOwner
 
             viewModel.showProgress.postValue(true)
-            viewModel.subjectIndex.observe(this@ConceptCourseFragment) { selectedSubjectIndex ->
-
-//                // TODO vm.subjectIndex 바인딩이 작동하지 않음 왤까
-                rvHeaderBinding?.apply {
-                    listOf(
-                        mathSangBtn, mathHaBtn,
-                        math1Btn, math2Btn, mathProbabilityAndStatisticsBtn,
-                        mathCalculusBtn, mathKihaBtn
-                    )
-                        .forEachIndexed { index, button ->
-                            when (index) {
-                                selectedSubjectIndex -> {
-                                    button.let {
-                                        it.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                                        it.setBackgroundResource(R.drawable.shadow_main_page_tab_focused)
-                                    }
-                                }
-                                else -> {
-                                    button.let {
-                                        it.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
-                                        it.setBackgroundResource(R.drawable.shadow_main_page_tab_default)
-                                    }
-
-                                }
-                            }
-                        }
-                }
+            viewModel.selectedSubjectId.observe(this@ConceptCourseFragment) { subjectId ->
+                // TODO vm.subjectIndex 바인딩이 작동하지 않음 왤까
+                setHeaderButton(subjectId)
+                if (subjectId > 0) { viewModel.fetch(subjectId) }
             }
             studyRv.adapter = StudyChapterAdapter()
-            viewModel.fetch()
-
+            viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
         }
     }
 
+    fun setHeaderButton(subjectId: Int) {
+        rvHeaderBinding?.apply {
+            listOf(
+                Pair(mathSangBtn, SubjectIndicator.MathSang.rawValue),
+                Pair(mathHaBtn, SubjectIndicator.MathHa.rawValue),
+                Pair(math1Btn, SubjectIndicator.Math1.rawValue),
+                Pair(math2Btn, SubjectIndicator.Math2.rawValue),
+                Pair(mathProbabilityAndStatisticsBtn, SubjectIndicator.MathProbabilityAndStatistics.rawValue),
+                Pair(mathCalculusBtn, SubjectIndicator.MathCalculus.rawValue),
+                Pair(mathKihaBtn, SubjectIndicator.MathKiha.rawValue)
+            )
+                .forEach { item ->
+                    when (subjectId) {
+                        item.second -> {
+                            item.first.let {
+                                it.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                                it.setBackgroundResource(R.drawable.shadow_main_page_tab_focused)
+                            }
+                        }
+                        else -> {
+                            item.first.let {
+                                it.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
+                                it.setBackgroundResource(R.drawable.shadow_main_page_tab_default)
+                            }
+
+                        }
+                    }
+                }
+        }
+    }
     inner class StudyChapterAdapter(): ListAdapter<StudyChapter, RecyclerView.ViewHolder>(
         DiffCallback<StudyChapter>()
     ) {

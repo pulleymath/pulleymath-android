@@ -20,6 +20,7 @@ class LCPatternCard: BaseDiffItem, Serializable {
 
     val isCompleteCard: Boolean
         get() {
+            if (progress.isEmpty()) return false
             return progress.all { it.isCorrect != null }
         }
 
@@ -53,7 +54,7 @@ open class LCPatternQuiz: BaseDiffItem, Serializable {
     var solutionImageUrl: String = ""
     var answer: String = "1" // 문제의 정답
     var isCorrect: Boolean? = null // 맞은 여부 , 미입력시 null
-    var isFirstTry: Boolean = false // 유형맵에서 채점 이미지 결정
+    var isFirstTry: Boolean = true // 유형맵에서 채점 이미지 결정
     var userAnswer: String? = null // 유저가 입력한 정답
     var correctAnswerRate: Float = 0f  // 정답률
     var hintUsageCount: Int = 0 //힌트 사용수

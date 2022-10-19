@@ -44,7 +44,7 @@ class StudyChapter: BaseDiffItem, Serializable {
 
     val largeTitle: String
         get() {
-            val seq =  when (id) {
+            val seq =  when (sequence) {
                 1 -> { "Ⅰ" }
                 2 -> { "Ⅱ" }
                 3 -> { "Ⅲ" }

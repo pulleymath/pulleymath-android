@@ -86,7 +86,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
-            <!--            android:background="@{ (isAnswerEntered &amp;&amp; isCorrectAnswer) ? @drawable/bg_white_ffffff_stroke_grey_e8e8e8_3 : isAnswerEntered ? @drawable/bg_white_ffffff_stroke_grey_e8e8e8_2 : @drawable/bg_white_ffffff_stroke_grey_e8e8e8}"-->
 
 
             <EditText
@@ -111,6 +110,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/selectedAnswerIv"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 cookingImgRes="@{ quiz.selectedQuizAnswerImageUrl }"
@@ -161,6 +161,7 @@
 
 
         <ImageView
+            android:id="@+id/rightWrongIv"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@{ quiz.isAnswerEntered ? quiz.isCorrectAnswer ? @drawable/ic_o_right_answer : @drawable/ic_x_wrong_answer : null }"

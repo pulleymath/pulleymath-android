@@ -5,39 +5,31 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.FragmentCookingQuizBinding
-import com.freewheelin.pulley.databinding.FragmentLearningCourseCookingBinding
-import com.freewheelin.pulley.databinding.ItemCookingItemBinding
-import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
+import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.activity.dialog.CookingQuizAnswerSelectDialog
 import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
-import com.freewheelin.pulley.revision2021.model.CookingExercise
-import com.freewheelin.pulley.revision2021.model.CookingInfoItem
-import com.freewheelin.pulley.revision2021.model.CookingQuiz
+import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.DisplayUtils
+import com.freewheelin.pulley.utils.setImageUrlGlide
 import com.freewheelin.pulley.utils.toPx
 import kotlinx.coroutines.*
 import kotlin.math.abs
@@ -98,10 +90,12 @@ class LCCookingFragment() : Fragment(),
                 leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
                 cookingMemoView.layoutParams.width = screenWidth
 
-
+                selectionFl.setOnClickListener {
+                    viewModel.showSelection.postValue(false)
+                    recoveryQuizSingleAnswer()
+                }
             }
         }
-
     }
 
     fun setHintImageToCooking(imageUrl: String) {
@@ -268,6 +262,11 @@ class LCCookingFragment() : Fragment(),
                 excs.cookingQuiz2,
                 excs.cookingQuiz3,
                 excs.cookingQuiz4,
+                excs.cookingQuiz5,
+                excs.cookingQuiz6,
+                excs.cookingQuiz7,
+                excs.cookingQuiz8,
+                excs.cookingQuiz9,
             ).forEachIndexed { index, quiz ->
                 val detailBinding = getDetailBindingOnIndex(quizBinding, index)
                 setOnDetailView(detailBinding, quiz)
@@ -280,12 +279,17 @@ class LCCookingFragment() : Fragment(),
                 2 -> quizBinding.quizDetail2
                 3 -> quizBinding.quizDetail3
                 4 -> quizBinding.quizDetail4
+                5 -> quizBinding.quizDetail5
+                6 -> quizBinding.quizDetail6
+                7 -> quizBinding.quizDetail7
+                8 -> quizBinding.quizDetail8
+                9 -> quizBinding.quizDetail9
                 else -> quizBinding.quizDetail0
             }
         }
 
-        private fun setOnDetailView (itemBinding: ItemCookingQuizDetailBinding, quiz: CookingQuiz) {
-            itemBinding.let {
+        private fun setOnDetailView (detailBinding: ItemCookingQuizDetailBinding, quiz: CookingQuiz) {
+            detailBinding.let {
                 it.hintBtn.setOnClickListener { view ->
                     val exercise = viewModel.findQuizExercise(quiz)
                     viewModel.useHint(quiz.exerciseQuizId) {
@@ -293,19 +297,12 @@ class LCCookingFragment() : Fragment(),
                         quiz.isHintUsed.set(true)
                         setHintImageToCooking(quiz.hintImageUrl)
                     }
-                    // 힌트 후 스크롤 무브 테스트했던 코드임
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        delay(500)
-//                        withContext(Dispatchers.Main) {
-//                            binding.leftScrollView.scrollTo(0, 300)
-//                        }
-//                    }
                 }
                 if (quiz.userAnswer == null) {
                     // 풀지 않은 문제
                     it.quizSingleAnswer.setOnClickListener { view ->
                         quiz.afterTryAnswered.set(true)
-                        onSingleAnswerClick(quiz, view)
+                        onSingleAnswerClick(quiz, view, detailBinding)
                         focusedQuizList.add(quiz)
                     }
 
@@ -318,31 +315,21 @@ class LCCookingFragment() : Fragment(),
                 }
             }
         }
-        private fun onSingleAnswerClick (quiz: CookingQuiz, sourceView: View) {
+        private fun onSingleAnswerClick (quiz: CookingQuiz, sourceView: View, detailBinding: ItemCookingQuizDetailBinding) {
             if (quiz.isAnswerEntered.get()) {
                 return
             }
 
             val selectionImages = quiz.answerOptions.map { it.imageUrl }
 
-            val dialog = CookingQuizAnswerSelectDialog(requireContext(), sourceView, selectionImages) { selectedContent ->
-                val userAnswer = "${selectedContent.seq}"
-                viewModel.scoringCookingQuiz(quiz, userAnswer) {
-                    quiz.selectedQuizAnswerImageUrl.set(selectedContent.imageUrl)
-                    quiz.isAnswerEntered.set(true)
-
-                }
+            val quizSelectionList = selectionImages.mapIndexed { index, s ->
+                CookingQuizSelection(s, index + 1, quiz, sourceView, detailBinding)
             }
+            viewModel.selectionImageUrlList.postValue(quizSelectionList)
+            viewModel.showSelection.postValue(true)
 
-            childFragmentManager.let { dialog.show(it, "CookingQuizAnswerSelectDialog${dialog.hashCode()}") }
-            childFragmentManager.executePendingTransactions()
+            binding.selectionImageRv.adapter = SelectionListAdapter()
 
-
-            dialog.dialog?.setOnDismissListener {
-                // dim click dismiss 일때
-                quiz.afterTryAnswered.set(false)
-
-            }
         }
 
         fun onAnswerEditTextChange (
@@ -464,7 +451,42 @@ class LCCookingFragment() : Fragment(),
             }
         }
     }
+    inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
+        DiffCallback<CookingQuizSelection>()
+    ) {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return SelectionViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_lc_cooking_selection, parent, false))
+        }
 
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            (holder as SelectionViewHolder).bind(getItem(position))
+        }
+    }
+
+    inner class SelectionViewHolder(private val binding: ItemLcCookingSelectionBinding): RecyclerView.ViewHolder(binding.root), CookingSelectionItemClickListener {
+
+        fun bind(item: CookingQuizSelection) {
+            binding.apply {
+                listener = this@SelectionViewHolder
+                vm = viewModel
+                this.item = item
+            }
+        }
+
+        override fun onItemClick(selectedContent: CookingQuizSelection) {
+            val userAnswer = "${selectedContent.seq}"
+            val quiz = selectedContent.parentQuiz
+            viewModel.scoringCookingQuiz(quiz, userAnswer) { isCorrect ->
+                quiz.selectedQuizAnswerImageUrl.set(selectedContent.imageUrl)
+                quiz.isAnswerEntered.set(true)
+            }
+
+            viewModel.showSelection.postValue(false)
+        }
+    }
+    interface CookingSelectionItemClickListener {
+        fun onItemClick(content: CookingQuizSelection)
+    }
     override fun onResume() {
         super.onResume()
         resetMemoView()
@@ -599,5 +621,14 @@ fun bindCookingRecyclerView(recyclerView: RecyclerView, item: List<CookingInfoIt
     item?.let { itemList ->
         val adapter = recyclerView.adapter as LCCookingFragment.CookingAdapter
         adapter.submitList(itemList)
+    }
+}
+@BindingAdapter("bind_cooking_selection_image")
+fun bindCookingSelectionImageRecyclerView(recyclerView: RecyclerView, item: List<CookingQuizSelection>?) {
+    Log.d("bind_cooking_selection_image", "list=$item")
+    item?.let { contentList ->
+        if (recyclerView.adapter == null) { return }
+        val adapter = recyclerView.adapter as LCCookingFragment.SelectionListAdapter
+        adapter.submitList(contentList)
     }
 }

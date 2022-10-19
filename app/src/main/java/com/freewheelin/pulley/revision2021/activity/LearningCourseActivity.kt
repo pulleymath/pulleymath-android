@@ -7,9 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import android.widget.PopupWindow
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.core.content.FileProvider
@@ -26,6 +24,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
+import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
@@ -39,8 +38,10 @@ import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel
 import com.freewheelin.pulley.revision2021.views.BalloonCourseRoadView
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
+import com.freewheelin.pulley.revision2021.views.CookingPencilcaseListener
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.utils.dpToPx
+import com.freewheelin.pulley.utils.toDp
 import com.freewheelin.pulley.utils.toPx
 import com.zoyi.channel.plugin.android.model.source.photopicker.PhotoItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
@@ -51,7 +52,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener {
+class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener,
+    CookingPencilcaseListener {
 
     companion object {
         val COURSE_DETAIL_ID = "COURSE_DETAIL_ID"
@@ -119,7 +121,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         super.onCreate(savedInstanceState)
         hideSystemUI()
         setContentView(binding.root)
-        AppUsageMonitor.startConceptLearningUsage()
+        ConceptLearningUsageMonitor.startConceptLearningUsage()
 
         ChannelIOWrapper.initialize(application, this)
 
@@ -137,6 +139,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
             viewModel.isPriorConceptScene.postValue(isPriorConceptScene)
 
+            pencilcaseView.listener = this@LearningCourseActivity
 
             backBtn.setOnClickListener {
                 onBackPressed()
@@ -144,19 +147,20 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             // 헤더 ripple 분리하려면 각 버튼마다 따로붙여야함
             headerPriorConceptCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showDialogWithCourseType(sourceView, CourseType.priorConcept)
+                showHeaderNaviView(CourseType.priorConcept)
             }
             headerCookingCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showDialogWithCourseType(sourceView, CourseType.cooking)
+                showHeaderNaviView(CourseType.cooking)
             }
             headerPatternCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showDialogWithCourseType(sourceView, CourseType.pattern)
+                showHeaderNaviView(CourseType.pattern)
             }
             headerWrongNoteCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
                 setPagerToWrongNoteMap()
+                binding.naviFl.removeAllViews()
             }
             headerCl.setOnClickListener {
                 hidePencilcasePanel()
@@ -214,7 +218,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                     }
                 }
             }
-
+            naviFl.setOnClickListener {
+                viewModel.naviViewDismiss()
+            }
             pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -335,8 +341,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         transaction.replace(R.id.channelIoFrame, fragmentC).commitAllowingStateLoss()
     }
 
-    fun showDialogWithCourseType(sourceView: View, selectedType: CourseType) {
-        var popWindow: PopupWindow? = null
+    fun showHeaderNaviView(selectedType: CourseType) {
+        binding.naviFl.removeAllViews()
+        viewModel.setNaviFlag(selectedType)
         val courseList = viewModel.getHeaderCourseListOnType(selectedType)
         val currentCourse = viewModel.courseContentTable.value?.get(binding.pager.currentItem)
         val roadView = BalloonCourseRoadView(this)
@@ -352,7 +359,8 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             } else {
                 binding.pager.currentItem = viewModel.trimPosition(course)
             }
-            popWindow?.dismiss()
+            viewModel.naviViewDismiss()
+            binding.naviFl.removeAllViews()
         }
         roadView.setOnMapBtnClickListener(selectedType) {
             val position = when (it) {
@@ -360,19 +368,23 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 CourseType.patternMap -> viewModel.getPatternMapPosition()
                 else -> 0
             }
-            popWindow?.dismiss()
+            viewModel.naviViewDismiss()
+            binding.naviFl.removeAllViews()
             binding.pager.currentItem = position
         }
-
-        val width = roadView.getBalloonWidth()
-        val height = roadView.getBalloonHeight()
-        val xOffset = roadView.getXOffset(selectedType).dpToPx()
-
-
-
-        popWindow = PopupWindow(roadView, width, height, true).apply {
-            showAsDropDown(sourceView, xOffset, 20)
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.CENTER
+            if (selectedType == CourseType.priorConcept) {
+                marginEnd = 600.toDp().toInt()
+            }
         }
+        roadView.layoutParams = params
+
+        binding.naviFl.addView(roadView)
+        viewModel.showNaviView()
     }
 
     private fun saveImageAsCache(image: Bitmap): Uri? {
@@ -495,7 +507,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
 //        ChannelIO.shutdown()
         super.onDestroy()
-        AppUsageMonitor.finishConceptLearning()
+        ConceptLearningUsageMonitor.finishConceptLearning()
     }
 
     inner class LCViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
@@ -573,13 +585,23 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
     override fun onResume() {
         super.onResume()
-        AppUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
+        ConceptLearningUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
     }
 
     override fun onPause() {
         super.onPause()
-        AppUsageMonitor.pauseConceptLearning()
+        ConceptLearningUsageMonitor.pauseConceptLearning()
     }
+
+    override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
+        binding.naviFl.removeAllViews()
+    }
+
+    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {}
+
+    override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {}
+
+    override fun onModeChanged(isFixedMode: Boolean) {}
 }
 
 @BindingAdapter("layout_margin_top_dimen")

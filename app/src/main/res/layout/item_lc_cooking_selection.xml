@@ -5,9 +5,9 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.dialog.CookingQuizAnswerSelectDialog.CookingSelectionItemClickListener" />
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment.CookingSelectionItemClickListener" />
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.CookingQuizSelection"/>
-        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.cooking.CookingQuizAnswerSelectViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

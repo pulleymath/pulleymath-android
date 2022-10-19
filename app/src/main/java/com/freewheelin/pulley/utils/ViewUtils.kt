@@ -463,6 +463,13 @@ fun ImageView.setImageUrlGlide(url: String) {
         .into(this)
 }
 
+fun ImageView.setImageUrlPicasso(url: String) {
+    Picasso.get()
+        .load("${url}?time=${Date().time}")
+        .into(this)
+}
+
+
 fun ImageView.setCookingImageURL(url: String) {
     if (url.isEmpty()) return
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this.context) }

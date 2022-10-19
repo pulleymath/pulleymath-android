@@ -94,7 +94,7 @@ class CookingQuizAnswerSelectDialog(
             vm = viewModel
             viewModel.initImageUrlList(selectionImages)
 
-            selectionImageRv.adapter = SelectionListAdapter()
+//            selectionImageRv.adapter = SelectionListAdapter()
 //            selectionImages?.let {
 //                if (it.size < 5) {
                     selectionImageRv.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -103,44 +103,36 @@ class CookingQuizAnswerSelectDialog(
         }
     }
 
-    inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
-        DiffCallback<CookingQuizSelection>()
-    ) {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return SelectionViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_lc_cooking_selection, parent, false))
-        }
+//    inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
+//        DiffCallback<CookingQuizSelection>()
+//    ) {
+//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+//            return SelectionViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_lc_cooking_selection, parent, false))
+//        }
+//
+//        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+//            (holder as SelectionViewHolder).bind(getItem(position))
+//        }
+//    }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            (holder as SelectionViewHolder).bind(getItem(position))
-        }
-    }
-
-    inner class SelectionViewHolder(private val binding: ItemLcCookingSelectionBinding): RecyclerView.ViewHolder(binding.root), CookingSelectionItemClickListener {
-
-        fun bind(item: CookingQuizSelection) {
-            binding.apply {
-                listener = this@SelectionViewHolder
-                vm = viewModel
-                this.item = item
-            }
-        }
-
-        override fun onItemClick(content: CookingQuizSelection) {
-            answerBtnCallback(content)
-            dismiss()
-        }
-    }
-    interface CookingSelectionItemClickListener {
-        fun onItemClick(content: CookingQuizSelection)
-    }
+//    inner class SelectionViewHolder(private val binding: ItemLcCookingSelectionBinding): RecyclerView.ViewHolder(binding.root), CookingSelectionItemClickListener {
+//
+//        fun bind(item: CookingQuizSelection) {
+//            binding.apply {
+//                listener = this@SelectionViewHolder
+//                vm = viewModel
+//                this.item = item
+//            }
+//        }
+//
+//        override fun onItemClick(content: CookingQuizSelection) {
+//            answerBtnCallback(content)
+//            dismiss()
+//        }
+//    }
+//    interface CookingSelectionItemClickListener {
+//        fun onItemClick(content: CookingQuizSelection)
+//    }
 }
 
 
-@BindingAdapter("bind_cooking_selection_image")
-fun bindCookingSelectionImageRecyclerView(recyclerView: RecyclerView, item: List<CookingQuizSelection>?) {
-    Log.d("bind_cooking_selection_image", "list=$item")
-    item?.let { contentList ->
-        val adapter = recyclerView.adapter as CookingQuizAnswerSelectDialog.SelectionListAdapter
-        adapter.submitList(contentList)
-    }
-}

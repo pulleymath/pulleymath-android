@@ -131,6 +131,82 @@
                 app:quiz="@{ cookingExercise.cookingQuiz4 }"
                 layout="@layout/item_cooking_quiz_detail"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz5 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz5 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz5 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz6 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz6 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz6 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz7 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz7 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz7 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz8 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz8 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz8 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/purple_100"
+                android:layout_marginVertical="24dp"
+                android:visibility="@{ cookingExercise.cookingQuiz9 == null ? View.GONE : View.VISIBLE }"
+                />
+
+            <include
+                android:id="@+id/quizDetail9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{ cookingExercise.cookingQuiz9 == null ? View.GONE : View.VISIBLE }"
+                app:quiz="@{ cookingExercise.cookingQuiz9 }"
+                layout="@layout/item_cooking_quiz_detail"/>
+
         </LinearLayout>
 
         <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView

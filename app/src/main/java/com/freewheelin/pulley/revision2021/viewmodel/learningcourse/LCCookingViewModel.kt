@@ -31,6 +31,9 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
     val cookingExercise4 by lazy { MutableLiveData<CookingExercise>(null) }
     val cookingExercise5 by lazy { MutableLiveData<CookingExercise>(null) }
 
+    val selectionImageUrlList by lazy { MutableLiveData<List<CookingQuizSelection>>() }
+    val showSelection by lazy { MutableLiveData(false) }
+
     @SuppressLint("CheckResult")
     fun fetchCookingGroceries(courseId: Int) {
         val studentId = user?.studentID ?: return
@@ -110,7 +113,7 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
     }
 
     @SuppressLint("CheckResult")
-    fun scoringCookingQuiz(quiz: CookingQuiz, userAnswer: String, callback: () -> Unit) {
+    fun scoringCookingQuiz(quiz: CookingQuiz, userAnswer: String, callback: (Boolean) -> Unit) {
         val studentId = user?.studentID ?: return
         val scoringReq = ScoringReq(userAnswer)
         cookingRepository.scoringCookingQuiz(quiz.exerciseQuizId, studentId, scoringReq)
@@ -123,7 +126,7 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {
                                 quiz.isCorrectAnswer.set(it.isCorrect)
-                                callback()
+                                callback(it.isCorrect)
                             }
                         }
                     }
@@ -146,4 +149,11 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
         }
         return if (asd.isNotEmpty()) asd[0] else null
     }
+
+//    fun initImageUrlList(list: List<String>?) {
+//        val quizSelectionList = list?.mapIndexed { index, s ->
+//            CookingQuizSelection(s, index + 1)
+//        }
+//        selectionImageUrlList.postValue(quizSelectionList)
+//    }
 }

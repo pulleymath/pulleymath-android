@@ -24,6 +24,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
+import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -62,7 +63,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         hideSystemUI()
-        AppUsageMonitor.startConceptLearningUsage()
+        ConceptLearningUsageMonitor.startConceptLearningUsage()
 
         val noteCardList: ArrayList<LCWrongNoteMapCard> = intent.getSerializableExtra(NOTE_CARD_LIST) as ArrayList<LCWrongNoteMapCard>
         val noteCardItem = intent.getSerializableExtra(NOTE_CARD_ITEM) as LCWrongNoteMapCard
@@ -180,7 +181,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        AppUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
+        ConceptLearningUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
 
         CoroutineScope(Dispatchers.IO).launch {
             delay(500)
@@ -192,7 +193,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        AppUsageMonitor.pauseConceptLearning()
+        ConceptLearningUsageMonitor.pauseConceptLearning()
     }
     fun goInitialPosition() {
         val list = viewModel.filteredNoteCardList.value

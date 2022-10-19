@@ -57,19 +57,21 @@ class LCPatternMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val lcActivity = (activity as LearningCourseActivity)
-        val isLastPage = lcActivity.isPagerLastPage()
-        if (isLastPage) {
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(200)
-                withContext(Dispatchers.Main) {
-                    lcActivity.setPagerToPatternMap()
-                }
-            }
-        } else {
-            val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
-            viewModel.fetchPatternMap(chapterId)
-        }
+        val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
+        viewModel.fetchPatternMap(chapterId)
+
+//        val lcActivity = (activity as LearningCourseActivity)
+//        val isLastPage = lcActivity.isPagerLastPage()
+//        if (isLastPage) {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                delay(200)
+//                withContext(Dispatchers.Main) {
+//                    lcActivity.setPagerToPatternMap()
+//                }
+//            }
+//        } else {
+//
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

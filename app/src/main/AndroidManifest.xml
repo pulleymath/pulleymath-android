@@ -51,6 +51,7 @@
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2021.activity.AlarmActivity"
