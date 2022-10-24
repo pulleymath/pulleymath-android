@@ -110,11 +110,67 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/selectedAnswerIv"
+                android:id="@+id/aleadySelectedAnswerIv"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 cookingImgRes="@{ quiz.selectedQuizAnswerImageUrl }"
-                android:visibility="@{ quiz.isAnswerEntered ? View.VISIBLE : View.GONE }"
+                android:visibility="@{ quiz.isAnswerEntered ? View.VISIBLE : View.INVISIBLE }"
+                app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+
+            <ImageView
+                android:id="@+id/selectedAnswerIv1"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                cookingImgRes="@{ quiz.readyToAnswerOption1Url }"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+            <ImageView
+                android:id="@+id/selectedAnswerIv2"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                cookingImgRes="@{ quiz.readyToAnswerOption2Url }"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+            <ImageView
+                android:id="@+id/selectedAnswerIv3"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                cookingImgRes="@{ quiz.readyToAnswerOption3Url }"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+            <ImageView
+                android:id="@+id/selectedAnswerIv4"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                cookingImgRes="@{ quiz.readyToAnswerOption4Url }"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+            <ImageView
+                android:id="@+id/selectedAnswerIv5"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                cookingImgRes="@{ quiz.readyToAnswerOption5Url }"
+                android:visibility="invisible"
                 app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
                 app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
                 app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
@@ -122,49 +178,92 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/answerLl"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/shortAnswerCl"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:visibility="@{ !quiz.isCorrectAnswer &amp;&amp; quiz.isAnswerEntered &amp;&amp; quiz.format == QuizFormat.Short ? View.VISIBLE : View.INVISIBLE }"
             app:layout_constraintTop_toTopOf="@+id/quizSingleAnswerCl"
             app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswerCl"
             app:layout_constraintStart_toEndOf="@+id/quizSingleAnswerCl"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                android:id="@+id/answerTv2"
+                android:id="@+id/shortAnswerTextTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="정답: "
                 android:layout_gravity="center_horizontal"
                 style="@style/mo_b2r"
-                android:visibility="@{ !quiz.isCorrectAnswer &amp;&amp; quiz.isAnswerEntered ? View.VISIBLE : View.GONE }"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
             <TextView
-                android:id="@+id/correctAnswerTv"
+                android:id="@+id/shortCorrectAnswerTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="@{ quiz.answer }"
                 style="@style/h4"
                 android:layout_gravity="center_horizontal"
-                android:visibility="@{ !quiz.isCorrectAnswer &amp;&amp; quiz.isAnswerEntered &amp;&amp; quiz.format == QuizFormat.Short ? View.VISIBLE : View.GONE }"/>
+                app:layout_constraintTop_toBottomOf="@+id/shortAnswerTextTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/singleAnswerCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{ !quiz.isCorrectAnswer &amp;&amp; quiz.isAnswerEntered &amp;&amp; quiz.format != QuizFormat.Short ? View.VISIBLE : View.INVISIBLE }"
+            app:layout_constraintTop_toTopOf="@+id/quizSingleAnswerCl"
+            app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswerCl"
+            app:layout_constraintStart_toEndOf="@+id/quizSingleAnswerCl"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/singleAnswerTextTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="정답: "
+                android:layout_gravity="center_horizontal"
+                style="@style/mo_b2r"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
             <ImageView
-                android:id="@+id/correctAnswerIv2"
+                android:id="@+id/singleCorrectAnswerIv"
                 android:layout_width="48dp"
                 android:layout_height="24dp"
                 android:layout_marginBottom="8dp"
-                android:visibility="@{ !quiz.isCorrectAnswer &amp;&amp; quiz.isAnswerEntered &amp;&amp; quiz.format != QuizFormat.Short ? View.VISIBLE : View.GONE }"
-                cookingImgRes="@{ quiz.correctAnswerImage }"/>
+                cookingImgRes="@{ quiz.correctAnswerImage }"
+                app:layout_constraintTop_toBottomOf="@+id/singleAnswerTextTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </LinearLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            android:id="@+id/rightWrongIv"
+            android:id="@+id/wrongIv"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@{ quiz.isAnswerEntered ? quiz.isCorrectAnswer ? @drawable/ic_o_right_answer : @drawable/ic_x_wrong_answer : null }"
+            android:visibility="@{ quiz.isAnswerEntered ? quiz.isCorrectAnswer ? View.INVISIBLE : View.VISIBLE : View.INVISIBLE }"
+            android:src="@drawable/ic_x_wrong_answer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+<!--            android:visibility="invisible"-->
+
+        <ImageView
+            android:id="@+id/rightIv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="@{ quiz.isAnswerEntered ? quiz.isCorrectAnswer ? View.VISIBLE : View.INVISIBLE : View.INVISIBLE }"
+            android:src="@drawable/ic_o_right_answer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

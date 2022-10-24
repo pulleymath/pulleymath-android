@@ -245,8 +245,8 @@
                 android:layout_width="2dp"
                 android:layout_height="12dp"
                 android:layout_marginEnd="12dp"
-                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 android:background="@drawable/bg_gray_750_round"
+                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
                 app:layout_constraintEnd_toStartOf="@id/navPrevBtn"
                 app:layout_constraintTop_toTopOf="@id/navPrevBtn" />
@@ -296,9 +296,9 @@
                 android:id="@+id/pencilcaseView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="122dp"
+                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

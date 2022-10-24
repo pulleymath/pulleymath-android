@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -29,7 +30,6 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.setImageUrlGlide
 import com.freewheelin.pulley.utils.toPx
 import kotlinx.coroutines.*
 import kotlin.math.abs
@@ -272,7 +272,7 @@ class LCCookingFragment() : Fragment(),
                 setOnDetailView(detailBinding, quiz)
             }
         }
-        private fun getDetailBindingOnIndex(quizBinding: FragmentCookingQuizBinding, index: Int): ItemCookingQuizDetailBinding {
+        fun getDetailBindingOnIndex(quizBinding: FragmentCookingQuizBinding, index: Int): ItemCookingQuizDetailBinding {
             return when (index) {
                 0 -> quizBinding.quizDetail0
                 1 -> quizBinding.quizDetail1
@@ -320,7 +320,7 @@ class LCCookingFragment() : Fragment(),
                 return
             }
 
-            val selectionImages = quiz.answerOptions.map { it.imageUrl }
+            val selectionImages = quiz.sortedAnswerOptions.map { it.imageUrl }
 
             val quizSelectionList = selectionImages.mapIndexed { index, s ->
                 CookingQuizSelection(s, index + 1, quiz, sourceView, detailBinding)
@@ -349,10 +349,26 @@ class LCCookingFragment() : Fragment(),
                             true
                         }
                         else {
-                            viewModel.scoringCookingQuiz(quiz, userAnswer) {
-                                (activity as LearningCourseActivity).hideKeyboard(v)
-                                itemQuizBinding.quizAnswerEt.isEnabled = false
-                                quiz.isAnswerEntered.set(true)
+                            viewModel.scoringCookingQuiz(quiz, userAnswer) { isCorrect ->
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    withContext(Dispatchers.Main) {
+
+                                        (activity as LearningCourseActivity).hideKeyboard(v)
+//                                quiz.isAnswerEntered.set(true)
+
+                                        itemQuizBinding.apply {
+                                            quizAnswerEt.isEnabled = false
+                                            quizAnswerEt.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_5)
+//                                          quizAnswerEt.hintTextColors
+//                                          rightWrongIv.setImageResource(if (isCorrect) R.drawable.ic_o_right_answer else R.drawable.ic_x_wrong_answer)
+                                            wrongIv.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
+                                            rightIv.visibility = if (isCorrect) View.VISIBLE else View.INVISIBLE
+                                            shortAnswerCl.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
+                                        }
+//                                    }
+//                                }
+
+
                             }
 
                             true
@@ -365,6 +381,17 @@ class LCCookingFragment() : Fragment(),
             return false
         }
 
+        inner class JsToAndroid : Any() {
+            @JavascriptInterface
+            fun clickListener(idOrClass: String) {
+                val largeRedPlayButton = "ytp-large-play-button ytp-button ytp-large-play-button-red-bg"
+                val thumbnailImage = "ytp-cued-thumbnail-overlay-image"
+                if (idOrClass == largeRedPlayButton || idOrClass == thumbnailImage) {
+                    // TODO youtube play check api
+                    println("asoaso video played!")
+                }
+            }
+        }
         fun addVideo(item: CookingInfoItem) {
             itemBinding.apply {
 
@@ -388,9 +415,20 @@ class LCCookingFragment() : Fragment(),
 //                        webView.loadUrl("javascript:(function() { document.getElementsByClassName('ytp-large-play-button ytp-button')[0].click(); })()");
 
                         binding.rightViewProgress.visibility = View.GONE
+                        view?.evaluateJavascript(addMyClickCallBackJs(), null)
+                    }
+
+                    fun addMyClickCallBackJs(): String {
+                        var js = "javascript:"
+                        js += "function clickListener(event){" +
+                            "if(event.target.className == null){androidInterface.clickListener(event.target.id)}" +
+                            "else{androidInterface.clickListener(event.target.className)}}"
+                        js += "document.addEventListener(\"click\",clickListener,true);"
+                        return js
                     }
                 }
                 webView.webChromeClient = CookingChromeClient()
+                webView.addJavascriptInterface(JsToAndroid(), "androidInterface")
                 webView.settings.apply {
                     javaScriptEnabled = true
                     mediaPlaybackRequiresUserGesture = false
@@ -474,11 +512,31 @@ class LCCookingFragment() : Fragment(),
         }
 
         override fun onItemClick(selectedContent: CookingQuizSelection) {
+            val detailBinding = selectedContent.binding
             val userAnswer = "${selectedContent.seq}"
             val quiz = selectedContent.parentQuiz
             viewModel.scoringCookingQuiz(quiz, userAnswer) { isCorrect ->
-                quiz.selectedQuizAnswerImageUrl.set(selectedContent.imageUrl)
-                quiz.isAnswerEntered.set(true)
+
+                detailBinding.apply {
+
+                    // 이 아래부분을 binding을 INVISIBLE이 아닌 GONE을 사용하면 scrollview가 줄어드는 경험을 할 수 있을것이다.
+                    // binding 이 문제인지는 아직 잘 모르겠다. 221019
+                    singleAnswerCl.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
+                    quizSingleAnswer.text = ""
+                    quizSingleAnswer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_5)
+                    quizSingleAnswer.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_300))
+                    wrongIv.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
+                    rightIv.visibility = if (isCorrect) View.VISIBLE else View.INVISIBLE
+
+                    when(selectedContent.seq) {
+                        1 -> selectedAnswerIv1.visibility = View.VISIBLE
+                        2 -> selectedAnswerIv2.visibility = View.VISIBLE
+                        3 -> selectedAnswerIv3.visibility = View.VISIBLE
+                        4 -> selectedAnswerIv4.visibility = View.VISIBLE
+                        5 -> selectedAnswerIv5.visibility = View.VISIBLE
+                        else -> {}
+                    }
+                }
             }
 
             viewModel.showSelection.postValue(false)

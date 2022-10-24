@@ -57,7 +57,7 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                                 quiz.isCorrectAnswer.set(isCorrectAnswer)
                                 if (quiz.format == QuizFormat.Single) {
                                     quiz.userAnswer?.toInt()?.let { position ->
-                                        val selectedImageUrl = quiz.answerOptions[position - 1].imageUrl
+                                        val selectedImageUrl = quiz.sortedAnswerOptions[position - 1].imageUrl
                                         quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
                                     }
                                 }
@@ -123,9 +123,10 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                 Log.d(javaClass.simpleName, "scoringCookingQuiz =>${response.data}")
                 response.data?.let {
                     if (quiz.exerciseQuizId == it.exerciseQuizId) {
+//                        callback(it.isCorrect)
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {
-                                quiz.isCorrectAnswer.set(it.isCorrect)
+//                                quiz.isCorrectAnswer.set(it.isCorrect)
                                 callback(it.isCorrect)
                             }
                         }

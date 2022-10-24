@@ -137,24 +137,53 @@ class CookingQuiz: BaseDiffItem, Serializable {
     var isCorrectAnswer: ObservableBoolean = ObservableBoolean(false)
     var selectedQuizAnswerImageUrl = ObservableField<String>("")
 
+    val sortedAnswerOptions: List<ExerciseQuizAnswerOption>
+        get() {
+            return answerOptions.sortedBy { it.number }
+        }
+    val readyToAnswerOption1Url: String
+        get () {
+            val imageUrl = if (sortedAnswerOptions.size > 0) sortedAnswerOptions[0].imageUrl else ""
+            return imageUrl
+        }
+    val readyToAnswerOption2Url: String
+        get () {
+            val imageUrl = if (sortedAnswerOptions.size > 1) sortedAnswerOptions[1].imageUrl else ""
+            return imageUrl
+        }
+    val readyToAnswerOption3Url: String
+        get () {
+            val imageUrl = if (sortedAnswerOptions.size > 2) sortedAnswerOptions[2].imageUrl else ""
+            return imageUrl
+        }
+    val readyToAnswerOption4Url: String
+        get () {
+            val imageUrl = if (sortedAnswerOptions.size > 3) sortedAnswerOptions[3].imageUrl else ""
+            return imageUrl
+        }
+    val readyToAnswerOption5Url: String
+        get () {
+            val imageUrl = if (sortedAnswerOptions.size > 4) sortedAnswerOptions[4].imageUrl else ""
+            return imageUrl
+        }
+
     val correctAnswerImage: String
      get() {
-
          val imageUrl =  when (answer) {
              "1" -> {
-                 if (answerOptions.size > 0) answerOptions[0].imageUrl else ""
+                 if (sortedAnswerOptions.size > 0) sortedAnswerOptions[0].imageUrl else ""
              }
              "2" -> {
-                 if (answerOptions.size > 1) answerOptions[1].imageUrl else ""
+                 if (sortedAnswerOptions.size > 1) sortedAnswerOptions[1].imageUrl else ""
              }
              "3" -> {
-                 if (answerOptions.size > 2) answerOptions[2].imageUrl else ""
+                 if (sortedAnswerOptions.size > 2) sortedAnswerOptions[2].imageUrl else ""
              }
              "4" -> {
-                 if (answerOptions.size > 3) answerOptions[3].imageUrl else ""
+                 if (sortedAnswerOptions.size > 3) sortedAnswerOptions[3].imageUrl else ""
              }
              "5" ->
-                 if (answerOptions.size > 4) answerOptions[4].imageUrl else ""
+                 if (sortedAnswerOptions.size > 4) sortedAnswerOptions[4].imageUrl else ""
              else -> ""
          }
 
