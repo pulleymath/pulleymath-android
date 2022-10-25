@@ -38,10 +38,10 @@ object Network {
         else -> URL.PULLEY_API
     }
     val cookingUrl = when (Preferences.onServerAPI.get()) {
-        Server.live.toString() -> "https://pulley-cooking-dev.pulleymath.com"
+        Server.live.toString() -> "https://pulley-cooking-live.pulleymath.com"
         Server.staging.toString() -> "https://pulley-cooking-dev.pulleymath.com"
         Server.dev.toString() -> "https://pulley-cooking-dev.pulleymath.com"
-        else -> "https://pulley-cooking-dev.pulleymath.com"
+        else -> "https://pulley-cooking-live.pulleymath.com"
     }
     val channelTalkMediaUrl = when (Preferences.onServerAPI.get()) {
         Server.live.toString() -> "https://media.channel.io"

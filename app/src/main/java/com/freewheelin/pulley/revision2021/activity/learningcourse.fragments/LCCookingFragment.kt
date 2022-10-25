@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -30,6 +31,8 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.DisplayUtils
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
 import kotlinx.coroutines.*
 import kotlin.math.abs
@@ -387,8 +390,8 @@ class LCCookingFragment() : Fragment(),
                 val largeRedPlayButton = "ytp-large-play-button ytp-button ytp-large-play-button-red-bg"
                 val thumbnailImage = "ytp-cued-thumbnail-overlay-image"
                 if (idOrClass == largeRedPlayButton || idOrClass == thumbnailImage) {
-                    // TODO youtube play check api
-                    println("asoaso video played!")
+                    val cookingId = viewModel.cookingInfo.value?.conceptCookingId
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "풀리개념학습", "유튜브", "$cookingId")
                 }
             }
         }
