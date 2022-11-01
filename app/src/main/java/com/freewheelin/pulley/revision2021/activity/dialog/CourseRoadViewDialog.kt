@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -73,8 +72,8 @@ class CourseRoadViewDialog(context: Context,
         val centerOfWidth = screenWidth / 2
         val dialogWidth = 368.dpToPx()
         return when (selectedType) {
-            CourseType.priorConcept -> sourceX
-            CourseType.pattern -> {
+            CourseType.PriorConcept -> sourceX
+            CourseType.Pattern -> {
                 val sourceWidth = sourceView.width
                 val targetX = sourceX + sourceWidth - dialogWidth
                 targetX
@@ -118,9 +117,9 @@ class CourseRoadViewDialog(context: Context,
             goMapBtn.setOnClickListener {
                 dismiss()
                 val selectedMap = when (selectedType) {
-                    CourseType.priorConcept -> CourseType.priorConceptMap
-                    CourseType.pattern -> CourseType.patternMap
-                    else -> CourseType.priorConceptMap
+                    CourseType.PriorConcept -> CourseType.PriorConceptMap
+                    CourseType.Pattern -> CourseType.PatternMap
+                    else -> CourseType.PriorConceptMap
                 }
                 mapCallback(selectedMap)
             }
@@ -142,11 +141,10 @@ class CourseRoadViewDialog(context: Context,
                 ) // SCD에 값이 없다.
                 else -> ContextCompat.getDrawable(context, R.drawable.bg_road_view_common)
             }
-//            text = "${course.name}"
             text = when (course.courseType) {
-                CourseType.priorConcept -> "복습 0${course.sequence}. ${course.name}"
-                CourseType.cooking -> "개념 0${course.sequence}. ${course.name}"
-                CourseType.pattern -> "유형 0${course.sequence}. ${course.name}"
+                CourseType.PriorConcept -> "복습 0${course.sequence}. ${course.name}"
+                CourseType.Cooking -> "개념 0${course.sequence}. ${course.name}"
+                CourseType.Pattern -> "유형 0${course.sequence}. ${course.name}"
                 else -> {
                     "유형 0${course.sequence}. ${course.name}"
                 }
@@ -157,8 +155,8 @@ class CourseRoadViewDialog(context: Context,
     private fun setPeakViewBias() {
         binding.apply {
             val biasValue = when (selectedType) {
-                CourseType.priorConcept, CourseType.priorConcept -> 0.15f
-                CourseType.pattern -> 0.85f
+                CourseType.PriorConcept, CourseType.PriorConcept -> 0.15f
+                CourseType.Pattern -> 0.85f
                 else -> 0.5f
             }
 

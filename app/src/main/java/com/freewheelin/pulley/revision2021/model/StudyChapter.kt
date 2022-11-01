@@ -31,6 +31,41 @@ class StudyChapter: BaseDiffItem, Serializable {
     var lastStudiedAt: String? = null
     var children: List<StudyChapter> = listOf()
 
+    val child1: StudyChapter?
+        get() {
+            children.let {
+                if (it.isNotEmpty()) return it[0]
+            }
+            return null
+        }
+    val child2: StudyChapter?
+        get() {
+            children.let {
+                if (it.size > 1) return it[1]
+            }
+            return null
+        }
+    val child3: StudyChapter?
+        get() {
+            children.let {
+                if (it.size > 2) return it[2]
+            }
+            return null
+        }
+    val child4: StudyChapter?
+        get() {
+            children.let {
+                if (it.size > 3) return it[3]
+            }
+            return null
+        }
+    val child5: StudyChapter?
+        get() {
+            children.let {
+                if (it.size > 4) return it[4]
+            }
+            return null
+        }
 
     val lastStudiedFormatting: String
         get() {
@@ -51,26 +86,6 @@ class StudyChapter: BaseDiffItem, Serializable {
                 else -> { "Ⅰ" }
             }
             return "$seq. ${name}"
-        }
-    val mediumTitle: String
-        get() {
-            return "$id. ${name}"
-        }
-    val smallTitle: String
-        get() {
-            return "Part $id. ${name}"
-        }
-
-    val progressRateAtPercentage: String
-        get () {
-//            val percent = (progressRate * 100).toInt()
-            return "percent%test"
-        }
-
-    val progressRatePercentageLessThen50: Boolean
-        get() {
-//            val percent = (progressRate * 100).toInt()
-            return true
         }
 
     val isHeader: Boolean
@@ -179,6 +194,18 @@ class StudyChapter: BaseDiffItem, Serializable {
         return brotherLastIndex - itemPosition > 0
     }
 
+    var isNextItemExt: Boolean = false
+    fun setNextItemExist(parent: StudyChapter?) {
+        if (parent != null) {
+            val brotherLastIndex = parent.children.lastIndex
+            val itemPosition = parent.children.indexOf(this)
+            isNextItemExt = brotherLastIndex - itemPosition > 0
+        }
+        children.forEach {
+            it.setNextItemExist(this)
+        }
+
+    }
     fun getItemPosition(parent: StudyChapter): Int {
         return parent.children.indexOf(this) + 1
     }

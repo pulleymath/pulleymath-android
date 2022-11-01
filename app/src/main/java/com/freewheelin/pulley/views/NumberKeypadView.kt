@@ -15,7 +15,6 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.utils.toPx
 import java.lang.ref.WeakReference
 
-
 interface PlusMinusKeypadWindowListener {
     var keypadListener: PlusMinusKeypadListener
     fun onKeyboardDismiss()

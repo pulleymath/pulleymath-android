@@ -17,11 +17,7 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
 
     val subjectList by lazy { MutableLiveData<List<LCSubject>>() }
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
-    val largeChapter1 by lazy { MutableLiveData<StudyChapter>() }
-    val largeChapter2 by lazy { MutableLiveData<StudyChapter>() }
-    val largeChapter3 by lazy { MutableLiveData<StudyChapter>() }
 
-//    val subjectIndex = MutableLiveData<Int>(3)
     val showProgress = MutableLiveData<Boolean>(true)
     val selectedSubjectId = MutableLiveData<Int>(-1)
     val availableLastSubjectId = MutableLiveData<Int>(7)
@@ -58,21 +54,10 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 showProgress.postValue(false)
                 response.data?.let {
-
                     studyChapterHeader = studyChapterHeader ?: StudyChapter.createHeader()
                     studyChapterFooter = studyChapterFooter ?: StudyChapter.createFooter()
                     val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + it + listOf(studyChapterFooter!!)
                     chapterList.postValue(listWithHeaderAndFooter)
-
-                    it.forEachIndexed { index, sc ->
-                        when(index) {
-                            0 -> { largeChapter1.postValue(sc) }
-                            1 -> { largeChapter2.postValue(sc) }
-                            2 -> { largeChapter3.postValue(sc) }
-                            else -> { largeChapter1.postValue(sc) }
-                        }
-                    }
-
                 }
             }, { error ->
                 showProgress.postValue(false)

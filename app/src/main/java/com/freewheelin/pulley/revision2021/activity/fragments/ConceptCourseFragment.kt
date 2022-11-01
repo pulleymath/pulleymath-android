@@ -85,8 +85,10 @@ class ConceptCourseFragment : LearningTabFragment() {
             viewModel.showProgress.postValue(true)
             viewModel.selectedSubjectId.observe(this@ConceptCourseFragment) { subjectId ->
                 // TODO vm.subjectIndex 바인딩이 작동하지 않음 왤까
-                setHeaderButton(subjectId)
-                if (subjectId > 0) { viewModel.fetch(subjectId) }
+//                setHeaderButton(subjectId)
+                if (subjectId > 0) {
+                    viewModel.fetch(subjectId)
+                }
             }
             studyRv.adapter = StudyChapterAdapter()
             viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
@@ -136,13 +138,14 @@ class ConceptCourseFragment : LearningTabFragment() {
     }
 
     var rvHeaderBinding: ItemStudyChapterBinding ? = null
-    inner class StudyChapterViewHolder(private val itemBinding: ItemStudyChapterBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    inner class StudyChapterViewHolder(private val itemBinding: ItemStudyChapterBinding): RecyclerView.ViewHolder(itemBinding.root), ChapterItemClickListener {
         fun bind(item: StudyChapter) {
             if (item.id == -1) rvHeaderBinding = itemBinding
             itemBinding.apply {
                 vm = viewModel
                 this.item = item
-//                lifecycleOwner = viewLifecycleOwner
+                listener = this@StudyChapterViewHolder
+                lifecycleOwner = viewLifecycleOwner
 
                 val lastChapterIndex = viewModel.chapterList.value?.lastIndex?.minus(1)
                 isLastItem = lastChapterIndex?.let { viewModel.chapterList.value?.get(it)?.id } == item.id
@@ -163,42 +166,29 @@ class ConceptCourseFragment : LearningTabFragment() {
                         headerCl.visibility = View.GONE
                         footerCl.visibility = View.GONE
                         chapterCl.visibility = View.VISIBLE
-                    }
-                }
-                val mediumChapterList = listOf(largeChapter.mediumChapter1, largeChapter.mediumChapter2, largeChapter.mediumChapter3, largeChapter.mediumChapter4, largeChapter.mediumChapter5)
 
-                mediumChapterList.forEachIndexed { index, mediumBinding ->
-                    if (item.isChildExist(index)) {
-                        mediumBinding.smallChapterRv.adapter = SmallChapterListAdapter(item.children[index])
+                        listOfNotNull(
+                            largeChapter.mediumChapter1,
+                            largeChapter.mediumChapter2,
+                            largeChapter.mediumChapter3,
+                            largeChapter.mediumChapter4,
+                            largeChapter.mediumChapter5
+                        ).forEach { mediumBinding ->
+                            setSmallChapterEffectOnRoot(mediumBinding)
+                        }
                     }
                 }
+
 
             }
         }
-    }
-
-    inner class SmallChapterListAdapter(private val parentItem: StudyChapter): ListAdapter<StudyChapter, RecyclerView.ViewHolder>(DiffCallback<StudyChapter>()) {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return SmallChapterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_small_chapter, parent, false))
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            (holder as SmallChapterViewHolder).bind(getItem(position), parentItem)
-        }
-    }
-
-    inner class SmallChapterViewHolder(private val smallItemBinding: ItemSmallChapterBinding): RecyclerView.ViewHolder(smallItemBinding.root), ChapterItemClickListener  {
-        fun bind(item: StudyChapter, parent: StudyChapter) {
-            smallItemBinding.apply {
-//                vm = viewModel
-                this.item = item
-                lifecycleOwner = viewLifecycleOwner
-
-                listener = this@SmallChapterViewHolder
-                isNextItemExist = item.isNextItemExist(parent)
-                partIndex = item.getItemPosition(parent)
-                smallChapterRootCl.setOnTouchListener(BoongthEffect())
+        private fun setSmallChapterEffectOnRoot(mediumBinding: ItemMediumChapterBinding) {
+            mediumBinding.apply {
+                listOfNotNull(
+                    smallChapter1, smallChapter2, smallChapter3, smallChapter4, smallChapter5
+                ).forEach { smallBinding ->
+                    smallBinding.smallChapterRootCl.setOnTouchListener(BoongthEffect())
+                }
             }
         }
 
@@ -225,14 +215,15 @@ fun bindStudyChapterRecyclerView(recyclerView: RecyclerView, item: List<StudyCha
     }
 }
 
-@BindingAdapter("bind_small_chapter")
-fun bindSmallChapterRv(rv: RecyclerView, item: List<StudyChapter>?) {
-    Log.d("bind_small_chapter", "list=$item")
-    item?.let { chapterList ->
-        val adapter = rv.adapter as? ConceptCourseFragment.SmallChapterListAdapter
-        adapter?.submitList(chapterList)
-    }
-}
+//@BindingAdapter("bind_small_chapter")
+//fun bindSmallChapterRv(rv: RecyclerView, item: List<StudyChapter>?) {
+//    Log.d("bind_small_chapter", "list=$item")
+//    item?.let { chapterList ->
+//        println("bind_small_chapter : , submitlist!")
+//        val adapter = rv.adapter as? ConceptCourseFragment.SmallChapterListAdapter
+//        adapter?.submitList(chapterList)
+//    }
+//}
 
 @BindingAdapter("progress_layout_width")
 fun setLayoutWidth(view: View, rate: Double) {

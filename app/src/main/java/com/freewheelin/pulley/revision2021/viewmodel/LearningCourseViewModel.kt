@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 //import com.freewheelin.pulley.revision2021.model.CourseContentTable
 import com.freewheelin.pulley.revision2021.model.CourseType
@@ -36,17 +35,10 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     // courseContent에는 review페이지가 포함되어있지 않음
     val courseContentTable by lazy { MutableLiveData<List<SingleCourseDesc>>() }
-
-    val isCurrentPagePriorConcept by lazy { MutableLiveData(false) }
-    val isCurrentPageCooking by lazy { MutableLiveData(false) }
-    val isCurrentPagePattern by lazy { MutableLiveData(false) }
-    val isCurrentPageWrongNote by lazy { MutableLiveData(false) }
+    val currentCourseType by lazy { MutableLiveData(CourseType.PriorConcept) }
 
     val headerCookingBtnText by lazy { MutableLiveData("개념 익히기") }
     val headerPatternBtnText by lazy { MutableLiveData("유형 학습") }
-
-    val videoReleaseFlags by lazy { MutableLiveData<List<Boolean>>(listOf()) }
-    val videoAddFlags by lazy { MutableLiveData<List<Boolean>>(listOf()) }
 
     val headerTitle by lazy { MutableLiveData<String>("") }
 
@@ -64,15 +56,13 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     val isPriorConceptScene by lazy { MutableLiveData(false) }
 
     val showHeaderNaviDialog by lazy { MutableLiveData(false) }
-    val flagPriorConceptNavi by lazy { MutableLiveData(false) }
-    val flagCookingNavi by lazy { MutableLiveData(false) }
-    val flagPatternNavi by lazy { MutableLiveData(false) }
+    val isPriorConceptNaviSelected by lazy { MutableLiveData(false) }
+    val isCookingNaviSelected by lazy { MutableLiveData(false) }
+    val isPatternNaviSelected by lazy { MutableLiveData(false) }
 
     var currPagerPosition = 0
 
     var currChannelIOImage: ChannelIOImageUploadRes? = null
-
-    var addedRoadView = mutableListOf<View>()
 
 
     @SuppressLint("CheckResult")
@@ -85,7 +75,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchCourseList =>${response.data}")
                 response.data?.let {
-                    val firstPattern = it.first { it.courseType == CourseType.pattern }
+                    val firstPattern = it.first { it.courseType == CourseType.Pattern }
                     val firstPatternIndex = it.indexOf(firstPattern)
                     val mutableCourseList = it.toMutableList()
 
@@ -96,7 +86,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
                     courseHeaderContentTable.postValue(contentTable)
 
-                    val contents = contentTable.filter { it.courseType != CourseType.priorConcept }
+                    val contents = contentTable.filter { it.courseType != CourseType.PriorConcept }
                     courseContentTable.postValue(contents)
 
 
@@ -122,29 +112,25 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     }
 
     private fun setPageType(courseType: CourseType, currItemPosition: Int) {
-        println("rkskekfk, courseType: ${courseType}, currItemPosition : ${currItemPosition}")
-        isCurrentPagePriorConcept.postValue(courseType == CourseType.priorConcept || courseType == CourseType.priorConceptMap)
-        isCurrentPageCooking.postValue(courseType == CourseType.cooking)
-        isCurrentPagePattern.postValue(courseType == CourseType.patternMap || courseType == CourseType.pattern)
-        isCurrentPageWrongNote.postValue(courseType == CourseType.wrongNoteMap)
+        currentCourseType.postValue(courseType)
 
         val prevTypeCount = when (courseType) {
-            CourseType.cooking -> courseContentTable.value?.count { it.courseType == CourseType.priorConceptMap || it.courseType == CourseType.priorConcept }
-            CourseType.patternMap -> 999
-            CourseType.pattern -> courseContentTable.value?.count { it.courseType != CourseType.pattern }
+            CourseType.Cooking -> courseContentTable.value?.count { it.courseType == CourseType.PriorConceptMap || it.courseType == CourseType.PriorConcept }
+            CourseType.PatternMap -> 999
+            CourseType.Pattern -> courseContentTable.value?.count { it.courseType != CourseType.Pattern }
             else -> 999
         } ?: 999
 
         val currentPositionInType = currItemPosition - prevTypeCount + 1
-        val cookingCourseCount = courseContentTable.value?.count { it.courseType == CourseType.cooking }
-        headerCookingBtnText.postValue(if (courseType == CourseType.cooking) "개념 익히기 ${currentPositionInType}/${cookingCourseCount}" else "개념 익히기")
+        val cookingCourseCount = courseContentTable.value?.count { it.courseType == CourseType.Cooking }
+        headerCookingBtnText.postValue(if (courseType == CourseType.Cooking) "개념 익히기 ${currentPositionInType}/${cookingCourseCount}" else "개념 익히기")
 
-        val patternCourseCount = courseContentTable.value?.count { it.courseType == CourseType.pattern }
-        headerPatternBtnText.postValue(if (courseType == CourseType.pattern) "유형 학습 ${currentPositionInType + 1}/${patternCourseCount}" else "유형 학습")
+        val patternCourseCount = courseContentTable.value?.count { it.courseType == CourseType.Pattern }
+        headerPatternBtnText.postValue(if (courseType == CourseType.Pattern) "유형 학습 ${currentPositionInType + 1}/${patternCourseCount}" else "유형 학습")
     }
 
     fun isPriorConcept(course: SingleCourseDesc): Boolean {
-        return course.courseType == CourseType.priorConcept
+        return course.courseType == CourseType.PriorConcept
 //        return courseHeaderContentTable.value?.get(selectedPosition)?.courseType == CourseType.review
     }
     // trim 되는 이유는 헤더 목차에는 사전개념이 들어가있지만 사전개념은 viewPager의 page가 아니기 때문이다.
@@ -161,7 +147,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     fun getPagerPositionOnCookingId(cookingId: Int): Int {
         courseContentTable.value?.forEachIndexed { index, course ->
-            if (course.courseType == CourseType.cooking && course.learningCourseDetailId == cookingId) {
+            if (course.courseType == CourseType.Cooking && course.learningCourseDetailId == cookingId) {
                 return index
             }
         }
@@ -169,13 +155,13 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     }
     fun getPagerPositionOnPatternId(patternId: Int): Int {
         courseContentTable.value?.forEachIndexed { index, course ->
-            if (course.courseType == CourseType.pattern && course.learningCourseDetailId == patternId) {
+            if (course.courseType == CourseType.Pattern && course.learningCourseDetailId == patternId) {
                 return index
             }
         }
         // 없으면 패턴맵에서 이동하지 않음
         courseContentTable.value?.forEachIndexed { index, course ->
-            if (course.courseType == CourseType.patternMap) {
+            if (course.courseType == CourseType.PatternMap) {
                 return index
             }
         }
@@ -183,7 +169,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     }
     fun isPatternLearningPage(position: Int): Boolean {
         courseContentTable.value?.forEachIndexed { index, course ->
-            if (index == position && (course.courseType == CourseType.pattern || course.courseType == CourseType.patternMap)) {
+            if (index == position && (course.courseType == CourseType.Pattern || course.courseType == CourseType.PatternMap)) {
                 return true
             }
         }
@@ -192,7 +178,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     fun getPatternMapPosition(): Int {
         courseContentTable.value?.forEachIndexed { index, lct ->
-            if (lct.courseType == CourseType.patternMap) {
+            if (lct.courseType == CourseType.PatternMap) {
                 return index
             }
         }
@@ -201,7 +187,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     fun getWrongNoteMapPosition(): Int {
         courseContentTable.value?.forEachIndexed { index, lct ->
-            if (lct.courseType == CourseType.wrongNoteMap) {
+            if (lct.courseType == CourseType.WrongNoteMap) {
                 return index
             }
         }
@@ -319,9 +305,9 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     }
     fun naviViewDismiss() {
         showHeaderNaviDialog.postValue(false)
-        flagPriorConceptNavi.postValue(false)
-        flagCookingNavi.postValue(false)
-        flagPatternNavi.postValue(false)
+        isPriorConceptNaviSelected.postValue(false)
+        isCookingNaviSelected.postValue(false)
+        isPatternNaviSelected.postValue(false)
     }
     fun showNaviView() {
         showHeaderNaviDialog.postValue(true)
@@ -329,11 +315,22 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     fun setNaviFlag(selectedType: CourseType) {
         when(selectedType) {
-            CourseType.priorConcept -> flagPriorConceptNavi.postValue(true)
-            CourseType.cooking -> flagCookingNavi.postValue(true)
-            CourseType.pattern -> flagPatternNavi.postValue(true)
+            CourseType.PriorConcept -> {
+                isPriorConceptNaviSelected.postValue(true)
+                isCookingNaviSelected.postValue(false)
+                isPatternNaviSelected.postValue(false)
+            }
+            CourseType.Cooking -> {
+                isPriorConceptNaviSelected.postValue(false)
+                isCookingNaviSelected.postValue(true)
+                isPatternNaviSelected.postValue(false)
+            }
+            CourseType.Pattern -> {
+                isPriorConceptNaviSelected.postValue(false)
+                isCookingNaviSelected.postValue(false)
+                isPatternNaviSelected.postValue(true)
+            }
             else -> {}
         }
-
     }
 }

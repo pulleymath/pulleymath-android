@@ -16,13 +16,13 @@ class SingleCourseDesc: BaseDiffItem, Serializable {
     val courseType: CourseType
         get() {
             return when(learningCourseType) {
-                "PRIOR_CONCEPT" -> { CourseType.priorConcept }
-                "PRIOR_CONCEPT_MAP" -> { CourseType.priorConceptMap }
-                "CONCEPT" -> { CourseType.cooking }
-                "PATTERN_MAP" -> { CourseType.patternMap }
-                "PATTERN" -> { CourseType.pattern }
-                "WRONG_NOTE_MAP" -> { CourseType.wrongNoteMap }
-                else -> { CourseType.priorConceptMap }
+                "PRIOR_CONCEPT" -> { CourseType.PriorConcept }
+                "PRIOR_CONCEPT_MAP" -> { CourseType.PriorConceptMap }
+                "CONCEPT" -> { CourseType.Cooking }
+                "PATTERN_MAP" -> { CourseType.PatternMap }
+                "PATTERN" -> { CourseType.Pattern }
+                "WRONG_NOTE_MAP" -> { CourseType.WrongNoteMap }
+                else -> { CourseType.PriorConceptMap }
             }
         }
     companion object {

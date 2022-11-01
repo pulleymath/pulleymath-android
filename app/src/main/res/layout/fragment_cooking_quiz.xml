@@ -35,7 +35,6 @@
                 style="@style/mo_h6"
                 android:background="@drawable/bg_purple_100_round_5"
                 android:textColor="@color/purple_300"
-                android:layout_marginTop="8dp"
                 android:paddingVertical="3dp"
                 android:paddingHorizontal="8dp"
                 />
@@ -50,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:scaleType="fitStart"
-                    cookingImgRes="@{ cookingExercise.imageUrl }"/>
+                    cookingImgResOnPicasso="@{ cookingExercise.imageUrl }"/>
     <!--                android:src="@drawable/cooking_quiz1"/>-->
 
                 <View
@@ -212,7 +211,7 @@
         <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
             android:id="@+id/cookingMemoView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

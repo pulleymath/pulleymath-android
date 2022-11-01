@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.activity
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.ColorInt
+import androidx.core.animation.doOnEnd
 import androidx.core.content.FileProvider
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
@@ -23,7 +25,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
@@ -39,10 +40,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel
 import com.freewheelin.pulley.revision2021.views.BalloonCourseRoadView
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.revision2021.views.CookingPencilcaseListener
-import com.freewheelin.pulley.utils.Preferences
-import com.freewheelin.pulley.utils.dpToPx
-import com.freewheelin.pulley.utils.toDp
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.*
 import com.zoyi.channel.plugin.android.model.source.photopicker.PhotoItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData
@@ -147,18 +145,19 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             // 헤더 ripple 분리하려면 각 버튼마다 따로붙여야함
             headerPriorConceptCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.priorConcept)
+                showHeaderNaviView(CourseType.PriorConcept)
             }
             headerCookingCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.cooking)
+                showHeaderNaviView(CourseType.Cooking)
             }
             headerPatternCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.pattern)
+                showHeaderNaviView(CourseType.Pattern)
             }
             headerWrongNoteCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
+                viewModel.naviViewDismiss()
                 setPagerToWrongNoteMap()
                 binding.naviFl.removeAllViews()
             }
@@ -171,10 +170,11 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                     val pagerIndex = binding.pager.currentItem
                     val currCourse = it[pagerIndex]
                     when (currCourse.courseType) {
-                        CourseType.pattern -> {
+                        CourseType.Pattern -> {
                             (tabFragments[pagerIndex] as LCPatternFragment).let { frag ->
                                 if (frag.viewModel.isPagerFirstIndex()) {
                                     binding.pager.currentItem = binding.pager.currentItem - 1
+                                    viewModel.currentCourseType.postValue(currCourse.courseType)
                                 } else {
                                     frag.setPatternPagerPrevPage()
                                 }
@@ -185,6 +185,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                                 Toast.makeText(this@LearningCourseActivity, "첫 페이지입니다.", Toast.LENGTH_SHORT).show()
                             } else {
                                 binding.pager.currentItem = binding.pager.currentItem - 1
+                                viewModel.currentCourseType.postValue(currCourse.courseType)
                             }
                         }
                     }
@@ -199,10 +200,11 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                     val pagerIndex = binding.pager.currentItem
                     val currCourse = it[pagerIndex]
                     when (currCourse.courseType) {
-                        CourseType.pattern -> {
+                        CourseType.Pattern -> {
                             (tabFragments[pagerIndex] as LCPatternFragment).let { frag ->
                                 if (frag.viewModel.isPagerLastIndex()) {
                                     binding.pager.currentItem = binding.pager.currentItem + 1
+                                    viewModel.currentCourseType.postValue(currCourse.courseType)
                                 } else {
                                     frag.setPatternPagerNextPage()
                                 }
@@ -213,6 +215,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                                 Toast.makeText(this@LearningCourseActivity, "마지막 페이지입니다.", Toast.LENGTH_SHORT).show()
                             } else {
                                 binding.pager.currentItem = binding.pager.currentItem + 1
+                                viewModel.currentCourseType.postValue(currCourse.courseType)
                             }
                         }
                     }
@@ -249,10 +252,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                     val courseDetailId = course.learningCourseDetailId
                     when (course.courseType) {
 //                        CourseType.review -> LessonReviewFragment.newInstance(selectedChapter.name)
-                        CourseType.cooking -> LCCookingFragment.newInstance(courseDetailId)
-                        CourseType.patternMap -> LCPatternMapFragment.newInstance(courseDetailId)
-                        CourseType.pattern -> LCPatternFragment.newInstance(course)
-                        CourseType.wrongNoteMap -> LCWrongNoteMapFragment.newInstance()
+                        CourseType.Cooking -> LCCookingFragment.newInstance(courseDetailId)
+                        CourseType.PatternMap -> LCPatternMapFragment.newInstance(courseDetailId)
+                        CourseType.Pattern -> LCPatternFragment.newInstance(course)
+                        CourseType.WrongNoteMap -> LCWrongNoteMapFragment.newInstance()
                         else -> null
                     }
                 }
@@ -263,14 +266,13 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
             }
 
-
             onPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
 
                 override fun onPageScrollStateChanged(state: Int) {
                     if (state == 0) {
                         viewModel.getCourseTypeByPosition(viewModel.currPagerPosition)?.let { courseType ->
                             when(courseType) {
-                                CourseType.pattern -> {
+                                CourseType.Pattern -> {
                                     binding.pager.isUserInputEnabled = false
                                 }
                                 else -> { binding.pager.isUserInputEnabled = true }
@@ -282,13 +284,22 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
             pager.registerOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
 
+            viewModel.isPriorConceptNaviSelected.observe(this@LearningCourseActivity) {
+                setCourseHeaderAnim(priorConceptDropdownIv, it)
+            }
+            viewModel.isCookingNaviSelected.observe(this@LearningCourseActivity) {
+                setCourseHeaderAnim(cookingDropdownIv, it)
+            }
+            viewModel.isPatternNaviSelected.observe(this@LearningCourseActivity) {
+                setCourseHeaderAnim(patternDropdownIv, it)
+            }
         }
     }
     private fun goCookingIfPriorConceptCourse(courseContentTable: List<SingleCourseDesc>, cookingId: Int) {
 
         val targetCookingIndex = courseContentTable.let { list ->
             list.forEachIndexed { index, singleCourseDesc ->
-                val isEqualType = singleCourseDesc.courseType == CourseType.cooking
+                val isEqualType = singleCourseDesc.courseType == CourseType.Cooking
                 val isEqualId = singleCourseDesc.learningCourseDetailId == cookingId
                     if (isEqualType && isEqualId) return@let index
                 }
@@ -300,6 +311,8 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 delay(500)
                 withContext(Dispatchers.Main) {
                     binding.pager.currentItem = targetCookingIndex
+                    viewModel.currentCourseType.postValue(CourseType.Cooking)
+
                 }
             }
         }
@@ -340,6 +353,19 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val transaction = fm.beginTransaction()
         transaction.replace(R.id.channelIoFrame, fragmentC).commitAllowingStateLoss()
     }
+    fun setCourseHeaderAnim(view: View, flag: Boolean) {
+        if (!flag && view.rotation != -60f) return
+        val startAngle = if (flag) 0f else -60f
+        val endAngle = if (flag) -60f else 0f
+
+        val rotateAnim = ObjectAnimator.ofFloat(view, "rotation", startAngle, endAngle)
+        rotateAnim.duration = 300
+        rotateAnim.start()
+
+        rotateAnim.doOnEnd {
+            view.rotation = if (flag) -60f else 0f
+        }
+    }
 
     fun showHeaderNaviView(selectedType: CourseType) {
         binding.naviFl.removeAllViews()
@@ -358,26 +384,28 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 }
             } else {
                 binding.pager.currentItem = viewModel.trimPosition(course)
+                viewModel.currentCourseType.postValue(selectedType)
             }
             viewModel.naviViewDismiss()
             binding.naviFl.removeAllViews()
         }
         roadView.setOnMapBtnClickListener(selectedType) {
             val position = when (it) {
-                CourseType.priorConceptMap -> 0
-                CourseType.patternMap -> viewModel.getPatternMapPosition()
+                CourseType.PriorConceptMap -> 0
+                CourseType.PatternMap -> viewModel.getPatternMapPosition()
                 else -> 0
             }
             viewModel.naviViewDismiss()
             binding.naviFl.removeAllViews()
             binding.pager.currentItem = position
+            viewModel.currentCourseType.postValue(selectedType)
         }
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
         ).apply {
             gravity = Gravity.TOP or Gravity.CENTER
-            if (selectedType == CourseType.priorConcept) {
+            if (selectedType == CourseType.PriorConcept) {
                 marginEnd = 600.toDp().toInt()
             }
         }
@@ -424,19 +452,21 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
     fun setPagerToCookingFirstPage() {
         binding.pager.setCurrentItem(1, true)
+        viewModel.currentCourseType.postValue(CourseType.Cooking)
     }
     fun setPagerToCookingId(cookingId: Int) {
         val position = viewModel.getPagerPositionOnCookingId(cookingId)
-//        binding.pager.currentItem = position
         binding.pager.setCurrentItem(position, false)
+        viewModel.currentCourseType.postValue(CourseType.Cooking)
     }
     fun setPagerToPatternId(patternId: Int) {
         val position = viewModel.getPagerPositionOnPatternId(patternId)
-//        binding.pager.currentItem = position
         binding.pager.setCurrentItem(position, false)
+        viewModel.currentCourseType.postValue(CourseType.Pattern)
     }
     fun setPagerToCooking() {
         binding.pager.currentItem = 1
+        viewModel.currentCourseType.postValue(CourseType.Cooking)
     }
 
     fun setPatternFragRemainingHintSize(size: Int) {
@@ -449,10 +479,12 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     fun setPagerToPatternMap() {
         val position = viewModel.getPatternMapPosition()
         binding.pager.setCurrentItem(position, false)
+        viewModel.currentCourseType.postValue(CourseType.Pattern)
     }
     fun setPagerToWrongNoteMap() {
         val position = viewModel.getWrongNoteMapPosition()
         binding.pager.setCurrentItem(position, true)
+        viewModel.currentCourseType.postValue(CourseType.WrongNoteMap)
     }
     fun setPagerUserInputEnable(enabled: Boolean) {
         binding.pager.isUserInputEnabled = enabled
@@ -500,7 +532,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         return tabLastIndex == pagerIndex
     }
     fun isCourseTypePattern(): Boolean {
-        return viewModel.getCourseTypeByPosition(viewModel.currPagerPosition) == CourseType.pattern
+        return viewModel.getCourseTypeByPosition(viewModel.currPagerPosition) == CourseType.Pattern
     }
 
     override fun onDestroy() {
@@ -626,8 +658,10 @@ fun setLayoutMarginEnd(view: View, dimen: Float) {
 }
 
 @BindingAdapter("imageview_tint")
-fun ImageView.setImageTint(@ColorInt color: Int) {
-    setColorFilter(color)
+fun ImageView.setImageTint(@ColorInt color: Int?) {
+    color?.let {
+        setColorFilter(it)
+    }
 }
 
 @BindingAdapter("layout_margin_end_dimen_on_text_length")

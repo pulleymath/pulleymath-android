@@ -26,11 +26,12 @@ class DisallowTouchEventRecyclerView : RecyclerView {
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
 
         // isBlocked가 false이면 무조건 canScroll, pointcount 2 이면 canScroll
-        verticalScrollFlag = ev?.pointerCount == 2 || !isBlocked
+//        verticalScrollFlag = ev?.pointerCount == 2 || !isBlocked
 
-        if (isBlocked) {
-            parent.requestDisallowInterceptTouchEvent(true)
-        }
+        println("asoaso isBlocked? :${isBlocked}")
+//        if (isBlocked) {
+//            parent.requestDisallowInterceptTouchEvent(true)
+//        }
         return super.dispatchTouchEvent(ev)
     }
 }

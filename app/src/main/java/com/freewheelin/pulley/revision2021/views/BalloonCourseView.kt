@@ -96,11 +96,10 @@ class BalloonCourseView(private val context: Context) : PopupWindow(context) {
                     ) // SCD에 값이 없다.
                     else -> ContextCompat.getDrawable(context, R.drawable.bg_road_view_common)
                 }
-//            text = "${course.name}"
                 text = when (course.courseType) {
-                    CourseType.priorConcept -> "복습 0${course.sequence}. ${course.name}"
-                    CourseType.cooking -> "개념 0${course.sequence}. ${course.name}"
-                    CourseType.pattern -> "유형 0${course.sequence}. ${course.name}"
+                    CourseType.PriorConcept -> "복습 0${course.sequence}. ${course.name}"
+                    CourseType.Cooking -> "개념 0${course.sequence}. ${course.name}"
+                    CourseType.Pattern -> "유형 0${course.sequence}. ${course.name}"
                     else -> {
                         "유형 0${course.sequence}. ${course.name}"
                     }
@@ -110,9 +109,9 @@ class BalloonCourseView(private val context: Context) : PopupWindow(context) {
         fun setPeakViewBias(selectedType: CourseType) {
             binding.apply {
                 val biasValue = when (selectedType) {
-                    CourseType.priorConcept -> 0.15f
-                    CourseType.cooking -> 0.5f
-                    CourseType.pattern -> 0.85f
+                    CourseType.PriorConcept -> 0.15f
+                    CourseType.Cooking -> 0.5f
+                    CourseType.Pattern -> 0.85f
                     else -> 0.5f
                 }
 

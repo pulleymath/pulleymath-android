@@ -77,7 +77,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
                         android:layout_marginTop="16dp"
-                        cookingImgResOnPicasso="@{ vm.cookingImageUrl }"
+                        cookingImgResOnPicassoDownScale="@{ vm.cookingImageUrl }"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/stepTv"/>
@@ -99,7 +99,8 @@
 
         </com.freewheelin.pulley.revision2021.views.LCCookingLeftScrollView>
 
-        <com.freewheelin.pulley.revision2021.views.DisallowTouchEventRecyclerView
+<!--        <com.freewheelin.pulley.revision2021.views.DisallowTouchEventRecyclerView-->
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rightRv"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -109,8 +110,37 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical"
             bind_cooking_list="@{vm.cookingList}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:nestedScrollingEnabled="true" />
-<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+
+        <FrameLayout
+            android:id="@+id/keyboardFl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black3c_000000"
+            android:visibility="@{ vm.showNumkeyboard ? View.VISIBLE : View.GONE }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/customKeyboardCl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center">
+
+                <com.freewheelin.pulley.revision2021.views.CookingCustomNumberKeyboard
+                    android:id="@+id/numberKeyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
         <ProgressBar
             android:id="@+id/rightViewProgress"

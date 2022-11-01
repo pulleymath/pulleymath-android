@@ -75,6 +75,7 @@
     <color name="purple_200">#acacff</color>
     <color name="purple_300">#6d6dff</color>
     <color name="purple_300_disable">#4c6d6dff</color>
+    <color name="purple_300_disable_20">#336D6DFF</color>
 
     <color name="red_100">#ffe8e8</color>
     <color name="red_200">#ffc6bc</color>

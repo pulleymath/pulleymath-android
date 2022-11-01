@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
@@ -24,15 +25,15 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
 
     val cookingList by lazy { MutableLiveData<List<CookingInfoItem>>() }
 
-    val cookingExercise0 by lazy { MutableLiveData<CookingExercise>() }
-    val cookingExercise1 by lazy { MutableLiveData<CookingExercise>(null) }
-    val cookingExercise2 by lazy { MutableLiveData<CookingExercise>(null) }
-    val cookingExercise3 by lazy { MutableLiveData<CookingExercise>(null) }
-    val cookingExercise4 by lazy { MutableLiveData<CookingExercise>(null) }
-    val cookingExercise5 by lazy { MutableLiveData<CookingExercise>(null) }
+    val currentCookingExercise by lazy { MutableLiveData<CookingExercise>() }
+    val selectedExerciseIndex by lazy { MutableLiveData<Int>() }
 
     val selectionImageUrlList by lazy { MutableLiveData<List<CookingQuizSelection>>() }
     val showSelection by lazy { MutableLiveData(false) }
+    val showNumkeyboard by lazy { MutableLiveData(false) }
+    val selectedShortQuiz by lazy { MutableLiveData<CookingQuiz>(null) }
+    var selectedItemBinding: ItemCookingQuizDetailBinding? = null
+    val showExerciseBlindView by lazy { MutableLiveData(false) }
 
     @SuppressLint("CheckResult")
     fun fetchCookingGroceries(courseId: Int) {
@@ -45,9 +46,9 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                 response.data?.let {
 
                     cookingInfo.postValue(it)
-
-                    val video = listOf(CookingInfoItem(0, it.video))
-                    val exerciseList = listOf(CookingInfoItem(1, it.exerciseGroups)).map { item ->
+                    val video = listOf(CookingInfoItem.getVideoItem(0, it.video, it.exerciseGroups))
+                    val footer = listOf(CookingInfoItem.getFooter(0))
+                    val exerciseList = listOf(CookingInfoItem.getExercise(1, it, it.exerciseGroups)).map { item ->
                         item.exerciseList?.forEach { exec ->
                             exec.exerciseQuizzes?.forEach { quiz ->
                                 val isSolved = quiz.userAnswer != null
@@ -66,36 +67,16 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                         item
                     }
 
-                    val sumList = (video + exerciseList).sortedBy { it.order }
+                    val sumList = (video + exerciseList + footer).sortedBy { it.order }
 
                     cookingList.postValue(sumList)
-                    sumList.forEach { cookingInfoItem ->
-                        if (cookingInfoItem.type == CookingInfoItem.ItemType.Exercise) {
-                            cookingInfoItem.exerciseList?.forEachIndexed { index, cookingExercise ->
-                                when (index) {
-                                    0 -> { cookingExercise0.postValue(cookingExercise) }
-                                    1 -> { cookingExercise1.postValue(cookingExercise) }
-                                    2 -> { cookingExercise2.postValue(cookingExercise) }
-                                    3 -> { cookingExercise3.postValue(cookingExercise) }
-                                    4 -> { cookingExercise4.postValue(cookingExercise) }
-                                    else -> { cookingExercise5.postValue(cookingExercise) }
-                                }
-                            }
-                        }
-                    }
-
                     cookingImageUrl.postValue(it.imageUrl)
+                    selectedExerciseIndex.postValue(0)
 
                 }
             }, { error ->
                 Log.e(javaClass.simpleName, "fetchCookingGroceries error=${error.localizedMessage}")
             })
-    }
-
-    var exercisePosition: Int = 0
-    fun setCurrentExercisePosition(position: Int) {
-        exercisePosition = position
-
     }
 
     @SuppressLint("CheckResult")
@@ -137,24 +118,4 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    fun findQuizExercise(quiz: CookingQuiz): CookingExercise? {
-        val asd = listOfNotNull(
-            cookingExercise0.value,
-            cookingExercise1.value,
-            cookingExercise2.value,
-            cookingExercise3.value,
-            cookingExercise4.value,
-        ).filter {
-            val isContained = it.exerciseQuizzes?.contains(quiz)
-            isContained == true
-        }
-        return if (asd.isNotEmpty()) asd[0] else null
-    }
-
-//    fun initImageUrlList(list: List<String>?) {
-//        val quizSelectionList = list?.mapIndexed { index, s ->
-//            CookingQuizSelection(s, index + 1)
-//        }
-//        selectionImageUrlList.postValue(quizSelectionList)
-//    }
 }

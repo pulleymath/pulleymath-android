@@ -21,7 +21,7 @@ object ConceptLearningUsageMonitor {
     var accumulatedConceptLearningTime: Long = 0
     var timer: Timer? = null
 
-    val saveDuration10Sec: Long = 10 * 1000
+    val saveDuration10Sec: Long = 5 * 1000
     var lastSaveDuration = Date()
 
     var isForeground: Boolean = true

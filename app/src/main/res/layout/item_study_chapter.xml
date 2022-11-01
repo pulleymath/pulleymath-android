@@ -7,6 +7,7 @@
         <import type="android.view.View"/>
         <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
 <!--        StudyChapterViewHolder 에서 인입 -->
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.ChapterItemClickListener"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
         <variable name="isLastItem" type="Boolean"/>
@@ -338,6 +339,7 @@
                     layout="@layout/item_large_chapter"
                     android:paddingHorizontal="10dp"
                     app:item="@{ item }"
+                    app:listener="@{ listener }"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>

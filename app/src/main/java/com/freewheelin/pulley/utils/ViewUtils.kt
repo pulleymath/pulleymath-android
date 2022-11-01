@@ -32,10 +32,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
+import android.graphics.Bitmap
+import android.net.Uri
+import java.io.File
+import java.io.OutputStream
+
 
 object ViewUtils {
     val sNextGeneratedId = AtomicInteger(1)
@@ -467,6 +471,24 @@ fun ImageView.setImageUrlPicasso(url: String) {
     Picasso.get()
         .load("${url}?time=${Date().time}")
         .into(this)
+}
+
+fun ImageView.setImageUrlPicassoDownScale(url: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+
+        val requestCreator = Picasso.get()
+            .load("${url}?time=${Date().time}")
+
+        val width = requestCreator.get().width
+        val height = requestCreator.get().height
+
+        withContext(Dispatchers.Main) {
+            requestCreator
+                .resize(if (height > 5000) 3000 else width, 0)
+                .onlyScaleDown()
+                .into(this@setImageUrlPicassoDownScale)
+        }
+    }
 }
 
 

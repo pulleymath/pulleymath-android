@@ -104,6 +104,13 @@
         <item name="android:textSize">@dimen/sp24</item>
     </style>
 
+    <style name="Cooking_Keypad_btn" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/bg_grey_f2f2f2_round</item>
+        <item name="android:textColor">@color/gray_700</item>
+        <item name="android:textSize">@dimen/sp24</item>
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+    </style>
+
     <style name="OMR_radio_button" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="colorAccent">@color/purple_ACACFF</item>
         <item name="android:colorControlNormal">#f8f8f8</item>

@@ -8,6 +8,7 @@
 
     <data>
         <import type="android.view.View" />
+        <import type="com.freewheelin.pulley.revision2021.model.CourseType"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel"/>
     </data>
 
@@ -79,7 +80,7 @@
                     android:id="@+id/headerPriorConceptCl"
                     android:layout_width="136dp"
                     android:layout_height="36dp"
-                    android:background="@{ vm.isCurrentPagePriorConcept ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_passed }"
+                    android:background="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap ? @drawable/bg_lc_header_btn_selected : vm.isPriorConceptNaviSelected ? @drawable/bg_lc_header_btn_selected_and_selected : @drawable/bg_lc_header_btn_passed }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -91,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="사전 개념"
-                        android:textColor="@{ vm.isCurrentPagePriorConcept ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap || vm.isPriorConceptNaviSelected ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/priorConceptDropdownIv"
                         app:layout_constraintStart_toStartOf="parent"
@@ -99,14 +100,16 @@
 
                     <ImageView
                         android:id="@+id/priorConceptDropdownIv"
-                        layout_margin_start_dimen="@{ vm.isCurrentPagePriorConcept ? @dimen/dp24 : @dimen/dp8 }"
+                        layout_margin_start_dimen="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap ? @dimen/dp24 : @dimen/dp8 }"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_marginEnd="12dp"
-                        android:src="@{ vm.isCurrentPagePriorConcept ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        imageview_tint="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap ? @color/purple_250 : vm.isPriorConceptNaviSelected ? @color/white : @color/gray_700 }"
+                        android:src="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+<!--                        course_header_anim="@{ vm.flagPriorConceptNavi }"-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,7 +117,7 @@
                     android:id="@+id/priorConceptToCookingBridge"
                     android:layout_width="16dp"
                     android:layout_height="1dp"
-                    android:background="@{ vm.isCurrentPagePriorConcept ? @color/gray_700 : @color/purple_250 }"
+                    android:background="@{ vm.currentCourseType == CourseType.PriorConcept || vm.currentCourseType == CourseType.PriorConceptMap ? @color/gray_700 : @color/purple_250 }"
                     app:layout_constraintBottom_toBottomOf="@+id/headerPriorConceptCl"
                     app:layout_constraintEnd_toStartOf="@+id/headerCookingCl"
                     app:layout_constraintStart_toEndOf="@+id/headerPriorConceptCl"
@@ -124,7 +127,7 @@
                     android:id="@+id/headerCookingCl"
                     android:layout_width="136dp"
                     android:layout_height="36dp"
-                    android:background="@{ vm.isCurrentPagePriorConcept ? @drawable/bg_lc_header_btn_common : vm.isCurrentPageCooking ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_passed }"
+                    android:background="@{ vm.currentCourseType.rawValue &lt; CourseType.Cooking.rawValue ? (vm.isCookingNaviSelected ? @drawable/bg_lc_header_btn_non_selected_and_selected : @drawable/bg_lc_header_btn_common) : vm.currentCourseType.rawValue > CourseType.Cooking.rawValue ? (vm.isCookingNaviSelected ? @drawable/bg_lc_header_btn_selected_and_selected : @drawable/bg_lc_header_btn_passed) : @drawable/bg_lc_header_btn_selected }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/priorConceptToCookingBridge"
                     app:layout_constraintTop_toTopOf="parent">
@@ -136,21 +139,21 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="@{ vm.headerCookingBtnText }"
-                        android:textColor="@{ vm.isCurrentPageCooking ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.currentCourseType == CourseType.Cooking || vm.isCookingNaviSelected ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cookingDropdownIv"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-                    <!--                    layout_margin_start_dimen="@{ vm.isCurrentPageCooking ? @dimen/dp32 : @dimen/dp12 }"-->
 
 
                     <ImageView
                         android:id="@+id/cookingDropdownIv"
-                        layout_margin_start_dimen="@{ vm.isCurrentPageCooking ? @dimen/dp24 : @dimen/dp8 }"
+                        layout_margin_start_dimen="@{ vm.currentCourseType == CourseType.Cooking ? @dimen/dp24 : @dimen/dp8 }"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_marginEnd="12dp"
-                        android:src="@{ vm.isCurrentPageCooking ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        imageview_tint="@{ vm.currentCourseType == CourseType.Cooking ? @color/purple_250 : vm.isCookingNaviSelected ? @color/white : @color/gray_700 }"
+                        android:src="@{ vm.currentCourseType == CourseType.Cooking ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -161,7 +164,7 @@
                     android:id="@+id/cookingPatternBridge"
                     android:layout_width="16dp"
                     android:layout_height="1dp"
-                    android:background="@{ vm.isCurrentPagePattern || vm.isCurrentPageWrongNote ? @color/purple_250 : @color/gray_700 }"
+                    android:background="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap || vm.currentCourseType == CourseType.WrongNoteMap ? @color/purple_250 : @color/gray_700 }"
                     app:layout_constraintBottom_toBottomOf="@+id/headerCookingCl"
                     app:layout_constraintEnd_toStartOf="@+id/headerPatternCl"
                     app:layout_constraintStart_toEndOf="@+id/headerCookingCl"
@@ -171,7 +174,7 @@
                     android:id="@+id/headerPatternCl"
                     android:layout_width="136dp"
                     android:layout_height="36dp"
-                    android:background="@{ vm.isCurrentPagePattern ? @drawable/bg_lc_header_btn_selected : vm.isCurrentPageWrongNote ? @drawable/bg_lc_header_btn_passed : @drawable/bg_lc_header_btn_common }"
+                    android:background="@{ vm.currentCourseType.rawValue &lt; CourseType.PatternMap.rawValue ? (vm.isPatternNaviSelected ? @drawable/bg_lc_header_btn_non_selected_and_selected : @drawable/bg_lc_header_btn_common) : vm.currentCourseType.rawValue > CourseType.Pattern.rawValue ? (vm.isPatternNaviSelected ? @drawable/bg_lc_header_btn_selected_and_selected : @drawable/bg_lc_header_btn_passed) : @drawable/bg_lc_header_btn_selected }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/cookingPatternBridge"
                     app:layout_constraintTop_toTopOf="parent">
@@ -183,8 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="@{ vm.headerPatternBtnText }"
-
-                        android:textColor="@{ vm.isCurrentPagePattern ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap || vm.isPatternNaviSelected ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/patternDropdownIv"
                         app:layout_constraintStart_toStartOf="parent"
@@ -193,14 +195,16 @@
 
                     <ImageView
                         android:id="@+id/patternDropdownIv"
-                        layout_margin_start_dimen="@{ vm.isCurrentPagePattern ? @dimen/dp24 : @dimen/dp8 }"
+                        layout_margin_start_dimen="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap ? @dimen/dp24 : @dimen/dp8 }"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_marginEnd="12dp"
-                        android:src="@{ vm.isCurrentPagePattern ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
+                        imageview_tint="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap ? @color/purple_250 : vm.isPatternNaviSelected ? @color/white : @color/gray_700 }"
+                        android:src="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap ? @drawable/icon_drop_purple : @drawable/icon_drop_gray }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+<!--                        course_header_anim="@{ vm.flagPatternNavi }"-->
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -210,7 +214,7 @@
                     android:id="@+id/cookingWrongNoteBridge"
                     android:layout_width="16dp"
                     android:layout_height="1dp"
-                    android:background="@{ vm.isCurrentPageWrongNote ? @color/purple_250 : @color/gray_700 }"
+                    android:background="@{ vm.currentCourseType == CourseType.WrongNoteMap ? @color/purple_250 : @color/gray_700 }"
                     app:layout_constraintBottom_toBottomOf="@+id/headerPatternCl"
                     app:layout_constraintEnd_toStartOf="@+id/headerWrongNoteCl"
                     app:layout_constraintStart_toEndOf="@+id/headerPatternCl"
@@ -220,7 +224,7 @@
                     android:id="@+id/headerWrongNoteCl"
                     android:layout_width="136dp"
                     android:layout_height="36dp"
-                    android:background="@{ vm.isCurrentPageWrongNote ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_common }"
+                    android:background="@{ vm.currentCourseType == CourseType.WrongNoteMap ? @drawable/bg_lc_header_btn_selected : @drawable/bg_lc_header_btn_common }"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/cookingWrongNoteBridge"
                     app:layout_constraintTop_toTopOf="parent">
@@ -231,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="오답 학습"
-                        android:textColor="@{ vm.isCurrentPageWrongNote ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.currentCourseType == CourseType.WrongNoteMap ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -246,7 +250,6 @@
                 android:layout_height="12dp"
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/bg_gray_750_round"
-                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
                 app:layout_constraintEnd_toStartOf="@id/navPrevBtn"
                 app:layout_constraintTop_toTopOf="@id/navPrevBtn" />
@@ -298,9 +301,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="122dp"
-                android:visibility="@{ vm.isCurrentPageCooking ? View.GONE : View.VISIBLE }"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+<!--            android:visibility="@{ vm.currentCourseType == CourseType.Cooking ? View.GONE : View.VISIBLE }"-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

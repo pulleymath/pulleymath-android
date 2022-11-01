@@ -34,12 +34,11 @@ import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.views.DaebakToast
 import kotlinx.coroutines.*
-import kotlin.math.abs
-
 
 class LCCookingFragment() : Fragment(),
-    CookingPencilcaseListener {
+    CookingPencilcaseListener, PlusMinusEnterKeypadListener {
     companion object {
         fun newInstance(courseId: Int) : LCCookingFragment {
             return LCCookingFragment().apply {
@@ -78,7 +77,6 @@ class LCCookingFragment() : Fragment(),
 
                 viewModel.apply {
                     cookingInfo.observe(viewLifecycleOwner) {
-
                         val chapterId = it.chapterId
                         val cookingId = it.conceptCookingId
                         cookingMemoView.setCookingMemoId(chapterId, cookingId)
@@ -97,6 +95,12 @@ class LCCookingFragment() : Fragment(),
                     viewModel.showSelection.postValue(false)
                     recoveryQuizSingleAnswer()
                 }
+                keyboardFl.setOnClickListener {
+                    viewModel.showNumkeyboard.postValue(false)
+                    viewModel.selectedShortQuiz.postValue(null)
+                    viewModel.selectedItemBinding = null
+                    binding.numberKeyboard.releaseKeyboard(null)
+                }
             }
         }
     }
@@ -104,9 +108,10 @@ class LCCookingFragment() : Fragment(),
     fun setHintImageToCooking(imageUrl: String) {
         viewModel.cookingImageUrl.postValue(imageUrl)
     }
+
     inner class CookingAdapter(): ListAdapter<CookingInfoItem, RecyclerView.ViewHolder>(DiffCallback<CookingInfoItem>()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return CookingItemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_cooking_item, parent, false))
+            return CookingItemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_cooking_right_view, parent, false))
         }
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             (holder as CookingItemHolder).bind(getItem(position), position)
@@ -115,38 +120,27 @@ class LCCookingFragment() : Fragment(),
             return position
         }
     }
-    interface CookingItemClickListener {
-        fun onItemClick(item: CookingInfoItem)
-    }
 
     val quizMemoViewList: MutableList<CookingMemoView> = mutableListOf()
-    var cookingItemBinding: ItemCookingItemBinding? = null
+
     var focusedQuizList: MutableList<CookingQuiz> = mutableListOf()
-    inner class CookingItemHolder(private val itemBinding: ItemCookingItemBinding): RecyclerView.ViewHolder(itemBinding.root),
-        CookingItemClickListener {
-        lateinit var itemType: CookingInfoItem.ItemType
-        lateinit var item: CookingInfoItem
+    inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root), CookingItemClickListener {
         var quizItemWidth = screenWidth * 0.55 - 96.toPx()
-
         fun bind(item: CookingInfoItem, position: Int) {
-            this.item = item
-
             itemBinding.apply {
                 this.item = item
-                itemType = item.type
                 vm = viewModel
                 listener = this@CookingItemHolder
                 lifecycleOwner = viewLifecycleOwner
                 setAllContainerViewGone(this)
-                setQuizWidth(itemBinding)
-
                 rightRvItemRoot.setOnClickListener {
                     (activity as LearningCourseActivity).hidePencilcasePanel()
                 }
 
+
                 when (item.type) {
                     CookingInfoItem.ItemType.Video -> {
-                        videoContainer.visibility = View.VISIBLE
+                        videoContainerCl.visibility = View.VISIBLE
 
                         webView.setOnTouchListener { view, motionEvent ->
                             (activity as LearningCourseActivity).hidePencilcasePanel()
@@ -154,57 +148,74 @@ class LCCookingFragment() : Fragment(),
                         }
 
                         addVideo(item)
-
-                    }
-                    CookingInfoItem.ItemType.Exercise -> {
-                        cookingItemBinding = itemBinding
-                        exerciseContainer.visibility = View.VISIBLE
                         item.exerciseList?.let {
                             addExerciseBtn(it)
-                            exerciseLastIndex = it.lastIndex
-                            cookingHorizontalSv.setTabIndexStatus(it.lastIndex, 0)
                         }
 
                         viewModel.apply {
-                            cookingInfo.observe(viewLifecycleOwner) {
+                            selectedExerciseIndex.observe(viewLifecycleOwner) {
 
-                                val chapterId = it.chapterId
-                                val cookingId = it.conceptCookingId
-                                quizMemoViewList.clear()
-                                listOfNotNull(
-                                    viewModel.cookingExercise0.value,
-                                    viewModel.cookingExercise1.value,
-                                    viewModel.cookingExercise2.value,
-                                    viewModel.cookingExercise3.value,
-                                    viewModel.cookingExercise4.value,
-                                ).forEachIndexed { index, cookingExercise ->
-                                    getQuizBindingOnIndex(index).apply {
-                                        cookingMemoView.setMemoSavedName(chapterId, cookingId, "cooking_quiz_${index}")
-                                        cookingMemoView.clearBitmap()
-                                        cookingMemoView.load()
-                                        quizMemoViewList.add(cookingMemoView)
+                                val selectedExercise =
+                                    cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
+                                        ?.first()
+                                        ?.exerciseList
+                                        ?.get(it)
+                                viewModel.currentCookingExercise.postValue(selectedExercise)
+
+                            }
+                            currentCookingExercise.observe(viewLifecycleOwner) {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    delay(300)
+                                    withContext(Dispatchers.Main) {
+                                        showExerciseBlindView.postValue(false)
                                     }
                                 }
-
                             }
                         }
 
+                    }
+                    CookingInfoItem.ItemType.Exercise -> {
+                        exerciseContainer.visibility = View.VISIBLE
 
-                        listOfNotNull(
-                            viewModel.cookingExercise0.value,
-                            viewModel.cookingExercise1.value,
-                            viewModel.cookingExercise2.value,
-                            viewModel.cookingExercise3.value,
-                            viewModel.cookingExercise4.value,
-                        ).forEachIndexed { index, cookingExercise ->
-                            val quizBinding = getQuizBindingOnIndex(index)
-                            setOnQuizView(quizBinding, cookingExercise)
+                        quizMemoViewList.clear()
+
+                        viewModel.apply {
+                            selectedExerciseIndex.observe(viewLifecycleOwner) { selectedIndex ->
+                                item.cookingInfo?.let {
+                                    val chapterId = it.chapterId
+                                    val cookingId = it.conceptCookingId
+                                    quizMemoViewList.clear()
+
+                                    cookingQuizzes.cookingMemoView.setMemoSavedName(
+                                        chapterId,
+                                        cookingId,
+                                        "cooking_quiz_${selectedIndex}"
+                                    )
+                                    cookingQuizzes.cookingMemoView.clearBitmap()
+                                    cookingQuizzes.cookingMemoView.load()
+                                    quizMemoViewList.add(cookingQuizzes.cookingMemoView)
+                                }
+
+                                cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
+                                    ?.first()
+                                    ?.exerciseList
+                                    ?.get(selectedIndex)
+                                    ?.let { selectedExercise ->
+                                        val quizBinding = cookingQuizzes
+                                        setOnQuizView(quizBinding, selectedExercise)
+                                    }
+                            }
                         }
                     }
-                    else -> {}
+                    CookingInfoItem.ItemType.Footer -> {
+                        footerContainer.visibility = View.VISIBLE
+
+
+                    }
                 }
             }
         }
+
         private fun addExerciseBtn(list: List<CookingExercise>) {
             val tabTitles = list.mapIndexed { index, cookingExercise -> "예제${index+1}\n${cookingExercise.name}" }
             tabTitles.forEachIndexed { index, title ->
@@ -213,6 +224,7 @@ class LCCookingFragment() : Fragment(),
                 }
 
                 exerciseBtn.setOnClickListener {
+                    viewModel.showExerciseBlindView.postValue(true)
                     (activity as LearningCourseActivity).hidePencilcasePanel()
 
                     itemBinding.quizTabHeader.children.forEach {
@@ -221,7 +233,8 @@ class LCCookingFragment() : Fragment(),
 
                     val btn = it as CookingExerciseHeaderBtn
                     btn.setStateSelected()
-                    setHorizontalSvScrollAndTabSelect(btn.index)
+
+                    viewModel.selectedExerciseIndex.postValue(index)
                 }
                 itemBinding.quizTabHeader.addView(exerciseBtn)
 
@@ -237,162 +250,11 @@ class LCCookingFragment() : Fragment(),
             }
         }
 
-        fun setQuizWidth(itemBinding: ItemCookingItemBinding) {
-            // itemWidth의 screenWidth 퍼센테이지는 1 - (leftScrollView의 width_percent)
-
-            itemBinding.apply {
-                cookingQuiz0.root.layoutParams.width = quizItemWidth.toInt()
-                cookingQuiz1.root.layoutParams.width = quizItemWidth.toInt()
-                cookingQuiz2.root.layoutParams.width = quizItemWidth.toInt()
-                cookingQuiz3.root.layoutParams.width = quizItemWidth.toInt()
-                cookingQuiz4.root.layoutParams.width = quizItemWidth.toInt()
-            }
-        }
-        private fun getQuizBindingOnIndex(index: Int): FragmentCookingQuizBinding {
-            return when (index) {
-                0 -> itemBinding.cookingQuiz0
-                1 -> itemBinding.cookingQuiz1
-                2 -> itemBinding.cookingQuiz2
-                3 -> itemBinding.cookingQuiz3
-                4 -> itemBinding.cookingQuiz4
-                else -> itemBinding.cookingQuiz0
-            }
-        }
-        private fun setOnQuizView (quizBinding: FragmentCookingQuizBinding, excs: CookingExercise) {
-            listOfNotNull(
-                excs.cookingQuiz0,
-                excs.cookingQuiz1,
-                excs.cookingQuiz2,
-                excs.cookingQuiz3,
-                excs.cookingQuiz4,
-                excs.cookingQuiz5,
-                excs.cookingQuiz6,
-                excs.cookingQuiz7,
-                excs.cookingQuiz8,
-                excs.cookingQuiz9,
-            ).forEachIndexed { index, quiz ->
-                val detailBinding = getDetailBindingOnIndex(quizBinding, index)
-                setOnDetailView(detailBinding, quiz)
-            }
-        }
-        fun getDetailBindingOnIndex(quizBinding: FragmentCookingQuizBinding, index: Int): ItemCookingQuizDetailBinding {
-            return when (index) {
-                0 -> quizBinding.quizDetail0
-                1 -> quizBinding.quizDetail1
-                2 -> quizBinding.quizDetail2
-                3 -> quizBinding.quizDetail3
-                4 -> quizBinding.quizDetail4
-                5 -> quizBinding.quizDetail5
-                6 -> quizBinding.quizDetail6
-                7 -> quizBinding.quizDetail7
-                8 -> quizBinding.quizDetail8
-                9 -> quizBinding.quizDetail9
-                else -> quizBinding.quizDetail0
-            }
-        }
-
-        private fun setOnDetailView (detailBinding: ItemCookingQuizDetailBinding, quiz: CookingQuiz) {
-            detailBinding.let {
-                it.hintBtn.setOnClickListener { view ->
-                    val exercise = viewModel.findQuizExercise(quiz)
-                    viewModel.useHint(quiz.exerciseQuizId) {
-                        exercise?.exerciseQuizzes?.forEach { it.isHintUsed.set(false) }
-                        quiz.isHintUsed.set(true)
-                        setHintImageToCooking(quiz.hintImageUrl)
-                    }
-                }
-                if (quiz.userAnswer == null) {
-                    // 풀지 않은 문제
-                    it.quizSingleAnswer.setOnClickListener { view ->
-                        quiz.afterTryAnswered.set(true)
-                        onSingleAnswerClick(quiz, view, detailBinding)
-                        focusedQuizList.add(quiz)
-                    }
-
-                    it.quizAnswerEt.setOnKeyListener { v, keyCode, event ->
-                        onAnswerEditTextChange(v, keyCode, event, it, quiz)
-                    }
-                } else {
-                    // 이미 푼 문제
-                    it.quizAnswerEt.setText(quiz.userAnswer, TextView.BufferType.EDITABLE)
-                }
-            }
-        }
-        private fun onSingleAnswerClick (quiz: CookingQuiz, sourceView: View, detailBinding: ItemCookingQuizDetailBinding) {
-            if (quiz.isAnswerEntered.get()) {
-                return
-            }
-
-            val selectionImages = quiz.sortedAnswerOptions.map { it.imageUrl }
-
-            val quizSelectionList = selectionImages.mapIndexed { index, s ->
-                CookingQuizSelection(s, index + 1, quiz, sourceView, detailBinding)
-            }
-            viewModel.selectionImageUrlList.postValue(quizSelectionList)
-            viewModel.showSelection.postValue(true)
-
-            binding.selectionImageRv.adapter = SelectionListAdapter()
-
-        }
-
-        fun onAnswerEditTextChange (
-            v: View,
-            keyCode: Int,
-            event: KeyEvent,
-            itemQuizBinding: ItemCookingQuizDetailBinding,
-            quiz: CookingQuiz
-        ): Boolean {
-            if (event.action == KeyEvent.ACTION_UP) {
-                val result = when (event.keyCode) {
-                    KeyEvent.KEYCODE_ENTER -> {
-
-                        val userAnswer = itemQuizBinding.quizAnswerEt.text.toString()
-                        if (userAnswer.isEmpty()) {
-                            (activity as LearningCourseActivity).hideKeyboard(v)
-                            true
-                        }
-                        else {
-                            viewModel.scoringCookingQuiz(quiz, userAnswer) { isCorrect ->
-//                                CoroutineScope(Dispatchers.IO).launch {
-//                                    withContext(Dispatchers.Main) {
-
-                                        (activity as LearningCourseActivity).hideKeyboard(v)
-//                                quiz.isAnswerEntered.set(true)
-
-                                        itemQuizBinding.apply {
-                                            quizAnswerEt.isEnabled = false
-                                            quizAnswerEt.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_5)
-//                                          quizAnswerEt.hintTextColors
-//                                          rightWrongIv.setImageResource(if (isCorrect) R.drawable.ic_o_right_answer else R.drawable.ic_x_wrong_answer)
-                                            wrongIv.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
-                                            rightIv.visibility = if (isCorrect) View.VISIBLE else View.INVISIBLE
-                                            shortAnswerCl.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
-                                        }
-//                                    }
-//                                }
-
-
-                            }
-
-                            true
-                        }
-                    }
-                    else -> { false }
-                }
-                return result
-            }
-            return false
-        }
-
-        inner class JsToAndroid : Any() {
-            @JavascriptInterface
-            fun clickListener(idOrClass: String) {
-                val largeRedPlayButton = "ytp-large-play-button ytp-button ytp-large-play-button-red-bg"
-                val thumbnailImage = "ytp-cued-thumbnail-overlay-image"
-                if (idOrClass == largeRedPlayButton || idOrClass == thumbnailImage) {
-                    val cookingId = viewModel.cookingInfo.value?.conceptCookingId
-                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "풀리개념학습", "유튜브", "$cookingId")
-                }
+        private fun setAllContainerViewGone(view: ItemCookingRightViewBinding) {
+            view.apply {
+                videoContainerCl.visibility = View.GONE
+                exerciseContainer.visibility = View.GONE
+                footerContainer.visibility = View.GONE
             }
         }
         fun addVideo(item: CookingInfoItem) {
@@ -438,7 +300,19 @@ class LCCookingFragment() : Fragment(),
                     allowFileAccess = true
                 }
                 val videoUrl = makeYoutubeUrl(item)
+                println("YOUTUBE_URL, :${videoUrl}")
                 webView.loadUrl(videoUrl)
+            }
+        }
+        inner class JsToAndroid : Any() {
+            @JavascriptInterface
+            fun clickListener(idOrClass: String) {
+                val largeRedPlayButton = "ytp-large-play-button ytp-button ytp-large-play-button-red-bg"
+                val thumbnailImage = "ytp-cued-thumbnail-overlay-image"
+                if (idOrClass == largeRedPlayButton || idOrClass == thumbnailImage) {
+                    val cookingId = viewModel.cookingInfo.value?.conceptCookingId
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "풀리개념학습", "유튜브", "conceptCookingId_$cookingId")
+                }
             }
         }
         private fun makeYoutubeUrl(item: CookingInfoItem): String {
@@ -447,51 +321,106 @@ class LCCookingFragment() : Fragment(),
             val endTimeQuery = if(item.video.endTime == null) "" else "&end=${item.video.endTime}"
             return "https://www.youtube.com/embed/${videoUUID}?${startTimeQuery}${endTimeQuery}"
         }
-
-        private fun setAllContainerViewGone(view: ItemCookingItemBinding) {
-            view.apply {
-                videoContainer.visibility = View.GONE
-                exerciseContainer.visibility = View.GONE
+        private fun setOnQuizView (quizBinding: FragmentCookingQuizBinding, excs: CookingExercise) {
+            listOfNotNull(
+                excs.cookingQuiz0,
+                excs.cookingQuiz1,
+                excs.cookingQuiz2,
+                excs.cookingQuiz3,
+                excs.cookingQuiz4,
+                excs.cookingQuiz5,
+                excs.cookingQuiz6,
+                excs.cookingQuiz7,
+                excs.cookingQuiz8,
+                excs.cookingQuiz9,
+            ).forEachIndexed { index, quiz ->
+                val detailBinding = getDetailBindingOnIndex(quizBinding, index)
+                setOnDetailView(detailBinding, quiz)
             }
+        }
+        fun getDetailBindingOnIndex(quizBinding: FragmentCookingQuizBinding, index: Int): ItemCookingQuizDetailBinding {
+            return when (index) {
+                0 -> quizBinding.quizDetail0
+                1 -> quizBinding.quizDetail1
+                2 -> quizBinding.quizDetail2
+                3 -> quizBinding.quizDetail3
+                4 -> quizBinding.quizDetail4
+                5 -> quizBinding.quizDetail5
+                6 -> quizBinding.quizDetail6
+                7 -> quizBinding.quizDetail7
+                8 -> quizBinding.quizDetail8
+                9 -> quizBinding.quizDetail9
+                else -> quizBinding.quizDetail0
+            }
+        }
+
+        private fun setOnDetailView (detailBinding: ItemCookingQuizDetailBinding, quiz: CookingQuiz) {
+            detailBinding.let {
+                it.hintBtn.setOnClickListener(null)
+                it.hintBtn.setOnClickListener { view ->
+                    val exercise = viewModel.currentCookingExercise.value
+                    viewModel.useHint(quiz.exerciseQuizId) {
+                        exercise?.exerciseQuizzes?.forEach { it.isHintUsed.set(false) }
+                        quiz.isHintUsed.set(true)
+                        setHintImageToCooking(quiz.hintImageUrl)
+                    }
+                }
+
+                if (quiz.userAnswer == null) {
+                    // 풀지 않은 문제
+                    it.quizSingleAnswer.setOnClickListener(null)
+                    it.quizSingleAnswer.isEnabled = true
+                    it.quizAnswerBtn.isEnabled = true
+
+                    it.quizSingleAnswer.setOnClickListener { view ->
+                        quiz.afterTryAnswered.set(true)
+                        onSingleAnswerClick(quiz, view, detailBinding)
+                        focusedQuizList.add(quiz)
+                    }
+
+                    it.quizAnswerBtn.text = "정답 입력"
+                    it.quizAnswerBtn.setOnClickListener(null)
+                    it.quizAnswerBtn.setOnClickListener { v ->
+                        viewModel.showNumkeyboard.postValue(true)
+                        viewModel.selectedShortQuiz.postValue(quiz)
+                        viewModel.selectedItemBinding = it
+                        binding.numberKeyboard.listener = this@LCCookingFragment
+                    }
+                } else {
+                    // 이미 푼 문제
+                    it.quizSingleAnswer.setOnClickListener(null)
+                    it.quizAnswerBtn.setOnClickListener(null)
+
+                    it.quizAnswerBtn.text = quiz.userAnswer
+                }
+            }
+        }
+        private fun onSingleAnswerClick (quiz: CookingQuiz, sourceView: View, detailBinding: ItemCookingQuizDetailBinding) {
+            if (quiz.isAnswerEntered.get()) {
+                return
+            }
+
+            val selectionImages = quiz.sortedAnswerOptions.map { it.imageUrl }
+
+            val quizSelectionList = selectionImages.mapIndexed { index, s ->
+                CookingQuizSelection(s, index + 1, quiz, sourceView, detailBinding)
+            }
+            viewModel.selectionImageUrlList.postValue(quizSelectionList)
+            viewModel.showSelection.postValue(true)
+
+            binding.selectionImageRv.adapter = SelectionListAdapter()
+
         }
 
         override fun onItemClick(item: CookingInfoItem) {
-            when (item.type) {
-                CookingInfoItem.ItemType.Video -> {}
-                CookingInfoItem.ItemType.Exercise -> {}
-            }
-        }
 
-        var prevTabPosition = 0
-        var exerciseLastIndex = 0
-        var prevXPosition: Double = 0.0
-
-        fun setHorizontalSvScrollAndTabSelect(targetPosition: Int) {
-            prevTabPosition = targetPosition
-            val positionScrollX = quizItemWidth * targetPosition
-            itemBinding.cookingHorizontalSv.setTabIndexStatus(exerciseLastIndex, targetPosition)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(100)
-                withContext(Dispatchers.Main) {
-                    itemBinding.cookingHorizontalSv.smoothScrollTo(positionScrollX.toInt(), 0)
-                    prevXPosition = positionScrollX
-                }
-            }
-        }
-        fun getNewTabPosition(): Int {
-            itemBinding.cookingHorizontalSv.apply {
-                val isPageOverThreshold = abs(prevXPosition - scrollNewX) > 150
-                val changeAmount = prevXPosition - scrollNewX
-                val isRightSwipe = changeAmount < 0
-                return when {
-                    !isPageOverThreshold -> prevTabPosition
-                    isRightSwipe -> prevTabPosition + 1
-                    else -> prevTabPosition - 1
-                }
-            }
         }
     }
+
+    interface CookingItemClickListener {
+        fun onItemClick(item: CookingInfoItem)
+    }
+
     inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
         DiffCallback<CookingQuizSelection>()
     ) {
@@ -515,30 +444,25 @@ class LCCookingFragment() : Fragment(),
         }
 
         override fun onItemClick(selectedContent: CookingQuizSelection) {
+
             val detailBinding = selectedContent.binding
             val userAnswer = "${selectedContent.seq}"
             val quiz = selectedContent.parentQuiz
+            val selectedImageUrl = selectedContent.imageUrl
             viewModel.scoringCookingQuiz(quiz, userAnswer) { isCorrect ->
 
                 detailBinding.apply {
-
-                    // 이 아래부분을 binding을 INVISIBLE이 아닌 GONE을 사용하면 scrollview가 줄어드는 경험을 할 수 있을것이다.
-                    // binding 이 문제인지는 아직 잘 모르겠다. 221019
-                    singleAnswerCl.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
                     quizSingleAnswer.text = ""
                     quizSingleAnswer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_5)
                     quizSingleAnswer.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_300))
-                    wrongIv.visibility = if (isCorrect) View.INVISIBLE else View.VISIBLE
-                    rightIv.visibility = if (isCorrect) View.VISIBLE else View.INVISIBLE
+                    quizSingleAnswer.isEnabled = false
 
-                    when(selectedContent.seq) {
-                        1 -> selectedAnswerIv1.visibility = View.VISIBLE
-                        2 -> selectedAnswerIv2.visibility = View.VISIBLE
-                        3 -> selectedAnswerIv3.visibility = View.VISIBLE
-                        4 -> selectedAnswerIv4.visibility = View.VISIBLE
-                        5 -> selectedAnswerIv5.visibility = View.VISIBLE
-                        else -> {}
-                    }
+                    quiz.isAnswerEntered.set(true)
+                    val isCorrectAnswer = quiz.answer == userAnswer
+                    quiz.isCorrectAnswer.set(isCorrectAnswer)
+                    quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
+
+                    focusedQuizList.clear()
                 }
             }
 
@@ -602,7 +526,7 @@ class LCCookingFragment() : Fragment(),
     override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
         val isBlocked = type != null
         binding.leftScrollView.isBlock = isBlocked
-        binding.rightRv.isBlocked = isBlocked
+//        binding.rightRv.isBlocked = isBlocked
 
         binding.cookingMemoView.isBlocked = isBlocked
         quizMemoViewList.forEach { it.isBlocked = isBlocked }
@@ -672,6 +596,28 @@ class LCCookingFragment() : Fragment(),
                 ViewGroup.LayoutParams(-1, -1)
             )
             activity.window.decorView.systemUiVisibility = 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+    }
+
+    override fun onEnterBtnClicked(button: Button, answer: String) {
+        if (answer.isEmpty()) {
+            DaebakToast.show(requireContext(), "값이 입력되지 않았습니다.")
+            viewModel.showNumkeyboard.postValue(false)
+        } else {
+            val quiz = viewModel.selectedShortQuiz.value ?: return
+
+            viewModel.scoringCookingQuiz(quiz, answer) { isCorrect ->
+                viewModel.showNumkeyboard.postValue(false)
+                viewModel.selectedItemBinding?.apply {
+
+                    quizAnswerBtn.text = answer
+                    quizAnswerBtn.isEnabled = false
+                    quiz.isAnswerEntered.set(true)
+                    val isCorrectAnswer = quiz.answer == answer
+                    quiz.isCorrectAnswer.set(isCorrectAnswer)
+                    binding.numberKeyboard.releaseKeyboard(null)
+                }
+            }
         }
     }
 }

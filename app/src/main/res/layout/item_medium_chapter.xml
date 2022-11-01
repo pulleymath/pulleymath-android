@@ -27,20 +27,95 @@
             android:textColor="@color/blue_black_200"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
-<!--        android:text="@{ item.mediumTitle }"-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/smallChapterRv"
+        <HorizontalScrollView
+            android:id="@+id/smallSv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            bind_small_chapter="@{ item.children }"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             app:layout_constraintTop_toBottomOf="@id/mediumChapterTitleTv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/svRootLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/smallChapter1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ item.child1 == null ? View.GONE : View.VISIBLE }"
+                    app:item="@{ item.child1 }"
+                    app:listener="@{ listener }"
+                    app:isNextItemExist="@{ item.child1.isNextItemExist(item) }"
+                    app:partIndex="@{ item.getItemPosition(parent) }"
+                    layout="@layout/item_small_chapter"/>
+
+                <include
+                    android:id="@+id/smallChapter2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ item.child2 == null ? View.GONE : View.VISIBLE }"
+                    app:item="@{ item.child2 }"
+                    app:listener="@{ listener }"
+                    app:isNextItemExist="@{ item.child2.isNextItemExist(item) }"
+                    app:partIndex="@{ item.getItemPosition(parent) }"
+                    layout="@layout/item_small_chapter"/>
+
+                <include
+                    android:id="@+id/smallChapter3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ item.child3 == null ? View.GONE : View.VISIBLE }"
+                    app:item="@{ item.child3 }"
+                    app:listener="@{ listener }"
+                    app:isNextItemExist="@{ item.child3.isNextItemExist(item) }"
+                    app:partIndex="@{ item.getItemPosition(parent) }"
+                    layout="@layout/item_small_chapter"/>
+
+                <include
+                    android:id="@+id/smallChapter4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ item.child4 == null ? View.GONE : View.VISIBLE }"
+                    app:item="@{ item.child4 }"
+                    app:listener="@{ listener }"
+                    app:isNextItemExist="@{ item.child4.isNextItemExist(item) }"
+                    app:partIndex="@{ item.getItemPosition(parent) }"
+                    layout="@layout/item_small_chapter"/>
+
+                <include
+                    android:id="@+id/smallChapter5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ item.child5 == null ? View.GONE : View.VISIBLE }"
+                    app:item="@{ item.child5 }"
+                    app:listener="@{ listener }"
+                    app:isNextItemExist="@{ item.child5.isNextItemExist(item) }"
+                    app:partIndex="@{ item.getItemPosition(parent) }"
+                    layout="@layout/item_small_chapter"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/smallChapterRv"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            bind_small_chapter="@{ item.children }"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/mediumChapterTitleTv"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

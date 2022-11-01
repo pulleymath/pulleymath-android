@@ -46,9 +46,9 @@ class BalloonCourseRoadView: ConstraintLayout {
     fun setOnMapBtnClickListener(selectedType: CourseType, callback: (CourseType) -> Unit) {
         binding.goMapBtn.setOnClickListener {
             val selectedMap = when (selectedType) {
-                CourseType.priorConcept -> CourseType.priorConceptMap
-                CourseType.pattern -> CourseType.patternMap
-                else -> CourseType.priorConceptMap
+                CourseType.PriorConcept -> CourseType.PriorConceptMap
+                CourseType.Pattern -> CourseType.PatternMap
+                else -> CourseType.PriorConceptMap
             }
             callback(selectedMap)
         }
@@ -64,9 +64,9 @@ class BalloonCourseRoadView: ConstraintLayout {
             }
 
             binding.contentTv.text = when (course.courseType) {
-                CourseType.priorConcept -> "${course.name}"
-                CourseType.cooking -> "개념 0${course.sequence}. ${course.name}"
-                CourseType.pattern -> "유형 0${course.sequence}. ${course.name}"
+                CourseType.PriorConcept -> "${course.name}"
+                CourseType.Cooking -> "개념 0${course.sequence}. ${course.name}"
+                CourseType.Pattern -> "유형 0${course.sequence}. ${course.name}"
                 else -> { "유형 0${course.sequence}. ${course.name}" }
             }
             binding.arrowIv.visibility = if (isCurrentCourse) View.GONE else View.VISIBLE
@@ -76,9 +76,9 @@ class BalloonCourseRoadView: ConstraintLayout {
         binding.apply {
             courseType = selectedType
             val biasValue = when (selectedType) {
-                CourseType.priorConcept -> 0.15f
-                CourseType.cooking -> 0.3f
-                CourseType.pattern -> 0.7f
+                CourseType.PriorConcept -> 0.15f
+                CourseType.Cooking -> 0.3f
+                CourseType.Pattern -> 0.7f
                 else -> 0.5f
             }
 
@@ -105,8 +105,8 @@ class BalloonCourseRoadView: ConstraintLayout {
     }
     fun getXOffset(selectedType: CourseType): Int {
         return when (selectedType) {
-            CourseType.cooking -> -50
-            CourseType.pattern -> -188
+            CourseType.Cooking -> -50
+            CourseType.Pattern -> -188
 //            CourseType.pattern -> -468
             else -> 0
         }

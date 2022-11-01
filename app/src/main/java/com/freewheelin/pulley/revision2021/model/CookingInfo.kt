@@ -16,8 +16,6 @@ class CookingInfo {
     lateinit var video: Video
     lateinit var exerciseGroups: List<CookingExercise>
 
-
-
     inner class Video {
         var url: String = ""
         var uuid: String = ""
@@ -216,43 +214,74 @@ class CookingInfoItem: BaseDiffItem, Serializable {
     enum class ItemType {
         Video,
         Exercise,
-//        QuizHint,
+        Footer
     }
 
     var type: ItemType = ItemType.Video
     var id: Int = 0
     var cookingImageUrl: String? = null
-//    var videoUrl: String? = null // 풀리로 넘어오면서 변경된 값
     lateinit var video: CookingInfo.Video
-
-    val youtubeKey: String
-        get() {
-            return video.uuid
-        }
-    val youtubeStartSecond: Int
-        get() {
-            return if (video.startTime == null) 0 else video.startTime!!.toInt()
-        }
 
     // exercise
     var exerciseList: List<CookingExercise>? = null
 
-    // Video
-    constructor(id: Int, video: CookingInfo.Video) {
-        this.id = id
-        this.type = ItemType.Video
-        this.video = video
-        order = "A"
-    }
+    var quiz: CookingQuiz? = null
+    var cookingInfo: CookingInfo? = null
 
     var order: String = ""
-    constructor(id: Int, exerciseList: List<CookingExercise>) {
-        this.id = id
-        this.type = ItemType.Exercise
-        this.exerciseList = exerciseList
-        order = "B"
-    }
 
+    companion object {
+        fun getVideoItem(id: Int, video: CookingInfo.Video, exerciseList: List<CookingExercise>): CookingInfoItem {
+            return CookingInfoItem().apply {
+                this.id = id
+                this.type = ItemType.Video
+                this.video = video
+                this.exerciseList = exerciseList
+                order = "A"
+            }
+        }
+
+        fun getExerciseItem(id: Int, quiz: CookingQuiz): CookingInfoItem {
+            return CookingInfoItem().apply {
+                this.id = id
+                this.type = ItemType.Exercise
+
+                val isSolved = quiz.userAnswer != null
+                val isCorrectAnswer = quiz.userAnswer == quiz.answer
+                quiz.afterTryAnswered.set(isSolved)
+                quiz.isAnswerEntered.set(isSolved)
+                quiz.isCorrectAnswer.set(isCorrectAnswer)
+
+                // TODO 이거 필요함?
+                if (quiz.format == QuizFormat.Single) {
+                    quiz.userAnswer?.toInt()?.let { position ->
+                        val selectedImageUrl = quiz.sortedAnswerOptions[position - 1].imageUrl
+                        quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
+                    }
+                }
+
+                this.quiz = quiz
+                order = "D${quiz.exerciseQuizId}"
+            }
+        }
+        fun getExercise(id: Int, cookingInfo: CookingInfo, exerciseList: List<CookingExercise>): CookingInfoItem {
+            return CookingInfoItem().apply {
+                this.id = id
+                this.type = ItemType.Exercise
+                this.exerciseList = exerciseList
+                this.cookingInfo = cookingInfo
+
+                order = "B"
+            }
+        }
+        fun getFooter(id: Int): CookingInfoItem {
+            return CookingInfoItem().apply {
+                this.id = id
+                this.type = ItemType.Footer
+                order = "C"
+            }
+        }
+     }
 }
 
 class CookingQuizSelection: BaseDiffItem, Serializable {

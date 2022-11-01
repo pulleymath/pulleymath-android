@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.BaseActivity
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.databinding.ActivityStudyReportBinding
@@ -128,6 +129,7 @@ class StudyReportActivity : BaseActivity() {
     }
 
     fun moveToMain() {
+        MyApplication.firstLaunchGoConceptFlag = false
         val intent = LearningTabActivity.getIntent(this, true, true)
         startActivity(intent)
         finishAffinity()
