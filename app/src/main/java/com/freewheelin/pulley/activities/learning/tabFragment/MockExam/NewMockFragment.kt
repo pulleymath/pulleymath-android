@@ -260,6 +260,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
         override fun onBindViewHolder(holder: MockListHolder, position: Int) {
             val tests = filteredMockList ?: examList
             val test = tests!![position]
+            holder.set(test)
 
             holder.testBtn.setOnClickListener {
                 if (holder.testBtn.isEnableUI()) {
@@ -277,7 +278,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
                     }
                 }
             }
-            holder.set(test)
 
             if (tests.last() == test)
                 holder.setLastHolderUI()

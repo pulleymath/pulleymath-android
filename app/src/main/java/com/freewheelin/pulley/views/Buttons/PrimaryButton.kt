@@ -263,7 +263,7 @@ open class PrimaryButton: ConstraintLayout {
                 if(hasPulleyPlus)
                     button.setOnClickListener(listener)
                 else
-                    button.setOnClickListener{
+                    button.setOnClickListener {
                         DialogUtils.confirmHasPulleyPlus(context) {
                             PulleyPlusPriceDialog(context).show()
                         }
