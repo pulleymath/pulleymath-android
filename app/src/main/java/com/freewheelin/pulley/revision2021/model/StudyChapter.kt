@@ -1,12 +1,16 @@
 package com.freewheelin.pulley.revision2021.model
 
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
+import com.freewheelin.pulley.utils.Preferences
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
 class StudyChapter: BaseDiffItem, Serializable {
     companion object {
+        val TUTORIAL_SEQUENCE = -999
         fun createHeader() = StudyChapter().apply {
             id = -1
             name = ""
@@ -18,6 +22,32 @@ class StudyChapter: BaseDiffItem, Serializable {
             name = ""
             sequence = -2
             children = listOf()
+        }
+        fun createTutorial() = StudyChapter().apply {
+            id = -4
+            name = ""
+            sequence = TUTORIAL_SEQUENCE
+            parentSequence = -1
+            isParentChapterLast = true
+            children = listOf(createTutorialChild())
+        }
+        fun createTutorialChild() = StudyChapter().apply {
+            id = -5
+            name = "개념학습 튜토리얼"
+            sequence = TUTORIAL_SEQUENCE
+            progress = Progress().apply {
+                val tutorialPassed = Preferences.isConceptLearningTutorialPassed.get()
+
+                exercise = Exercise().apply {
+                    totalQuizCount = 1
+                    userSolvedCount = if (tutorialPassed) 1 else 0
+                }
+                pattern = Pattern().apply {
+                    totalQuizCount = 1
+                    userSolvedCount = if (tutorialPassed) 1 else 0
+                    userWrongCount = 0
+                }
+            }
         }
     }
     override fun getId(): String {
@@ -31,41 +61,12 @@ class StudyChapter: BaseDiffItem, Serializable {
     var lastStudiedAt: String? = null
     var children: List<StudyChapter> = listOf()
 
-    val child1: StudyChapter?
-        get() {
-            children.let {
-                if (it.isNotEmpty()) return it[0]
-            }
-            return null
-        }
-    val child2: StudyChapter?
-        get() {
-            children.let {
-                if (it.size > 1) return it[1]
-            }
-            return null
-        }
-    val child3: StudyChapter?
-        get() {
-            children.let {
-                if (it.size > 2) return it[2]
-            }
-            return null
-        }
-    val child4: StudyChapter?
-        get() {
-            children.let {
-                if (it.size > 3) return it[3]
-            }
-            return null
-        }
-    val child5: StudyChapter?
-        get() {
-            children.let {
-                if (it.size > 4) return it[4]
-            }
-            return null
-        }
+    var parentName: String = ""
+    var isFirstChapter: Boolean = false
+    var isLastChapter: Boolean = false
+    var hasNextItem: Boolean = false
+    var isParentChapterLast: Boolean = false
+    var parentSequence: Int = 0
 
     val lastStudiedFormatting: String
         get() {
@@ -79,24 +80,20 @@ class StudyChapter: BaseDiffItem, Serializable {
 
     val largeTitle: String
         get() {
-            val seq =  when (sequence) {
+            val seq =  when (parentSequence) {
                 1 -> { "Ⅰ" }
                 2 -> { "Ⅱ" }
                 3 -> { "Ⅲ" }
-                else -> { "Ⅰ" }
+                else -> { "" }
             }
-            return "$seq. ${name}"
+            return "$seq. ${parentName}"
         }
 
-    val isHeader: Boolean
+    val middleTitle: String
         get() {
-            return id == -1
+            return if (sequence < 0) ""
+                else "$sequence. $name"
         }
-    val isFooter: Boolean
-        get() {
-            return id == -2
-        }
-
     val isChapterDone: Boolean
         get() {
             progress?.let {
@@ -117,13 +114,6 @@ class StudyChapter: BaseDiffItem, Serializable {
             return 3
         }
 
-    val exerciseProgressText: String
-        get() {
-            progress?.let {
-                return "${it.exercise.userSolvedCount}/${it.exercise.totalQuizCount}"
-            }
-            return "0/0"
-        }
     val exerciseSolvedText: String
         get() {
             progress?.let {
@@ -144,14 +134,6 @@ class StudyChapter: BaseDiffItem, Serializable {
                 return it.exercise.progressRate
             }
             return 0.0
-        }
-
-    val patternProgressText: String
-        get() {
-            progress?.let {
-                return "${it.pattern.userSolvedCount}/${it.pattern.totalQuizCount}"
-            }
-            return "0/0"
         }
 
     val patternSolvedText: String
@@ -187,27 +169,10 @@ class StudyChapter: BaseDiffItem, Serializable {
     fun isChildExist(index: Int): Boolean {
         return children.size > index
     }
-
-    fun isNextItemExist(parent: StudyChapter): Boolean {
+    fun setNextItemExist(parent: StudyChapter) {
         val brotherLastIndex = parent.children.lastIndex
         val itemPosition = parent.children.indexOf(this)
-        return brotherLastIndex - itemPosition > 0
-    }
-
-    var isNextItemExt: Boolean = false
-    fun setNextItemExist(parent: StudyChapter?) {
-        if (parent != null) {
-            val brotherLastIndex = parent.children.lastIndex
-            val itemPosition = parent.children.indexOf(this)
-            isNextItemExt = brotherLastIndex - itemPosition > 0
-        }
-        children.forEach {
-            it.setNextItemExist(this)
-        }
-
-    }
-    fun getItemPosition(parent: StudyChapter): Int {
-        return parent.children.indexOf(this) + 1
+        hasNextItem = brotherLastIndex - itemPosition > 0
     }
 
     inner class Progress: Serializable {
@@ -232,7 +197,6 @@ class StudyChapter: BaseDiffItem, Serializable {
         var totalQuizCount: Int = -1
         var userSolvedCount: Int = -2
         var userWrongCount: Int = -3
-//        lateinit var correctRate: CorrectRate
 
         val isDone: Boolean
             get() {

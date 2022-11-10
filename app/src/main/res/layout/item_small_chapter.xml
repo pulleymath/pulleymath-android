@@ -6,9 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
-        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.ChapterItemClickListener"/>
+<!--        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.ChapterItemClickListener"/>-->
         <variable name="isNextItemExist" type="Boolean"/>
-        <variable name="partIndex" type="Integer"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,10 +20,10 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:focusable="true"
-            android:onClick="@{ () -> listener.onItemClick(item, partIndex) }"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
+<!--            android:onClick="@{ () -> listener.onItemClick(item, 0) }"-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rootCl"
@@ -57,7 +56,6 @@
                         android:lineHeight="20dp"
                         android:textColor="@color/blue_black_200"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="@{ item.name }"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -68,20 +66,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="예제"
-                        android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_200 }"
                         app:layout_constraintTop_toBottomOf="@+id/smallChapterTitleTv"
                         app:layout_constraintStart_toStartOf="parent"/>
+<!--                        android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_200 }"-->
 
-    <!--                    android:layout_marginEnd="59dp"-->
                     <ImageView
                         android:id="@+id/backgroundExerciseProgressBarIv"
                         android:layout_width="170dp"
                         android:layout_height="10dp"
                         android:src="@drawable/bg_progress_purple_100"
                         android:layout_marginStart="12dp"
-                        layout_margin_end_dimen_on_text_length="@{ item.progressTextLength }"
                         app:layout_constraintHorizontal_bias="0"
-
                         app:layout_constraintTop_toTopOf="@+id/exerciseTv"
                         app:layout_constraintStart_toEndOf="@+id/exerciseTv"
                         app:layout_constraintBottom_toBottomOf="@+id/exerciseTv"
@@ -89,56 +84,53 @@
 
                     <ImageView
                         android:id="@+id/exerciseProgressBarIv"
-                        app:progress_layout_width="@{ item.exerciseProgressRate }"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:visibility="@{ item.exerciseProgressRate == 0 ? View.GONE : View.VISIBLE}"
-                        android:src="@{ item.progress.exercise.isDone ? @drawable/bg_progress_purple_200_opa_50 : @drawable/bg_progress_purple_200 }"
                         app:layout_constraintTop_toTopOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintStart_toStartOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/backgroundExerciseProgressBarIv"
                         />
+<!--                        app:progress_layout_width="@{ item.exerciseProgressRate }"-->
+<!--                        android:visibility="@{ item.exerciseProgressRate == 0 ? View.GONE : View.VISIBLE}"-->
+<!--                        android:src="@{ item.progress.exercise.isDone ? @drawable/bg_progress_purple_200_opa_50 : @drawable/bg_progress_purple_200 }"-->
 
                     <TextView
                         android:id="@+id/exerciseSolvedTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.exerciseSolvedText }"
-                        android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_200 }"
                         app:layout_constraintTop_toTopOf="@+id/exerciseTotalTv"
                         app:layout_constraintBottom_toBottomOf="@+id/exerciseTotalTv"
                         app:layout_constraintEnd_toStartOf="@+id/exerciseTotalTv"/>
+<!--                    android:text="@{ item.exerciseSolvedText }"-->
+<!--                    android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_200 }"-->
                     <TextView
                         android:id="@+id/exerciseTotalTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.exerciseTotalText }"
-                        android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_gray_300 }"
                         app:layout_constraintStart_toEndOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintTop_toTopOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1"
                         />
-    <!--                    android:layout_marginStart="10dp"-->
+<!--                        android:text="@{ item.exerciseTotalText }"-->
+<!--                        android:textColor="@{ item.progress.exercise.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.exercise.isDone ? @color/purple_200_opa_50 : @color/purple_gray_300 }"-->
                     <TextView
                         android:id="@+id/patternTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="유형"
-                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_250 }"
                         android:layout_marginTop="12dp"
                         app:layout_constraintTop_toBottomOf="@+id/backgroundExerciseProgressBarIv"
                         app:layout_constraintStart_toStartOf="parent"/>
+<!--                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_250 }"-->
 
-    <!--                    android:layout_marginEnd="59dp"-->
                     <ImageView
                         android:id="@+id/backgroundPatternProgressBarIv"
                         android:layout_width="170dp"
                         android:layout_height="10dp"
                         android:src="@drawable/bg_progress_purple_100"
                         android:layout_marginStart="12dp"
-                        layout_margin_end_dimen_on_text_length="@{ item.progressTextLength }"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintTop_toTopOf="@+id/patternTv"
                         app:layout_constraintStart_toEndOf="@+id/patternTv"
@@ -147,90 +139,91 @@
 
                     <ImageView
                         android:id="@+id/patternWrongProgressBarIv"
-                        app:progress_layout_width="@{ item.patternWrongProgressRate }"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:visibility="@{ item.patternWrongProgressRate == 0 ? View.GONE : View.VISIBLE}"
                         android:src="@drawable/bg_progress_red_250"
                         app:layout_constraintTop_toTopOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintStart_toStartOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/backgroundPatternProgressBarIv"
                         />
+<!--                        app:progress_layout_width="@{ item.patternWrongProgressRate }"-->
+<!--                        android:visibility="@{ item.patternWrongProgressRate == 0 ? View.GONE : View.VISIBLE}"-->
 
                     <ImageView
                         android:id="@+id/patternCorrectProgressBarIv"
-                        app:progress_layout_width="@{ item.patternCorrectProgressRate }"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:visibility="@{ item.patternCorrectProgressRate == 0 ? View.GONE : View.VISIBLE}"
-                        android:src="@{ item.progress.pattern.isDone ? @drawable/bg_progress_purple_250_opa_50 : item.progress.pattern.userWrongCount != 0 ? @drawable/bg_progress_purple_250_left_corner : @drawable/bg_progress_purple_250 }"
                         app:layout_constraintTop_toTopOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintStart_toStartOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/backgroundPatternProgressBarIv"
                         />
+<!--                        app:progress_layout_width="@{ item.patternCorrectProgressRate }"-->
+<!--                        android:visibility="@{ item.patternCorrectProgressRate == 0 ? View.GONE : View.VISIBLE}"-->
+<!--                        android:src="@{ item.progress.pattern.isDone ? @drawable/bg_progress_purple_250_opa_50 : item.progress.pattern.userWrongCount != 0 ? @drawable/bg_progress_purple_250_left_corner : @drawable/bg_progress_purple_250 }"-->
 
                     <View
+                        android:id="@+id/whiteBarView"
                         android:layout_width="2dp"
                         android:layout_height="0dp"
-                        android:visibility="@{ item.progress.pattern.userWrongCount == 0 ? View.GONE : View.VISIBLE }"
                         android:background="@color/white"
                         app:layout_constraintTop_toTopOf="@+id/patternCorrectProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/patternCorrectProgressBarIv"
                         app:layout_constraintEnd_toEndOf="@+id/patternCorrectProgressBarIv"
                         />
+<!--                        android:visibility="@{ item.progress.pattern.userWrongCount == 0 ? View.GONE : View.VISIBLE }"-->
 
                     <TextView
                         android:id="@+id/patternSolvedTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.patternSolvedText }"
-                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_250 }"
                         app:layout_constraintTop_toTopOf="@+id/patternTotalTv"
                         app:layout_constraintBottom_toBottomOf="@+id/patternTotalTv"
                         app:layout_constraintEnd_toStartOf="@+id/patternTotalTv"/>
+<!--                        android:text="@{ item.patternSolvedText }"-->
+<!--                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_250 }"-->
 
                     <TextView
                         android:id="@+id/patternTotalTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.patternTotalText }"
-                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_gray_300 }"
                         app:layout_constraintStart_toEndOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintTop_toTopOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintBottom_toBottomOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1"
                         />
-    <!--                    android:layout_marginStart="10dp"-->
+<!--                        android:text="@{ item.patternTotalText }"-->
+<!--                        android:textColor="@{ item.progress.pattern.userSolvedCount == 0 ? @color/purple_gray_300 : item.progress.pattern.isDone ? @color/purple_250_opa_50 : @color/purple_gray_300 }"-->
                     <TextView
                         android:id="@+id/lastStudyDateTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/b3"
                         android:layout_marginStart="4dp"
-                        android:textColor="@{ item.isChapterDone ? @color/purple_gray_300_opa_50 : @color/purple_gray_300 }"
                         app:layout_constraintTop_toTopOf="@+id/lastStudyDateIv"
                         app:layout_constraintStart_toEndOf="@+id/lastStudyDateIv"
                         app:layout_constraintBottom_toBottomOf="@+id/lastStudyDateIv"
-                        android:text="@{ item.lastStudiedFormatting }"
                         />
+<!--                        android:textColor="@{ item.isChapterDone ? @color/purple_gray_300_opa_50 : @color/purple_gray_300 }"-->
+<!--                        android:text="@{ item.lastStudiedFormatting }"-->
                     <ImageView
                         android:id="@+id/lastStudyDateIv"
                         android:layout_width="19dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_timer"
-                        imageview_tint="@{ item.isChapterDone ? @color/purple_gray_300_opa_50 : @color/purple_gray_300 }"
                         app:layout_constraintTop_toBottomOf="@+id/backgroundPatternProgressBarIv"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="6dp"/>
+<!--                        imageview_tint="@{ item.isChapterDone ? @color/purple_gray_300_opa_50 : @color/purple_gray_300 }"-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
+                android:id="@+id/doneIv"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:src="@drawable/ic_done_badge"
@@ -238,21 +231,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:visibility="@{ item.isChapterDone ? View.VISIBLE : View.GONE }"
             />
+<!--                android:visibility="@{ item.isChapterDone ? View.VISIBLE : View.GONE }"-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
+            android:id="@+id/rightArrowIv"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:src="@drawable/ic_study_arrow_right"
             app:tint="@color/purple_200"
-            android:visibility="@{ isNextItemExist ? View.VISIBLE : View.GONE }"
             app:layout_constraintStart_toEndOf="@+id/smallChapterRootCl"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
+<!--            android:visibility="@{ isNextItemExist ? View.VISIBLE : View.GONE }"-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

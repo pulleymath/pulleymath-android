@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.ActivityInitSettingCompleteBinding
+import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.utils.partialFontAndColored
 
 class InitSettingCompleteActivity : AppCompatActivity() {
@@ -27,11 +31,28 @@ class InitSettingCompleteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.startBtn.setOnClickListener {
-            val intent = InitTestActivity.getIntent(this)
-            startActivity(intent)
-            finish()
+            if (isTablet) {
+                moveToLearningCourseTutorial()
+            } else {
+                moveToMain()
+            }
         }
-        binding.guideTv.text = "기본정보가 제출되었습니다!\n이제 ${user!!.fullName}님의 공부 스타일을 진단해드릴게요 :)"
-                .partialFontAndColored( Theme.extraBold(this), ContextCompat.getColor(this, R.color.purple_6D6DFF), "${user!!.fullName}님의 공부 스타일")
+        binding.guideTv.text = "회원가입이 완료되었습니다!\n이제 풀리수학과 공부를 시작해볼까요?"
+                .partialFontAndColored( Theme.extraBold(this), ContextCompat.getColor(this, R.color.purple_6D6DFF), "풀리수학")
+    }
+
+    private fun moveToLearningCourseTutorial() {
+        MyApplication.firstLaunchGoConceptFlag = false
+        LCTutorialActivity.getIntent(this).let {
+            startActivity(it)
+            finishAffinity()
+        }
+    }
+
+    fun moveToMain() {
+        MyApplication.firstLaunchGoConceptFlag = false
+        val intent = LearningTabActivity.getIntent(this, true, true)
+        startActivity(intent)
+        finishAffinity()
     }
 }

@@ -53,6 +53,8 @@ object Preferences {
     var channelTalkCurrChatId = APPreference("")
     var studentIdWhenIssuingChatId = APPreference("")
     var channelTalkUserId = APPreference("")
+
+    var isConceptLearningTutorialPassed = APPreference(false)
 }
 
 

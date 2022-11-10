@@ -27,6 +27,7 @@ import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
+import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFragment
@@ -49,6 +50,7 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.math.absoluteValue
 
 class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener,
     CookingPencilcaseListener {
@@ -145,15 +147,15 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             // 헤더 ripple 분리하려면 각 버튼마다 따로붙여야함
             headerPriorConceptCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.PriorConcept)
+                showHeaderNaviView(CourseType.PriorConcept, headerPriorConceptCl)
             }
             headerCookingCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.Cooking)
+                showHeaderNaviView(CourseType.Cooking, headerCookingCl)
             }
             headerPatternCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
-                showHeaderNaviView(CourseType.Pattern)
+                showHeaderNaviView(CourseType.Pattern, headerPatternCl)
             }
             headerWrongNoteCl.setOnClickListener { sourceView ->
                 hidePencilcasePanel()
@@ -322,6 +324,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         if (isChannelIoForeground) {
             beginBlackChannelIoFrame()
         } else {
+            setResult(ConceptCourseFragment.RESULT_OK, intent)
             super.onBackPressed()
         }
     }
@@ -367,7 +370,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         }
     }
 
-    fun showHeaderNaviView(selectedType: CourseType) {
+    fun showHeaderNaviView(selectedType: CourseType, sourceView: View) {
         binding.naviFl.removeAllViews()
         viewModel.setNaviFlag(selectedType)
         val courseList = viewModel.getHeaderCourseListOnType(selectedType)
@@ -404,11 +407,17 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            gravity = Gravity.TOP or Gravity.CENTER
-            if (selectedType == CourseType.PriorConcept) {
-                marginEnd = 600.toDp().toInt()
-            }
+            gravity = Gravity.TOP or Gravity.LEFT
+
+            val outLocation = IntArray(2)
+            sourceView.getLocationInWindow(outLocation)
+            val sourceX = outLocation[0]
+            val roadViewWidth = 368.toPx()
+            val sourceViewWidth = sourceView.width
+            val startMargin = sourceX - (roadViewWidth / 2) + (sourceViewWidth / 2)
+            marginStart = startMargin
         }
+
         roadView.layoutParams = params
 
         binding.naviFl.addView(roadView)
@@ -539,7 +548,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
 //        ChannelIO.shutdown()
         super.onDestroy()
-        ConceptLearningUsageMonitor.finishConceptLearning()
     }
 
     inner class LCViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
@@ -659,6 +667,13 @@ fun setLayoutMarginEnd(view: View, dimen: Float) {
 
 @BindingAdapter("imageview_tint")
 fun ImageView.setImageTint(@ColorInt color: Int?) {
+    color?.let {
+        setColorFilter(it)
+    }
+}
+
+@BindingAdapter("imagebtn_tint")
+fun ImageButton.setImageTint(@ColorInt color: Int?) {
     color?.let {
         setColorFilter(it)
     }

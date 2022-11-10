@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2021.activity.LCTutorialActivity">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootCl"
+        android:background="@color/gray_800"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/oddWrapperCl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <ImageView
+                android:id="@+id/oddSeqIv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/android_concept_learning_tutorial_1"
+                android:scaleType="matrix"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+<!--                cookingImgRes="@{ vm.oddImageUrl }"-->
+
+            <ImageButton
+                android:id="@+id/oddExitBtn"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:padding="24dp"
+                android:background="@null"
+                app:tint="@color/gray_500"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+<!--            <Button-->
+<!--                android:id="@+id/oddBottomCenterBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/bg_purple_100_stroke_purple_300_round_5_ripple"-->
+<!--                android:text="Next >"-->
+<!--                android:paddingHorizontal="16dp"-->
+<!--                android:textColor="@color/purple_300"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:layout_marginBottom="64dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/evenWrapperCl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/evenSeqIv"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/android_concept_learning_tutorial_2"
+                android:scaleType="matrix"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+<!--                cookingImgRes="@{ vm.evenImageUrl }"-->
+
+            <ImageButton
+                android:id="@+id/evenExitBtn"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:padding="24dp"
+                android:background="@null"
+                app:tint="@color/gray_500"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+<!--            <Button-->
+<!--                android:id="@+id/evenBottomCenterBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/bg_purple_100_stroke_purple_300_round_5_ripple"-->
+<!--                android:text="Next >"-->
+<!--                android:paddingHorizontal="16dp"-->
+<!--                android:textColor="@color/purple_300"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:layout_marginBottom="64dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

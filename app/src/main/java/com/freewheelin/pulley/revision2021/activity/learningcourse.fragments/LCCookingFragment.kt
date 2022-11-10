@@ -172,7 +172,6 @@ class LCCookingFragment() : Fragment(),
                                 }
                             }
                         }
-
                     }
                     CookingInfoItem.ItemType.Exercise -> {
                         exerciseContainer.visibility = View.VISIBLE

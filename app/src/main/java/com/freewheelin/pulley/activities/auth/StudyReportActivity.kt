@@ -94,9 +94,9 @@ class StudyReportActivity : BaseActivity() {
             mailGuideText.setOnClickListener { onMailBtnClicked() }
             mailBtn.setOnClickListener { onMailBtnClicked() }
             if(user!!.hasPulleyPlus)
-                bottomActionButton.text = "${user!!.fullName}님을 위한 첫 단계 시작하기"
+                bottomActionButton.text = "스낵테스트 종료하기"
             else
-                bottomActionButton.text = "지금부터 풀리수학으로 공부 시작하기"
+                bottomActionButton.text = "스낵테스트 종료하기"
         }
     }
 
@@ -129,10 +129,9 @@ class StudyReportActivity : BaseActivity() {
     }
 
     fun moveToMain() {
-        MyApplication.firstLaunchGoConceptFlag = false
-        val intent = LearningTabActivity.getIntent(this, true, true)
+//        MyApplication.firstLaunchGoConceptFlag = false
+        val intent = LearningTabActivity.getIntent(this, )
         startActivity(intent)
-        finishAffinity()
     }
 
     fun showHeaderView() {

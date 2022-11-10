@@ -59,6 +59,7 @@
     <color name="light_peach">#ffc6bc</color>
 
     <color name="dim_black_333333">#4c333333</color>
+    <color name="dim_black_333333_70a">#B3333333</color>
     <color name="dim_white_ffffff">#4cffffff</color>
 
     <color name="gray_100">#fafafa</color>
@@ -118,6 +119,7 @@
     <color name="purple_gray_100">#FAFAFE</color>
     <color name="purple_gray_200">#ECEBFF</color>
     <color name="purple_gray_300">#BEBEDF</color>
+    <color name="purple_gray_400">#A7A7D2</color>
     <color name="purple_200_opa_50">#D5D5FF</color>
     <color name="purple_250_opa_50">#BEBEFF</color>
     <color name="purple_300_opa_50">#7E7EFF</color>

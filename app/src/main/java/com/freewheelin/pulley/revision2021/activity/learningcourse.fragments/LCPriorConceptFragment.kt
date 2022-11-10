@@ -14,8 +14,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCPriorConceptViewModel
@@ -23,15 +25,20 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyListViewHolder
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.model.LCPriorConceptInfo
+import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.LabelFlowView
+import com.freewheelin.pulley.utils.BoongthEffect
 //import com.freewheelin.pulley.revision2021.views.LCPatternDetailDialog
 import com.freewheelin.pulley.utils.Preferences
 import com.zoyi.channel.plugin.android.ChannelIO
 import kotlinx.coroutines.*
+import kotlin.random.Random
 
 class LCPriorConceptFragment : Fragment() {
 
@@ -82,17 +89,7 @@ class LCPriorConceptFragment : Fragment() {
                     (activity as LearningCourseActivity).setPagerToCookingFirstPage()
                 }
 
-                viewModel.priorConceptCount.observe(viewLifecycleOwner) {
-//                    if (it == 0) {
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            delay(2000)
-//                            withContext(Dispatchers.Main) {
-//                                (activity as LearningCourseActivity).setPagerToCookingFirstPage()
-//                            }
-//                        }
-//                    }
-                }
-
+                viewModel.priorConceptCount.observe(viewLifecycleOwner) {}
             }
         }
     }

@@ -6,11 +6,10 @@
     <data>
         <import type="android.view.View"/>
         <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
-<!--        StudyChapterViewHolder 에서 인입 -->
+
         <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.ChapterItemClickListener"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.StudyChapter"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
-        <variable name="isLastItem" type="Boolean"/>
     </data>
 
 
@@ -25,7 +24,7 @@
             android:id="@+id/headerCl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:paddingTop="38dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +104,7 @@
                     android:layout_marginTop="18dp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            
+
             <ImageView
                 android:id="@+id/mainHeaderIv"
                 android:layout_width="350dp"
@@ -151,24 +150,45 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside">
 
                 <LinearLayout
+                    android:id="@+id/tutorialWrapperLl"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/mathSangWrapperLl">
+                    <ImageButton
+                        android:id="@+id/tutorialBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
+                        android:background="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
+                        android:src="@drawable/ic_course_star"
+                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                    <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/mathSangWrapperLl"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:orientation="vertical"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tutorialWrapperLl"
                     app:layout_constraintEnd_toStartOf="@id/mathHaWrapperLl">
                     <Button
                         android:id="@+id/mathSangBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/gray_600 }"
+                        android:layout_marginStart="6dp"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathSang.rawValue ? View.VISIBLE : View.GONE }"
                         android:text="수학(상)"/>
-<!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -184,7 +204,7 @@
                         android:id="@+id/mathHaBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathHa.rawValue ? View.VISIBLE : View.GONE }"
@@ -209,7 +229,7 @@
                         android:id="@+id/math1Btn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.Math1.rawValue ? View.VISIBLE : View.GONE }"
@@ -230,7 +250,7 @@
                         android:id="@+id/math2Btn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.Math2.rawValue ? View.VISIBLE : View.GONE }"
@@ -251,7 +271,7 @@
                         android:id="@+id/mathProbabilityAndStatisticsBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathProbabilityAndStatistics.rawValue ? View.VISIBLE : View.GONE }"
@@ -272,7 +292,7 @@
                         android:id="@+id/mathCalculusBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathCalculus.rawValue ? View.VISIBLE : View.GONE }"
@@ -293,7 +313,7 @@
                         android:id="@+id/mathKihaBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/gray_600 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/purple_gray_400 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
                         android:background="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @drawable/shadow_main_page_tab_focused : @drawable/shadow_main_page_tab_default }"
                         android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathKiha.rawValue ? View.VISIBLE : View.GONE }"
@@ -309,14 +329,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-<!--                android:paddingHorizontal="5dp"-->
+            <!--                android:paddingHorizontal="5dp"-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chapterCl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:clipToPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -332,32 +352,94 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <include
-                    android:id="@+id/largeChapter"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/largeChapterCl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    layout="@layout/item_large_chapter"
-                    android:paddingHorizontal="10dp"
-                    app:item="@{ item }"
-                    app:listener="@{ listener }"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/largeChapterTitleTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.largeTitle }"
+                        android:visibility="@{ item.isFirstChapter ? View.VISIBLE : View.GONE }"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginStart="32dp"
+                        style="@style/h4"
+                        android:textColor="@color/blue_black_200"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+<!--                    <include-->
+<!--                        android:id="@+id/mediumChapter1"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="24dp"-->
+<!--                        android:layout_marginStart="27dp"-->
+<!--                        android:layout_marginEnd="27dp"-->
+<!--                        app:item="@{ item }"-->
+<!--                        app:listener="@{ listener }"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/largeChapterTitleTv"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        layout="@layout/item_medium_chapter"/>-->
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/middleChapterRootView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginStart="27dp"
+                        android:layout_marginEnd="27dp"
+                        app:layout_constraintTop_toBottomOf="@id/largeChapterTitleTv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <TextView
+                            android:id="@+id/mediumChapterTitleTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/h5"
+                            android:text="@{ item.middleTitle }"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/blue_black_200"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/smallChapterRv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            bind_small_chapter="@{ item.children }"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintTop_toBottomOf="@id/mediumChapterTitleTv"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="32dp"
                     android:background="@color/purple_gray_200"
-                    android:visibility="@{ isLastItem ? View.GONE : View.VISIBLE }"
+                    android:visibility="@{ item.hasNextItem || item.isParentChapterLast ? View.GONE : View.VISIBLE }"
                     android:layout_marginHorizontal="32dp"
-                    app:layout_constraintTop_toBottomOf="@+id/largeChapter"
+                    app:layout_constraintTop_toBottomOf="@+id/largeChapterCl"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/footerCl"

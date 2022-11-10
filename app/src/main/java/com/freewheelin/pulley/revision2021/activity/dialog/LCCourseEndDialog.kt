@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogLcWrongNoteEndBinding
 import com.freewheelin.pulley.revision2021.model.StudyChapter
+import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCourseEndDialogViewModel
 
 class LCCourseEndDialog(context: Context,
                         val chapterId: Int?,
                         private val exitBtnCallback: () -> Unit,
-                        private val moreStudyBtnCallback: () -> Unit,
+                        private val moreStudyBtnCallback: (CourseSummary.MainMessageStatus) -> Unit,
 ): DialogFragment() {
 
     val binding: DialogLcWrongNoteEndBinding by lazy {
@@ -59,8 +60,11 @@ class LCCourseEndDialog(context: Context,
             }
 
             moreStudyBtn.setOnClickListener {
-                moreStudyBtnCallback()
-                dismiss()
+                viewModel.courseSummary.value?.mainMessageStatus?.let {
+                    moreStudyBtnCallback(it)
+                    dismiss()
+                }
+
             }
         }
     }

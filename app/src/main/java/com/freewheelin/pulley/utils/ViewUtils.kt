@@ -12,6 +12,8 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -35,10 +37,6 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
-import android.graphics.Bitmap
-import android.net.Uri
-import java.io.File
-import java.io.OutputStream
 
 
 object ViewUtils {
@@ -108,6 +106,38 @@ fun View.show(duration:Long = 500, cb:((view: View) -> Unit)? = null) {
         }
     })
     startAnimation(anim)
+}
+
+enum class ViewTransition {
+    Instant,
+    SlideFromDown,
+    SlideFromUp,
+    SlideFromLeft,
+    SlideFromRight
+}
+
+fun View.showTransition(duration: Long = 500, transition: ViewTransition, cb:((view: View) -> Unit)? = null) {
+    // https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
+    visibility = View.VISIBLE
+
+    val anim = when(transition) {
+        ViewTransition.Instant -> TranslateAnimation(0f, 0f, 0f, 0f)
+        ViewTransition.SlideFromDown -> TranslateAnimation(0f, 0f, height.toFloat(), 0f)
+        ViewTransition.SlideFromUp -> TranslateAnimation(0f, 0f, -height.toFloat(), 0f)
+        ViewTransition.SlideFromLeft -> TranslateAnimation(-width.toFloat(), 0f, 0f, 0f)
+        ViewTransition.SlideFromRight -> TranslateAnimation(width.toFloat(), 0f, 0f, 0f)
+    }
+    anim.duration = duration
+    anim.fillAfter = true
+    anim.setAnimationListener(object: Animation.AnimationListener{
+        override fun onAnimationRepeat(p0: Animation?) {}
+        override fun onAnimationStart(p0: Animation?) {}
+        override fun onAnimationEnd(p0: Animation?) {
+            cb?.let { it(this@showTransition) }
+        }
+    })
+    startAnimation(anim)
+
 }
 
 fun View.showIfNeed(duration: Long = 500, cb:((view: View) -> Unit)? = null) {

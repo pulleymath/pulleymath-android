@@ -260,25 +260,48 @@
                     <!--            app:layout_constraintTop_toTopOf="@+id/nameTv"-->
                     <!--            app:layout_constraintBottom_toBottomOf="@+id/nameTv"/>-->
 
-                    <TextView
-                        android:id="@+id/reportTv"
-                        style="@style/TextPurple_6d6dff.ExtraBold"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/reportCl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp16"
-                        android:text=""
-                        android:textSize="@dimen/dp16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+                        app:layout_constraintTop_toBottomOf="@+id/nameTv">
+
+                        <TextView
+                            android:id="@+id/reportTv"
+                            style="@style/TextPurple_6d6dff.ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="@dimen/dp16"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/typeTestTv"
+                            style="@style/TextPurple_6d6dff.ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="@dimen/dp16"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:background="@color/purple_6D6DFF"
-                        app:layout_constraintBottom_toBottomOf="@+id/reportTv"
-                        app:layout_constraintEnd_toEndOf="@+id/reportTv"
-                        app:layout_constraintStart_toStartOf="@+id/reportTv" />
+                        app:layout_constraintBottom_toBottomOf="@+id/reportCl"
+                        app:layout_constraintEnd_toEndOf="@+id/reportCl"
+                        app:layout_constraintStart_toStartOf="@+id/reportCl" />
 
                     <com.google.android.flexbox.FlexboxLayout
                         android:id="@+id/tagFl"
@@ -291,7 +314,7 @@
                         app:flexDirection="row"
                         app:flexWrap="wrap"
                         app:justifyContent="center"
-                        app:layout_constraintTop_toBottomOf="@+id/reportTv"
+                        app:layout_constraintTop_toBottomOf="@+id/reportCl"
                         app:showDivider="middle">
 
                     </com.google.android.flexbox.FlexboxLayout>

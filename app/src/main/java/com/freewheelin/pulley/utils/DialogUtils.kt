@@ -365,7 +365,21 @@ class DialogUtils {
                 if(rightBtnCB != null) rightBtnCB()
             }
             dialog.show()
+        }
+        fun showTutorialEndDialog(context: Context, leftBtnCB: (() -> Unit), rightBtnCB: (() -> Unit)) {
+            val title = "튜토리얼이 아직 남아있어요!"
+            val content = "1분안에 끝나는 풀리수학 사용법,\n정말 유용한 꿀팁들이 있으니 끝까지 함께해요 ♥"
 
+            val dialog = makeDialog(context, title, content, "종료하기", "이어보기")
+            dialog.binding.leftBtn.setOnClickListener {
+                dialog.dismiss()
+                leftBtnCB()
+            }
+            dialog.binding.rightBtn.setOnClickListener {
+                dialog.dismiss()
+                rightBtnCB()
+            }
+            dialog.show()
         }
 
         fun updateGradeDialog(context: Context, user: User): DialogUtils.DaebakDialog {

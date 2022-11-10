@@ -63,12 +63,12 @@ class LCWrongNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         hideSystemUI()
-        ConceptLearningUsageMonitor.startConceptLearningUsage()
 
         val noteCardList: ArrayList<LCWrongNoteMapCard> = intent.getSerializableExtra(NOTE_CARD_LIST) as ArrayList<LCWrongNoteMapCard>
         val noteCardItem = intent.getSerializableExtra(NOTE_CARD_ITEM) as LCWrongNoteMapCard
         val chapterId = intent.getIntExtra(CURR_CHAPTER, -1)
         val title = intent.getStringExtra(HEADER_TITLE) ?: ""
+        ConceptLearningUsageMonitor.startConceptLearningUsage()
 
         binding.apply {
             vm = viewModel

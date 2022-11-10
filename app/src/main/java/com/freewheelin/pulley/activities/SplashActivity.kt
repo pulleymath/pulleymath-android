@@ -25,6 +25,7 @@ import com.freewheelin.pulley.databinding.ActivityOnboardingBinding
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.utils.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -176,6 +177,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     fun checkSign() {
         Preferences.forceUpdateDialogCount.set(0)
+        Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
 
         if(MyApplication.user?.token?.isNotEmpty() == true) {
@@ -211,8 +213,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
         when {
             isNeedOnboarding -> startActivity(OnboardingActivity::class.java)
-            user?.initSettingCompleted != true -> { startActivity(InitSettingActivity.getIntent(this)) }
-            user?.studentType == null -> { startActivity(InitTestActivity.getIntent(this)) }
             else -> {
                 loadAlimSetting(user)
                 putFcmToken(user)
@@ -222,6 +222,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                     .putExtra("target_android", pushParam).apply {
                         startActivity(this)
                     }
+//                startActivity(LCTutorialActivity.getIntent(this))
             }
         }
         finish()

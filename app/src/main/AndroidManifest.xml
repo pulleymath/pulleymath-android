@@ -45,14 +45,18 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2021.activity.LCTutorialActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+        <activity
             android:name=".revision2021.activity.LCWrongNoteActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".revision2021.activity.AlarmActivity"
             android:exported="true"

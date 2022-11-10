@@ -10,6 +10,7 @@ class LCSubject: Serializable {
     val subjectIndicator: SubjectIndicator
         get() {
             return when(subjectId) {
+                0 -> SubjectIndicator.Tutorial
                 1 -> SubjectIndicator.OutOfCurriculum
                 2 -> SubjectIndicator.MiddleSchoolCurriculum
                 3 -> SubjectIndicator.MathSang
@@ -23,6 +24,7 @@ class LCSubject: Serializable {
             }
         }
     enum class SubjectIndicator(val rawValue: Int) {
+        Tutorial(0),
         OutOfCurriculum(1),
         MiddleSchoolCurriculum(2),
         MathSang(3),

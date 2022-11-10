@@ -40,6 +40,8 @@ import com.freewheelin.pulley.revision2021.activity.fragments.AlarmDetailFragmen
 import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
+import com.freewheelin.pulley.activities.auth.InitTestActivity
+import com.freewheelin.pulley.activities.auth.InitTestActivity.Companion.COMPLETED_SNACK_TEST
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
@@ -141,6 +143,8 @@ class LearningTabActivity : PermissionActivity(),
     val lessonPermissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS)
     val lessonRequest = 1001
 
+    var isFromTutorial = false
+
     companion object {
         const val LEARNING_MAIN = "LEARNING_MAIN"
         const val LEARNING_ANALYSIS = "LEARNING_ANALYSIS"
@@ -154,11 +158,13 @@ class LearningTabActivity : PermissionActivity(),
         const val LEARNING_COURSE = "LEARNING_COURSE"
 
         const val FILTER_SESSION_EXPIRED = "FILTER_SESSION_EXPIRED"
+        const val FROM_TUTORIAL = "FROM_TUTORIAL"
 
-        fun getIntent(context: Context, isFromInitTest: Boolean = false, needLeading: Boolean = false) : Intent {
+        fun getIntent(context: Context, isFromInitTest: Boolean = false, needLeading: Boolean = false, isFromTutorial: Boolean = false) : Intent {
             val intent = Intent(context, LearningTabActivity::class.java)
             intent.putExtra(ARG_FROM_INIT_TEST, isFromInitTest)
             intent.putExtra(BookManager.ARG_NEED_LEADING, needLeading)
+            intent.putExtra(FROM_TUTORIAL, isFromTutorial)
             return intent
         }
 
@@ -221,6 +227,8 @@ class LearningTabActivity : PermissionActivity(),
             viewPager.offscreenPageLimit = 5
 
 //        tabLayout.setupWithViewPager(viewPager)
+
+            isFromTutorial = intent.getBooleanExtra(FROM_TUTORIAL, false)
 
             val isFromInitTest = intent.getBooleanExtra(ARG_FROM_INIT_TEST, false)
             if(isFromInitTest) {
@@ -513,13 +521,13 @@ class LearningTabActivity : PermissionActivity(),
 
         when(resultCode) {
             RESULT_SNACK_TEST -> {
-                setSelectedTab(2)
+                setSelectedTab(4)
             }
             RESULT_SNACK_UNIT -> {
-                setSelectedTab(3)
+                setSelectedTab(2)
             }
             RESULT_SNACK_MOCK -> {
-                setSelectedTab(4)
+                setSelectedTab(3)
             }
             RESULT_SNACK_WRONG -> {
                 setSelectedTab(5)
@@ -527,6 +535,9 @@ class LearningTabActivity : PermissionActivity(),
             RESULT_SNACK_ANALYSIS -> {
                 val intent = Intent(this, AnalysisTabActivity::class.java)
                 startActivity(intent)
+            }
+            COMPLETED_SNACK_TEST -> {
+
             }
         }
     }
@@ -648,10 +659,10 @@ class LearningTabActivity : PermissionActivity(),
 
         user!!.syncMyInfo(this) { user ->
 
-            if(MyApplication.user?.studentType == null) {
-                DialogUtils.showNeedInitTestDialog(this)
-            }
-            else if(!user.isValidPhone || user.isExceedDevice) { // 폰 변경, 기기중복 시 세션만료
+//            if(MyApplication.user?.studentType == null) {
+//                DialogUtils.showNeedInitTestDialog(this)
+//            }
+            if(!user.isValidPhone || user.isExceedDevice) { // 폰 변경, 기기중복 시 세션만료
                 sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
             }
             else if(user.isNeedToUpdateGrade()) {

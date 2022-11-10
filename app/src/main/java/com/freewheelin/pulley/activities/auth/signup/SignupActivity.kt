@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
+import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.Major
@@ -29,6 +30,10 @@ import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -120,12 +125,11 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
 
     private fun signupSuccess() {
         LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
-        val completeDialog = CompleteDialog(this@SignupActivity, "자동 로그인을 시작합니다.", "초기 세팅 화면으로 이동합니다.")
-        completeDialog.show()
-        Handler(Looper.getMainLooper()).postDelayed({
-            completeDialog.dismiss()
-            login(signup.email, signup.password)
-        }, 2000)
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Main) {
+                login(signup.email, signup.password)
+            }
+        }
     }
 
     private fun login(email:String, pw:String) {
@@ -151,22 +155,14 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     private fun loginSuccess(user:User?) {
         if(MyApplication.user == null) MyApplication.user = user
         else MyApplication.user!!.update(user)
-        when {
-            user?.initSettingCompleted == false -> {
-                Preferences.initTestData.set("")
-                startActivity(InitSettingActivity.getIntent(this))
-            }
-            else -> {
-                startActivity(Intent(this, LearningTabActivity::class.java))
-            }
-        }
+        startActivity(InitSettingCompleteActivity.getIntent(this))
     }
 
     private fun loginFailed(response: Response<Template<User?>>) {
         val errorTemplate = response?.errorBody()?.let { errorBody ->
             Gson().fromJson(errorBody.string(), ResponseBody::class.java)
         }
-        when(errorTemplate?.error){
+        when(errorTemplate?.error) {
             LoginActivity.NOT_MATCH_PW -> {
                 signupFragment.binding.emailDet.isShownError = false
                 signupFragment.binding.pwDet.showErrorMsg(errorTemplate.message?:"")

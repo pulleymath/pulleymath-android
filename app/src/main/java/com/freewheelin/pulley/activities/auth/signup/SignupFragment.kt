@@ -112,13 +112,14 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             }
 
             if(view == emailDet && !hasFocus) {
-                emailDet.text = emailDet.text.trim()
-                if(emailDet.text.isEmpty())
+//                emailDet.text = emailDet.text.trim()
+                if(emailDet.text.isEmpty()) {
                     emailDet.showErrorMsg("이메일을 입력해주세요.")
-                else if(emailDet.text.isValidEmail() == false)
+                } else if(emailDet.text.isValidEmail() == false) {
                     emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
-                else
+                } else {
                     checkEmail()
+                }
             }
 
             if(view === phoneNumDet && !hasFocus) {
@@ -538,7 +539,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
 
     private fun checkEmail(callback:(()->Unit)?=null) {
         binding.apply {
-            val email = emailDet.text
+            val email = emailDet.text.trim()
             API_V2.existId(email).enqueue(object: Callback<Template<String?>> {
                 override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
                     responseFailed(context!!, t)

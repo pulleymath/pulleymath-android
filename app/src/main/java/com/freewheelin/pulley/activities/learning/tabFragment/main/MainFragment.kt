@@ -24,6 +24,8 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.auth.InitTestActivity
+import com.freewheelin.pulley.activities.auth.StudyReportActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.learning.LearningTabInterface
@@ -120,9 +122,9 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     fun setupUI() {
         binding.apply {
-            profileIv.setOnClickListener {
-                setProgress()
-            }
+//            profileIv.setOnClickListener {
+//                setProgress()
+//            }
 
             shareBtn.setOnClickListener {
                 onShareBtnClicked()
@@ -135,7 +137,6 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
             dDayErrowIv.setOnClickListener { onDDayBtnClicked() }
             startBtn.setOnClickListener { onStartBtnClicked() }
             bgIv.layoutParams.width = (DisplayUtils.getScreenWidth(requireContext()) * 0.5).toInt()
-            reportTv.setOnClickListener { onReportBtnClicked() }
 //        profileIv.setOnClickListener { onProfileBtnClicked() }
 
 //        syncProfile()
@@ -146,8 +147,29 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     private fun setReportType() {
         val dessertType = user?.studentType
-        if(dessertType != null) {
-            binding.reportTv.text = "${dessertType.dessertName} 타입에 관한 심층 보고서"
+        binding.apply {
+            if(dessertType != null) {
+                typeTestTv.visibility = View.GONE
+                reportTv.visibility = View.VISIBLE
+                reportTv.text = "${dessertType.dessertName} 타입에 관한 심층 보고서"
+                reportTv.setOnClickListener { onReportBtnClicked() }
+                typeTestTv.setOnClickListener(null)
+                profileIv.setOnClickListener(null)
+            } else {
+                reportTv.visibility = View.GONE
+                typeTestTv.visibility = View.VISIBLE
+                typeTestTv.text = "간식으로 알아보는 나의 학습유형 TEST"
+                typeTestTv.setOnClickListener {
+//                    val intent = InitTestActivity.getIntent(requireContext())
+//                    startActivity(intent)
+                    startActivityForResult(InitTestActivity.getIntent(requireContext()), InitTestActivity.COMPLETED_SNACK_TEST)
+                }
+                profileIv.setOnClickListener {
+                    startActivityForResult(InitTestActivity.getIntent(requireContext()), InitTestActivity.COMPLETED_SNACK_TEST)
+                }
+                reportTv.setOnClickListener(null)
+
+            }
         }
     }
 
@@ -320,6 +342,11 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     private fun onReportBtnClicked() {
         startActivityForResult(SnackReportActivity.getIntent(requireContext(), user!!.studentType!!), SnackReportActivity.REQUEST_SNACK_ACTIVITY)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setReportType()
     }
 
     private fun onShareBtnClicked() {

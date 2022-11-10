@@ -52,6 +52,16 @@ class CourseSummary: Serializable {
                 SubMessageStatus.유형학습은_전부_오답학습은_다_풀지는않음 -> "유형 정답률이 ${initialScore}%에서 ${finalScore}%로 향상됐어요!"
             }
         }
+    val studyMessage: String
+        get () {
+            return when(mainMessageStatus) {
+                MainMessageStatus.예제학습_미완료 -> "예제 풀러 가기"
+                MainMessageStatus.예제완료하고_유형학습_전혀_풀지않음 -> "유형 학습하기"
+                MainMessageStatus.예제완료하고_유형학습_다_풀지는_않음 -> "유형 학습하기"
+                MainMessageStatus.예제완료하고_유형완료_오답학습_미완료 -> "오답 학습하기"
+                MainMessageStatus.예제완료_유형완료_오답완료 -> "연습 문제 풀기"
+            }
+        }
     inner class ExerciseProgress: Serializable {
         var totalQuizCount: Int = -1
         var userSolvedCount: Int = -1

@@ -104,6 +104,8 @@ class InitTestActivity : AppCompatActivity() {
     val gson by lazy { Gson() }
 
     companion object {
+        const val COMPLETED_SNACK_TEST = 21001
+
         fun getIntent(context: Context): Intent {
             return Intent(context, InitTestActivity::class.java)
         }

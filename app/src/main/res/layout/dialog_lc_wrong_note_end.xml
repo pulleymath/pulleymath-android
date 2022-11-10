@@ -327,7 +327,7 @@
                 android:id="@+id/moreStudyBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="연습 문제 풀기"
+                android:text="@{ vm.courseSummary.studyMessage }"
                 style="@style/h4"
                 android:layout_marginHorizontal="24dp"
                 android:textColor="@color/white"

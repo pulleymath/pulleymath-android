@@ -75,12 +75,13 @@ class BalloonCourseRoadView: ConstraintLayout {
     fun setPeakViewBias(selectedType: CourseType) {
         binding.apply {
             courseType = selectedType
-            val biasValue = when (selectedType) {
-                CourseType.PriorConcept -> 0.15f
-                CourseType.Cooking -> 0.3f
-                CourseType.Pattern -> 0.7f
-                else -> 0.5f
-            }
+//            val biasValue = when (selectedType) {
+//                CourseType.PriorConcept -> 0.15f
+//                CourseType.Cooking -> 0.3f
+//                CourseType.Pattern -> 0.7f
+//                else -> 0.5f
+//            }
+            val biasValue = 0.5f
 
             val cs = ConstraintSet()
             cs.clone(rootView)

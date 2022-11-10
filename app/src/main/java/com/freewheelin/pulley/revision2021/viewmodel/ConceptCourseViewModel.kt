@@ -9,6 +9,11 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.time.chrono.MinguoEra
 import java.util.concurrent.TimeUnit
 
 class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
@@ -46,18 +51,46 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
     var studyChapterFooter: StudyChapter? = null
     @SuppressLint("CheckResult")
     fun fetch(subjectId: Int) {
+        if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) {
+            setTutorialList()
+            return
+        }
         val studentId = user?.studentID ?: return
         studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
-                showProgress.postValue(false)
                 response.data?.let {
                     studyChapterHeader = studyChapterHeader ?: StudyChapter.createHeader()
                     studyChapterFooter = studyChapterFooter ?: StudyChapter.createFooter()
-                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + it + listOf(studyChapterFooter!!)
+
+                    val cList = mutableListOf<StudyChapter>()
+
+                    it.forEachIndexed { largeIndex, largeChapter ->
+                        largeChapter.children.forEachIndexed { index, middleChapter ->
+                            middleChapter.isParentChapterLast = it.size - 1 == largeIndex
+                            middleChapter.parentSequence = largeChapter.sequence
+                            middleChapter.parentName = largeChapter.name
+                            middleChapter.isFirstChapter = index == 0
+                            middleChapter.isLastChapter =
+                                (largeChapter.children.size - 1) == index
+                            middleChapter.setNextItemExist(largeChapter)
+                            middleChapter.children.forEach { smallChapter ->
+                                smallChapter.parentName = middleChapter.name
+                                smallChapter.isFirstChapter = index == 0
+                                smallChapter.isLastChapter =
+                                    (middleChapter.children.size - 1) == index
+                                smallChapter.setNextItemExist(middleChapter)
+                            }
+                            cList.add(middleChapter)
+                        }
+                    }
+
+                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + cList + listOf(studyChapterFooter!!)
+
                     chapterList.postValue(listWithHeaderAndFooter)
+                    showProgress.postValue(false)
                 }
             }, { error ->
                 showProgress.postValue(false)
@@ -83,6 +116,17 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
 
     fun onHeaderSubjectBtnClick(subjectId: Int) {
         this.selectedSubjectId.postValue(subjectId)
+    }
+
+    fun setTutorialList() {
+        studyChapterHeader = studyChapterHeader ?: StudyChapter.createHeader()
+        studyChapterFooter = studyChapterFooter ?: StudyChapter.createFooter()
+
+        val tutorialChapter = StudyChapter.createTutorial()
+
+        val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + tutorialChapter + listOf(studyChapterFooter!!)
+
+        chapterList.postValue(listWithHeaderAndFooter)
     }
 
 }

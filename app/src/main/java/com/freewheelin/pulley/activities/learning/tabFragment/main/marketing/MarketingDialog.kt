@@ -17,6 +17,7 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.underMinHeight
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.DialogMarketingBinding
+import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.DaebakToast
@@ -48,20 +49,18 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
                     tab.setIcon(R.drawable.banner_tab_selector)
                 }.attach()
             }
-
             Log.d("마케팅", "screen height=${context.resources.configuration.screenHeightDp}")
 
-            if (context.underMinHeight) {
-                val ratio = 0.5f
+            val customRatio = 0.7f
+            val pagerHeight = DisplayUtils.getScreenHeight(context) * customRatio
 
-                var pagerParams = marketingPager.layoutParams
-                pagerParams.width = (720 * ratio).toPx().toInt()
-                pagerParams.height = (560 * ratio).toPx().toInt()
+            var pagerParams = marketingPager.layoutParams
+            pagerParams.height = pagerHeight.toInt()
+            pagerParams.width = (pagerHeight / 560 * 720).toInt()
 
-                var buttomParams = marketingButtonLayout.layoutParams
-                buttomParams.width = (720 * ratio).toPx().toInt()
-                buttomParams.height = (64 * ratio).toPx().toInt()
-            }
+            var buttomParams = marketingButtonLayout.layoutParams
+            buttomParams.width = (pagerHeight / 560 * 720).toInt()
+            buttomParams.height = (pagerHeight / 560 * 64).toInt()
 
             btnMarketingClose.setOnClickListener {
                 dismiss()

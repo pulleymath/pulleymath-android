@@ -31,6 +31,7 @@ import com.freewheelin.pulley.databinding.ItemLcWrongNoteBinding
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.dialog.LCCourseEndDialog
+import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
@@ -94,18 +95,34 @@ class LCWrongNoteMapFragment : Fragment() {
                 val exitCallback: () -> Unit = {
                     (activity as LearningCourseActivity).finish()
                 }
-                val moreStudyCallback: () -> Unit = {
-                    (activity as LearningCourseActivity).finish()
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(200)
+                val moreStudyCallback: (CourseSummary.MainMessageStatus) -> Unit = {
+                    when (it) {
+                        CourseSummary.MainMessageStatus.예제학습_미완료 -> {
+                            (activity as LearningCourseActivity).setPagerToCookingFirstPage()
+                        }
+                        CourseSummary.MainMessageStatus.예제완료하고_유형학습_전혀_풀지않음 -> {
+                            (activity as LearningCourseActivity).setPagerToPatternMap()
+                        }
+                        CourseSummary.MainMessageStatus.예제완료하고_유형학습_다_풀지는_않음 -> {
+                            (activity as LearningCourseActivity).setPagerToPatternMap()
+                        }
+                        CourseSummary.MainMessageStatus.예제완료하고_유형완료_오답학습_미완료 -> {
 
-                        withContext(Dispatchers.Main) {
-                            val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                            intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
-                            intent.putExtra(PieceManager.EVENT_SCROLL, true)
-                            intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
-                            intent.putExtra(PieceManager.EVENT_FILTER, "확률과 통계")
-                            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+                        }
+                        CourseSummary.MainMessageStatus.예제완료_유형완료_오답완료 -> {
+                            (activity as LearningCourseActivity).finish()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                delay(200)
+
+                                withContext(Dispatchers.Main) {
+                                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
+                                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
+                                    intent.putExtra(PieceManager.EVENT_SCROLL, true)
+                                    intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
+                                    intent.putExtra(PieceManager.EVENT_FILTER, "확률과 통계")
+                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+                                }
+                            }
                         }
                     }
                 }
