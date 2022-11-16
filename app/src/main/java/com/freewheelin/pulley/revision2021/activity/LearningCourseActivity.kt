@@ -265,6 +265,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 frags.let { tabFragments.addAll(listOf(priprConceptMapFrag) + it) }
 
                 pager.adapter = LCViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
+                pager.offscreenPageLimit = 2
 
             }
 

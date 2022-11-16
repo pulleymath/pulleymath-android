@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.*
@@ -35,7 +33,6 @@ import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
 import com.freewheelin.pulley.utils.*
-import kotlinx.coroutines.*
 
 class ConceptCourseFragment : LearningTabFragment() {
     companion object {
@@ -239,7 +236,7 @@ class ConceptCourseFragment : LearningTabFragment() {
                     setPatternTotalTv(item)
                     setLastStudyDateTv(item)
                     setLastStudyDateIv(item)
-                    setDoneIv(item)
+                    setDoneStampIv(item)
                     setRightArrowIv(item)
                     setSmallChapterRootCl(item)
 
@@ -266,8 +263,8 @@ class ConceptCourseFragment : LearningTabFragment() {
                     visibility = if (item.hasNextItem) View.VISIBLE else View.GONE
                 }
             }
-            fun setDoneIv(item: StudyChapter) {
-                scBinding.doneIv.apply {
+            fun setDoneStampIv(item: StudyChapter) {
+                scBinding.stampIv.apply {
                     visibility = if(item.isChapterDone) View.VISIBLE else View.GONE
                 }
             }

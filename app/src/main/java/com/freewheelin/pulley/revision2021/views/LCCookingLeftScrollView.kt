@@ -10,7 +10,8 @@ import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
-import java.io.IOException
+import java.lang.Float.max
+import java.lang.Float.min
 
 
 class LCCookingLeftScrollView: ScrollView,
@@ -71,13 +72,6 @@ class LCCookingLeftScrollView: ScrollView,
         super.onScrollChanged(l, t, oldl, oldt)
     }
 
-
-    // 현재 필기중일때 -> isBlock true -> 두손가락일때만 좌우 스와이프 가능
-    // 아닐때 return true,
-
-    // false 이어야 메모뷰로 넘어감
-    // true 일때 scale처리를 해야함
-    //
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return if(isBlock) {
             ev?.pointerCount == 2
@@ -87,41 +81,10 @@ class LCCookingLeftScrollView: ScrollView,
     }
 
     override fun onScale(p0: ScaleGestureDetector): Boolean {
-        p0?.let { detector ->
-            val beforeScaleFactor = scaleFactor
+        p0.let { detector ->
             scaleFactor *= detector.scaleFactor
-
-            scaleFactor = if(scaleFactor < minScale)
-                minScale
-            else if(scaleFactor > maxScale)
-                maxScale
-            else scaleFactor
-
+            scaleFactor = min(max(scaleFactor, minScale), maxScale)
             setViewScale()
-
-            val changedMemoWidth =  memoView.measuredWidth * scaleFactor - memoView.measuredWidth * beforeScaleFactor
-            val changedMemoHeight = memoView.measuredHeight * scaleFactor - memoView.measuredHeight * beforeScaleFactor
-
-            if(scaleFactor > beforeScaleFactor) {
-                memoView.x += changedMemoWidth * 0.5f
-                memoView.y += changedMemoHeight * 0.5f
-            } else {
-                val minX = getMinX()
-                val minY = getMinY()
-
-                var newMemoX = memoView.x + changedMemoWidth * 0.5f
-                var newMemoY = memoView.y + changedMemoHeight * 0.5f
-
-                if(newMemoX < minX)
-                    newMemoX = minX
-                if(newMemoY < minY)
-                    newMemoY = minY
-
-                memoView.y = newMemoY
-                memoView.x = newMemoX
-            }
-
-            setViewPosition()
         }
         return true
     }
@@ -131,38 +94,32 @@ class LCCookingLeftScrollView: ScrollView,
         leftContentCl.scaleY = scaleFactor
         memoView.scaleX = scaleFactor
         memoView.scaleY = scaleFactor
+
+
+//        val scaleAnimation = ScaleAnimation(beforeScaleFactor, scaleFactor, beforeScaleFactor, scaleFactor, detector.focusX, detector.focusY)
+//        scaleAnimation.duration = 0
+//        scaleAnimation.fillAfter = true
+//        leftContentCl.startAnimation(scaleAnimation)
+//        memoView.startAnimation(scaleAnimation)
     }
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+
+    override fun onScroll(event1: MotionEvent, event2: MotionEvent, xDiff: Float, yDiff: Float): Boolean {
         val minX = getMinX()
         val minY = getMinY()
 
         if(!touchStart) return true
 
-        val beforeX = memoView.x
-        var newMemoX = memoView.x
-        val memoMaxX = (memoView.measuredWidth * scaleFactor - memoView.measuredWidth) * 0.5f
-        newMemoX -= x
-        var newX = beforeX - x
+        val memoMaxX = (scaleFactor - 1) * memoView.measuredWidth * 0.5f
+        val memoMaxY = (scaleFactor - 1) * memoView.measuredHeight * 0.5f
 
-        if(newX > memoMaxX) {
-            newX = memoMaxX
-        } else if(newX < minX) {
-            newX = minX
-        }
+        var newX = memoView.x - xDiff
+        var newY = memoView.y - yDiff
+
+        newX = min(max(newX, minX), memoMaxX)
+        newY = min(max(newY, minY), memoMaxY)
+
         memoView.x = newX
-
-
-        var newMemoY = memoView.y
-        val memoMaxY = (memoView.measuredHeight * scaleFactor - memoView.measuredHeight) * 0.5f
-        newMemoY -= y
-
-        if (newMemoY > memoMaxY) {
-            newMemoY = memoMaxY
-        } else if (newMemoY < minY) {
-            newMemoY = minY
-        }
-
-        memoView.y = newMemoY
+        memoView.y = newY
 
 
         setViewPosition()
@@ -171,19 +128,23 @@ class LCCookingLeftScrollView: ScrollView,
 
 
     open fun getIvX(): Float {
-        return memoView.x + 0.5f * (1 - scaleFactor) * (memoView.measuredWidth - leftContentCl.measuredWidth)
+//        return memoView.x + 0.5f * (1 - scaleFactor) * (memoView.measuredWidth - leftContentCl.measuredWidth)
+        return memoView.x + 0.5f * (1 - scaleFactor) * (memoView.width - leftContentCl.width)
     }
 
     open fun getIvY(): Float {
-        return memoView.y + 0.5f * (1 - scaleFactor) * (memoView.measuredHeight - leftContentCl.measuredHeight)
+//        return memoView.y + 0.5f * (1 - scaleFactor) * (memoView.measuredHeight - leftContentCl.measuredHeight)
+        return memoView.y + 0.5f * (1 - scaleFactor) * (memoView.height - leftContentCl.height)
     }
 
     private fun getMinX(): Float {
-        return (1 - scaleFactor)*(memoView.measuredWidth) * 0.5f
+//        return (1 - scaleFactor)*(memoView.measuredWidth) * 0.5f
+        return (1 - scaleFactor)*(memoView.width) * 0.5f
     }
 
     private fun getMinY(): Float {
-        return ((memoView.parent.parent as View).height - memoView.measuredHeight * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.measuredHeight
+//        return ((memoView.parent.parent as View).height - memoView.measuredHeight * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.measuredHeight
+        return ((memoView.parent.parent as View).height - memoView.height * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.height
     }
 
     // 쓸일없으면 지우자
@@ -196,6 +157,8 @@ class LCCookingLeftScrollView: ScrollView,
         leftContentCl.y = getIvY()
     }
     override fun onScaleBegin(p0: ScaleGestureDetector): Boolean {
+        println("zxoo: lccl width : ${leftContentCl.width} , lccl height: ${leftContentCl.height}")
+        println("zxoo: memoView width : ${memoView.width} , memoView height: ${memoView.height}")
         return true
     }
 

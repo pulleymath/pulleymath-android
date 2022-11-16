@@ -30,6 +30,7 @@ class StudyChapter: BaseDiffItem, Serializable {
             parentSequence = -1
             isParentChapterLast = true
             children = listOf(createTutorialChild())
+            isFirstChapter = false
         }
         fun createTutorialChild() = StudyChapter().apply {
             id = -5
@@ -102,6 +103,10 @@ class StudyChapter: BaseDiffItem, Serializable {
                 return isExerciseDone && isPatternDone
             }
             return false
+        }
+    val isTutorial: Boolean
+        get() {
+            return sequence == -999
         }
 
     val progressTextLength: Int

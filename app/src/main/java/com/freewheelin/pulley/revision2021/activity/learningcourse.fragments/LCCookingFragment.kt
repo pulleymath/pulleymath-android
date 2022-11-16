@@ -30,12 +30,12 @@ import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
+import java.util.*
 
 class LCCookingFragment() : Fragment(),
     CookingPencilcaseListener, PlusMinusEnterKeypadListener {
@@ -61,45 +61,73 @@ class LCCookingFragment() : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.getInt(LearningCourseActivity.COURSE_DETAIL_ID)?.let {
+            viewModel = ViewModelProvider(this).get(LCCookingViewModel::class.java)
+            viewModel.fetchCookingGroceries(it)
+        }
+
         isInitFragment = true
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LCCookingViewModel::class.java)
-        arguments?.let {
-            val courseId = it.getInt(LearningCourseActivity.COURSE_DETAIL_ID)
 
-            binding.apply {
-                vm = viewModel
-                lifecycleOwner = viewLifecycleOwner
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
 
-                viewModel.apply {
-                    cookingInfo.observe(viewLifecycleOwner) {
-                        val chapterId = it.chapterId
-                        val cookingId = it.conceptCookingId
-                        cookingMemoView.setCookingMemoId(chapterId, cookingId)
-                        cookingMemoView.clearBitmap()
-                        cookingMemoView.load()
+            viewModel.apply {
+                cookingInfo.observe(viewLifecycleOwner) {
+                    val chapterId = it.chapterId
+                    val cookingId = it.conceptCookingId
+                    cookingMemoView.setCookingMemoId(chapterId, cookingId)
+                    cookingMemoView.clearBitmap()
+                    cookingMemoView.load()
+                }
+            }
+
+//                viewModel.fetchCookingGroceries(courseId)
+//                rightRv.adapter = CookingAdapter()
+
+            leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
+            cookingMemoView.layoutParams.width = leftScrollRootCl.layoutParams.width
+
+            selectionFl.setOnClickListener {
+                viewModel.showSelection.postValue(false)
+                recoveryQuizSingleAnswer()
+            }
+            keyboardFl.setOnClickListener {
+                viewModel.showNumkeyboard.postValue(false)
+                viewModel.selectedShortQuiz.postValue(null)
+                viewModel.selectedItemBinding = null
+                binding.numberKeyboard.releaseKeyboard(null)
+            }
+
+            viewModel.cookingImageUrl.observe(viewLifecycleOwner) {
+                CoroutineScope(Dispatchers.IO).launch {
+
+                    val requestCreator = Picasso.get()
+                        .load(it)
+//                        .load("${it}?time=${Date().time}")
+
+                    val width = requestCreator.get().width
+                    val height = requestCreator.get().height
+                    withContext(Dispatchers.Main) {
+
+                        requestCreator
+                            .resize(if (height > 5000) 3000 else width, 0)
+                            .onlyScaleDown()
+                            .into(exerciseIv, object: Callback {
+                                override fun onSuccess() {
+                                    rightRv.adapter = CookingAdapter()
+                                    viewModel.cookingList.postValue(viewModel.cookingList.value)
+                                }
+                                override fun onError(e: java.lang.Exception?) {
+                                    println("picasso downscale load error : ${e}")
+                                }
+                            })
                     }
-                }
-
-                viewModel.fetchCookingGroceries(courseId)
-                rightRv.adapter = CookingAdapter()
-
-                leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
-                cookingMemoView.layoutParams.width = screenWidth
-
-                selectionFl.setOnClickListener {
-                    viewModel.showSelection.postValue(false)
-                    recoveryQuizSingleAnswer()
-                }
-                keyboardFl.setOnClickListener {
-                    viewModel.showNumkeyboard.postValue(false)
-                    viewModel.selectedShortQuiz.postValue(null)
-                    viewModel.selectedItemBinding = null
-                    binding.numberKeyboard.releaseKeyboard(null)
                 }
             }
         }
@@ -439,6 +467,8 @@ class LCCookingFragment() : Fragment(),
                 listener = this@SelectionViewHolder
                 vm = viewModel
                 this.item = item
+                lifecycleOwner = viewLifecycleOwner
+
             }
         }
 
@@ -625,6 +655,7 @@ class LCCookingFragment() : Fragment(),
 fun bindCookingRecyclerView(recyclerView: RecyclerView, item: List<CookingInfoItem>?) {
     println("bind_cooking_list, size=${item?.size}")
     item?.let { itemList ->
+        if (recyclerView.adapter == null) return
         val adapter = recyclerView.adapter as LCCookingFragment.CookingAdapter
         adapter.submitList(itemList)
     }

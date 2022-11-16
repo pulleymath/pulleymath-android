@@ -15,6 +15,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityLcTutorialBinding
 import com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel
@@ -77,9 +78,19 @@ class LCTutorialActivity : AppCompatActivity() {
 
 
             }
-
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppUsageMonitor.finishAppUsage()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AppUsageMonitor.startAppUsage()
+    }
+
     private fun changeImageWrapperCl(seq: Int) {
         binding.apply {
             val isSeqOdd = seq % 2 == 1

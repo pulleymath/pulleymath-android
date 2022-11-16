@@ -39,7 +39,7 @@ class PatternQuizScrollView: ScrollView,
 //    var memoView: CookingMemoView? = null
 
 
-    override fun onTouchEvent(ev: MotionEvent): Boolean {
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
         try {
             if (ev != null) { gesture.onTouchEvent(ev) }
         } catch (e: NullPointerException) {

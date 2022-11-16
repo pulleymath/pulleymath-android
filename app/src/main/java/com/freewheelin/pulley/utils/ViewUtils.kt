@@ -504,7 +504,7 @@ fun ImageView.setImageUrlPicasso(url: String) {
 }
 
 fun ImageView.setImageUrlPicassoDownScale(url: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+    CoroutineScope(Dispatchers.IO).launch {
 
         val requestCreator = Picasso.get()
             .load("${url}?time=${Date().time}")
