@@ -80,7 +80,6 @@ public class FileHelper {
         fun eraseMemo(context: Context, fileName: String) {
             Log.d(javaClass.simpleName, "eraseMemo() fileName=$fileName")
 
-            // TODO memoId를 custom 했더니 모두지우기 버튼 눌렀을 때 여기서 터지는것같다.
             CoroutineScope(Dispatchers.IO).launch {
                 val db = DatabaseHelper.get(context)
                 val valueArray = fileName.split("&&")

@@ -67,7 +67,7 @@ class LCWrongNoteMapFragment : Fragment() {
         arguments?.let {
 
 
-            val headerTitle = (activity as LearningCourseActivity).viewModel.headerTitle.value
+            val headerTitle = (activity as? LearningCourseActivity)?.viewModel?.headerTitle?.value
             viewModel.setChapterHeaderTitle(headerTitle)
 
             viewModel.showProgress.postValue(true)

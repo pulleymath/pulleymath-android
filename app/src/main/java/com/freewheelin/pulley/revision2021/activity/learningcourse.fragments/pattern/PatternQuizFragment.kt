@@ -116,6 +116,7 @@ class PatternQuizFragment() : Fragment(),
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
 
                         val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                        memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         memoView.setPatternMemoId(patternId, it.patternQuizId)
                         memoView.clearBitmap()
                         memoView.load()
@@ -234,23 +235,23 @@ class PatternQuizFragment() : Fragment(),
 
             val dialog = ChannelIoQuestionDialog(requireContext(), screenShotBitmap) { radioMsg, additinalMsg ->
                 val message = "${radioMsg}\n\n${additinalMsg}"
-                val activity = (activity as LearningCourseActivity)
-//
-                activity.getFileImageAsCache(screenShotBitmap)?.let {
+                (activity as? LearningCourseActivity)?.let { lcActivity ->
+                    lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
 
-                    val chatId = Preferences.channelTalkCurrChatId.get()
-                    val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
-                    val currentStudentId = user?.studentID ?: ""
+                        val chatId = Preferences.channelTalkCurrChatId.get()
+                        val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
+                        val currentStudentId = user?.studentID ?: ""
 
-                    if (studentIdWhenIssuingChatId == currentStudentId && chatId.isNotEmpty()) {
-                        postImageMessage(it, message, false)
-                    } else {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            withContext(Dispatchers.Main) {
-                                PChannelIO.openChat(activity, null, "")
+                        if (studentIdWhenIssuingChatId == currentStudentId && chatId.isNotEmpty()) {
+                            postImageMessage(it, message, false)
+                        } else {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                withContext(Dispatchers.Main) {
+                                    PChannelIO.openChat(activity, null, "")
+                                }
+                                delay(1500)
+                                postImageMessage(it, message, true)
                             }
-                            delay(1500)
-                            postImageMessage(it, message, true)
                         }
                     }
                 }
@@ -332,21 +333,22 @@ class PatternQuizFragment() : Fragment(),
 
     }
     fun postImageMessage(file: File, msg: String, isChatOpened: Boolean) {
-        val activity = (activity as LearningCourseActivity)
-        activity.viewModel.uploadImageCaptureFile(file) {
-            it?.let { uploadRes ->
-                activity.viewModel.currChannelIOImage = uploadRes
-                val chatId = Preferences.channelTalkCurrChatId.get()
+        (activity as? LearningCourseActivity)?.apply {
+            viewModel.uploadImageCaptureFile(file) {
+                it?.let { uploadRes ->
+                    viewModel.currChannelIOImage = uploadRes
+                    val chatId = Preferences.channelTalkCurrChatId.get()
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (!isChatOpened) {
-                        withContext(Dispatchers.Main) {
-                            PChannelIO.openChat(activity, chatId, null)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (!isChatOpened) {
+                            withContext(Dispatchers.Main) {
+                                PChannelIO.openChat(activity, chatId, null)
+                            }
                         }
-                    }
-                    delay(1000)
-                    activity.viewModel.postChannelIoCapturedImageMessage(uploadRes) {
-                        activity.viewModel.postChannelIoTextMessage(msg) {
+                        delay(1000)
+                        viewModel.postChannelIoCapturedImageMessage(uploadRes) {
+                            viewModel.postChannelIoTextMessage(msg) {
+                            }
                         }
                     }
                 }
@@ -448,41 +450,43 @@ class PatternQuizFragment() : Fragment(),
     }
 
     private fun resetMemoView() {
-        val lcActivity = (activity as LearningCourseActivity)
-        lcActivity.binding.pencilcaseView.memoViews.clear()
+        (activity as? LearningCourseActivity)?.apply {
+            binding.pencilcaseView.memoViews.clear()
+        }
     }
     private fun resumePencilcaseView() {
-        val lcActivity = (activity as LearningCourseActivity)
-        lcActivity.binding.pencilcaseView.listener = this@PatternQuizFragment
-        binding.memoView.set(lcActivity.binding.pencilcaseView)
+        (activity as? LearningCourseActivity)?.let { lcActivity ->
+            lcActivity.binding.pencilcaseView.listener = this@PatternQuizFragment
+            binding.memoView.set(lcActivity.binding.pencilcaseView)
 
-        val pencilType = lcActivity.getPencilcaseType()
-        val color = lcActivity.getPencilcaseColor()
-        val thickn = lcActivity.getPencilcaseThickness()
-        val isFixedMode = lcActivity.getPencilcaseMode()
+            val pencilType = lcActivity.getPencilcaseType()
+            val color = lcActivity.getPencilcaseColor()
+            val thickn = lcActivity.getPencilcaseThickness()
+            val isFixedMode = lcActivity.getPencilcaseMode()
 
-        lcActivity.binding.pencilcaseView.apply {
+            lcActivity.binding.pencilcaseView.apply {
 
-            if (isFixedMode) {
-                editType = pencilType
-                if (color != null) {
-                    penColor = color
+                if (isFixedMode) {
+                    editType = pencilType
+                    if (color != null) {
+                        penColor = color
+                    }
+                    if (thickn != null) {
+                        thickness = thickn
+                    }
+                    writeModeSwitch.isChecked = isFixedMode
+
+                    val isBlocked = pencilType != null
+                    binding.leftScrollView.isBlock = isBlocked
+                    (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
+                } else {
+                    editType = null
                 }
-                if (thickn != null) {
-                    thickness = thickn
-                }
-                writeModeSwitch.isChecked = isFixedMode
-
-                val isBlocked = pencilType != null
-                binding.leftScrollView.isBlock = isBlocked
-                (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
-            } else {
-                editType = null
+                pencilOptionLl.isSelected = false
+                pencilOptionLl.visibility = View.GONE
+                clearAllBtn.isSelected = false
+                clearAllBtn.visibility = View.GONE
             }
-            pencilOptionLl.isSelected = false
-            pencilOptionLl.visibility = View.GONE
-            clearAllBtn.isSelected = false
-            clearAllBtn.visibility = View.GONE
         }
     }
     private fun setTempConceptSolutionViewFlag() {
@@ -528,19 +532,19 @@ class PatternQuizFragment() : Fragment(),
         binding.leftScrollView.isBlock = isBlocked
         binding.memoView.isBlocked = isBlocked
 
-        (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
-        (activity as LearningCourseActivity).savePencilcaseType(type)
+        (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
+        (activity as? LearningCourseActivity)?.savePencilcaseType(type)
     }
 
     override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {
-        (activity as LearningCourseActivity).savePencilcaseThicknesss(thickness)
+        (activity as? LearningCourseActivity)?.savePencilcaseThicknesss(thickness)
     }
     override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
-        (activity as LearningCourseActivity).savePencilcaseColor(color)
+        (activity as? LearningCourseActivity)?.savePencilcaseColor(color)
     }
 
     override fun onModeChanged(isFixedMode: Boolean) {
-        (activity as LearningCourseActivity).savePencilcaseMode(isFixedMode)
+        (activity as? LearningCourseActivity)?.savePencilcaseMode(isFixedMode)
     }
 
     override fun onScaleFactor(scale: Float) {

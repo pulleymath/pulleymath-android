@@ -211,12 +211,7 @@ class PatternQuizScrollView: ScrollView,
     }
 
     private fun getMinY(): Float {
-        return ((memoView?.parent?.parent as View).height - memoView!!.measuredHeight * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.measuredHeight
-    }
-
-    // 쓸일없으면 지우자
-    fun isParentHeightSameAsMemoHeight(): Boolean {
-        return (memoView?.parent?.parent as View).height == memoView!!.measuredHeight
+        return ((memoView?.parent as View).height - memoView!!.measuredHeight * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.measuredHeight
     }
 
     open fun setViewPosition() {

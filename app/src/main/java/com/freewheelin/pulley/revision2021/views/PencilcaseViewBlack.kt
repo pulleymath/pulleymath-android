@@ -2,6 +2,9 @@ package com.freewheelin.pulley.revision2021.views
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Xfermode
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +15,9 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 
 interface CookingPencilcase {
+    val ERASE_THICK: Float
+        get() = 28f
+
     enum class Thickness(val width: Float) {
         line(1.5F),
         thin(5F),
@@ -64,14 +70,25 @@ interface CookingPencilcaseListener {
 }
 
 class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
+    private val clear = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     var listener: CookingPencilcaseListener? = null
 
     override var editType: CookingPencilcase.EditType? = null
         set(value) {
             field = value
+            when (value) {
+                CookingPencilcase.EditType.pencil -> setMode(null)
+                else -> setMode(clear)
+            }
             configUI()
             listener?.onEditTypeChanged(value)
         }
+    private fun setMode(mode: Xfermode?) {
+        memoViews.forEach {
+            if (mode == null) it.setPencil(penColor.value, penColor.alpha, thickness.width)
+            else it.setEraser(ERASE_THICK)
+        }
+    }
     override var penColor: CookingPencilcase.PenColor = CookingPencilcase.PenColor.black
         set(value) {
             field = value
@@ -84,9 +101,6 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
         }
     override var thickness: CookingPencilcase.Thickness = CookingPencilcase.Thickness.line
         set(value) {
-            View.VISIBLE
-            View.INVISIBLE
-            View.GONE
             field = value
             configUI()
             memoViews.forEach {
@@ -233,8 +247,6 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
                 pencilOptionLl.visibility = View.VISIBLE
                 pencilBtn.setImageResource(R.drawable.ic_npot_pencil_filled)
                 eraserBtn.setImageResource(R.drawable.ic_npot_eraser)
-//                pencilBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
-//                eraserBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
             }
             CookingPencilcase.EditType.eraser -> {
                 pencilBtn.isSelected = false
@@ -242,8 +254,6 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
                 pencilOptionLl.visibility = View.GONE
                 pencilBtn.setImageResource(R.drawable.ic_npot_pencil)
                 eraserBtn.setImageResource(R.drawable.ic_npot_eraser_filled)
-//                pencilBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
-//                eraserBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
             }
             else -> {
                 pencilBtn.isSelected = false
@@ -251,8 +261,6 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
                 pencilOptionLl.visibility = View.GONE
                 pencilBtn.setImageResource(R.drawable.ic_npot_pencil)
                 eraserBtn.setImageResource(R.drawable.ic_npot_eraser)
-//                pencilBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
-//                eraserBtn.setBackgroundResource(R.drawable.bg_black_200_round_ripple)
             }
         }
 

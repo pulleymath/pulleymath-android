@@ -20,9 +20,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -145,6 +148,20 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         mLastDimensionH = savedState.getLastDimensionH();
 
         notifyRedoUndoCountChanged();
+    }
+
+    public void setEraser(float stroke) {
+        mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mCurrentPaint.setColor(Color.TRANSPARENT);
+        mCurrentPaint.setAlpha(Color.TRANSPARENT);
+        setPaintWidthDp(stroke);
+    }
+
+    public void setPencil(int paintColor, int paintAlpha, float stroke) {
+        mCurrentPaint.setXfermode(null);
+        mCurrentPaint.setColor(paintColor);
+        mCurrentPaint.setAlpha(paintAlpha);
+        setPaintWidthDp(stroke);
     }
 
     /**
@@ -561,7 +578,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, currentPath.getPaint());
             } else {// Else draw the complete path
-
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
             }
         }
@@ -596,7 +612,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         // If the path is finished, add it to the history
-        if (finishedPath && mPoints.size() > 0) {
+        if (finishedPath && mPoints.size() > 0) { // TODO
             createHistoryPathFromPoints();
         }
     }
@@ -647,8 +663,16 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mPoints.add(point);
             mFinishPath = false;
 
-        } else
+
+        } else {
+
             mFinishPath = true;
+            // TODO pdf memo freedrawview 와 다름
+            // onDraw 에서 이동 - 마지막 선이 저장 안되는 문제 해결을 위해
+            if (mFinishPath && mPoints.size() > 0) {
+                createHistoryPathFromPoints();
+            }
+        }
 
         invalidate();
         return false;

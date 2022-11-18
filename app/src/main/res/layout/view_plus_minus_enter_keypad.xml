@@ -13,18 +13,32 @@
         android:focusable="false"
         >
 
-        <TextView
-            android:id="@+id/valueTv"
-            style="@style/Cooking_Keypad_btn"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/valueCl"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="정답 입력"
-            android:gravity="center_vertical|right"
-            android:paddingEnd="24dp"
+            android:background="@drawable/bg_grey_f2f2f2_round"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/number7Btn"/>
+            app:layout_constraintBottom_toTopOf="@+id/number7Btn">
+
+            <TextView
+                android:id="@+id/valueTv"
+                style="@style/Cooking_Keypad_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="정답 입력"
+                android:gravity="center_vertical|right"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingRight="24dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
             style="@style/Cooking_Keypad_btn"
             android:id="@+id/number7Btn"
@@ -36,7 +50,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/number8Btn"
-            app:layout_constraintTop_toBottomOf="@+id/valueTv"
+            app:layout_constraintTop_toBottomOf="@+id/valueCl"
             app:layout_constraintBottom_toTopOf="@+id/number4Btn"/>
 
         <Button
@@ -51,7 +65,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toEndOf="@+id/number7Btn"
             app:layout_constraintEnd_toStartOf="@+id/number9Btn"
-            app:layout_constraintTop_toBottomOf="@+id/valueTv"
+            app:layout_constraintTop_toBottomOf="@+id/valueCl"
             app:layout_constraintBottom_toTopOf="@+id/number5Btn"/>
 
         <Button
@@ -66,7 +80,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toEndOf="@+id/number8Btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/valueTv"
+            app:layout_constraintTop_toBottomOf="@+id/valueCl"
             app:layout_constraintBottom_toTopOf="@+id/number6Btn"/>
 
         <Button

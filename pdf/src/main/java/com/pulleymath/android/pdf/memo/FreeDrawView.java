@@ -614,6 +614,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             }
 
             canvas.drawPath(mCurrentPath, mCurrentPaint);
+
         }
 
         // If the path is finished, add it to the history

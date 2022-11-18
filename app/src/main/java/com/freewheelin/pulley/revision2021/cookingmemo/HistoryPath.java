@@ -14,6 +14,8 @@ package com.freewheelin.pulley.revision2021.cookingmemo;
 
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
@@ -32,6 +34,8 @@ class HistoryPath implements Parcelable, Serializable {
 
     private static final String TAG = HistoryPath.class.getSimpleName();
 
+    private static transient PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+
     private ArrayList<Point> points = new ArrayList<>();
     private int paintColor;
     private int paintAlpha;
@@ -42,6 +46,8 @@ class HistoryPath implements Parcelable, Serializable {
     private transient Path path = null;
     private transient Paint paint = null;
 
+    private boolean isErase = false;
+
     HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint) {
         this.points = new ArrayList<>(points);
         this.paintColor = paint.getColor();
@@ -50,6 +56,8 @@ class HistoryPath implements Parcelable, Serializable {
         this.originX = points.get(0).x;
         this.originY = points.get(0).y;
         this.isPoint = FreeDrawHelper.isAPoint(points);
+
+        this.isErase = (paint.getXfermode() != null) ? true : false;
 
         generatePath();
         generatePaint();
@@ -80,6 +88,8 @@ class HistoryPath implements Parcelable, Serializable {
 
         paint = FreeDrawHelper.createPaintAndInitialize(paintColor, paintAlpha, paintWidth,
                 isPoint);
+
+        if (isErase) paint.setXfermode(clear);
     }
 
     public Path getPath() {

@@ -266,7 +266,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
                 pager.adapter = LCViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
                 pager.offscreenPageLimit = 2
-
             }
 
             onPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {

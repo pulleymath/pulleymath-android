@@ -65,7 +65,7 @@ class CookingMemoView: FreeDrawView {
             super.onTouch(view, motionEvent)
             return false
 
-        }else if(pencilcase?.editType == CookingPencilcase.EditType.eraser || buttonType == MotionEvent.BUTTON_STYLUS_PRIMARY) {
+        } else if(pencilcase?.editType == CookingPencilcase.EditType.eraser || buttonType == MotionEvent.BUTTON_STYLUS_PRIMARY) {
 
             saveHistoryPathFromPoints()
             if (motionEvent?.pointerCount in 2..3 ) {
@@ -73,41 +73,16 @@ class CookingMemoView: FreeDrawView {
                 return false
             }
 
-            val iterator = mPaths.iterator()
             parent.requestDisallowInterceptTouchEvent(true)
-            while(iterator.hasNext()) {
-                var e = iterator.next()
-
-                for (i in 0 until (motionEvent?.getHistorySize() ?: 0)) {
-                    var point = Point()
-
-                    if (motionEvent?.getHistoricalX(i) == null || motionEvent?.getHistoricalY(i) == null)
-                        continue
-
-                    point.x = motionEvent.getHistoricalX(i)
-                    point.y = motionEvent.getHistoricalY(i)
-
-                    if (e.isIn(point)) {
-                        iterator.remove()
-                        invalidate()
-                        break
-                    }
-                }
-            }
-            return true
+            if (motionEvent?.action == MotionEvent.ACTION_DOWN)
+                return true
+            super.onTouch(view, motionEvent)
         } else {
             return true
         }
 
+        return false
     }
-
-//    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-//        if (isBlocked) {
-//            println("xjcl4, dispatchToucnevent super ")
-//            return super.dispatchTouchEvent(event)
-//        }
-//        return false
-//    }
 
     private var isWaitingExecutionSignal = false
     private var drawingSaveHandler: Handler? = null
@@ -184,7 +159,6 @@ class CookingMemoView: FreeDrawView {
             pencilcase.memoViews.add(this)
         }
     }
-
 
     fun save(fileName: String) {
         FileHelper.saveStateIntoFile(context, currentViewStateAsSerializable, fileName, null)

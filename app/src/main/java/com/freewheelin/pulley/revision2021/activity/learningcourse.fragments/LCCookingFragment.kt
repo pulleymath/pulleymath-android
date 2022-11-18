@@ -57,6 +57,7 @@ class LCCookingFragment() : Fragment(),
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
 
     var isInitFragment = false
+    var isRvLoaded = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,6 +82,7 @@ class LCCookingFragment() : Fragment(),
                 cookingInfo.observe(viewLifecycleOwner) {
                     val chapterId = it.chapterId
                     val cookingId = it.conceptCookingId
+                    cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                     cookingMemoView.setCookingMemoId(chapterId, cookingId)
                     cookingMemoView.clearBitmap()
                     cookingMemoView.load()
@@ -106,7 +108,6 @@ class LCCookingFragment() : Fragment(),
 
             viewModel.cookingImageUrl.observe(viewLifecycleOwner) {
                 CoroutineScope(Dispatchers.IO).launch {
-
                     val requestCreator = Picasso.get()
                         .load(it)
 //                        .load("${it}?time=${Date().time}")
@@ -120,8 +121,11 @@ class LCCookingFragment() : Fragment(),
                             .onlyScaleDown()
                             .into(exerciseIv, object: Callback {
                                 override fun onSuccess() {
-                                    rightRv.adapter = CookingAdapter()
-                                    viewModel.cookingList.postValue(viewModel.cookingList.value)
+                                    if (!isRvLoaded) {
+                                        isRvLoaded = true
+                                        rightRv.adapter = CookingAdapter()
+                                        viewModel.cookingList.postValue(viewModel.cookingList.value)
+                                    }
                                 }
                                 override fun onError(e: java.lang.Exception?) {
                                     println("picasso downscale load error : ${e}")
@@ -182,7 +186,6 @@ class LCCookingFragment() : Fragment(),
 
                         viewModel.apply {
                             selectedExerciseIndex.observe(viewLifecycleOwner) {
-
                                 val selectedExercise =
                                     cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
                                         ?.first()
@@ -213,14 +216,16 @@ class LCCookingFragment() : Fragment(),
                                     val cookingId = it.conceptCookingId
                                     quizMemoViewList.clear()
 
-                                    cookingQuizzes.cookingMemoView.setMemoSavedName(
-                                        chapterId,
-                                        cookingId,
-                                        "cooking_quiz_${selectedIndex}"
-                                    )
+                                    cookingQuizzes.cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                                    cookingQuizzes.cookingMemoView.setMemoSavedName(chapterId,cookingId,"cooking_quiz_${selectedIndex}")
                                     cookingQuizzes.cookingMemoView.clearBitmap()
                                     cookingQuizzes.cookingMemoView.load()
                                     quizMemoViewList.add(cookingQuizzes.cookingMemoView)
+
+                                    val lcActivity = (activity as LearningCourseActivity)
+                                    lcActivity.binding.pencilcaseView.listener = this@LCCookingFragment
+                                    binding.cookingMemoView.set(lcActivity.binding.pencilcaseView)
+                                    quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
                                 }
 
                                 cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }

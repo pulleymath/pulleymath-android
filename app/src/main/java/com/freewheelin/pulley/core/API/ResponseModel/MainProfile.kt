@@ -42,10 +42,13 @@ class MainProfile {
 
     fun getDDayText(targetDay: Date?): String {
         val dday = getDDay(targetDay)
-        if(dday < 0 )
-            return "D+${abs(dday)}"
-        else
-            return "D-${abs(dday)}"
+        return if(dday < 0 ) {
+            "D+${abs(dday)}"
+        } else if (dday == 0) {
+            "D-Day"
+        } else {
+            "D-${abs(dday)}"
+        }
     }
 
     fun getDDay(targetDay: Date?): Int {

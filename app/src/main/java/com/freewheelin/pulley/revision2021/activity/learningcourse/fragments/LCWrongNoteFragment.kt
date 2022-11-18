@@ -72,6 +72,7 @@ class LCWrongNoteFragment : Fragment(),
                 viewModel.noteCard.observeOnce(this@LCWrongNoteFragment) {
 
 //                    val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                    memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                     memoView.setMemoSavedName(it.userQuizSolvingHistoryId, it.refPatternQuizId, "lcwrongnotememo")
                     memoView.clearBitmap()
                     memoView.load()

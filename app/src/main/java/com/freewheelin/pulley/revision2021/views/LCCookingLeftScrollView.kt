@@ -95,12 +95,6 @@ class LCCookingLeftScrollView: ScrollView,
         memoView.scaleX = scaleFactor
         memoView.scaleY = scaleFactor
 
-
-//        val scaleAnimation = ScaleAnimation(beforeScaleFactor, scaleFactor, beforeScaleFactor, scaleFactor, detector.focusX, detector.focusY)
-//        scaleAnimation.duration = 0
-//        scaleAnimation.fillAfter = true
-//        leftContentCl.startAnimation(scaleAnimation)
-//        memoView.startAnimation(scaleAnimation)
     }
 
     override fun onScroll(event1: MotionEvent, event2: MotionEvent, xDiff: Float, yDiff: Float): Boolean {
@@ -128,28 +122,19 @@ class LCCookingLeftScrollView: ScrollView,
 
 
     open fun getIvX(): Float {
-//        return memoView.x + 0.5f * (1 - scaleFactor) * (memoView.measuredWidth - leftContentCl.measuredWidth)
         return memoView.x + 0.5f * (1 - scaleFactor) * (memoView.width - leftContentCl.width)
     }
 
     open fun getIvY(): Float {
-//        return memoView.y + 0.5f * (1 - scaleFactor) * (memoView.measuredHeight - leftContentCl.measuredHeight)
         return memoView.y + 0.5f * (1 - scaleFactor) * (memoView.height - leftContentCl.height)
     }
 
     private fun getMinX(): Float {
-//        return (1 - scaleFactor)*(memoView.measuredWidth) * 0.5f
         return (1 - scaleFactor)*(memoView.width) * 0.5f
     }
 
     private fun getMinY(): Float {
-//        return ((memoView.parent.parent as View).height - memoView.measuredHeight * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.measuredHeight
-        return ((memoView.parent.parent as View).height - memoView.height * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.height
-    }
-
-    // 쓸일없으면 지우자
-    fun isParentHeightSameAsMemoHeight(): Boolean {
-        return (memoView.parent.parent as View).height == memoView.measuredHeight
+        return ((memoView.parent as View).height - memoView.height * scaleFactor) + 0.5f * (scaleFactor - 1) * memoView!!.height
     }
 
     open fun setViewPosition() {

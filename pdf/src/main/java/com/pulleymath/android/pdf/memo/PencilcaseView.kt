@@ -327,13 +327,11 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
     }
 
     private fun setMode(mode: Xfermode?) {
-        memoViews.forEach {
-            if(mode == null) {
-                memoViews.forEach { it.setPencil(penColor.value, penColor.alpha, thickness.width) }
-            } else {
-                memoViews.forEach {
-                    it.setEraser(ERASE_THICK)
-                }
+        if(mode == null) {
+            memoViews.forEach { it.setPencil(penColor.value, penColor.alpha, thickness.width) }
+        } else {
+            memoViews.forEach {
+                it.setEraser(ERASE_THICK)
             }
         }
     }
