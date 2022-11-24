@@ -35,8 +35,6 @@ class WrongNoteQuizScrollView: ScrollView,
     // pattern에서도 이 뷰를 쓰고있으므로 아래의 뷰는 id로 받기보다는 fragment로부터 받아와야 할것같다.
     val leftContentCl by lazy { this.findViewById<ConstraintLayout>(R.id.ivWrapperCl) }
     val memoView by lazy { this.findViewById<CookingMemoView>(R.id.memoView) }
-//    var leftContentCl: ConstraintLayout? = null
-//    var memoView: CookingMemoView? = null
 
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {

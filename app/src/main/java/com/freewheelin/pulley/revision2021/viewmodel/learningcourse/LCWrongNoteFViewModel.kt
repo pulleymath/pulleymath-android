@@ -14,6 +14,7 @@ import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteMapRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -50,17 +51,15 @@ class LCWrongNoteFViewModel : BaseViewModel(), LifecycleObserver {
         return true
     }
 
-    @SuppressLint("CheckResult")
     fun quizScoring(callback: (scoring: LCPatternScoring) -> Unit) {
         if (currentAnswerOfSingle.value == "") return
         val userAnswer = ScoringReq(currentAnswerOfSingle.value!!)
-        println("https, userAnswer ${userAnswer.userAnswer}")
         noteCard.value?.let { note ->
             val patternQuizId = note.refPatternQuizId
             val studentId = user?.studentID ?: return
 
             if (note.isCorrect != null) return@let
-            patternRepository.patternQuizScoring(patternQuizId, studentId, "WRONG_PATTERN_QUIZ", userAnswer)
+            compositeDisposable += patternRepository.patternQuizScoring(patternQuizId, studentId, "WRONG_PATTERN_QUIZ", userAnswer)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ response ->

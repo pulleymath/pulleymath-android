@@ -9,6 +9,7 @@ import com.freewheelin.pulley.revision2021.model.LCPatternCard
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.repository.LCPatternMapRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -16,22 +17,24 @@ class LCPatternMapViewModel: BaseViewModel(), LifecycleObserver {
     private val patternMapRepository by lazy { LCPatternMapRepository() }
 
     val patternCardList by lazy { MutableLiveData<List<LCPatternCard>>() }
-    val showProgress by lazy { MutableLiveData<Boolean>(true) }
+    val showProgress by lazy { MutableLiveData<Boolean>(false) }
     val showNextStepBtn by lazy { MutableLiveData<Boolean>(false) }
     var patternCardLastIndex: Int = -1
-//    val smallChapterName by lazy { MutableLiveData("유형 학습 완료!") }
+
     val chapter by lazy { MutableLiveData<StudyChapter>() }
     var solvedPatternCount = 0
+    var isFirstFetch = true
 
-    @SuppressLint("CheckResult")
     fun fetchPatternMap(chapterId: Int) {
         val studentId = user?.studentID ?: return
-        patternMapRepository.fetchPatternMapInfo(chapterId, studentId)
+        compositeDisposable += patternMapRepository.fetchPatternMapInfo(chapterId, studentId)
             .subscribeOn(Schedulers.io())
+            .doOnSubscribe { showProgress.postValue(true) }
+            .doOnError { showProgress.postValue(false) }
+            .doOnComplete { showProgress.postValue(false) }
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchPatternMap =>${response.data}")
-                showProgress.postValue(false)
 
                 response.data?.let {
                     val header = LCPatternCard.getHeader()
@@ -44,7 +47,6 @@ class LCPatternMapViewModel: BaseViewModel(), LifecycleObserver {
                     showNextStepBtn.postValue(showStepBtn)
                 }
             }, { error ->
-                showProgress.postValue(false)
                 Log.e(javaClass.simpleName, "fetchPatternMap error=${error.localizedMessage}")
             })
     }

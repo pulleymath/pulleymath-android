@@ -19,6 +19,7 @@ import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.utils.Preferences
 import com.zoyi.channel.plugin.android.store.ChannelStore
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -61,15 +62,15 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     val isPatternNaviSelected by lazy { MutableLiveData(false) }
 
     var currPagerPosition = 0
+    val selectedPagerIndex by lazy { MutableLiveData<Int>(0) }
 
     var currChannelIOImage: ChannelIOImageUploadRes? = null
 
 
-    @SuppressLint("CheckResult")
     fun fetchCourseList(chapterId: Int, callback: (List<SingleCourseDesc>) -> Unit) {
         selectedChapterId = chapterId
 
-        courseRepository.fetchCourseList(chapterId)
+        compositeDisposable += courseRepository.fetchCourseList(chapterId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -205,9 +206,8 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
         return listOf()
     }
 
-    @SuppressLint("CheckResult")
     fun getChats(callback: () -> Unit) {
-        channelTalkRepository.getChats()
+        compositeDisposable += channelTalkRepository.getChats()
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -232,14 +232,14 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
                 callback()
             })
     }
-    @SuppressLint("CheckResult")
+
     fun uploadImageCaptureFile(file: File, callback: (ChannelIOImageUploadRes?) -> Unit) {
         val channelId = ChannelStore.get().channelState.get()?.id ?: "104720"
         val chatId = Preferences.channelTalkCurrChatId.get()
         val fileName = "question_file.png"
 
         val file = RequestBody.create(MediaType.parse("image/png"), file)
-        channelTalkRepository.uploadCaptureImage(channelId, chatId, fileName, file)
+        compositeDisposable += channelTalkRepository.uploadCaptureImage(channelId, chatId, fileName, file)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -252,13 +252,12 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun postChannelIoCapturedImageMessage(res: ChannelIOImageUploadRes, callback: () -> Unit) {
         val chatId = Preferences.channelTalkCurrChatId.get()
         val pageName = "LearningCourseActivity" // ChannelIO를 initialize한 Activity의 이름
         val personId = Preferences.channelTalkUserId.get()
         val body = PostImageMessageReq(personId, res)
-        channelTalkRepository.postCapturedImageMessage(chatId, pageName, body)
+        compositeDisposable += channelTalkRepository.postCapturedImageMessage(chatId, pageName, body)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -270,13 +269,13 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
                 callback()
             })
     }
-    @SuppressLint("CheckResult")
+
     fun postChannelIoTextMessage(msg: String, callback: () -> Unit) {
         val chatId = Preferences.channelTalkCurrChatId.get()
         val pageName = "LearningCourseActivity" // ChannelIO를 initialize한 Activity의 이름
         val personId = Preferences.channelTalkUserId.get()
         val body = PostTextMessageReq(personId, msg)
-        channelTalkRepository.postTextMessage(chatId, pageName, body)
+        compositeDisposable += channelTalkRepository.postTextMessage(chatId, pageName, body)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -289,11 +288,10 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {
         val studentId = user?.studentID ?: return
 
-        studyRepository.createLearningCourse(chapterId, studentId)
+        compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

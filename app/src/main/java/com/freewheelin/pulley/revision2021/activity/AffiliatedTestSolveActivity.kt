@@ -807,6 +807,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 DaebakToast.show(this, "마지막 문제입니다 :)")
         }
     }
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
 
 class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :

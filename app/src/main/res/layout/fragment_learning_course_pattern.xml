@@ -272,7 +272,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.freewheelin.pulley.revision2021.views.DisallowTouchEventViewPager
+        <com.freewheelin.pulley.revision2021.views.LCPatternViewPager
             android:id="@+id/pagerWrapper"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -140,26 +140,7 @@ class PatternQuizScrollView: ScrollView,
         memoView.scaleY = scaleFactor
     }
 
-    var xScroll: Int = 0
-    var yScroll: Int = 0
-    lateinit var setUserInputOfPatternQuizEnabled: (enabled: Boolean) -> Unit
-    lateinit var scrollEndCallback: (u: Unit) -> Unit
-
-    private fun yScrollControl(x: Float, y: Float) {
-        if (scaleFactor == 1f) {
-            if (abs(x) < abs(y)) {
-                yScroll += 2
-            } else {
-                xScroll += 1
-            }
-            if (yScroll > xScroll) {
-                setUserInputOfPatternQuizEnabled(false)
-                scrollEndCallback(Unit)
-            }
-        }
-    }
     override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
-        yScrollControl(x, y)
 
         val minX = getMinX()
         val minY = getMinY()

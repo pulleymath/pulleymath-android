@@ -22,10 +22,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.Patt
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.lifecycleScope
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.DensityLevel
-import com.freewheelin.pulley.bases.densityLevel
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
@@ -34,11 +31,9 @@ import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.DatabaseHelper
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
-import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.*
-import com.zoyi.channel.plugin.android.ChannelIO
 import kotlinx.coroutines.*
 import java.io.File
 
@@ -127,27 +122,7 @@ class PatternQuizFragment() : Fragment(),
                 pager.isUserInputEnabled = false
 
                 leftScrollView.listener = this@PatternQuizFragment
-                val quizUserInputDebounce = debounce<Unit>(300L, viewLifecycleOwner.lifecycleScope) {
-                    (parentFragment as LCPatternFragment).setPagerUserInputEnabled(true)
-                    (activity as LearningCourseActivity).setPagerUserInputEnable(true)
-                }
-                leftScrollView.setUserInputOfPatternQuizEnabled = { enabled ->
-                    (parentFragment as LCPatternFragment).setPagerUserInputEnabled(enabled)
-                    (activity as LearningCourseActivity).setPagerUserInputEnable(enabled)
-                }
-                leftScrollView.scrollEndCallback = quizUserInputDebounce
-
-
-                val imageWidth = when (requireContext().densityLevel) {
-                    DensityLevel.Low -> screenWidth / 2
-                    DensityLevel.High -> (screenWidth / 2.7).toInt()
-                    else -> (500.toPx()).toInt()
-                }
-
-//                conceptIv.maxWidth = imageWidth
-
                 memoView.layoutParams.width = screenWidth
-
 
                 if (viewModel.currQuizIndex == 0) {
                     viewModel.isQuizMainConcept.postValue(true)
@@ -328,9 +303,7 @@ class PatternQuizFragment() : Fragment(),
             val url = quiz.solutionImageUrl
             iv.setImageUrlGlide(url)
             solutionScrollRootLl.addView(iv)
-
         }
-
     }
     fun postImageMessage(file: File, msg: String, isChatOpened: Boolean) {
         (activity as? LearningCourseActivity)?.apply {
@@ -355,6 +328,7 @@ class PatternQuizFragment() : Fragment(),
             }
         }
     }
+
     fun onFloatingAnswerSheetDragListener (view: View, dragEvent: DragEvent): Boolean {
         binding.apply {
             when (dragEvent.action) {
@@ -370,8 +344,7 @@ class PatternQuizFragment() : Fragment(),
                         val answerHeight = floatingAnswerSheet.height
                         val answerWidth = floatingAnswerSheet.width
 
-                        x =
-                            dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                         y = dragEvent.y - answerHeight / 2f
 
                         // 화면 밖으로 나가면 안으로 넣기
@@ -391,15 +364,14 @@ class PatternQuizFragment() : Fragment(),
                     }
 
                 }
-                DragEvent.ACTION_DROP -> {
 
+                DragEvent.ACTION_DROP -> {
                     floatingAnswerSheet.visibility = View.VISIBLE
 
                     val answerHeight = floatingAnswerSheet.height
                     val answerWidth = floatingAnswerSheet.width
 
-                    var x =
-                        dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                    var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                     var y = dragEvent.y - answerHeight / 2f
 
 
@@ -417,6 +389,8 @@ class PatternQuizFragment() : Fragment(),
                     }
 
                     floatingAnswerSheet.setPosition(x, y)
+                    Preferences.floatingAnswerSheetLastLocation.set("${x}&&${y}")
+                    (activity as LearningCourseActivity).resumeLCPatternFloatingAnswerSheetLocation()
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
                     floatingAnswerSheet.visibility = View.VISIBLE
@@ -424,9 +398,7 @@ class PatternQuizFragment() : Fragment(),
                         floatingAnswerSheet.cancelDragAndDrop()
                     }
                 }
-                else -> {
-//                        println("emform, dragEvent.action : ${dragEvent.action}")
-                }
+                else -> {}
             }
         }
         return true
@@ -438,13 +410,14 @@ class PatternQuizFragment() : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        setHintBtn()
+//        setHintBtn()
         resetMemoView()
         resumePencilcaseView()
-        setTempConceptSolutionViewFlag()
+
+//        setTempConceptSolutionViewFlag()
     }
 
-    private fun setHintBtn() {
+    fun setHintBtn() {
         val size = viewModel.remainingHintSize.value
         (parentFragment as LCPatternFragment).setHintBtn(size == 0, size)
     }
@@ -468,17 +441,13 @@ class PatternQuizFragment() : Fragment(),
 
                 if (isFixedMode) {
                     editType = pencilType
-                    if (color != null) {
-                        penColor = color
-                    }
-                    if (thickn != null) {
-                        thickness = thickn
-                    }
+                    if (color != null) { penColor = color }
+                    if (thickn != null) { thickness = thickn }
                     writeModeSwitch.isChecked = isFixedMode
 
                     val isBlocked = pencilType != null
                     binding.leftScrollView.isBlock = isBlocked
-                    (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
+                    (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
                 } else {
                     editType = null
                 }
@@ -489,8 +458,13 @@ class PatternQuizFragment() : Fragment(),
             }
         }
     }
-    private fun setTempConceptSolutionViewFlag() {
+    fun setTempConceptSolutionViewFlag() {
         viewModel.showConceptSolutionView.postValue(viewModel.tempConceptSolutionViewFlag)
+    }
+    fun resumeFloatingAnswerSheetLocation() {
+        if (viewModel.currQuizIndex != 0) {
+            binding.floatingAnswerSheet.setInitPosition()
+        }
     }
     fun toggleDrawer() {
         val value = viewModel.showConceptSolutionView.value?.not()
@@ -532,8 +506,8 @@ class PatternQuizFragment() : Fragment(),
         binding.leftScrollView.isBlock = isBlocked
         binding.memoView.isBlocked = isBlocked
 
-        (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
         (activity as? LearningCourseActivity)?.savePencilcaseType(type)
+        (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
     }
 
     override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {
@@ -549,6 +523,12 @@ class PatternQuizFragment() : Fragment(),
 
     override fun onScaleFactor(scale: Float) {
         (parentFragment as LCPatternFragment).setQuizImageScale(scale)
+    }
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
     }
 }
 

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:focusable="true"
-        android:paddingStart="@{ isLeftPosition ? @dimen/dp30 : @dimen/dp6 }"
+        android:paddingStart="@{ isLeftPosition ? @dimen/dp0 : @dimen/dp6 }"
         android:paddingEnd="@{ isFinalCard &amp;&amp; isRightPosition ? @dimen/dp30 : isFinalCard ? @dimen/dp18 : @dimen/dp0 }"
         android:paddingBottom="@{ isBottomPosition &amp;&amp; showNextStepButton ? @dimen/dp144 : isBottomPosition ? @dimen/dp36 : @dimen/dp0 }">
 
@@ -216,7 +216,6 @@
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginStart="4dp"
-            layout_margin_end_dimen="@{ isRightPosition ? @dimen/dp34 : @dimen/dp0 }"
             android:src="@drawable/ic_study_arrow_right"
             app:tint="@color/purple_200"
             android:visibility="@{ isFinalCard ? View.GONE : View.VISIBLE }"
@@ -225,6 +224,7 @@
             app:layout_constraintStart_toEndOf="@+id/cardRootCl"
             app:layout_constraintEnd_toEndOf="parent"
             />
+<!--            layout_margin_end_dimen="@{ isRightPosition ? @dimen/dp34 : @dimen/dp0 }"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

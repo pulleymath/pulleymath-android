@@ -20,12 +20,15 @@ import com.freewheelin.pulley.revision2021.repository.FindCityRepository
 import com.freewheelin.pulley.revision2021.model.response.City
 import com.freewheelin.pulley.utils.DialogUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 
 
 class MyStudyInfoSettingFragment : MyPageBaseFragment() {
 
     val findCityRepository by lazy { FindCityRepository() }
+    internal val disposables = CompositeDisposable()
     var cityList: List<City> = mutableListOf()
     var selectedSchoolID: Int? = null
     var selectedCityID: Int? = null
@@ -147,7 +150,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
 
     private fun setCites() {
         if(cityList.isEmpty()) {
-            findCityRepository.getCities()
+            disposables += findCityRepository.getCities()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
@@ -270,7 +273,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
 
             Log.d(javaClass.simpleName, "major=${majorType} idx=$majorIdx")
 
-            API_V2.updateSchoolInfo(this)
+            disposables += API_V2.updateSchoolInfo(this)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
@@ -292,5 +295,10 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                         DialogUtils.showDialog(requireContext(),"학업정보 변경오류", it.localizedMessage, rightBtnText = "확인")
                     })
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 }

@@ -1,7 +1,5 @@
 package com.freewheelin.pulley.revision2021.model
 
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.utils.Preferences
 import java.io.Serializable
@@ -30,12 +28,13 @@ class StudyChapter: BaseDiffItem, Serializable {
             parentSequence = -1
             isParentChapterLast = true
             children = listOf(createTutorialChild())
-            isFirstChapter = false
+            isFirstMiddleChapter = false
         }
         fun createTutorialChild() = StudyChapter().apply {
             id = -5
             name = "개념학습 튜토리얼"
             sequence = TUTORIAL_SEQUENCE
+            isFirstSmallItem = true
             progress = Progress().apply {
                 val tutorialPassed = Preferences.isConceptLearningTutorialPassed.get()
 
@@ -63,9 +62,11 @@ class StudyChapter: BaseDiffItem, Serializable {
     var children: List<StudyChapter> = listOf()
 
     var parentName: String = ""
-    var isFirstChapter: Boolean = false
-    var isLastChapter: Boolean = false
+    var isFirstMiddleChapter: Boolean = false
+    var isLastMiddleChapter: Boolean = false
     var hasNextItem: Boolean = false
+    var isFirstSmallItem: Boolean = false
+    var isLastSmallItem: Boolean = false
     var isParentChapterLast: Boolean = false
     var parentSequence: Int = 0
 
@@ -178,6 +179,13 @@ class StudyChapter: BaseDiffItem, Serializable {
         val brotherLastIndex = parent.children.lastIndex
         val itemPosition = parent.children.indexOf(this)
         hasNextItem = brotherLastIndex - itemPosition > 0
+    }
+    fun checkBothEndsItem(parent: StudyChapter) {
+        val lastIndex = parent.children.lastIndex
+        val itemPosition = parent.children.indexOf(this)
+
+        isFirstSmallItem = itemPosition == 0
+        isLastSmallItem = lastIndex == itemPosition
     }
 
     inner class Progress: Serializable {

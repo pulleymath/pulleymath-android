@@ -55,6 +55,7 @@ object Preferences {
     var channelTalkUserId = APPreference("")
 
     var isConceptLearningTutorialPassed = APPreference(false)
+    var floatingAnswerSheetLastLocation = APPreference("")
 }
 
 

@@ -15,8 +15,10 @@ import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pat
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
+import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.AnswerSelectionListener
 import com.freewheelin.pulley.views.AnswerSelectionView
+import java.util.*
 
 interface FloatingAnswerDelegate {
     fun onAnswerChanged(view: View, answer: String?)
@@ -97,6 +99,19 @@ class FloatingAnswerSheet: BaseView, AnswerSelectionListener {
     }
     override fun doOnDetached() {}
 
+    fun setInitPosition() {
+        val locationStr = Preferences.floatingAnswerSheetLastLocation.get()
+        locationStr.split("&&").let {
+            if (it.size > 1) {
+                val x = it[0].toFloat()
+                val y = it[1].toFloat()
+                this.x = x
+                this.y = y
+                this.visibility = View.VISIBLE
+            }
+        }
+
+    }
     fun setPosition(x: Float, y: Float) {
         this.x = x
         this.y = y

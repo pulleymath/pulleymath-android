@@ -19,19 +19,13 @@ import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeOnce
+import kotlinx.coroutines.*
 
 
 class LCPatternFragment : Fragment() {
 
     companion object {
         val COURSE_DESC = "COURSE_DESC"
-//        fun newInstance(courseId: Int) : LCPatternFragment {
-//            return LCPatternFragment().apply {
-//                arguments = Bundle().apply {
-//                    putInt(LearningCourseActivity.COURSE_DETAIL_ID, courseId)
-//                }
-//            }
-//        }
         fun newInstance(course: SingleCourseDesc) : LCPatternFragment {
             return LCPatternFragment().apply {
                 arguments = Bundle().apply {
@@ -72,6 +66,21 @@ class LCPatternFragment : Fragment() {
                         viewModel.patternQuiz3.postValue(it[3])
                     }
                 }
+                viewModel.selectedQuizIndex.observe(viewLifecycleOwner) { index ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(100)
+                        withContext(Dispatchers.Main) {
+                            val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(index)) }
+                            children.forEach {
+                                (it as PatternQuizFragment).run {
+                                    setHintBtn()
+                                    setTempConceptSolutionViewFlag()
+                                    resumeFloatingAnswerSheetLocation()
+                                }
+                            }
+                        }
+                    }
+                }
 
                 viewModel.patternQuizList.observeOnce(this@LCPatternFragment) {
                     val frags = it.mapIndexed { index, quiz ->
@@ -84,17 +93,11 @@ class LCPatternFragment : Fragment() {
                     }
                     pagerWrapper.pager.adapter = LCPatternViewPagerAdapter(tabFragments, childFragmentManager, lifecycle)
                     pagerWrapper.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                        override fun onPageScrolled(
-                            position: Int,
-                            positionOffset: Float,
-                            positionOffsetPixels: Int
-                        ) {
-                            super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                            viewModel.selectedQuizIndex.postValue(position)
-                        }
 
                         override fun onPageSelected(position: Int) {
                             super.onPageSelected(position)
+                            viewModel.selectedQuizIndex.postValue(position)
+
                             when (position) {
                                 0 -> {
                                     pagerWrapper.setStartIndex()
@@ -111,11 +114,6 @@ class LCPatternFragment : Fragment() {
                 }
 
                 conceptSolutionToggleBtn.setOnClickListener {
-//                    val currItem = pagerWrapper.pager.currentItem
-//                    childFragmentManager.fragments[currItem].let {
-//                        (it as PatternQuizFragment).toggleDrawer()
-//                    }
-
                     val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(pagerWrapper.pager.currentItem)) }
                     children.forEach {
                         (it as PatternQuizFragment).toggleDrawer()
@@ -160,7 +158,7 @@ class LCPatternFragment : Fragment() {
                 }
 
                 pagerWrapper.pagerEnableCallback = {
-                    (activity as LearningCourseActivity).setPagerUserInputEnable(true)
+                    (activity as LearningCourseActivity).setPagerUserInputEnable(it)
                 }
                 patternHeaderLeftLl.setOnClickListener {
                     (activity as LearningCourseActivity).hidePencilcasePanel()
@@ -230,6 +228,13 @@ class LCPatternFragment : Fragment() {
             }
         }
     }
+    fun resumeFloatingAnswerSheetLocation() {
+        childFragmentManager.fragments.forEach {
+            (it as PatternQuizFragment).run {
+                resumeFloatingAnswerSheetLocation()
+            }
+        }
+    }
 
     fun setQuizImageScale(scale: Float) {
         binding.pagerWrapper.scaleFactor = scale
@@ -258,4 +263,12 @@ class LCPatternFragment : Fragment() {
             return fragments[position]
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
+
 }

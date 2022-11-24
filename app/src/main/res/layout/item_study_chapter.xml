@@ -366,7 +366,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{ item.largeTitle }"
-                        android:visibility="@{ item.isFirstChapter ? View.VISIBLE : View.GONE }"
+                        android:visibility="@{ item.firstMiddleChapter ? View.VISIBLE : View.GONE }"
                         android:layout_marginTop="32dp"
                         android:layout_marginStart="32dp"
                         style="@style/h4"
@@ -393,8 +393,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         layout_margin_top_dimen="@{ item.isTutorial ? @dimen/dp0 : @dimen/dp32 }"
-                        android:layout_marginStart="27dp"
-                        android:layout_marginEnd="27dp"
                         app:layout_constraintTop_toBottomOf="@id/largeChapterTitleTv"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
@@ -405,7 +403,7 @@
                             android:layout_height="wrap_content"
                             style="@style/h5"
                             android:text="@{ item.middleTitle }"
-                            android:layout_marginStart="5dp"
+                            android:layout_marginStart="32dp"
                             android:textColor="@color/blue_black_200"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"/>

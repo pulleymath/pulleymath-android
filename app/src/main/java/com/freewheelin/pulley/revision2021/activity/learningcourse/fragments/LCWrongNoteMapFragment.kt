@@ -76,8 +76,9 @@ class LCWrongNoteMapFragment : Fragment() {
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
 
-                wrongNoteRv.adapter = WrongNoteAdapter()
+                fetchLCWrongNote()
 
+                wrongNoteRv.adapter = WrongNoteAdapter()
                 wrongNoteRv.layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.VERTICAL, false).also {
                     it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
@@ -139,11 +140,16 @@ class LCWrongNoteMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (!viewModel.isFirstFetch) {
+            fetchLCWrongNote()
+        }
+        viewModel.isFirstFetch = false
+    }
 
+    private fun fetchLCWrongNote() {
         val currChapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId
         viewModel.fetchLCWrongNoteInfo(currChapterId)
     }
-
     inner class WrongNoteAdapter(): ListAdapter<LCWrongNoteMapCard, RecyclerView.ViewHolder>(
         DiffCallback<LCWrongNoteMapCard>()
     ) {
@@ -203,6 +209,13 @@ class LCWrongNoteMapFragment : Fragment() {
 
     interface NoteCardItemClickListener {
         fun onItemClick(item: LCWrongNoteMapCard)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
     }
 }
 

@@ -13,6 +13,7 @@ import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepositor
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.utils.ViewTransition
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -91,13 +92,12 @@ class LCTutorialViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun cookingQuizScoring(callback: (Boolean) -> Unit) {
         val studentId = user?.studentID ?: return
         val scoringReq = ScoringReq("1")
         val exerciseQuizId = 1561 // 컨텐츠와 서버에서 협의된 튜토리얼 퀴즈 id
 
-        cookingRepository.scoringCookingQuiz(exerciseQuizId, studentId, scoringReq)
+        compositeDisposable += cookingRepository.scoringCookingQuiz(exerciseQuizId, studentId, scoringReq)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -110,12 +110,11 @@ class LCTutorialViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun patternQuizScoring(callback: (scoring: LCPatternScoring) -> Unit) {
         val userAnswer = ScoringReq("3")
         val patternQuizId = 690
         val studentId = user?.studentID ?: return
-        patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
+        compositeDisposable +=patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -124,12 +123,12 @@ class LCTutorialViewModel : BaseViewModel(), LifecycleObserver {
                 Log.e(javaClass.simpleName, "quizScoring error=${error.localizedMessage}")
             })
     }
-    @SuppressLint("CheckResult")
+
     fun createLearningCourseOnStudentId(callback: () -> Unit) {
         val chapterId = 175
         val studentId = MyApplication.user?.studentID ?: return
 
-        studyRepository.createLearningCourse(chapterId, studentId)
+        compositeDisposable +=studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

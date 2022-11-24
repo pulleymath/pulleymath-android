@@ -12,6 +12,7 @@ import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -46,7 +47,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     var ySum: Int = 0
 
     fun listPdf(title: String = "", page: Int = 0, size: Int = 1000, subjectCode: String = "", category: String = "", callback: () -> Unit) {
-        pdfRepository.pdfList(title, page, size, subjectCode, category)
+        compositeDisposable += pdfRepository.pdfList(title, page, size, subjectCode, category)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -106,9 +107,8 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun answer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit) {
-        pdfRepository.answer(cmBookId)
+        compositeDisposable += pdfRepository.answer(cmBookId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -119,10 +119,9 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun eventBookCheck(cmBookId:Int, callback: () -> Unit = {}) {
         val eventBook = EventBook(cmBookId)
-        pdfRepository.eventBookCheck(eventBook)
+        compositeDisposable += pdfRepository.eventBookCheck(eventBook)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

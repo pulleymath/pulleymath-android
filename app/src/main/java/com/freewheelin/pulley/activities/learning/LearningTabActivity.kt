@@ -121,7 +121,6 @@ class LearningTabActivity : PermissionActivity(),
     var snackBar: SnackBar? = null
     var mypageFragment = MyMainPageFragment()
 
-    private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
     private val binding: ActivityLearningBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_learning, null, false)
     }

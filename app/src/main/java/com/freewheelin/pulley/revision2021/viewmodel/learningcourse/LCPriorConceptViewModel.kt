@@ -11,6 +11,7 @@ import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepositor
 import com.freewheelin.pulley.revision2021.repository.LCPriorConceptRepository
 import com.freewheelin.pulley.revision2021.utils.KoreanUtil
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -22,12 +23,11 @@ class LCPriorConceptViewModel : BaseViewModel(), LifecycleObserver {
     val priorConceptInfoList by lazy { MutableLiveData<List<LCPriorConceptInfo>>() }
     val priorConceptCount by lazy { MutableLiveData(-1) }
 
-    @SuppressLint("CheckResult")
     fun fetchPriorConcept(lessonTitle: String, chapterId: Int?) {
         if (chapterId == null) return
         val studentId = user?.studentID ?: return
 
-        reviewRepository.fetchPriorConcept(chapterId, studentId)
+        compositeDisposable += reviewRepository.fetchPriorConcept(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -43,9 +43,8 @@ class LCPriorConceptViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun completedPriorConcept(reviewId: Int, studentId: String) {
-        reviewRepository.completedReview(reviewId, studentId)
+        compositeDisposable += reviewRepository.completedReview(reviewId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -57,11 +56,10 @@ class LCPriorConceptViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {
         val studentId = MyApplication.user?.studentID ?: return
 
-        studyRepository.createLearningCourse(chapterId, studentId)
+        compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

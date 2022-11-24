@@ -141,6 +141,13 @@ class AffiliatedSolveSolutionFragment : Fragment() {
     interface SolutionItemClickListener {
         fun onItemClick(item: AffiliatedSolution)
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
 
 @BindingAdapter("bind_solution_list")

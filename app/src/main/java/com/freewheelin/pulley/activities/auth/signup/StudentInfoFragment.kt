@@ -17,11 +17,14 @@ import com.freewheelin.pulley.revision2021.repository.FindCityRepository
 import com.freewheelin.pulley.revision2021.model.response.City
 import com.freewheelin.pulley.revision2021.model.response.School
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 
 class StudentInfoFragment : Fragment() {
 
     val findCityRepository by lazy { FindCityRepository() }
+    internal val disposables = CompositeDisposable()
 
     var cityList: List<City> = mutableListOf()
 
@@ -145,7 +148,7 @@ class StudentInfoFragment : Fragment() {
 
     private fun setCites() {
         if(cityList.isEmpty()) {
-            findCityRepository.getCities()
+            disposables += findCityRepository.getCities()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
@@ -217,5 +220,10 @@ class StudentInfoFragment : Fragment() {
         binding.selectRate.set(data, hint) { position ->
             checkRegist()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 }

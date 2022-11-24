@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +7,8 @@ import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.time.chrono.MinguoEra
 import java.util.concurrent.TimeUnit
 
 class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
@@ -27,10 +22,8 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
     val selectedSubjectId = MutableLiveData<Int>(-1)
     val availableLastSubjectId = MutableLiveData<Int>(7)
 
-
-    @SuppressLint("CheckResult")
     fun fetchAvailableSubjects() {
-        studyRepository.getAvailableSubject()
+        compositeDisposable += studyRepository.getAvailableSubject()
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -49,16 +42,18 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
 
     var studyChapterHeader: StudyChapter? = null
     var studyChapterFooter: StudyChapter? = null
-    @SuppressLint("CheckResult")
+
     fun fetch(subjectId: Int) {
         if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) {
             setTutorialList()
             return
         }
         val studentId = user?.studentID ?: return
-        studyRepository.getChapterOnSubject(subjectId, studentId)
+        compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
+            .doOnError { showProgress.postValue(false) }
+            .doOnComplete { showProgress.postValue(false) }
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 response.data?.let {
@@ -72,16 +67,14 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
                             middleChapter.isParentChapterLast = it.size - 1 == largeIndex
                             middleChapter.parentSequence = largeChapter.sequence
                             middleChapter.parentName = largeChapter.name
-                            middleChapter.isFirstChapter = index == 0
-                            middleChapter.isLastChapter =
+                            middleChapter.isFirstMiddleChapter = index == 0
+                            middleChapter.isLastMiddleChapter =
                                 (largeChapter.children.size - 1) == index
                             middleChapter.setNextItemExist(largeChapter)
                             middleChapter.children.forEach { smallChapter ->
                                 smallChapter.parentName = middleChapter.name
-                                smallChapter.isFirstChapter = index == 0
-                                smallChapter.isLastChapter =
-                                    (middleChapter.children.size - 1) == index
                                 smallChapter.setNextItemExist(middleChapter)
+                                smallChapter.checkBothEndsItem(middleChapter)
                             }
                             cList.add(middleChapter)
                         }
@@ -90,19 +83,16 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
                     val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + cList + listOf(studyChapterFooter!!)
 
                     chapterList.postValue(listWithHeaderAndFooter)
-                    showProgress.postValue(false)
                 }
             }, { error ->
-                showProgress.postValue(false)
                 Log.e(javaClass.simpleName, "concept course fetch error=${error.localizedMessage}")
             })
     }
 
-    @SuppressLint("CheckResult")
     fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {
         val studentId = user?.studentID ?: return
 
-        studyRepository.createLearningCourse(chapterId, studentId)
+        compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

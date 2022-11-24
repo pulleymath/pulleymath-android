@@ -10,6 +10,8 @@ import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2021.views.DisallowTouchEventViewPager
+import com.freewheelin.pulley.revision2021.views.LCPatternViewPager
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +30,8 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
     val patternQuiz3 by lazy { MutableLiveData<LCPatternQuiz>() }
 
     val selectedQuizIndex by lazy { MutableLiveData<Int>(0) }
-    val isPatternQuizOnResume by lazy { MutableLiveData<Boolean>(false) }
     val isHintBtnDisabled by lazy { MutableLiveData<Boolean>(false) }
-//    var remainingHintSize = 0
     val remainingHintSizeLive by lazy { MutableLiveData(0) }
-//    val hintBtnText by lazy { MutableLiveData<String>("") }
 
     var patternId = -1
 
@@ -41,11 +40,11 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
         val sequence = course.sequence
         patternName.postValue("유형 0${sequence}. ${parentPatternName}")
     }
-    @SuppressLint("CheckResult")
+
     fun fetchPatternInfo(patternId: Int) {
         this.patternId = patternId
         val studentId = user?.studentID ?: return
-        patternRepository.fetchPatternInfo(patternId, studentId)
+        compositeDisposable += patternRepository.fetchPatternInfo(patternId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -59,16 +58,13 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-
-
-    @SuppressLint("CheckResult")
     fun usePatternQuizHint(callback: () -> Unit) {
         val studentId = user?.studentID ?: return
         if (selectedQuizIndex.value == null) return
         if (patternQuizList.value == null) return
         val patternQuizId = patternQuizList.value!!.get(selectedQuizIndex.value!!).patternQuizId
 
-        patternRepository.usePatternQuizHint(patternQuizId, studentId)
+        compositeDisposable += patternRepository.usePatternQuizHint(patternQuizId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -84,7 +80,7 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
 
     }
 
-    fun setViewPagerPosition(pagerWrapper: DisallowTouchEventViewPager, position: Int) {
+    fun setViewPagerPosition(pagerWrapper: LCPatternViewPager, position: Int) {
         pagerWrapper.pager.currentItem = position
         selectedQuizIndex.postValue(position)
 

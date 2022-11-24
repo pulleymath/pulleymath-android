@@ -11,6 +11,7 @@ import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -45,7 +46,6 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
         currQuizImage.postValue(quiz.quizImageUrl)
 
         currBaseConceptImage.postValue(quiz.concepts[0].conceptImageUrl)
-//        isHintButtonDisabled.postValue(false)
         remainingHintSize.postValue(quiz.hints.size)
     }
 
@@ -101,7 +101,6 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
         return currQuizFormat.value != QuizFormat.Short
     }
 
-    @SuppressLint("CheckResult")
     fun quizScoring(callback: (scoring: LCPatternScoring) -> Unit) {
         if (currentAnswerOfSingle.value == "") return
         val userAnswer = ScoringReq(currentAnswerOfSingle.value!!)
@@ -109,7 +108,7 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
             val patternQuizId = quiz.patternQuizId
             val studentId = user?.studentID ?: return
             if (quiz.isCorrect != null) return@let
-            patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
+            compositeDisposable += patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ response ->

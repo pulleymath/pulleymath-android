@@ -28,7 +28,9 @@ import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPatternFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
@@ -81,6 +83,23 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
             tabFragments.addAll(frags)
 
+            viewModel.currentCardIndex.observe(this@LCWrongNoteActivity) { index ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(100)
+                    withContext(Dispatchers.Main) {
+                        val children = supportFragmentManager.fragments.filter { it.tag.equals("f" + binding.pagerWrapper.pager.adapter?.getItemId(index)) }
+                        children.forEach {
+                            (it as LCWrongNoteFragment).run {
+                                setHintBtn()
+                                setTempConceptSolutionViewFlag()
+                                resumeFloatingAnswerSheetLocation()
+                            }
+                        }
+                    }
+                }
+
+            }
+
             pagerWrapper.pager.adapter = WrongNotePagerAdapter(tabFragments, supportFragmentManager, lifecycle)
             pagerWrapper.pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
@@ -115,10 +134,6 @@ class LCWrongNoteActivity : AppCompatActivity() {
                 children.forEach {
                     (it as LCWrongNoteFragment).toggleDrawer()
                 }
-//                val children = supportFragmentManager.fragments.filter { it.tag.equals("f" + newPager.adapter?.getItemId(newPager.currentItem)) }
-//                children.forEach {
-//                    (it as LCWrongNoteFragment).toggleDrawer()
-//                }
             }
 
             appendHintBtn.setOnClickListener {
@@ -196,6 +211,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
         ConceptLearningUsageMonitor.pauseConceptLearning()
     }
     fun goInitialPosition() {
+        resumeLCPatternFloatingAnswerSheetLocation()
         val list = viewModel.filteredNoteCardList.value
         val noteItem = viewModel.currNoteCard.value
         list?.forEachIndexed { index, card ->
@@ -206,7 +222,13 @@ class LCWrongNoteActivity : AppCompatActivity() {
             }
         }
     }
-
+    fun resumeLCPatternFloatingAnswerSheetLocation() {
+        supportFragmentManager.fragments.forEach {
+            (it as? LCWrongNoteFragment)?.run {
+                resumeFloatingAnswerSheetLocation()
+            }
+        }
+    }
 
     fun moveSelectorOnPosition (pos: Int) {
         binding.apply {
@@ -367,6 +389,12 @@ class LCWrongNoteActivity : AppCompatActivity() {
         fun onItemClick(position: Int)
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
 
 

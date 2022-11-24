@@ -53,6 +53,13 @@ class ConceptCourseFragment : LearningTabFragment() {
         fetch()
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -222,6 +229,8 @@ class ConceptCourseFragment : LearningTabFragment() {
 
                     smallChapterTitleTv.text = item.name
 
+                    setFirstItemMarginStart(rootCl, item.isFirstSmallItem)
+                    setLastItemMarginEnd(rootCl, item.isLastSmallItem)
                     setExerciseTvTextColor(item)
                     setViewMarginEnd(backgroundExerciseProgressBarIv, item)
                     setViewMarginEnd(backgroundPatternProgressBarIv, item)
@@ -399,6 +408,16 @@ class ConceptCourseFragment : LearningTabFragment() {
                     }
                 }
 
+            }
+            fun setFirstItemMarginStart(view: View, isFirstItem: Boolean) {
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    this.marginStart =  if (isFirstItem) 22.toPx() else 0.toPx()
+                }
+            }
+            fun setLastItemMarginEnd(view: View, isLastItem: Boolean) {
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    this.marginEnd =  if (isLastItem) 22.toPx() else 0.toPx()
+                }
             }
         }
     }

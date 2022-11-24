@@ -48,10 +48,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:adjustViewBounds="true"
                     android:scaleType="fitStart"
                     cookingImgResOnPicasso="@{ cookingExercise.imageUrl }"/>
-    <!--                android:src="@drawable/cooking_quiz1"/>-->
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

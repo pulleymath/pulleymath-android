@@ -34,6 +34,12 @@ class LCCourseEndDialog(context: Context,
     ): View {
         return binding.root
     }
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

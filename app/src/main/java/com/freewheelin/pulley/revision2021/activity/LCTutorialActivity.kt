@@ -162,4 +162,11 @@ class LCTutorialActivity : AppCompatActivity() {
                 MyApplication.user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "이어보기", "")
         })
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }

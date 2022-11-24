@@ -531,6 +531,13 @@ class PdfListActivity : AppCompatActivity() {
     interface PdfItemClickListener {
         fun onItemClick(pdf: Pdf)
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
 
 @BindingAdapter("bind_pdf_response")

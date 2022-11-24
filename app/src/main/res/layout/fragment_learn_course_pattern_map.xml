@@ -20,6 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             bind_pattern_map_table="@{vm.patternCardList}"
+            android:paddingStart="22dp"
+            android:paddingEnd="28dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

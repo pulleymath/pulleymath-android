@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.revision2021.model.response.Alarm
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,15 +25,16 @@ class AlarmViewModel  : BaseViewModel(), LifecycleObserver {
     var currentTimeString: String? = null
     val showAlarmProgress by lazy { MutableLiveData(false) }
 
-    @SuppressLint("CheckResult")
     fun fetchAlarmList(callback: (()->Unit) = {}) {
         showAlarmProgress.postValue(true)
-        alarmRepository.fetchMessages()
+        compositeDisposable += alarmRepository.fetchMessages()
             .subscribeOn(Schedulers.io())
+            .doOnSubscribe { showAlarmProgress.postValue(true) }
+            .doOnError { showAlarmProgress.postValue(false) }
+            .doOnComplete { showAlarmProgress.postValue(false) }
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchMessages list=>${response.data}")
-                showAlarmProgress.postValue(false)
 
                 currentTimeString = response.current_time
                 val resAlarmList = response.data.map {
@@ -42,7 +44,6 @@ class AlarmViewModel  : BaseViewModel(), LifecycleObserver {
                 alarmList.postValue(resAlarmList)
                 callback()
             }, { error ->
-                showAlarmProgress.postValue(false)
 
                 val sdf by lazy { SimpleDateFormat("yyyy-MM-dd a HH:mm", Locale.KOREA) }
                 val currentDate = sdf.format(Date())
@@ -51,9 +52,9 @@ class AlarmViewModel  : BaseViewModel(), LifecycleObserver {
                 callback()
             })
     }
-    @SuppressLint("CheckResult")
+
     fun readMessage(messageID: Int, callback: (()->Unit)) {
-        alarmRepository.readMessage(messageID)
+        compositeDisposable += alarmRepository.readMessage(messageID)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
@@ -67,9 +68,8 @@ class AlarmViewModel  : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun readAllMessages() {
-        alarmRepository.readAllMessages()
+        compositeDisposable += alarmRepository.readAllMessages()
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->

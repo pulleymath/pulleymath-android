@@ -18,7 +18,8 @@
         android:background="@color/white"
         android:clipToPadding="false"
         >
-<!--        PatternQuizScrollView-->
+
+
         <com.freewheelin.pulley.revision2021.views.PatternQuizScrollView
             android:id="@+id/leftScrollView"
             android:layout_width="0dp"
@@ -42,11 +43,33 @@
                     android:id="@+id/ivWrapperCl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="24dp"
-                    android:background="@{ vm.isQuizMainConcept ? @color/purple_gray_100 : @color/white }"
-
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
+<!--                    android:background="@{ vm.isQuizMainConcept ? @color/purple_gray_100 : @color/white }"-->
+
+                    <View
+                        android:id="@+id/mainQuizBackgroundView"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@color/purple_gray_100"
+                        android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintWidth_percent="0.4"
+                        app:layout_constraintHorizontal_bias="0"/>
+
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@color/white"
+                        android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintStart_toEndOf="@+id/mainQuizBackgroundView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <ImageView
                         android:id="@+id/quizIv"
@@ -100,25 +123,23 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/mainQuizConceptSolutionCl"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
                         app:layout_constraintStart_toEndOf="@+id/mainQuizWrapperLl"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:id="@+id/conceptScrollRootLl"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:paddingStart="24dp"
                             android:paddingVertical="24dp"
                             android:orientation="vertical"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/solutionScrollRootLl"
-                            app:layout_constraintBottom_toBottomOf="parent">
+                            app:layout_constraintEnd_toStartOf="@+id/solutionScrollRootLl">
 
                             <TextView
                                 android:id="@+id/conceptTv"
@@ -134,14 +155,13 @@
                         <LinearLayout
                             android:id="@+id/solutionScrollRootLl"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:paddingHorizontal="24dp"
                             android:paddingVertical="24dp"
                             android:orientation="vertical"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/conceptScrollRootLl"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent">
+                            app:layout_constraintEnd_toEndOf="parent">
 
 
                             <TextView
@@ -242,17 +262,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.freewheelin.pulley.revision2021.views.PatternQuizScrollView>
-
-<!--        <Button-->
-<!--            android:id="@+id/questionToTeacherBtn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="질문하기(test)"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/solutionContainer"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/solutionContainer"

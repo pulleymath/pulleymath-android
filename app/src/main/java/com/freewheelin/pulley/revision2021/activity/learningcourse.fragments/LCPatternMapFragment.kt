@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +19,10 @@ import com.freewheelin.pulley.databinding.ItemPatternMapCardBinding
 import com.freewheelin.pulley.databinding.ItemPatternMapHeaderBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.activity.dialog.LCPatternDetailDialog
 import com.freewheelin.pulley.revision2021.model.LCPatternCard
-import com.freewheelin.pulley.revision2021.model.StudyChapter
-import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
 //import com.freewheelin.pulley.revision2021.views.LCPatternDetailDialog
 //import com.freewheelin.pulley.revision2021.views.LCPatternEndDialog
-import kotlinx.coroutines.*
 
 class LCPatternMapFragment : Fragment() {
     companion object {
@@ -57,21 +51,22 @@ class LCPatternMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
-        viewModel.fetchPatternMap(chapterId)
+        if (!viewModel.isFirstFetch) {
+            fetchPatternMap()
+        }
+        viewModel.isFirstFetch = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(LCPatternMapViewModel::class.java)
         arguments?.let {
-//            val chapter = it.getSerializable(LearningCourseActivity.STUDY_CHAPTER_FLAG) as StudyChapter?
-
-//            viewModel.setChapterName(chapter)
             binding.apply {
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
                 viewModel.showProgress.postValue(true)
+
+                fetchPatternMap()
 
                 patternMapRv.adapter = PatternCardListAdapter()
                 patternMapRv.layoutManager =
@@ -91,6 +86,10 @@ class LCPatternMapFragment : Fragment() {
                 }
             }
         }
+    }
+    fun fetchPatternMap() {
+        val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
+        viewModel.fetchPatternMap(chapterId)
     }
 
     inner class PatternCardListAdapter(): ListAdapter<LCPatternCard, RecyclerView.ViewHolder>(
@@ -175,6 +174,14 @@ class LCPatternMapFragment : Fragment() {
     interface PatternMapItemClickListener {
         fun onItemClick(item: LCPatternCard)
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
+
 }
 
 @BindingAdapter("bind_pattern_map_table")

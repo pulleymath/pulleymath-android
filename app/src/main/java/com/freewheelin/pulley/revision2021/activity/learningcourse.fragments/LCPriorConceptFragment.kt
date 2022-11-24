@@ -148,6 +148,14 @@ class LCPriorConceptFragment : Fragment() {
     interface PriorConceptItemClickListener {
         fun onItemClick(info: LCPriorConceptInfo)
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
+
 }
 
 @BindingAdapter("bind_prior_concept_card")

@@ -10,6 +10,11 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.channel.plugin.android.extension.doOnElse
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,12 +38,10 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
     val showNumkeyboard by lazy { MutableLiveData(false) }
     val selectedShortQuiz by lazy { MutableLiveData<CookingQuiz>(null) }
     var selectedItemBinding: ItemCookingQuizDetailBinding? = null
-    val showExerciseBlindView by lazy { MutableLiveData(false) }
 
-    @SuppressLint("CheckResult")
     fun fetchCookingGroceries(courseId: Int) {
         val studentId = user?.studentID ?: return
-        cookingRepository.fetchCookingGroceries(courseId, studentId)
+        compositeDisposable += cookingRepository.fetchCookingGroceries(courseId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -79,10 +82,9 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun useHint(exerciseQuizId: Int, callback: () -> Unit) {
         val studentId = user?.studentID ?: return
-        cookingRepository.useHint(exerciseQuizId, studentId)
+        compositeDisposable += cookingRepository.useHint(exerciseQuizId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -93,11 +95,10 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
             })
     }
 
-    @SuppressLint("CheckResult")
     fun scoringCookingQuiz(quiz: CookingQuiz, userAnswer: String, callback: (Boolean) -> Unit) {
         val studentId = user?.studentID ?: return
         val scoringReq = ScoringReq(userAnswer)
-        cookingRepository.scoringCookingQuiz(quiz.exerciseQuizId, studentId, scoringReq)
+        compositeDisposable += cookingRepository.scoringCookingQuiz(quiz.exerciseQuizId, studentId, scoringReq)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

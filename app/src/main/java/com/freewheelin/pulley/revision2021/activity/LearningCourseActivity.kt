@@ -29,6 +29,7 @@ import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFragment
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.ChatFragment
@@ -50,7 +51,6 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.math.absoluteValue
 
 class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener,
     CookingPencilcaseListener {
@@ -167,6 +167,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 hidePencilcasePanel()
             }
 
+            viewModel.selectedPagerIndex.observe(this@LearningCourseActivity) {
+                resumeLCPatternFloatingAnswerSheetLocation()
+            }
+
             navPrevBtn.setOnClickListener {
                 viewModel.courseContentTable.value?.let {
                     val pagerIndex = binding.pager.currentItem
@@ -226,24 +230,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             naviFl.setOnClickListener {
                 viewModel.naviViewDismiss()
             }
-            pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    viewModel.currPagerPosition = position
-                    viewModel.setCurrentCourseType(position)
-
-                    setPagerIndexes(position)
-                }
-
-                private fun setPagerIndexes(position: Int) {
-
-                    viewModel.apply {
-                        val pagerLastIndex = courseContentTable.value?.lastIndex
-                        isPagerFirstIndex.postValue(position == 0)
-                        isPagerLastIndex.postValue(position == pagerLastIndex)
-                    }
-                }
-            })
 
             viewModel.courseContentTable.observeOnce(this@LearningCourseActivity) {
                 viewModel.setCurrentCourseType(0)
@@ -269,6 +255,23 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
 
             onPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.currPagerPosition = position
+                    viewModel.selectedPagerIndex.postValue(position)
+                    viewModel.setCurrentCourseType(position)
+
+                    setPagerIndexes(position)
+                }
+
+                private fun setPagerIndexes(position: Int) {
+
+                    viewModel.apply {
+                        val pagerLastIndex = courseContentTable.value?.lastIndex
+                        isPagerFirstIndex.postValue(position == 0)
+                        isPagerLastIndex.postValue(position == pagerLastIndex)
+                    }
+                }
 
                 override fun onPageScrollStateChanged(state: Int) {
                     if (state == 0) {
@@ -285,7 +288,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 }
             }
             pager.registerOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
-
             viewModel.isPriorConceptNaviSelected.observe(this@LearningCourseActivity) {
                 setCourseHeaderAnim(priorConceptDropdownIv, it)
             }
@@ -459,6 +461,13 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         return file
     }
 
+    fun resumeLCPatternFloatingAnswerSheetLocation() {
+        supportFragmentManager.fragments.forEach {
+            (it as? LCPatternFragment)?.run {
+                resumeFloatingAnswerSheetLocation()
+            }
+        }
+    }
     fun setPagerToCookingFirstPage() {
         binding.pager.setCurrentItem(1, true)
         viewModel.currentCourseType.postValue(CourseType.Cooking)
@@ -642,6 +651,12 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {}
 
     override fun onModeChanged(isFixedMode: Boolean) {}
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
 
 @BindingAdapter("layout_margin_top_dimen")

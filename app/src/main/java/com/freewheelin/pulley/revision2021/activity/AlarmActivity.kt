@@ -60,14 +60,14 @@ class AlarmActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.wantClose.observe(this, { beClose ->
+        viewModel.wantClose.observe(this) { beClose ->
             if (beClose) {
                 finish()
             }
-        })
-        viewModel.wantGoAlarmList.observe(this, {
+        }
+        viewModel.wantGoAlarmList.observe(this) {
             viewModel.fetchAlarmList()
-        })
+        }
     }
     private fun setMessageRv() {
         binding.apply {
@@ -141,6 +141,13 @@ class AlarmActivity : AppCompatActivity() {
     }
     interface AlarmItemClickListener {
         fun onItemClick(alarm: Alarm)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
     }
 }
 

@@ -194,14 +194,6 @@ class LCCookingFragment() : Fragment(),
                                 viewModel.currentCookingExercise.postValue(selectedExercise)
 
                             }
-                            currentCookingExercise.observe(viewLifecycleOwner) {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    delay(300)
-                                    withContext(Dispatchers.Main) {
-                                        showExerciseBlindView.postValue(false)
-                                    }
-                                }
-                            }
                         }
                     }
                     CookingInfoItem.ItemType.Exercise -> {
@@ -256,7 +248,6 @@ class LCCookingFragment() : Fragment(),
                 }
 
                 exerciseBtn.setOnClickListener {
-                    viewModel.showExerciseBlindView.postValue(true)
                     (activity as LearningCourseActivity).hidePencilcasePanel()
 
                     itemBinding.quizTabHeader.children.forEach {
@@ -652,6 +643,13 @@ class LCCookingFragment() : Fragment(),
                     binding.numberKeyboard.releaseKeyboard(null)
                 }
             }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
         }
     }
 }

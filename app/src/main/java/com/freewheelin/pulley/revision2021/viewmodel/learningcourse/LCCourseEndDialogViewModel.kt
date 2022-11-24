@@ -9,6 +9,7 @@ import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -19,11 +20,10 @@ class LCCourseEndDialogViewModel: BaseViewModel(), LifecycleObserver {
 
     val showSprinkleView by lazy { MutableLiveData<Boolean>(false) }
 
-    @SuppressLint("CheckResult")
     fun fetchCourseSummary(cid: Int?) {
         val chapterId = cid ?: return
         val studentId = user?.studentID ?: return
-        repository.fetchCourseSummary(chapterId ,studentId)
+        compositeDisposable += repository.fetchCourseSummary(chapterId ,studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

@@ -28,6 +28,7 @@ import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteFViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.DisplayUtils
+import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.utils.toPx
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -148,10 +149,8 @@ class LCWrongNoteFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        setHintBtn()
         resetMemoView()
         resumePencilcaseView()
-        setTempConceptSolutionViewFlag()
     }
 
     fun hasMoreHint(): Boolean {
@@ -161,7 +160,7 @@ class LCWrongNoteFragment : Fragment(),
         viewModel.setNextHint(remainingHintSize)
     }
 
-    private fun setHintBtn() {
+    fun setHintBtn() {
         val size = viewModel.remainingHintSize.value
         (activity as LCWrongNoteActivity).setHintBtn(size == 0, size)
     }
@@ -203,8 +202,11 @@ class LCWrongNoteFragment : Fragment(),
             clearAllBtn.visibility = View.GONE
         }
     }
-    private fun setTempConceptSolutionViewFlag() {
+    fun setTempConceptSolutionViewFlag() {
         viewModel.showConceptSolutionView.postValue(viewModel.tempConceptSolutionViewFlag)
+    }
+    fun resumeFloatingAnswerSheetLocation() {
+        binding.floatingAnswerSheet.setInitPosition()
     }
     fun toggleDrawer() {
         val value = viewModel.showConceptSolutionView.value?.not()
@@ -278,6 +280,8 @@ class LCWrongNoteFragment : Fragment(),
                     }
 
                     floatingAnswerSheet.setPosition(x, y)
+                    Preferences.floatingAnswerSheetLastLocation.set("${x}&&${y}")
+                    (activity as LCWrongNoteActivity).resumeLCPatternFloatingAnswerSheetLocation()
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
                     floatingAnswerSheet.visibility = View.VISIBLE
@@ -338,5 +342,10 @@ class LCWrongNoteFragment : Fragment(),
             return fragments[position]
         }
     }
-
+    override fun onStop() {
+        super.onStop()
+        viewModel.run {
+            clearCompositeDisposable()
+        }
+    }
 }
