@@ -203,13 +203,13 @@ class PatternQuizFragment() : Fragment(),
             }
         }
     }
-    fun openChannelIoDialog () {
+    fun openChannelIoDialog (courseName: String) {
         binding.apply {
 
             val screenShotBitmap = leftScrollRootCl.getBitmap(leftScrollRootCl.width, leftScrollRootCl.height)
 
             val dialog = ChannelIoQuestionDialog(requireContext(), screenShotBitmap) { radioMsg, additinalMsg ->
-                val message = "${radioMsg}\n\n${additinalMsg}"
+                val message = "${courseName}\n\n${radioMsg}\n\n${additinalMsg}"
                 (activity as? LearningCourseActivity)?.let { lcActivity ->
                     lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
 

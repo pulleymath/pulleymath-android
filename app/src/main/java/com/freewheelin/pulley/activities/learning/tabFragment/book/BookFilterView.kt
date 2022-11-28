@@ -174,7 +174,7 @@ interface BookFilterListener {
 
 class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
     val filters = listOf(
-            Pair("보기설정" , listOf(핀_미포함, 워크북_포함)),
+            Pair("보기설정" , listOf(핀_미포함)), // 워크북은 유료화때문에 book filter에서 노출되지 않음
             Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
             Pair("문제집 유형" , listOf(유형_전체, 유형_유형서, 유형_내신서, 유형_기출서)),
             Pair("추천등급" , listOf(추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하))

@@ -64,10 +64,10 @@ class LCPatternViewPager: LinearLayout {
                 pager.isUserInputEnabled = !isPagerSwipeBlocked
             }
             if (scaleFactor != 1f) return
-            if (isPageStartIndex && (scaledDx > scaledDy) && dx > 0) {
+            if (isPageStartIndex && (scaledDx > scaledDy) && dx > 0 && !isPagerSwipeBlocked) {
                 pagerEnableCallback(true)
                 parent.requestDisallowInterceptTouchEvent(false)
-            } else if (isPageEndIndex && (scaledDx > scaledDy) && dx < 0) {
+            } else if (isPageEndIndex && (scaledDx > scaledDy) && dx < 0 && !isPagerSwipeBlocked) {
                 pagerEnableCallback(true)
                 parent.requestDisallowInterceptTouchEvent(false)
             } else {

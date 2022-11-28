@@ -152,7 +152,10 @@ class LCPatternFragment : Fragment() {
                     val children = getChildrenPage()
                     children.forEach {
                         val quizFrag = (it as PatternQuizFragment)
-                        quizFrag.openChannelIoDialog()
+                        val patternName = viewModel.patternName.value ?: return@forEach
+                        val chapterName = (activity as LearningCourseActivity).viewModel.headerTitle.value ?: return@forEach
+                        val courseName = "[${chapterName}] : [${patternName}]"
+                        quizFrag.openChannelIoDialog(courseName)
                     }
 
                 }

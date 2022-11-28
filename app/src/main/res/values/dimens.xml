@@ -16,6 +16,7 @@
     <dimen name="sp40">32dp</dimen>
     <dimen name="sp36">28dp</dimen>
     <dimen name="sp32">24dp</dimen>
+    <dimen name="sp28">20dp</dimen>
     <dimen name="sp24">18dp</dimen>
     <dimen name="sp20">16dp</dimen>
     <dimen name="sp18">14dp</dimen>
