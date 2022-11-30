@@ -138,6 +138,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
     }
 
     override fun initUI() {
+        if (!::binding.isInitialized) return
         with(binding) {
             guideTv.text = "학습 플랜이 없습니다.\n우측 상단의 <플랜 추가하기>로 플랜을 추가해보세요."
             addPieceBtn.setOnClickListener {

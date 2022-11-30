@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
+import com.freewheelin.pulley.databinding.ItemCookingRightViewBinding
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
@@ -38,6 +39,7 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
     val showNumkeyboard by lazy { MutableLiveData(false) }
     val selectedShortQuiz by lazy { MutableLiveData<CookingQuiz>(null) }
     var selectedItemBinding: ItemCookingQuizDetailBinding? = null
+    var rightViewBinding: ItemCookingRightViewBinding? = null
 
     fun fetchCookingGroceries(courseId: Int) {
         val studentId = user?.studentID ?: return

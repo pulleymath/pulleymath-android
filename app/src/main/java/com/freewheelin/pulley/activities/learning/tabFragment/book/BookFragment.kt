@@ -95,6 +95,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     override fun initUI() {
+        if (!::binding.isInitialized) return
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 

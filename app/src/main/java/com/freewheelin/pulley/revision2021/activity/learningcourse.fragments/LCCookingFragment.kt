@@ -173,7 +173,7 @@ class LCCookingFragment() : Fragment(),
                 when (item.type) {
                     CookingInfoItem.ItemType.Video -> {
                         videoContainerCl.visibility = View.VISIBLE
-
+                        viewModel.rightViewBinding = itemBinding
                         webView.setOnTouchListener { view, motionEvent ->
                             (activity as LearningCourseActivity).hidePencilcasePanel()
                             false
@@ -456,6 +456,11 @@ class LCCookingFragment() : Fragment(),
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.rightViewBinding?.webView?.onPause()
+    }
+
     inner class SelectionViewHolder(private val binding: ItemLcCookingSelectionBinding): RecyclerView.ViewHolder(binding.root), CookingSelectionItemClickListener {
 
         fun bind(item: CookingQuizSelection) {
@@ -502,6 +507,7 @@ class LCCookingFragment() : Fragment(),
         resetMemoView()
         resumePencilcaseView()
         recoveryQuizSingleAnswer()
+        viewModel.rightViewBinding?.webView?.onResume()
     }
 
     private fun recoveryQuizSingleAnswer() {

@@ -326,6 +326,7 @@ class WrongNoteFragment : LearningTabFragment(),
     }
 
     override fun initUI() {
+        if (!::binding.isInitialized) return
         binding.apply {
             viewPager.adapter = TabAdapter(childFragmentManager)
             viewPager.setPagingEnabled(false)

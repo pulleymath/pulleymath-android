@@ -190,6 +190,7 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun initUI() {
+        if (!::binding.isInitialized) return
         try {
             binding.apply {
                 todayStudyView.listener = this@AnalysisFragment

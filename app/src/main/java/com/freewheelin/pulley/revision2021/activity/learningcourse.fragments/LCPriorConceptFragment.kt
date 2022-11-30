@@ -89,7 +89,9 @@ class LCPriorConceptFragment : Fragment() {
                     (activity as LearningCourseActivity).setPagerToCookingFirstPage()
                 }
 
-                viewModel.priorConceptCount.observe(viewLifecycleOwner) {}
+                viewModel.priorConceptCount.observe(viewLifecycleOwner) { count ->
+                    if (count == 0) { (activity as? LearningCourseActivity)?.setPagerToCookingFirstPage() }
+                }
             }
         }
     }

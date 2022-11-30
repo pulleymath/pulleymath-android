@@ -115,12 +115,14 @@ class ConceptCourseFragment : LearningTabFragment() {
     }
 
     override fun initUI() {
-        viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
+        if (::viewModel.isInitialized) {
+            viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
 
-        if ((activity as LearningTabActivity).isFromTutorial) {
-            (activity as LearningTabActivity).isFromTutorial = false
-            binding.apply {
-                tutorialCl1.showTransition(500, ViewTransition.Instant)
+            if ((activity as LearningTabActivity).isFromTutorial) {
+                (activity as LearningTabActivity).isFromTutorial = false
+                binding.apply {
+                    tutorialCl1.showTransition(500, ViewTransition.Instant)
+                }
             }
         }
     }

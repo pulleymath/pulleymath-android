@@ -121,6 +121,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
     }
 
     fun setupUI() {
+        if (!::binding.isInitialized) return
         binding.apply {
 //            profileIv.setOnClickListener {
 //                setProgress()

@@ -70,6 +70,7 @@ class MockExamFragment : LearningTabFragment(),
     }
     private var tabTitles = arrayOf("새로 풀기", "나의 모의고사")
     override fun initUI() {
+        if (!::binding.isInitialized) return
         binding.apply {
             lifecycleOwner = this@MockExamFragment
 

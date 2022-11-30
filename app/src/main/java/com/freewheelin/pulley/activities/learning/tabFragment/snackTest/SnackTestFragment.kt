@@ -179,6 +179,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun initUI() {
+        if (!::binding.isInitialized) return
         binding.apply {
             dailyContainer.setOnClickListener { onSelectorContainerClicked(it) }
             weeklyContainer.setOnClickListener { onSelectorContainerClicked(it) }

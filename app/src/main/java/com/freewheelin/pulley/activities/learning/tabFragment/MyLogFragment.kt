@@ -63,6 +63,7 @@ class MyLogFragment : LearningTabFragment(), SortableListener, DabakTabRadioList
             syncContentList()
     }
     override fun initUI() {
+        if (!::binding.isInitialized) return
         checkedContent.listener = this
         with(binding) {
             studyTypeRadio.labels = listOf("전체", "기본학습", "오답학습")
