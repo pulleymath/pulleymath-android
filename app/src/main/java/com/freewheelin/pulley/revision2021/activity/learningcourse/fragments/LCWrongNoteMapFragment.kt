@@ -32,6 +32,7 @@ import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.dialog.LCCourseEndDialog
 import com.freewheelin.pulley.revision2021.model.response.CourseSummary
+import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
@@ -111,18 +112,21 @@ class LCWrongNoteMapFragment : Fragment() {
 
                         }
                         CourseSummary.MainMessageStatus.예제완료_유형완료_오답완료 -> {
+                            val subjectInKorean = LCSubject().run {
+                                val sid = (activity as LearningCourseActivity).viewModel.selectedSubjectId ?: -1
+                                this.subjectId = sid
+                                subjectIndicator.inKorean
+                            }
+                            LCSubject.SubjectIndicator.MathSang
                             (activity as LearningCourseActivity).finish()
-                            CoroutineScope(Dispatchers.IO).launch {
+                            CoroutineScope(Dispatchers.Main).launch {
                                 delay(200)
-
-                                withContext(Dispatchers.Main) {
-                                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
-                                    intent.putExtra(PieceManager.EVENT_SCROLL, true)
-                                    intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
-                                    intent.putExtra(PieceManager.EVENT_FILTER, "확률과 통계")
-                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
-                                }
+                                val intent = Intent(PieceManager.EVENT_MOVE_TAB)
+                                intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
+                                intent.putExtra(PieceManager.EVENT_SCROLL, true)
+                                intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
+                                intent.putExtra(PieceManager.EVENT_FILTER, subjectInKorean)
+                                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
                             }
                         }
                     }
@@ -216,14 +220,5 @@ class LCWrongNoteMapFragment : Fragment() {
         viewModel.run {
             clearCompositeDisposable()
         }
-    }
-}
-
-@BindingAdapter("bind_lc_wrong_note_card")
-fun bindLCWrongNoteCardRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
-    Log.d("bind_lc_wrong_note_card", "list=$item")
-    item?.let { reviewList ->
-        val adapter = recyclerView.adapter as LCWrongNoteMapFragment.WrongNoteAdapter
-        adapter.submitList(reviewList)
     }
 }

@@ -125,10 +125,8 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
 
     private fun signupSuccess() {
         LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.Main) {
-                login(signup.email, signup.password)
-            }
+        CoroutineScope(Dispatchers.Main).launch {
+            login(signup.email, signup.password)
         }
     }
 

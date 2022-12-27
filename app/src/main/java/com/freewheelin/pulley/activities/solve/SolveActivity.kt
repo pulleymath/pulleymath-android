@@ -718,7 +718,8 @@ class SolveActivity : BaseActivity(),
                 binding.speedAnswerView.updateAll()
                 onProblemSelected(selectedProblem)
 
-                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
+//                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
+
 //                if(it?.isNeedToShowCompletedToast() == true) {
 //                    SuccessToast.showCompleteDialogIfNeed(this, it)
 //                }
@@ -1292,11 +1293,9 @@ class SolveActivity : BaseActivity(),
             binding.speedAnswerView.visibility = View.VISIBLE
             binding.answerView.visibility = View.INVISIBLE
             binding.speedAnswerView.recyclerView.adapter?.notifyDataSetChanged()
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 delay(100)
-                withContext(Dispatchers.Main) {
-                    binding.speedAnswerView.scrollTo(selectedProblem,"onSpeedyScoringCheckChanged")
-                }
+                binding.speedAnswerView.scrollTo(selectedProblem,"onSpeedyScoringCheckChanged")
             }
 
         } else {

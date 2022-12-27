@@ -95,12 +95,10 @@ class ConceptCourseViewModel: BaseViewModel(), LifecycleObserver {
         compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "createLearningCourseOnStudentId =>${response.data}")
-                callback()
-            }, { error ->
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
-            })
+            .doOnComplete { callback() }
+            .doOnError {
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
+            }.subscribe()
     }
 
 

@@ -149,14 +149,3 @@ class AffiliatedSolveSolutionFragment : Fragment() {
         }
     }
 }
-
-@BindingAdapter("bind_solution_list")
-fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AffiliatedSolution>?) {
-//    Log.d("bind_solution_video_response", " size=${item?.size}")
-    item?.let { workbookList ->
-        val adapter = recyclerView.adapter as AffiliatedSolveSolutionFragment.VideoSolutionAdapter
-        adapter.submitList(null)
-        adapter.submitList(workbookList)
-        adapter.notifyDataSetChanged()
-    }
-}

@@ -25,7 +25,6 @@ import android.graphics.PorterDuffXfermode;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -53,6 +52,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private Paint mCurrentPaint;
     private Path mCurrentPath;
     public Bitmap loadedBitmap;
+    public Bitmap loadedBitmapAtWillRedo;
 
     private ResizeBehaviour mResizeBehaviour;
 
@@ -69,6 +69,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private int mLastDimensionH = -1;
 
     private boolean mFinishPath = false;
+    boolean isPencilcaseVisibleBeforeOnTouchDraw = false;
 
     private PathDrawnListener mPathDrawnListener;
     private PathRedoUndoCountChangeListener mPathRedoUndoCountChangeListener;
@@ -283,19 +284,20 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Cancel the last drawn segment
      */
     public void undoLast() {
-
         if (mPaths.size() > 0) {
             // End current path
             mFinishPath = true;
-            invalidate();
 
             // Cancel the last one and redraw
             mCanceledPaths.add(mPaths.get(mPaths.size() - 1));
             mPaths.remove(mPaths.size() - 1);
-            invalidate();
 
-            notifyRedoUndoCountChanged();
+        } else if (loadedBitmapAtWillRedo == null) {
+            loadedBitmapAtWillRedo = loadedBitmap;
+            loadedBitmap = null;
         }
+        invalidate();
+        notifyRedoUndoCountChanged();
     }
 
     /**
@@ -303,13 +305,16 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      */
     public void redoLast() {
 
-        if (mCanceledPaths.size() > 0) {
+        if (loadedBitmapAtWillRedo != null) {
+            loadedBitmap = loadedBitmapAtWillRedo;
+            loadedBitmapAtWillRedo = null;
+        } else if (mCanceledPaths.size() > 0) {
             mPaths.add(mCanceledPaths.get(mCanceledPaths.size() - 1));
             mCanceledPaths.remove(mCanceledPaths.size() - 1);
-            invalidate();
 
-            notifyRedoUndoCountChanged();
         }
+        invalidate();
+        notifyRedoUndoCountChanged();
     }
 
     /**
@@ -342,6 +347,20 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Get how many undo operations are available
      */
     public int getUndoCount() {
+        if (mPaths.size() > 0) {
+            return getUndoDrawingOnlyCount();
+        } else {
+            if (loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+                return 0;
+            } else if (loadedBitmapAtWillRedo == null) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+    }
+    public int getUndoDrawingOnlyCount() {
         return mPaths.size();
     }
 
@@ -349,6 +368,13 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Get how many redo operations are available
      */
     public int getRedoCount() {
+        if (loadedBitmapAtWillRedo != null) {
+            return 1;
+        }
+
+        return getRedoDrawingOnlyCount();
+    }
+    public int getRedoDrawingOnlyCount() {
         return mCanceledPaths.size();
     }
 
@@ -520,6 +546,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mPathRedoUndoCountChangeListener.onUndoCountChanged(getUndoCount());
         }
     }
+    public void notifyRedoUndoCountSetting() {
+        notifyRedoUndoCountChanged();
+    }
 
     private void initPaints(TypedArray a) {
         mCurrentPaint = FreeDrawHelper.createPaint();
@@ -670,7 +699,15 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             // TODO pdf memo freedrawview 와 다름
             // onDraw 에서 이동 - 마지막 선이 저장 안되는 문제 해결을 위해
             if (mFinishPath && mPoints.size() > 0) {
-                createHistoryPathFromPoints();
+                if (mPoints.size() < 50) {
+
+                    if (isPencilcaseVisibleBeforeOnTouchDraw) {
+                        mPoints = new ArrayList<>();
+                    }
+
+                } else {
+                    createHistoryPathFromPoints();
+                }
             }
         }
 

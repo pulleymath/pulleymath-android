@@ -33,6 +33,7 @@ import com.freewheelin.pulley.revision2021.model.LCPriorConceptInfo
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.LabelFlowView
+import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.utils.BoongthEffect
 //import com.freewheelin.pulley.revision2021.views.LCPatternDetailDialog
 import com.freewheelin.pulley.utils.Preferences
@@ -55,11 +56,6 @@ class LCPriorConceptFragment : Fragment() {
 
     val binding: FragmentLearnCoursePriorConceptBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_learn_course_prior_concept, null, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
     }
 
     private lateinit var viewModel: LCPriorConceptViewModel
@@ -142,7 +138,8 @@ class LCPriorConceptFragment : Fragment() {
 
             val chapterId = info.priorConceptChapterId
             viewModel.createLearningCourseOnStudentId(chapterId) {
-                startActivity(LearningCourseActivity.getIntent(requireContext(), info))
+                val subjectId = (activity as LearningCourseActivity).viewModel.selectedSubjectId ?: -1
+                startActivity(LearningCourseActivity.getIntent(requireContext(), subjectId, info))
 
             }
         }
@@ -158,13 +155,4 @@ class LCPriorConceptFragment : Fragment() {
         }
     }
 
-}
-
-@BindingAdapter("bind_prior_concept_card")
-fun bindPriorConceptCardRecyclerView(recyclerView: RecyclerView, item: List<LCPriorConceptInfo>?){
-    Log.d("bind_prior_concept_card", "list=$item")
-    item?.let { priorConceptList ->
-        val adapter = recyclerView.adapter as LCPriorConceptFragment.PriorConceptCardListAdapter
-        adapter.submitList(priorConceptList)
-    }
 }

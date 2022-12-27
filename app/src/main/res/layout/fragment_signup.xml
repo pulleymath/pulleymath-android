@@ -294,7 +294,7 @@
                             android:layout_height="1dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
-                            android:background="@color/grey_e8e8e8" />
+                            android:background="@color/gray_300" />
 
                         <com.freewheelin.pulley.views.v2.PolicyLayoutV2
                             android:id="@+id/order14Cb"

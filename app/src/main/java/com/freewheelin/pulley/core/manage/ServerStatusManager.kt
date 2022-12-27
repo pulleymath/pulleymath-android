@@ -5,7 +5,10 @@ import android.util.Log
 import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.model.ServerStatus
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.utils.Preferences
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import java.text.SimpleDateFormat
@@ -16,11 +19,17 @@ object ServerStatusManager {
 
     fun requestInspectionFlag(): ServerStatus? {
         try {
+            val inspectionUrl = when (Preferences.onServerAPI.get()) {
+                Network.Server.live.toString() -> URL.SERVER_INSPECTION
+                Network.Server.staging.toString() -> URL.STAGING_SERVER_INSPECTION
+                else -> URL.SERVER_INSPECTION
+            }
             val data = Jsoup
-                .connect(URL.SERVER_INSPECTION)
+                .connect(inspectionUrl)
                 .ignoreContentType(true)
                 .execute()
                 .body()
+
             if (data != null && data.isNotEmpty()) {
                 Gson().fromJson(data, ServerStatus::class.java).let { status ->
                     return if (isServerUnderInspection(status)) {
@@ -48,7 +57,6 @@ object ServerStatusManager {
 
     suspend fun setServerInspectionDialog(activity: Activity) {
         val status = requestInspectionFlag()
-
         withContext(Dispatchers.Main) {
             status?.let {
                 val dialog = ServerInspectionDialog(activity, status)

@@ -246,9 +246,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
+                android:id="@+id/barOnLeftNavBtn"
                 android:layout_width="2dp"
                 android:layout_height="12dp"
                 android:layout_marginEnd="12dp"
+                android:visibility="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.Cooking ? View.VISIBLE : View.GONE }"
                 android:background="@drawable/bg_gray_750_round"
                 app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
                 app:layout_constraintEnd_toStartOf="@id/navPrevBtn"

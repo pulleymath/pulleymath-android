@@ -494,13 +494,11 @@ class LearningTabActivity : PermissionActivity(),
                     }
                 }
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main) {
-                        binding.updateAlarmView.visibility = if (isNewAlarmExist) {
-                            View.VISIBLE
-                        } else {
-                            View.GONE
-                        }
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.updateAlarmView.visibility = if (isNewAlarmExist) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
                     }
                 }
 

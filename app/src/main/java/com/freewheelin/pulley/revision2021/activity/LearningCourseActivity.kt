@@ -29,7 +29,6 @@ import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFragment
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.ChatFragment
@@ -42,6 +41,9 @@ import com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel
 import com.freewheelin.pulley.revision2021.views.BalloonCourseRoadView
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.revision2021.views.CookingPencilcaseListener
+import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
+import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
 import com.freewheelin.pulley.utils.*
 import com.zoyi.channel.plugin.android.model.source.photopicker.PhotoItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
@@ -60,31 +62,48 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val STUDY_CHAPTER_FLAG = "STUDY_CHAPTER"
         val STUDY_CHAPTER_NAME = "STUDY_CHAPTER_NAME"
         val SMALL_CHAPTER_INDEX = "SMALL_CHAPTER_INDEX"
+        val SUBJECT_ID = "SUBJECT_ID"
         val CHAPTER_ID = "CHAPTER_ID"
         val CHAPTER_NAME = "CHAPTER_NAME"
         val COOKING_ID = "COOKING_ID"
         val IS_PRIOR_CONCEPT = "IS_PRIOR_CONCEPT"
 
-        fun getIntent(context: Context, chapterId: Int, chapterName: String) : Intent {
+        fun getIntent(context: Context, subjectId: Int, chapterId: Int, chapterName: String) : Intent {
             return Intent(context, LearningCourseActivity::class.java).apply {
+                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
             }
         }
 
-        fun getIntent(context: Context, chapterId: Int, chapterName: String, cookingId: Int) : Intent {
+        fun getIntent(context: Context, subjectId: Int, chapterId: Int, chapterName: String, cookingId: Int) : Intent {
             return Intent(context, LearningCourseActivity::class.java).apply {
+                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
                 putExtra(IS_PRIOR_CONCEPT, true)
             }
         }
-        fun getIntent(context: Context, priorConcept: LCPriorConceptInfo) : Intent {
+        fun getIntent(context: Context, subjectId: Int, priorConcept: LCPriorConceptInfo) : Intent {
             val chapterId = priorConcept.priorConceptChapterId
             val chapterName = priorConcept.name
             val cookingId = priorConcept.priorConceptCookingId
             return Intent(context, LearningCourseActivity::class.java).apply {
+                putExtra(SUBJECT_ID, subjectId)
+                putExtra(CHAPTER_ID, chapterId)
+                putExtra(CHAPTER_NAME, chapterName)
+                putExtra(COOKING_ID, cookingId)
+                putExtra(IS_PRIOR_CONCEPT, true)
+            }
+        }
+
+        fun getIntent(context: Context, subjectId: Int, priorConcept: PriorConcept) : Intent {
+            val chapterId = priorConcept.priorConceptChapterId
+            val chapterName = priorConcept.name
+            val cookingId = priorConcept.priorConceptCookingId
+            return Intent(context, LearningCourseActivity::class.java).apply {
+                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
@@ -125,6 +144,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
         ChannelIOWrapper.initialize(application, this)
 
+        val subjectId = intent.getIntExtra(SUBJECT_ID, -1)
         val selectedChapterId = intent.getIntExtra(CHAPTER_ID, -1)
         val selectedChapterName = intent.getStringExtra(CHAPTER_NAME) ?: ""
         val isPriorConceptScene = intent.getBooleanExtra(IS_PRIOR_CONCEPT, false)
@@ -134,6 +154,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             lifecycleOwner = this@LearningCourseActivity
             vm = viewModel
             viewModel.setLessonHeaderTitle(selectedChapterName)
+            viewModel.selectedSubjectId = subjectId
             viewModel.fetchCourseList(selectedChapterId) {
                 if (isPriorConceptScene) goCookingIfPriorConceptCourse(it, cookingId)
             }
@@ -169,6 +190,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
             viewModel.selectedPagerIndex.observe(this@LearningCourseActivity) {
                 resumeLCPatternFloatingAnswerSheetLocation()
+                val courseType = viewModel.getCourseTypeByPosition(it)
+                pencilcaseView.hasOneMemoPerPage(courseType == CourseType.Pattern)
+                pencilcaseView.courseType = viewModel.getCourseTypeByPosition(it) ?: CourseType.PriorConcept
             }
 
             navPrevBtn.setOnClickListener {
@@ -233,15 +257,13 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
             viewModel.courseContentTable.observeOnce(this@LearningCourseActivity) {
                 viewModel.setCurrentCourseType(0)
-//                val chapter = viewModel.selectedChapter
 
-                val priprConceptMapFrag = LCPriorConceptFragment.newInstance(selectedChapterName)
+                val priprConceptMapFrag = PriorConceptFragment.newInstance(selectedChapterName)
                 val frags = it.mapIndexedNotNull { index, course ->
                     val courseDetailId = course.learningCourseDetailId
                     when (course.courseType) {
-//                        CourseType.review -> LessonReviewFragment.newInstance(selectedChapter.name)
                         CourseType.Cooking -> LCCookingFragment.newInstance(courseDetailId)
-                        CourseType.PatternMap -> LCPatternMapFragment.newInstance(courseDetailId)
+                        CourseType.PatternMap -> PatternMapFragment.newInstance(courseDetailId)
                         CourseType.Pattern -> LCPatternFragment.newInstance(course)
                         CourseType.WrongNoteMap -> LCWrongNoteMapFragment.newInstance()
                         else -> null
@@ -311,13 +333,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
 
         if (targetCookingIndex != -1) {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 delay(500)
-                withContext(Dispatchers.Main) {
-                    binding.pager.currentItem = targetCookingIndex
-                    viewModel.currentCourseType.postValue(CourseType.Cooking)
-
-                }
+                binding.pager.currentItem = targetCookingIndex
+                viewModel.currentCourseType.postValue(CourseType.Cooking)
             }
         }
     }
@@ -385,7 +404,8 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 viewModel.createLearningCourseOnStudentId(chapterId) {
                     val name = course.name ?: ""
                     val cookingId = course.targetConceptCookingId ?: -1
-                    startActivity(getIntent(this, chapterId, name, cookingId))
+                    val subjectId = viewModel.selectedSubjectId ?: -1
+                    startActivity(getIntent(this, subjectId, chapterId, name, cookingId))
                 }
             } else {
                 binding.pager.currentItem = viewModel.trimPosition(course)
@@ -541,8 +561,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     fun hidePencilcasePanel() {
         binding.pencilcaseView.pencilOptionLl.isSelected = false
         binding.pencilcaseView.pencilOptionLl.visibility = View.GONE
-        binding.pencilcaseView.clearAllBtn.isSelected = false
-        binding.pencilcaseView.clearAllBtn.visibility = View.GONE
     }
     fun isPagerLastPage(): Boolean {
         val pagerIndex = binding.pager.currentItem
@@ -553,6 +571,12 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         return viewModel.getCourseTypeByPosition(viewModel.currPagerPosition) == CourseType.Pattern
     }
 
+    fun setUndoCount(count: Int) {
+        binding.pencilcaseView.undoCount = count
+    }
+    fun setRedoCount(count: Int) {
+        binding.pencilcaseView.redoCount = count
+    }
     override fun onDestroy() {
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
 //        ChannelIO.shutdown()
@@ -655,55 +679,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         super.onStop()
         viewModel.run {
             clearCompositeDisposable()
-        }
-    }
-}
-
-@BindingAdapter("layout_margin_top_dimen")
-fun setLayoutMarginTop(view: View, dimen: Float) {
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        this.topMargin = dimen.toInt()
-        println("layout_margin_top_dimen, dimen :${dimen.toInt()}")
-    }
-}
-@BindingAdapter("layout_margin_start_dimen")
-fun setLayoutMarginBottom(view: View, dimen: Float) {
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        this.marginStart = dimen.toInt()
-    }
-}
-
-@BindingAdapter("layout_margin_end_dimen")
-fun setLayoutMarginEnd(view: View, dimen: Float) {
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        this.marginEnd = dimen.toInt()
-    }
-}
-
-@BindingAdapter("imageview_tint")
-fun ImageView.setImageTint(@ColorInt color: Int?) {
-    color?.let {
-        setColorFilter(it)
-    }
-}
-
-@BindingAdapter("imagebtn_tint")
-fun ImageButton.setImageTint(@ColorInt color: Int?) {
-    color?.let {
-        setColorFilter(it)
-    }
-}
-
-@BindingAdapter("layout_margin_end_dimen_on_text_length")
-fun setLayoutMarginEndOnTextLength(view: View, length: Int) {
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        when (length) {
-            3 -> { this.marginEnd = 43.toPx() }
-            4 -> { this.marginEnd = 47.toPx() }
-            5 -> { this.marginEnd = 51.toPx() }
-            6 -> { this.marginEnd = 55.toPx() }
-            7 -> { this.marginEnd = 59.toPx() }
-            else -> { this.marginEnd = 59.toPx() }
         }
     }
 }

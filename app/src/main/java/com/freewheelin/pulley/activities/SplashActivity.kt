@@ -3,7 +3,6 @@ package com.freewheelin.pulley.activities
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,21 +10,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.InitSettingActivity
-import com.freewheelin.pulley.activities.auth.InitTestActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
-import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.core.manage.VersionManager
-import com.freewheelin.pulley.databinding.ActivityOnboardingBinding
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
+import com.freewheelin.pulley.model.ServerStatus
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.utils.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -60,22 +55,31 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
 //        splashLottie.playAnimation()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(800)
-            val status = ServerStatusManager.requestInspectionFlag()
+        CoroutineScope(Dispatchers.Main).launch {
+            val isServerUnderInspection = checkServerInspection()
+            if (isServerUnderInspection.not()) {
+                start()
+            }
+        }
 
-            if (status != null) {
-                withContext(Dispatchers.Main) {
-                    val dialog = ServerInspectionDialog(this@SplashActivity, status)
+    }
+    suspend fun checkServerInspection(): Boolean {
+        var status: ServerStatus? = null
+        val inspectionJob = CoroutineScope(Dispatchers.IO).async {
+            delay(800)
+            status = ServerStatusManager.requestInspectionFlag()
+
+            withContext(Dispatchers.Main) {
+                if (status != null) {
+                    val dialog = ServerInspectionDialog(this@SplashActivity, status!!)
                     dialog.setCancelable(false)
                     dialog.show()
                 }
-            } else {
-                withContext(Dispatchers.Main) {
-                    start()
-                }
             }
+
         }
+        inspectionJob.await()
+        return status != null
     }
 
     fun start() {
@@ -230,7 +234,14 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     override fun onResume() {
         super.onResume()
-        start()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val isServerUnderInspection = checkServerInspection()
+            if (isServerUnderInspection.not()) {
+                start()
+            }
+        }
+
 //        continueUpdateProcess()
     }
 

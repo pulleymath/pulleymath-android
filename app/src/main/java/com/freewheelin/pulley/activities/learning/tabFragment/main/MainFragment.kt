@@ -112,6 +112,7 @@ class MainFragment : LearningTabFragment(), ShareProfileDialogListener, ProblemC
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
+        if (!::binding.isInitialized) return
         syncProfile()
     }
 

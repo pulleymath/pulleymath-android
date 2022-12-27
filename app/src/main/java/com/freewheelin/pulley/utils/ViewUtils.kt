@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
@@ -551,10 +552,29 @@ fun ImageView.setCookingImageURL(url: String) {
 
         withContext(Dispatchers.Main) {
             Glide.with(this@setCookingImageURL.context)
-                .load("${url}?time=${Date().time}")
+                .load(downloadedImage)
                 .apply(RequestOptions().override(maxWidth, originalHeight))
                 .into(this@setCookingImageURL)
-
         }
+    }
+}
+fun View.setMarginTop(dp: Int) {
+    this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
+        setMarginTop(dp.toPx())
+    }
+}
+fun View.setMarginBottom(dp: Int) {
+    this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
+        setMarginBottom(dp.toPx())
+    }
+}
+fun View.setMarginStart(dp: Int) {
+    this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
+        marginStart = dp.toPx()
+    }
+}
+fun View.setMarginEnd(dp: Int) {
+    this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
+        marginEnd = dp.toPx()
     }
 }

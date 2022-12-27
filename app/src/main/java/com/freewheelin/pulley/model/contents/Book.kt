@@ -106,7 +106,7 @@ class Book: Content {
         return bookPage.filter { (it.filteredProblems != null && it.filteredProblems!!.isNotEmpty()) }
     }
     private fun convertTag(tag: String): String {
-        return when (tag) {
+        return when (tag.trim()) {
             "기출" -> "기출서"
             "문제풀이" -> "유형서"
             "내신대비" -> "내신서"
@@ -114,7 +114,7 @@ class Book: Content {
         }
     }
     private fun convertTagAtFiltertType(tag: String): FilterType {
-        return when (tag) {
+        return when (tag.trim()) {
             "기출" -> FilterType.유형_기출서
             "문제풀이" -> FilterType.유형_유형서
             "내신대비" -> FilterType.유형_내신서

@@ -355,19 +355,18 @@ open class Problem: Serializable {
         }
     }
 
-    var s3: String = "https://s3.ap-northeast-2.amazonaws.com/mathflat"
-
+//    var s3: String = "https://s3.ap-northeast-2.amazonaws.com/mathflat"
 
     fun getThumbnailUrl(): String {
-        return s3 + problemURL.replace("/math_problems/", "/math_problems/d/") + "p.png"
+        return problemURL + "problem.png"
     }
 
     fun getProblemUrl(): String {
-        return s3 + problemURL.replace("/math_problems/", "/math_problems/ng/") + "p.png"
+        return problemURL + "problem.png"
     }
 
     fun getSolutionUrl(): String {
-        return s3 + problemURL.replace("/math_problems/", "/math_problems/ng/") + "s.png"
+        return problemURL + "solution.png"
     }
 
     /***

@@ -29,7 +29,6 @@ import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.manage.BookManager
-import com.freewheelin.pulley.core.manage.ServerStatusManager
 import com.freewheelin.pulley.databinding.FragmentBookBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
@@ -41,7 +40,6 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
-import kotlinx.coroutines.*
 
 class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
 
@@ -545,33 +543,24 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         }
     }
     fun setFilterType(subject: String): HashSet<FilterType> {
-        return when (subject) {
-            "미적분" -> hashSetOf(
-                FilterType.워크북_미포함,
-                FilterType.핀_포함,
-                FilterType.계열_전체,
-                FilterType.과목_미적분,
-                FilterType.과목_수학2,
-                FilterType.유형_전체,
-                FilterType.추천_2_3등급
-            )
-            "확률과 통계" -> hashSetOf(
-                FilterType.워크북_미포함,
-                FilterType.핀_포함,
-                FilterType.계열_전체,
-                FilterType.과목_확통,
-                FilterType.유형_전체,
-                FilterType.추천_2_3등급
-            )
-            else -> hashSetOf(
-                FilterType.워크북_미포함,
-                FilterType.핀_포함,
-                FilterType.계열_전체,
-                FilterType.과목_확통,
-                FilterType.유형_전체,
-                FilterType.추천_2_3등급
-            )
+        val defaultSet = mutableSetOf(
+            FilterType.워크북_미포함,
+            FilterType.핀_포함,
+            FilterType.계열_전체,
+            FilterType.유형_전체,
+            FilterType.추천_2_3등급
+        )
+        when (subject) {
+            "수학(상)" -> defaultSet.add(FilterType.과목_수학_상)
+            "수학(하)" -> defaultSet.add(FilterType.과목_수학_하)
+            "수학1" -> defaultSet.add(FilterType.과목_수학1)
+            "수학2" -> defaultSet.add(FilterType.과목_수학2)
+            "미적분" -> defaultSet.addAll(listOf(FilterType.과목_미적분, FilterType.과목_수학2))
+            "확률과 통계" -> defaultSet.add(FilterType.과목_확통)
+            "기하" -> defaultSet.add(FilterType.과목_기하)
+            else -> defaultSet.add(FilterType.과목_수학1)
         }
+        return defaultSet.toHashSet()
     }
     fun scrollToTotalLabel(subject: String) {
         val targetHashSet = setFilterType(subject)

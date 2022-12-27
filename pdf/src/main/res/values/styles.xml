@@ -18,7 +18,7 @@
     </style>
 
     <style name="Border_Grey_e8e8e8_Horizontal">
-        <item name="android:background">@color/grey_e8e8e8</item>
+        <item name="android:background">@color/gray_300</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
     </style>

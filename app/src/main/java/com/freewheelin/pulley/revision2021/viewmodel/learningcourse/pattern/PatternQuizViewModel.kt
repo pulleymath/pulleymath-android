@@ -116,10 +116,8 @@ class PatternQuizViewModel: BaseViewModel(), LifecycleObserver {
                     response.data?.let {
                         quiz.isCorrect = it.isCorrect
                         patternQuiz.postValue(quiz)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            withContext(Dispatchers.Main) {
-                                callback(it)
-                            }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            callback(it)
                         }
                     }
                 }, { error ->

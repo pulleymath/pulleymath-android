@@ -108,11 +108,9 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
                 response.data?.let {
                     if (quiz.exerciseQuizId == it.exerciseQuizId) {
 //                        callback(it.isCorrect)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            withContext(Dispatchers.Main) {
+                        CoroutineScope(Dispatchers.Main).launch {
 //                                quiz.isCorrectAnswer.set(it.isCorrect)
-                                callback(it.isCorrect)
-                            }
+                            callback(it.isCorrect)
                         }
                     }
                 }

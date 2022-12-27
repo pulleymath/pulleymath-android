@@ -183,12 +183,3 @@ class LCPatternMapFragment : Fragment() {
     }
 
 }
-
-@BindingAdapter("bind_pattern_map_table")
-fun bindPatternMapTableRecyclerView(recyclerView: RecyclerView, item: List<LCPatternCard>?) {
-    Log.d("bind_pattern_map_table", "list=$item")
-    item?.let { contentList ->
-        val adapter = recyclerView.adapter as LCPatternMapFragment.PatternCardListAdapter
-        adapter.submitList(contentList)
-    }
-}

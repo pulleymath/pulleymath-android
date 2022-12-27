@@ -6,6 +6,7 @@ import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
+import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -31,7 +32,7 @@ interface ConceptCourseService {
     fun createLearningCourse(
         @Path("chapterId") chapterId: Int,
         @Path("studentId") studentId: String,
-    ): Observable<BaseCookingResponse<Unit?>>
+    ): Completable
 
     @GET("users/{studentId}/chapters/{chapterId}/summary")
     fun fetchCourseSummary(

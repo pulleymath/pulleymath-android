@@ -26,13 +26,14 @@ class CookingMemoView: FreeDrawView {
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
 
-        println("xjcl,  -  -  - memoview onTouch, ${motionEvent?.pointerCount}, pencilcase?.editType: ${pencilcase?.editType}")
+        if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
+            isPencilcaseVisibleBeforeOnTouchDraw = isPencilPanelVisible()
+        }
 
-        val pencilcaseViewBlack = (pencilcase as? CookingPencilcaseView)
-        pencilcaseViewBlack?.pencilOptionLl?.isSelected = false
-        pencilcaseViewBlack?.pencilOptionLl?.visibility = View.GONE
-        pencilcaseViewBlack?.clearAllBtn?.isSelected = false
-        pencilcaseViewBlack?.clearAllBtn?.visibility = View.GONE
+        (pencilcase as? CookingPencilcaseView)?.run {
+            pencilOptionLl.isSelected = false
+            pencilOptionLl.visibility = View.GONE
+        }
 
         listener?.onMemorizing(motionEvent)
 
@@ -67,15 +68,17 @@ class CookingMemoView: FreeDrawView {
 
         } else if(pencilcase?.editType == CookingPencilcase.EditType.eraser || buttonType == MotionEvent.BUTTON_STYLUS_PRIMARY) {
 
-            saveHistoryPathFromPoints()
+//            saveHistoryPathFromPoints()
             if (motionEvent?.pointerCount in 2..3 ) {
                 parent.requestDisallowInterceptTouchEvent(false)
                 return false
             }
 
             parent.requestDisallowInterceptTouchEvent(true)
-            if (motionEvent?.action == MotionEvent.ACTION_DOWN)
+            if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
+                super.onTouch(view, motionEvent)
                 return true
+            }
             super.onTouch(view, motionEvent)
         } else {
             return true
@@ -101,9 +104,12 @@ class CookingMemoView: FreeDrawView {
             isWaitingExecutionSignal = false
             println("memoview:: addSaveHandler")
             saveImaged()
-        }, 1000)
+        }, 500)
     }
 
+    private fun isPencilPanelVisible(): Boolean {
+        return (pencilcase as? CookingPencilcaseView)?.pencilOptionLl?.visibility == View.VISIBLE
+    }
     var memoId: String = ""
     fun setMemoSavedName(id: Int, subId: Int, memoTag: String) {
         val studentId = user?.studentID ?: return
@@ -126,6 +132,7 @@ class CookingMemoView: FreeDrawView {
             Handler(Looper.getMainLooper()).post {
                 clearMemoState()
                 loadedBitmap = it
+                notifyRedoUndoCountSetting()
             }
         }, { error ->
             Handler(Looper.getMainLooper()).post {
@@ -138,6 +145,8 @@ class CookingMemoView: FreeDrawView {
     }
     fun clearBitmap() {
         loadedBitmap = null
+        loadedBitmapAtWillRedo = null
+        notifyRedoUndoCountSetting()
     }
     fun clearMemoState() {
         undoAll()

@@ -17,20 +17,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPatternFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
+import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
@@ -84,20 +81,18 @@ class LCWrongNoteActivity : AppCompatActivity() {
             tabFragments.addAll(frags)
 
             viewModel.currentCardIndex.observe(this@LCWrongNoteActivity) { index ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(100)
-                    withContext(Dispatchers.Main) {
-                        val children = supportFragmentManager.fragments.filter { it.tag.equals("f" + binding.pagerWrapper.pager.adapter?.getItemId(index)) }
-                        children.forEach {
-                            (it as LCWrongNoteFragment).run {
-                                setHintBtn()
-                                setTempConceptSolutionViewFlag()
-                                resumeFloatingAnswerSheetLocation()
-                            }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val children = supportFragmentManager.fragments.filter { it.tag.equals("f" + binding.pagerWrapper.pager.adapter?.getItemId(index)) }
+                    children.forEach {
+                        (it as LCWrongNoteFragment).run {
+                            setHintBtn()
+                            setTempConceptSolutionViewFlag()
+                            resumeFloatingAnswerSheetLocation()
                         }
                     }
                 }
-
+                pencilcaseView.hasOneMemoPerPage(true)
+                pencilcaseView.courseType = CourseType.Pattern
             }
 
             pagerWrapper.pager.adapter = WrongNotePagerAdapter(tabFragments, supportFragmentManager, lifecycle)
@@ -198,11 +193,9 @@ class LCWrongNoteActivity : AppCompatActivity() {
         super.onResume()
         ConceptLearningUsageMonitor.startConceptLearning(viewModel.selectedChapterId)
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             delay(500)
-            withContext(Dispatchers.Main) {
-                goInitialPosition()
-            }
+            goInitialPosition()
         }
     }
 
@@ -272,8 +265,6 @@ class LCWrongNoteActivity : AppCompatActivity() {
     fun hidePencilcasePanel() {
         binding.pencilcaseView.pencilOptionLl.isSelected = false
         binding.pencilcaseView.pencilOptionLl.visibility = View.GONE
-        binding.pencilcaseView.clearAllBtn.isSelected = false
-        binding.pencilcaseView.clearAllBtn.visibility = View.GONE
     }
 
     fun setQuizImageScale(scale: Float) {
@@ -321,7 +312,12 @@ class LCWrongNoteActivity : AppCompatActivity() {
     fun setConceptSolutionToggleBtnText(isOpened: Boolean) {
         binding.conceptSolutionToggleBtn.text = if (isOpened) "개념 | 정답 닫기" else "개념 | 정답 보기"
     }
-
+    fun setUndoCount(count: Int) {
+        binding.pencilcaseView.undoCount = count
+    }
+    fun setRedoCount(count: Int) {
+        binding.pencilcaseView.redoCount = count
+    }
     private fun hideSystemUI() {
         if (Build.VERSION.SDK_INT < 16) {
             window.setFlags(
@@ -394,15 +390,5 @@ class LCWrongNoteActivity : AppCompatActivity() {
         viewModel.run {
             clearCompositeDisposable()
         }
-    }
-}
-
-
-@BindingAdapter("bind_note_selector")
-fun bindNoteSelectorRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
-    Log.d("bind_note_selector", "list=$item")
-    item?.let { cardList ->
-        val adapter = recyclerView.adapter as LCWrongNoteActivity.NoteNumberListAdapter
-        adapter.submitList(cardList)
     }
 }

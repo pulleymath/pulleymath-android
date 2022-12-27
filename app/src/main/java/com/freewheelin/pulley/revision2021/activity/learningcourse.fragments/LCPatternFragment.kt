@@ -67,16 +67,14 @@ class LCPatternFragment : Fragment() {
                     }
                 }
                 viewModel.selectedQuizIndex.observe(viewLifecycleOwner) { index ->
-                    CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         delay(100)
-                        withContext(Dispatchers.Main) {
-                            val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(index)) }
-                            children.forEach {
-                                (it as PatternQuizFragment).run {
-                                    setHintBtn()
-                                    setTempConceptSolutionViewFlag()
-                                    resumeFloatingAnswerSheetLocation()
-                                }
+                        val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(index)) }
+                        children.forEach {
+                            (it as PatternQuizFragment).run {
+                                setHintBtn()
+                                setTempConceptSolutionViewFlag()
+                                resumeFloatingAnswerSheetLocation()
                             }
                         }
                     }
@@ -114,6 +112,7 @@ class LCPatternFragment : Fragment() {
                 }
 
                 conceptSolutionToggleBtn.setOnClickListener {
+                    (activity as LearningCourseActivity).hidePencilcasePanel()
                     val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(pagerWrapper.pager.currentItem)) }
                     children.forEach {
                         (it as PatternQuizFragment).toggleDrawer()
@@ -124,11 +123,9 @@ class LCPatternFragment : Fragment() {
                     viewModel.remainingHintSizeLive.value?.let { hintSize ->
                         viewModel.usePatternQuizHint {
                             val nextHintSize = hintSize - 1
-                            viewModel.setHintBtnText(nextHintSize) //
+                            viewModel.setHintBtnText(nextHintSize)
 
-                            val children = getChildrenPage()
-
-                            children.forEach {
+                            getChildrenPage().forEach {
                                 val quizFrag = (it as PatternQuizFragment)
                                 if (quizFrag.hasMoreHint()) {
                                     quizFrag.setNextHint(nextHintSize)
@@ -136,34 +133,39 @@ class LCPatternFragment : Fragment() {
                             }
                         }
                     }
+//                    getChildrenPage().forEach {
+//                        (it as PatternQuizFragment).undoDrawing()
+//                    }
                 }
 
                 resetHintBtnLl.setOnClickListener {
                     viewModel.resetHint()
 
-                    val children = getChildrenPage()
-                    children.forEach {
+                    getChildrenPage().forEach {
                         val quizFrag = (it as PatternQuizFragment)
                         quizFrag.viewModel.resetQuizImage()
                     }
                 }
 
                 questionBtnLl.setOnClickListener {
-                    val children = getChildrenPage()
-                    children.forEach {
+                    (activity as LearningCourseActivity).hidePencilcasePanel()
+
+                    getChildrenPage().forEach {
                         val quizFrag = (it as PatternQuizFragment)
                         val patternName = viewModel.patternName.value ?: return@forEach
                         val chapterName = (activity as LearningCourseActivity).viewModel.headerTitle.value ?: return@forEach
                         val courseName = "[${chapterName}] : [${patternName}]"
                         quizFrag.openChannelIoDialog(courseName)
                     }
-
+//                    getChildrenPage().forEach {
+//                        (it as PatternQuizFragment).redoDrawing()
+//                    }
                 }
 
                 pagerWrapper.pagerEnableCallback = {
                     (activity as LearningCourseActivity).setPagerUserInputEnable(it)
                 }
-                patternHeaderLeftLl.setOnClickListener {
+                headerCl.setOnClickListener {
                     (activity as LearningCourseActivity).hidePencilcasePanel()
                 }
             }

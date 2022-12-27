@@ -21,6 +21,7 @@ import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternConceptFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternSolutionFragment
+import com.freewheelin.pulley.revision2021.cookingmemo.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.utils.debounce
@@ -33,7 +34,8 @@ import com.freewheelin.pulley.utils.toPx
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LCWrongNoteFragment : Fragment(),
-    WrongNoteScrollListener, CookingPencilcaseListener, FloatingAnswerDelegate {
+    WrongNoteScrollListener, CookingPencilcaseListener, FloatingAnswerDelegate,
+    PathRedoUndoCountChangeListener {
 
     companion object {
         val NOTECARD = "NOTE_CARD"
@@ -73,6 +75,8 @@ class LCWrongNoteFragment : Fragment(),
                 viewModel.noteCard.observeOnce(this@LCWrongNoteFragment) {
 
 //                    val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                    memoView.removePathRedoUndoCountChangeListener()
+                    memoView.setPathRedoUndoCountChangeListener(this@LCWrongNoteFragment)
                     memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                     memoView.setMemoSavedName(it.userQuizSolvingHistoryId, it.refPatternQuizId, "lcwrongnotememo")
                     memoView.clearBitmap()
@@ -198,8 +202,6 @@ class LCWrongNoteFragment : Fragment(),
             }
             pencilOptionLl.isSelected = false
             pencilOptionLl.visibility = View.GONE
-            clearAllBtn.isSelected = false
-            clearAllBtn.visibility = View.GONE
         }
     }
     fun setTempConceptSolutionViewFlag() {
@@ -347,5 +349,13 @@ class LCWrongNoteFragment : Fragment(),
         viewModel.run {
             clearCompositeDisposable()
         }
+    }
+
+    override fun onUndoCountChanged(count: Int) {
+        (activity as? LCWrongNoteActivity)?.setUndoCount(count)
+    }
+
+    override fun onRedoCountChanged(count: Int) {
+        (activity as? LCWrongNoteActivity)?.setRedoCount(count)
     }
 }

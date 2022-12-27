@@ -67,10 +67,8 @@ class LCWrongNoteFViewModel : BaseViewModel(), LifecycleObserver {
                     response.data?.let {
                         note.isCorrect = it.isCorrect
                         noteCard.postValue(note)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            withContext(Dispatchers.Main) {
-                                callback(it)
-                            }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            callback(it)
                         }
                     }
                 }, { error ->

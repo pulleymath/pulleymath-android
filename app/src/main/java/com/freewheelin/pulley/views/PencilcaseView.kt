@@ -227,7 +227,7 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
                 pencilBtn.isSelected = true
                 eraserBtn.isSelected = false
                 pencilOptionLl.visibility = View.VISIBLE
-                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round)
+                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
                 pencilBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_6d6dff_round)
             }
             Pencilcase.EditType.eraser -> {
@@ -235,15 +235,15 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
                 eraserBtn.isSelected = true
                 pencilOptionLl.visibility = View.GONE
                 eraserBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_6d6dff_round)
-                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round)
+                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
             }
             else -> {
                 pencilBtn.isSelected = false
                 eraserBtn.isSelected = false
                 pencilOptionLl.visibility = View.GONE
 
-                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round)
-                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round)
+                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
+                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
             }
         }
 

@@ -79,12 +79,10 @@ class MarketingDialog(context: Context, val marketing:Marketing): Dialog(context
         if(urlString.startsWith("http")) {
             IntentUtils.openWebLink(context, urlString, context.packageManager)
 
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 delay(2000)
-                withContext(Dispatchers.Main) {
-                    binding.loadingContainer.visibility = View.GONE
-                    dismiss()
-                }
+                binding.loadingContainer.visibility = View.GONE
+                dismiss()
             }
         } else if(urlString.startsWith("tabindex://")){
             val tabIndex = urlString.replace("tabindex://","").toInt()

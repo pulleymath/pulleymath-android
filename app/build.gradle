@@ -24,8 +24,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 307
-        versionName '1.4.82'
+        versionCode 312
+        versionName '1.4.87'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -195,7 +195,7 @@ dependencies {
 
     def roomVersion = "2.4.3"
     implementation "androidx.room:room-runtime:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // 사용하던 custom view는 남아있으나 webview로 변경하여서 추후 삭제해야할것같음

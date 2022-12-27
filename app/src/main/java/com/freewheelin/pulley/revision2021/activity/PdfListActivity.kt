@@ -38,9 +38,6 @@ import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.DaebakToast
 import com.pulleymath.android.pdf.PdfViewerActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -165,7 +162,7 @@ class PdfListActivity : AppCompatActivity() {
                         with(binding) {
                             searchName.let { searchView ->
                                 if (searchView.isIconified == isIconified) {
-                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_ffffff_round_5)
+                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
                                 }
                             }
                         }
@@ -281,7 +278,7 @@ class PdfListActivity : AppCompatActivity() {
                             with(binding) {
                                 this.searchNameInHeader.let { searchView ->
                                     if (searchView.isIconified == isIconified) {
-                                        searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_ffffff_round_5)
+                                        searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
                                     }
                                 }
                             }

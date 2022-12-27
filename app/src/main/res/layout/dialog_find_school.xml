@@ -55,7 +55,7 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey_e8e8e8" />
+            android:background="@color/gray_300" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

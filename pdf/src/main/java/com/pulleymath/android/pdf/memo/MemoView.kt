@@ -26,11 +26,13 @@ class MemoView: FreeDrawView {
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
 
-        val pencilcaseView2 = (pencilcase as? PencilcaseView)
-        pencilcaseView2?.pencilOptionLl?.isSelected = false
-        pencilcaseView2?.pencilOptionLl?.visibility = View.GONE
-        pencilcaseView2?.clearAllBtn?.isSelected = false
-        pencilcaseView2?.clearAllBtn?.visibility = View.GONE
+        (pencilcase as? PencilcaseView)?.run {
+            pencilOptionLl.isSelected = false
+            pencilOptionLl.visibility = View.GONE
+            clearAllBtn.isSelected = false
+            clearAllBtn.visibility = View.GONE
+        }
+
 
         listener?.onMemorizing(motionEvent)
 

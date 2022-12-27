@@ -97,14 +97,12 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     }
 
     private fun showSuccessToastIfNeed() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
             delay(2000)
 
-            withContext(Dispatchers.Main) {
-                if (scoredInfo?.isNeedToShowCompletedToast() == true) {
-                    SuccessToast.show(this@MockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
-                }
+            if (scoredInfo?.isNeedToShowCompletedToast() == true) {
+                SuccessToast.show(this@MockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
             }
         }
     }
@@ -377,23 +375,21 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
             examAnalysis.subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
                 val barChartList: List<MockReportBarChartView> = listOf(itemBinding.subjectBarChartView1, itemBinding.subjectBarChartView2, itemBinding.subjectBarChartView3)
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main) {
-                        barChartList.forEachIndexed { index, chartView ->
-                            chartView.visibility = if (index >= subjectReport.chapterList.size) View.INVISIBLE else View.VISIBLE
-                        }
-                        subjectReport.chapterList.forEachIndexed { idx, chapter ->
-                            val barChart = barChartList[idx]
-                            val leftTitle = chapter.chapterName
-                            val leftSub = "${chapter.totalNumber}문항"
-                            val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
-                            val rightSub =
-                                "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
-                            barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
-                            barChart.setMainColorWithPercent(chapter.myCorrectRate)
-                            barChart.setSubPercent(chapter.sameRatingCorrectRate)
-                            barChart.show(examAnalysis.showAllSummary)
-                        }
+                CoroutineScope(Dispatchers.Main).launch {
+                    barChartList.forEachIndexed { index, chartView ->
+                        chartView.visibility = if (index >= subjectReport.chapterList.size) View.INVISIBLE else View.VISIBLE
+                    }
+                    subjectReport.chapterList.forEachIndexed { idx, chapter ->
+                        val barChart = barChartList[idx]
+                        val leftTitle = chapter.chapterName
+                        val leftSub = "${chapter.totalNumber}문항"
+                        val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
+                        val rightSub =
+                            "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
+                        barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
+                        barChart.setMainColorWithPercent(chapter.myCorrectRate)
+                        barChart.setSubPercent(chapter.sameRatingCorrectRate)
+                        barChart.show(examAnalysis.showAllSummary)
                     }
                 }
             }
@@ -463,24 +459,22 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
                 val barChartList: List<MockReportBarChartView> = listOf(itemBinding.scoreBarChartView1, itemBinding.scoreBarChartView2, itemBinding.scoreBarChartView3)
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main) {
-                        barChartList.forEachIndexed { index, chartView ->
-                            chartView.visibility = if (index >= scoreReport.pointProblemList.size) View.INVISIBLE else View.VISIBLE
-                        }
-                        scoreReport.pointProblemList.forEachIndexed { idx, problem ->
-                            val barChart = barChartList[idx]
+                CoroutineScope(Dispatchers.Main).launch {
+                    barChartList.forEachIndexed { index, chartView ->
+                        chartView.visibility = if (index >= scoreReport.pointProblemList.size) View.INVISIBLE else View.VISIBLE
+                    }
+                    scoreReport.pointProblemList.forEachIndexed { idx, problem ->
+                        val barChart = barChartList[idx]
 
-                            val leftTitle = "${problem.point}점 문항"
-                            val leftSub = "${problem.totalNumber}문항"
-                            val rightTitle = "내 정답률 ${problem.myCorrectRate}%"
-                            val rightSub = "${problem.myRating}등급 평균 ${problem.sameRatingCorrectRate}%"
+                        val leftTitle = "${problem.point}점 문항"
+                        val leftSub = "${problem.totalNumber}문항"
+                        val rightTitle = "내 정답률 ${problem.myCorrectRate}%"
+                        val rightSub = "${problem.myRating}등급 평균 ${problem.sameRatingCorrectRate}%"
 
-                            barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
-                            barChart.setMainColorWithPercent(problem.myCorrectRate)
-                            barChart.setSubPercent(problem.sameRatingCorrectRate)
-                            barChart.show(examAnalysis.showAllSummary)
-                        }
+                        barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
+                        barChart.setMainColorWithPercent(problem.myCorrectRate)
+                        barChart.setSubPercent(problem.sameRatingCorrectRate)
+                        barChart.show(examAnalysis.showAllSummary)
                     }
                 }
             }

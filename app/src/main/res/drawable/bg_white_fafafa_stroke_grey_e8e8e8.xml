@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/grey_e8e8e8">
+    android:color="@color/gray_300">
 
 
     <item android:id="@android:id/background">
@@ -9,7 +9,7 @@
             <solid android:color="@color/white_fafafa" />
             <stroke
                 android:width="1dip"
-                android:color="@color/grey_e8e8e8" />
+                android:color="@color/gray_300" />
         </shape>
     </item>
 </ripple>

@@ -348,11 +348,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     }
 
     private fun hideProgress() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             delay(1000)
-            withContext(Dispatchers.Main) {
-                binding.loadingContainer.visibility = View.GONE
-            }
+            binding.loadingContainer.visibility = View.GONE
         }
     }
 

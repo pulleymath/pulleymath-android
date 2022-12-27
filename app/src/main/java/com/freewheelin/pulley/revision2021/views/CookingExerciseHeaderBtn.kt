@@ -2,14 +2,8 @@ package com.freewheelin.pulley.revision2021.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.marginStart
-import androidx.core.view.marginTop
-import androidx.core.view.updateLayoutParams
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
 
@@ -44,7 +38,7 @@ class CookingExerciseHeaderBtn: androidx.appcompat.widget.AppCompatButton {
     }
     fun setStateSelected() {
         setTextColor(ContextCompat.getColor(context, R.color.purple_300))
-        setBackgroundResource(R.drawable.bg_white_ffffff_round_5)
+        setBackgroundResource(R.drawable.bg_white_round_5)
     }
 
     fun setStateCommon() {

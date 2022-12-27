@@ -33,6 +33,22 @@ class LCSubject: Serializable {
         Math2(6),
         MathProbabilityAndStatistics(7),
         MathCalculus(8),
-        MathKiha(9)
+        MathKiha(9);
+
+        val inKorean: String
+            get() {
+                return when (this) {
+                    Tutorial -> "튜토리얼"
+                    OutOfCurriculum -> "커리큘럼 외"
+                    MiddleSchoolCurriculum -> "중등"
+                    MathSang -> "수학(상)"
+                    MathHa -> "수학(하)"
+                    Math1 -> "수학1"
+                    Math2 -> "수학2"
+                    MathProbabilityAndStatistics -> "확률과 통계"
+                    MathCalculus -> "미적분"
+                    MathKiha -> "기하"
+                }
+            }
     }
 }

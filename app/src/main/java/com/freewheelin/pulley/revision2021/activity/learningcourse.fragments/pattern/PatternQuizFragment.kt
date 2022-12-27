@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPatternFragment
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.PatternQuizViewModel
+import com.freewheelin.pulley.revision2021.cookingmemo.PathRedoUndoCountChangeListener
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -41,7 +42,8 @@ class PatternQuizFragment() : Fragment(),
     FloatingAnswerDelegate,
 //    ProblemGestureListener,
     PatternScrollListener,
-    CookingPencilcaseListener {
+    CookingPencilcaseListener,
+    PathRedoUndoCountChangeListener {
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
     val screenHeight by lazy { DisplayUtils.getScreenHeight(requireContext()) }
@@ -111,6 +113,8 @@ class PatternQuizFragment() : Fragment(),
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
 
                         val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                        memoView.removePathRedoUndoCountChangeListener()
+                        memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
                         memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         memoView.setPatternMemoId(patternId, it.patternQuizId)
                         memoView.clearBitmap()
@@ -194,7 +198,7 @@ class PatternQuizFragment() : Fragment(),
                     controlDisabledFloatingAnswer(quiz, floatingAnswerSheet)
                 }
                 viewModel.currentAnswerOfSingle.observe(viewLifecycleOwner) {
-                    // 값이 임력되었을떄 입력이 간으하게
+                    // 값이 임력되었을떄 입력이 가능하게
                     floatingAnswerSheet.binding.scoringBtn.isEnabled = when (it) {
                         "" -> false
                         else -> true
@@ -453,8 +457,6 @@ class PatternQuizFragment() : Fragment(),
                 }
                 pencilOptionLl.isSelected = false
                 pencilOptionLl.visibility = View.GONE
-                clearAllBtn.isSelected = false
-                clearAllBtn.visibility = View.GONE
             }
         }
     }
@@ -530,6 +532,14 @@ class PatternQuizFragment() : Fragment(),
             clearCompositeDisposable()
         }
     }
+
+    override fun onUndoCountChanged(count: Int) {
+        (activity as? LearningCourseActivity)?.setUndoCount(count)
+    }
+
+    override fun onRedoCountChanged(count: Int) {
+        (activity as? LearningCourseActivity)?.setRedoCount(count)
+    }
 }
 
 class AnswerShadowBuilder(v: View): View.DragShadowBuilder(v) {
@@ -539,44 +549,5 @@ class AnswerShadowBuilder(v: View): View.DragShadowBuilder(v) {
         val height: Int = view.height
         size.set(width, height)
         touch.set(x, view.height / 2)
-    }
-}
-
-@BindingAdapter("floatingSheetStepBtnText")
-fun setFloatingBtnText(sheet: FloatingAnswerSheet, value: String) {
-    if(sheet.binding.scoringBtn.text.toString() != value) {
-        sheet.binding.scoringBtn.setText(value)
-    }
-}
-
-@BindingAdapter("floatingSheetAnswerType")
-fun setFloatingBtnAnswerType(sheet: FloatingAnswerSheet, isShortFormat: Boolean) {
-    sheet.binding.apply {
-        if (isShortFormat) {
-            shortAnswerView.visibility = View.VISIBLE
-            selectionAnswerView.visibility = View.INVISIBLE
-        } else {
-            shortAnswerView.visibility = View.INVISIBLE
-            selectionAnswerView.visibility = View.VISIBLE
-        }
-    }
-}
-
-@BindingAdapter("floatingStepBtnBackground")
-fun setFloatingStepBtnBackground(sheet: FloatingAnswerSheet, isAnswerEntered: Boolean) {
-    sheet.binding.apply {
-        if (isAnswerEntered) {
-            scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_6d6dff_round_40_disabled)
-        } else {
-            scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_6d6dff_round_40)
-        }
-    }
-}
-
-@BindingAdapter("answerAreaEnabled")
-fun setFloatingBtnAnswerAreaEnabled(sheet: FloatingAnswerSheet, isEnabled: Boolean) {
-    sheet.binding.apply {
-        selectionAnswerView.isEnabled = isEnabled
-        shortAnswerView.isEnabled = isEnabled
     }
 }

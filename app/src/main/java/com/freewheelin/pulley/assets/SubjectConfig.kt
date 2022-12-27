@@ -57,12 +57,12 @@ enum class Subject(val id: Int) {
             val unitCodeStr = unitCode.toString()
             return when (unitCodeStr.take(3).toInt()) {
                 311 -> 수학_상
-                312-> 수학_하
-                321-> 수학I
-                322-> 수학II
-                331-> 확률과통계
+                312 -> 수학_하
+                321 -> 수학I
+                322 -> 수학II
+                331 -> 확률과통계
                 332 -> 미적분
-                333-> 기하
+                333 -> 기하
                 else -> {
                     중학교
                 }

@@ -88,7 +88,7 @@
                 android:layout_width="@dimen/dp36"
                 android:layout_height="@dimen/dp36"
                 android:layout_marginStart="@dimen/dp8"
-                android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round">
+                android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round_ripple">
 
                 <ImageView
                     android:layout_width="wrap_content"

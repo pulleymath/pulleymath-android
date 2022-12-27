@@ -38,7 +38,8 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class LCCookingFragment() : Fragment(),
-    CookingPencilcaseListener, PlusMinusEnterKeypadListener {
+    CookingPencilcaseListener,
+    PlusMinusEnterKeypadListener {
     companion object {
         fun newInstance(courseId: Int) : LCCookingFragment {
             return LCCookingFragment().apply {
@@ -508,6 +509,10 @@ class LCCookingFragment() : Fragment(),
         resumePencilcaseView()
         recoveryQuizSingleAnswer()
         viewModel.rightViewBinding?.webView?.onResume()
+        setRedOnAllClearBtnOfPenPanel()
+    }
+    private fun setRedOnAllClearBtnOfPenPanel() {
+        (activity as? LearningCourseActivity)?.setUndoCount(1)
     }
 
     private fun recoveryQuizSingleAnswer() {
@@ -548,8 +553,6 @@ class LCCookingFragment() : Fragment(),
             }
             pencilOptionLl.isSelected = false
             pencilOptionLl.visibility = View.GONE
-            clearAllBtn.isSelected = false
-            clearAllBtn.visibility = View.GONE
         }
     }
 
@@ -657,24 +660,5 @@ class LCCookingFragment() : Fragment(),
         viewModel.run {
             clearCompositeDisposable()
         }
-    }
-}
-
-@BindingAdapter("bind_cooking_list")
-fun bindCookingRecyclerView(recyclerView: RecyclerView, item: List<CookingInfoItem>?) {
-    println("bind_cooking_list, size=${item?.size}")
-    item?.let { itemList ->
-        if (recyclerView.adapter == null) return
-        val adapter = recyclerView.adapter as LCCookingFragment.CookingAdapter
-        adapter.submitList(itemList)
-    }
-}
-@BindingAdapter("bind_cooking_selection_image")
-fun bindCookingSelectionImageRecyclerView(recyclerView: RecyclerView, item: List<CookingQuizSelection>?) {
-    Log.d("bind_cooking_selection_image", "list=$item")
-    item?.let { contentList ->
-        if (recyclerView.adapter == null) { return }
-        val adapter = recyclerView.adapter as LCCookingFragment.SelectionListAdapter
-        adapter.submitList(contentList)
     }
 }

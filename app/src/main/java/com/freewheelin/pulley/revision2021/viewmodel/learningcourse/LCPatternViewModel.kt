@@ -69,10 +69,8 @@ class LCPatternViewModel : BaseViewModel(), LifecycleObserver {
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "usePatternQuizHint =>${response.data}")
-                CoroutineScope(Dispatchers.IO).launch {
-                    withContext(Dispatchers.Main) {
-                        callback()
-                    }
+                CoroutineScope(Dispatchers.Main).launch {
+                    callback()
                 }
             }, { error ->
                 Log.e(javaClass.simpleName, "usePatternQuizHint error=${error.localizedMessage}")

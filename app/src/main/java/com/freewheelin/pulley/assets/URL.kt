@@ -27,7 +27,9 @@ object URL {
     val PULLEY_API = "https://api-live.pulleymath.com"
     val PULLEY_STAGING_API = "https://api-staging.pulleymath.com"
 //    val PULLEY_API = "https://api-dev.pulleymath.com"
-    val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
+    val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection.json"
+    val STAGING_SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection_staging.json"
+    val SERVER_INSPECTION_ORIGINAL = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
 
     val 구매촉구 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=init&utm_content=intro_pay#part03"
     val 구매촉구_메인 = "https://pulleymath.com/math_plus?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-main"
