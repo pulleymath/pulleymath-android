@@ -17,8 +17,6 @@ import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPatternMapFragment
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPriorConceptFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteMapFragment
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
@@ -27,15 +25,6 @@ import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
 import com.freewheelin.pulley.utils.*
 
 object BindingAdapter {
-    @JvmStatic
-    @BindingAdapter("bind_pattern_map_table")
-    fun bindPatternMapTableRecyclerView(recyclerView: RecyclerView, item: List<LCPatternCard>?) {
-        Log.d("bind_pattern_map_table", "list=$item")
-        item?.let { contentList ->
-            val adapter = recyclerView.adapter as LCPatternMapFragment.PatternCardListAdapter
-            adapter.submitList(contentList)
-        }
-    }
 
     @JvmStatic
     @BindingAdapter("bind_note_selector")
@@ -158,16 +147,6 @@ object BindingAdapter {
             if (recyclerView.adapter == null) { return }
             val adapter = recyclerView.adapter as LCCookingFragment.SelectionListAdapter
             adapter.submitList(contentList)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_prior_concept_card")
-    fun bindPriorConceptCardRecyclerView(recyclerView: RecyclerView, item: List<LCPriorConceptInfo>?){
-        Log.d("bind_prior_concept_card", "list=$item")
-        item?.let { priorConceptList ->
-            val adapter = recyclerView.adapter as LCPriorConceptFragment.PriorConceptCardListAdapter
-            adapter.submitList(priorConceptList)
         }
     }
 

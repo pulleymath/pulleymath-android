@@ -30,6 +30,7 @@ import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
+import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.squareup.picasso.Callback
@@ -91,7 +92,7 @@ class LCCookingFragment() : Fragment(),
             }
 
 //                viewModel.fetchCookingGroceries(courseId)
-//                rightRv.adapter = CookingAdapter()
+            rightRv.adapter = CookingAdapter()
 
             leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
             cookingMemoView.layoutParams.width = leftScrollRootCl.layoutParams.width
@@ -120,18 +121,7 @@ class LCCookingFragment() : Fragment(),
                         requestCreator
                             .resize(if (height > 5000) 3000 else width, 0)
                             .onlyScaleDown()
-                            .into(exerciseIv, object: Callback {
-                                override fun onSuccess() {
-                                    if (!isRvLoaded) {
-                                        isRvLoaded = true
-                                        rightRv.adapter = CookingAdapter()
-                                        viewModel.cookingList.postValue(viewModel.cookingList.value)
-                                    }
-                                }
-                                override fun onError(e: java.lang.Exception?) {
-                                    println("picasso downscale load error : ${e}")
-                                }
-                            })
+                            .into(exerciseIv)
                     }
                 }
             }
@@ -316,7 +306,7 @@ class LCCookingFragment() : Fragment(),
                         return js
                     }
                 }
-                webView.webChromeClient = CookingChromeClient()
+                webView.webChromeClient = CookingChromeClient(requireActivity())
                 webView.addJavascriptInterface(JsToAndroid(), "androidInterface")
                 webView.settings.apply {
                     javaScriptEnabled = true
@@ -579,58 +569,6 @@ class LCCookingFragment() : Fragment(),
 
     override fun onModeChanged(isFixedMode: Boolean) {
         (activity as LearningCourseActivity).savePencilcaseMode(isFixedMode)
-    }
-
-    inner class CookingChromeClient: WebChromeClient() {
-        // https://stackoverflow.com/questions/15768837/playing-html5-video-on-fullscreen-in-android-webview/56186877#56186877
-
-        private var mCustomView: View? = null
-        private var mCustomViewCallback: CustomViewCallback? = null
-        private var mOriginalOrientation = 0
-        private var mOriginalSystemUiVisibility = 0
-
-        init {
-
-        }
-
-        override fun getDefaultVideoPoster(): Bitmap? {
-            return if (mCustomView == null) {
-                null
-            } else BitmapFactory.decodeResource(getApplicationContext().resources, 2130837573)
-        }
-
-        override fun onHideCustomView() {
-            val activity = (activity as LearningCourseActivity)
-            (activity.window.decorView as FrameLayout).removeView(
-                mCustomView
-            )
-            mCustomView = null
-            activity.window.decorView.systemUiVisibility = mOriginalSystemUiVisibility
-            activity.requestedOrientation = mOriginalOrientation
-            mCustomViewCallback!!.onCustomViewHidden()
-            mCustomViewCallback = null
-        }
-
-        override fun onShowCustomView(
-            paramView: View?,
-            paramCustomViewCallback: CustomViewCallback?
-        ) {
-            val activity = (activity as LearningCourseActivity)
-
-            if (mCustomView != null) {
-                onHideCustomView()
-                return
-            }
-            mCustomView = paramView
-            mOriginalSystemUiVisibility = activity.window.decorView.systemUiVisibility
-            mOriginalOrientation = activity.requestedOrientation
-            mCustomViewCallback = paramCustomViewCallback
-            (activity.window.decorView as FrameLayout).addView(
-                mCustomView,
-                ViewGroup.LayoutParams(-1, -1)
-            )
-            activity.window.decorView.systemUiVisibility = 3846 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
     }
 
     override fun onEnterBtnClicked(button: Button, answer: String) {

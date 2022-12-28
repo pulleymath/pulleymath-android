@@ -10,11 +10,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.annotation.ColorInt
 import androidx.core.animation.doOnEnd
 import androidx.core.content.FileProvider
-import androidx.core.view.updateLayoutParams
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -34,7 +31,6 @@ import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFr
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.ChatFragment
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.LoungeFragment
 import com.freewheelin.pulley.revision2021.model.CourseType
-import com.freewheelin.pulley.revision2021.model.LCPriorConceptInfo
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel
@@ -77,18 +73,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         }
 
         fun getIntent(context: Context, subjectId: Int, chapterId: Int, chapterName: String, cookingId: Int) : Intent {
-            return Intent(context, LearningCourseActivity::class.java).apply {
-                putExtra(SUBJECT_ID, subjectId)
-                putExtra(CHAPTER_ID, chapterId)
-                putExtra(CHAPTER_NAME, chapterName)
-                putExtra(COOKING_ID, cookingId)
-                putExtra(IS_PRIOR_CONCEPT, true)
-            }
-        }
-        fun getIntent(context: Context, subjectId: Int, priorConcept: LCPriorConceptInfo) : Intent {
-            val chapterId = priorConcept.priorConceptChapterId
-            val chapterName = priorConcept.name
-            val cookingId = priorConcept.priorConceptCookingId
             return Intent(context, LearningCourseActivity::class.java).apply {
                 putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
@@ -273,7 +257,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 frags.let { tabFragments.addAll(listOf(priprConceptMapFrag) + it) }
 
                 pager.adapter = LCViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
-                pager.offscreenPageLimit = 2
+                pager.offscreenPageLimit = 1
             }
 
             onPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {

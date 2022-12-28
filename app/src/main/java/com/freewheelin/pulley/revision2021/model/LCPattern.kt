@@ -9,39 +9,6 @@ enum class QuizFormat {
     Short
 }
 
-class LCPatternCard: BaseDiffItem, Serializable {
-    var name: String = "유형 n: 다항식의 덧셈과 뺼셈"
-    var imageUrl: String = "https://pulley-cm-book-pdfs.s3.ap-northeast-2.amazonaws.com/1.png"
-//    var progressRate: Float = 0f // 풀리로 이전하면서 변경
-    var progress: List<Progress> = listOf()
-    var patternId: Int = 0
-
-//    var studyHistoryId: Int = hashCode() // ?? 이게뭐엿을까
-
-    val isCompleteCard: Boolean
-        get() {
-            if (progress.isEmpty()) return false
-            return progress.all { it.isCorrect != null }
-        }
-
-    override fun getId() = "${patternId}"
-
-    companion object {
-        fun getHeader (): LCPatternCard {
-            return LCPatternCard().apply {
-                patternId = -999
-            }
-        }
-    }
-
-    inner class Progress {
-        var patternQuizId: Int = -1
-        var isCorrect: Boolean? = null
-        var isFirstTry: Boolean? = null
-    }
-}
-
-
 open class LCPatternQuiz: BaseDiffItem, Serializable {
     override fun getId(): String {
         return "$patternQuizId"

@@ -2,7 +2,6 @@ package com.freewheelin.pulley.revision2023.ui.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.databinding.ItemLcPatternMapCardBinding
-import com.freewheelin.pulley.databinding.ItemPatternMapCardBinding
 import com.freewheelin.pulley.databinding.ItemPatternMapHeaderBinding
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.utils.listeners.LCPatternMapClickListener
