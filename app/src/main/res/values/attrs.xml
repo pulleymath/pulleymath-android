@@ -176,6 +176,13 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="PulleySpinner">
+        <attr name="corner" format="enum">
+            <enum name="flat" value="0" />
+            <enum name="round" value="1" />
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="CodeConfirmView">
         <attr name="title" format="string" />
         <attr name="hint" format="string" />

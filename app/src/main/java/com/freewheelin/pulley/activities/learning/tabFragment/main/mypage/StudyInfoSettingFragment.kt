@@ -31,7 +31,8 @@ import retrofit2.Response
 
 class StudyInfoSettingFragment : MyPageBaseFragment(), DabakTabRadioListener {
 
-    val grades = listOf(Grade.BeforeHigh, Grade.High_1, Grade.High_2, Grade.High_3, Grade.AfterHigh)
+    // 학년정보 수정이 더이상 snack test에서 일어나지 않는것 같다.
+    val grades = listOf(Grade.Middle_1, Grade.Middle_2, Grade.Middle_3, Grade.High_1, Grade.High_2, Grade.High_3, Grade.AfterHigh)
     val ratings = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
     val majors = listOf(Major.liberal_arts, Major.natural_sciences)
 
@@ -87,7 +88,7 @@ class StudyInfoSettingFragment : MyPageBaseFragment(), DabakTabRadioListener {
         with(binding) {
             val grade = grades.getOrNull(gradeTab.selectedIndex)
 
-            if (grade == Grade.BeforeHigh) {
+            if (grade?.isMiddle == true) {
                 majorLabel.visibility = View.GONE
                 majorTab.visibility = View.GONE
                 ratingLabel.visibility = View.GONE
@@ -116,7 +117,7 @@ class StudyInfoSettingFragment : MyPageBaseFragment(), DabakTabRadioListener {
             var major = majors.getOrNull(majorTab.selectedIndex)
             var rating = ratings.getOrNull(ratingTab.selectedIndex)
 
-            if (grade == Grade.BeforeHigh) {
+            if (grade?.isMiddle == true) {
                 major = Major.common
                 rating = 0
             } else if(grade == Grade.High_1) {

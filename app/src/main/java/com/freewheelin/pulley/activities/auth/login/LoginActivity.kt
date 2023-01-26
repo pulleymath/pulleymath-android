@@ -23,9 +23,11 @@ import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.API.RequestModel.RequestChangeEmail
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
@@ -39,6 +41,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.pulleymath.android.pdf.PdfViewerActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import retrofit2.Call
@@ -160,7 +163,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 showProgress()
 
 
-                    API_V2.loginApp(RequestLogin(email, pw))
+                    API_V3.loginApp(RequestLogin(email, pw))
                         .enqueue(object : Callback<Template<User?>> {
                             override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
                                 try {
@@ -258,7 +261,14 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     }
                     user?.initSettingCompleted == false -> {
                         commitUser()
-                        goInitSetting()
+                        disposables += API_V2.defaultInitSetting(user.studentID)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ res ->
+                                goLearningTab()
+                            }, {
+                                DialogUtils.showServerErr(this@LoginActivity)
+                            })
                     }
                     else -> {
                         commitUser()
@@ -304,6 +314,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 
     private fun openResetPassword() {

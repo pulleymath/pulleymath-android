@@ -144,10 +144,7 @@ class LCWrongNoteMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.isFirstFetch) {
-            fetchLCWrongNote()
-        }
-        viewModel.isFirstFetch = false
+        fetchLCWrongNote()
     }
 
     private fun fetchLCWrongNote() {

@@ -22,9 +22,13 @@ import android.graphics.Path;
 
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -151,18 +155,49 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         notifyRedoUndoCountChanged();
     }
 
-    public void setEraser(float stroke) {
+    public void setEraserFromOnTouch(float stroke) {
         mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         mCurrentPaint.setColor(Color.TRANSPARENT);
         mCurrentPaint.setAlpha(Color.TRANSPARENT);
-        setPaintWidthDp(stroke);
+        setPaintWidthPx(FreeDrawHelper.convertDpToPixels(stroke));
+
+    }
+    public void setEraser(float stroke) {
+        pp = new PrevPencil(new PorterDuffXfermode(PorterDuff.Mode.CLEAR), Color.TRANSPARENT, Color.TRANSPARENT, stroke);
+        mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mCurrentPaint.setColor(Color.TRANSPARENT);
+        mCurrentPaint.setAlpha(Color.TRANSPARENT);
+        setPaintWidthPx(FreeDrawHelper.convertDpToPixels(stroke));
     }
 
-    public void setPencil(int paintColor, int paintAlpha, float stroke) {
-        mCurrentPaint.setXfermode(null);
+    class PrevPencil {
+        Xfermode mode;
+        int color;
+        int alpha;
+        float stroke;
+        PrevPencil(Xfermode mode, int color, int alpha, float stroke) {
+            this.mode = mode;
+            this.color = color;
+            this.alpha = alpha;
+            this.stroke = stroke;
+        }
+    }
+    PrevPencil pp = new PrevPencil(null,-8289919, 255, 1.5f);
+    public void setPencil(Xfermode mode, int paintColor, int paintAlpha, float stroke) {
+        isStylusBtnClicked = false;
+        pp = new PrevPencil(mode, paintColor, paintAlpha, stroke);
+        mCurrentPaint.setXfermode(mode);
         mCurrentPaint.setColor(paintColor);
         mCurrentPaint.setAlpha(paintAlpha);
         setPaintWidthDp(stroke);
+    }
+    public void setCurrPaint(Xfermode mode,  int paintColor, int paintAlpha) {
+        isStylusBtnClicked = false;
+        pp.color = paintColor;
+        pp.alpha = paintAlpha;
+        mCurrentPaint.setXfermode(mode);
+        mCurrentPaint.setColor(paintColor);
+        mCurrentPaint.setAlpha(paintAlpha);
     }
 
     /**
@@ -217,6 +252,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * @param dp The new weight in dp, must be > 0
      */
     public void setPaintWidthDp(float dp) {
+        isStylusBtnClicked = false;
+        pp.stroke = dp;
         setPaintWidthPx(FreeDrawHelper.convertDpToPixels(dp));
     }
 
@@ -644,6 +681,13 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         if (finishedPath && mPoints.size() > 0) { // TODO
             createHistoryPathFromPoints();
         }
+
+        new Handler().postDelayed(() -> {
+            if (isStylusBtnClicked) {
+                setPencil(pp.mode, pp.color, pp.alpha, pp.stroke);
+            }
+        }, 0);
+
     }
 
     // Create a path from the current points
@@ -663,9 +707,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
     }
 
+    Boolean isStylusBtnClicked = false;
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
             notifyPathStart();
         }
@@ -673,12 +717,18 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
 
-        // Clear all the history when restarting to draw
         mCanceledPaths = new ArrayList<>();
+        int BUTTON_STYLUS = 213; // spen 버튼 클릭시 왜 motionEvent가 213으로 표기될까?
 
-        if ( motionEvent.getAction() == MotionEvent.ACTION_MOVE &&
-                motionEvent.getButtonState() != MotionEvent.BUTTON_STYLUS_PRIMARY &&
-                motionEvent.getButtonState() != MotionEvent.BUTTON_STYLUS_SECONDARY ) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE || motionEvent.getAction() == BUTTON_STYLUS) {
+            if (motionEvent.getAction() == BUTTON_STYLUS) {
+                isStylusBtnClicked = true;
+                float ERASE_THICK = 28f;
+                setEraserFromOnTouch(ERASE_THICK);
+            } else if (isStylusBtnClicked) {
+                isStylusBtnClicked = false;
+                setPencil(pp.mode, pp.color, pp.alpha, pp.stroke);
+            }
             Point point;
             for (int i = 0; i < motionEvent.getHistorySize(); i++) {
                 point = new Point();

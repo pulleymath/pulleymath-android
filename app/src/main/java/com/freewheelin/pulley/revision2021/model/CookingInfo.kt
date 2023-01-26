@@ -3,18 +3,33 @@ package com.freewheelin.pulley.revision2021.model
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable
 
-class CookingInfo {
+data class LCCookingWrapper(
+    val data: CookingInfo,
+    val error: String?,
+    val message: String?,
+    val current_time: String?
+)
+@Entity(tableName = "lc_cooking_info_table")
+data class CookingInfo(
+    @PrimaryKey(autoGenerate = false) var conceptCookingId: Int,
+    val chapterId: Int,
+    val imageUrl: String,
+    val video: Video,
+    val exerciseGroups: List<CookingExercise>
+) {
 
-    var chapterId: Int = 0
-    var conceptCookingId: Int = 0
-    var imageUrl: String = ""
-//    var videoUrl: String = "" // 풀리로 옮겨오면서 변경된 값
-    lateinit var video: Video
-    lateinit var exerciseGroups: List<CookingExercise>
+//    var chapterId: Int = 0
+//    var conceptCookingId: Int = 0
+//    var imageUrl: String = ""
+//
+//    lateinit var video: Video
+//    lateinit var exerciseGroups: List<CookingExercise>
 
     inner class Video {
         var url: String = ""
@@ -103,16 +118,6 @@ class CookingExercise: Serializable {
             return null
         }
 
-    val get1: String
-        get() = "1"
-    val get2: String
-        get() = "2"
-    val get3: String
-        get() = "3"
-    val get4: String
-        get() = "4"
-    val get5: String
-        get() = "5"
 }
 
 
@@ -207,9 +212,19 @@ class ExerciseQuizAnswerOption: Serializable {
     var imageUrl: String = ""
 }
 
-class CookingInfoItem: BaseDiffItem, Serializable {
+@Entity(tableName = "lc_cooking_info_item_table")
+data class CookingInfoItem(
+    @PrimaryKey(autoGenerate = false) val itemId: Int,
+    val cookingId: Int,
+    val quiz: CookingQuiz? = null,
+    val cookingInfo: CookingInfo? = null,
+    val order: String = "",
+    val exerciseList: List<CookingExercise>? = null,
+    var type: ItemType = ItemType.Video,
+    var video: CookingInfo.Video? = null
+): BaseDiffItem, Serializable {
     override fun getId(): String {
-        return "${id}"
+        return "${itemId}"
     }
     enum class ItemType {
         Video,
@@ -217,69 +232,60 @@ class CookingInfoItem: BaseDiffItem, Serializable {
         Footer
     }
 
-    var type: ItemType = ItemType.Video
-    var id: Int = 0
-    var cookingImageUrl: String? = null
-    lateinit var video: CookingInfo.Video
-
-    // exercise
-    var exerciseList: List<CookingExercise>? = null
-
-    var quiz: CookingQuiz? = null
-    var cookingInfo: CookingInfo? = null
-
-    var order: String = ""
-
     companion object {
-        fun getVideoItem(id: Int, video: CookingInfo.Video, exerciseList: List<CookingExercise>): CookingInfoItem {
-            return CookingInfoItem().apply {
-                this.id = id
-                this.type = ItemType.Video
-                this.video = video
-                this.exerciseList = exerciseList
+//        fun getVideoItem(id: Int, video: CookingInfo.Video, exerciseList: List<CookingExercise>): CookingInfoItem {
+        fun getVideoItem(info: CookingInfo): CookingInfoItem {
+            return CookingInfoItem(
+                itemId = info.conceptCookingId + 10000,
+                cookingId = info.conceptCookingId,
+                type = ItemType.Video,
+                video = info.video,
+                exerciseList = info.exerciseGroups,
                 order = "A"
-            }
+            )
         }
 
-        fun getExerciseItem(id: Int, quiz: CookingQuiz): CookingInfoItem {
-            return CookingInfoItem().apply {
-                this.id = id
-                this.type = ItemType.Exercise
-
-                val isSolved = quiz.userAnswer != null
-                val isCorrectAnswer = quiz.userAnswer == quiz.answer
-                quiz.afterTryAnswered.set(isSolved)
-                quiz.isAnswerEntered.set(isSolved)
-                quiz.isCorrectAnswer.set(isCorrectAnswer)
-
-                // TODO 이거 필요함?
-                if (quiz.format == QuizFormat.Single) {
-                    quiz.userAnswer?.toInt()?.let { position ->
-                        val selectedImageUrl = quiz.sortedAnswerOptions[position - 1].imageUrl
-                        quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
-                    }
-                }
-
-                this.quiz = quiz
-                order = "D${quiz.exerciseQuizId}"
-            }
-        }
-        fun getExercise(id: Int, cookingInfo: CookingInfo, exerciseList: List<CookingExercise>): CookingInfoItem {
-            return CookingInfoItem().apply {
-                this.id = id
-                this.type = ItemType.Exercise
-                this.exerciseList = exerciseList
-                this.cookingInfo = cookingInfo
-
+//        fun getExerciseItem(id: Int, quiz: CookingQuiz): CookingInfoItem {
+//            return CookingInfoItem(
+//                id = id,
+//                type = ItemType.Exercise,
+//                quiz = quiz,
+//                order = "D${quiz.exerciseQuizId}"
+//            ).apply {
+//                val isSolved = quiz.userAnswer != null
+//                val isCorrectAnswer = quiz.userAnswer == quiz.answer
+//                quiz.afterTryAnswered.set(isSolved)
+//                quiz.isAnswerEntered.set(isSolved)
+//                quiz.isCorrectAnswer.set(isCorrectAnswer)
+//
+//                // TODO 이거 필요함?
+//                if (quiz.format == QuizFormat.Single) {
+//                    quiz.userAnswer?.toInt()?.let { position ->
+//                        val selectedImageUrl = quiz.sortedAnswerOptions[position - 1].imageUrl
+//                        quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
+//                    }
+//                }
+//            }
+//        }
+//        fun getExercise(id: Int, cookingInfo: CookingInfo, exerciseList: List<CookingExercise>): CookingInfoItem {
+        fun getExercise(info: CookingInfo): CookingInfoItem {
+            return CookingInfoItem(
+                itemId = info.conceptCookingId + 100000,
+                type = ItemType.Exercise,
+                exerciseList = info.exerciseGroups,
+                cookingInfo = info,
+                cookingId = info.conceptCookingId,
                 order = "B"
-            }
+            )
         }
-        fun getFooter(id: Int): CookingInfoItem {
-            return CookingInfoItem().apply {
-                this.id = id
-                this.type = ItemType.Footer
+//        fun getFooter(id: Int): CookingInfoItem {
+        fun getFooter(info: CookingInfo): CookingInfoItem {
+            return CookingInfoItem(
+                itemId = info.conceptCookingId + 1000000,
+                cookingId = info.conceptCookingId,
+                type = ItemType.Footer,
                 order = "C"
-            }
+            )
         }
      }
 }

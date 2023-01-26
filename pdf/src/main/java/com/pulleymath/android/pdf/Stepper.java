@@ -5,7 +5,7 @@
  *
  * Modified by Freewheelin Inc. since 2021 for the Pulley Math app
  * (package rename and app-specific changes).
- * Modifications Copyright (C) 2021-2022 Freewheelin Inc.
+ * Modifications Copyright (C) 2021-2023 Freewheelin Inc.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published by the

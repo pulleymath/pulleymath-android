@@ -34,7 +34,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.componen
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragmentListener
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
@@ -504,25 +504,25 @@ class WrongNoteFragment : LearningTabFragment(),
                 subjectCondition = true
 
             if(filters.contains(과목_수학_상))
-                subjectCondition = (subjectCondition || subject == Subject.수학_상)
+                subjectCondition = (subjectCondition || subject.isMathSang)
 
             if(filters.contains(과목_수학_하))
-                subjectCondition = (subjectCondition || subject == Subject.수학_하)
+                subjectCondition = (subjectCondition || subject.isMathHa)
 
             if(filters.contains(과목_수학1))
-                subjectCondition = (subjectCondition || subject == Subject.수학I)
+                subjectCondition = (subjectCondition || subject.isMath1)
 
             if(filters.contains(과목_수학2))
-                subjectCondition = (subjectCondition || subject == Subject.수학II)
+                subjectCondition = (subjectCondition || subject.isMath2)
 
             if(filters.contains(과목_확률과통계))
-                subjectCondition = (subjectCondition || subject == Subject.확률과통계)
+                subjectCondition = (subjectCondition || subject.isProbabilityAndStatistics)
 
             if(filters.contains(과목_미적분))
-                subjectCondition = (subjectCondition || subject == Subject.미적분)
+                subjectCondition = (subjectCondition || subject.isCalculus)
 
             if(filters.contains(과목_기하))
-                subjectCondition = (subjectCondition || subject == Subject.기하)
+                subjectCondition = (subjectCondition || subject.isGeometry)
 
 
             var levelCondition = false

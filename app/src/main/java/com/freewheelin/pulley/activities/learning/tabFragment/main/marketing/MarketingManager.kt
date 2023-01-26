@@ -89,7 +89,9 @@ object MarketingManager {
 
     fun getStudentSegment(grade:Grade?) : StudentSegment {
         return when(grade) {
-            Grade.BeforeHigh -> StudentSegment.Middle
+            Grade.Middle_1 -> StudentSegment.Middle1
+            Grade.Middle_2 -> StudentSegment.Middle2
+            Grade.Middle_3 -> StudentSegment.Middle3
             Grade.High_1 -> StudentSegment.High1
             Grade.High_2 -> StudentSegment.High2
             Grade.High_3 -> StudentSegment.High3

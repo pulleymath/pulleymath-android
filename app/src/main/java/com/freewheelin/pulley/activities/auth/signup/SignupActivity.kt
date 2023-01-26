@@ -23,6 +23,7 @@ import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.databinding.ActivitySignupBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.ResponseBody
@@ -100,11 +101,11 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         }
     }
 
-    override fun regist(school:Int?, region:Int?, year:Int, rate:Int, major:Int) {
+    override fun regist(school:Int?, region:Int?, selectedGrade:Int, rate:Int, major:Int) {
         signup.schoolInfo.apply {
             schoolID = school
             regionID = region
-            grade = year
+            grade = selectedGrade
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
@@ -131,7 +132,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     private fun login(email:String, pw:String) {
-        API_V2.loginApp(RequestLogin(email, pw)).enqueue(object: Callback<Template<User?>> {
+        API_V3.loginApp(RequestLogin(email, pw)).enqueue(object: Callback<Template<User?>> {
             override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
                 responseFailed(this@SignupActivity, t)
             }

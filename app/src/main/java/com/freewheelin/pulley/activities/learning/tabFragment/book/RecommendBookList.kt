@@ -72,11 +72,7 @@ class RecommendBookList: ConstraintLayout {
         indexLabel.text = "#${index}"
         guideTv.text = "$title"
         this.books = books?: mutableListOf()
-        if(books == null) {
-            visibility = View.GONE
-        } else {
-            visibility = View.VISIBLE
-        }
+        visibility = if (books == null) View.GONE else View.VISIBLE
         recyclerView.adapter?.notifyDataSetChanged()
     }
 

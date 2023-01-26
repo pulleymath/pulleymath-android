@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment.CookingItemClickListener"/>
+<!--        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment.CookingItemClickListener"/>-->
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.CookingInfoItem"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel"/>
     </data>

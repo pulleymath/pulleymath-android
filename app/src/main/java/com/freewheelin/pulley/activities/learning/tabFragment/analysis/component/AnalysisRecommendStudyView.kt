@@ -56,7 +56,7 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         averageCorrectRateBar.barHeight = resources.getDimension(R.dimen.dp120)
         averageCorrectRateBar.barWidth = resources.getDimension(R.dimen.dp56)
         averageCorrectRateBar.color = ContextCompat.getColor(context, R.color.grey_e0e0e0)
-        averageBarLabel.text = "${user!!.rating}등급\n평균"
+        averageBarLabel.text = "등급\n평균"
         actionBtn.setOnClickListener { listener?.onRecommendBtnClicked(this) }
     }
 
@@ -66,6 +66,12 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         myCorrectRateBar.value = myPercent
         myCorrectRateBar.lowLabel = "나의\n정답률"
         averageCorrectRateBar.value = sameGradePercent
+
+        averageBarLabel.text = if (result.studentRating == 0) {
+            "중등\n평균"
+        } else {
+            "${result.studentRating}등급\n평균"
+        }
 
         var userRatingText = "${user!!.rating}등급\n평균"
         if(user!!.rating < 1) {

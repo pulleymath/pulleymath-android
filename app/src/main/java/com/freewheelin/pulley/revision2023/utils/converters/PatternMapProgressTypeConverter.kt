@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.revision2021.utils.converters
+package com.freewheelin.pulley.revision2023.utils.converters
 
 import androidx.room.TypeConverter
 import com.freewheelin.pulley.revision2023.model.LCPatternMapProgress

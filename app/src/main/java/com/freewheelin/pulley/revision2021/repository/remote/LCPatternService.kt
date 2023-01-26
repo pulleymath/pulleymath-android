@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
+import com.freewheelin.pulley.revision2021.model.LCPatternQuizWrapper
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
@@ -14,10 +16,10 @@ object LCPatternApi {
 interface LCPatternService {
 
     @GET("patterns/{patternId}/users/{studentId}")
-    fun fetchPatternInfo(
+    suspend fun fetchPatternInfo(
         @Path("patternId") patternId: Int,
-        @Path("studentId") studentId: String,
-    ): Observable<BaseCookingListResponse<LCPatternQuiz>>
+        @Path("studentId") studentId: String = user?.studentID!!,
+    ): LCPatternQuizWrapper
 
     @PATCH("users/{studentId}/patterns/{patternQuizId}")
     fun patternQuizScoring(

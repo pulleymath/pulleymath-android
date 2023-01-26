@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/dialog_test_report_top_margin"
         android:paddingBottom="@dimen/dialog_test_report_bottom_margin"
-        tools:context="com.freewheelin.pulley.activities.DailyTestReportActivity">>
+        tools:context="com.freewheelin.pulley.activities.DailyTestReportActivity">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="960dp"
             android:layout_height="wrap_content"

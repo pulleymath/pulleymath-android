@@ -2,8 +2,7 @@ package com.freewheelin.pulley.revision2023.room.patternmap
 
 import android.content.Context
 import androidx.room.*
-import com.freewheelin.pulley.revision2021.utils.converters.PatternMapProgressTypeConverter
-import com.freewheelin.pulley.revision2021.utils.converters.PriorConceptTagTypeConverter
+import com.freewheelin.pulley.revision2023.utils.converters.PatternMapProgressTypeConverter
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import kotlinx.coroutines.CoroutineScope
 

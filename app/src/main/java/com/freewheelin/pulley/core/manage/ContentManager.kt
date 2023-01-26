@@ -1,7 +1,6 @@
 package com.freewheelin.pulley.core.manage
 
 import android.content.Context
-import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.core.API.ResponseModel.StudentGoalInfo
@@ -37,10 +36,10 @@ object ContentManager {
                 "studentID" to user.studentID,
                 "receiverEmail" to email,
                 "pieceIDs" to content.map {
-                    if(it.pieceCategoryTag == BookType.CUSTOM_BOOK || it.id == 0) // 워크북이거나, id가 0이면
+                    if(it.pieceCategoryTag == BookType.CUSTOM_BOOK || it.pieceID == 0) // 워크북이거나, id가 0이면
                         it.assignID!!
                     else
-                        it.id
+                        it.pieceID
                 }
         )
 
@@ -178,7 +177,7 @@ object ContentManager {
                         content.score = problems.filter { it.getResultByUserAnswer() == Result.correct }.size * 100 / problems.size
                     } else {
                         LogUtils.errorEvent(PulleyEvent.PROBLEM_NOT_EXIST, user,"err: problem is not exist in score\n" +
-                                "pieceID: ${content.id}" +
+                                "pieceID: ${content.pieceID}" +
                                 "assignID: ${content.assignID}" +
                                 "studentID: ${user.studentID}")
 

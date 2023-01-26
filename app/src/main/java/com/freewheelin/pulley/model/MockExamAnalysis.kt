@@ -93,9 +93,9 @@ class MockExamProblem: Serializable {
 }
 
 class ChapterAnalysis: Serializable {
-    @Expose @SerializedName("chapterCode")
+    @Expose @SerializedName("chapterCode") // = subjectCode
     val code: Int = 0
-    @Expose @SerializedName("chapterName")
+    @Expose @SerializedName("chapterName") // BigChapterName
     val name: String = ""
 
     val myCorrectRate: Int = 0

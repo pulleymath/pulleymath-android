@@ -1,6 +1,9 @@
 package com.freewheelin.pulley.revision2021.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
+import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import java.io.Serializable
 
 enum class QuizFormat {
@@ -9,25 +12,33 @@ enum class QuizFormat {
     Short
 }
 
-open class LCPatternQuiz: BaseDiffItem, Serializable {
+data class LCPatternQuizWrapper(
+    val data: List<LCPatternQuiz>,
+    val error: String?,
+    val message: String?,
+    val current_time: String?
+)
+@Entity(tableName = "lc_pattern_table")
+data class LCPatternQuiz(
+    @PrimaryKey(autoGenerate = false) val patternQuizId: Int,
+    val patternId: Int,
+    val quizType: String,
+    val questionFormat: String,
+    val quizImageUrl: String,
+    val solutionImageUrl: String,
+    val answer: String,
+    var isCorrect: Boolean?,
+    var isFirstTry: Boolean = true,
+    val userAnswer: String?,
+    val correctAnswerRate: Float,
+    val hintUsageCount: Int,
+    val hints: List<LCPatternQuizHint>,
+    val concepts: List<LCPatternConcept>,
+
+): BaseDiffItem, Serializable {
     override fun getId(): String {
         return "$patternQuizId"
     }
-
-    var patternQuizId: Int = hashCode() // 이름을 quizId로 바꿔야할거같은데?
-    var quizType: String = "MAIN" // main or quiz
-    var questionFormat: String = "SINGLE_SELECT" // 객관식 주관식 선다형
-    var quizImageUrl: String = "https://pulley-cm-book-pdfs.s3.ap-northeast-2.amazonaws.com/test/quiz_problem.png"
-    var solutionImageUrl: String = ""
-    var answer: String = "1" // 문제의 정답
-    var isCorrect: Boolean? = null // 맞은 여부 , 미입력시 null
-    var isFirstTry: Boolean = true // 유형맵에서 채점 이미지 결정
-    var userAnswer: String? = null // 유저가 입력한 정답
-    var correctAnswerRate: Float = 0f  // 정답률
-    var hintUsageCount: Int = 0 //힌트 사용수
-    var hints: List<LCPatternQuizHint> = listOf()
-    var concepts: List<LCPatternConcept> = listOf()
-
 
     val patternType: PatternType
         get() {
@@ -94,40 +105,21 @@ open class LCPatternQuiz: BaseDiffItem, Serializable {
         }
     }
 
-    fun getUserAnswerWithList(): List<String> {
-        userAnswer?.let {
-            return when (quizFormat) {
-                QuizFormat.Single -> {
-                    listOf(it)
-                }
-                QuizFormat.Multi -> {
-                    it.split(",")
-                }
-                QuizFormat.Short -> {
-                    listOf(it)
-                }
-            }
-        }
-        return listOf()
-
-    }
-
     fun isShortFormat(): Boolean {
         return quizFormat == QuizFormat.Short
     }
-}
 
-class LCPatternQuizHint: Serializable {
-    var sequence: Int = -1
-    var hintImageUrl: String = ""
 }
-class LCPatternConcept: Serializable {
-    var conceptType: String = "BASE" // RELEATED , BASE
-    var sequence: Int = -1
-    var conceptImageUrl: String = "https://pulley-cm-book-pdfs.s3.ap-northeast-2.amazonaws.com/test/releated_concept.png"
-//    "https://pulley-cm-book-pdfs.s3.ap-northeast-2.amazonaws.com/test/quiz_concept.png"
-
-    var type: ConceptType = ConceptType.base
+data class LCPatternQuizHint(
+    val sequence: Int,
+    val hintImageUrl: String
+)
+data class LCPatternConcept(
+    val conceptType: String,
+    val sequence: Int,
+    val conceptImageUrl: String,
+    val type: ConceptType,
+) {
 
     enum class ConceptType {
         base,

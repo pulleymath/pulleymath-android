@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ItemBookMyPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.ClientBookType
@@ -29,6 +30,9 @@ interface PlanListener {
     fun onSolveClicked(holder: PlanHolder, book: Book)
     fun onMakeCustomBookClicked(holder: PlanHolder, book: Book)
 }
+interface PatternStudyListener {
+    fun filterFromTagOnCard(type: FilterType)
+}
 
 abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
     lateinit var book: Book
@@ -47,6 +51,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
     open var actionList = listOf(ActionType.pin)
     var listener: PlanListener? = null
+    var studyListener: PatternStudyListener? = null
     var scaleAnim: ValueAnimator? = null
     var expandAnim: ValueAnimator? = null
 
@@ -309,7 +314,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
             when (action) {
                 ActionType.delete -> {
-                    holder.button.text = "나의 플랜에서 빼기"
+                    holder.button.text = "나의 문제집에서 빼기"
                 }
 
                 ActionType.mail -> {
@@ -336,6 +341,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class MyPlanHolder(override var view: View) : PlanHolder(view) {
+
     val solveDateLabel = view.findViewById<TextView>(R.id.solveDateLabel)
     val solveDateTv = view.findViewById<TextView>(R.id.solveDateTv)
     val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)

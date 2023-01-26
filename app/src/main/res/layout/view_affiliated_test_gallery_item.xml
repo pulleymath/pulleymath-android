@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <import type="android.view.View" />
+        <variable name="problem" type="com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.utils.listener.AffiliatedGalleryViewClickListener"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_stroke_gray_300"
+        android:onClick="@{ () -> listener.onGalleryViewClick(problem) }"
+        >
+
+        <TextView
+            android:id="@+id/numberTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/h3"
+            android:text="@{ problem.no + `` }"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/ivWrapperLl"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@id/numberTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <ImageView
+                android:id="@+id/thumbnailIv"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                cookingImgRes="@{ problem.img_url }"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="1dp"
+            android:visibility="@{ problem.user_answer != null ? View.VISIBLE : View.GONE }"
+            android:background="@color/dim_white_26ffffff"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_check_green_circle"
+            android:scaleType="centerInside"
+            android:layout_margin="16dp"
+            android:visibility="@{ problem.user_answer != null ? View.VISIBLE : View.GONE }"
+            app:layout_constraintTop_toBottomOf="@+id/numberTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

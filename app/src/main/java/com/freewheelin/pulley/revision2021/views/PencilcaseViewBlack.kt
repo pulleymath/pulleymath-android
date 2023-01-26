@@ -122,7 +122,7 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
         }
     private fun setMode(mode: Xfermode?) {
         memoViews.forEach {
-            if (mode == null) it.setPencil(penColor.value, penColor.alpha, thickness.width)
+            if (mode == null) it.setPencil(mode, penColor.value, penColor.alpha, thickness.width)
             else it.setEraser(ERASE_THICK)
         }
     }
@@ -131,8 +131,11 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
             field = value
             configUI()
             memoViews.forEach {
-                it.paintColor = value.value
-                it.paintAlpha = value.alpha
+                val Xfermode = when (editType) {
+                    CookingPencilcase.EditType.pencil -> null
+                    else -> clear
+                }
+                it.setCurrPaint(Xfermode, value.value, value.alpha)
             }
             listener?.onEditColorChanged(value)
         }

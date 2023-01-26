@@ -56,7 +56,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
     var books: ArrayList<Book>? = null
     var filteredBooks: List<Book> = listOf()
 
-    val filterList = listOf("플랜 전체", "학습중인 플랜", "완료한 플랜")
+    val filterList = listOf("문제집 전체", "학습중인 문제집", "완료한 문제집")
 
     var isStartWithInitTest = false
     var isNeedLeading = false
@@ -91,12 +91,12 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
             override fun onReceive(context: Context, intent: Intent) {
                 val book = intent.getSerializableExtra(ARG_BOOK) as Book
 
-                books?.filter { it.id == book.id }?.forEach {
+                books?.filter { it.pieceID == book.pieceID }?.forEach {
                     it.markingState = book.markingState
                     it.markedNumber = book.markedNumber
                     it.updateDateTime = Date()
                 }
-                filteredBooks.filter { it.id == book.id }.forEach {
+                filteredBooks.filter { it.pieceID == book.pieceID }.forEach {
                     it.markingState = book.markingState
                     it.markedNumber = book.markedNumber
                     it.updateDateTime = Date()
@@ -140,7 +140,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
     override fun initUI() {
         if (!::binding.isInitialized) return
         with(binding) {
-            guideTv.text = "학습 플랜이 없습니다.\n우측 상단의 <플랜 추가하기>로 플랜을 추가해보세요."
+            guideTv.text = "학습중인 문제집이 없습니다.\n우측 상단의 <문제집 추가하기>로 문제집을 추가해보세요."
             addPieceBtn.setOnClickListener {
                 onAddBookBtnClicked()
             }
@@ -214,7 +214,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
 
     override fun onSolveBtnClicked(book: Book) {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "플랜풀기")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집풀기")
         val intent = SolveActivity.getIntent(requireContext(), book)
         startActivity(intent)
     }
@@ -331,7 +331,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
         val textView = TextView(requireContext())
         textView.text = "${user!!.fullName}님께\n" +
-                "딱 맞는 플랜을 추가했어요 :)"
+                "딱 맞는 문제집을 추가했어요 :)"
         textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_ffffff))
         textView.typeface = Theme.extraBold(requireContext())
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))

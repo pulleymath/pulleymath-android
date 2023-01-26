@@ -60,6 +60,7 @@
             android:layout_marginEnd="@dimen/dp36"
             android:text="@{item.subject}"
             android:textSize="@dimen/dp18"
+            android:visibility="@{ item.subject.isEmpty() ? View.GONE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTitle" />

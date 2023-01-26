@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.core.API.ResponseModel.WeeklyProblemCount
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.Template
@@ -118,7 +119,7 @@ object TestManager {
                 "pieceSubCategory" to test.pieceSubCategory
         )
 
-        API_V1.getTestReport(param).enqueue(object: Callback<Template<Test>> {
+        API_V3.getTestReport(param).enqueue(object: Callback<Template<Test>> {
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
 
             }

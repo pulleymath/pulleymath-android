@@ -90,7 +90,7 @@ object BookManager {
     fun assign(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
         val param: Parameter = Parameter (
                 "studentID" to user.studentID,
-                "pieceID" to book.id
+                "pieceID" to book.pieceID
         )
 
         API_V1.assignBook(param).enqueue(object: Callback<Template<Book>> {
@@ -111,7 +111,7 @@ object BookManager {
     }
 
     fun getBook(context: Context, book: Book, user: User, cb: ((book: Book) -> Unit)) {
-        API_V2.getBook(user.studentID, book.assignID ?: book.id).enqueue(object: Callback<ResponseBookInfo2> {
+        API_V2.getBook(user.studentID, book.assignID ?: book.pieceID).enqueue(object: Callback<ResponseBookInfo2> {
             override fun onFailure(call: Call<ResponseBookInfo2>, t: Throwable) {
                 responseFailed(context, t)
             }
@@ -128,7 +128,7 @@ object BookManager {
                     book.arrangeProblem()
                     book.arrangeChapter()
                     LogUtils.logEvent(context, user, PulleyEvent.INIT_TEST, "문제풀기", "유형학습 세팅","Log: 문항개수 0개\n" +
-                            "param: ${"studentID: ${user.studentID}, id: ${book.assignID ?: book.id}"}\n" +
+                            "param: ${"studentID: ${user.studentID}, id: ${book.assignID ?: book.pieceID}"}\n" +
                             "response: ${response.raw()}\n")
                     cb(book)
 
@@ -139,6 +139,7 @@ object BookManager {
 
     fun getBooks(context: Context, user: User, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
+        // Did
         API_V2.getBooksNew(user.studentID, filterString, FilterOrder.DEFAULT.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
 
@@ -352,8 +353,8 @@ object BookManager {
 
     fun togglePin(context: Context, book: Book, user: User, cb:() -> Unit) {
 
-        val id = if(book.assignID == null) book.id else book.assignID!!
-
+        val id = if(book.assignID == null) book.pieceID else book.assignID!!
+        //did
         API_V2.setPin(user.studentID, id, !book.pin).enqueue(object: Callback<Void>{
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 responseFailed(context, t)
@@ -459,7 +460,7 @@ object BookManager {
 
     fun deleteBook(context: Context, user: User, book: Book, cb:() -> Unit) {
 
-        val id = if(book.assignID == null) book.id else book.assignID!!
+        val id = if(book.assignID == null) book.pieceID else book.assignID!!
 
         API_V2.deleteFromMyBook(user.studentID, id).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {

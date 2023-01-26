@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.model.response
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.ScreenTheme
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
@@ -87,7 +88,7 @@ class AffiliatedTestWorkbook: BaseDiffItem, Serializable {
     var school_id: Int = 0
     lateinit var major_code: String
     lateinit var name: String
-    var student_code: Int? = null
+    var student_code: String? = null
 
     fun isTestNotStartedYet(): Boolean {
         return !isTestStartTimeHasPassed()
@@ -277,7 +278,7 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
     var source_id: Int = 0
     lateinit var source_num: String
     lateinit var img_url: String
-    lateinit var thumb_url: String
+    var thumb_url: String? = null
     lateinit var updated_at: String
     lateinit var updated_by: String
     var pulley_problem_id: Int = 0
@@ -422,7 +423,7 @@ class AffiliatedStudentWorkbook: Serializable {
     var school_id: Int = 0
     lateinit var major_code: String
     lateinit var name: String
-    var student_code: Int? = null
+    var student_code: String? = null
 }
 
 class AffiliatedOpenProblem: Serializable {

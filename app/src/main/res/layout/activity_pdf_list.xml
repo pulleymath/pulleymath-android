@@ -38,6 +38,21 @@
                 app:srcCompat="@drawable/ic_arrow_black_left"
                 app:tint="@color/color_white_ffffff" />
 
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/h4"
+                android:layout_weight="999"
+                android:gravity="center"
+                android:text="출판사 문제집"
+                android:textColor="@color/white"/>
+            <View
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

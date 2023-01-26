@@ -29,6 +29,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.FragmentAffiliatedTestBinding
 import com.freewheelin.pulley.databinding.ItemAffiliatedTestBinding
+import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
@@ -90,6 +91,11 @@ class AffiliatedTestFragment: LearningTabFragment() {
             val adapter = UnivTestAdapter(viewModel)
             testListRv.adapter = adapter
             uuiTv.movementMethod = ScrollingMovementMethod()
+
+            if(user?.showMainKUTab == true)
+                testCompletedIv.setImageResource(R.drawable.box_colorful_ku)
+            else
+                testCompletedIv.setImageResource(R.drawable.box_colorful)
 
             reportBtn.setOnClickListener {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "테스트", "보고서-보기")
@@ -359,6 +365,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
             binding.listener = this
             binding.item = item
             binding.vm = viewModel
+            binding.isKU = user?.showMainKUTab
         }
         override fun onItemClick(ut: AffiliatedTestCard) {
             viewModel.selectCard(ut)

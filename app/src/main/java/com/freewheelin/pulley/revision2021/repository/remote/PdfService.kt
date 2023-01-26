@@ -24,6 +24,14 @@ interface PdfService {
              @Query("category") category:String="")
             : Observable<PdfListResponse>
 
+    @GET("v2/pdf/list")
+    fun listV2(@Query("title") title:String,
+             @Query("page") page:Int,
+             @Query("size") size:Int,
+             @Query("subject_code") subject_code:String = "",
+             @Query("category") category:String = "")
+            : Observable<PdfListResponse>
+
     @GET("v1/pdf/answers/{cm_book_id}")
     fun answer(@Path("cm_book_id") cm_book_id:Int) : Observable<PdfAnswerResponse>
 

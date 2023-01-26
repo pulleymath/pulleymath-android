@@ -1,8 +1,10 @@
 package com.freewheelin.pulley.model.contents
 
+import androidx.room.Entity
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable
 
 class BookCategoryList: Serializable {
@@ -46,8 +48,8 @@ enum class ClientBookType {
         }
 }
 
-
-class Book: Content {
+@Entity(tableName = "plan_book_table")
+class Book: Content, BaseDiffItem {
 
     var description: String = ""
     var bookTag: String? = null
@@ -125,6 +127,10 @@ class Book: Content {
             "4등급이하" -> FilterType.추천_4등급이하
             else -> FilterType.추천_1등급
         }
+    }
+
+    override fun getId(): String {
+        return "$assignID"
     }
 }
 

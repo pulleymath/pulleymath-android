@@ -18,7 +18,7 @@ data class Banner(
 )
 
 enum class StudentSegment {
-    Middle, High1, High2, High3, N, All
+    Middle1, Middle2, Middle3, High1, High2, High3, N, All
 }
 
 enum class UserSegment {

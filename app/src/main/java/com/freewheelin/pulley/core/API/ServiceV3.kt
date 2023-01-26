@@ -1,8 +1,10 @@
 package com.freewheelin.pulley.core.API
 
+import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.MockExamAnalysis
 import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -26,4 +28,29 @@ interface  ServiceV3 {
 
     @GET("mock/student/{studentID}/report/{assignID}")
     fun getMockReport(@Path("studentID") studentID: String, @Path("assignID") assignID: Int): Call<MockExamAnalysis>
+
+    @GET("me/app")
+    fun getUser(): Call<Template<User>>
+
+    @POST("signin/app")
+    fun loginApp(@Body params: RequestLogin): Call<Template<User?>>
+
+    @PUT("users/{studentID}/subjects/common")
+    fun changeCommonSubject(
+        @Path("studentID") studentID: String,
+        @Body params: Parameter): Call<Void>
+
+    @PUT("users/{studentID}/subjects/optional")
+    fun changeOptionalSubject(
+        @Path("studentID") studentID: String,
+        @Body params: Parameter): Call<Void>
+
+    @PUT("daily-test/{studentID}/exclude")
+    fun setExcludeStudied(
+        @Path("studentID") studentID: String,
+        @Body params: Parameter): Call<Void>
+
+    @POST("/test/report")
+    fun getTestReport(@Body param: Parameter): Call<Template<Test>>
+
 }

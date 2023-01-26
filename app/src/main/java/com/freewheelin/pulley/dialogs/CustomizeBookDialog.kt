@@ -222,6 +222,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     }
 
     private fun sync(subject: CommercialSubject?) {
+        //did
         BookManager.getCommercialBook(context, subject) {
             this.commercialBooks = it
             sort()

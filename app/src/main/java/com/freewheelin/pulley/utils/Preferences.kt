@@ -38,6 +38,7 @@ object Preferences {
     val tooltipShowingCntAnalysisMain = APPreference(0)
     val tooltipShowingCntRecommendPlan = APPreference(0)
     val galleryClickCnt = APPreference(0)
+    val univGalleryClickCnt = APPreference(0)
 
     val answerXPosition = APPreference(-1f)
     val answerYPosition = APPreference(-1f)

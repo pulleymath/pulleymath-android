@@ -68,7 +68,7 @@ class MainProfile {
     fun getProblemCountGuideText(user: User): String {
         val rating = user.rating
 
-        if(user.grade == Grade.BeforeHigh) {
+        if(user.grade.isMiddle) {
             return "더 나은 나를 위한 도전!\n하루 ${goalProblemCount}문제 꼬박꼬박"
         } else {
             val ratingText = if (rating <= 1) "1등급" else "${rating - 1}등급"

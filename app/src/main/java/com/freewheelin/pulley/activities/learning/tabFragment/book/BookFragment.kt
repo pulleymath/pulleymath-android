@@ -107,6 +107,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 }
             }
 
+            // 워크북 잠금 아이콘
             iconLock.visibility = if (user!!.hasPulleyPlus) {
                 View.GONE
             } else {
@@ -129,6 +130,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 }
             }
 
+            // 전체플랜
             totalRv.layoutManager = GridLayoutManager(context, 3)
             totalRv.adapter = TotalPlanAdapter()
             val totalRvAnimationController = AnimationUtils.loadLayoutAnimation(
@@ -228,6 +230,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
 
     fun getMyPlanList(cb: () -> Unit) {
         binding.apply {
+            // Did
             BookManager.getMyBookList(requireContext(), user!!) {
                 myBooks = it
 
@@ -248,6 +251,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     fun getRecommendList(cb: () -> Unit) {
+        // Did
         BookManager.getRecommendBookList(requireContext(), user!!) {
             if (it != null) {
                 for (i in 0 until it.size) {
@@ -267,6 +271,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     }
 
     private fun getRecommendListWithoutRefresh(cb: () -> Unit) {
+        //did
         BookManager.getRecommendBookList(requireContext(), user!!) {
             if (it != null) {
                 for (i in 0 until it.size) {
@@ -294,7 +299,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             totalLoadingView.playAnimation()
 
             val filters = filterView.selectedFilterTypes.toSet()
-
+            //did
             BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
                 if (filter == filterView.selectedFilterTypes) {
                     totalBooks = books.toMutableList()
@@ -327,6 +332,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             totalLoadingView.playAnimation()
             val filters = filterView.selectedFilterTypes.toSet()
 
+            //did
             BookManager.getBooks(requireContext(), user!!, filters, cb = { books, filter ->
                 if (filter == filterView.selectedFilterTypes) {
                     totalBooks?.clear()
@@ -348,7 +354,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         recommendBookListViews.forEach {
             val books = it.books
             val index = books?.indexOfFirst {
-                it.id == book.id
+                it.pieceID == book.pieceID
             }
             if (index != null && index >= 0) {
                 books[index] = book
@@ -363,7 +369,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             if(book.assignID != null)
                 book.assignID == it.assignID
             else
-                it.id == book.id
+                it.pieceID == book.pieceID
         }
 
         if(index != null && index >= 0) {
@@ -381,6 +387,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     inner class MyPlanAdapter : RecyclerView.Adapter<MyPlanHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPlanHolder {
             val view = LayoutInflater.from(context).inflate(R.layout.item_book_my_plan, parent, false)
+//            val binding = ItemBookMyPlanBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return MyPlanHolder(view)
         }
 
@@ -454,6 +461,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
                 val itemValue = if(holder is MyPlanHolder) "나의플랜" else if(holder is RecommendPlanHolder) "추천플랜" else "전체플랜"
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
+                //did
                 BookManager.togglePin(requireContext(), book, user!!) {
                     getMyPlanList {
                         getRecommendListWithoutRefresh {
@@ -464,6 +472,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             }
             ActionType.delete -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의플랜빼기")
+                //did
                 BookManager.deleteBook(requireContext(), user!!, book) {
                     myBooks?.removeBook(book) {
                         binding.apply {
@@ -576,7 +585,6 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         }, 1000)
     }
     fun filterFromTagOnCard(type: FilterType) {
-
         binding.filterView.selectedFilterTypes.add(type)
         binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
         binding.filterView.adapter?.notifyDataSetChanged()

@@ -12,7 +12,7 @@ class School (
     val isDeleted: Boolean,
     val name: String,
     val regionID: Int,
-    val type: String,
+    val type: Type,
     val updateDate: String
 ) : BaseDiffItem {
     override fun equals(other: Any?): Boolean {
@@ -20,6 +20,25 @@ class School (
     }
 
     override fun getId() = "$id"
+
+    enum class Type {
+        ELEMENTARY,
+        MIDDLE,
+        HIGH,
+        UNIVERSITY
+    }
+    fun isElementary(): Boolean {
+        return type == Type.ELEMENTARY
+    }
+    fun isMiddle(): Boolean {
+        return type == Type.MIDDLE
+    }
+    fun isHigh(): Boolean {
+        return type == Type.HIGH
+    }
+    fun isUniversity(): Boolean {
+        return type == Type.UNIVERSITY
+    }
 }
 
 class SchoolResponse : BaseResponsePageable<School>()

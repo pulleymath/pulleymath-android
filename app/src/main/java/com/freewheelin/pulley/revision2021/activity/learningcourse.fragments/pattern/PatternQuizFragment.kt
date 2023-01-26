@@ -111,8 +111,7 @@ class PatternQuizFragment() : Fragment(),
                     }
 
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
-
-                        val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                        val patternId = quiz.patternId
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
                         memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

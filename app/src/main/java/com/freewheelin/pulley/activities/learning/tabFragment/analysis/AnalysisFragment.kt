@@ -101,6 +101,7 @@ class AnalysisFragment : LearningTabFragment(),
         user!!.getDailyPiece(requireContext()) {
             setUpPieceUI(it)
         }
+        initChart(binding.timeCountChart)
     }
 
     private fun setUpStudyUI(study: DailyStudy) {
@@ -510,7 +511,7 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onRecommendBtnClicked(view: AnalysisRecommendStudyView) {
-        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천플랜버튼")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천문제집버튼")
         ContentManager.makeRecommendPiece(requireContext(), user!!) {
             val intent = SolveActivity.getIntent(requireContext(), it)
             startActivity(intent)
@@ -519,7 +520,7 @@ class AnalysisFragment : LearningTabFragment(),
 
     override fun onStudyBtnClicked(view: AnalysisTodayStudyListView) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공부하기버튼")
-        (activity as? LearningTabActivity)?.setSelectedTab(3)
+        (activity as? LearningTabActivity)?.setSelectedTab(2)
 
     }
 

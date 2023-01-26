@@ -219,13 +219,14 @@ object PdfListFilter {
 
     val subject = mapOf<String, String>(
         "" to "과목 전체",
-        "311" to "수학(상)",
-        "312" to "수학(하)",
-        "321" to "수학1",
-        "322" to "수학2",
-        "331" to "확률과 통계",
-        "332" to "미적분",
-        "333" to "기하")
+        "41" to "수학(상)",
+        "42" to "수학(하)",
+        "43" to "수학1",
+        "44" to "수학2",
+        "45" to "확률과 통계",
+        "46" to "미적분",
+        "47" to "기하"
+    )
 
     val subjectList = subject.values.toList()
 

@@ -101,11 +101,12 @@ class AddOptionUnitToast: PopupWindow() {
         }
 
         fun showCompleteDialogIfNeed(context: Context, scoredInfo: ScoredStudentGoalInfo?) {
-            if(scoredInfo?.getAskAddSubjects()?.isNotEmpty() == true) {
-                AddOptionUnitToast.scoredInfo = scoredInfo
-                val title = scoredInfo.getAskAddSubjectCodeText()
-                show(context, "${title}\n과목을 풀고 있군요!","추천설정에 없는 선택과목인데\n추가해 놓을까요?")
-            }
+            // TODO SubjectV3 개편과 동시에 AddOptionUnitToast를 사용하지 않게되어 주석처리하였다.
+//            if(scoredInfo?.getAskAddSubjects()?.isNotEmpty() == true) {
+//                AddOptionUnitToast.scoredInfo = scoredInfo
+//                val title = scoredInfo.getAskAddSubjectCodeText()
+//                show(context, "${title}\n과목을 풀고 있군요!","추천설정에 없는 선택과목인데\n추가해 놓을까요?")
+//            }
         }
 
         fun no(context:Context) {
@@ -115,14 +116,15 @@ class AddOptionUnitToast: PopupWindow() {
 
         fun yes(context:Context) {
             setNoShowConfigure()
-            scoredInfo?.let {
-                UserManager.addInitOptionalSubject(context!!, user!!, it.getAskAddSubjects(), successCB = {
-//                    CompleteDialog(context!!, "추가되었습니다.", "해당 내역은 추천 문항에 반영됩니다.").showFor(1000)
-
-                    SuccessToast.showAdded(context, scoredInfo?.getAskAddSubjectCodeText()?:"")
-                    hideToast(context, 0)
-                })
-            }
+            // AddOptionUnitToast 을 사용하지않아서 Subject -> SubjectV3 변경작업에서 주석처리되었습니다.
+//            scoredInfo?.let {
+//                UserManager.addInitOptionalSubject(context!!, user!!, it.getAskAddSubjects(), successCB = {
+////                    CompleteDialog(context!!, "추가되었습니다.", "해당 내역은 추천 문항에 반영됩니다.").showFor(1000)
+//
+//                    SuccessToast.showAdded(context, scoredInfo?.getAskAddSubjectCodeText()?:"")
+//                    hideToast(context, 0)
+//                })
+//            }
         }
 
         fun setNoShowConfigure() {

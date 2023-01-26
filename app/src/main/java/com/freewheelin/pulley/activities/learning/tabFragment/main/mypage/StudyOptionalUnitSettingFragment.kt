@@ -12,8 +12,8 @@ import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
-import com.freewheelin.pulley.assets.BigUnit
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.BigUnitV3
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
@@ -45,11 +45,11 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
             geometrySelection.listener = this@StudyOptionalUnitSettingFragment
 
             probAnsStatSelection.buttonTitles =
-                listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
+                listOf(BigUnitV3.경우의_수, BigUnitV3.확률, BigUnitV3.통계).map { it.title }
             calculusSelection.buttonTitles =
-                listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
+                listOf(BigUnitV3.수열의_극한, BigUnitV3.미분법, BigUnitV3.적분법).map { it.title }
             geometrySelection.buttonTitles =
-                listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
+                listOf(BigUnitV3.이차곡선, BigUnitV3.벡터, BigUnitV3.공간도형).map { it.title }
 
 
             val userUnits = user!!.optionalUnit
@@ -58,21 +58,21 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
             } else {
                 probAnsStatSelection.result = listOf(
                     false,
-                    userUnits.contains(BigUnit.경우의_수),
-                    userUnits.contains(BigUnit.확률),
-                    userUnits.contains(BigUnit.통계)
+                    userUnits.contains(BigUnitV3.경우의_수),
+                    userUnits.contains(BigUnitV3.확률),
+                    userUnits.contains(BigUnitV3.통계)
                 )
                 calculusSelection.result = listOf(
                     false,
-                    userUnits.contains(BigUnit.수열의_극한),
-                    userUnits.contains(BigUnit.미분법),
-                    userUnits.contains(BigUnit.적분법)
+                    userUnits.contains(BigUnitV3.수열의_극한),
+                    userUnits.contains(BigUnitV3.미분법),
+                    userUnits.contains(BigUnitV3.적분법)
                 )
                 geometrySelection.result = listOf(
                     false,
-                    userUnits.contains(BigUnit.이차곡선),
-                    userUnits.contains(BigUnit.벡터),
-                    userUnits.contains(BigUnit.공간도형)
+                    userUnits.contains(BigUnitV3.이차곡선),
+                    userUnits.contains(BigUnitV3.벡터),
+                    userUnits.contains(BigUnitV3.공간도형)
                 )
             }
 
@@ -95,17 +95,17 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
         }
     }
 
-    private fun getSelectedUnit(): Collection<BigUnit> {
-        val selectedBigUnits = hashSetOf<BigUnit>()
+    private fun getSelectedUnit(): Collection<BigUnitV3> {
+        val selectedBigUnits = hashSetOf<BigUnitV3>()
         with(binding) {
-            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
-            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
-            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
+            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, SubjectV3.확률과통계))
+            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, SubjectV3.미적분))
+            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, SubjectV3.기하))
         }
         return selectedBigUnits
     }
 
-    private fun getSelectedUnits(view: DaebakInputSelection, subject: Subject): Collection<BigUnit> {
+    private fun getSelectedUnits(view: DaebakInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
         if(view.result.first())
             return subject.bigUnits
         else {

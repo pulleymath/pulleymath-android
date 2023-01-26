@@ -73,15 +73,18 @@
 
         <TextView
             android:id="@+id/titleTv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/mo_h4_sb"
             android:layout_marginTop="8dp"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:text="@{item.title}"
             android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/dateTv"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bodyCl"

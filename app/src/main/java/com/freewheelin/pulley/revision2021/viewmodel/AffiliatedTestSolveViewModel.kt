@@ -2,12 +2,10 @@ package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.widget.CompoundButton
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.lib.ObservableHashSet
@@ -15,7 +13,10 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedStudentWorkb
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
+import com.freewheelin.pulley.revision2021.utils.replace
+import com.freewheelin.pulley.revision2021.views.adapters.AffiliatedTestGalleryAdapter
 import com.freewheelin.pulley.utils.DialogUtils
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,6 +38,8 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
 
     var isReview = MutableLiveData(false)
     var showSolutionView = MutableLiveData(false)
+    var showGalleryView = MutableLiveData(false)
+
     var isEnableSolutionSwitch = MutableLiveData(false)
 
     var answeredSet: ObservableHashSet<AffiliatedTestProblem> = ObservableHashSet()
@@ -48,6 +51,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     val currentProblem by lazy { affiliatedTestRepository.currentProblem }
 
     val problemIndex by lazy { MutableLiveData<Int>(0) }
+    lateinit var contentAdapter: AffiliatedTestGalleryAdapter
 
     var workbookId: Int = 0
     var version: Int = 0
@@ -62,10 +66,9 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         showSolutionView.postValue(isChecked)
     }
 
-    @SuppressLint("CheckResult")
     fun getTestResult (callback: ((problem: AffiliatedTestProblem)-> Unit)?) {
         val studentId = user?.studentID ?: return
-        affiliatedTestRepository.fetchScoringResult(studentId, workbookId, version)
+        compositeDisposable += affiliatedTestRepository.fetchScoringResult(studentId, workbookId, version)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
@@ -94,10 +97,10 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
                 Log.e(javaClass.simpleName, "fetchScoringResult error=${error.localizedMessage}")
             })
     }
-    @SuppressLint("CheckResult")
+
     fun getTestProblems (workbookId: Int, version: Int, callback: ((problem: AffiliatedTestProblem)-> Unit)?) {
         val studentId = user?.studentID ?: return
-        affiliatedTestRepository.openWorkbook(studentId, workbookId, version)
+        compositeDisposable += affiliatedTestRepository.openWorkbook(studentId, workbookId, version)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
@@ -107,7 +110,6 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
                 res.data?.let { resData ->
 
                     studentWorkbook = resData.user_workbook
-
                     val ansList = resData.answer_list
 
                     var pbList = resData.problem_list.toMutableList()
@@ -195,6 +197,8 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         insertAnswer(problem)
         isSubmitBtnActive.value = answeredSet.isNotEmpty()
 
+        val newList = problemList.value?.replace(problem)
+        problemList.postValue(newList)
     }
 
     @SuppressLint("CheckResult")
@@ -220,43 +224,39 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA) }
 
     fun getFinishedTime(): String? {
-        return when (workbookSeq) {
-            1 -> { testFinishedAt }
-            else -> {
-                val cal = Calendar.getInstance()
-                val startedAt = studentWorkbook?.started_at ?: return null
-                val startedDate = sdf.parse(startedAt)
-                cal.time = startedDate
-                cal.add(Calendar.MINUTE, testPeriodMinutes)
-                return sdf.format(cal.time)
-            }
+        return if (isFixedStartTime.value == true) {
+            testFinishedAt
+        } else {
+            val cal = Calendar.getInstance()
+            val startedAt = studentWorkbook?.started_at ?: return null
+            val startedDate = sdf.parse(startedAt)
+            cal.time = startedDate
+            cal.add(Calendar.MINUTE, testPeriodMinutes)
+            sdf.format(cal.time)
         }
     }
 
     fun getStartedTime(): String? {
-        return when (workbookSeq) {
-            1 -> { testStartedAt }
-            else -> { studentWorkbook?.started_at }
+        return if (isFixedStartTime.value == true) {
+            testStartedAt
+        } else {
+            studentWorkbook?.started_at
         }
     }
 
     fun get5MinBeforeFinishedTimeEnds(): String? {
         val cal = Calendar.getInstance()
-        return when (workbookSeq) {
-            1 -> {
-                val finishedDate = sdf.parse(testFinishedAt)
-                cal.time = finishedDate
-                cal.add(Calendar.MINUTE, -5)
-                return sdf.format(cal.time)
-            }
-            else -> {
-//                val cal = Calendar.getInstance()
-                val startedAt = studentWorkbook?.started_at
-                val startedDate = sdf.parse(startedAt)
-                cal.time = startedDate
-                cal.add(Calendar.MINUTE, testPeriodMinutes - 5)
-                return sdf.format(cal.time)
-            }
+        return if (isFixedStartTime.value == true) {
+            val finishedDate = sdf.parse(testFinishedAt)
+            cal.time = finishedDate
+            cal.add(Calendar.MINUTE, -5)
+            sdf.format(cal.time)
+        } else {
+            val startedAt = studentWorkbook?.started_at
+            val startedDate = sdf.parse(startedAt)
+            cal.time = startedDate
+            cal.add(Calendar.MINUTE, testPeriodMinutes - 5)
+            sdf.format(cal.time)
         }
     }
 }

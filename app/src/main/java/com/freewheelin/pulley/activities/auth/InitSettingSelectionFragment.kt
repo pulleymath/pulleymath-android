@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.BigUnit
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.BigUnitV3
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.databinding.FragmentInitSettingSelectionBinding
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
@@ -39,9 +39,9 @@ class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
         binding.apply {
             completeBtn.toDisableUI()
 
-            probAnsStatSelection.buttonTitles = listOf(BigUnit.경우의_수, BigUnit.확률, BigUnit.통계).map { it.title }
-            calculusSelection.buttonTitles = listOf(BigUnit.수열의_극한, BigUnit.미분법, BigUnit.적분법).map { it.title }
-            geometrySelection.buttonTitles = listOf(BigUnit.이차곡선, BigUnit.벡터, BigUnit.공간도형).map { it.title }
+            probAnsStatSelection.buttonTitles = listOf(BigUnitV3.경우의_수, BigUnitV3.확률, BigUnitV3.통계).map { it.title }
+            calculusSelection.buttonTitles = listOf(BigUnitV3.수열의_극한, BigUnitV3.미분법, BigUnitV3.적분법).map { it.title }
+            geometrySelection.buttonTitles = listOf(BigUnitV3.이차곡선, BigUnitV3.벡터, BigUnitV3.공간도형).map { it.title }
 
             noneSelection.setOnClickListener { onNoneSelection() }
             probAnsStatSelection.listener = this@InitSettingSelectionFragment
@@ -66,19 +66,19 @@ class InitSettingSelectionFragment : Fragment(), DaebakInputSelectionListener {
         }
     }
 
-    fun getSelectedUnit(): Collection<BigUnit> {
+    fun getSelectedUnit(): Collection<BigUnitV3> {
         binding.apply {
-            val selectedBigUnits = hashSetOf<BigUnit>()
+            val selectedBigUnits = hashSetOf<BigUnitV3>()
 
-            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, Subject.확률과통계))
-            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, Subject.미적분))
-            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, Subject.기하))
+            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, SubjectV3.확률과통계))
+            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, SubjectV3.미적분))
+            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, SubjectV3.기하))
 
             return selectedBigUnits
         }
     }
 
-    private fun getSelectedUnits(view: DaebakInputSelection, subject: Subject): Collection<BigUnit> {
+    private fun getSelectedUnits(view: DaebakInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
         if(view.result.first())
             return subject.bigUnits
         else {

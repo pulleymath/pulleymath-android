@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
+import com.freewheelin.pulley.revision2021.model.LCCookingWrapper
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.model.response.ScoringResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingResponse
@@ -21,6 +23,12 @@ interface LCCookingService {
         @Path("conceptCookingId") conceptCookingId: Int,
         @Path("studentId") studentId: String,
     ): Observable<BaseCookingResponse<CookingInfo>>
+
+    @GET("concepts/{conceptCookingId}/users/{studentId}")
+    suspend fun fetchCookingInfo(
+        @Path("conceptCookingId") conceptCookingId: Int,
+        @Path("studentId") studentId: String = user?.studentID!!,
+    ): LCCookingWrapper
 
     @PATCH("concepts/exercises/{exerciseQuizId}/hint/users/{studentId}")
     fun useHint(

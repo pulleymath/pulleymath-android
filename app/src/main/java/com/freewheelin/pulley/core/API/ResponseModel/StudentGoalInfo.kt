@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.core.API.ResponseModel
 
-import com.freewheelin.pulley.assets.Subject
 import java.io.Serializable
 
 class StudentGoalInfo: Serializable {
@@ -13,24 +12,24 @@ class StudentGoalInfo: Serializable {
 class ScoredStudentGoalInfo: Serializable {
     var studentGoalInfo = StudentGoalInfo()
     var beforeScoreDailySolvedProblemCount: Int = 0
-    var askAddSubjectCode = ""
+    var askAddSubjectCode = "" // TODO SubjectV3 개편과 함께 사용하지 않게되었음
 
     val continuousGoalCount: Int
         get() = studentGoalInfo.continuousGoalCount
     val goalProblemCount: Int
         get() = studentGoalInfo.goalProblemCount
 
-    fun getAskAddSubjectCodes() : Set<Int> {
-        return askAddSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-    }
-
-    fun getAskAddSubjects() : Set<Subject> {
-        return getAskAddSubjectCodes().map { Subject.init(it) }.toSet()
-    }
-
-    fun getAskAddSubjectCodeText() : String {
-        return getAskAddSubjects().joinToString(", ")
-    }
+//    fun getAskAddSubjectCodes() : Set<Int> {
+//        return askAddSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
+//    }
+//
+//    fun getAskAddSubjects() : Set<Subject> {
+//        return getAskAddSubjectCodes().map { Subject.init(it) }.toSet()
+//    }
+//
+//    fun getAskAddSubjectCodeText() : String {
+//        return getAskAddSubjects().joinToString(", ")
+//    }
 
     fun isNeedToShowCompletedToast(): Boolean {
         return beforeScoreDailySolvedProblemCount < goalProblemCount &&

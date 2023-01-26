@@ -746,9 +746,9 @@ class SolveActivity : BaseActivity(),
                 if(it?.isNeedToShowCompletedToast() == true) {
                     SuccessToast.showCompleteDialogIfNeed(this, it)
                 }
-                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
-                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
-                }
+//                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
+//                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
+//                }
             }
         }
     }
@@ -797,7 +797,6 @@ class SolveActivity : BaseActivity(),
                             dialog.dismiss()
                             binding.solutionSwitch.visibility = View.VISIBLE
 
-                            Log.d("테스", "askAddSubjectCode=${it?.getAskAddSubjects()}, show=${user!!.isShowAddOptionalSubjectStatus()}")
 
 //                            if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
 //                                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)

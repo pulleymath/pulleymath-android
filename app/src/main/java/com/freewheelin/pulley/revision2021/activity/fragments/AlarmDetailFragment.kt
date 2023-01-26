@@ -58,20 +58,20 @@ class AlarmDetailFragment : Fragment() {
 
             bodyTv.movementMethod = ScrollingMovementMethod()
         }
-        viewModel.wantClose.observe(viewLifecycleOwner, { beClose ->
+        viewModel.wantClose.observe(viewLifecycleOwner) { beClose ->
             if (beClose) {
                 activity?.finish()
             }
-        })
-        viewModel.wantGoAlarmList.observe(viewLifecycleOwner, { wantToList ->
+        }
+        viewModel.wantGoAlarmList.observe(viewLifecycleOwner) { wantToList ->
             if (wantToList) {
                 activity?.onBackPressed()
             }
-        })
-        viewModel.sendLinkUrl.observe(viewLifecycleOwner, {
+        }
+        viewModel.sendLinkUrl.observe(viewLifecycleOwner) {
             if (it.isEmpty()) return@observe
             IntentUtils.openWebLink(requireContext(), it, requireContext().packageManager)
-        })
+        }
     }
 
 }

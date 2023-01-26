@@ -73,7 +73,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
             configureSchool(user)
 
-            if (user.grade == Grade.BeforeHigh) {
+            if (user.grade.isMiddle) {
                 majorTv.text = "-"
                 ratingTv.text = "-"
             } else {

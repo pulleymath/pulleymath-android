@@ -49,7 +49,7 @@ class CommercialBook {
 
 
     constructor(book: Book) {
-        this.pieceID = book.id
+        this.pieceID = book.pieceID
         this.bookName = book.bookName
         this.subjectType = CommercialSubject.init(book.subject)
     }

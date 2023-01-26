@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2021.activity
 
 import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.*
@@ -11,8 +12,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.DragEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -33,7 +36,6 @@ import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
-import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveConceptFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
@@ -42,6 +44,8 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveConceptViewModel
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
+import com.freewheelin.pulley.revision2021.views.AffiliatedGalleryViewDelegate
+import com.freewheelin.pulley.revision2021.views.AffiliatedTestGalleryView
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import com.google.android.material.tabs.TabLayoutMediator
@@ -52,6 +56,7 @@ import kotlin.math.pow
 class AffiliatedTestSolveActivity : AppCompatActivity(),
     AnswerV2Delegate,
     ProblemGestureListener,
+    AffiliatedGalleryViewDelegate,
     PencilcaseListener {
 
     private val binding: ActivityAffiliatedTestSolveBinding by lazy {
@@ -162,12 +167,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     fun observeLiveData() {
-        if (viewModel.isReview.value == true) return
         viewModel.apply {
-            problemIndex.observe(this@AffiliatedTestSolveActivity, {
+            if (viewModel.isReview.value == true) return
+            problemIndex.observe(this@AffiliatedTestSolveActivity) {
                 val problemNo = it + 1
                 openProblem(problemNo)
-            })
+            }
         }
     }
 
@@ -202,6 +207,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             lifecycleOwner = this@AffiliatedTestSolveActivity
             vm = viewModel
 
+            initGallery(viewModel.selectedWorkbook)
+            setGalleryBtn()
+
             pager.adapter = ViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
             pager.isUserInputEnabled = false
             TabLayoutMediator(tabLayout, pager) { tab, position ->
@@ -212,10 +220,17 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             backBtn.setOnClickListener {
                 onBackPressed()
             }
-            solveCl.layoutParams.width = screenWidth
+            baseCl.layoutParams.width = screenWidth
+//            solveCl.layoutParams.width = screenWidth
 //            solutionContainer.visibility = View.GONE
             prevBtn.setOnClickListener { onPrevBtnClicked() }
             nextBtn.setOnClickListener { onNextBtnClicked() }
+            galleryCloser.setOnTouchListener { view, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    onFoldBtnClicked()
+                }
+                true
+            }
             pencilcaseView.listener = this@AffiliatedTestSolveActivity
             problemMemoView.set(pencilcaseView)
 //            solutionMemoView.set(pencilcaseView)
@@ -344,11 +359,106 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 ProblemGestures(this@AffiliatedTestSolveActivity, problemIv, problemMemoView)
             problemGesture?.listener = this@AffiliatedTestSolveActivity
             problemContainer.setOnTouchListener(problemGesture)
+            initPosition()
+        }
+    }
+
+    fun initPosition() {
+        binding.apply {
+            rootView.postDelayed({
+                rootView.scrollX = AffiliatedTestGalleryView.getGalleryViewWidth(this@AffiliatedTestSolveActivity)
+                answerView.setInitPosition()
+            }, 0)
+        }
+    }
+    fun setGalleryBtn() {
+
+        var rotateAnim: ObjectAnimator? = null
+        if (Preferences.univGalleryClickCnt.get() > 0) {
+            binding.galleryBtn.setOnClickListener {
+                onGalleryBtnClicked(rotateAnim)
+            }
+            return
+        } else {
+            rotateAnim = ObjectAnimator.ofFloat(binding.galleryBtn, "rotation", 0f, 5f, 0f, -5f, 0f)
+            rotateAnim.repeatCount = 20
+            rotateAnim.duration = 200
+            rotateAnim.start()
+            binding.galleryBtn.playAnimation()
+
+            rotateAnim.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator) {}
+
+                override fun onAnimationEnd(p0: Animator) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        rotateAnim.start()
+                    }, 500)
+                }
+
+                override fun onAnimationCancel(p0: Animator) {}
+
+                override fun onAnimationStart(p0: Animator) {}
+            })
+            binding.galleryBtn.setOnClickListener {
+                onGalleryBtnClicked(rotateAnim)
+            }
+        }
+    }
+
+    fun initGallery(selectedWorkbook: AffiliatedTestWorkbook?) {
+        binding.apply {
+            galleryView.layoutParams.width = AffiliatedTestGalleryView.getGalleryViewWidth(this@AffiliatedTestSolveActivity)
+            selectedWorkbook?.let {
+                galleryView.setContent(it)
+            }
+            galleryView.delegate = this@AffiliatedTestSolveActivity
 
         }
     }
 
-    fun onProblemSelected(problem: AffiliatedTestProblem?, autoFocus: Boolean) {
+    fun onGalleryBtnClicked(rotateAnim: ObjectAnimator?) {
+        Preferences.univGalleryClickCnt.set(Preferences.galleryClickCnt.get() + 1)
+        rotateAnim?.apply {
+            cancel()
+            repeatCount = 0
+            removeAllListeners()
+            removeAllUpdateListeners()
+            binding.galleryBtn.cancelAnimation()
+            binding.galleryBtn.frame = 0
+        }
+
+        binding.apply {
+            answerView.clearFocusOnShortAnswer()
+            val problem = viewModel.currentProblem.value
+            if(problem != null) binding.galleryView.scrollTo(problem)
+
+            if (viewModel.showGalleryView.value == true) {
+                return@apply
+            }
+            val galleryParam = (galleryView.layoutParams as LinearLayout.LayoutParams)
+
+            val animator = ValueAnimator.ofInt(galleryParam.width, 0)
+            animator.addUpdateListener {
+                val value = it.animatedValue as Int
+                rootView.scrollTo(value, 0)
+            }
+            animator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator) {}
+                override fun onAnimationEnd(p0: Animator) {
+                    viewModel.showGalleryView.postValue(true)
+                }
+                override fun onAnimationCancel(p0: Animator) {}
+                override fun onAnimationStart(p0: Animator) {}
+            })
+
+            animator.duration = 150
+            animator.start()
+
+
+        }
+    }
+
+    override fun onProblemSelected(problem: AffiliatedTestProblem?, autoFocus: Boolean) {
 
 //        conceptViewModel.currentProblem.postValue(problem)
         viewModel.currentProblem.postValue(problem)
@@ -744,18 +854,6 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     override fun onAnswerChanged(view: View, answer: String?, problem: AffiliatedTestProblem?) {
         viewModel.answerChanged(answer, problem)
-
-//        val problem = problem ?: viewModel.currentProblem.value ?: return
-//        problem.user_answer = if(answer != null && answer.isNotEmpty()) answer else null
-//        if(problem.user_answer == null) viewModel.answeredSet.remove(problem)
-//        else viewModel.answeredSet.add(problem)
-//        viewModel.isSubmitBtnActive.value = viewModel.answeredSet.isNotEmpty()
-//        if (view == binding.answerView) {
-//
-//        } else {
-//            // 스피드answerview일때 여기를 타는데 이 뷰에는 스피드앤서가 없다
-//            binding.answerView.configureUI(problem, false)
-//        }
     }
 
     override fun onEnter() {
@@ -812,6 +910,19 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         viewModel.run {
             clearCompositeDisposable()
         }
+    }
+
+    override fun onFoldBtnClicked() {
+        viewModel.showGalleryView.postValue(false)
+        val galleyParam = (binding.galleryView.layoutParams as LinearLayout.LayoutParams)
+        val animator = ValueAnimator.ofInt(0, galleyParam.width)
+        animator.addUpdateListener {
+            val value = it.animatedValue as Int
+            binding.rootView.scrollTo(value, 0)
+        }
+        animator.duration = 150
+        animator.start()
+        viewModel.currentProblem.value?.let { binding.answerView.configureUI(it, true) }
     }
 }
 

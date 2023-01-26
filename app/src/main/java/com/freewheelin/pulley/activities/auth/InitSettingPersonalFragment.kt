@@ -26,7 +26,7 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
         if (activity is InitSettingActivity) parent = activity as InitSettingActivity
     }
 
-    private val grades = listOf(Grade.BeforeHigh, Grade.High_1, Grade.High_2, Grade.High_3, Grade.AfterHigh)
+    private val grades = listOf(Grade.Middle_1, Grade.Middle_2, Grade.Middle_3, Grade.High_1, Grade.High_2, Grade.High_3, Grade.AfterHigh)
     private val majors = listOf(Major.common, Major.liberal_arts, Major.natural_sciences)
     private val ratings = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
@@ -57,7 +57,7 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
 
             Log.d("개인정보", "grade=${user?.rawGrade}, major=${user?.major}, rating=${user?.rating?:0}")
 
-            gradeRadio.selectedIndex = user?.rawGrade?: -1
+            gradeRadio.selectedIndex = userGradeToGradeRadioIndex(user?.rawGrade?: -1)
             majorRadio.selectedIndex =  if(user?.major == null) -1 else Major.list.indexOf(user?.major?:0)
             ratingRadio.selectedIndex = (user?.rating?:0) - 1
 
@@ -69,6 +69,13 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
         }
     }
 
+    private fun userGradeToGradeRadioIndex(rawGrade: Int): Int {
+        return when (rawGrade) {
+            1, 2, 3, 4 -> rawGrade + 3
+            5, 6, 7 -> rawGrade - 4
+            else -> -1
+        }
+    }
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
         when(radio.id) {
             R.id.gradeRadio -> {
@@ -81,11 +88,11 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
 
     private fun setLayout() {
         when(binding.gradeRadio.selectedIndex) {
-            0 -> {
+            0, 1 ,2 -> {
                 showRating(false)
                 showMajor(false)
             }
-            1 -> {
+            3 -> {
                 showRating(true)
                 showMajor(false)
             }
@@ -128,7 +135,7 @@ class InitSettingPersonalFragment : Fragment(), DabakTabRadioListener {
             val major = majors.getOrNull(majorRadio?.selectedIndex?:-1)
             val rating = ratings.getOrNull(ratingRadio?.selectedIndex?:-1)
 
-            if(grade == Grade.BeforeHigh
+            if(grade?.isMiddle == true
                 || (grade == Grade.High_1 && rating != null)
                 || (grade == Grade.High_2 || grade == Grade.High_3 || grade == Grade.AfterHigh) && rating != null && major != null) {
                 nextBtn.toEnableUI()

@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.UpdateGradeDialogViewModel"/>
+        <import type="android.view.View"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootCl"
+        android:layout_width="448dp"
+        android:layout_height="match_parent">
+<!--        android:layout_height="@dimen/dp768">-->
+
+        <ScrollView
+            android:layout_width="448dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/updateGradeCl"
+                android:layout_width="448dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="@{ vm.showUpdateGradeView ? View.VISIBLE : View.GONE }"
+
+                >
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            android:visibility="gone"-->
+                <LinearLayout
+                    android:id="@+id/headerLl"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="24dp"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <TextView
+                        android:id="@+id/headerTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingVertical="16dp"
+                        style="@style/h5"
+                        android:text="학습 정보 업데이트"
+                        />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        />
+                    <ImageButton
+                        android:id="@+id/exitBtn"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginVertical="16dp"
+                        android:gravity="center"
+                        android:src="@drawable/icon_x"
+                        android:onClick="@{ () -> vm.exitBtn() }"
+                        android:background="@null"
+
+                        />
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_300"
+                    app:layout_constraintTop_toBottomOf="@id/headerLl"
+                    app:layout_constraintBottom_toTopOf="@id/infoScrollContainer"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <LinearLayout
+                    android:id="@+id/infoScrollContainer"
+                    android:layout_width="448dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/headerLl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/layoutButton"
+                    app:layout_constraintVertical_bias="0">
+
+                    <LinearLayout
+                        android:id="@+id/bodyLl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:id="@+id/infoConatiner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="24dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginBottom="32dp"
+                                style="@style/h4_sb"
+                                android:text="@{ vm.userName + `님에게 최적화된 서비스를 위해\n새롭게 바뀐 학교와 학년 정보를 알려주세요!` }"
+                                 />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textToLogin"
+                                    style="@style/b2r"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="현재 학교를 다니지 않습니다" />
+
+                                <Switch
+                                    android:id="@+id/switchNoStudent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onCheckedChanged="@{ (v, flag) -> vm.schoolSwitchChecked(flag)}"
+                                    android:layout_marginStart="8dp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutSchoolSelect"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp24"
+                                android:gravity="bottom"
+                                android:orientation="vertical"
+                                android:visibility="@{ vm.showSchoolSelect ? View.VISIBLE : View.GONE }">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/selectSchool"
+                                        android:layout_width="0dp"
+                                        android:layout_height="@dimen/dp56"
+                                        android:layout_weight="3"
+                                        android:text="@{ vm.selectSchoolText }"
+                                        android:background="@drawable/bg_gray_200_stroke_gray_500"
+                                        android:gravity="center_vertical"
+                                        android:paddingStart="@dimen/sp16"
+                                        android:singleLine="true"
+                                        android:onClick="@{ () -> vm.openFindSchool() }"
+                                        style="@style/b1r"/>
+
+                                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                                        android:id="@+id/findSchoolBtn"
+                                        android:layout_width="0dp"
+                                        android:layout_height="@dimen/dp56"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_weight="1"
+                                        android:text="검색하기"
+                                        android:onClick="@{ () -> vm.openFindSchool() }"
+                                        app:buttonTheme="blue" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layoutCitySelect"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp24"
+                                android:orientation="vertical"
+                                android:visibility="@{ vm.showCitySelect ? View.VISIBLE : View.GONE }">
+
+                            <com.freewheelin.pulley.views.PulleySpinner
+                                android:id="@+id/selectCity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:corner="round"
+                            />
+
+                            </LinearLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layoutInfoOption"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="@{ vm.showInfoOption ? View.VISIBLE : View.GONE }">
+
+
+                                <LinearLayout
+                                    android:id="@+id/selectGradeLl"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <com.freewheelin.pulley.views.PulleySpinner
+                                        android:id="@+id/selectMiddleGrade"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:corner="round"
+                                        android:visibility="@{ vm.showSelectMiddleGrade ? View.VISIBLE : View.GONE }"
+                                        />
+
+                                    <com.freewheelin.pulley.views.PulleySpinner
+                                        android:id="@+id/selectHighGrade"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:corner="round"
+                                        android:visibility="@{ vm.showSelectHighGrade ? View.VISIBLE : View.GONE }"
+                                        />
+                                    <com.freewheelin.pulley.views.PulleySpinner
+                                        android:id="@+id/selectAllGrade"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:corner="round"
+                                        android:visibility="@{ vm.showSelectAllGrade ? View.VISIBLE : View.GONE }"
+                                        />
+                                </LinearLayout>
+
+
+                                <com.freewheelin.pulley.views.PulleySpinner
+                                    android:id="@+id/selectMajor"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    app:corner="round"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/selectGradeLl"
+                                    android:visibility="@{ vm.showSelectMajor ? View.VISIBLE : View.GONE }"
+                                />
+
+                                <com.freewheelin.pulley.views.PulleySpinner
+                                    android:id="@+id/selectRate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    app:corner="round"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/selectMajor"
+                                    android:visibility="@{ vm.showSelectRate ? View.VISIBLE : View.GONE }"
+                                    />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/infoScrollContainer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+
+                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        android:id="@+id/submitBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_weight="3"
+                        android:text="저장하기"
+                        app:ButtonTextSize="@dimen/sp18"
+                        app:buttonTheme="blue" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/findSchoolCl"
+            android:layout_width="448dp"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/dp560"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="@{ vm.showFindSchoolView ? View.VISIBLE : View.GONE }"
+            >
+<!--            android:visibility="gone"-->
+            <LinearLayout
+                android:id="@+id/schoolHeaderLl"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <ImageButton
+                    android:id="@+id/backBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginVertical="16dp"
+                    android:src="@drawable/ic_arrow_black_left"
+                    android:background="@null"
+                    android:onClick="@{ () -> vm.exitBtn() }"
+                    />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
+                <ImageButton
+                    android:id="@+id/findExitBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginVertical="16dp"
+                    android:gravity="center"
+                    android:src="@drawable/icon_x"
+                    android:onClick="@{ () -> vm.exitBtn() }"
+                    android:background="@null"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray_300"
+                app:layout_constraintTop_toBottomOf="@id/schoolHeaderLl"
+                app:layout_constraintBottom_toTopOf="@id/findSchoolBodyLl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+            <LinearLayout
+                android:id="@+id/findSchoolBodyLl"
+                android:layout_width="448dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_white_ffffff_round"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/schoolHeaderLl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/labelFindSchool"
+                        style="@style/h4_sb"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:text="재학 중인 학교를 검색해주세요."
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textSchoolName"
+                        style="@style/b1r"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:background="@drawable/bg_white_stroke_gray_500_round"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/sp16"
+                        android:textColorHint="@color/gray_500"
+                        android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
+                        android:onTextChanged="@{vm::textChanged}"
+                        android:hint="학교명"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/labelFindSchool" />
+
+
+                    <TextView
+                        android:id="@+id/emptyContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:text="검색 결과가 없습니다."
+                        android:textSize="18sp"
+                        android:visibility="@{vm.showEmptyString ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textSchoolName" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerSchool"
+                        android:layout_width="0dp"
+                        android:layout_height="320dp"
+                        android:layout_marginTop="4dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textSchoolName"
+                        bind_school="@{vm.schoolResponse}"
+                        tools:listitem="@layout/item_find_school_for_update_grade" />
+
+                    <FrameLayout
+                        android:id="@+id/containerPaging"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:background="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/recyclerSchool"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/btnPrevPage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:padding="15dp"
+                                android:onClick="@{()->vm.onSearchSchoolPrevClick()}"
+                                app:srcCompat="@drawable/ic_calendar_arrow_prev" />
+
+                            <TextView
+                                android:id="@+id/textPaging"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{vm.currentPage}" />
+                            <TextView
+                                android:id="@+id/textPer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/" />
+                            <TextView
+                                android:id="@+id/textTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{vm.totalPage}" />
+
+                            <ImageButton
+                                android:id="@+id/btnNextPage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:padding="15dp"
+                                android:onClick="@{()->vm.onSearchSchoolNextClick()}"
+                                app:srcCompat="@drawable/ic_calendar_arrow_next" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -17,11 +17,13 @@ import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
@@ -31,6 +33,8 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
+import com.freewheelin.pulley.revision2023.utils.CookingWebClient
+import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.squareup.picasso.Callback
@@ -51,25 +55,23 @@ class LCCookingFragment() : Fragment(),
         }
     }
 
+    private val cookingAdapter = CookingAdapter()
     val binding: FragmentLearningCourseCookingBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_learning_course_cooking, null, false)
     }
 
-    private lateinit var viewModel: LCCookingViewModel
+    private val viewModel: LCCookingViewModel by viewModels()
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
 
-    var isInitFragment = false
-    var isRvLoaded = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         arguments?.getInt(LearningCourseActivity.COURSE_DETAIL_ID)?.let {
-            viewModel = ViewModelProvider(this).get(LCCookingViewModel::class.java)
-            viewModel.fetchCookingGroceries(it)
+//            viewModel = ViewModelProvider(this).get(LCCookingViewModel::class.java)
+            viewModel.initAdapterItem(it)
         }
 
-        isInitFragment = true
         return binding.root
     }
 
@@ -79,20 +81,9 @@ class LCCookingFragment() : Fragment(),
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-
-            viewModel.apply {
-                cookingInfo.observe(viewLifecycleOwner) {
-                    val chapterId = it.chapterId
-                    val cookingId = it.conceptCookingId
-                    cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    cookingMemoView.setCookingMemoId(chapterId, cookingId)
-                    cookingMemoView.clearBitmap()
-                    cookingMemoView.load()
-                }
-            }
+            rightRv.adapter = cookingAdapter
 
 //                viewModel.fetchCookingGroceries(courseId)
-            rightRv.adapter = CookingAdapter()
 
             leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
             cookingMemoView.layoutParams.width = leftScrollRootCl.layoutParams.width
@@ -108,20 +99,34 @@ class LCCookingFragment() : Fragment(),
                 binding.numberKeyboard.releaseKeyboard(null)
             }
 
-            viewModel.cookingImageUrl.observe(viewLifecycleOwner) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val requestCreator = Picasso.get()
-                        .load(it)
+            viewModel.apply {
+                adapter = cookingAdapter
+                cookingInfo.observe(viewLifecycleOwner) {
+                    val chapterId = it.chapterId
+                    val cookingId = it.conceptCookingId
+                    cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    cookingMemoView.setCookingMemoId(chapterId, cookingId)
+                    cookingMemoView.clearBitmap()
+                    cookingMemoView.load()
+                }
+                cookingInfoItems.observe(viewLifecycleOwner) {
+                    cookingAdapter.submitList(it)
+                }
+                cookingImageUrl.observe(viewLifecycleOwner) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val requestCreator = Picasso.get()
+                            .load(it)
 //                        .load("${it}?time=${Date().time}")
 
-                    val width = requestCreator.get().width
-                    val height = requestCreator.get().height
-                    withContext(Dispatchers.Main) {
+                        val width = requestCreator.get().width
+                        val height = requestCreator.get().height
+                        withContext(Dispatchers.Main) {
 
-                        requestCreator
-                            .resize(if (height > 5000) 3000 else width, 0)
-                            .onlyScaleDown()
-                            .into(exerciseIv)
+                            requestCreator
+                                .resize(if (height > 5000) 3000 else width, 0)
+                                .onlyScaleDown()
+                                .into(exerciseIv)
+                        }
                     }
                 }
             }
@@ -144,16 +149,13 @@ class LCCookingFragment() : Fragment(),
         }
     }
 
-    val quizMemoViewList: MutableList<CookingMemoView> = mutableListOf()
-
-    var focusedQuizList: MutableList<CookingQuiz> = mutableListOf()
-    inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root), CookingItemClickListener {
+    inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root) {
         var quizItemWidth = screenWidth * 0.55 - 96.toPx()
         fun bind(item: CookingInfoItem, position: Int) {
             itemBinding.apply {
                 this.item = item
                 vm = viewModel
-                listener = this@CookingItemHolder
+//                listener = this@CookingItemHolder
                 lifecycleOwner = viewLifecycleOwner
                 setAllContainerViewGone(this)
                 rightRvItemRoot.setOnClickListener {
@@ -178,7 +180,7 @@ class LCCookingFragment() : Fragment(),
                         viewModel.apply {
                             selectedExerciseIndex.observe(viewLifecycleOwner) {
                                 val selectedExercise =
-                                    cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
+                                    cookingInfoItems.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
                                         ?.first()
                                         ?.exerciseList
                                         ?.get(it)
@@ -190,7 +192,7 @@ class LCCookingFragment() : Fragment(),
                     CookingInfoItem.ItemType.Exercise -> {
                         exerciseContainer.visibility = View.VISIBLE
 
-                        quizMemoViewList.clear()
+                        viewModel.quizMemoViewList.clear()
 
                         viewModel.apply {
                             selectedExerciseIndex.observe(viewLifecycleOwner) { selectedIndex ->
@@ -211,7 +213,7 @@ class LCCookingFragment() : Fragment(),
                                     quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
                                 }
 
-                                cookingList.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
+                                cookingInfoItems.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
                                     ?.first()
                                     ?.exerciseList
                                     ?.get(selectedIndex)
@@ -282,32 +284,25 @@ class LCCookingFragment() : Fragment(),
                 lp.height = vWidth
                 webView.layoutParams = lp
 
-                webView.webViewClient = object: WebViewClient() {
-                    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                        (activity as LearningCourseActivity).hidePencilcasePanel()
-                        return true
-                    }
-
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        // 페이지 로드 후 javascript단에서 함수를 생성해서 document를 컨트롤하는 자동재생 로직임
-//                        webView.loadUrl("javascript:(function() { document.getElementsByClassName('ytp-large-play-button ytp-button')[0].click(); })()");
-
+                webView.webViewClient = CookingWebClient({ url ->
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                },
+                {
                         binding.rightViewProgress.visibility = View.GONE
-                        view?.evaluateJavascript(addMyClickCallBackJs(), null)
-                    }
-
-                    fun addMyClickCallBackJs(): String {
-                        var js = "javascript:"
-                        js += "function clickListener(event){" +
-                            "if(event.target.className == null){androidInterface.clickListener(event.target.id)}" +
-                            "else{androidInterface.clickListener(event.target.className)}}"
-                        js += "document.addEventListener(\"click\",clickListener,true);"
-                        return js
-                    }
-                }
+                })
                 webView.webChromeClient = CookingChromeClient(requireActivity())
-                webView.addJavascriptInterface(JsToAndroid(), "androidInterface")
+                webView.addJavascriptInterface(CookingWebClientClickEventListener {
+                    val cookingId = viewModel.cookingInfo.value?.conceptCookingId ?: -999
+                    LogUtils.logEvent(
+                        requireContext(),
+                        user,
+                        PulleyEvent.BUTTON_CLICK,
+                        "풀리개념학습",
+                        "유튜브",
+                        "conceptCookingId_$cookingId"
+                    )
+                }, "androidInterface")
                 webView.settings.apply {
                     javaScriptEnabled = true
                     mediaPlaybackRequiresUserGesture = false
@@ -318,21 +313,10 @@ class LCCookingFragment() : Fragment(),
                 webView.loadUrl(videoUrl)
             }
         }
-        inner class JsToAndroid : Any() {
-            @JavascriptInterface
-            fun clickListener(idOrClass: String) {
-                val largeRedPlayButton = "ytp-large-play-button ytp-button ytp-large-play-button-red-bg"
-                val thumbnailImage = "ytp-cued-thumbnail-overlay-image"
-                if (idOrClass == largeRedPlayButton || idOrClass == thumbnailImage) {
-                    val cookingId = viewModel.cookingInfo.value?.conceptCookingId
-                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "풀리개념학습", "유튜브", "conceptCookingId_$cookingId")
-                }
-            }
-        }
         private fun makeYoutubeUrl(item: CookingInfoItem): String {
-            val videoUUID = item.video.uuid
-            val startTimeQuery = if(item.video.startTime == null) "" else "&start=${item.video.startTime}"
-            val endTimeQuery = if(item.video.endTime == null) "" else "&end=${item.video.endTime}"
+            val videoUUID = item.video!!.uuid
+            val startTimeQuery = if(item.video!!.startTime == null) "" else "&start=${item.video!!.startTime}"
+            val endTimeQuery = if(item.video!!.endTime == null) "" else "&end=${item.video!!.endTime}"
             return "https://www.youtube.com/embed/${videoUUID}?${startTimeQuery}${endTimeQuery}"
         }
         private fun setOnQuizView (quizBinding: FragmentCookingQuizBinding, excs: CookingExercise) {
@@ -389,7 +373,7 @@ class LCCookingFragment() : Fragment(),
                     it.quizSingleAnswer.setOnClickListener { view ->
                         quiz.afterTryAnswered.set(true)
                         onSingleAnswerClick(quiz, view, detailBinding)
-                        focusedQuizList.add(quiz)
+                        viewModel.focusedQuizList.add(quiz)
                     }
 
                     it.quizAnswerBtn.text = "정답 입력"
@@ -410,9 +394,7 @@ class LCCookingFragment() : Fragment(),
             }
         }
         private fun onSingleAnswerClick (quiz: CookingQuiz, sourceView: View, detailBinding: ItemCookingQuizDetailBinding) {
-            if (quiz.isAnswerEntered.get()) {
-                return
-            }
+            if (quiz.isAnswerEntered.get()) { return }
 
             val selectionImages = quiz.sortedAnswerOptions.map { it.imageUrl }
 
@@ -425,14 +407,6 @@ class LCCookingFragment() : Fragment(),
             binding.selectionImageRv.adapter = SelectionListAdapter()
 
         }
-
-        override fun onItemClick(item: CookingInfoItem) {
-
-        }
-    }
-
-    interface CookingItemClickListener {
-        fun onItemClick(item: CookingInfoItem)
     }
 
     inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
@@ -483,7 +457,7 @@ class LCCookingFragment() : Fragment(),
                     quiz.isCorrectAnswer.set(isCorrectAnswer)
                     quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
 
-                    focusedQuizList.clear()
+                    viewModel.focusedQuizList.clear()
                 }
             }
 
@@ -506,10 +480,10 @@ class LCCookingFragment() : Fragment(),
     }
 
     private fun recoveryQuizSingleAnswer() {
-        focusedQuizList.forEach {
+        viewModel.focusedQuizList.forEach {
             it.afterTryAnswered.set(false)
         }
-        focusedQuizList.clear()
+        viewModel.focusedQuizList.clear()
     }
     private fun resetMemoView() {
         val lcActivity = (activity as LearningCourseActivity)
@@ -520,7 +494,7 @@ class LCCookingFragment() : Fragment(),
         val lcActivity = (activity as LearningCourseActivity)
         lcActivity.binding.pencilcaseView.listener = this@LCCookingFragment
         binding.cookingMemoView.set(lcActivity.binding.pencilcaseView)
-        quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
+        viewModel.quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
 
         val pencilType = lcActivity.getPencilcaseType()
         val color = lcActivity.getPencilcaseColor()
@@ -553,7 +527,7 @@ class LCCookingFragment() : Fragment(),
 //        binding.rightRv.isBlocked = isBlocked
 
         binding.cookingMemoView.isBlocked = isBlocked
-        quizMemoViewList.forEach { it.isBlocked = isBlocked }
+        viewModel.quizMemoViewList.forEach { it.isBlocked = isBlocked }
 
 //        (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
         (activity as LearningCourseActivity).savePencilcaseType(type)

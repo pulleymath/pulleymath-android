@@ -9,394 +9,445 @@
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/baseCl"
+    <com.freewheelin.pulley.views.DisableHorizontalScrollView
+        android:id="@+id/rootView"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="false">
+        android:orientation="horizontal"
+        android:focusable="false"
+        tools:context="com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/firstHeaderCl"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp56"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/black_333333">
 
-            <ImageButton
-                android:id="@+id/backBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="@dimen/dp24"
-                app:tint="@color/gray_600"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:srcCompat="@drawable/ic_arrow_black_left"
-                />
-            <TextView
-                android:id="@+id/titleTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{vm.currentProblem.subject}"
-                style="@style/b1"
-                android:textColor="@color/gray_600"
-                app:layout_constraintStart_toEndOf="@+id/backBtn"
-                app:layout_constraintTop_toTopOf="@+id/backBtn"
-                app:layout_constraintBottom_toBottomOf="@+id/backBtn"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/submitBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="제출하기"
-                android:layout_marginVertical="@dimen/dp10"
-                android:layout_marginEnd="@dimen/dp24"
-                android:paddingHorizontal="12dp"
-                android:visibility="@{ vm.isReview ? View.GONE : View.VISIBLE }"
-                android:textColor="@{ vm.isSubmitBtnActive ? @color/white_ffffff : @color/white_4cffffff }"
-                android:enabled="@{vm.isSubmitBtnActive}"
-                android:background="@{ vm.isSubmitBtnActive ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
-                style="@style/h6"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            <com.freewheelin.pulley.revision2021.views.AffiliatedTestGalleryView
+                android:id="@+id/galleryView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                app:viewModel="@{ vm }"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="* 문제를 틀린 경우 해설을 확인할 수 있습니다."
-                style="@style/b1"
-                android:textColor="@color/gray_600"
-                android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/secondHeaderCl"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp56"
-            app:layout_constraintTop_toBottomOf="@id/firstHeaderCl"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/black_333333">
-
-            <LinearLayout
-                android:id="@+id/pageTool"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp36"
-                android:layout_marginStart="@dimen/dp24"
-                android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <ImageButton
-                    android:id="@+id/prevBtn"
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_arrow_left_8"
-                    android:background="@null"
-                    android:focusable="false"/>
-
-                <View
-                    style="@style/Border_Black_4c4c4c_Vertical"
-                    android:layout_height="match_parent"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/baseCl"
+                android:layout_width="600dp"
+                android:layout_height="match_parent"
+                android:focusable="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:id="@+id/firstHeaderCl"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp56"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@color/black_333333">
 
-                    <TextView
-                        android:id="@+id/numTv"
-                        style="@style/TextWhite_ffffff.ExtraBold"
+                    <ImageButton
+                        android:id="@+id/backBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp48"
-                        android:gravity="center"
-                        android:text="@{vm.currentProblem.no + ``}"
-                        android:textSize="@dimen/sp24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/numExtTv"
-                        app:layout_constraintHorizontal_bias="0.5"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/dp24"
+                        app:tint="@color/gray_600"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:srcCompat="@drawable/ic_arrow_black_left"
+                        />
                     <TextView
-                        android:id="@+id/numExtTv"
-                        style="@style/TextWhite_ffffff.ExtraBold"
+                        android:id="@+id/titleTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text=""
-                        android:textSize="@dimen/sp14"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
-                        app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/numTv" />
+                        android:text="@{vm.currentProblem.subject}"
+                        style="@style/b1"
+                        android:textColor="@color/gray_600"
+                        app:layout_constraintStart_toEndOf="@+id/backBtn"
+                        app:layout_constraintTop_toTopOf="@+id/backBtn"
+                        app:layout_constraintBottom_toBottomOf="@+id/backBtn"/>
+
+                    <Button
+                        android:id="@+id/submitBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="제출하기"
+                        android:layout_marginVertical="@dimen/dp10"
+                        android:layout_marginEnd="@dimen/dp24"
+                        android:paddingHorizontal="12dp"
+                        android:visibility="@{ vm.isReview ? View.GONE : View.VISIBLE }"
+                        android:textColor="@{ vm.isSubmitBtnActive ? @color/white_ffffff : @color/white_4cffffff }"
+                        android:enabled="@{vm.isSubmitBtnActive}"
+                        android:background="@{ vm.isSubmitBtnActive ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
+                        style="@style/h6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
-                        android:id="@+id/totalCntTv"
-                        style="@style/TextGrey_818181.ExtraBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="@dimen/dp48"
-                        android:text="@{`/ ` + vm.problemList.size()}"
-                        android:textSize="@dimen/sp14"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/numExtTv" />
+                        android:text="* 문제를 틀린 경우 해설을 확인할 수 있습니다."
+                        style="@style/b1"
+                        android:textColor="@color/gray_600"
+                        android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    style="@style/Border_Black_4c4c4c_Vertical"
-                    android:layout_height="match_parent"/>
-
-                <ImageButton
-                    android:id="@+id/nextBtn"
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_arrow_right_8"
-                    android:background="@null"
-                    android:focusable="false"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/icon_clock_basic"
-                android:visibility="@{ vm.isReview ? View.GONE : vm.showTimer ? View.VISIBLE : View.GONE }"
-                app:layout_constraintBottom_toBottomOf="@+id/remainingTime"
-                app:layout_constraintEnd_toStartOf="@+id/remainingTime"
-                app:layout_constraintTop_toTopOf="@+id/remainingTime"
-                app:layout_constraintVertical_bias="0.60" />
-            <TextView
-                android:id="@+id/remainingTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00:00"
-                android:fontFamily="@font/font_pretendard_semibold"
-                android:textColor="@color/gray_600"
-                android:textSize="32sp"
-                android:visibility="@{ vm.isReview ? View.GONE : vm.showTimer ? View.VISIBLE : View.GONE }"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="@dimen/dp24"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="정답/해설 표시"
-                style="@style/b1"
-                android:textColor="@color/gray_600"
-                android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toTopOf="@+id/solutionSwitch"
-                app:layout_constraintBottom_toBottomOf="@+id/solutionSwitch"
-                app:layout_constraintEnd_toStartOf="@+id/solutionSwitch"/>
-
-            <Switch
-                android:id="@+id/solutionSwitch"
-                android:layout_width="48dp"
-                android:layout_height="24dp"
-                android:checked="@{vm.showSolutionView}"
-                android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
-                android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
-                android:enabled="@{vm.isEnableSolutionSwitch}"
-                android:layout_marginEnd="@dimen/dp24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/solveCl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white_ffffff"
-            app:layout_constraintTop_toBottomOf="@id/secondHeaderCl"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <com.freewheelin.pulley.views.DisableVerticalScrollView
-                android:id="@+id/problemContainer"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:focusable="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
-                app:layout_constraintBottom_toBottomOf="parent">
-
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/memoArea"
+                    android:id="@+id/secondHeaderCl"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false">
+                    android:layout_height="@dimen/dp56"
+                    app:layout_constraintTop_toBottomOf="@id/firstHeaderCl"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@color/black_333333">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/galleryBtn"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:visibility="visible"
+                        android:focusable="false"
+                        app:lottie_loop="true"
+                        app:lottie_fileName="gallery.json"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <LinearLayout
+                        android:id="@+id/pageTool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toEndOf="@+id/galleryBtn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+
+                        <ImageButton
+                            android:id="@+id/prevBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_left_8"
+                            android:background="@null"
+                            android:focusable="false"/>
+
+                        <View
+                            style="@style/Border_Black_4c4c4c_Vertical"
+                            android:layout_height="match_parent"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/numTv"
+                                style="@style/TextWhite_ffffff.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp48"
+                                android:gravity="center"
+                                android:text="@{vm.currentProblem.no + ``}"
+                                android:textSize="@dimen/sp24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/numExtTv"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/numExtTv"
+                                style="@style/TextWhite_ffffff.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text=""
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
+                                app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/numTv" />
+
+                            <TextView
+                                android:id="@+id/totalCntTv"
+                                style="@style/TextGrey_818181.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="@dimen/dp48"
+                                android:text="@{`/ ` + vm.problemList.size()}"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/numExtTv" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            style="@style/Border_Black_4c4c4c_Vertical"
+                            android:layout_height="match_parent"/>
+
+                        <ImageButton
+                            android:id="@+id/nextBtn"
+                            android:layout_width="@dimen/dp36"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_right_8"
+                            android:background="@null"
+                            android:focusable="false"/>
+
+                    </LinearLayout>
+
                     <ImageView
-                        android:id="@+id/problemIv"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/icon_clock_basic"
+                        android:visibility="@{ vm.isReview ? View.GONE : vm.showTimer ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="@+id/remainingTime"
+                        app:layout_constraintEnd_toStartOf="@+id/remainingTime"
+                        app:layout_constraintTop_toTopOf="@+id/remainingTime"
+                        app:layout_constraintVertical_bias="0.60" />
+                    <TextView
+                        android:id="@+id/remainingTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp32"
-                        android:scaleType="fitStart"
-                        android:focusable="false"
-                        imgRes="@{vm.currentProblem.img_url}"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:text="00:00:00"
+                        android:fontFamily="@font/font_pretendard_semibold"
+                        android:textColor="@color/gray_600"
+                        android:textSize="32sp"
+                        android:visibility="@{ vm.isReview ? View.GONE : vm.showTimer ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="@dimen/dp24"/>
 
-                    <com.freewheelin.pulley.views.memoView.MemoView
-                        android:id="@+id/problemMemoView"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="정답/해설 표시"
+                        style="@style/b1"
+                        android:textColor="@color/gray_600"
+                        android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintTop_toTopOf="@+id/solutionSwitch"
+                        app:layout_constraintBottom_toBottomOf="@+id/solutionSwitch"
+                        app:layout_constraintEnd_toStartOf="@+id/solutionSwitch"/>
+
+                    <Switch
+                        android:id="@+id/solutionSwitch"
+                        android:layout_width="48dp"
+                        android:layout_height="24dp"
+                        android:checked="@{vm.showSolutionView}"
+                        android:visibility="@{vm.isReview ? View.VISIBLE : View.GONE }"
+                        android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
+                        android:enabled="@{vm.isEnableSolutionSwitch}"
+                        android:layout_marginEnd="@dimen/dp24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/solveCl"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white_ffffff"
+                    app:layout_constraintTop_toBottomOf="@id/secondHeaderCl"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <com.freewheelin.pulley.views.DisableVerticalScrollView
+                        android:id="@+id/problemContainer"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:fillViewport="true"
+                        android:scrollbars="none"
                         android:focusable="false"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/memoArea"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false">
+                            <ImageView
+                                android:id="@+id/problemIv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/dp32"
+                                android:scaleType="fitStart"
+                                android:focusable="false"
+                                imgRes="@{vm.currentProblem.img_url}"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.freewheelin.pulley.views.memoView.MemoView
+                                android:id="@+id/problemMemoView"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:focusable="false"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.freewheelin.pulley.views.DisableVerticalScrollView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/solutionContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
+                        android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintWidth_percent="0.375"
+                        app:layout_constraintStart_toEndOf="@+id/problemContainer"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        >
+
+                        <View
+                            style="@style/Border_Grey_e8e8e8_Horizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="2dp"
+                            app:layout_constraintBottom_toBottomOf="@id/tabLayout"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp56"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tabSelectedTextColor="@color/purple_300"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/purple_300"
+                            app:tabIndicatorFullWidth="true"
+                            app:tabIndicatorHeight="2dp"
+                            app:tabMode="fixed">
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/tabItem"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="해설" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:id="@+id/tabItem2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="개념" />
+                        </com.google.android.material.tabs.TabLayout>
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.freewheelin.pulley.views.PencilcaseView
+                        android:id="@+id/pencilcaseView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        app:layout_constraintTop_toTopOf="@+id/problemContainer"
+                        app:layout_constraintEnd_toEndOf="@+id/problemContainer"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.freewheelin.pulley.views.DisableVerticalScrollView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/solutionContainer"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
-                android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
-                app:layout_constraintWidth_percent="0.375"
-                app:layout_constraintStart_toEndOf="@+id/problemContainer"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
-
-                <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dimCl"
                     android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    app:layout_constraintBottom_toBottomOf="@id/tabLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp56"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tabSelectedTextColor="@color/purple_300"
-                    app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/purple_300"
-                    app:tabIndicatorFullWidth="true"
-                    app:tabIndicatorHeight="2dp"
-                    app:tabMode="fixed">
-
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tabItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="해설" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tabItem2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="개념" />
-                </com.google.android.material.tabs.TabLayout>
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                    android:background="@color/gray_500"
+                    app:layout_constraintTop_toBottomOf="@id/secondHeaderCl"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    android:visibility="@{vm.showDimBgView ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dimDialog"
+                        android:layout_width="308dp"
+                        android:layout_height="134dp"
+                        android:background="@drawable/bg_white_ffffff_round"
+                        android:padding="@dimen/dp24"
+                        android:visibility="@{vm.showDimView ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.40">
 
-            <com.freewheelin.pulley.views.PencilcaseView
-                android:id="@+id/pencilcaseView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp32"
-                android:layout_marginEnd="@dimen/dp32"
-                app:layout_constraintTop_toTopOf="@+id/problemContainer"
-                app:layout_constraintEnd_toEndOf="@+id/problemContainer"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/dimDialogTitle"
+                            style="@style/h4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.minInDimDialog + `분 ` + vm.secInDimDialog +`초 후에 시험이 시작됩니다.`}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dimCl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/gray_500"
-            app:layout_constraintTop_toBottomOf="@id/secondHeaderCl"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="@{vm.showDimBgView ? View.VISIBLE : View.GONE }"
-            app:layout_constraintBottom_toBottomOf="parent">
+                        <Button
+                            android:id="@+id/dimDialogBtn"
+                            style="@style/TextWhite_ffffff.ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_purple_6d6dff_round"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:text="뒤로가기"
+                            android:textSize="14dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/dimDialog"
-                android:layout_width="308dp"
-                android:layout_height="134dp"
-                android:background="@drawable/bg_white_ffffff_round"
-                android:padding="@dimen/dp24"
-                android:visibility="@{vm.showDimView ? View.VISIBLE : View.GONE }"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.40">
-
-                <TextView
-                    android:id="@+id/dimDialogTitle"
-                    style="@style/h4"
+                <com.freewheelin.pulley.activities.solve.AnswerV2View
+                    android:id="@+id/answerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.minInDimDialog + `분 ` + vm.secInDimDialog +`초 후에 시험이 시작됩니다.`}"
+                    android:layout_height="@dimen/dp64"
+                    android:layout_marginBottom="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:elevation="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/galleryCloser"
+                    android:visibility="@{ vm.showGalleryView ? View.VISIBLE : View.GONE }"
+                    android:focusable="false"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/dimDialogBtn"
-                    style="@style/TextWhite_ffffff.ExtraBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:background="@drawable/bg_purple_6d6dff_round"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:text="뒤로가기"
-                    android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.freewheelin.pulley.activities.solve.AnswerV2View
-            android:id="@+id/answerView"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp64"
-            android:layout_marginBottom="@dimen/dp32"
-            android:layout_marginEnd="@dimen/dp32"
-            android:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </com.freewheelin.pulley.views.DisableHorizontalScrollView>
 </layout>

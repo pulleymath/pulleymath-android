@@ -107,7 +107,7 @@ class InitSettingActivity : AppCompatActivity() {
         val major = personalFragment.getMajor()
         var rating = personalFragment.getRating()
 
-        if (grade == Grade.BeforeHigh) {
+        if (grade?.isMiddle == true) {
             rating = 0
         }
 

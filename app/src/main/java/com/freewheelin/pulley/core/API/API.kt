@@ -104,7 +104,7 @@ fun retrofit(apiVersion: Version): Retrofit {
                     Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code()}")
 
                     // 401 시 세션 만료 처리
-                    var exceptionUrl = listOf("/v2/me/app", "/v2/versions/android", "/v2/signin/app", "/log/user", "/v2/daily/study-time")
+                    var exceptionUrl = listOf("/v3/me/app", "/v2/versions/android", "/v2/signin/app", "/log/user", "/v2/daily/study-time")
 
                     if(response.code() == 401 && !exceptionUrl.contains(path)) {
 

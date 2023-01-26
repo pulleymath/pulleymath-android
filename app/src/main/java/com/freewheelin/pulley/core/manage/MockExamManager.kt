@@ -107,7 +107,7 @@ object MockExamManager {
     }
 
     fun getProblems(context: Context, exam: MockExam, user: User, isRestart: Boolean, successCB: (exam: MockExam) -> Unit) {
-        API_V2.getMo(exam.id, user.studentID, isRestart).enqueue(object: Callback<MockExam> {
+        API_V2.getMo(exam.pieceID, user.studentID, isRestart).enqueue(object: Callback<MockExam> {
             override fun onFailure(call: Call<MockExam>, t: Throwable) {
                 responseFailed(context, t)
             }

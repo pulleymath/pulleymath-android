@@ -118,11 +118,11 @@ open class PrimaryButton: ConstraintLayout {
         }
 
     private var isEnableUI: Boolean = true
-    var enableFlag: Boolean = true
-    set(value) {
-        field = value
-        if (value) toEnableUI() else toDisableUI()
-    }
+//    var enableFlag: Boolean = true
+//    set(value) {
+//        field = value
+//        if (value) toEnableUI() else toDisableUI()
+//    }
 
     fun setLock(hasPulleyPlus:Boolean,
                 lockImage:ButtonLockImage = ButtonLockImage.small16,

@@ -19,6 +19,16 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
         }
     })
 }
+fun <T> LiveData<List<T>>.observeListOnce(lifecycleOwner: LifecycleOwner, observer: Observer<List<T>>) {
+    observe(lifecycleOwner, object : Observer<List<T>> {
+        override fun onChanged(t: List<T>?) {
+            if (t?.isNotEmpty() == true) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        }
+    })
+}
 
 fun <T> throttleLatest(
     intervalMs: Long = 300L,

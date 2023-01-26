@@ -226,6 +226,9 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                 close()
             }
+            var messageByUniv = if(user?.showMainKUTab == true) "KU진단 " else ""
+            messageByUniv = "${messageByUniv}결과에 맞는 보완학습을 진행해보세요."
+            supportLearnTitleTv.text = messageByUniv
         }
 
         private fun releaseStepStick() {
@@ -234,10 +237,11 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
             stepStick3.setBackgroundResource(R.color.gray_300)
         }
         private fun setResultBodyTv(userStep: Int) {
+            val message1ByUniv = if (user?.showMainKUTab == true) "풀리수학과 함께 Dr.KU AI 튜터 시스템으로" else "풀리수학과 함께"
             resultBodyTv.text = when (userStep) {
                 1 -> "많이 어려웠나요? \uD83D\uDE22 \n원활한 전공과목 이수를 위해 1학점 연계 교과목을 필수로 이수해주세요!\n필수 이수가 어렵다면, 보완학습을 진행해볼까요?"
-                2 -> "약점 채우기 딱 좋은 기회네요!\n원활한 전공과목 이수를 위해 1학점 연계 교과목을 이수하거나\n풀리수학과 함께 Dr.KU AI 튜터 시스템으로 보완학습을 진행해봐요."
-                3 -> "어려운 문제 때문에 힘들지 않았나요?\n풀리수학과 함께 Dr.KU AI 튜터 시스템으로 보완학습을 진행하고\n더 만족스러운 결과를 만들어봐요!"
+                2 -> "약점 채우기 딱 좋은 기회네요!\n원활한 전공과목 이수를 위해 1학점 연계 교과목을 이수하거나\n${message1ByUniv} 보완학습을 진행해봐요."
+                3 -> "어려운 문제 때문에 힘들지 않았나요?\n${message1ByUniv} 보완학습을 진행하고\n더 만족스러운 결과를 만들어봐요!"
                 else -> ""
             }
         }

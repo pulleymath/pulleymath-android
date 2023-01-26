@@ -65,7 +65,7 @@ class FindSchoolViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    var onItemClickCallback: ((school: School?) -> Unit)? = null
+    var onItemClickCallback: ((school: School) -> Unit)? = null
 
     fun onItemClick(school:School) {
         Log.d("학교검색", "onItemClick .school=${school}")

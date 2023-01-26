@@ -62,7 +62,9 @@ class StudentInfoFragment : Fragment() {
             backBtnArrow.setOnClickListener { infoInterface?.goBack() }
 
             switchNoStudent.setOnCheckedChangeListener { buttonView, isChecked ->
-                selectGrade.initSpinner()
+                selectMiddleGrade.initSpinner()
+                selectHighGrade.initSpinner()
+                selectAllGrade.initSpinner()
                 selectMajor.initSpinner()
                 selectRate.initSpinner()
                 selectCity.initSpinner()
@@ -71,6 +73,8 @@ class StudentInfoFragment : Fragment() {
                 selectedCity = null
                 selectSchool.text = ""
 
+                showMiddleGrade(false)
+                showHighGrade(false)
                 layoutSchoolSelect.visibility = if(isChecked) View.GONE else View.VISIBLE
                 layoutCitySelect.visibility = if(isChecked) View.VISIBLE else View.GONE
 
@@ -87,7 +91,7 @@ class StudentInfoFragment : Fragment() {
                 if(registBtn.isEnableUI()) {
                     val schoolID = selectedSchool?.id
                     val regionID = selectedCity?.id
-                    val grade = selectGrade.position - 1
+                    val grade = getGradeFromSpinner()
                     val initMoGrade = selectRate.position
                     val majorType = selectMajor.position - 1
                     infoInterface?.regist(schoolID, regionID, grade, initMoGrade, majorType)
@@ -95,10 +99,29 @@ class StudentInfoFragment : Fragment() {
             }
         }
     }
-
+    private fun getGradeFromSpinner(): Int {
+        return when {
+            isMiddleSchoolUser() -> {
+                binding.selectMiddleGrade.position + 4
+            }
+            isHighSchoolUser() -> {
+                binding.selectHighGrade.position
+            }
+            isNotSchoolUser() -> {
+                when (binding.selectAllGrade.position) {
+                    1, 2, 3 -> binding.selectAllGrade.position + 4
+                    4, 5, 6, 7 -> binding.selectAllGrade.position - 3
+                    else -> 1
+                }
+            }
+            else -> { 1 }
+        }
+    }
     private fun initSpinners() {
         setCites()
-        setGrades()
+        setMiddleGrades()
+        setHighGrades()
+        setAllGrades()
         setMajors()
         setRates()
 
@@ -112,6 +135,9 @@ class StudentInfoFragment : Fragment() {
             selectedSchool = selected
             binding.selectSchool.text = selected?.name?:""
             binding.layoutInfoOption.visibility = View.VISIBLE
+            showMiddleGrade(selected.isMiddle())
+            showHighGrade(selected.isHigh())
+            showAllGrade(false)
             checkRegist()
         }
         dialog.isCancelable = false
@@ -131,17 +157,55 @@ class StudentInfoFragment : Fragment() {
                     return
                 }
             }
-            when(selectGrade.position) {
-                1 -> {
-                    registBtn.toEnableUI()
+            if (isMiddleSchoolUser()) {
+                if (!selectMiddleGrade.isSelected) {
+                    registBtn.toDisableUI()
+                    return
                 }
-                2 -> {
-                    if(selectRate.isSelected) registBtn.toEnableUI() else registBtn.toDisableUI()
+            }
+            if (isHighSchoolUser()) {
+                if (!selectHighGrade.isSelected) {
+                    registBtn.toDisableUI()
+                    return
                 }
-                3, 4, 5 -> {
-                    if(selectMajor.isSelected && selectRate.isSelected) registBtn.toEnableUI() else registBtn.toDisableUI()
+            }
+
+            if (isMiddleSchoolUser()) {
+                when (selectMiddleGrade.position) {
+                    1, 2, 3 -> {
+                        registBtn.toEnableUI()
+                    }
+                    else -> registBtn.toDisableUI()
                 }
-                else -> registBtn.toDisableUI()
+            }
+            if (isHighSchoolUser()) {
+                when (selectHighGrade.position) {
+                    1 -> {
+                        if (selectRate.isSelected && selectHighGrade.isSelected) {
+                            registBtn.toEnableUI()
+                        } else {
+                            registBtn.toDisableUI()
+                        }
+                    }
+                    2, 3, 4 -> {
+                        if (selectMajor.isSelected && selectRate.isSelected) registBtn.toEnableUI() else registBtn.toDisableUI()
+                    }
+                    else -> registBtn.toDisableUI()
+                }
+            }
+            if (isNotSchoolUser()) {
+                when (selectAllGrade.position) {
+                    1, 2, 3 -> {
+                        registBtn.toEnableUI()
+                    }
+                    4 -> {
+                        if (selectRate.isSelected && selectAllGrade.isSelected) registBtn.toEnableUI() else registBtn.toDisableUI()
+                    }
+                    5, 6, 7 -> {
+                        if (selectMajor.isSelected && selectRate.isSelected) registBtn.toEnableUI() else registBtn.toDisableUI()
+                    }
+                    else -> registBtn.toDisableUI()
+                }
             }
         }
     }
@@ -154,10 +218,10 @@ class StudentInfoFragment : Fragment() {
                 .subscribe({ response ->
                     Log.d("도시검색", "cities=$response")
                     cityList = response.data
-                    val data = cityList.map{ it.name }
+                    val data = cityList.map { it.name }
                     val hint = "도시를 선택해주세요"
                     binding.selectCity.set(data, hint) { position ->
-                        if(position < 0) {
+                        if (position < 0) {
                             selectedCity = null
                             binding.layoutInfoOption.visibility = View.GONE
                         } else {
@@ -167,6 +231,9 @@ class StudentInfoFragment : Fragment() {
                                 selectedCity = cityList.get(position)
                             }
                             binding.layoutInfoOption.visibility = View.VISIBLE
+                            showAllGrade(true)
+                            showMiddleGrade(false)
+                            showHighGrade(false)
                         }
                         checkRegist()
                     }
@@ -176,28 +243,71 @@ class StudentInfoFragment : Fragment() {
         }
     }
 
-    private fun setGrades() {
-        var data = Grade.list.map { it.tabTitle }
-        val hint = "학년을 선택해주세요"
-        binding.selectGrade.set(data, hint) { position ->
-            when(position) {
-                2 -> {
-                    showMajor(false)
-                    showRates(true)
-                }
-                3, 4, 5 -> {
-                    showMajor(true)
-                    showRates(true)
-                }
-                else -> {
-                    showMajor(false)
-                    showRates(false)
-                }
+    private fun setMiddleGrades() {
+        binding.apply {
+            val data = Grade.middleList.map { it.tabTitle }
+            val hint = "학년을 선택해주세요"
+            selectMiddleGrade.set(data, hint) { position ->
+                showMajor(false)
+                showRates(false)
+                selectMajor.position = 0
+                selectRate.position = 0
+                checkRegist()
             }
-            checkRegist()
         }
     }
-
+    private fun setHighGrades() {
+        with(binding) {
+            var data = Grade.highList.map { it.tabTitle }
+            val hint = "학년을 선택해주세요"
+            selectHighGrade.set(data, hint) { position ->
+                when(position) {
+                    1 -> {
+                        showMajor(false)
+                        showRates(true)
+                        selectMajor.position = 0
+                    }
+                    2, 3, 4 -> {
+                        showMajor(true)
+                        showRates(true)
+                    }
+                    else -> {
+                        showMajor(false)
+                        showRates(false)
+                        selectMajor.position = 0
+                        selectRate.position = 0
+                    }
+                }
+                checkRegist()
+            }
+        }
+    }
+    private fun setAllGrades() {
+        with(binding) {
+            var data = Grade.list.map { it.tabTitle }
+            val hint = "학년을 선택해주세요"
+            selectAllGrade.set(data, hint) { position ->
+                when(position) {
+                    4 -> {
+                        showMajor(false)
+                        showRates(true)
+                        selectMajor.position = 0
+                    }
+                    5, 6, 7 -> {
+                        showMajor(true)
+                        showRates(true)
+                    }
+                    else -> {
+                        showMajor(false)
+                        showRates(false)
+                        selectMajor.position = 0
+                        selectRate.position = 0
+                    }
+                }
+                checkRegist()
+            }
+        }
+    }
     private fun showMajor(show:Boolean) {
         binding.selectMajor.visibility = if(show) View.VISIBLE else View.GONE
     }
@@ -205,7 +315,15 @@ class StudentInfoFragment : Fragment() {
     private fun showRates(show:Boolean) {
         binding.selectRate.visibility = if(show) View.VISIBLE else View.GONE
     }
-
+    private fun showMiddleGrade(show: Boolean) {
+        binding.selectMiddleGrade.visibility = if(show) View.VISIBLE else View.GONE
+    }
+    private fun showHighGrade(show: Boolean) {
+        binding.selectHighGrade.visibility = if(show) View.VISIBLE else View.GONE
+    }
+    private fun showAllGrade(show: Boolean) {
+        binding.selectAllGrade.visibility = if(show) View.VISIBLE else View.GONE
+    }
     private fun setMajors() {
         var data = Major.list.map { it.title }
         val hint = "계열을 선택해주세요"
@@ -225,5 +343,14 @@ class StudentInfoFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         disposables.clear()
+    }
+    private fun isMiddleSchoolUser(): Boolean {
+        return binding.selectMiddleGrade.visibility == View.VISIBLE
+    }
+    private fun isHighSchoolUser(): Boolean {
+        return binding.selectHighGrade.visibility == View.VISIBLE
+    }
+    private fun isNotSchoolUser(): Boolean {
+        return binding.selectAllGrade.visibility == View.VISIBLE
     }
 }

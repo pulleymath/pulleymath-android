@@ -69,7 +69,7 @@ fun ServiceV1.findPassword(email: String): Call<Template<String>> {
 fun ServiceV1.assignMockExam(mock: MockExam, user: User): Call<Template<Map<String,String>>> {
     val params: Parameter = Parameter(
             "studentID" to user.studentID,
-            "pieceID" to mock.id
+            "pieceID" to mock.pieceID
     )
     return assignPiece(params)
 }
@@ -82,7 +82,7 @@ fun ServiceV1.getProblemList(mock: MockExam, user: User): Call<Template<Map<Stri
     if(mock.assignID != null) {
         params["assignID"] = mock.assignID!!
     } else {
-        params["pieceID"] = mock.id
+        params["pieceID"] = mock.pieceID
     }
 
     return getPieceInfo(params)

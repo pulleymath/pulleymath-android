@@ -69,9 +69,12 @@ import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
+import com.freewheelin.pulley.revision2021.activity.dialog.FindSchoolDialog
+import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
+import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.snackBar.SnackBar
@@ -193,7 +196,8 @@ class LearningTabActivity : PermissionActivity(),
                 tabFragment = mutableListOf(
                     MainFragment.newInstance(),
                     ConceptCourseFragment.newInstance(),
-                    BookFragment.newInstance(),
+//                    BookFragment.newInstance(),
+                    PatternStudyFragment.newInstance(),
                     MockExamFragment.newInstance(),
                     SnackTestFragment.newInstance(),
                     WrongNoteFragment.newInstance(),
@@ -202,7 +206,8 @@ class LearningTabActivity : PermissionActivity(),
             } else {
                 tabFragment = mutableListOf(
                     MainFragment.newInstance(),
-                    BookFragment.newInstance(),
+                    PatternStudyFragment.newInstance(),
+//                    BookFragment.newInstance(),
                     MockExamFragment.newInstance(),
                     SnackTestFragment.newInstance(),
                     WrongNoteFragment.newInstance(),
@@ -211,7 +216,7 @@ class LearningTabActivity : PermissionActivity(),
             }
 //        }
 
-        if (user?.showMainKUTab == true) {
+        if (user?.showMainUnivTab == true) {
             tabFragment.add(AffiliatedTestFragment.newInstance())
         }
 
@@ -238,7 +243,13 @@ class LearningTabActivity : PermissionActivity(),
             viewPager.addOnPageChangeListener(this@LearningTabActivity)
 
             // 베타이미지 제거할때 tabName 관련된 항목 제거
-            val tabName = listOf("메인", "개념", "유형", "모의고사", "테스트", "오답노트", "분석", "과외", "KU")
+            val tabName = listOf("메인", "개념", "유형", "모의고사", "테스트", "오답노트", "분석", "과외",
+                when(user?.schoolID) {
+                    6000 -> "KU"
+                    7000 -> "숭실대"
+                    else -> "대학"
+                }
+            )
 
             tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -352,7 +363,7 @@ class LearningTabActivity : PermissionActivity(),
                         when {
                             intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
                                 val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
-                                (tabFragment[2] as BookFragment).scrollToTotalLabel(subject)
+//                                (tabFragment[2] as BookFragment).scrollToTotalLabel(subject)
                             }
                             else -> {}
                         }
@@ -468,7 +479,7 @@ class LearningTabActivity : PermissionActivity(),
     }
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
-        if (user?.showMainKUTab != true) {
+        if (user?.showMainUnivTab != true) {
             val tabName = binding.tabLayout.getTabAt(binding.tabLayout.tabCount - 1)?.text ?: return
             if (tabName == AffiliatedTestFragment.newInstance().screenName) {
                 binding.tabLayout.removeTabAt(binding.tabLayout.tabCount - 1)
@@ -573,7 +584,7 @@ class LearningTabActivity : PermissionActivity(),
             if (tabFragment.size > 7 && tabFragment[7].isAdded)
                 supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[7])
 
-            if (user?.showMainKUTab == true) {
+            if (user?.showMainUnivTab == true) {
                 if (tabFragment.size > 8 && tabFragment[8].isAdded) {
                     supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[7])
                 }
@@ -595,7 +606,7 @@ class LearningTabActivity : PermissionActivity(),
             if (tabFragment.size > 6 && tabFragment[6].isAdded)
                 supportFragmentManager.putFragment(outState, LEARNING_LIST, tabFragment[6])
 
-            if (user?.showMainKUTab == true) {
+            if (user?.showMainUnivTab == true) {
                 if (tabFragment.size > 7 && tabFragment[7].isAdded) {
                     supportFragmentManager.putFragment(outState, LEARNING_AFFILIATED_TEST, tabFragment[6])
                 }
@@ -626,7 +637,7 @@ class LearningTabActivity : PermissionActivity(),
 //                    tabLayout.getTabAt(5)?.select()
 //                    openStudyHistory("오답 노트", "오답학습하기")
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 1)
+                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 6)
                     LocalBroadcastManager.getInstance(baseContext).sendBroadcast(intent)
                 } else {
                     action()
@@ -663,24 +674,15 @@ class LearningTabActivity : PermissionActivity(),
                 sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
             }
             else if(user.isNeedToUpdateGrade()) {
-                val dialog = DialogUtils.updateGradeDialog(this, user)
-                dialog.show()
-                dialog.binding.leftBtn.setOnClickListener { btn ->
-                    dialog.dismiss()
-                    user.updateGrade(this@LearningTabActivity, user.grade)
-                    DialogUtils.updateGradeNoDialog(this).show()
-                }
-                dialog.binding.rightBtn.setOnClickListener { btn ->
-                    dialog.dismiss()
-//                    if (user.grade == Grade.BeforeHigh || user.grade == Grade.High_1) {
-                    MyStudyInfoSettingDialog(this@LearningTabActivity, user, object : MyPageSettingDialogListener {
-                        override fun onModifyCompleted(user: User) {
-                            user.updateGrade(this@LearningTabActivity, user.grade) { showCompleteAndConfirm() }
-                        }
-                    }).show()
-//                    } else {
-//                        user.updateGrade(this@LearningTabActivity, user.grade.nextGrade) { showCompleteAndConfirm() }
-//                    }
+                MyApplication.user = user
+                try {
+                    UpdateGradeDialog {
+                        DaebakToast.show(this, "저장 완료! 업데이트 되었습니다.")
+                    }.apply {
+                        isCancelable = false
+                    }.show(supportFragmentManager, "updateSchool")
+                } catch (e: IllegalStateException) {
+                    println("error : ${e}")
                 }
             }
             /*
@@ -747,9 +749,9 @@ class LearningTabActivity : PermissionActivity(),
             return
         }
 
-        if (binding.viewPager.currentItem == 2 && (tabFragment[2] as BookFragment).isStartWithInitTest) {
-            LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "기기-백버튼", "유형학습화면")
-        }
+//        if (binding.viewPager.currentItem == 2 && (tabFragment[2] as BookFragment).isStartWithInitTest) {
+//            LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "기기-백버튼", "유형학습화면")
+//        }
 
         doubleBackToExitPressedOnce = true
         DaebakToast.show(this, "뒤로 가기를 한번 더 누르면 종료됩니다.")

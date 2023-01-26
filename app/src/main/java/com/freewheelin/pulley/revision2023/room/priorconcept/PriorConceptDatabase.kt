@@ -2,7 +2,7 @@ package com.freewheelin.pulley.revision2023.room.priorconcept
 
 import android.content.Context
 import androidx.room.*
-import com.freewheelin.pulley.revision2021.utils.converters.PriorConceptTagTypeConverter
+import com.freewheelin.pulley.revision2023.utils.converters.PriorConceptTagTypeConverter
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import kotlinx.coroutines.CoroutineScope
 

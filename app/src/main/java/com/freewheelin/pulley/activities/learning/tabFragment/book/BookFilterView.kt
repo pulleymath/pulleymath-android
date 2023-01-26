@@ -183,6 +183,9 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
     var selectedFilterTypes: HashSet<FilterType> = hashSetOf(
             워크북_미포함, 핀_미포함, 계열_전체, 과목_전체, 유형_전체, 추천_전체
     )
+    val customBookInitFilterTypes: HashSet<FilterType> = hashSetOf(
+            과목_전체, 유형_전체, 추천_전체
+    )
 
     var listener: BookFilterListener? = null
 

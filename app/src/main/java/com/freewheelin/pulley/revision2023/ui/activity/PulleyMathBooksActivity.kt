@@ -1,0 +1,243 @@
+package com.freewheelin.pulley.revision2023.ui.activity
+
+import android.content.Context
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleObserver
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.tabFragment.book.*
+import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.Banner
+import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.BookManager
+import com.freewheelin.pulley.core.manage.PieceManager
+import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
+import com.freewheelin.pulley.databinding.ItemTestBinding
+import com.freewheelin.pulley.dialogs.CustomizeBookDialog
+import com.freewheelin.pulley.dialogs.EmailInputDialog
+import com.freewheelin.pulley.dialogs.EmailInputDialogListener
+import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
+import com.freewheelin.pulley.revision2021.model.CookingInfoItem
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
+import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
+import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.GridMarginDecoration
+import com.freewheelin.pulley.views.snackBar.SnackBar
+import com.freewheelin.pulley.views.snackBar.SnackBarView
+import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.lang.StringBuilder
+
+class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListener, PatternStudyListener, BookFilterListener,
+    EmailInputDialogListener {
+
+    val binding: ActivityPulleyMathBooksBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_pulley_math_books, null, false)
+    }
+    private val viewModel: PulleyMathBooksViewModel by viewModels()
+    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, this)
+
+    companion object {
+        @JvmStatic
+        fun getIntent(context: Context): Intent {
+            return Intent(context, PulleyMathBooksActivity::class.java).apply {
+
+            }
+        }
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = this@PulleyMathBooksActivity
+
+            initAdapter()
+            initUI()
+            btnBack.setOnClickListener {
+                finish()
+            }
+        }
+
+        viewModel.apply {
+            playTotalLoadingView.observe(this@PulleyMathBooksActivity) {
+                if (it) {
+                    binding.totalLoadingView.playAnimation()
+                } else {
+                    binding.totalLoadingView.cancelAnimation()
+
+                }
+            }
+            books.observe(this@PulleyMathBooksActivity) {
+
+                if (latestFilters == binding.filterView.selectedFilterTypes) {
+                    totalPlanAdapter.submitList(it)
+                    if (it.isEmpty()) {
+                        binding.totalEmptyContainer.show(300)
+                    } else {
+                        val rvAnimController = AnimationUtils.loadLayoutAnimation(
+                            this@PulleyMathBooksActivity,
+                            R.anim.recyclerview_grid_layout_animation
+                        )
+                        binding.totalRv.layoutAnimation = rvAnimController
+                        binding.totalRv.scheduleLayoutAnimation()
+                    }
+                    showDummyBottomView.postValue(it.size < 4)
+                    showTotalLoadingView.postValue(false)
+                    playTotalLoadingView.postValue(false)
+                    showTotalPlanCover.postValue(false)
+                }
+            }
+        }
+    }
+
+    fun initUI () {
+        binding.apply {
+            viewModel.showEmptyContainer.postValue(false)
+            viewModel.showRecyclerView.postValue(false)
+            viewModel.showTotalLoadingView.postValue(true)
+            viewModel.playTotalLoadingView.postValue(true)
+            val filters = filterView.selectedFilterTypes.toSet()
+            viewModel.fetchTotalBooks(filters)
+            totalPlanContainer.layoutParams.height = DisplayUtils.getScreenHeight(this@PulleyMathBooksActivity)
+            filterView.listener = this@PulleyMathBooksActivity
+        }
+    }
+
+    fun initAdapter() {
+        binding.apply {
+            totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, 3)
+            totalRv.adapter = totalPlanAdapter
+            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), 0, 3))
+            totalRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_DRAGGING -> {
+                            scrollLogEvent()
+                        }
+                    }
+                }
+            })
+            viewModel.totalAdapter = totalPlanAdapter
+        }
+    }
+
+    private fun scrollLogEvent() {
+        LogUtils.logEvent(this@PulleyMathBooksActivity, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체문제집")
+    }
+
+    override fun onActionBtnClicked(action: ActionType, book: Book, holder: PlanHolder) {
+        when (action) {
+            ActionType.mail -> {
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일보내기")
+                val dialog = EmailInputDialog(this, listOf(book), user!!, this)
+                dialog.show()
+            }
+            ActionType.pin -> {
+                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
+                val itemValue = "전체문제집"
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
+                val id = if(book.assignID == null) book.pieceID else book.assignID!!
+                viewModel.togglePin(id, !book.pin) {
+                    setSnackBar()
+                }
+            }
+            ActionType.delete -> {
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
+                viewModel.removeFromMyPlan(book)
+            }
+        }
+
+    }
+
+    private fun setSnackBar() {
+        val snackBar = SnackBar(this, "핀 설정은 나의 문제집에서 확인할 수 있습니다.", "바로가기")
+        snackBar.setSnackBarViewListener(object : SnackBarViewListener {
+            override fun onXBtnClicked(view: SnackBarView) {
+                snackBar.dismiss()
+            }
+
+            override fun onActionBtnClicked(view: SnackBarView) {
+                snackBar.dismiss()
+                finish()
+                setResult(PatternStudyFragment.PLAN_PINNED, intent)
+            }
+        })
+        CoroutineScope(Dispatchers.Main).launch {
+            snackBar.show()
+        }
+    }
+
+    override fun onReviewBtnClikced(holder: PlanHolder, book: Book) {
+
+        val itemValue = "전체문제집"
+        LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
+        val intent = SolveActivity.getReviewIntent(this, book)
+        startActivity(intent)
+    }
+
+    override fun onSolveClicked(holder: PlanHolder, book: Book) {
+        val intent = SolveActivity.getIntent(this, book)
+        startActivity(intent)
+    }
+
+    override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
+
+    }
+
+    override fun filterFromTagOnCard(type: FilterType) {
+        binding.filterView.selectedFilterTypes.add(type)
+        binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
+        binding.filterView.adapter?.notifyDataSetChanged()
+
+        getTotalListWithoutRefresh()
+    }
+    private fun getTotalListWithoutRefresh() {
+        binding.apply {
+            viewModel.showTotalPlanCover.postValue(true)
+            viewModel.showTotalLoadingView.postValue(true)
+            viewModel.playTotalLoadingView.postValue(true)
+            val filters = filterView.selectedFilterTypes.toSet()
+
+            viewModel.fetchTotalBooks(filters)
+        }
+    }
+
+    override fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>) {
+        viewModel.showEmptyContainer.postValue(false)
+        viewModel.showRecyclerView.postValue(false)
+        viewModel.showTotalLoadingView.postValue(true)
+        viewModel.playTotalLoadingView.postValue(true)
+        viewModel.fetchTotalBooks(filters.toSet())
+    }
+
+    override fun onSentEmail() {
+        DaebakToast.show(this, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
+    }
+}

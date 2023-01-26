@@ -6,7 +6,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.assets.*
-import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.DailyRecommend
@@ -14,6 +13,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.DailyStudy
 import com.freewheelin.pulley.core.API.ResponseModel.DailySummary
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.utils.*
@@ -108,6 +108,11 @@ class User {
         get () {
             return schoolID == 6000
         }
+    val showMainUnivTab: Boolean
+        get () {
+            val sid = schoolID ?: 0
+            return sid >= 6000
+        }
 
     companion object {
         val TYPE_FREE_ING = "FREE_ING"
@@ -147,31 +152,31 @@ class User {
 //        }
     }
 
-    val studiedUnit: Set<BigUnit>
+    val studiedUnit: Set<BigUnitV3>
         get() {
             val ids = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnit.initOrNull(it) }
+            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
                 .toSet()
         }
 
-    val optionalUnit: Set<BigUnit>
+    val optionalUnit: Set<BigUnitV3>
         get() {
             val ids = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnit.initOrNull(it) }
+            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
                 .toSet()
         }
 
-    val recentUnit: Set<BigUnit>
+    val recentUnit: Set<BigUnitV3>
         get() {
             val ids = recentSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnit.initOrNull(it) }
+            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
                 .toSet()
         }
 
-    val recentExcludedUnit: Set<BigUnit>
+    val recentExcludedUnit: Set<BigUnitV3>
         get() {
             val ids = excludeSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnit.initOrNull(it) }
+            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
                 .toSet()
         }
 
@@ -259,7 +264,7 @@ class User {
         Preferences.userDataString.set(json)
     }
 
-    fun getStudiedUnit(subject: Subject): List<BigUnit> {
+    fun getStudiedUnit(subject: SubjectV3): List<BigUnitV3> {
         return subject.bigUnits.filter { studiedUnit.contains(it) }
     }
 
@@ -434,8 +439,8 @@ class User {
             val subjectSet = subjects.toSet()
             val excludes = excludeSubjectCode.split(", ").map { it.trim().toIntOrNull() }.filterNotNull()
             val excluded = subjectSet.minus(excludes)
-            val temp = excluded.map { it / 10 }
-            result = temp.sortedBy { it }.map { Subject.init(it).filterText }.toSet().joinToString(", ")
+//            val temp = excluded.map { it / 10 }
+            result = excluded.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
         }
         if(result.isEmpty()) {
             studiedUnit.map{ it.name }
@@ -445,13 +450,13 @@ class User {
 
     fun getCommonSubjectText() : String {
         val units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.sortedBy {it} .map {it / 10}.map { Subject.init(it).filterText }.toSet().joinToString(", ")
+        val subjects = units.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
         return subjects
     }
 
     fun getOptionalSubjectText() : String {
         val units = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.sortedBy {it}.map {it / 10}.map { Subject.init(it).filterText }.toSet().joinToString(", ")
+        val subjects = units.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
         return subjects
     }
 
@@ -459,7 +464,7 @@ class User {
         var units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val optionalUnits = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val subjects = units.plus(optionalUnits)
-        return subjects.sortedBy{it}.map {it / 10}.map { Subject.init(it).filterText }.toSet().joinToString(", ")
+        return subjects.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
     }
 
     fun isExpiredUser(): Boolean {
@@ -470,7 +475,7 @@ class User {
 
     fun syncMyInfo(activity:Activity, cb: (user: User) -> Unit) {
 
-        API_V2.getUser().enqueue(object: Callback<Template<User>> {
+        API_V3.getUser().enqueue(object: Callback<Template<User>> {
             override fun onFailure(call: Call<Template<User>>, t: Throwable) {}
             override fun onResponse(call: Call<Template<User>>, response: Response<Template<User>>) {
                 val remoteUser = response.body()?.data
@@ -635,23 +640,23 @@ class User {
         commit("setStudyInfoVal")
     }
 
-    fun setStudiedUnit(bigUnit: Collection<BigUnit>) {
+    fun setStudiedUnit(bigUnit: Collection<BigUnitV3>) {
         this.rawInitStudied = bigUnit.map { it.id }.joinToString()
         commit("setStudiedUnit")
     }
 
-    fun setExcludeUnit(bigUnit: Collection<BigUnit>) {
+    fun setExcludeUnit(bigUnit: Collection<BigUnitV3>) {
         this.excludeSubjectCode = bigUnit.map { it.id }.joinToString()
         commit("setExcludeUnit")
     }
 
-    fun setOptionalUnit(bigUnit: Collection<BigUnit>) {
+    fun setOptionalUnit(bigUnit: Collection<BigUnitV3>) {
         this.rawInitOptional = bigUnit.map { it.id }.joinToString()
         commit("setOptionalUnit")
     }
 
-    fun setOptionalUnitBySubjects(subjects: Collection<Subject>) {
-        val bigUnit = mutableListOf<BigUnit>()
+    fun setOptionalUnitBySubjects(subjects: Collection<SubjectV3>) {
+        val bigUnit = mutableListOf<BigUnitV3>()
         for(subject in subjects) {
             bigUnit.addAll(subject.bigUnits)
         }

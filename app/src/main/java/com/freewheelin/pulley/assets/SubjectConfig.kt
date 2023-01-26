@@ -162,5 +162,6 @@ enum class BigUnit(val subject: Subject, val title: String, val suffixId: Int) {
                 }
             }
         }
+
     }
 }

@@ -45,6 +45,7 @@ class LCWrongNoteMapCardWrapper: Serializable {
 }
 class LCWrongNoteMapCard: BaseDiffItem, Serializable {
     var userQuizSolvingHistoryId: Int = -1
+    var refPatternId: Int = -1 // TODO 새로생긴값인데 LCPatternQuiz랑 호환해야함
     var refPatternQuizId: Int = 26
     var patternName: String = "유형 04. 명제의 참, 거짓과 진리집합"
     var quizType: String = "QUIZ"
@@ -106,25 +107,22 @@ class LCWrongNoteMapCard: BaseDiffItem, Serializable {
         return quizFormat == QuizFormat.Short
     }
     fun toLCPatternQuiz(): LCPatternQuiz {
-        val intialQuiz = LCPatternQuiz()
-        val quiz = intialQuiz.let { quiz ->
-            quiz.patternQuizId = refPatternQuizId
-            quiz.quizType = quizType
-            quiz.questionFormat = questionFormat
-            quiz.quizImageUrl = quizImageUrl
-            quiz.solutionImageUrl = solutionImageUrl
-            quiz.answer = answer
-            quiz.isCorrect = isCorrect
-//        quiz.isFirstTry = isFirstTry
-            quiz.userAnswer = userAnswer
-            quiz.correctAnswerRate = correctAnswerRate
-            quiz.hintUsageCount = hintUsageCount
-            quiz.hints = hints
-            quiz.concepts = concepts
-
-            quiz
-        }
-        return quiz
+        return LCPatternQuiz(
+            patternQuizId = refPatternQuizId,
+            patternId = refPatternId,
+            quizType = quizType,
+            questionFormat = questionFormat,
+            quizImageUrl = quizImageUrl,
+            solutionImageUrl = solutionImageUrl,
+            answer = answer,
+            isCorrect = isCorrect,
+            isFirstTry = true,
+            userAnswer = userAnswer,
+            correctAnswerRate = correctAnswerRate,
+            hintUsageCount = hintUsageCount,
+            hints = hints,
+            concepts = concepts
+        )
     }
 
 

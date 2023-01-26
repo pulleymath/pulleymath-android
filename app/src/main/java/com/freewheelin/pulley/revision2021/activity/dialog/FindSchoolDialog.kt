@@ -22,7 +22,7 @@ import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 import com.freewheelin.pulley.revision2021.viewmodel.FindSchoolViewModel
 
-class FindSchoolDialog(val callback: (school: School?) -> Unit): DialogFragment() {
+class FindSchoolDialog(val callback: (school: School) -> Unit): DialogFragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FindSchoolViewModel::class.java)

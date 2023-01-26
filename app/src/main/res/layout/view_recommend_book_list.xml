@@ -5,22 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        style="@style/TextPurple_acacff.ExtraBold"
+        style="@style/h4"
         android:id="@+id/indexLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
+        android:textColor="@color/purple_200"
         android:text="#1"
-        android:layout_marginStart="@dimen/dp64"
+        android:layout_marginStart="@dimen/dp48"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/h4"
         android:id="@+id/guideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp24"
         android:text="시험이 밝았습니다.\n유형은 고개를 들어주세요."
         android:layout_marginStart="@dimen/dp16"
         android:lineSpacingExtra="@dimen/sp12"
@@ -34,7 +33,7 @@
         android:layout_marginBottom="@dimen/dp24"
         android:paddingTop="@dimen/dp24"
         android:paddingBottom="@dimen/dp24"
-        android:paddingStart="@dimen/dp96"
+        android:paddingStart="@dimen/dp64"
         android:clipChildren="false"
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/guideTv"

@@ -1,12 +1,10 @@
 package com.freewheelin.pulley.core.manage
 
 import android.content.Context
-import com.freewheelin.pulley.assets.BigUnit
-import com.freewheelin.pulley.assets.Grade
-import com.freewheelin.pulley.assets.Major
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.*
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.responseError
@@ -20,11 +18,11 @@ object UserManager {
     const val ARG_DESSERT_TYPE = "ARG_DESSERT_TYPE"
     const val EVENT_USER_MODIFYING = "EVENT_USER_MODIFYING"
 
-    fun setInitStudy(context: Context, user: User, units: Collection<BigUnit>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
+    fun setInitStudy(context: Context, user: User, units: Collection<BigUnitV3>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
         val param: Parameter = Parameter(
-                "initStudied" to units.map { it.id }
+            "initStudied" to units.map { it.id }
         )
-        API_V2.setInitStudied(user.studentID, param).enqueue(object: Callback<Void> {
+        API_V3.changeCommonSubject(user.studentID, param).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 if(faildCB != null) {
                     faildCB()
@@ -45,11 +43,11 @@ object UserManager {
         })
     }
 
-    fun setRecentExclude(context: Context, user: User, units: Collection<BigUnit>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
+    fun setRecentExclude(context: Context, user: User, units: Collection<BigUnitV3>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
         val param: Parameter = Parameter(
-                "excludeSubject" to units.map { it.id }
+            "excludeSubject" to units.map { it.id }
         )
-        API_V2.setExcludeStudied(user.studentID, param).enqueue(object: Callback<Void> {
+        API_V3.setExcludeStudied(user.studentID, param).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 if(faildCB != null) {
                     faildCB()
@@ -70,11 +68,11 @@ object UserManager {
         })
     }
 
-    fun setInitOptional(context: Context, user: User, units: Collection<BigUnit>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
+    fun setInitOptional(context: Context, user: User, units: Collection<BigUnitV3>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
         val param: Parameter = Parameter(
-                "initOptional" to units.map { it.id }
+            "initOptional" to units.map { it.id }
         )
-        API_V2.setInitOptional(user.studentID, param).enqueue(object: Callback<Void> {
+        API_V3.changeOptionalSubject(user.studentID, param).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 if(faildCB != null) {
                     faildCB()
@@ -95,10 +93,11 @@ object UserManager {
         })
     }
 
-    fun addInitOptionalSubject(context: Context, user: User, subjects: Collection<Subject>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
+    fun addInitOptionalSubject(context: Context, user: User, subjects: Collection<SubjectV3>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
         val param: Parameter = Parameter(
-                "initOptionalSubject" to subjects.map { it.code }
+                "initOptionalSubject" to subjects.map { it.id } // subjectV3 변경하며 AddOptionalToast 를 사용하지 않게되었다.
         )
+        // 원래 빅챕터 보내던건데 변경된 빅챕터 코드를 보내면 된다.
         API_V2.addInitOptionalSubject(user.studentID, param).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 if(faildCB != null) {
@@ -151,9 +150,11 @@ object UserManager {
         })
     }
 
-    fun setUserInitSetting(context: Context, user: User, grade: Grade, major: Major?, rating: Int, commonSubject: Collection<BigUnit>, optionalSubject: Collection<BigUnit>, cb: (() -> Unit)? = null) {
+    fun setUserInitSetting(context: Context, user: User, grade: Grade, major: Major?, rating: Int, commonSubject: Collection<BigUnitV3>, optionalSubject: Collection<BigUnitV3>, cb: (() -> Unit)? = null) {
+        // TODO SubjectV3 변경관련 확인해봐야함
         val param: Parameter = Parameter(
                 "grade" to grade.value,
+                "version" to "v3",
                 "initStudied" to commonSubject.map { it.id },
                 "initOptional" to optionalSubject.map { it.id }
         )

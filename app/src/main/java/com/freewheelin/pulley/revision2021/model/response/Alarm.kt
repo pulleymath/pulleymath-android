@@ -60,8 +60,8 @@ class Alarm : BaseDiffItem, Serializable {
             }
             else -> {
                 val customSdf = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                val customDate = customSdf.parse(createdAt)
-                customDate.toString()
+                val customDate = customSdf.parse(createdAt) ?: Date()
+                customSdf.format(customDate.time)
             }
         }
     }

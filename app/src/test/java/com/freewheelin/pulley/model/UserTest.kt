@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.model
 
-import com.freewheelin.pulley.assets.BigUnit
 import com.freewheelin.pulley.assets.Major
 import com.freewheelin.pulley.lib.ContextTest
 import com.freewheelin.pulley.utils.DateTimeUtils

@@ -84,6 +84,7 @@ class WeakChapterResult {
     val sameGradePercent: Int = 0
     val smallChapterName: String = ""
     val bigChapterName: String = ""
+    val studentRating: Int = 0
 }
 
 class NormalNoteRatio {

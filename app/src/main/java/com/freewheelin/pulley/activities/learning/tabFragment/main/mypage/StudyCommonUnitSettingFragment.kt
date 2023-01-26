@@ -13,8 +13,8 @@ import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
-import com.freewheelin.pulley.assets.BigUnit
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.BigUnitV3
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
@@ -48,13 +48,13 @@ class StudyCommonUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectio
             math2Selection.listener = this@StudyCommonUnitSettingFragment
 
             mathTopSelection.buttonTitles =
-                listOf(BigUnit.다항식, BigUnit.방정식과_부등식, BigUnit.도형의_방정식).map { it.title }
+                listOf(BigUnitV3.다항식, BigUnitV3.방정식과_부등식, BigUnitV3.도형의_방정식).map { it.title }
             mathBottomSelection.buttonTitles =
-                listOf(BigUnit.집합과_명제, BigUnit.함수, BigUnit.순열과_조합).map { it.title }
+                listOf(BigUnitV3.집합과_명제, BigUnitV3.함수, BigUnitV3.순열과_조합).map { it.title }
             math1Selection.buttonTitles =
-                listOf(BigUnit.지수함수와_로그함수, BigUnit.삼각함수, BigUnit.수열).map { it.title }
+                listOf(BigUnitV3.지수함수와_로그함수, BigUnitV3.삼각함수, BigUnitV3.수열).map { it.title }
             math2Selection.buttonTitles =
-                listOf(BigUnit.함수의_극한과_연속, BigUnit.미분, BigUnit.적분).map { it.title }
+                listOf(BigUnitV3.함수의_극한과_연속, BigUnitV3.미분, BigUnitV3.적분).map { it.title }
 
             setCommonUnit()
 
@@ -69,47 +69,47 @@ class StudyCommonUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectio
 
             mathTopSelection.result = listOf(
                 false,
-                studiedUnit.contains(BigUnit.다항식),
-                studiedUnit.contains(BigUnit.방정식과_부등식),
-                studiedUnit.contains(BigUnit.도형의_방정식)
+                studiedUnit.contains(BigUnitV3.다항식),
+                studiedUnit.contains(BigUnitV3.방정식과_부등식),
+                studiedUnit.contains(BigUnitV3.도형의_방정식)
             )
 
             mathBottomSelection.result = listOf(
                 false,
-                studiedUnit.contains(BigUnit.집합과_명제),
-                studiedUnit.contains(BigUnit.함수),
-                studiedUnit.contains(BigUnit.순열과_조합)
+                studiedUnit.contains(BigUnitV3.집합과_명제),
+                studiedUnit.contains(BigUnitV3.함수),
+                studiedUnit.contains(BigUnitV3.순열과_조합)
             )
 
             math1Selection.result = listOf(
                 false,
-                studiedUnit.contains(BigUnit.지수함수와_로그함수),
-                studiedUnit.contains(BigUnit.삼각함수),
-                studiedUnit.contains(BigUnit.수열)
+                studiedUnit.contains(BigUnitV3.지수함수와_로그함수),
+                studiedUnit.contains(BigUnitV3.삼각함수),
+                studiedUnit.contains(BigUnitV3.수열)
             )
 
             math2Selection.result = listOf(
                 false,
-                studiedUnit.contains(BigUnit.함수의_극한과_연속),
-                studiedUnit.contains(BigUnit.미분),
-                studiedUnit.contains(BigUnit.적분)
+                studiedUnit.contains(BigUnitV3.함수의_극한과_연속),
+                studiedUnit.contains(BigUnitV3.미분),
+                studiedUnit.contains(BigUnitV3.적분)
             )
         }
     }
 
-    private fun getSelectedUnit(): Collection<BigUnit> {
+    private fun getSelectedUnit(): Collection<BigUnitV3> {
 
-        val selectedBigUnits = hashSetOf<BigUnit>()
+        val selectedBigUnits = hashSetOf<BigUnitV3>()
         with(binding) {
-            selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, Subject.수학_상))
-            selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, Subject.수학_하))
-            selectedBigUnits.addAll(getSelectedUnits(math1Selection, Subject.수학I))
-            selectedBigUnits.addAll(getSelectedUnits(math2Selection, Subject.수학II))
+            selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, SubjectV3.수학_상))
+            selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, SubjectV3.수학_하))
+            selectedBigUnits.addAll(getSelectedUnits(math1Selection, SubjectV3.수학I))
+            selectedBigUnits.addAll(getSelectedUnits(math2Selection, SubjectV3.수학II))
         }
         return selectedBigUnits
     }
 
-    private fun getSelectedUnits(view: DaebakInputSelection, subject: Subject): Collection<BigUnit> {
+    private fun getSelectedUnits(view: DaebakInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
         if(view.result.first())
             return subject.bigUnits
         else {

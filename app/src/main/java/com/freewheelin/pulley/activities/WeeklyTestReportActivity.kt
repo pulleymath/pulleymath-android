@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.BigUnitV3
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.manage.TestManager
@@ -76,7 +77,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
                 if(it.weakChapterAnalysis == null)
                     lowestNothingGuideTv.show()
                 else {
-                    lowestSubjectTv.text = Subject.init(it.weakChapterAnalysis!!.code).filterText
+                    lowestSubjectTv.text = SubjectV3.codeToSubject(it.weakChapterAnalysis!!.code).filterText // Subject.init(it.weakChapterAnalysis!!.code).filterText
                     lowestUnitTv.text = it.weakChapterAnalysis?.name
                     lowestPenChart.setValues(it.weakChapterAnalysis!!.myRate, it.weakChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
                     lowestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
@@ -88,7 +89,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
                 if(it.strongChapterAnalysis == null)
                     highestNothingGuideTv.show()
                 else {
-                    highestSubjectTv.text = Subject.init(it.strongChapterAnalysis!!.code).filterText
+                    lowestSubjectTv.text = SubjectV3.codeToSubject(it.weakChapterAnalysis!!.code).filterText // Subject.init(it.weakChapterAnalysis!!.code).filterText
                     highestUnitTv.text = it.strongChapterAnalysis?.name
                     highestPenChart.setValues(it.strongChapterAnalysis!!.myRate, it.strongChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
                     highestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")

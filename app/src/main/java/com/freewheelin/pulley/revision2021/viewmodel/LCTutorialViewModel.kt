@@ -1,9 +1,11 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
@@ -12,14 +14,15 @@ import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.utils.ViewTransition
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class LCTutorialViewModel : BaseViewModel(), LifecycleObserver {
-    private val cookingRepository by lazy { LCCookingRepository() }
-    private val patternRepository: LCPatternRepository by lazy { LCPatternRepository() }
+class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
+    private val cookingRepository = LCCookingRepository(getApplication<Application>().applicationContext, viewModelScope)
+    private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     val tutorialImages = listOf(

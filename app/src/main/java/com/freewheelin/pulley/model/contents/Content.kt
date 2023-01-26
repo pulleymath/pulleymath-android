@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.model.contents
 
 import android.util.Log
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.utils.LogUtils
@@ -54,12 +56,14 @@ enum class MarkingState{
     YET, ING, COMPLETED, NONE
 }
 open class Content: Serializable {
-    @Expose @SerializedName("pieceID")
-    var id: Int = 0
+//    @Expose @SerializedName("pieceID")
+//    var id: Int = 0
+    var pieceID: Int = 0
 
-    var assignID: Int? = null
+    @PrimaryKey(autoGenerate = false)var assignID: Int? = null
 
     var problems: List<Problem> = listOf()
+    @Ignore
     val tempSimilarProblems: ArrayList<Problem> = ArrayList()
 
     var score: Int = 0
@@ -73,8 +77,10 @@ open class Content: Serializable {
     var markedNumber: Int = 0
     var similarProblemNumber: Int = 0
 
+    @Ignore
     private var pieceCategory = HashSet<String>()
 
+    @Ignore
     private var pieceDerived: String = ""
     var pieceCategoryTag: BookType = BookType.BOOK
 
@@ -122,7 +128,7 @@ open class Content: Serializable {
     var pieceSubCategory: String = ""
     constructor()
     constructor(content: Content) {
-        this.id = content.id
+        this.pieceID = content.pieceID
         this.assignID = content.assignID
         this.score = content.score
         this.markingState = content.markingState

@@ -12,6 +12,7 @@ import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.views.DaebakToast
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -25,12 +26,11 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
     val selectedTabIndex by lazy { MutableLiveData<Int>(0) }
     val showNothingDataView by lazy { MutableLiveData(false) }
 
-    @SuppressLint("CheckResult")
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
         val studentId = user?.studentID ?: return
         val schoolId = user?.schoolID ?: return
 
-        affiliatedTestRepository.getGroupList2(studentId, schoolId)
+        compositeDisposable += affiliatedTestRepository.getGroupList2(studentId, schoolId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
@@ -56,6 +56,7 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
                                         val b1 = if (it.areAllWorkbookFinished()) 1 else 0
                                         b1
                                     }
+
                     affiliatedTestCardList.postValue(cardList)
                     cardList[0].isSelected.set(true)
                     selectedUnivTestCard.postValue(cardList[0])

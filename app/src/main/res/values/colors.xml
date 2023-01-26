@@ -61,6 +61,7 @@
     <color name="dim_black_333333">#4c333333</color>
     <color name="dim_black_333333_70a">#B3333333</color>
     <color name="dim_white_ffffff">#4cffffff</color>
+    <color name="dim_white_26ffffff">#B2FFFFFF</color>
 
     <color name="gray_100">#fafafa</color>
     <color name="gray_150">#f6f6f6</color>

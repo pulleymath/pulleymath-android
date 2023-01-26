@@ -138,14 +138,33 @@
                         android:orientation="vertical"
                         android:visibility="visible">
 
-                        <com.freewheelin.pulley.views.PulleySpinner
-                            android:id="@+id/selectGrade"
+                        <LinearLayout
+                            android:id="@+id/selectGradeLl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.freewheelin.pulley.views.PulleySpinner
+                                android:id="@+id/selectMiddleGrade"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+
+                            <com.freewheelin.pulley.views.PulleySpinner
+                                android:id="@+id/selectHighGrade"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+                            <com.freewheelin.pulley.views.PulleySpinner
+                                android:id="@+id/selectAllGrade"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+                        </LinearLayout>
 
                         <com.freewheelin.pulley.views.PulleySpinner
                             android:id="@+id/selectMajor"
@@ -154,7 +173,7 @@
                             android:layout_marginTop="16dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/selectGrade" />
+                            app:layout_constraintTop_toBottomOf="@+id/selectGradeLl" />
 
                         <com.freewheelin.pulley.views.PulleySpinner
                             android:id="@+id/selectRate"

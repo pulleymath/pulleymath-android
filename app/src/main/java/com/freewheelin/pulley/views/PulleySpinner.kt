@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.adapters.HintableSpinnerAdapter
+import com.freewheelin.pulley.views.bars.PenBar
 
 class PulleySpinner : ConstraintLayout {
 
@@ -17,7 +19,7 @@ class PulleySpinner : ConstraintLayout {
     private lateinit var spinner:Spinner
     private lateinit var error:LinearLayout
     private lateinit var errorText:TextView
-    private var hintable = false
+    var hintable = false
 
     private var hasHint = false
     var position = -1
@@ -27,12 +29,28 @@ class PulleySpinner : ConstraintLayout {
             spinner.setSelection(value)
         }
 
+    var corner: Int = 0
+        set(value) {
+            field = value
+            when(value) {
+                0 -> setSpinnerCornerFlat()
+                1 -> setSpinnerCornerRound()
+                else -> setSpinnerCornerFlat()
+            }
+        }
+
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
         LayoutInflater.from(context).inflate(R.layout.view_hintable_spinner, this)
         initUI()
+        setTypedArray(attrs)
     }
 
+    fun setTypedArray(attrs: AttributeSet) {
+        val array = context.obtainStyledAttributes(attrs, R.styleable.PulleySpinner)
+        corner = array.getInt(R.styleable.PulleySpinner_corner, 0)
+
+    }
     private fun initUI() {
         spinner = findViewById(R.id.spinner)
         spinner.setPadding(1.toPx(),1.toPx(), 1.toPx(),1.toPx())
@@ -43,6 +61,12 @@ class PulleySpinner : ConstraintLayout {
         error.visibility = View.GONE
     }
 
+    private fun setSpinnerCornerRound() {
+        spinner.setBackgroundResource(R.drawable.bg_white_stroke_gray_500_round)
+    }
+    private fun setSpinnerCornerFlat() {
+        spinner.setBackgroundResource(R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+    }
     fun set(data:List<String>, hint:String?=null, errorMsg:String?=null,callback:(position:Int)->Unit) {
 //        adapter = HintableSpinnerAdapter.setSpinner(spinner, data, hint)
         val dataList = if(hint != null) {
@@ -78,6 +102,7 @@ class PulleySpinner : ConstraintLayout {
     }
 
     override fun isSelected(): Boolean {
+
         return if(hintable) position > 0 else position > -1
     }
 

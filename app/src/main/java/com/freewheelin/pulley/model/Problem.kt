@@ -2,7 +2,7 @@ package com.freewheelin.pulley.model
 
 import android.content.Context
 import android.util.Log
-import com.freewheelin.pulley.assets.Subject
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
@@ -62,6 +62,7 @@ open class Problem: Serializable {
 
     var studyID: Int = 0
     var unitCode: Int = 0
+    var subjectCode: Int = 0
     var problemNum: Int? = null
     var answerData: String = ""
     var correctTimes: Int = 312000203
@@ -225,8 +226,8 @@ open class Problem: Serializable {
         })
     }
 
-    fun getSubject(): Subject {
-        return Subject.init(unitCode)
+    fun getSubject(): SubjectV3 {
+        return SubjectV3.codeToSubject(subjectCode)
     }
 
     fun isAllAnswered() : Boolean {

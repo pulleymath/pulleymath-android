@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -18,6 +19,7 @@ import com.freewheelin.pulley.databinding.FragmentLearningCoursePatternBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
+import com.freewheelin.pulley.revision2021.utils.observeListOnce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import kotlinx.coroutines.*
 
@@ -39,7 +41,7 @@ class LCPatternFragment : Fragment() {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_learning_course_pattern, null, false)
     }
     private var tabFragments: MutableList<Fragment> = mutableListOf()
-    lateinit var viewModel: LCPatternViewModel
+    val viewModel: LCPatternViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +51,11 @@ class LCPatternFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LCPatternViewModel::class.java)
         arguments?.let { it ->
             val course = it.getSerializable(COURSE_DESC) as SingleCourseDesc
             val courseId = course.learningCourseDetailId
 
-            viewModel.fetchPatternInfo(courseId)
+            viewModel.initPatternInfo(courseId)
             binding.apply {
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
@@ -80,7 +81,7 @@ class LCPatternFragment : Fragment() {
                     }
                 }
 
-                viewModel.patternQuizList.observeOnce(this@LCPatternFragment) {
+                viewModel.patternQuizList.observeListOnce(this@LCPatternFragment) {
                     val frags = it.mapIndexed { index, quiz ->
                         PatternQuizFragment.newInstance(quiz, index, viewModel.patternQuizList.value?.size)
                     }
@@ -133,9 +134,6 @@ class LCPatternFragment : Fragment() {
                             }
                         }
                     }
-//                    getChildrenPage().forEach {
-//                        (it as PatternQuizFragment).undoDrawing()
-//                    }
                 }
 
                 resetHintBtnLl.setOnClickListener {
@@ -157,9 +155,6 @@ class LCPatternFragment : Fragment() {
                         val courseName = "[${chapterName}] : [${patternName}]"
                         quizFrag.openChannelIoDialog(courseName)
                     }
-//                    getChildrenPage().forEach {
-//                        (it as PatternQuizFragment).redoDrawing()
-//                    }
                 }
 
                 pagerWrapper.pagerEnableCallback = {
@@ -190,7 +185,7 @@ class LCPatternFragment : Fragment() {
     }
 
     fun setHintBtn(flag: Boolean?, size: Int?) {
-        if (::viewModel.isInitialized && flag != null && size != null) {
+        if (flag != null && size != null) {
             viewModel.isHintBtnDisabled.postValue(flag)
             viewModel.setHintBtnText(size)
         }
@@ -200,9 +195,7 @@ class LCPatternFragment : Fragment() {
     }
 
     fun setHintBtnText(size: Int) {
-        if (::viewModel.isInitialized) {
-            viewModel.setHintBtnText(size)
-        }
+        viewModel.setHintBtnText(size)
     }
 
     fun setPagerToAnotherQuiz(quizId: Int) {

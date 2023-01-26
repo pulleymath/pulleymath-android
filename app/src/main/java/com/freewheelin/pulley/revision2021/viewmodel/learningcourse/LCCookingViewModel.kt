@@ -1,16 +1,23 @@
 package com.freewheelin.pulley.revision2021.viewmodel.learningcourse
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.databinding.ItemCookingRightViewBinding
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
+import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import io.channel.plugin.android.extension.doOnElse
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -19,18 +26,23 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
-class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
+class LCCookingViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
 
-    private val cookingRepository by lazy { LCCookingRepository() }
-    val cookingInfo by lazy { MutableLiveData<CookingInfo>() }
+    private val cookingRepository = LCCookingRepository(getApplication<Application>().applicationContext, viewModelScope)
+    private val _cookingInfo = MutableLiveData<CookingInfo>()
+    val cookingInfo : LiveData<CookingInfo> = _cookingInfo
+
+    private val _cookingInfoItems = MutableLiveData<List<CookingInfoItem>>()
+    val cookingInfoItems : LiveData<List<CookingInfoItem>> = _cookingInfoItems
+
     val cookingImageUrl by lazy { MutableLiveData<String>() }
-
-    val cookingList by lazy { MutableLiveData<List<CookingInfoItem>>() }
-
     val currentCookingExercise by lazy { MutableLiveData<CookingExercise>() }
     val selectedExerciseIndex by lazy { MutableLiveData<Int>() }
 
@@ -41,48 +53,40 @@ class LCCookingViewModel : BaseViewModel(), LifecycleObserver {
     var selectedItemBinding: ItemCookingQuizDetailBinding? = null
     var rightViewBinding: ItemCookingRightViewBinding? = null
 
-    fun fetchCookingGroceries(courseId: Int) {
-        val studentId = user?.studentID ?: return
-        compositeDisposable += cookingRepository.fetchCookingGroceries(courseId, studentId)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "fetchCookingGroceries =>${response.data}")
-                response.data?.let {
+    val quizMemoViewList: MutableList<CookingMemoView> = mutableListOf()
+    var focusedQuizList: MutableList<CookingQuiz> = mutableListOf()
 
-                    cookingInfo.postValue(it)
-                    val video = listOf(CookingInfoItem.getVideoItem(0, it.video, it.exerciseGroups))
-                    val footer = listOf(CookingInfoItem.getFooter(0))
-                    val exerciseList = listOf(CookingInfoItem.getExercise(1, it, it.exerciseGroups)).map { item ->
-                        item.exerciseList?.forEach { exec ->
-                            exec.exerciseQuizzes?.forEach { quiz ->
-                                val isSolved = quiz.userAnswer != null
-                                val isCorrectAnswer = quiz.userAnswer == quiz.answer
-                                quiz.afterTryAnswered.set(isSolved)
-                                quiz.isAnswerEntered.set(isSolved)
-                                quiz.isCorrectAnswer.set(isCorrectAnswer)
-                                if (quiz.format == QuizFormat.Single) {
-                                    quiz.userAnswer?.toInt()?.let { position ->
-                                        val selectedImageUrl = quiz.sortedAnswerOptions[position - 1].imageUrl
-                                        quiz.selectedQuizAnswerImageUrl.set(selectedImageUrl)
-                                    }
-                                }
-                            }
-                        }
-                        item
-                    }
+    lateinit var adapter: LCCookingFragment.CookingAdapter
 
-                    val sumList = (video + exerciseList + footer).sortedBy { it.order }
-
-                    cookingList.postValue(sumList)
-                    cookingImageUrl.postValue(it.imageUrl)
-                    selectedExerciseIndex.postValue(0)
-
+    fun initAdapterItem(courseId: Int) {
+        cookingRepository.run {
+            flowAllCookingInfoItem(courseId)
+                .onEach { items ->
+                    _cookingInfoItems.value = items
                 }
-            }, { error ->
-                Log.e(javaClass.simpleName, "fetchCookingGroceries error=${error.localizedMessage}")
-            })
+                .launchIn(viewModelScope)
+        }
+        collectCookingInfoItems(courseId)
     }
+    private fun collectCookingInfoItems(courseId: Int) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            _isLoading.postValue(true)
+            val items = fetchCookingInfoItems(courseId)
+            _isLoading.postValue(false)
+            upsertInfoItems(items)
+        }
+    }
+
+    suspend fun fetchCookingInfoItems(courseId: Int): List<CookingInfoItem> {
+        val res: Pair<List<CookingInfoItem>, String> = cookingRepository.fetchCookingInfoItems(courseId)
+        cookingImageUrl.postValue(res.second)
+        selectedExerciseIndex.postValue(0)
+        return res.first
+    }
+    suspend fun upsertInfoItems(items: List<CookingInfoItem>) {
+        cookingRepository.upsertAllInfoItem(items)
+    }
+
 
     fun useHint(exerciseQuizId: Int, callback: () -> Unit) {
         val studentId = user?.studentID ?: return

@@ -273,4 +273,6 @@ interface  ServiceV2 {
     @POST("book/review/custom-book")
     fun reviewCustomBook(@Body param: Parameter): Call<ResponseBody<Book>>
 
+    @POST("users/{studentId}/init-setting/default")
+    fun defaultInitSetting(@Path("studentId") studentId: String): Single<ResponseBody<Any?>>
 }

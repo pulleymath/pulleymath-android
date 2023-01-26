@@ -16,7 +16,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyC
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyInfoSettingFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudySelectedUnitSettingFragment
-import com.freewheelin.pulley.assets.BigUnit
+import com.freewheelin.pulley.assets.BigUnitV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
@@ -41,10 +41,10 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
         }
     }
 
-    var commonUnits = setOf<BigUnit>()
-    var optionalUnits = setOf<BigUnit>()
-    var recentUnits = setOf<BigUnit>()
-    var excludedUnits = setOf<BigUnit>()
+    var commonUnits = setOf<BigUnitV3>()
+    var optionalUnits = setOf<BigUnitV3>()
+    var recentUnits = setOf<BigUnitV3>()
+    var excludedUnits = setOf<BigUnitV3>()
 
     val difficultyButtonIDs: List<Int>
         get() = listOf(R.id.lowButton, R.id.middleButton, R.id.highButton)

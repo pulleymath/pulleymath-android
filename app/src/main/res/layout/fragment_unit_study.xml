@@ -90,7 +90,7 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            app:defaultStr="플랜 전체"
+            app:defaultStr="문제집 전체"
             app:layout_constraintBottom_toBottomOf="@+id/addPieceBtn"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -127,7 +127,7 @@
             android:fontFamily="@font/font_pretendard_bold"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="플랜 추가하기"
+            android:text="문제집 추가하기"
             android:textColor="@color/white_ffffff"
             android:textSize="@dimen/sp16"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
