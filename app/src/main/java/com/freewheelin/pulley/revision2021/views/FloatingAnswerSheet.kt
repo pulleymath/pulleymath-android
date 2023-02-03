@@ -10,7 +10,7 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ViewFloatingAnswerSheetBinding
-import com.freewheelin.pulley.revision2021.activity.base.BaseView
+import com.freewheelin.pulley.revision2021.activity.base.CustomBaseView
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.AnswerShadowBuilder
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.QuizFormat
@@ -25,7 +25,7 @@ interface FloatingAnswerDelegate {
     fun onShortAnswerChanged(answer: String?)
 }
 
-class FloatingAnswerSheet: BaseView, AnswerSelectionListener {
+class FloatingAnswerSheet: CustomBaseView, AnswerSelectionListener {
 
     constructor(context: Context) : super(context) {}
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}

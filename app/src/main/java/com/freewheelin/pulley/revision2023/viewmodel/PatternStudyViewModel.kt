@@ -29,8 +29,6 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     lateinit var myPlanAdapter: PatternStudyMyPlanAdapter
-    lateinit var recommendBookListViews: List<RecommendBookListView>
-    lateinit var planListener: PlanListener
 
     private val _myPlans = MutableLiveData<MyBookList>()
     val myPlans: LiveData<MyBookList> = _myPlans
@@ -96,29 +94,6 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
         }
         _myPlans.postValue(myPlan)
 
-    }
-
-    fun collectRecommendList(isInit: Boolean = true, cb: () -> Unit) {
-        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val newRecommendList = fetchRecommendList()
-            newRecommendList.forEachIndexed { index, book ->
-                val title = book.title
-                val bookList = book.targetBookPlanList
-                val view = recommendBookListViews.getOrNull(index)
-                withContext(Dispatchers.Main) {
-                    if (isInit) {
-                        view?.set(bookList.toMutableList(), title, index + 1, planListener)
-                    } else {
-                        view?.set(bookList)
-                    }
-                    view?.show { }
-                }
-            }
-            cb()
-        }
-    }
-    suspend fun fetchRecommendList(): List<RecommendBookList> {
-        return patternStudyRepository.fetchRecommendBooks()
     }
 
     fun togglePin(pieceId: Int, isPinned: Boolean, callback: () -> Unit) {

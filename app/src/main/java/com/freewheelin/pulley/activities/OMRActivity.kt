@@ -62,7 +62,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.mockExam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
+        this.mockExam = getSerializable(this@OMRActivity, MockExamManager.ARG_MOCK_EXAM, MockExam::class.java)
 //        this.isRestart = intent.getBooleanExtra(MockExamManager.ARG_MOCK_IS_RESTART, false)
         setContentView(binding.root)
 

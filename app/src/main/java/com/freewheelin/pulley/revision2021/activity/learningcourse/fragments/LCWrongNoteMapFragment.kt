@@ -36,6 +36,7 @@ import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.utils.AnimUtils
 import com.freewheelin.pulley.utils.BoongthEffect
+import com.google.gson.Gson
 import kotlinx.coroutines.*
 
 class LCWrongNoteMapFragment : Fragment() {
@@ -200,10 +201,11 @@ class LCWrongNoteMapFragment : Fragment() {
         override fun onItemClick(noteCard: LCWrongNoteMapCard) {
             val filteredNoteCardList = viewModel.filteredNoteCardList.value?.filter {
                 it.cardType == LCWrongNoteMapCard.CardType.Card
-            }?.let { return@let ArrayList(it) }
+            }
             val headerTitle = (activity as LearningCourseActivity).viewModel.headerTitle.value
             val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId
-            startActivity(LCWrongNoteActivity.getIntent(requireContext(), filteredNoteCardList, noteCard, headerTitle, chapterId))
+            val filteredCardListStr = Gson().toJson(filteredNoteCardList)
+            startActivity(LCWrongNoteActivity.getIntent(requireContext(), filteredCardListStr, noteCard, headerTitle, chapterId))
 
         }
     }

@@ -19,16 +19,6 @@
         android:clipChildren="false"
         android:clipToPadding="false" />
 
-<!--    <Button-->
-<!--        android:id="@+id/test"-->
-<!--        android:layout_width="42dp"-->
-<!--        android:layout_height="42dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:clipChildren="false"-->
-<!--        android:clipToPadding="false"-->
-<!--        android:text="X"-->
-<!--        />-->
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ch_textLauncherBadge"
         android:layout_width="wrap_content"

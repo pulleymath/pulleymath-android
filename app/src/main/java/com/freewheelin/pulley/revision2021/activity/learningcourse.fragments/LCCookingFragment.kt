@@ -82,6 +82,7 @@ class LCCookingFragment() : Fragment(),
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             rightRv.adapter = cookingAdapter
+            cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // observe 안에 이 코드가 있지만 상단에서 선언되어야 작동한다ㅠㅠ
 
 //                viewModel.fetchCookingGroceries(courseId)
 
@@ -235,6 +236,7 @@ class LCCookingFragment() : Fragment(),
 
         private fun addExerciseBtn(list: List<CookingExercise>) {
             val tabTitles = list.mapIndexed { index, cookingExercise -> "예제${index+1}\n${cookingExercise.name}" }
+            itemBinding.quizTabHeader.removeAllViews()
             tabTitles.forEachIndexed { index, title ->
                 val exerciseBtn = CookingExerciseHeaderBtn(requireContext()).apply {
                     initUI(index, tabTitles.size)

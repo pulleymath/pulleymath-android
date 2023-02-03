@@ -68,7 +68,7 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
     }
     private fun init() {
-        mockExam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
+        mockExam = getSerializable(this@StudentMockReportActivity, MockExamManager.ARG_MOCK_EXAM, MockExam::class.java)
         studentID = intent.getStringExtra(MockExamManager.ARG_STUDENT_ID)?: ""
 
         MockExamManager.getStudentMockExamReport(this, mockExam.assignID?:0, studentID,
@@ -100,7 +100,8 @@ class StudentMockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
     private fun showSuccessToastIfNeed() {
         CoroutineScope(Dispatchers.Main).launch {
-            val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
+            val scoredInfo = getSerializable(this@StudentMockReportActivity, MockExamManager.ARG_SCORED_INFO, ScoredStudentGoalInfo::class.java)
+
             delay(2000)
             if (scoredInfo?.isNeedToShowCompletedToast() == true) {
                 SuccessToast.show(this@StudentMockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")

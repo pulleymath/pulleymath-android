@@ -85,7 +85,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 MockExamManager.getMyMockExamList(context, user!!) {
-                    val exam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
+                    val exam = getSerializable(requireActivity(), MockExamManager.ARG_MOCK_EXAM, MockExam::class.java)
                     val resultExam = it?.filter { it.assignID == exam.assignID }?.firstOrNull()
                     if (resultExam?.getMakringState() == MarkingState.COMPLETED) {
                         selectedPercentageEntries.clear()

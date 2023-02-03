@@ -16,7 +16,7 @@ import androidx.core.view.doOnAttach
 import androidx.core.view.doOnDetach
 
 
-abstract class BaseView: ConstraintLayout, LifecycleOwner, LifecycleEventObserver {
+abstract class CustomBaseView: ConstraintLayout, LifecycleOwner, LifecycleEventObserver {
 
     constructor(context: Context) : super(context) {}
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}

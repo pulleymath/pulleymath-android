@@ -120,7 +120,6 @@ class Book: Content, BaseDiffItem {
             "기출" -> FilterType.유형_기출서
             "문제풀이" -> FilterType.유형_유형서
             "내신대비" -> FilterType.유형_내신서
-            "내신대비" -> FilterType.유형_내신서
             "1등급" -> FilterType.추천_1등급
             "2~3등급" -> FilterType.추천_2_3등급
             "3~4등급" -> FilterType.추천_3_4등급

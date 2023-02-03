@@ -41,7 +41,7 @@ import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
 import com.freewheelin.pulley.utils.*
-import com.zoyi.channel.plugin.android.model.source.photopicker.PhotoItem
+import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData
 import io.channel.plugin.android.feature.chat.contract.ChatContract
@@ -593,7 +593,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         when (requestCode) {
             902 -> {
                 if (resultCode == 12) {
-                    this.presenter?.uploadFiles(data!!.getParcelableArrayListExtra<PhotoItem>("PHOTO_INTENT_KEY"))
+                    this.presenter?.uploadFiles(data!!.getParcelableArrayListExtra<FileItem>("PHOTO_INTENT_KEY"))
                 }
             }
             else -> {}

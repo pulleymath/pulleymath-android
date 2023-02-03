@@ -55,7 +55,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setOnTouchListener(BoongthEffect())
             setOnClickListener {
                 if (item.sequence == StudyChapter.TUTORIAL_SEQUENCE) {
-                    context.applicationContext.startActivity(LCTutorialActivity.getIntent(context, true))
+                    context.applicationContext.startActivity(LCTutorialActivity.getIntentAddFlags(context, true))
                     return@setOnClickListener
                 }
                 viewModel.createLearningCourseOnStudentId(item.id) {

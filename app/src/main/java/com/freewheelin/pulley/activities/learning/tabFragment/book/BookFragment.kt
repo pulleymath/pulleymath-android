@@ -495,7 +495,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         }
     }
 
-    override fun onReviewBtnClikced(holder: PlanHolder, book: Book) {
+    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
         val itemValue = if(holder is MyPlanHolder) "나의플랜" else if(holder is RecommendPlanHolder) "추천플랜" else "전체플랜"
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
         val intent = SolveActivity.getReviewIntent(requireContext(), book)

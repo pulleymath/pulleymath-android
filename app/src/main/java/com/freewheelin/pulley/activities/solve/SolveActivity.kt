@@ -142,7 +142,7 @@ class SolveActivity : BaseActivity(),
 
         initUI()
 
-        val content = intent.getSerializableExtra(ContentManager.ARG_CONTENT) as? Content
+        val content = getSerializable(this@SolveActivity, ContentManager.ARG_CONTENT, Content::class.java)
         isReview = intent.getBooleanExtra(IS_REVIEW, false)
 
         Log.d("문제풀기", "content=$content")

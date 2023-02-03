@@ -27,7 +27,7 @@ import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
 //import dagger.hilt.android.HiltAndroidApp
-import io.realm.Realm
+//import io.realm.Realm
 import net.danlew.android.joda.JodaTimeAndroid
 
 //@HiltAndroidApp
@@ -56,9 +56,9 @@ class MyApplication: Application(), LifecycleObserver {
 //                .build()
 //        Fresco.initialize(this, config)
 
-        if(!isTest) {
-            Realm.init(this)
-        }
+//        if(!isTest) {
+//            Realm.init(this)
+//        }
         JodaTimeAndroid.init(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 

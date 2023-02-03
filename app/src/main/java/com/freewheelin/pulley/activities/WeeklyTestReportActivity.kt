@@ -57,7 +57,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
         initUI()
 
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
-        val test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
+        val test = getSerializable(this@WeeklyTestReportActivity, TestManager.ARG_TEST, Test::class.java)
         with(binding) {
             TestManager.getTestReport(this@WeeklyTestReportActivity, user!!, test) {
                 this@WeeklyTestReportActivity.test = it

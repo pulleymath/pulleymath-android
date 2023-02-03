@@ -47,37 +47,34 @@
             android:textSize="13sp"
             tools:text="@string/ch.form.follow_up.description" />
 
-        <io.channel.com.google.android.flexbox.ChFlexboxLayout
-            android:id="@+id/ch_layoutFormContainerFollowUpRetry"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/ch_buttonFormContainerEdit"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:paddingHorizontal="4dp"
-            app:ch_alignItems="center"
-            app:ch_dividerDrawable="@drawable/ch_divider_4dp"
-            app:ch_flexWrap="wrap"
-            app:ch_showDivider="middle">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingVertical="3dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="8dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/ch_textFormContainerFollowUpRetry"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ch_icon_edit"
+                app:tint="@color/ch_txt_black_darker" />
+
+            <com.zoyi.channel.plugin.android.view.textview.CHTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:textColor="@color/ch_txt_black_dark"
-                android:textSize="13sp"
-                tools:text="@string/ch.form.follow_up.rewrite.description" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/ch_buttonFormContainerFollowUpRetry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/ch_txt_black_darker"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/ch_txt_black_darkest"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                tools:text="@string/ch.form.follow_up.rewrite.button" />
+                app:ch_tv_textKey="ch.form.follow_up.rewrite" />
 
-        </io.channel.com.google.android.flexbox.ChFlexboxLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

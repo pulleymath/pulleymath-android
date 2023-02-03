@@ -43,7 +43,7 @@ class PatternStudyFragment : LearningTabFragment(),
     private lateinit var binding: FragmentPatternStudyBinding
     private val viewModel: PatternStudyViewModel by viewModels()
 
-    override var screenName = "개념"
+    override var screenName = "유형"
 
     private val myPlanAdapter = PatternStudyMyPlanAdapter (this)
     private lateinit var getResult: ActivityResultLauncher<Intent>
@@ -75,7 +75,7 @@ class PatternStudyFragment : LearningTabFragment(),
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == PLAN_PINNED) {
                 binding.apply {
-                    rootView.smoothScrollTo(0, myPlanCl.top)
+                    scrollRootView.smoothScrollTo(0, myPlanCl.top)
                 }
             }
         }
@@ -84,6 +84,7 @@ class PatternStudyFragment : LearningTabFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         arguments?.let {
 
             binding.apply {
@@ -92,47 +93,12 @@ class PatternStudyFragment : LearningTabFragment(),
 
                 initAdapter()
                 initGuide()
-//                planLoadingView.playAnimation()
 
-                viewModel.collectRecommendList {
-                    recommendLabel.showIfNeed()
-//                    planLoadingView.cancelAnimation()
-//                    planLoadingView.visibility = View.INVISIBLE
-                }
+//                guideView.setViewModel(viewModel)
 
-                viewModel.planListener = this@PatternStudyFragment
-                viewModel.recommendBookListViews = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
-                viewModel.recommendBookListViews.forEach {
-                    it.visibility = View.GONE
-                }
-
-                pulleyMathBookCv.setOnClickListener {
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체문제집")
-                    PulleyMathBooksActivity.getIntent(requireContext()).let {
-                        getResult.launch(it)
-                    }
-
-                }
-                commercialBookCv.setOnClickListener {
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "출판사문제집")
-                    Intent(requireContext(), PdfListActivity::class.java).let {
-                        startActivity(it)
-                    }
-                }
-                workBookCv.setOnClickListener {
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체-워크북만들기")
-
-                    WorkbookListActivity.getIntent(requireContext()).let {
-                        getResult.launch(it)
-                    }
-//                    if (user!!.hasPulleyPlus) {
-//                        CustomizeBookDialog(requireContext(), this@PatternStudyFragment).show()
-//                    } else {
-//                        DialogUtils.confirmHasPulleyPlus(requireContext()) {
-//                            PulleyPlusPriceDialog(requireContext()).show()
-//                        }
-//                    }
-                }
+                pulleyMathBookCv.setOnClickListener { goPulleyMathBooks() }
+                commercialBookCv.setOnClickListener { goPdfList() }
+                workBookCv.setOnClickListener { goWorkbooks() }
             }
             viewModel.apply {
                 myPlans.observe(viewLifecycleOwner) {
@@ -207,7 +173,6 @@ class PatternStudyFragment : LearningTabFragment(),
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
                 viewModel.togglePin(id, !book.pin) {
                     viewModel.initMyPlanAdapterItem()
-                    viewModel.collectRecommendList(false) {}
                 }
             }
             ActionType.delete -> {
@@ -215,7 +180,6 @@ class PatternStudyFragment : LearningTabFragment(),
 
                 viewModel.removeFromMyPlan(book) {
                     viewModel.initMyPlanAdapterItem()
-                    viewModel.collectRecommendList(false) {}
                 }
             }
         }
@@ -226,7 +190,25 @@ class PatternStudyFragment : LearningTabFragment(),
         viewModel.initMyPlanAdapterItem()
     }
 
-    override fun onReviewBtnClikced(holder: PlanHolder, book: Book) {
+    fun goPulleyMathBooks() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체문제집")
+        PulleyMathBooksActivity.getIntent(requireContext()).let {
+            getResult.launch(it)
+        }
+    }
+    fun goPdfList() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "출판사문제집")
+        Intent(requireContext(), PdfListActivity::class.java).let {
+            startActivity(it)
+        }
+    }
+    fun goWorkbooks() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체-워크북만들기")
+        WorkbookListActivity.getIntent(requireContext()).let {
+            getResult.launch(it)
+        }
+    }
+    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
         val itemValue = if(holder is MyPlanHolder) "나의문제집" else if(holder is RecommendPlanHolder) "추천문제집" else "전체문제집"
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
         val intent = SolveActivity.getReviewIntent(requireContext(), book)

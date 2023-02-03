@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.ItemBookMyPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.ClientBookType
@@ -26,7 +25,7 @@ enum class ActionType {
 
 interface PlanListener {
     fun onActionBtnClicked(action: ActionType, book: Book, holder: PlanHolder)
-    fun onReviewBtnClikced(holder: PlanHolder, book: Book)
+    fun onReviewBtnClicked(holder: PlanHolder, book: Book)
     fun onSolveClicked(holder: PlanHolder, book: Book)
     fun onMakeCustomBookClicked(holder: PlanHolder, book: Book)
 }
@@ -111,7 +110,9 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         }
 
         reviewBtn.setOnClickListener {
-            listener?.onReviewBtnClikced(this, book)
+            println("asoaso plan Holder review Btn click!" )
+            listener?.onSolveClicked(this, book)
+//            listener?.onReviewBtnClikced(this, book)
         }
         makingCustomBookBtn.setOnClickListener {
             listener?.onMakeCustomBookClicked(this, book)
@@ -147,7 +148,10 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             itemView.setOnClickListener {
                 startScaleAnim {
                     startExpandAnim {
-                        listener?.onReviewBtnClikced(this, book)
+                        println("asoaso setBookUI review Btn click!" )
+
+//                        listener?.onReviewBtnClicked(this, book)
+                        listener?.onSolveClicked(this, book)
                     }
                 }
             }
@@ -222,7 +226,8 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             itemView.setOnClickListener {
                 startScaleAnim {
                     startExpandAnim {
-                        listener?.onReviewBtnClikced(this, book)
+                        println("asoaso book review? btn click? ")
+                        listener?.onSolveClicked(this, book)
                     }
                 }
             }

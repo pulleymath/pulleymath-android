@@ -216,20 +216,16 @@ class PatternQuizFragment() : Fragment(),
                 (activity as? LearningCourseActivity)?.let { lcActivity ->
                     lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
 
-                        val chatId = Preferences.channelTalkCurrChatId.get()
-                        val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
-                        val currentStudentId = user?.studentID ?: ""
+//                        val chatId = Preferences.channelTalkCurrChatId.get()
+//                        val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
+//                        val currentStudentId = user?.studentID ?: ""
 
-                        if (studentIdWhenIssuingChatId == currentStudentId && chatId.isNotEmpty()) {
-                            postImageMessage(it, message, false)
-                        } else {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                withContext(Dispatchers.Main) {
-                                    PChannelIO.openChat(activity, null, "")
-                                }
-                                delay(1500)
-                                postImageMessage(it, message, true)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            withContext(Dispatchers.Main) {
+                                PChannelIO.openChat(activity, null, "")
                             }
+                            delay(1500)
+                            postImageMessage(it, message)
                         }
                     }
                 }
@@ -308,19 +304,13 @@ class PatternQuizFragment() : Fragment(),
             solutionScrollRootLl.addView(iv)
         }
     }
-    fun postImageMessage(file: File, msg: String, isChatOpened: Boolean) {
+    fun postImageMessage(file: File, msg: String) {
         (activity as? LearningCourseActivity)?.apply {
             viewModel.uploadImageCaptureFile(file) {
                 it?.let { uploadRes ->
                     viewModel.currChannelIOImage = uploadRes
-                    val chatId = Preferences.channelTalkCurrChatId.get()
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        if (!isChatOpened) {
-                            withContext(Dispatchers.Main) {
-                                PChannelIO.openChat(activity, chatId, null)
-                            }
-                        }
                         delay(1000)
                         viewModel.postChannelIoCapturedImageMessage(uploadRes) {
                             viewModel.postChannelIoTextMessage(msg) {

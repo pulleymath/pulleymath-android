@@ -369,15 +369,6 @@ open class Problem: Serializable {
     fun getSolutionUrl(): String {
         return problemURL + "solution.png"
     }
-
-    /***
-     * NOTE: (hyuntae) 아래건 쓰지말것 백단 연결되기 전까지
-     */
-    fun getResultByInput(): SolveLog.Result {
-        return if(userAnswer == null || userAnswer.toString() != answerData)
-            SolveLog.Result.incorrect
-        else SolveLog.Result.correct
-    }
 }
 
 

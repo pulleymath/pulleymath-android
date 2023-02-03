@@ -27,11 +27,15 @@ import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
+import com.freewheelin.pulley.revision2021.model.CookingExercise
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
+import com.freewheelin.pulley.utils.getSerializable
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 
 class LCWrongNoteActivity : AppCompatActivity() {
@@ -40,9 +44,9 @@ class LCWrongNoteActivity : AppCompatActivity() {
         val NOTE_CARD_ITEM = "NOTE_CARD_ITEM"
         val HEADER_TITLE = "HEADER_TITLE"
         val CURR_CHAPTER = "CURR_CHAPTER"
-        fun getIntent(context: Context, list: ArrayList<LCWrongNoteMapCard>?, item: LCWrongNoteMapCard, headerTitle: String?, chapterId: Int?) : Intent {
+        fun getIntent(context: Context, listStr: String, item: LCWrongNoteMapCard, headerTitle: String?, chapterId: Int?) : Intent {
             return Intent(context, LCWrongNoteActivity::class.java).apply {
-                putExtra(NOTE_CARD_LIST, list)
+                putExtra(NOTE_CARD_LIST, listStr)
                 putExtra(NOTE_CARD_ITEM, item)
                 putExtra(CURR_CHAPTER, chapterId)
                 putExtra(HEADER_TITLE, headerTitle)
@@ -63,8 +67,11 @@ class LCWrongNoteActivity : AppCompatActivity() {
         setContentView(binding.root)
         hideSystemUI()
 
-        val noteCardList: ArrayList<LCWrongNoteMapCard> = intent.getSerializableExtra(NOTE_CARD_LIST) as ArrayList<LCWrongNoteMapCard>
-        val noteCardItem = intent.getSerializableExtra(NOTE_CARD_ITEM) as LCWrongNoteMapCard
+        val noteCardListStr = intent.getStringExtra(NOTE_CARD_LIST) ?: ""
+        val listType = object: TypeToken<List<LCWrongNoteMapCard>>(){}.type
+        val noteCardList: List<LCWrongNoteMapCard> = Gson().fromJson(noteCardListStr, listType)
+
+        val noteCardItem = getSerializable(this@LCWrongNoteActivity, NOTE_CARD_ITEM, LCWrongNoteMapCard::class.java)
         val chapterId = intent.getIntExtra(CURR_CHAPTER, -1)
         val title = intent.getStringExtra(HEADER_TITLE) ?: ""
         ConceptLearningUsageMonitor.startConceptLearningUsage()

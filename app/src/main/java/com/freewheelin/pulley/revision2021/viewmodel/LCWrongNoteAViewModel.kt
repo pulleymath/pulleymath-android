@@ -34,9 +34,9 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
     val isPagerLastIndex by lazy { MutableLiveData(false) }
     var selectedChapterId: Int = -1
 
-    fun init(list: ArrayList<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String, chapterId: Int) {
+    fun init(list: List<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String, chapterId: Int) {
         headerTitle.postValue(title)
-        filteredNoteCardList.postValue(list.toList())
+        filteredNoteCardList.postValue(list)
         currNoteCard.postValue(noteItem)
 //        selectedChapter = chapter
 

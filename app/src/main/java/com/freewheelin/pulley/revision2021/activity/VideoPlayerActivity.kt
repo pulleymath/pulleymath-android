@@ -16,6 +16,7 @@ import com.freewheelin.pulley.databinding.ActivityVideoPlayerBinding
 import com.freewheelin.pulley.databinding.ExoPlaybackControlViewBinding
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
 import com.freewheelin.pulley.revision2021.viewmodel.VideoPlayerViewModel
+import com.freewheelin.pulley.utils.getSerializable
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -56,7 +57,7 @@ class VideoPlayerActivity : AppCompatActivity() {
     }
 
     private fun makeMediaLog() {
-        val solution = intent.getSerializableExtra(SOLUTION) as? AffiliatedSolution ?: return
+        val solution = getSerializable(this@VideoPlayerActivity, SOLUTION, AffiliatedSolution::class.java)
         viewModel.let {
             it.currentMedia = solution
             it.makeMediaLog()

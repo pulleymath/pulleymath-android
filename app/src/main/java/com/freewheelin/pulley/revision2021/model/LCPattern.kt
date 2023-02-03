@@ -113,13 +113,13 @@ data class LCPatternQuiz(
 data class LCPatternQuizHint(
     val sequence: Int,
     val hintImageUrl: String
-)
+): Serializable
 data class LCPatternConcept(
     val conceptType: String,
     val sequence: Int,
     val conceptImageUrl: String,
     val type: ConceptType,
-) {
+): Serializable {
 
     enum class ConceptType {
         base,

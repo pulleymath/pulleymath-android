@@ -15,10 +15,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivitySnackReportBinding
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.show
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -49,7 +46,7 @@ class SnackReportActivity : AppCompatActivity(), ReportDesignListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val type = intent.getSerializableExtra(UserManager.ARG_DESSERT_TYPE) as DessertType
+        val type = getSerializable(this@SnackReportActivity, UserManager.ARG_DESSERT_TYPE, DessertType::class.java)
         val designFactory = ReportDesignFactory.createReportDesignFactory(type, this)
         setUpUI(designFactory)
 

@@ -29,6 +29,7 @@ import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
 import com.freewheelin.pulley.databinding.ItemTestBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
+import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
 import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.model.contents.Book
@@ -53,7 +54,7 @@ import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 
 class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListener, PatternStudyListener, BookFilterListener,
-    EmailInputDialogListener {
+    EmailInputDialogListener, CustomizeBookDialogListener {
 
     val binding: ActivityPulleyMathBooksBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_pulley_math_books, null, false)
@@ -69,6 +70,14 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        val filters = binding.filterView.selectedFilterTypes.toSet()
+        viewModel.fetchTotalBooks(filters)
+        viewModel.collectRecommendList(false) {}
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -79,6 +88,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
             initAdapter()
             initUI()
+            initRecommend()
             btnBack.setOnClickListener {
                 finish()
             }
@@ -107,7 +117,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                         binding.totalRv.layoutAnimation = rvAnimController
                         binding.totalRv.scheduleLayoutAnimation()
                     }
-                    showDummyBottomView.postValue(it.size < 4)
+                    showDummyBottomView.postValue(it.size < 7)
                     showTotalLoadingView.postValue(false)
                     playTotalLoadingView.postValue(false)
                     showTotalPlanCover.postValue(false)
@@ -124,7 +134,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             viewModel.playTotalLoadingView.postValue(true)
             val filters = filterView.selectedFilterTypes.toSet()
             viewModel.fetchTotalBooks(filters)
-            totalPlanContainer.layoutParams.height = DisplayUtils.getScreenHeight(this@PulleyMathBooksActivity)
+            totalPlanContainerLl.layoutParams.height = DisplayUtils.getScreenHeight(this@PulleyMathBooksActivity)
             filterView.listener = this@PulleyMathBooksActivity
         }
     }
@@ -148,6 +158,19 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         }
     }
 
+    fun initRecommend () {
+        binding.apply {
+            viewModel.collectRecommendList {
+                recommendLabel.showIfNeed()
+            }
+
+            viewModel.planListener = this@PulleyMathBooksActivity
+            viewModel.recommendBookListViews = listOf(firstRecommendList, secondRecommendList, thirdRecommendList, fourthRecommendList)
+            viewModel.recommendBookListViews.forEach {
+                it.visibility = View.GONE
+            }
+        }
+    }
     private fun scrollLogEvent() {
         LogUtils.logEvent(this@PulleyMathBooksActivity, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체문제집")
     }
@@ -166,11 +189,13 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
                 viewModel.togglePin(id, !book.pin) {
                     setSnackBar()
+                    viewModel.collectRecommendList(false) {}
                 }
             }
             ActionType.delete -> {
                 LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
                 viewModel.removeFromMyPlan(book)
+                viewModel.collectRecommendList(false) {}
             }
         }
 
@@ -194,7 +219,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         }
     }
 
-    override fun onReviewBtnClikced(holder: PlanHolder, book: Book) {
+    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
 
         val itemValue = "전체문제집"
         LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
@@ -208,7 +233,9 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
 
     override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
-
+//        LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집선택버튼")
+//        CustomizeBookDialog(this, null, book).show()
+        println("onMakeCustomBookClicked")
     }
 
     override fun filterFromTagOnCard(type: FilterType) {
@@ -239,5 +266,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     override fun onSentEmail() {
         DaebakToast.show(this, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
+    }
+
+    override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
+        println("onMadeCustomBook")
+
     }
 }

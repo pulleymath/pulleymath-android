@@ -29,6 +29,12 @@ class LCTutorialActivity : AppCompatActivity() {
                 putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
             }
         }
+        fun getIntentAddFlags(context: Context, isFromMainActivity: Boolean = false): Intent {
+            return Intent(context, LCTutorialActivity::class.java).apply {
+                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
     }
 
     val binding: ActivityLcTutorialBinding by lazy {

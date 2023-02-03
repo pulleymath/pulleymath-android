@@ -24,11 +24,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
 class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(application) {
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
+    lateinit var recommendBookListViews: List<RecommendBookListView>
+    lateinit var planListener: PlanListener
 
     val showEmptyContainer = MutableLiveData<Boolean>(false)
     val showRecyclerView = MutableLiveData<Boolean>(false)
@@ -76,5 +79,27 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
             .doOnError {
                 Log.e(javaClass.simpleName, "removeFromMyPlan error=${it.localizedMessage}")
             }.subscribe()
+    }
+    fun collectRecommendList(isInit: Boolean = true, cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val newRecommendList = fetchRecommendList()
+            newRecommendList.forEachIndexed { index, book ->
+                val title = book.title
+                val bookList = book.targetBookPlanList
+                val view = recommendBookListViews.getOrNull(index)
+                withContext(Dispatchers.Main) {
+                    if (isInit) {
+                        view?.set(bookList.toMutableList(), title, index + 1, planListener)
+                    } else {
+                        view?.set(bookList)
+                    }
+                    view?.show { }
+                }
+            }
+            cb()
+        }
+    }
+    suspend fun fetchRecommendList(): List<RecommendBookList> {
+        return patternStudyRepository.fetchRecommendBooks()
     }
 }

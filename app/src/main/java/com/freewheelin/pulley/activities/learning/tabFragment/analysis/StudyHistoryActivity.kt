@@ -203,7 +203,11 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                             MockExamGuideDialog(this@StudyHistoryActivity, exam, true, this@StudyHistoryActivity).show()
                         }
                     }
-                    BookType.BOOK, BookType.CUSTOM_BOOK -> {
+                    BookType.CUSTOM_BOOK -> {
+                        val intent = SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
+                        startActivity(intent)
+                    }
+                    BookType.BOOK -> {
                         val intent = if(content.isCompleted())
                             SolveActivity.getReviewIntent(this@StudyHistoryActivity, Book(content))
                         else

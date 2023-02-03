@@ -408,7 +408,15 @@ class AnalysisFragment : LearningTabFragment(),
                     MockExamGuideDialog(requireContext(), exam, true, this).show()
                 }
             }
-            BookType.BOOK, BookType.CUSTOM_BOOK -> {
+            BookType.CUSTOM_BOOK -> {
+                val intent = if (content.isCompleted())
+//                    SolveActivity.getReviewIntent(requireContext(), Book(content))
+                    SolveActivity.getIntent(requireContext(), Book(content))
+                else
+                    SolveActivity.getIntent(requireContext(), Book(content))
+                startActivity(intent)
+            }
+            BookType.BOOK -> {
                 val intent = if (content.isCompleted())
                     SolveActivity.getReviewIntent(requireContext(), Book(content))
                 else

@@ -41,6 +41,7 @@ import com.freewheelin.pulley.dialogs.UnitPlanAddDialogListener
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.getSerializable
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.*
 import com.freewheelin.pulley.views.tooltip.TutorWindow
@@ -89,7 +90,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
         scoreReceiver = object: BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val book = intent.getSerializableExtra(ARG_BOOK) as Book
+                val book = getSerializable(requireActivity(), ARG_BOOK, Book::class.java)
 
                 books?.filter { it.pieceID == book.pieceID }?.forEach {
                     it.markingState = book.markingState

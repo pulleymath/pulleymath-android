@@ -128,8 +128,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun getExtra() {
         with(viewModel) {
-            selectedWorkbook =
-                intent.getSerializableExtra(SELECTED_WORKBOOK) as? AffiliatedTestWorkbook
+            selectedWorkbook = getSerializable(this@AffiliatedTestSolveActivity, SELECTED_WORKBOOK, AffiliatedTestWorkbook::class.java)
             isReview.value = intent.getBooleanExtra(IS_REVIEW, false)
 
             selectedWorkbook?.let {
@@ -275,8 +274,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
                     }
                     DragEvent.ACTION_DRAG_STARTED -> {
-                        val x = dragEvent.x
-                        val y = dragEvent.y
+//                        val x = dragEvent.x
+//                        val y = dragEvent.y
                     }
                     DragEvent.ACTION_DRAG_ENDED -> {
                         var x = dragEvent.x

@@ -23,6 +23,7 @@ import com.freewheelin.pulley.databinding.ItemFilterSwitchBinding
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.views.v2.PolicyLayoutV2
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 
 
@@ -172,12 +173,34 @@ interface BookFilterListener {
     fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>)
 }
 
-class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
-    val filters = listOf(
+class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(context, attrs) {
+    companion object {
+        val total = 0
+        val workbook = 1
+    }
+    fun setTypedArray(attrs: AttributeSet) {
+        val array = context.obtainStyledAttributes(attrs, styleable.BookFilterView)
+        this.type = array.getInt(styleable.BookFilterView_type, total)
+    }
+    var type = total
+        set(value) {
+            field = value
+            when(value) {
+                total -> { filters = totalInitFilters }
+                workbook -> { filters = workbookInitFilter }
+            }
+        }
+    var filters: List<Pair<String, List<FilterType>>> = listOf()
+    private val totalInitFilters = listOf(
             Pair("보기설정" , listOf(핀_미포함)), // 워크북은 유료화때문에 book filter에서 노출되지 않음
             Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
             Pair("문제집 유형" , listOf(유형_전체, 유형_유형서, 유형_내신서, 유형_기출서)),
             Pair("추천등급" , listOf(추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하))
+    )
+
+    private val workbookInitFilter = listOf(
+        Pair("보기설정" , listOf(핀_미포함)),
+        Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
     )
 
     var selectedFilterTypes: HashSet<FilterType> = hashSetOf(
@@ -190,6 +213,7 @@ class BookFilterView(context: Context, attrs: AttributeSet?) : RecyclerView(cont
     var listener: BookFilterListener? = null
 
     init {
+        attrs?.let { setTypedArray(it) }
         val filterAdatper = FilterAdapter()
         filterAdatper.sectionType = SectionType.header
 

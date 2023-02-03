@@ -79,7 +79,7 @@ public class FileHelper {
         }
         fun eraseMemo(context: Context, fileName: String) {
             Log.d(javaClass.simpleName, "eraseMemo() fileName=$fileName")
-
+            if (fileName.isEmpty()) return
             CoroutineScope(Dispatchers.IO).launch {
                 val db = DatabaseHelper.get(context)
                 val valueArray = fileName.split("&&")

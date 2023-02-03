@@ -26,17 +26,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/indexLabel"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp24"
-        android:paddingTop="@dimen/dp24"
-        android:paddingBottom="@dimen/dp24"
-        android:paddingStart="@dimen/dp64"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@+id/guideTv"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp24"
+            android:paddingBottom="@dimen/dp24"
+            android:paddingStart="@dimen/dp64"
+            android:layout_marginBottom="@dimen/dp24"
+            app:layout_constraintTop_toBottomOf="@+id/guideTv"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

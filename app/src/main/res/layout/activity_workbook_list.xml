@@ -51,21 +51,23 @@
                 />
         </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/rootView"
+        <LinearLayout
+            android:id="@+id/totalPlanContainerLl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
+            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
             app:layout_constraintTop_toBottomOf="@id/headerLl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0">
+        >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/totalPlanContainer"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/totalLabel"
@@ -79,10 +81,14 @@
                     android:textSize="@dimen/sp36"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/createWorkbookCl"
-                    android:layout_width="140dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -92,14 +98,12 @@
                     android:layout_marginEnd="@dimen/dp48"
                     android:layout_marginTop="@dimen/dp32"
                     >
-                    <TextView
+                    <ImageView
                         android:id="@+id/plusTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="22dp"
-                        android:text="+"
-                        style="@style/h2"
-                        android:textColor="@color/white"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_plus"
+                        android:layout_marginStart="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -109,44 +113,42 @@
                         android:layout_height="wrap_content"
                         android:text="워크북 만들기"
                         style="@style/h5"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="20dp"
                         android:textColor="@color/white"
                         app:layout_constraintStart_toEndOf="@+id/plusTv"
-                        app:layout_constraintTop_toTopOf="@+id/plusTv"
-                        app:layout_constraintBottom_toBottomOf="@+id/plusTv"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            </LinearLayout>
 
 
-                <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
-                    android:id="@+id/topBorder"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp32"
-                    app:layout_constraintTop_toBottomOf="@+id/totalLabel"/>
+            <View
+                style="@style/Border_Grey_e8e8e8_Horizontal"
+                android:id="@+id/topBorder"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp32"/>
 
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/workbookWrapperCl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
                     android:id="@+id/filterView"
                     android:layout_width="@dimen/learning_wrongNote_filter_width"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:clipToPadding="false"
                     android:paddingStart="@dimen/dp64"
                     android:paddingEnd="@dimen/dp32"
                     android:paddingBottom="@dimen/dp24"
+                    app:type="workbook"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/topBorder" />
-                <View
-                    android:id="@+id/dummyBottomView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="@{ vm.showDummyBottomView ? View.VISIBLE : View.GONE }"
-                    app:layout_constraintTop_toBottomOf="@id/filterView"
-                    app:layout_constraintStart_toStartOf="@id/filterView"
-
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     />
                 <View
                     style="@style/Border_Grey_e8e8e8_Vertical"
@@ -159,31 +161,18 @@
                 <com.freewheelin.pulley.views.GridRecyclerView
                     android:id="@+id/totalRv"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="1dp"
                     android:padding="@dimen/dp32"
                     android:clipToPadding="false"
                     android:visibility="@{ vm.showRecyclerView ? View.VISIBLE : View.INVISIBLE }"
-                    app:layout_constraintTop_toBottomOf="@+id/topBorder"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/filterView"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_bias="0">
 
                 </com.freewheelin.pulley.views.GridRecyclerView>
-
-                <FrameLayout
-                    android:id="@+id/totalPlanCover"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="1dp"
-                    android:clickable="true"
-                    android:visibility="@{ vm.showTotalPlanCover ? View.VISIBLE : View.GONE }"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </FrameLayout>
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/totalLoadingView"
@@ -203,10 +192,10 @@
                     android:visibility="@{ vm.showEmptyContainer ? View.VISIBLE : View.GONE }"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@+id/totalRv"
-                    app:layout_constraintStart_toStartOf="@+id/totalRv"
-                    app:layout_constraintEnd_toEndOf="@+id/totalRv"
-                    app:layout_constraintBottom_toBottomOf="@+id/totalRv">
+                    app:layout_constraintTop_toTopOf="@+id/filterView"
+                    app:layout_constraintStart_toEndOf="@+id/filterView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/filterView">
 
                     <ImageView
                         android:id="@+id/emptyIv"
@@ -235,10 +224,21 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-        </ScrollView>
+        <FrameLayout
+            android:id="@+id/totalPlanCover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dp"
+            android:clickable="true"
+            android:visibility="@{ vm.showTotalPlanCover ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

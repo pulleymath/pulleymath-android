@@ -19,6 +19,7 @@ import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
 import com.freewheelin.pulley.dialogs.EmailInputDialog
+import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
@@ -64,7 +65,13 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 finish()
             }
             createWorkbookCl.setOnClickListener {
-                CustomizeBookDialog(this@WorkbookListActivity, this@WorkbookListActivity).show()
+                if (user!!.hasPulleyPlus) {
+                    CustomizeBookDialog(this@WorkbookListActivity, this@WorkbookListActivity).show()
+                } else {
+                    DialogUtils.confirmHasPulleyPlus(this@WorkbookListActivity) {
+                        PulleyPlusPriceDialog(this@WorkbookListActivity).show()
+                    }
+                }
             }
         }
         viewModel.apply {
@@ -92,7 +99,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                         showEmptyContainer.postValue(false)
                     }
 
-                    showDummyBottomView.postValue(it.size < 4)
+                    showDummyBottomView.postValue(it.size < 7)
                     showTotalLoadingView.postValue(false)
                     playTotalLoadingView.postValue(false)
                     showTotalPlanCover.postValue(false)
@@ -129,6 +136,12 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
             filterView.listener = this@WorkbookListActivity
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        fetchCustomBook()
+    }
+
 
     private fun initFilterView() {
         binding.apply {
@@ -184,7 +197,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     }
 
 
-    override fun onReviewBtnClikced(holder: PlanHolder, book: Book) {
+    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
         val itemValue = "전체문제집"
         LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
         val intent = SolveActivity.getReviewIntent(this, book)

@@ -43,11 +43,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <Space
+                    android:id="@+id/ch_spaceDialogButtonMargin"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp" />
+
                 <LinearLayout
                     android:id="@+id/ch_layoutDialogButtonFrame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:divider="@drawable/ch_divider_8dp"
                     android:orientation="horizontal"
                     android:showDividers="middle" />

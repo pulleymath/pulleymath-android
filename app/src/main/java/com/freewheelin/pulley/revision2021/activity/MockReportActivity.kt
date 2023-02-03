@@ -67,7 +67,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
     }
     private fun init() {
-        mockExam = intent.getSerializableExtra(MockExamManager.ARG_MOCK_EXAM) as MockExam
+        mockExam = getSerializable(this@MockReportActivity, MockExamManager.ARG_MOCK_EXAM, MockExam::class.java)
 
         MockExamManager.getMockExamReport(this, mockExam, user!!,
             successCB = {
@@ -98,7 +98,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
     private fun showSuccessToastIfNeed() {
         CoroutineScope(Dispatchers.Main).launch {
-            val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
+            val scoredInfo = getSerializable(this@MockReportActivity, MockExamManager.ARG_SCORED_INFO, ScoredStudentGoalInfo::class.java)
             delay(2000)
 
             if (scoredInfo?.isNeedToShowCompletedToast() == true) {
