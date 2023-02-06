@@ -93,11 +93,8 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if(isStartWithInitTest) {
-            initUI()
-            syncTestList()
-            wasInitUI = true
-        }
+        initUI()
+        syncTestList()
     }
 
     override fun onDestroy() {
@@ -161,7 +158,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        syncTestList()
+//        syncTestList()
     }
 
     override fun onMoveBtnClikced(test: Test) {
