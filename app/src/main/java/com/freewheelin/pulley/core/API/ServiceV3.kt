@@ -1,9 +1,10 @@
 package com.freewheelin.pulley.core.API
 
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
-import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.*
+import com.freewheelin.pulley.model.MockExamAnalysis
+import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -52,17 +53,4 @@ interface  ServiceV3 {
     @POST("/test/report")
     fun getTestReport(@Body param: Parameter): Call<Template<Test>>
 
-//    @GET("v3/books/all")
-//    fun getBooksNew(@Query("filter") filter: String,
-//                    @Query("order") order: String,
-//                    @Query("category") category: String): Call<List<Book>>
-
-    @GET("books/{studentID}/plans")
-    fun getMyBookList(@Path("studentID") studentID: String): Call<ResponseBody<MyBookList>>
-
-    @GET("daily-summary/{studentID}/pieces/all")
-    fun getStudyList(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
-
-    @GET("daily-summary/{studentID}/pieces")
-    fun getDailyPiece(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
 }

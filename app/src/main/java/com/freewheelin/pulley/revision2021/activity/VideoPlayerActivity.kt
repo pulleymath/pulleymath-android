@@ -57,7 +57,8 @@ class VideoPlayerActivity : AppCompatActivity() {
     }
 
     private fun makeMediaLog() {
-        val solution = getSerializable(this@VideoPlayerActivity, SOLUTION, AffiliatedSolution::class.java)
+//        val solution = getSerializable(this@VideoPlayerActivity, SOLUTION, AffiliatedSolution::class.java)
+        val solution = intent.getSerializableExtra(SOLUTION) as? AffiliatedSolution ?: return
         viewModel.let {
             it.currentMedia = solution
             it.makeMediaLog()

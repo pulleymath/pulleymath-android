@@ -27,7 +27,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.views.TooltipWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.squareup.picasso.Callback
@@ -169,39 +168,12 @@ fun View.hide(duration:Long = 500, cb:(() -> Unit)? = null) {
     })
     startAnimation(anim)
 }
-fun View.hideToGone(duration:Long = 500, cb:(() -> Unit)? = null) {
-    if(this.visibility == View.GONE)
-        return
-
-    val anim = AlphaAnimation(1f, 0f)
-    anim.duration = duration
-    anim.setAnimationListener(object: Animation.AnimationListener{
-        override fun onAnimationRepeat(p0: Animation?) {
-        }
-
-        override fun onAnimationEnd(p0: Animation?) {
-            visibility = View.GONE
-            if(cb == null) return else cb()
-        }
-
-        override fun onAnimationStart(p0: Animation?) {
-        }
-    })
-    startAnimation(anim)
-}
 
 fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
     if(visibility == View.INVISIBLE || visibility == View.GONE)
         return
     else
         hide(duration, cb)
-}
-
-fun View.hideGoneIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
-    if(visibility == View.INVISIBLE || visibility == View.GONE)
-        return
-    else
-        hideToGone (duration, cb)
 }
 
 fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
@@ -213,28 +185,6 @@ fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
             DialogUtils.confirmHasPulleyPlus(context) {
                 PulleyPlusPriceDialog(context).show()
             }
-        }
-    }
-}
-fun View.setOnBasicCAndAboveClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeAndAbove(PaidServiceType.BASIC_C, cb, deniedCb)
-}
-fun View.setOnBasicPAndAboveClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeAndAbove(PaidServiceType.BASIC_P, cb, deniedCb)
-}
-fun View.setOnStandardAndAboveClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeAndAbove(PaidServiceType.STANDARD, cb, deniedCb)
-}
-fun View.setOnPremiumClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeAndAbove(PaidServiceType.PREMIUM, cb, deniedCb)
-}
-fun View.setOnClickListenerByServiceTypeAndAbove(criterionServiceType: PaidServiceType, cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    this.setOnClickListener {
-        val serviceTypeValue = user?.serviceType?.rawValue ?: 0
-        if(serviceTypeValue >= criterionServiceType.rawValue) {
-            cb(it)
-        } else {
-            deniedCb(it)
         }
     }
 }
@@ -614,12 +564,12 @@ fun ImageView.setCookingImageURL(url: String) {
 }
 fun View.setMarginTop(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        topMargin = dp.toPx()
+        setMarginTop(dp.toPx())
     }
 }
 fun View.setMarginBottom(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        bottomMargin = dp.toPx()
+        setMarginBottom(dp.toPx())
     }
 }
 fun View.setMarginStart(dp: Int) {

@@ -6,16 +6,13 @@ import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.utils.APHelper
 import com.freewheelin.pulley.utils.Preferences
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
 import com.zoyi.channel.plugin.android.global.PrefSupervisor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 object Network {
@@ -161,29 +158,6 @@ object Network {
             addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             addConverterFactory(GsonConverterFactory.create())
 
-            // Enum파싱 관련해서 추가했는데 추가하니까 잘 동작해서 한번 빼고 해봤는데 동작해서 주석처리했다 (?)
-//            addConverterFactory(EnumConverterFactory())
-
         }.build()
     }
-}
-class EnumConverterFactory : Converter.Factory() {
-
-    override fun stringConverter(
-        type: Type,
-        annotations: Array<Annotation>,
-        retrofit: Retrofit
-    ): Converter<Enum<*>, String>? =
-        if (type is Class<*> && type.isEnum) {
-            Converter { enum ->
-                try {
-                    enum.javaClass.getField(enum.name)
-                        .getAnnotation(SerializedName::class.java)?.value
-                } catch (exception: Exception) {
-                    null
-                } ?: enum.toString()
-            }
-        } else {
-            null
-        }
 }

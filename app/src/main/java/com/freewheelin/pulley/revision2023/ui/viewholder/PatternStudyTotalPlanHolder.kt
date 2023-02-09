@@ -11,6 +11,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanHolder
 import com.freewheelin.pulley.databinding.ItemBookTotalPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.ClientBookType
+import com.freewheelin.pulley.utils.scrollToView
 
 class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanHolder(binding.root) {
 
@@ -28,7 +29,6 @@ class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanH
             problemCntTv.text = book.totalNumber.toString() + "문제"
             correctRateTv.text = "${book.score}%"
 
-            // TODO 도장이미지뷰
             if (book.markedNumber == 0) {
                 solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
             } else {

@@ -231,18 +231,18 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     fun getMyPlanList(cb: () -> Unit) {
         binding.apply {
             // Did
-            BookManager.getMyBookList(user!!) {
+            BookManager.getMyBookList(requireContext(), user!!) {
                 myBooks = it
 
-                myPlanCntTv.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
-                pinCntTv.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
+                myPlanCntTv?.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
+                pinCntTv?.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
                 if (it == null || it.myPieceStorageList.size == 0) {
-                    myBookEmptyContainer.visibility = View.VISIBLE
-                    myPlanRv.visibility = View.INVISIBLE
+                    myBookEmptyContainer?.visibility = View.VISIBLE
+                    myPlanRv?.visibility = View.INVISIBLE
                 } else {
-                    myBookEmptyContainer.visibility = View.INVISIBLE
-                    myPlanRv.visibility = View.VISIBLE
-                    myPlanRv.adapter?.notifyDataSetChanged()
+                    myBookEmptyContainer?.visibility = View.INVISIBLE
+                    myPlanRv?.visibility = View.VISIBLE
+                    myPlanRv?.adapter?.notifyDataSetChanged()
                 }
 
                 cb()
@@ -274,7 +274,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         //did
         BookManager.getRecommendBookList(requireContext(), user!!) {
             if (it != null) {
-                for (i in it.indices) {
+                for (i in 0 until it.size) {
                     val recommend = it[i]
                     val title = recommend.title
                     val bookList = recommend.targetBookPlanList
@@ -376,7 +376,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             books[index] = book
         }
 
-        if(binding.filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.isPinned == true) {
+        if(binding.filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.pin == true) {
             books?.remove(book)
         }
 
@@ -458,7 +458,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 dialog.show()
             }
             ActionType.pin -> {
-                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
+                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
                 val itemValue = if(holder is MyPlanHolder) "나의플랜" else if(holder is RecommendPlanHolder) "추천플랜" else "전체플랜"
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
                 //did

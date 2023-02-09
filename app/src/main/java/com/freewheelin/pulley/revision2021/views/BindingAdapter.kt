@@ -22,8 +22,6 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.ui.view.MainUserStatusChip
 import com.freewheelin.pulley.utils.*
 
 object BindingAdapter {
@@ -100,14 +98,6 @@ object BindingAdapter {
             .load(url)
             .apply(RequestOptions().centerCrop())
             .into(v)
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_img_url_")
-    fun setImageUrl_(v: ImageView, url: String?) {
-        url?.let {
-            v.setImageURL(it)
-        }
     }
 
     @JvmStatic
@@ -261,16 +251,6 @@ object BindingAdapter {
         imageUrl?.let {
             view.setCookingImageURL(it)
         }
-    }
-    @JvmStatic
-    @BindingAdapter("visibleIf")
-    fun visibleIf(view: View, show: Boolean?) {
-        view.visibility = if (show == true) View.VISIBLE else View.GONE
-    }
-    @JvmStatic
-    @BindingAdapter("setUserServiceType")
-    fun makeUserStatusChip(view: MainUserStatusChip, type: PaidServiceType?) {
-        view.type = type
     }
 
 }

@@ -44,7 +44,8 @@ class WrongTestReportActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initUI()
-        test = getSerializable(this@WrongTestReportActivity, TestManager.ARG_TEST, Test::class.java)
+//        test = getSerializable(this@WrongTestReportActivity, TestManager.ARG_TEST, Test::class.java)
+        test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
     }
 

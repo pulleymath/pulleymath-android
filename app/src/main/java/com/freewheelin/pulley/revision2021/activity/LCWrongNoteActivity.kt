@@ -67,8 +67,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
         val noteCardListStr = intent.getStringExtra(NOTE_CARD_LIST) ?: ""
         val listType = object: TypeToken<List<LCWrongNoteMapCard>>(){}.type
         val noteCardList: List<LCWrongNoteMapCard> = Gson().fromJson(noteCardListStr, listType)
-
         val noteCardItem = getSerializable(this@LCWrongNoteActivity, NOTE_CARD_ITEM, LCWrongNoteMapCard::class.java)
+//        val noteCardList: ArrayList<LCWrongNoteMapCard> = intent.getSerializableExtra(NOTE_CARD_LIST) as ArrayList<LCWrongNoteMapCard>
+//        val noteCardItem = intent.getSerializableExtra(NOTE_CARD_ITEM) as LCWrongNoteMapCard
+
         val chapterId = intent.getIntExtra(CURR_CHAPTER, -1)
         val title = intent.getStringExtra(HEADER_TITLE) ?: ""
         ConceptLearningUsageMonitor.startConceptLearningUsage()
@@ -360,6 +362,8 @@ class LCWrongNoteActivity : AppCompatActivity() {
                     false
                 )
             )
+
+
         }
 
         override fun onBindViewHolder(holder: WrongNoteSelectorViewHolder, position: Int) {

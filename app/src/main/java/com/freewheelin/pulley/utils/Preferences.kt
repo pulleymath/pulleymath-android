@@ -57,7 +57,6 @@ object Preferences {
 
     var isConceptLearningTutorialPassed = APPreference(false)
     var floatingAnswerSheetLastLocation = APPreference("")
-    var startChallengeAlreadyAppearedFlog = APPreference(false)
 }
 
 

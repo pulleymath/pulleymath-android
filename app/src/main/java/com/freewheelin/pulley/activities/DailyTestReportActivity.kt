@@ -50,7 +50,8 @@ class DailyTestReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val test = getSerializable(this@DailyTestReportActivity, TestManager.ARG_TEST, Test::class.java)
+//        val test = getSerializable(this@DailyTestReportActivity, TestManager.ARG_TEST, Test::class.java)
+        val test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
         isFromSolve = intent.getBooleanExtra("FROM_SOLVE", false)
         initUI(test.scoringTestPieceCount - 1)
 

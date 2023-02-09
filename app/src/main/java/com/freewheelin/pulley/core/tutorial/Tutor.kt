@@ -86,9 +86,7 @@ class Tutor {
             if(tooltipType == TooltipType.recommendPlan)
                 window.offset = 100
 
-            if (dimView != null) {
-                window.show(tooltipType, dimView)
-            }
+            window.show(tooltipType, dimView)
         }
     }
 }

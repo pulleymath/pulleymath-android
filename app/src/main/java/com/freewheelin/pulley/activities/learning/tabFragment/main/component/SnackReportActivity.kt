@@ -46,7 +46,9 @@ class SnackReportActivity : AppCompatActivity(), ReportDesignListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val type = getSerializable(this@SnackReportActivity, UserManager.ARG_DESSERT_TYPE, DessertType::class.java)
+//        val type = getSerializable(this@SnackReportActivity, UserManager.ARG_DESSERT_TYPE, DessertType::class.java)
+        val type = intent.getSerializableExtra(UserManager.ARG_DESSERT_TYPE) as DessertType
+
         val designFactory = ReportDesignFactory.createReportDesignFactory(type, this)
         setUpUI(designFactory)
 

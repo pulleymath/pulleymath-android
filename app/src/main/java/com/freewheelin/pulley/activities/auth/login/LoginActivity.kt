@@ -238,11 +238,8 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
         when(response.code()) {
             200 -> {
-                if(MyApplication.user == null) {
-                    MyApplication.user = user
-                } else {
-                    MyApplication.user!!.update(user)
-                }
+                if(MyApplication.user == null) MyApplication.user = user
+                else MyApplication.user!!.update(user)
 
                 Log.d("로그인", "after login : user=$user")
 

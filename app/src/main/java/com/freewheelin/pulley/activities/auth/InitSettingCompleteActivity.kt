@@ -31,20 +31,18 @@ class InitSettingCompleteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.startBtn.setOnClickListener {
-            moveToMain()
-
-//            if (isTablet) {
-//                moveToLearningCourseTutorial()
-//            } else {
-//                moveToMain()
-//            }
+            if (isTablet) {
+                moveToLearningCourseTutorial()
+            } else {
+                moveToMain()
+            }
         }
         binding.guideTv.text = "회원가입이 완료되었습니다!\n이제 풀리수학과 공부를 시작해볼까요?"
                 .partialFontAndColored( Theme.extraBold(this), ContextCompat.getColor(this, R.color.purple_6D6DFF), "풀리수학")
     }
 
     private fun moveToLearningCourseTutorial() {
-//        MyApplication.firstLaunchGoConceptFlag = false
+        MyApplication.firstLaunchGoConceptFlag = false
         LCTutorialActivity.getIntent(this).let {
             startActivity(it)
             finishAffinity()
@@ -52,7 +50,7 @@ class InitSettingCompleteActivity : AppCompatActivity() {
     }
 
     fun moveToMain() {
-//        MyApplication.firstLaunchGoConceptFlag = false
+        MyApplication.firstLaunchGoConceptFlag = false
         val intent = LearningTabActivity.getIntent(this, true, true)
         startActivity(intent)
         finishAffinity()

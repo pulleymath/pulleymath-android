@@ -51,7 +51,6 @@ import java.lang.Math.PI
 import java.util.*
 import kotlin.math.sin
 
-//230209 안쓰는거같음
 class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPlanTemplateInteface, UnitPlanAddDialogListener, EmailInputDialogListener {
 
     override var screenName = "유형학습"
@@ -91,8 +90,8 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
 
         scoreReceiver = object: BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val book = getSerializable(requireActivity(), ARG_BOOK, Book::class.java)
-
+//                val book = getSerializable(requireActivity(), ARG_BOOK, Book::class.java)
+                val book = intent.getSerializableExtra(ARG_BOOK) as Book
                 books?.filter { it.pieceID == book.pieceID }?.forEach {
                     it.markingState = book.markingState
                     it.markedNumber = book.markedNumber
@@ -160,7 +159,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
             viewTypeSpinner.listener = this@UnitStudyFragment
             configureUI()
 
-            BookManager.getMyBookList(user!!) {
+            BookManager.getMyBookList(requireContext(), user!!) {
 //            this.books = ArrayList(it)
 //            this.filteredBooks = it
 //            configureUI()

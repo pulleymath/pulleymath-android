@@ -18,7 +18,6 @@ import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityLcTutorialBinding
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel
 import com.freewheelin.pulley.utils.*
 
@@ -27,13 +26,13 @@ class LCTutorialActivity : AppCompatActivity() {
         val FROM_MAIN_ACTIVITY = "FROM_MAIN"
         fun getIntent(context: Context, isFromMainActivity: Boolean = false): Intent {
             return Intent(context, LCTutorialActivity::class.java).apply {
-//                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
+                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
             }
         }
         fun getIntentAddFlags(context: Context, isFromMainActivity: Boolean = false): Intent {
             return Intent(context, LCTutorialActivity::class.java).apply {
-//                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
-//                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
     }
@@ -75,7 +74,7 @@ class LCTutorialActivity : AppCompatActivity() {
             viewModel.sequence.observe(this@LCTutorialActivity) { seq ->
 
                 if (viewModel.isSeqOver(seq)) {
-                    goToMainActivity(true)
+                    goToMainActivity()
                     return@observe
                 }
                 LogUtils.logEvent(this@LCTutorialActivity,
@@ -125,12 +124,20 @@ class LCTutorialActivity : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
     }
-    private fun goToMainActivity(isEnded: Boolean = false) {
+    private fun goToMainActivity() {
 
-        if (isEnded) {
-            setResult(ConceptCourseFragment.CHALLENGE_TUTORIAL_FINISH, intent)
+        val isFromMain = intent.getBooleanExtra(FROM_MAIN_ACTIVITY, false)
+        if (isFromMain) {
+            finish()
+        } else {
+            MyApplication.firstLaunchGoConceptFlag = false
+            val intent = LearningTabActivity.getIntent(this,
+                isFromTutorial = true
+            )
+            startActivity(intent)
+            finishAffinity()
+
         }
-        finish()
     }
 
     fun nextEvent() {

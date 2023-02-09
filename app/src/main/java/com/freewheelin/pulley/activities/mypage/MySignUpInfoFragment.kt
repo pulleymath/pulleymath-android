@@ -127,23 +127,23 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         (activity as LearningTabActivity).moveTo(fragment)
     }
 
-//    private fun getDurationText(user: User): String {
-//        if(user.startDate == null || user.endDate == null) {
-//            Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
-//                    "studentID: ${user.studentID}, " +
-//                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
-//                    "startDate: ${user.startDate}, " +
-//                    "endDate: ${user.endDate}")
-//            return ""
-//        } else {
-//            val now = Date()
-//            val startDate: Date = if(now > user.startDate) now else user.startDate!!
-//            val endDate = user.endDate!!
-//
-//            DateTimeUtils.yyyyMMddFormat?.run {
-//                return if (startDate < endDate) "${format(user.startDate)} - ${format(user.endDate)}"
-//                else "${format(user.startDate)} - ${format(user.endDate)}"
-//            }
-//        }
-//    }
+    private fun getDurationText(user: User): String {
+        if(user.startDate == null || user.endDate == null) {
+            Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
+                    "studentID: ${user.studentID}, " +
+                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
+                    "startDate: ${user.startDate}, " +
+                    "endDate: ${user.endDate}")
+            return ""
+        } else {
+            val now = Date()
+            val startDate: Date = if(now > user.startDate) now else user.startDate!!
+            val endDate = user.endDate!!
+
+            DateTimeUtils.yyyyMMddFormat?.run {
+                return if (startDate < endDate) "${format(user.startDate)} - ${format(user.endDate)}"
+                else "${format(user.startDate)} - ${format(user.endDate)}"
+            }
+        }
+    }
 }

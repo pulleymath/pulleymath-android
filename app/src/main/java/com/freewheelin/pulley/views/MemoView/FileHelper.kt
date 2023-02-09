@@ -77,19 +77,20 @@ public class FileHelper {
 
         override fun run() {
             try {
+                var fis: FileInputStream? = null
 
                 val file = mContext.getFileStreamPath(fileName)
-                if (!file.exists()) {
+                if (file.exists() == false) {
                     mListener?.onStateExtractionError()
                     return
                 }
 
-                val fis: FileInputStream? = mContext.openFileInput(fileName)
+                fis = mContext.openFileInput(fileName)
                 val `is` = ObjectInputStream(fis)
 
                 val state = `is`.readObject() as FreeDrawSerializableState
 
-                fis?.close()
+                fis!!.close()
                 `is`.close()
 
                 mListener?.onStateExtracted(state)
@@ -108,13 +109,14 @@ public class FileHelper {
             private val fileName: String) : Runnable {
 
         override fun run() {
-            val fos: FileOutputStream? = mContext.openFileOutput(fileName, Context.MODE_PRIVATE)
+            var fos: FileOutputStream? = null
+            fos = mContext.openFileOutput(fileName, Context.MODE_PRIVATE)
             val os = ObjectOutputStream(fos)
             os.writeObject(mState)
             os.flush()
-            fos?.flush()
+            fos!!.flush()
             os.close()
-            fos?.close()
+            fos.close()
 
             mListener?.onStateSaved()
         }

@@ -128,7 +128,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun getExtra() {
         with(viewModel) {
-            selectedWorkbook = getSerializable(this@AffiliatedTestSolveActivity, SELECTED_WORKBOOK, AffiliatedTestWorkbook::class.java)
+//            selectedWorkbook = getSerializable(this@AffiliatedTestSolveActivity, SELECTED_WORKBOOK, AffiliatedTestWorkbook::class.java)
+            selectedWorkbook = intent.getSerializableExtra(SELECTED_WORKBOOK) as? AffiliatedTestWorkbook
+
             isReview.value = intent.getBooleanExtra(IS_REVIEW, false)
 
             selectedWorkbook?.let {

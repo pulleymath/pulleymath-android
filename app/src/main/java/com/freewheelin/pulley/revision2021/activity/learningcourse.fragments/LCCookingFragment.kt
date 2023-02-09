@@ -383,7 +383,7 @@ class LCCookingFragment() : Fragment(),
 
                     it.quizAnswerBtn.text = "정답 입력"
                     it.quizAnswerBtn.setOnClickListener(null)
-                    it.quizAnswerBtn.setOnClickListener { _ ->
+                    it.quizAnswerBtn.setOnClickListener { v ->
                         viewModel.showNumkeyboard.postValue(true)
                         viewModel.selectedShortQuiz.postValue(quiz)
                         viewModel.selectedItemBinding = it
@@ -465,12 +465,8 @@ class LCCookingFragment() : Fragment(),
                     viewModel.focusedQuizList.clear()
                 }
             }
-            viewModel.sendExerciseScoringLog {
-                //TODO 챌린지관련
-                println("asoaso 챌린지 - 개념학습 예제 풀기")
-            }
-            viewModel.showSelection.postValue(false)
 
+            viewModel.showSelection.postValue(false)
         }
     }
     interface CookingSelectionItemClickListener {
@@ -563,10 +559,8 @@ class LCCookingFragment() : Fragment(),
 
             viewModel.scoringCookingQuiz(quiz, answer) { isCorrect ->
                 viewModel.showNumkeyboard.postValue(false)
-                viewModel.sendExerciseScoringLog {
-                    println("asoaso 챌린지 - 개념학습 쿠킹 예제 풀기 ")
-                }
                 viewModel.selectedItemBinding?.apply {
+
                     quizAnswerBtn.text = answer
                     quizAnswerBtn.isEnabled = false
                     quiz.isAnswerEntered.set(true)
