@@ -184,7 +184,7 @@ class DailyScoringHolder(val itemBinding: ItemTestReportDailyScoringBinding): Re
         else
             LogUtils.assert(false, "problem standardCorrectRate is not exist")
 
-        subjectTv.text = problem.getSubject().filterText
+        subjectTv.text = problem.subject
 //        tagLl.removeAllViewsInLayout()
 //
 //        problem.tag.forEach {

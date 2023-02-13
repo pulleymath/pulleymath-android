@@ -117,7 +117,7 @@
                 android:background="@null"
                 android:padding="0dp"
                 android:textSize="@dimen/sp16"
-                android:text="과거순"
+                android:text="오래된순"
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
 
             <View

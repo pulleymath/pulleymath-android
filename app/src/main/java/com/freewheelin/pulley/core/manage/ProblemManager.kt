@@ -1,14 +1,18 @@
 package com.freewheelin.pulley.core.manage
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.core.API_V1
+import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -30,48 +34,42 @@ object ProblemManager {
     const val EVENT_PROBLEM_SCRAP_CHANGED = "EVENT_PROBLEM_SCRAP_CHANGED"
 
 
+    @SuppressLint("CheckResult")
     fun getScrapProblems(context: Context, user: User, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
-        val param: Parameter = Parameter(
-                "endDate" to DateTimeUtils.yyyy_MM_dd.format(to),
-                "startDate" to DateTimeUtils.yyyy_MM_dd.format(from),
-                "noteMode" to "SCRAP",
-                "studentID" to user.studentID
+        val startDate = DateTimeUtils.yyyy_MM_dd.format(from)
+        val endDate = DateTimeUtils.yyyy_MM_dd.format(to)
+        API_V2.getWrongNotes(
+            startDate = startDate,
+            endDate = endDate,
+            mode = "SCRAP"
         )
-
-        API_V1.getWrongNoteProblems(param).enqueue(object: Callback<Template<List<Problem>>> {
-            override fun onFailure(call: Call<Template<List<Problem>>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<Template<List<Problem>>>, response: Response<Template<List<Problem>>>) {
-                if(response.isSuccessful) {
-                    val problems = response.body()?.data ?: listOf()
-                    cb(problems)
-                }
-            }
-
-        })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ res ->
+                res.data?.let { cb(it) }
+            }, {
+                responseFailed(context, it)
+            })
     }
 
+    @SuppressLint("CheckResult")
     fun getWrongProblems(context: Context, user: User, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
-        val param: Parameter = Parameter(
-                "endDate" to DateTimeUtils.yyyy_MM_dd.format(to),
-                "startDate" to DateTimeUtils.yyyy_MM_dd.format(from),
-                "noteMode" to "WRONG",
-                "studentID" to user.studentID
+        val startDate = DateTimeUtils.yyyy_MM_dd.format(from)
+        val endDate = DateTimeUtils.yyyy_MM_dd.format(to)
+        API_V2.getWrongNotes(
+            startDate = startDate,
+            endDate = endDate,
+            mode = "WRONG"
         )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ res ->
+                res.data?.let { cb(it) }
+            }, {
+                println("asoaso wrongproblem fail? ")
+                responseFailed(context, it)
+            })
 
-        API_V1.getWrongNoteProblems(param).enqueue(object: Callback<Template<List<Problem>>> {
-            override fun onFailure(call: Call<Template<List<Problem>>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<Template<List<Problem>>>, response: Response<Template<List<Problem>>>) {
-                val problems = response.body()?.data ?: listOf()
-                cb(problems)
-            }
-
-        })
     }
 
     fun scrap(context: Context, user: User, problem: Problem, isScrap: Boolean, successCB: () -> Unit) {

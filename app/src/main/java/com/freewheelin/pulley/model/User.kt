@@ -450,13 +450,13 @@ class User {
 
     fun getCommonSubjectText() : String {
         val units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
+        val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
         return subjects
     }
 
     fun getOptionalSubjectText() : String {
         val units = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
+        val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
         return subjects
     }
 
@@ -464,7 +464,7 @@ class User {
         var units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val optionalUnits = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val subjects = units.plus(optionalUnits)
-        return subjects.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
+        return subjects.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
     }
 
     fun isExpiredUser(): Boolean {

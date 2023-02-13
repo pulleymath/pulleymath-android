@@ -15,10 +15,12 @@ import com.freewheelin.pulley.utils.NumberUtils
 import com.freewheelin.pulley.utils.responseFailed
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.joda.time.LocalDateTime
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.Serializable
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -63,6 +65,7 @@ open class Problem: Serializable {
     var studyID: Int = 0
     var unitCode: Int = 0
     var subjectCode: Int = 0
+    var subject: String = ""
     var problemNum: Int? = null
     var answerData: String = ""
     var correctTimes: Int = 312000203
@@ -100,9 +103,31 @@ open class Problem: Serializable {
     var parentProblemID: Int? = null
     var rootProblem: Problem? = null
     var similarProblems: ArrayList<Problem> = ArrayList()
-    var updateDateTime: Date? = null
-    var scrapDateTime: Date? = null
-    var clearDateTime: Date? = null
+
+    var solveDateTime: String? = null
+    @Expose @SerializedName("updateDateTime")
+    var rawUpdateDateTime: String? = null
+    val updateDateTime: Date?
+        get() {
+            return if (rawUpdateDateTime == null) null
+            else LocalDateTime.parse(rawUpdateDateTime).toDate()
+        }
+
+    @Expose @SerializedName("scrapDateTime")
+    var rawScrapDateTime: String? = null
+    val scrapDateTime: Date?
+        get() {
+            return if (rawScrapDateTime == null) null
+            else LocalDateTime.parse(rawScrapDateTime).toDate()
+        }
+    @Expose @SerializedName("clearDateTime")
+    var rawClearDateTime: String? = null
+    val clearDateTime: Date?
+        get() {
+            return if (rawClearDateTime == null) null
+            else LocalDateTime.parse(rawClearDateTime).toDate()
+        }
+
     var page: Int? = null
 
     @Expose @SerializedName("clear")
@@ -315,7 +340,7 @@ open class Problem: Serializable {
                     val rootProblem = problemIdDictionary[problem.parentProblemID]
                     problem.rootProblem = rootProblem
                     problem.page = rootProblem?.page
-                    problem.updateDateTime = rootProblem?.updateDateTime
+                    problem.rawUpdateDateTime = rootProblem?.rawUpdateDateTime
                     if(rootProblem?.similarProblems != null)
                         rootProblem.similarProblems.add(problem)
                     else

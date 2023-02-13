@@ -275,4 +275,12 @@ interface  ServiceV2 {
 
     @POST("users/{studentId}/init-setting/default")
     fun defaultInitSetting(@Path("studentId") studentId: String): Single<ResponseBody<Any?>>
+
+    @GET("notes/")
+    fun getWrongNotes(
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String,
+        @Query("noteMode") mode: String,
+    ): Single<Template<List<Problem>>>
+
 }

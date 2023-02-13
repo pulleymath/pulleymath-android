@@ -112,7 +112,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:padding="0dp"
-                android:text="과거순"
+                android:text="오래된순"
                 android:textSize="@dimen/sp16"
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder" />
 

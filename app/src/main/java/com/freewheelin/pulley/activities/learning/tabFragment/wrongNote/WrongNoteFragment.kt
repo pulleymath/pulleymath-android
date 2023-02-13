@@ -63,6 +63,7 @@ import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
 import com.squareup.picasso.Picasso
 import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 import java.util.*
 
 enum class OrderType(val rawValue: Int) {
@@ -696,7 +697,7 @@ class WrongNoteFragment : LearningTabFragment(),
                         val isClear = !dialog.isClear
                         ProblemManager.clear(requireContext(), user!!, dialog.problem, isClear) {
                             dialog.problem.isClear = isClear
-                            dialog.problem.clearDateTime = Date()
+                            dialog.problem.rawClearDateTime = LocalDateTime().toString()
                             dialog.configureUI(dialog.problem)
                             setGroupedProblem(binding.tabLayout.selectedTabPosition, false)
                             val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
@@ -709,7 +710,7 @@ class WrongNoteFragment : LearningTabFragment(),
                         val isScrap = !dialog.isScrap
                         ProblemManager.scrap(requireContext(), user!!, dialog.problem, isScrap) {
                             dialog.problem.isScrap = isScrap
-                            dialog.problem.scrapDateTime = Date()
+                            dialog.problem.rawScrapDateTime = LocalDateTime().toString()
                             dialog.configureUI(dialog.problem)
                             setGroupedProblem(binding.tabLayout.selectedTabPosition, false)
                             val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
