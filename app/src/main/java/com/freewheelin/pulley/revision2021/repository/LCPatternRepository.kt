@@ -16,7 +16,8 @@ class LCPatternRepository(val context: Context, private val applicationScope: Co
     private val patternService: LCPatternService by lazy { LCPatternApi.lcPatternService() }
     private val dao: PatternDao = PatternDatabase.getDatabase(context, applicationScope).patternDao()
 
-    fun patternQuizScoring(patternQuizId: Int, studentId: String, type: String? = "PATTERN_QUIZ", userAnswer: ScoringReq) = patternService.patternQuizScoring(patternQuizId, studentId, type, userAnswer)
+    fun patternQuizScoring(patternQuizId: Int, studentId: String, type: String? = "PATTERN_QUIZ", userAnswer: ScoringReq) =
+        patternService.patternQuizScoring(patternQuizId, studentId, type, userAnswer)
     fun usePatternQuizHint(patternQuizId: Int, studentId: String) = patternService.usePatternQuizHint(patternQuizId, studentId)
     suspend fun fetchPatternInfo(patternId: Int): List<LCPatternQuiz> {
         return patternService.fetchPatternInfo(patternId)

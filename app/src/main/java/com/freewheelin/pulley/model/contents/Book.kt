@@ -48,7 +48,7 @@ enum class ClientBookType {
         }
 }
 
-@Entity(tableName = "plan_book_table")
+//@Entity(tableName = "plan_book_table")
 class Book: Content, BaseDiffItem {
 
     var description: String = ""
@@ -80,10 +80,12 @@ class Book: Content, BaseDiffItem {
 
     val originProblems: List<Problem>
         get() = problems.filter { !it.isSimilarProblem() }
-    var pin: Boolean = false
+    var isPinned: Boolean = false
+
     var backgroundImageUrl: String = ""
     var recommendType = ""
     var clientBookType:ClientBookType = ClientBookType.ALL
+    var isLocked: Boolean = true
 
     constructor()
     constructor(content: Content): super(content)

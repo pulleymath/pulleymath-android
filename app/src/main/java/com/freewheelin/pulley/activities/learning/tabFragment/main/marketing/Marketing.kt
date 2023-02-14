@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.main.marketing
 
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+
 data class Marketing(
     var banners: MutableList<Banner>,
     val marketingCode: Int,
@@ -13,7 +15,7 @@ data class Banner(
         val link: String,
         val startDate: String,
         val endDate: String,
-        val userSegment: List<UserSegment>,
+        val userSegment: List<PaidServiceType>,
         val studentSegment: List<StudentSegment>
 )
 
@@ -22,5 +24,5 @@ enum class StudentSegment {
 }
 
 enum class UserSegment {
-    Paid, Free, All
+    None, Paid_Ing, Basic_C, Basic_P, Standard, Premium, All
 }

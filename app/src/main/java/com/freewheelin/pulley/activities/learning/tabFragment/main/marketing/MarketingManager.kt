@@ -6,6 +6,9 @@ import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.utils.Preferences
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,8 +30,12 @@ object MarketingManager {
 
     fun getInfo(context: Context, mainProfile: MainProfile, callback:(marketing: Marketing?)->Unit) {
 
-        val url = if(BuildConfig.FLAVOR == "beta") URL_BETA else URL
-
+        val url = when (Preferences.onServerAPI.get()) {
+            Network.Server.live.toString() -> URL
+            Network.Server.staging.toString() -> URL_BETA
+            Network.Server.dev.toString() -> URL_BETA
+            else -> URL
+        }
         Log.d("마케팅", "url=$url")
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,20 +73,22 @@ object MarketingManager {
 //    1643026270780 - 1642987740000 = 38530780
     fun filterBanner(mainProfile:MainProfile, marketing:Marketing) {
         val studentSegment = getStudentSegment(user?.grade)
-        val userSegment = if(user?.hasPulleyPlus == true) UserSegment.Paid else UserSegment.Free
+        val userSegment = user?.serviceType!!
         val tz = TimeZone.getTimeZone("Asia/Seoul")
         sdf.timeZone = tz
         val current = sdf.format(System.currentTimeMillis())
-        Log.d("마케팅", "현재시간 $current")
 
         var limit = marketing.banners.size
 
         for(idx in limit-1 downTo 0) {
             val banner = marketing.banners.get(idx)
             val studentCheck = banner.studentSegment.contains(studentSegment) || banner.studentSegment.contains(StudentSegment.All)
-            val userCheck = banner.userSegment.contains(userSegment) || banner.userSegment.contains(UserSegment.All)
+            val userCheck = banner.userSegment.contains(userSegment) || banner.userSegment.contains(PaidServiceType.ALL)
             val dateCheck = current <= banner.endDate && current >= banner.startDate
-            Log.d("마케팅", "banner.endDate = ${banner.endDate}, banner.startDate = ${banner.startDate}")
+            Log.d("마케팅", "banner.studentSegment = ${banner.studentSegment}")
+            Log.d("마케팅", "banner.userSegment = ${banner.userSegment}, userSegment = ${userSegment}")
+            Log.d("마케팅", "banner.startDate = ${banner.startDate}, 현재시간 = ${current}, banner.endDate = ${banner.endDate}")
+            Log.d("마케팅", "studentCheck : ${studentCheck}, userCheck:${userCheck}, dateCheck: ${dateCheck}, result? : ${!studentCheck || !userCheck || !dateCheck}")
 
             if(!studentCheck || !userCheck || !dateCheck) {
                 marketing.banners.remove(banner)

@@ -18,6 +18,7 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
@@ -45,6 +46,7 @@ import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
+import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import kotlinx.coroutines.*
@@ -64,6 +66,7 @@ class SolveActivity : BaseActivity(),
     private val binding: ActivitySolveBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_solve, null,false)
     }
+    val viewModel: SolveActViewModel by viewModels()
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScreenHeight(this) }
@@ -567,16 +570,22 @@ class SolveActivity : BaseActivity(),
                 onMarkingBtnClicked()
             }
             answerView.submitBtn.setOnClickListener {
-                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
+//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
                 onSubmitBtnClicked()
+                viewModel.sendSubmitLog(content?.pieceID, "유형학습-바로") {
+
+                }
             }
             speedAnswerView.markingBtn.setOnClickListener {
                 LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onMarkingBtnClicked()
             }
             speedAnswerView.submitBtn.setOnClickListener {
-                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
+//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onSubmitBtnClicked()
+                viewModel.sendSubmitLog(content?.pieceID, "유형학습-빠른") {
+
+                }
             }
             pencilcaseView.listener = this@SolveActivity
             problemMemoView.set(pencilcaseView)
@@ -1343,6 +1352,10 @@ class SolveActivity : BaseActivity(),
 
 
         problem.getSimilarProblem(this, user!!, content!!) {
+            viewModel.sendAddSimilarLog(content, selectedProblem) {
+
+            }
+
             if(it == null) {
                 showNotExistSimilarToast()
             } else {

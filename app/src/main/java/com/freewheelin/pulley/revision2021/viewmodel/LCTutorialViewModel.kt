@@ -26,8 +26,8 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     val tutorialImages = listOf(
-        R.drawable.android_concept_learning_tutorial_1,
-        R.drawable.android_concept_learning_tutorial_2,
+//        R.drawable.android_concept_learning_tutorial_1,
+//        R.drawable.android_concept_learning_tutorial_2,
         R.drawable.android_concept_learning_tutorial_3,
         R.drawable.android_concept_learning_tutorial_4,
         R.drawable.android_concept_learning_tutorial_5,
@@ -49,8 +49,8 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     )
 
     val transitionList = listOf(
-        ViewTransition.Instant,
-        ViewTransition.Instant,
+//        ViewTransition.Instant,
+//        ViewTransition.Instant,
         ViewTransition.Instant,
         ViewTransition.SlideFromDown,
         ViewTransition.Instant,
@@ -117,7 +117,7 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
         val userAnswer = ScoringReq("3")
         val patternQuizId = 690
         val studentId = user?.studentID ?: return
-        compositeDisposable +=patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
+        compositeDisposable += patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->

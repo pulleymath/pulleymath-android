@@ -13,13 +13,17 @@ import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
+import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
 class PatternQuizViewModel(application: Application): BaseAndroidViewModel(application) {
+    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     var currQuizIndex = -1
@@ -118,6 +122,7 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
                     Log.d(javaClass.simpleName, "quizScoring =>${response.data}")
                     response.data?.let {
                         quiz.isCorrect = it.isCorrect
+                        quiz.isFirstTry = true
                         patternQuiz.postValue(quiz)
                         CoroutineScope(Dispatchers.Main).launch {
                             callback(it)
@@ -138,6 +143,22 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
         currentAnswerOfSingle.postValue(ans)
     }
 
+    fun sendQuizScoringLog(callback: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val logResponse = postLog()
+            if (logResponse.isChallengeCourse.not()) return@launch
+            callback()
+        }
+    }
 
+    suspend fun postLog(): V2LogUserResponse {
+        return legacyV2Repository.postLog(
+            event = PulleyEvent.BUTTON_CLICK,
+            itemCategory = "문제풀이",
+            itemName = "채점",
+            itemValue = null,
+            itemNote = "개념학습-유형",
+        )
+    }
 
 }

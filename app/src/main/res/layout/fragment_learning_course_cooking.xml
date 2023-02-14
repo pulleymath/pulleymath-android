@@ -80,6 +80,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/stepTv"/>
 <!--                    cookingImgResOnPicassoDownScale="@{ vm.cookingImageUrl }"-->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        app:layout_constraintTop_toBottomOf="@+id/exerciseIv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
@@ -95,7 +101,6 @@
 
         </com.freewheelin.pulley.revision2021.views.LCCookingLeftScrollView>
 
-<!--        <com.freewheelin.pulley.revision2021.views.DisallowTouchEventRecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rightRv"
             android:layout_width="0dp"

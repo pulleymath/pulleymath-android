@@ -68,7 +68,7 @@ class DateTimeUtils {
         val YYMMdd: SimpleDateFormat
             get() {
                 if(_YYMMdd == null)
-                    _YYMMdd = SimpleDateFormat("YYMMdd")
+                    _YYMMdd = SimpleDateFormat("yyMMdd")
                 return _YYMMdd!!
             }
 
@@ -78,6 +78,9 @@ class DateTimeUtils {
 
         val yyyyMMdd: SimpleDateFormat by lazy {
             SimpleDateFormat("yyyyMMdd")
+        }
+        val yy_MM_dd: SimpleDateFormat by lazy {
+            SimpleDateFormat("yy.MM.dd")
         }
 
         fun getDate(date: Date? = Date(), dateUnit: DateUnit, diff: Int): Date {

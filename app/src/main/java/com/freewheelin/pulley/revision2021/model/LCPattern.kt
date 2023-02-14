@@ -28,7 +28,7 @@ data class LCPatternQuiz(
     val solutionImageUrl: String,
     val answer: String,
     var isCorrect: Boolean?,
-    var isFirstTry: Boolean = true,
+    var isFirstTry: Boolean?,
     val userAnswer: String?,
     val correctAnswerRate: Float,
     val hintUsageCount: Int,

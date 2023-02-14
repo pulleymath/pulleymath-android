@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -64,8 +61,8 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
         hideSystemUI()
+        setContentView(binding.root)
 
         val noteCardListStr = intent.getStringExtra(NOTE_CARD_LIST) ?: ""
         val listType = object: TypeToken<List<LCWrongNoteMapCard>>(){}.type
@@ -326,14 +323,18 @@ class LCWrongNoteActivity : AppCompatActivity() {
         binding.pencilcaseView.redoCount = count
     }
     private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT < 16) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-            actionBar?.hide()
-        }
+//        if (Build.VERSION.SDK_INT < 16) {
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        } else {
+//            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+//            actionBar?.hide()
+//        }
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
     inner class WrongNotePagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -359,8 +360,6 @@ class LCWrongNoteActivity : AppCompatActivity() {
                     false
                 )
             )
-
-
         }
 
         override fun onBindViewHolder(holder: WrongNoteSelectorViewHolder, position: Int) {

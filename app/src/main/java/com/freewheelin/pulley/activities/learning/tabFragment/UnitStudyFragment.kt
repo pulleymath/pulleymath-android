@@ -51,6 +51,7 @@ import java.lang.Math.PI
 import java.util.*
 import kotlin.math.sin
 
+//230209 안쓰는거같음
 class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPlanTemplateInteface, UnitPlanAddDialogListener, EmailInputDialogListener {
 
     override var screenName = "유형학습"
@@ -159,7 +160,7 @@ class UnitStudyFragment : LearningTabFragment(), ArduousSpinnerListener, StudyPl
             viewTypeSpinner.listener = this@UnitStudyFragment
             configureUI()
 
-            BookManager.getMyBookList(requireContext(), user!!) {
+            BookManager.getMyBookList(user!!) {
 //            this.books = ArrayList(it)
 //            this.filteredBooks = it
 //            configureUI()

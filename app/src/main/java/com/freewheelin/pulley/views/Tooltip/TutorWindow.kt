@@ -73,8 +73,10 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
     fun show(type: Tutor.TooltipType, focusedDimView: FocusedDimView?) {
         val toolTipView =  getContentView(type)
 
-        startFloatAnim()
-        show(toolTipView)
+        if (focusedDimView != null) {
+            startFloatAnim()
+            show(toolTipView)
+        }
     }
 
     fun getContentView(type: Tutor.TooltipType): View {

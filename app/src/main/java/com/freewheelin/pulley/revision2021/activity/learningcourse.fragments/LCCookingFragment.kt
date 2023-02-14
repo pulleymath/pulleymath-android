@@ -19,6 +19,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.FacebookSdk.getApplicationContext
@@ -26,10 +27,12 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
+import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
@@ -380,7 +383,7 @@ class LCCookingFragment() : Fragment(),
 
                     it.quizAnswerBtn.text = "정답 입력"
                     it.quizAnswerBtn.setOnClickListener(null)
-                    it.quizAnswerBtn.setOnClickListener { v ->
+                    it.quizAnswerBtn.setOnClickListener { _ ->
                         viewModel.showNumkeyboard.postValue(true)
                         viewModel.selectedShortQuiz.postValue(quiz)
                         viewModel.selectedItemBinding = it
@@ -462,8 +465,12 @@ class LCCookingFragment() : Fragment(),
                     viewModel.focusedQuizList.clear()
                 }
             }
-
+            viewModel.sendExerciseScoringLog {
+                //TODO 챌린지관련
+                println("asoaso 챌린지 - 개념학습 예제 풀기")
+            }
             viewModel.showSelection.postValue(false)
+
         }
     }
     interface CookingSelectionItemClickListener {
@@ -556,8 +563,10 @@ class LCCookingFragment() : Fragment(),
 
             viewModel.scoringCookingQuiz(quiz, answer) { isCorrect ->
                 viewModel.showNumkeyboard.postValue(false)
+                viewModel.sendExerciseScoringLog {
+                    println("asoaso 챌린지 - 개념학습 쿠킹 예제 풀기 ")
+                }
                 viewModel.selectedItemBinding?.apply {
-
                     quizAnswerBtn.text = answer
                     quizAnswerBtn.isEnabled = false
                     quiz.isAnswerEntered.set(true)

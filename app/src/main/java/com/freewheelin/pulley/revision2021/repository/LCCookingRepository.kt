@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.revision2021.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import com.freewheelin.pulley.revision2021.model.LCCookingWrapper
@@ -26,12 +28,16 @@ class LCCookingRepository(val context: Context, private val applicationScope: Co
     fun useHint(exerciseQuizId: Int, studentId: String) = cookingService.useHint(exerciseQuizId, studentId)
     fun scoringCookingQuiz(exerciseQuizId: Int, studentId: String, userAnswer: ScoringReq) = cookingService.scoringCookingQuiz(exerciseQuizId, studentId, userAnswer)
 
+    private val _cookingInfo = MutableLiveData<CookingInfo>()
+    val cookingInfo : LiveData<CookingInfo> = _cookingInfo
+
     fun flowAllCookingInfoItem(conceptCookingId: Int): Flow<List<CookingInfoItem>> {
         return infoItemDao.getAllCookingInfoItem(conceptCookingId)
     }
     suspend fun fetchCookingInfoItems(conceptCookingId: Int): Pair<List<CookingInfoItem>, String> {
         val res = cookingService.fetchCookingInfo(conceptCookingId)
             .data.let {
+                _cookingInfo.postValue(it)
                 val video = listOf(CookingInfoItem.getVideoItem(it))
                 val footer = listOf(CookingInfoItem.getFooter(it))
                 val exerciseList = listOf(CookingInfoItem.getExercise(it)).map { item ->

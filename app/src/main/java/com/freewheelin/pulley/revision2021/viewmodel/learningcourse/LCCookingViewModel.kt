@@ -17,7 +17,10 @@ import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
+import com.freewheelin.pulley.utils.PulleyEvent
 import io.channel.plugin.android.extension.doOnElse
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -35,9 +38,10 @@ import java.util.concurrent.TimeUnit
 
 class LCCookingViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
 
+    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val cookingRepository = LCCookingRepository(getApplication<Application>().applicationContext, viewModelScope)
-    private val _cookingInfo = MutableLiveData<CookingInfo>()
-    val cookingInfo : LiveData<CookingInfo> = _cookingInfo
+//    private val _cookingInfo = MutableLiveData<CookingInfo>()
+    val cookingInfo : LiveData<CookingInfo> = cookingRepository.cookingInfo
 
     private val _cookingInfoItems = MutableLiveData<List<CookingInfoItem>>()
     val cookingInfoItems : LiveData<List<CookingInfoItem>> = _cookingInfoItems
@@ -121,6 +125,24 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
             }, { error ->
                 Log.e(javaClass.simpleName, "scoringCookingQuiz error=${error.localizedMessage}")
             })
+    }
+
+    fun sendExerciseScoringLog(callback: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val logResponse = postLog()
+            if (logResponse.isChallengeCourse.not()) return@launch
+            callback()
+        }
+    }
+
+    suspend fun postLog(): V2LogUserResponse {
+        return legacyV2Repository.postLog(
+            event = PulleyEvent.BUTTON_CLICK,
+            itemCategory = "문제풀이",
+            itemName = "채점",
+            itemValue = null,
+            itemNote = "개념학습-예제",
+        )
     }
 
 }

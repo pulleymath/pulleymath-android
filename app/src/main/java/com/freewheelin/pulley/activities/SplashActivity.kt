@@ -184,6 +184,11 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
 
+        if (isNeedOnboarding) {
+            startActivity(OnboardingActivity::class.java)
+            return
+        }
+
         if(MyApplication.user?.token?.isNotEmpty() == true) {
             MyApplication.user?.syncMyInfo(this) { user ->
 

@@ -354,15 +354,15 @@
             </LinearLayout>
         </ScrollView>
 
-<!--        <com.freewheelin.pulley.revision2023.ui.view.StartChallengePatternStudyGuideView-->
-<!--            android:id="@+id/guideView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:visibility="@{ vm.showGuideView ? View.VISIBLE : View.GONE }"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+        <com.freewheelin.pulley.revision2023.ui.view.StartChallengePatternStudyGuideView
+            android:id="@+id/guideView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{ vm.showGuideView ? View.VISIBLE : View.GONE }"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

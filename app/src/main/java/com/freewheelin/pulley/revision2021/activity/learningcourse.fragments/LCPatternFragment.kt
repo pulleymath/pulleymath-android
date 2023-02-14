@@ -17,6 +17,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCPatternVie
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentLearningCoursePatternBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeListOnce
@@ -43,6 +44,20 @@ class LCPatternFragment : Fragment() {
     private var tabFragments: MutableList<Fragment> = mutableListOf()
     val viewModel: LCPatternViewModel by viewModels()
 
+    fun updateChildPatternQuiz(quiz: LCPatternQuiz, childIndex: Int) {
+        when (childIndex) {
+            0 -> return
+            1 -> viewModel.patternQuiz1.postValue(quiz)
+            2 -> viewModel.patternQuiz2.postValue(quiz)
+            3 -> viewModel.patternQuiz3.postValue(quiz)
+        }
+        binding.apply {
+            val child = childFragmentManager.fragments.find { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(childIndex)) }
+            (child as PatternQuizFragment?)?.run {
+                updateQuiz(quiz)
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,10 +76,8 @@ class LCPatternFragment : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel.setPatternName(course)
                 viewModel.patternQuizList.observe(viewLifecycleOwner) {
-                    if (it.size == 4) {
-                        viewModel.patternQuiz1.postValue(it[1])
-                        viewModel.patternQuiz2.postValue(it[2])
-                        viewModel.patternQuiz3.postValue(it[3])
+                    it.forEachIndexed { index, quiz ->
+                        updateChildPatternQuiz(quiz, index)
                     }
                 }
                 viewModel.selectedQuizIndex.observe(viewLifecycleOwner) { index ->
@@ -164,6 +177,16 @@ class LCPatternFragment : Fragment() {
                     (activity as LearningCourseActivity).hidePencilcasePanel()
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        arguments?.let { it ->
+            val course = it.getSerializable(COURSE_DESC) as SingleCourseDesc
+            val courseId = course.learningCourseDetailId
+
+            viewModel.fetchPatternInfo(courseId)
         }
     }
 

@@ -9,6 +9,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.dialogs.WrongManagementDialog
 import com.freewheelin.pulley.model.*
@@ -75,13 +76,13 @@ object BookManager {
         })
     }
 
-    fun getMyBookList(context: Context, user: User, cb: (list: MyBookList?) -> Unit) {
-        API_V2.getMyBookList(user.studentID).enqueue(object: Callback<MyBookList> {
-            override fun onFailure(call: Call<MyBookList>, t: Throwable) {}
+    fun getMyBookList(user: User, cb: (list: MyBookList?) -> Unit) {
+        API_V3.getMyBookList(user.studentID).enqueue(object: Callback<ResponseBody<MyBookList>> {
+            override fun onFailure(call: Call<ResponseBody<MyBookList>>, t: Throwable) {}
 
-            override fun onResponse(call: Call<MyBookList>, response: Response<MyBookList>) {
+            override fun onResponse(call: Call<ResponseBody<MyBookList>>, response: Response<ResponseBody<MyBookList>>) {
                 if(response.isSuccessful)
-                    cb(response.body())
+                    cb(response.body()?.data)
             }
         })
 
@@ -137,20 +138,20 @@ object BookManager {
         })
     }
 
+    // Deprecated
     fun getBooks(context: Context, user: User, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
-        val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
-        // Did
-        API_V2.getBooksNew(user.studentID, filterString, FilterOrder.DEFAULT.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
-            override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
-
-            override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {
-                val books = response.body()
-                if(response.isSuccessful && books != null) {
-                    cb(books, filters)
-                } else { }
-            }
-
-        })
+//        val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
+//        API_V3.getBooksNew(filterString, FilterOrder.DEFAULT.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
+//            override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
+//
+//            override fun onResponse(call: Call<List<Book>>, response: Response<List<Book>>) {
+//                val books = response.body()
+//                if(response.isSuccessful && books != null) {
+//                    cb(books, filters)
+//                } else { }
+//            }
+//
+//        })
     }
 
     fun getBookInfo(context: Context, book: Book, user: User, cb: ((book: Book) -> Unit)) {
@@ -355,14 +356,14 @@ object BookManager {
 
         val id = if(book.assignID == null) book.pieceID else book.assignID!!
         //did
-        API_V2.setPin(user.studentID, id, !book.pin).enqueue(object: Callback<Void>{
+        API_V2.setPin(user.studentID, id, !book.isPinned).enqueue(object: Callback<Void>{
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 responseFailed(context, t)
             }
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response.code() == 200) {
-                    book.pin = !book.pin
+                    book.isPinned = !book.isPinned
                     cb()
                 } else {
                     responseError(context, response)

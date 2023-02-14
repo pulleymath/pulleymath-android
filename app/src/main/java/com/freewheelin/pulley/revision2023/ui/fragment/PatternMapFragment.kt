@@ -66,6 +66,12 @@ class PatternMapFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
+        viewModel.collectAllPatternMaps(chapterId)
+    }
+
     private fun fetch() {
         val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
         viewModel.initAdapterItem(chapterId)

@@ -23,6 +23,7 @@ import com.freewheelin.pulley.revision2021.cookingmemo.PathRedoUndoCountChangeLi
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.lifecycleScope
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
@@ -32,6 +33,7 @@ import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.DatabaseHelper
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
+import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.utils.*
@@ -85,6 +87,9 @@ class PatternQuizFragment() : Fragment(),
         return binding.root
     }
 
+    fun updateQuiz(quiz: LCPatternQuiz) {
+        viewModel.patternQuiz.postValue(quiz)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(PatternQuizViewModel::class.java)
@@ -189,6 +194,10 @@ class PatternQuizFragment() : Fragment(),
                         quizScoring {
                             viewModel.preventScoringBtnDoubleClickFlag = false
                             (parentFragment as LCPatternFragment).scoringPatternQuiz(it)
+                            viewModel.sendQuizScoringLog {
+                                //TODO 챌린지 관련
+                                println("asoaso 챌린지 - 개념학습 - 유형퀴즈 채점완료")
+                            }
                         }
                     }
                 }
@@ -215,10 +224,6 @@ class PatternQuizFragment() : Fragment(),
                 val message = "${courseName}\n\n${radioMsg}\n\n${additinalMsg}"
                 (activity as? LearningCourseActivity)?.let { lcActivity ->
                     lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
-
-//                        val chatId = Preferences.channelTalkCurrChatId.get()
-//                        val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
-//                        val currentStudentId = user?.studentID ?: ""
 
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {

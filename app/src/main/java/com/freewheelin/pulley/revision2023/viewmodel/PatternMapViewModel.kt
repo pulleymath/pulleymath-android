@@ -39,7 +39,7 @@ class PatternMapViewModel(application: Application) : BaseAndroidViewModel(appli
         collectAllPatternMaps(chapterId)
     }
 
-    private fun collectAllPatternMaps(chapterId: Int) {
+    fun collectAllPatternMaps(chapterId: Int) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             val newPatternMaps = fetchAllPatternMaps(chapterId)

@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
     entities = [
         LCPatternQuiz::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(
@@ -40,6 +40,8 @@ abstract class PatternDatabase: RoomDatabase() {
                     "lc_pattern_database"
                 )
                     .addCallback(PatternDatabaseCallback(applicationScope))
+                    .addMigrations()
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

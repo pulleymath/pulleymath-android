@@ -15,6 +15,7 @@ import com.pulleymath.android.pdf.utils.toBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 //import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import java.io.*
 
@@ -128,7 +129,7 @@ public class FileHelper {
                             errorCompletion?.let { it("error") }
                         }
                     } catch (e: java.lang.Exception) {
-                        Log.e(javaClass.simpleName, "${e.localizedMessage}")
+                        Log.e(javaClass.simpleName, "Exception ${e.localizedMessage}")
                     }
                 }
             }
@@ -136,7 +137,9 @@ public class FileHelper {
         fun saveImagedMemo(context: Context, fileName: String, view: View) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    var fileByteArray: ByteArray = view.getImageToByteArray()
+                    var fileByteArray = withContext(Dispatchers.Main) {
+                        view.getImageToByteArray()
+                    }
 
                     val db = DatabaseHelper.get(context)
                     val valueArray = fileName.split("&&")
@@ -173,8 +176,11 @@ public class FileHelper {
 
                 } catch (e:OutOfMemoryError) {
                     showAlert(context, "메모리가 부족해서 필기한 내용을 저장할 수 없습니다. 메모리를 정리하세요.")
+                    e.printStackTrace()
+                    println("OutOfMemoryError e:${e.localizedMessage}")
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
+                    println("Exception e:${e.localizedMessage}")
                 }
             }
         }
