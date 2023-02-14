@@ -114,7 +114,7 @@ enum class BigUnitV3(val subject: SubjectV3, val title: String, val id: Int) {
     방정식과_부등식(SubjectV3.수학_상, "방정식과 부등식", 371),
     도형의_방정식(SubjectV3.수학_상, "도형의 방정식", 369),
 
-    집합과_명제(SubjectV3.수학_하, "집학과 명제", 374),
+    집합과_명제(SubjectV3.수학_하, "집합과 명제", 374),
     함수(SubjectV3.수학_하, "함수", 375),
     순열과_조합(SubjectV3.수학_하, "순열과 조합", 373),
 
