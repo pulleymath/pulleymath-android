@@ -65,12 +65,14 @@
 
     <color name="gray_100">#fafafa</color>
     <color name="gray_150">#f6f6f6</color>
+    <color name="gray_150_opa_30">#4DF6F6F6</color>
     <color name="gray_200">#f2f2f2</color>
     <color name="gray_300">#e8e8e8</color>
     <color name="gray_400">#e0e0e0</color>
     <color name="gray_500">#c0c0c0</color>
     <color name="gray_600">#9f9f9f</color>
     <color name="gray_700">#818181</color>
+    <color name="gray_700_opa_30">#4D818181</color>
     <color name="gray_800">#4c4c4c</color>
 
     <color name="purple_100">#ecebff</color>
@@ -121,9 +123,12 @@
     <color name="purple_gray_200">#ECEBFF</color>
     <color name="purple_gray_300">#BEBEDF</color>
     <color name="purple_gray_400">#A7A7D2</color>
+    <color name="purple_gray_500">#8E8EBD</color>
     <color name="purple_200_opa_50">#D5D5FF</color>
     <color name="purple_250_opa_50">#BEBEFF</color>
     <color name="purple_300_opa_50">#7E7EFF</color>
     <color name="purple_gray_300_opa_50">#DEDEEF</color>
+
+    <color name="bronze">#D49358</color>
 
 </resources>

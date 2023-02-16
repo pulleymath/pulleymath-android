@@ -5,11 +5,16 @@ import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.databinding.ActivityFindEmailAndPwBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class FindEmailAndPwActivity : BaseActivity() {
 
@@ -40,9 +45,14 @@ class FindEmailAndPwActivity : BaseActivity() {
                 tab.text = titles.get(position)
             }.attach()
 
-            intent.getIntExtra(PAGE, 0).let { page ->
-                viewPager.setCurrentItem(page, false)
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(100)
+                // 딜레이 없이 실행할 경우 codeContainer 가 visible 될때 codeConfirmBtn가 보이지 않는 버그가 있음
+                intent.getIntExtra(PAGE, 0).let { page ->
+                    viewPager.currentItem = page
+                }
             }
+
         }
     }
 

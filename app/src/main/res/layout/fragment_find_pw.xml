@@ -138,13 +138,14 @@
                         <com.freewheelin.pulley.views.buttons.SecondaryButton
                             android:id="@+id/codeConfirmBtn"
                             android:layout_width="0dp"
-                            android:layout_height="@dimen/dp56"
+                            android:layout_height="0dp"
                             android:layout_marginStart="8dp"
                             android:text="인증 확인"
                             app:buttonTheme="blue"
                             app:layout_constraintTop_toTopOf="@+id/codeDet"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/codeDet">
+                            app:layout_constraintStart_toEndOf="@+id/codeDet"
+                            app:layout_constraintBottom_toBottomOf="@+id/codeDet">
 
                         </com.freewheelin.pulley.views.buttons.SecondaryButton>
 

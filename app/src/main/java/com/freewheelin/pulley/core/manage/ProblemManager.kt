@@ -66,7 +66,6 @@ object ProblemManager {
             .subscribe({ res ->
                 res.data?.let { cb(it) }
             }, {
-                println("asoaso wrongproblem fail? ")
                 responseFailed(context, it)
             })
 

@@ -15,7 +15,10 @@ import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2021.views.DisallowTouchEventViewPager
 import com.freewheelin.pulley.revision2021.views.LCPatternViewPager
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
+import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
+import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +30,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class LCPatternViewModel(application: Application): BaseAndroidViewModel(application) {
+    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     val patternName by lazy { MutableLiveData<String>() }

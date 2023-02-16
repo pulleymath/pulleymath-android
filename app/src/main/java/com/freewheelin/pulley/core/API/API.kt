@@ -6,6 +6,7 @@ import android.util.Log
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.*
 import com.freewheelin.pulley.core.manage.*
@@ -85,11 +86,12 @@ fun retrofit(apiVersion: Version): Retrofit {
 
             addInterceptor(
                 Interceptor { chain ->
-                    Log.d("인증", "intercepter ==================> ${user?.token}")
+                    val token = user?.token ?: MyApplication.token
+                    Log.d("인증", "intercepter ==================> $token")
                     Log.d("인증", "intercepter ==================> DeviceUid : ${APHelper.deviceId()}, Name : ${APHelper.deviceName}")
 
                     val builder = chain.request().newBuilder()
-                            .header("Authorization", "Bearer ${user?.token}")
+                            .header("Authorization", "Bearer $token")
                             .header("DeviceUid", APHelper.deviceId())
                             .header("DeviceName", APHelper.deviceName)
                             .header("Platform", "ANDROID")
@@ -119,6 +121,7 @@ fun retrofit(apiVersion: Version): Retrofit {
 
                     if(authorization?.isNotEmpty() == true) {
                         user?.token = authorization
+                        MyApplication.token = authorization
                         user?.commit("replace authorization token")
                     }
                     return@Interceptor response

@@ -114,6 +114,7 @@ class FindPwFragment : Fragment() {
                         emailDet.editText.hint = "- 없이 입력해주세요"
                         emailDet.editText.inputType = InputType.TYPE_CLASS_NUMBER
                         emailDet.editText.filters = arrayOf( InputFilter.LengthFilter(11) )
+
                     }
                 }
                 emailDet.text = ""
@@ -124,7 +125,12 @@ class FindPwFragment : Fragment() {
             emailDet.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             codeDet.inputType = InputType.TYPE_CLASS_NUMBER
             codeDet.doAfterTextChanged { text ->
-                if(text?.length?:0 == 4) codeConfirmBtn.toEnableUI() else codeConfirmBtn.toDisableUI()
+                if(text?.length?:0 == 4) {
+                    codeConfirmBtn.visibility = View.VISIBLE
+                    codeConfirmBtn.toEnableUI()
+                } else {
+                    codeConfirmBtn.toDisableUI()
+                }
             }
         }
     }

@@ -59,6 +59,21 @@ enum class FilterType {
     워크북_포함,
     워크북_미포함;
 
+    companion object {
+        fun convertTagAtFiltertType(tag: String): FilterType {
+            return when (tag.trim()) {
+                "기출" -> 유형_기출서
+                "문제풀이" -> 유형_유형서
+                "내신대비" -> 유형_내신서
+                "1등급" -> 추천_1등급
+                "2~3등급" -> 추천_2_3등급
+                "3~4등급" -> 추천_3_4등급
+                "4등급이하" -> 추천_4등급이하
+                else -> 추천_1등급
+            }
+        }
+
+    }
     val text: String
     get() {
         return when(this) {

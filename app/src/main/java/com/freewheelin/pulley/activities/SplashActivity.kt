@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
@@ -21,6 +22,7 @@ import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.ServerStatus
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.utils.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -32,6 +34,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 
@@ -40,6 +43,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var appUpdateManager : AppUpdateManager? = null
     private val UPDATE_IMMEDIATE = 700
     private val UPDATE_FLEXIBLE = 701
+    val viewModel: SplashActViewModel by viewModels()
     private val binding: ActivitySplashBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
     }
@@ -47,7 +51,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        MyApplication.firstLaunchGoConceptFlag = false
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         requestedOrientation = if(isMobileUI) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -102,7 +105,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     }
 
 
-    fun updateDialog(info:VersionInfo?) {
+    private fun updateDialog(info:VersionInfo?) {
         if (info == null) {
             checkSign()
         } else {
@@ -130,7 +133,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    fun requestAppUpdate(updateType:Int) {
+    private fun requestAppUpdate(updateType:Int) {
         val task = appUpdateManager?.appUpdateInfo
         Log.d("테스트", "task=${task}")
         task?.addOnSuccessListener { appUpdateInfo ->
@@ -145,7 +148,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    fun requestAppStore() {
+    private fun requestAppStore() {
         // BETA 앱은 앱스토어에 없기 때문에 제대로 동작하지 않음
         // BETA앱으로 테스트 시 packageName에 com.freewheelin.pulley 를 입력해야한다.
         try {
@@ -179,15 +182,19 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    fun checkSign() {
+    private fun checkSign() {
         Preferences.forceUpdateDialogCount.set(0)
         Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
 
-        if(MyApplication.user?.token?.isNotEmpty() == true) {
-            MyApplication.user?.syncMyInfo(this) { user ->
+        if (isNeedOnboarding) {
+            startActivity(OnboardingActivity::class.java)
+            return
+        }
 
-                MyApplication.user = user
+        if(MyApplication.user?.token?.isNotEmpty() == true) {
+            viewModel.fetchUser { user ->
+                MyApplication.appFirstMainLaunchFlag = false
                 MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
 
                 if (user.isExceedDevice) {
@@ -197,6 +204,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                         finishAffinity()
                     }, failCB = {
                         MyApplication.user!!.token = ""
+                        MyApplication.token = ""
                         MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [failed]")
                         finishAffinity()
                     }).show()
@@ -211,7 +219,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    fun toLogin() {
+    private fun toLogin() {
         Log.d(javaClass.simpleName, "moveActivity() => user ${user?.token?.isEmpty() == true} =${user?.token}")
         user?.connectToCrashlytics()
 
@@ -238,7 +246,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         CoroutineScope(Dispatchers.Main).launch {
             val isServerUnderInspection = checkServerInspection()
             if (isServerUnderInspection.not()) {
-                start()
+//                start()
             }
         }
 
@@ -254,7 +262,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 // Get new FCM registration token
                 val token = task.result
                 if (token?.isNotEmpty() == true) {
-                    API_APP.putToken(token)
+                    disposables += API_APP.putToken(token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ _ ->
@@ -266,16 +274,21 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     }
 
     fun loadAlimSetting(user: User?) {
-        API_APP.getNotificationSetting()
+        disposables += API_APP.getNotificationSetting()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
-                response.data?.apply {
-                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing, schoolID = user?.schoolID)
+                response.data.apply {
+                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing, schoolID = user.schoolID)
                 }
             },{
                 /* do nothing */
             })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

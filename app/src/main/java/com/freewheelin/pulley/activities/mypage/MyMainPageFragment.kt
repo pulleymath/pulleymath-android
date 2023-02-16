@@ -219,7 +219,7 @@ class MyMainPageFragment : Fragment() {
                     binding.rightBtn.setOnClickListener {
                         this.dismiss()
                         MyApplication.user?.logout { errorMsg ->
-                            activity?.finish()
+                            activity?.finishAffinity()
                             val intent = Intent(activity, LoginActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             activity?.startActivity(intent)
@@ -387,7 +387,7 @@ class MyMainPageFragment : Fragment() {
 
                         val intent = Intent(context, SplashActivity::class.java)
                         val mPendingIntentId = 123456
-                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
                         val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
                         System.exit(0)
@@ -528,7 +528,7 @@ class MyMainPageFragment : Fragment() {
                     Preferences.onServerAPI.set(api)
                     val intent = Intent(context, SplashActivity::class.java)
                     val mPendingIntentId = 123456
-                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
                     val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
                     System.exit(0)
@@ -541,7 +541,7 @@ class MyMainPageFragment : Fragment() {
                     Preferences.onServerAPI.set(api)
                     val intent = Intent(context, SplashActivity::class.java)
                     val mPendingIntentId = 123456
-                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
                     val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
                     System.exit(0)

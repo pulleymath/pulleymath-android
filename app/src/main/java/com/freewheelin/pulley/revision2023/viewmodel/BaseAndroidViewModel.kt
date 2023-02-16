@@ -18,6 +18,7 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
     protected val contentExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
 
+        println("throwable : $throwable")
         when (throwable) {
             is CancellationException -> {
                 _isLoading.postValue(false)

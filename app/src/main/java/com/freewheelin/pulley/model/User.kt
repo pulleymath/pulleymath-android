@@ -16,6 +16,7 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.contents.Content
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.utils.*
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
@@ -115,12 +116,6 @@ class User {
         }
 
     companion object {
-        val TYPE_FREE_ING = "FREE_ING"
-        val TYPE_PAID_ING = "PAID_ING"
-        val TYPE_NONE = "NONE"
-        val TYPE_PAUSE = "PAUSE"
-
-
         const val EVENT_STUDENT_TYPE_SETTING = "EVENT_STUDENT_TYPE_SETTING"
 
 //        fun signup(context: Context, lastName: String, firstName: String, email: String, pw: String, phone: String,
@@ -181,8 +176,8 @@ class User {
         }
 
     var firstDate: Date = Date()
-    var startDate: Date? = null
-    var endDate: Date? = null
+//    var startDate: Date? = null
+//    var endDate: Date? = null
     var serviceName: String = ""
 
     var recommendLevel: Int? = 0
@@ -194,7 +189,7 @@ class User {
     var agreeEmail: Boolean = false
     var agreeMarketing: Boolean = false
 
-    var serviceType: String = "" // deprecated
+    var serviceType: PaidServiceType = PaidServiceType.NONE
 
     @Expose @SerializedName("grade")
     var rawGrade: Int = 0
@@ -212,7 +207,7 @@ class User {
         set(value) {
             Preferences.lastExpiredShowingDate.set(value.time)
         }
-    var canUpdateGrade: Boolean? = null
+    var canUpdateGrade: Boolean = false
 
     var recentSubjectCode:String = ""
     var excludeSubjectCode:String = ""
@@ -244,6 +239,7 @@ class User {
         API_V2.signout().enqueue(object: Callback<Template<String?>>{
             override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
                 Log.d(javaClass.simpleName, "로그아웃 성공")
+                MyApplication.token = ""
                 MyApplication.user?.token = ""
                 MyApplication.user?.commit("logout")
 
@@ -539,29 +535,15 @@ class User {
         })
     }
 
-    fun getExpiredDday(): Int? {
-        val today = Date()
-        endDate ?: return null
-        return DateTimeUtils.getDayDifferences(today, endDate!!)
-    }
+//    fun getExpiredDday(): Int? {
+//        val today = Date()
+//        endDate ?: return null
+//        return DateTimeUtils.getDayDifferences(today, endDate!!)
+//    }
 
-    // deprecated
-    fun isNeedToStartFreeMembership(): Boolean {
-        return serviceType == TYPE_NONE ||
-                (serviceType == TYPE_FREE_ING && startDate == null)
-    }
-
-    // deprecated
-    fun isNeedToShowExpiredDialog(): Boolean {
-        val dday = getExpiredDday() ?: return false
-
-        return (((serviceType == TYPE_FREE_ING || serviceType == TYPE_PAID_ING)
-                && (dday in 0..3)) && !DateTimeUtils.isSameDate(Date(), lastExpiredShowingDate))
-
-    }
-
+    // 새해에 true이다
     fun isNeedToUpdateGrade(): Boolean {
-        return canUpdateGrade == true
+        return canUpdateGrade
     }
 
 
@@ -689,14 +671,14 @@ class User {
     }
 
     fun getStudyList(context: Context, successCB: (contents: List<Content>) -> Unit) {
-        API_V2.getStudyList(studentID).enqueue(object: Callback<List<Content>>{
-            override fun onFailure(call: Call<List<Content>>, t: Throwable) {
+        API_V3.getStudyList(studentID).enqueue(object: Callback<ResponseListBody<Content>>{
+            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<List<Content>>, response: Response<List<Content>>) {
+            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
                 if(response.isSuccessful) {
-                    val contents = response.body() ?: emptyList()
+                    val contents = response.body()?.data ?: emptyList()
                     successCB(contents)
                 } else {
                     responseError(context, response)
@@ -708,33 +690,34 @@ class User {
     fun getDailyStudy(context:Context, callback: (DailyStudy)->Unit) {
         API_V2.getDailyStudy(studentID).enqueue(object : Callback<DailyStudy> {
             override fun onResponse(call: Call<DailyStudy>, response: Response<DailyStudy>) {
-                response.body()?.let {
-                    callback(it)
-                }
+                val data = response.body() ?: return responseError(context, response)
+                callback(data)
             }
 
-            override fun onFailure(call: Call<DailyStudy>, t: Throwable) {}
+            override fun onFailure(call: Call<DailyStudy>, t: Throwable) {
+                responseFailed(context, t)
+            }
         })
     }
 
     fun getDailyPiece(context:Context, callback: (List<Content>)->Unit) {
-        API_V2.getDailyPiece(studentID).enqueue(object : Callback<List<Content>> {
-            override fun onResponse(call: Call<List<Content>>, response: Response<List<Content>>) {
-                response.body()?.let {
-                    callback(it)
-                }
+        API_V3.getDailyPiece(studentID).enqueue(object : Callback<ResponseListBody<Content>> {
+            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
+                val data = response.body()?.data ?: return responseError(context, response)
+                callback(data)
             }
 
-            override fun onFailure(call: Call<List<Content>>, t: Throwable) {}
+            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
+                responseFailed(context, t)
+            }
         })
     }
 
     fun getDailyRecommend(context:Context, callback: (DailyRecommend?)->Unit, failCB: () -> Unit) {
         API_V2.getDailyRecommend(studentID).enqueue(object : Callback<DailyRecommend?> {
             override fun onResponse(call: Call<DailyRecommend?>, response: Response<DailyRecommend?>) {
-                response.body().let {
-                    callback(it)
-                }
+                val data = response.body() ?: return responseError(context, response)
+                callback(data)
             }
 
             override fun onFailure(call: Call<DailyRecommend?>, t: Throwable) {

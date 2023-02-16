@@ -143,11 +143,10 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun finishTest(callback: (()->Unit)) {
         val studentId = user?.studentID
         if (studentId != null) {
-            affiliatedTestRepository.finishTest(studentId, workbookId)
+            compositeDisposable += affiliatedTestRepository.finishTest(studentId, workbookId)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
@@ -169,11 +168,10 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun openProblem(problemNo: Int) {
         val studentId = user?.studentID
         if (studentId != null) {
-            affiliatedTestRepository.openProblem(studentId, workbookId, problemNo)
+            compositeDisposable += affiliatedTestRepository.openProblem(studentId, workbookId, problemNo)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
@@ -197,11 +195,12 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         insertAnswer(problem)
         isSubmitBtnActive.value = answeredSet.isNotEmpty()
 
-        val newList = problemList.value?.replace(problem)
-        problemList.postValue(newList)
+        problemList.value?.replace(problem)?.let { newList ->
+            problemList.postValue(newList)
+        }
+
     }
 
-    @SuppressLint("CheckResult")
     fun insertAnswer(problem: AffiliatedTestProblem) {
         val studentId = user?.studentID
         val problemNo = problem.no
@@ -211,7 +210,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         )
         if (studentId != null) {
 
-            affiliatedTestRepository.insertAnswer(studentId, workbookId, problemNo, param)
+            compositeDisposable += affiliatedTestRepository.insertAnswer(studentId, workbookId, problemNo, param)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->

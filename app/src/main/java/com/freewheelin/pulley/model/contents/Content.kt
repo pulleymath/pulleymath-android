@@ -59,7 +59,8 @@ open class Content: Serializable {
 //    var id: Int = 0
     var pieceID: Int = 0
 
-    @PrimaryKey(autoGenerate = false)var assignID: Int? = null
+//    @PrimaryKey(autoGenerate = false) var assignID: Int? = null
+    var assignID: Int? = null
 
     var problems: List<Problem> = listOf()
     @Ignore

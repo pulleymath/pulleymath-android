@@ -16,21 +16,21 @@ class StudyChapter: BaseDiffItem, Serializable {
             children = listOf()
         }
         fun createFooter() = StudyChapter().apply {
-            id = -2
+            id = 999999
             name = ""
-            sequence = -2
+            sequence = 999999
             children = listOf()
         }
-        fun createTutorial() = StudyChapter().apply {
+        fun createTutorial(isCourseInProgress: Boolean?) = StudyChapter().apply {
             id = -4
             name = ""
             sequence = TUTORIAL_SEQUENCE
             parentSequence = -1
             isParentChapterLast = true
-            children = listOf(createTutorialChild())
+            children = listOf(createTutorialChild(isCourseInProgress))
             isFirstMiddleChapter = false
         }
-        fun createTutorialChild() = StudyChapter().apply {
+        fun createTutorialChild(isCourseInProgress: Boolean?) = StudyChapter().apply {
             id = -5
             name = "개념학습 튜토리얼"
             sequence = TUTORIAL_SEQUENCE
@@ -48,6 +48,7 @@ class StudyChapter: BaseDiffItem, Serializable {
                     userWrongCount = 0
                 }
             }
+            showChallengeCourseFlag = isCourseInProgress == true
         }
     }
     override fun getId(): String {
@@ -70,6 +71,8 @@ class StudyChapter: BaseDiffItem, Serializable {
     var isParentChapterLast: Boolean = false
     var parentSequence: Int = 0
 
+    var showChallengeCourseFlag = false
+    var isLocked = false
     val lastStudiedFormatting: String
         get() {
             if (lastStudiedAt == null) return "학습을 시작해보세요!"

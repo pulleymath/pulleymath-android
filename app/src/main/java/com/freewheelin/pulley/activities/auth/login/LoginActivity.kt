@@ -9,7 +9,6 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
@@ -23,31 +22,31 @@ import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API.RequestModel.RequestChangeEmail
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
-import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.editText.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import com.pulleymath.android.pdf.PdfViewerActivity
+import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
-import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 
 class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener, PasswordFieldV2EnterListener, LifecycleObserver {
@@ -123,10 +122,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     fun isValid() : Boolean{
         binding.apply {
-            if (emailField.text.isEmpty() == true || pwField.text.isEmpty() == true) {
+            if (emailField.text.isEmpty() || pwField.text.isEmpty()) {
                 return false
             }
-            return emailField.text.isValidEmail() == true && pwField.text.isValidPW() == true
+            return emailField.text.isValidEmail() && pwField.text.isValidPW()
         }
     }
 
@@ -137,7 +136,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     var requested = false
 
-    fun onLoginBtnClicked() {
+    private fun onLoginBtnClicked() {
         binding.apply {
             val email = emailField.text
             val pw = pwField.text
@@ -149,12 +148,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 return
             }
 
-            // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
-//        if(!email.isValidEmail() ) {
-//            emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
-//            return
-//        }
-
             emailField.isShownError = false
             pwField.isShownError = false
 
@@ -162,52 +155,70 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 requested = true
                 showProgress()
 
+                disposables += API_V3.getAppToken(RequestLogin(email, pw))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .timeout(3, TimeUnit.SECONDS)
+                    .subscribe({ res ->
+                        println("group error = res:${res.error}")
+                        res.data?.let {
+                            MyApplication.token = it.token
+                            Preferences.isAvailableRushDialog.set(true)
+                            hideProgress()
+                            requested = false
+                        }
+                        handleResponse(res)
+                    }, { error ->
 
-                    API_V3.loginApp(RequestLogin(email, pw))
-                        .enqueue(object : Callback<Template<User?>> {
-                            override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
-                                try {
-                                    responseFailed(this@LoginActivity, t)
-                                    hideProgress()
-                                    requested = false
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    hideProgress()
-                                    requested = false
-                                    DialogUtils.v2LoginErrDialog(this@LoginActivity)
-                                }
-                            }
+                        hideProgress()
+                        requested = false
+//                        DialogUtils.v2LoginErrDialog(this@LoginActivity)
+                        (error as? HttpException)?.response()?.errorBody()?.string()?.let {
+                            val listType = object: TypeToken<ResponseBody<SignInAppToken>>(){}.type
+                            val response: ResponseBody<SignInAppToken> = Gson().fromJson(it, listType)
+                            Log.e(javaClass.simpleName, "group error=${error.localizedMessage} , ${error.message}, ${response.error}")
+                            response.error?.let { error -> errorHandle(error) }
 
-                            override fun onResponse(
-                                call: Call<Template<User?>>,
-                                response: Response<Template<User?>>
-                            ) {
-                                try {
-                                    Preferences.isAvailableRushDialog.set(true)
-                                    val user = response.body()?.data
-                                    user?.connectToCrashlytics()
-                                    handleResponse(response, user)
-                                    hideProgress()
-                                    requested = false
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    hideProgress()
-                                    requested = false
-                                    DialogUtils.v2LoginErrDialog(this@LoginActivity)
-                                }
-                            }
-                        })
+                        }
 
 
-
-
-
+                    })
             }
         }
     }
 
-    fun putFcmToken(user: User?) {
-        if(user?.token?.isNotEmpty() == true) {
+    private fun errorHandle(errMsg: String) {
+        binding.apply {
+            when (errMsg) {
+                WRONG_LOGINID -> {
+                    emailField.showErrorMsg(errMsg)
+                    pwField.isShownError = false
+                }
+                WRONG_LOGINPW, NOT_MATCH_PW -> {
+                    emailField.isShownError = false
+                    pwField.showErrorMsg(errMsg)
+                }
+                NOT_FOUND_DATA -> {
+                    pwField.isShownError = false
+                    emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+                }
+                LOGINID_INVALID -> {
+                    pwField.isShownError = false
+                    emailField.showErrorMsg(errMsg)
+                }
+                LOCK_ACCOUNT -> {
+                    DialogUtils.lockAccountDialog(this@LoginActivity) {
+                        openResetPassword()
+                    }.show()
+                }
+                else -> {
+                    DialogUtils.showServerErr(this@LoginActivity)
+                }
+            }
+        }
+    }
+    fun putFcmToken() {
+        if(MyApplication.token?.isNotEmpty() == true) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     return@OnCompleteListener
@@ -216,12 +227,12 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 // Get new FCM registration token
                 val token = task.result
                 if (token?.isNotEmpty() == true) {
-                    API_APP.putToken(token)
+                    disposables += API_APP.putToken(token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ _ ->
+                        .subscribe { _ ->
                             Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-                        }, { })
+                        }
                 }
             })
         }
@@ -231,87 +242,24 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         startActivity(FindEmailAndPwActivity::class.java)
     }
 
-    fun handleResponse(response: Response<Template<User?>>, user: User?) {
-        var template = response.body()
+    fun handleResponse(res: ResponseBody<SignInAppToken>) {
+        Log.d(javaClass.simpleName, "template=${res.error}")
 
-        Log.d(javaClass.simpleName, "template=$template")
-
-        when(response.code()) {
-            200 -> {
-                if(MyApplication.user == null) MyApplication.user = user
-                else MyApplication.user!!.update(user)
-
-                Log.d("로그인", "after login : user=$user")
-
-                when {
-                    user?.isValidPhone == false -> {
-                        ConfirmPhoneDialog(this, successCB = {
-                            commitUser()
-                            goLearningTab()
-                        }, failCB = { clearToken() }).show()
-                    }
-                    user?.isExceedDevice  == true -> { // 기기 초과 > 삭제팝업
-                        // commit 은 기기 삭제후에
-                        DialogUtils.confirmExceedDevice(this) {
-                            DeviceManagerDialog(this, successCB = {
-                                commitUser()
-                                goLearningTab()
-                            }, failCB = { clearToken() }).show()
-                        }
-                    }
-                    user?.initSettingCompleted == false -> {
-                        commitUser()
-                        disposables += API_V2.defaultInitSetting(user.studentID)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ res ->
-                                goLearningTab()
-                            }, {
-                                DialogUtils.showServerErr(this@LoginActivity)
-                            })
-                    }
-                    else -> {
-                        commitUser()
+        if (res.error == null) {
+            when (res.data?.isValidPhone) {
+                false -> {
+                    ConfirmPhoneDialog(this, successCB = {
                         goLearningTab()
-                    }
+                    }, failCB = { clearToken() }).show()
+                }
+                else -> {
+                    goLearningTab()
                 }
             }
-            else -> {
-                clearToken()
-
-                val errorTemplate = response.errorBody()?.let { errorBody ->
-                    Gson().fromJson(errorBody.string(), ResponseBody::class.java)
-                }
-
-                Log.d(javaClass.simpleName, "errorTemplate=$errorTemplate")
-                binding.apply {
-                    when (errorTemplate?.error) {
-                        WRONG_LOGINID -> {
-                            emailField.showErrorMsg(errorTemplate.message ?: "")
-                            pwField.isShownError = false
-                        }
-                        WRONG_LOGINPW, NOT_MATCH_PW -> {
-                            emailField.isShownError = false
-                            pwField.showErrorMsg(errorTemplate.message ?: "")
-                        }
-                        NOT_FOUND_DATA -> {
-                            pwField.isShownError = false
-                            emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
-                        }
-                        LOGINID_INVALID -> {
-                            pwField.isShownError = false
-                            emailField.showErrorMsg(errorTemplate.message ?: "")
-                        }
-                        LOCK_ACCOUNT -> {
-                            DialogUtils.lockAccountDialog(this@LoginActivity) {
-                                openResetPassword()
-                            }.show()
-                        }
-                        else -> {
-                            DialogUtils.showServerErr(this@LoginActivity)
-                        }
-                    }
-                }
+        } else {
+            clearToken()
+            binding.apply {
+                res.message?.let { errorHandle(it) }
             }
         }
     }
@@ -325,7 +273,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         Intent(this, FindEmailAndPwActivity::class.java).run {
             this.putExtra(FindEmailAndPwActivity.PAGE, 1) // 1이 비밀번호 재설정
             startActivity(this)
-            finish()
         }
     }
 
@@ -334,21 +281,30 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     }
 
     private fun clearToken() {
+        MyApplication.token = ""
         MyApplication.user?.token = ""
         MyApplication.user?.commit("LoginActivity")
     }
 
     private fun goLearningTab() {
+        disposables += API_V3.getUserObservable()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ res ->
+                res.data.let {
+                    MyApplication.user = it
+                    MyApplication.token = it.token
+                    commitUser()
 
-        putFcmToken(user)
+                    putFcmToken()
 
-        startActivity(Intent(this, LearningTabActivity::class.java))
-        finishAffinity()
-    }
-
-    private fun goInitSetting() {
-        startActivity(InitSettingActivity.getIntent(this))
-        finishAffinity()
+                    startActivity(Intent(this, LearningTabActivity::class.java))
+                    finishAffinity()
+                }
+            }, { error ->
+                responseFailed(this, Throwable(error.message))
+            })
     }
 
     fun onSignupBtnClicked() {

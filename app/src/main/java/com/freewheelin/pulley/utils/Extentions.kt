@@ -3,8 +3,10 @@ package com.freewheelin.pulley.utils
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.bases.isNetworkConnected
 import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.model.ResponseBody
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -56,12 +58,14 @@ fun responseError(context: Context, response: Response<*>, param: Parameter) {
 }
 
 fun responseFailed(context: Context, throwable: Throwable, isShown500Error:Boolean = true) {
-    Log.e("DEFAULT_ERROR_HANDLE", throwable.localizedMessage)
+    Log.e("DEFAULT_ERROR_HANDLE", throwable.localizedMessage as String)
     throwable.printStackTrace()
 
     if(!context.isNetworkConnected)
         DialogUtils.showNetworkErr(context)
-    else {
+    else if (BuildConfig.FLAVOR == "beta") {
+        DialogUtils.showDialog(context, throwable.message.toString(), "")
+    } else {
         DialogUtils.showServerErr(context)
     }
 }
@@ -74,7 +78,13 @@ fun <T> Observable<T>.subscribeOnIO() : Observable<T> {
 fun <T> Observable<T>.onUI(onNext: (T) -> Unit): Disposable {
     return this.onUI(onNext, DEFAULT_ERROR_HANDLE)
 }
-
+fun <T> checkErrorAndReturn(context: Context, res: ResponseBody<T>): T? {
+    if (res.error != null) {
+        responseFailed(context, Throwable("${res.error} ${res.message}"))
+        return null
+    }
+    return res.data
+}
 
 fun <T> Observable<T>.onUI(onNext: (T) -> Unit, onError: (Throwable) -> Unit): Disposable {
 

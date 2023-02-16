@@ -194,6 +194,10 @@ class PatternQuizFragment() : Fragment(),
                         quizScoring {
                             viewModel.preventScoringBtnDoubleClickFlag = false
                             (parentFragment as LCPatternFragment).scoringPatternQuiz(it)
+                            viewModel.sendQuizScoringLog {
+                                //TODO 챌린지 관련
+                                println("asoaso 챌린지 - 개념학습 - 유형퀴즈 채점완료")
+                            }
                         }
                     }
                 }
@@ -220,10 +224,6 @@ class PatternQuizFragment() : Fragment(),
                 val message = "${courseName}\n\n${radioMsg}\n\n${additinalMsg}"
                 (activity as? LearningCourseActivity)?.let { lcActivity ->
                     lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
-
-//                        val chatId = Preferences.channelTalkCurrChatId.get()
-//                        val studentIdWhenIssuingChatId = Preferences.studentIdWhenIssuingChatId.get()
-//                        val currentStudentId = user?.studentID ?: ""
 
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {

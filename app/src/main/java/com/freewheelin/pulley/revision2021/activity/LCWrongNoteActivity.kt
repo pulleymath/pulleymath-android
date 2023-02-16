@@ -362,8 +362,6 @@ class LCWrongNoteActivity : AppCompatActivity() {
                     false
                 )
             )
-
-
         }
 
         override fun onBindViewHolder(holder: WrongNoteSelectorViewHolder, position: Int) {

@@ -37,6 +37,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val pinCount = MutableLiveData<String>("")
     val showMyPlanEmptyView = MutableLiveData<Boolean>(false)
     val showMyPlan = MutableLiveData<Boolean>(false)
+    val showGuideView = MutableLiveData<Boolean>(false)
     val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [나의문제집]에서 자동으로 빠집니다.\n" +
         "   그렇게 빠진 문제집은 [전체문제집]에서 다시 볼 수 있습니다.\n" +
         "\n" +
@@ -82,9 +83,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     suspend fun fetchMyPlans(): MyBookList {
         return patternStudyRepository.fetchMyPlans()
     }
-    private suspend fun deleteMyPlan(book: Book) {
-        patternStudyRepository.deleteMyPlans(book)
-    }
+
     private suspend fun upsertMyPlans(books: List<Book>) {
 //        patternStudyRepository.upsertAllMyPlans(books)
 

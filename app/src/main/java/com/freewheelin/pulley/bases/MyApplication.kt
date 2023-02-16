@@ -13,10 +13,11 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.R
 //import com.facebook.drawee.backends.pipeline.Fresco
 //import com.facebook.imagepipeline.core.ImagePipelineConfig
@@ -24,6 +25,8 @@ import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
+import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
 //import dagger.hilt.android.HiltAndroidApp
@@ -31,41 +34,34 @@ import com.google.gson.Gson
 import net.danlew.android.joda.JodaTimeAndroid
 
 //@HiltAndroidApp
-class MyApplication: Application(), LifecycleObserver {
+class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 
     companion object {
         var isTest = false
 //        var user:User? = null
 
         var user:User? = null
-        var firstLaunchGoConceptFlag: Boolean = false
+        var token: String? = null
+        var appFirstMainLaunchFlag: Boolean = false
     }
+
+    var viewModel: AppViewModel = AppViewModel(this)
 
     override fun onCreate() {
         super.onCreate()
-
         APHelper.init(applicationContext)
         APHelper.deviceId() // 디바이스ID 생성 - 랜덤이라 바뀌면 안됨
         APPreference.init(applicationContext, Preferences)
 
         Preferences.appLaunchCount = Preferences.appLaunchCount + 1
 
-//        val config = ImagePipelineConfig
-//                .newBuilder(applicationContext)
-//                .setResizeAndRotateEnabledForNetwork(false)
-//                .build()
-//        Fresco.initialize(this, config)
-
-//        if(!isTest) {
-//            Realm.init(this)
-//        }
         JodaTimeAndroid.init(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        MyApplication.user = Gson().fromJson(Preferences.userDataString.get(), User::class.java)
+        val user = Gson().fromJson(Preferences.userDataString.get(), User::class.java)
+        viewModel.updateUser(user)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onAppForeground() {
         val user = user ?: return
         LogUtils.logEvent(this, user, PulleyEvent.ACTIVE)
@@ -74,7 +70,6 @@ class MyApplication: Application(), LifecycleObserver {
         ConceptLearningUsageMonitor.isForeground = true
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackground() {
         Log.d("APP LIFE CYCLE TEST", "백그라운드냥?")
 
@@ -87,6 +82,20 @@ class MyApplication: Application(), LifecycleObserver {
     override fun onTerminate() {
         super.onTerminate()
         APHelper.clear()
+    }
+
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        when (event) {
+            Lifecycle.Event.ON_START -> {
+                onAppForeground()
+                viewModel.fetchUserChallenges()
+
+            }
+            Lifecycle.Event.ON_STOP -> {
+                onAppBackground()
+            }
+            else -> {}
+        }
     }
 
 }

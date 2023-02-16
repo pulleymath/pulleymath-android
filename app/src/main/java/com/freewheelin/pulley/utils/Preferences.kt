@@ -31,6 +31,7 @@ object Preferences {
 
     val tooltipShowingCntTakeNoteScroll = APPreference(0)
     val tooltipShowingCntAddSimilar = APPreference(0)
+    val tooltipShowingCntAddSimilarOfStartChallenge = APPreference(0)
     val tooltipShowingCntChangeSimilar = APPreference(0)
     val tooltipShowingCntAdditionalStudyInAnalysis = APPreference(0)
     val tooltipShowingCntAdditionalStudyInWrongNote = APPreference(0)
@@ -57,6 +58,7 @@ object Preferences {
 
     var isConceptLearningTutorialPassed = APPreference(false)
     var floatingAnswerSheetLastLocation = APPreference("")
+    var startChallengeAlreadyAppearedFlog = APPreference(false)
 }
 
 
