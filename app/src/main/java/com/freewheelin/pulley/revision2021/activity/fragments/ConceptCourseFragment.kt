@@ -1,47 +1,49 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
-//import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.*
+//import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.StudyChapter
+import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
+import com.freewheelin.pulley.databinding.FragmentConceptCourseBinding
+import com.freewheelin.pulley.databinding.ItemSmallChapterBinding
+import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
-import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
-import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
-import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
 
 class ConceptCourseFragment : LearningTabFragment() {
     companion object {
         val RESULT_OK = 301
-        val CHALLENGE_TUTORIAL_FINISH = 302
         fun newInstance() = ConceptCourseFragment()
     }
 
     lateinit var binding: FragmentConceptCourseBinding
 
-    val viewModel: ConceptCourseViewModel by viewModels()
+    private lateinit var viewModel: ConceptCourseViewModel
     private lateinit var getResult: ActivityResultLauncher<Intent>
 
     override var screenName = "개념"
@@ -63,36 +65,48 @@ class ConceptCourseFragment : LearningTabFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_concept_course, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(ConceptCourseViewModel::class.java)
 
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
 
+            viewModel.showProgress.postValue(true)
 
             studyRv.adapter = ChapterAdapter()
+            viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
+            viewModel.selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
+                if (subjectId > -1) { viewModel.fetch(subjectId) }
+            }
+
+            tutoral2TitleTv.text = "${user?.fullName} 학생도 바로 학습을 시작해\n소단원 하나만 끝내볼까?"
+            tutorialCl1.setOnClickListener {
+                sendTutorialEventLog(1)
+                tutorialCl1.hide(100) {  }
+                tutorialCl2.showTransition(500, ViewTransition.Instant)
+            }
+            tutorialCl2.setOnClickListener {
+                sendTutorialEventLog(2)
+                tutorialCl2.hide(300) {  }
+            }
+            pullingBtn.setOnClickListener {
+                sendTutorialEventLog(2)
+                tutorialCl2.hide(300) {  }
+            }
             studyRv.setOnClickListener {
                 viewModel.showProgress.postValue(!viewModel.showProgress.value!!)
             }
-        }
-        viewModel.apply {
-            showProgress.postValue(true)
-            onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
-            selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
-                if (subjectId > -1) { fetch(subjectId) }
-            }
 
-            showMobileHeader.postValue(requireContext().isTablet.not())
-            showTabletHeader.postValue(requireContext().isTablet)
-
-            joinedChallengeList.observe(viewLifecycleOwner) {
-                println("asoaso joinedChallengeList: ${it.size}")
+            getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    ConceptLearningUsageMonitor.finishConceptLearning()
+                }
             }
         }
     }
@@ -102,15 +116,16 @@ class ConceptCourseFragment : LearningTabFragment() {
     }
 
     override fun initUI() {
-//        viewModel.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
-        setHeaderSubject()
+        if (::viewModel.isInitialized) {
+            viewModel.selectedSubjectId.postValue(SubjectIndicator.MathSang.rawValue)
 
-        if ((activity as LearningTabActivity).isFromTutorial) {
-            (activity as LearningTabActivity).isFromTutorial = false
+            if ((activity as LearningTabActivity).isFromTutorial) {
+                (activity as LearningTabActivity).isFromTutorial = false
+                binding.apply {
+                    tutorialCl1.showTransition(500, ViewTransition.Instant)
+                }
+            }
         }
-    }
-    fun moveSubjectId(id : Int) { // SubjectIndicator
-        viewModel.selectedSubjectId.postValue(id)
     }
 
     fun fetch () {
@@ -118,26 +133,52 @@ class ConceptCourseFragment : LearningTabFragment() {
             if (it != -1) { viewModel.fetch(it) }
         }
     }
-    fun setHeaderSubject() {
-        viewModel.checkHeaderSelectedActionOfRelatedChallenge()
-    }
 
     inner class ChapterAdapter(): ListAdapter<StudyChapter, RecyclerView.ViewHolder>(DiffCallback<StudyChapter>()) {
+        private val typeHeader = 0
+        private val typeChapter = 1
+        private val typeFooter = 2
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return ChapterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))
+            return when (viewType) {
+                typeHeader -> {
+                    ChapterHeaderViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))
+                }
+                typeChapter -> {
+                    ChapterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))
+                }
+                typeFooter -> {
+                    ChapterFooterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))
+                }
+                else -> {
+                    ChapterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))
+                }
+            }
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            (holder as ChapterViewHolder).bind(getItem(position), position)
+            when (position) {
+                0 -> (holder as ChapterHeaderViewHolder).bind(getItem(position))
+                (viewModel.chapterList.value?.size?.minus(1)) -> (holder as ChapterFooterViewHolder).bind(getItem(position))
+                else -> (holder as ChapterViewHolder).bind(getItem(position))
+            }
+        }
+        override fun getItemViewType(position: Int): Int {
+            return when(position) {
+                0 -> typeHeader
+                (viewModel.chapterList.value?.size?.minus(1)) -> typeFooter
+                else -> typeChapter
+            }
         }
     }
 
     inner class ChapterViewHolder(private val itemBinding: ItemStudyChapterBinding): RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(item: StudyChapter, position: Int) {
+        fun bind(item: StudyChapter) {
             itemBinding.apply {
                 vm = viewModel
                 this.item = item
                 lifecycleOwner = viewLifecycleOwner
+                headerCl.visibility = View.GONE
+                footerCl.visibility = View.GONE
                 chapterCl.visibility = View.VISIBLE
 
                 val adapter = ConceptCourseSmallAdapter(viewModel, getResult)
@@ -145,37 +186,31 @@ class ConceptCourseFragment : LearningTabFragment() {
                 smallChapterRv.adapter = adapter
                 smallChapterRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 smallChapterRv.setHasFixedSize(true)
-                largeChapterTitleTv.setMarginTop(if (position == 0) 48 else 32)
-                val isLastItem = position == viewModel.chapterList.value?.size?.minus(1)
-                footerCl.visibility = if (isLastItem) View.VISIBLE else View.GONE
-                largeChapterBorder.visibility = if (isLastItem) View.VISIBLE else View.GONE
             }
         }
     }
+    inner class ChapterHeaderViewHolder(private val itemBinding: ItemStudyChapterBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(item: StudyChapter) {
+            itemBinding.apply {
+                vm = viewModel
+                this.item = item
+                lifecycleOwner = viewLifecycleOwner
+                headerCl.visibility = View.VISIBLE
+                footerCl.visibility = View.GONE
+                chapterCl.visibility = View.GONE
 
-    private fun initActivityResult() {
-        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
-                RESULT_OK -> ConceptLearningUsageMonitor.finishConceptLearning()
-                CHALLENGE_TUTORIAL_FINISH -> {
-                    viewModel.completedTutorial { startChallenge ->
-                        // TODO 챌린지 완료 후
-                        viewModel.updateChallenge(startChallenge)
-                        fetch()
-                        val turnOnCompletedDialog = {
-                            val completedDialog = ChallengeCompletedDialog(startChallenge) {
-                                ChallengeManager.getMainTabMoveIntent(it).let {
-                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
-                                }
-                            }
-                            childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog") }
-                        }
-
-                        val finishGuideDialog = ChallengeGuideManager
-                            .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)
-                        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
-                    }
-                }
+            }
+        }
+    }
+    inner class ChapterFooterViewHolder(private val itemBinding: ItemStudyChapterBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(item: StudyChapter) {
+            itemBinding.apply {
+                vm = viewModel
+                this.item = item
+                lifecycleOwner = viewLifecycleOwner
+                headerCl.visibility = View.GONE
+                footerCl.visibility = View.VISIBLE
+                chapterCl.visibility = View.GONE
             }
         }
     }

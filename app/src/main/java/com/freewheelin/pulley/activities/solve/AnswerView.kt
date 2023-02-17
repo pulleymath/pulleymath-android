@@ -14,10 +14,8 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
-import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
-import com.jakewharton.rxbinding2.view.selected
 
 
 interface AnswerDelegate {
@@ -54,7 +52,6 @@ class AnswerView : ConstraintLayout,
     var answeredCntTv: TextView
     var markingBtn: ConstraintLayout
     var submitBtn: Button
-    var challengeStampIv: ImageView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_answer, this)
@@ -68,7 +65,6 @@ class AnswerView : ConstraintLayout,
         answeredCntTv = findViewById(R.id.answeredCntTv)
         markingBtn = findViewById(R.id.markingBtn)
         submitBtn = findViewById(R.id.submitBtn)
-        challengeStampIv = findViewById(R.id.challengeStampIv)
 
         val paddingStartEnd = resources.getDimension(R.dimen.dp16).toInt()
         setPadding(paddingStartEnd, 0, paddingStartEnd, 0)
@@ -194,9 +190,7 @@ class AnswerView : ConstraintLayout,
         AnswerView.y = y
     }
 
-    var selectedProblem: Problem? = null
     fun configureUI(problem: Problem, requestFocus: Boolean) {
-        selectedProblem = problem
         if (problem.problemType == ProblemType.short) {
             shortAnswerView.visibility = View.VISIBLE
             selectionAnswerView.visibility = View.INVISIBLE
@@ -219,11 +213,7 @@ class AnswerView : ConstraintLayout,
                 shortAnswerView.isEnabled = true
                 selectionAnswerView.isEnabled = true
                 resultIv.visibility = View.GONE
-                challengeStampIv.visibility = if (selectedBook?.pieceSubCategory == "START") {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
+
 //                if (problem.problemType == ProblemType.short) shortAnswerView.requestFocus()
             }
             else -> {
@@ -233,7 +223,7 @@ class AnswerView : ConstraintLayout,
                 shortAnswerView.isEnabled = false
                 selectionAnswerView.isEnabled = false
                 resultIv.visibility = View.VISIBLE
-                challengeStampIv.visibility = View.GONE
+
                 if (problem.getResultByScoring() == Result.incorrect) {
                     resultIv.setImageResource(R.drawable.ic_incorrect_new)
                 } else {
@@ -360,21 +350,6 @@ class AnswerView : ConstraintLayout,
         delegate?.onAnswerChanged(this, answerStr)
     }
 
-    var selectedBook: Book? = null
-    fun showChallengeStampIv(selectedBook: Book) {
-        challengeStampIv.visibility = when (selectedProblem?.getResultByScoring()) {
-            Result.yet -> {
-                if (selectedBook.pieceSubCategory == "START") {
-                    Preferences.tooltipShowingCntAddSimilarOfStartChallenge.set(0)
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
-            }
-            else -> View.GONE
-        }
-
-    }
     fun showMarkingBtn() {
         markingBtn.visibility = View.VISIBLE
         submitBtn.visibility = View.INVISIBLE

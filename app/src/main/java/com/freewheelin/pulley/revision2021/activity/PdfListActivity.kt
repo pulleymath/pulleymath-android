@@ -10,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
@@ -30,7 +28,6 @@ import com.freewheelin.pulley.databinding.ActivityPdfListBinding
 import com.freewheelin.pulley.databinding.HeaderPdfListBinding
 import com.freewheelin.pulley.databinding.ItemPdfBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
@@ -53,32 +50,17 @@ class PdfListActivity : AppCompatActivity() {
     private val PDF_DIR by lazy {"$filesDir/pdfs"}
     private val PDF_URL_PREFIX = "${Network.baseNodeUrl}/v1/pdf"
 
-    companion object {
-        val RESULT_SUCCESS = 301
-        val RESULT_BOOK_ID = "RESULT_BOOK_ID"
-    }
     private val binding: ActivityPdfListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_pdf_list, null, false)
     }
 
     private val viewModel:PdfViewModel by viewModels()
-    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         createCacheDir()
 
-        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val bookId = it.data?.getIntExtra(RESULT_BOOK_ID, -1) ?: -1
-            if (bookId == -1) return@registerForActivityResult
-            when (it.resultCode) {
-                RESULT_SUCCESS -> viewModel.sendLog(bookId, isOpened = false) {
-                    println("asoaso 챌린지 pdf 닫기 ")
-                }
-            }
-
-        }
         binding.apply {
             lifecycleOwner = this@PdfListActivity
             vm = viewModel
@@ -392,7 +374,8 @@ class PdfListActivity : AppCompatActivity() {
 
         /** open viewer */
         private fun openPdf(context: Context, pdf:Pdf, answerPath:String, answerLinks:List<PdfLinkAnswerItem>) {
-            val intent = Intent(context, PdfViewerActivity::class.java).apply {
+            Intent(context, PdfViewerActivity::class.java).apply {
+
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(makeLocalPdfName(pdf))
 
@@ -419,13 +402,10 @@ class PdfListActivity : AppCompatActivity() {
                 if (linkString.isNotEmpty() && linkString.length > 1) {
                     putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
                 }
-//                runOnUiThread {
-//                    context.startActivity(this)
-//                }
-            }
-            viewModel.sendLog(pdf.cm_book_id, isOpened = true)
-            runOnUiThread {
-                getResult.launch(intent)
+
+                runOnUiThread {
+                    context.startActivity(this)
+                }
             }
         }
 

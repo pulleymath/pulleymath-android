@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.core.content.FileProvider
@@ -126,7 +125,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         hideSystemUI()
         setContentView(binding.root)
         ConceptLearningUsageMonitor.startConceptLearningUsage()
-        addBackBtnCallback()
+
         ChannelIOWrapper.initialize(application, this)
 
         val subjectId = intent.getIntExtra(SUBJECT_ID, -1)
@@ -148,8 +147,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             pencilcaseView.listener = this@LearningCourseActivity
 
             backBtn.setOnClickListener {
-//                onBackPressed()
-                backBtnAction()
+                onBackPressed()
             }
             // 헤더 ripple 분리하려면 각 버튼마다 따로붙여야함
             headerPriorConceptCl.setOnClickListener { sourceView ->
@@ -327,17 +325,12 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         }
     }
 
-    private fun backBtnAction() {
+    override fun onBackPressed() {
         if (isChannelIoForeground) {
             beginBlackChannelIoFrame()
         } else {
             setResult(ConceptCourseFragment.RESULT_OK, intent)
-            finish()
-        }
-    }
-    fun addBackBtnCallback() {
-        onBackPressedDispatcher.addCallback(this) {
-            backBtnAction()
+            super.onBackPressed()
         }
     }
 

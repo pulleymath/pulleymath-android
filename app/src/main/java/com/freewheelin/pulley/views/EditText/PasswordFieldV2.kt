@@ -122,10 +122,10 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
         val edit = findViewById<TextInputEditText>(R.id.inputEt)
         listener?.onFieldFocusChanged(this, hasFocus)
 
-        edit.setOnKeyListener { _, _, event ->
+        edit.setOnKeyListener { _, keyCode, event ->
             if(event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 enterListener?.onEnter(this)
-                return@setOnKeyListener true
+                true
             }
             false
         }

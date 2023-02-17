@@ -70,7 +70,7 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
             emailTv.text = user.email
             phoneTv.text = user.cellPhone
             serviceTv.text = user.serviceName
-//            availableDurationTv.text = getDurationText(user)
+            availableDurationTv.text = getDurationText(user)
             pwdModifyGuideTv.text = String.format(
                 getString(R.string.guide_reset_password_email_info_format),
                 user.email
@@ -182,20 +182,20 @@ class MyPageActivity : AppCompatActivity(), MyPageActionListener {
         tran.commit()
     }
 
-//    private fun getDurationText(user: User): String {
-//        return if (user.startDate == null || user.endDate == null) {
-////            LogUtils.assert(false, "유저 start 또 enddate가 존재하지 않음 " +
-////                    "studentID: ${user.studentID}" +
-////                    "mebership: ${user.memberExperiencedType}" +
-////                    "startDate: ${user.startDate}" +
-////                    "endDate: ${user.endDate}")
-//            ""
-//        } else {
-//            String.format("%s - %s",
-//                    DateTimeUtils.yyyyMMddFormat.format(user.startDate),
-//                    DateTimeUtils.yyyyMMddFormat.format(user.endDate))
-//        }
-//    }
+    private fun getDurationText(user: User): String {
+        return if (user.startDate == null || user.endDate == null) {
+//            LogUtils.assert(false, "유저 start 또 enddate가 존재하지 않음 " +
+//                    "studentID: ${user.studentID}" +
+//                    "mebership: ${user.memberExperiencedType}" +
+//                    "startDate: ${user.startDate}" +
+//                    "endDate: ${user.endDate}")
+            ""
+        } else {
+            String.format("%s - %s",
+                    DateTimeUtils.yyyyMMddFormat.format(user.startDate),
+                    DateTimeUtils.yyyyMMddFormat.format(user.endDate))
+        }
+    }
 
     override fun onModifyCompleted() {
         setUpUI()

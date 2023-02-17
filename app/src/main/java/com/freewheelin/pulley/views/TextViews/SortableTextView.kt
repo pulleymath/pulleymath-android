@@ -21,7 +21,7 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
 
 
     constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) { {}
         setTypedArray(attrs)
     }
 

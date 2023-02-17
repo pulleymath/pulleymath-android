@@ -3,8 +3,10 @@ package com.freewheelin.pulley.revision2021.ui.viewholder
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -27,9 +29,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             smallChapterTitleTv.text = item.name
 
             setFirstItemMarginStart(rootCl, item.isFirstSmallItem)
-            setFirstItemMarginStart(challengeStampIv, item.isFirstSmallItem)
             setLastItemMarginEnd(rootCl, item.isLastSmallItem)
-            setLastItemMarginEnd(challengeStampIv, item.isLastSmallItem)
             setExerciseTvTextColor(item)
             setViewMarginEnd(backgroundExerciseProgressBarIv, item)
             setViewMarginEnd(backgroundPatternProgressBarIv, item)
@@ -47,17 +47,16 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setDoneStampIv(item)
             setRightArrowIv(item)
             setSmallChapterRootCl(item)
-            setChallengeStampIv(item)
-            setLockIv(item)
+
         }
     }
     private fun setSmallChapterRootCl(item: StudyChapter) {
         binding.smallChapterRootCl.apply {
             setOnTouchListener(BoongthEffect())
-            setOnBasicCOrHigherClickListener(cb = {
+            setOnClickListener {
                 if (item.sequence == StudyChapter.TUTORIAL_SEQUENCE) {
-                    getResult.launch(LCTutorialActivity.getIntentAddFlags(context))
-                    return@setOnBasicCOrHigherClickListener
+                    context.applicationContext.startActivity(LCTutorialActivity.getIntentAddFlags(context, true))
+                    return@setOnClickListener
                 }
                 viewModel.createLearningCourseOnStudentId(item.id) {
                     val chapterId = item.id
@@ -65,19 +64,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
                     val subjectId = viewModel.selectedSubjectId.value ?: LCSubject.SubjectIndicator.MathSang.rawValue
                     getResult.launch(LearningCourseActivity.getIntent(context, subjectId, chapterId, name))
                 }
-            }, deniedCb = {
-                //TODO 해당 구독상품을 이용중이 아닐때
-            })
-        }
-    }
-    private fun setLockIv(item: StudyChapter) {
-        binding.lockIv.apply {
-            visibility = if (item.isLocked) View.VISIBLE else View.GONE
-        }
-    }
-    private fun setChallengeStampIv(item: StudyChapter) {
-        binding.challengeStampIv.apply {
-            visibility = if (item.showChallengeCourseFlag) View.VISIBLE else View.GONE
+            }
         }
     }
     private fun setRightArrowIv(item: StudyChapter) {
@@ -128,6 +115,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setTextColor(ContextCompat.getColor(context, color))
         }
     }
+
     private fun setBetweenWhiteBar(item: StudyChapter) {
         binding.whiteBarView.apply {
             visibility = if (item.progress?.pattern?.userWrongCount == 0) View.GONE else View.VISIBLE
@@ -220,9 +208,9 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
         view.setMarginEnd(value)
     }
     private fun setFirstItemMarginStart(view: View, isFirstItem: Boolean) {
-        view.setMarginStart(if (isFirstItem) 48 else 0)
+        view.setMarginStart(if (isFirstItem) 22 else 0)
     }
     private fun setLastItemMarginEnd(view: View, isLastItem: Boolean) {
-        view.setMarginEnd(if (isLastItem) 48 else 0)
+        view.setMarginEnd(if (isLastItem) 22 else 0)
     }
 }

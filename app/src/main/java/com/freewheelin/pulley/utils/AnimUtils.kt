@@ -1,7 +1,6 @@
 package com.freewheelin.pulley.utils
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.MotionEvent
@@ -81,32 +80,5 @@ object AnimUtils {
             override fun onAnimationStart(p0: Animator) {}
 
         })
-    }
-
-    fun smoothAppearAnim(v: View, cb: (() -> Unit)? = null) {
-        v.alpha = 0f
-        v.animate()
-            .alpha(1f)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    cb?.invoke()
-                }
-            })
-            .duration = v.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    }
-    fun smoothDisappearAnim(v: View, cb: (() -> Unit)? = null) {
-        v.alpha = 1f
-        v.animate()
-            .alpha(0f)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    v.visibility = View.GONE
-                    cb?.invoke()
-                }
-            })
-            .duration = v.context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-
     }
 }

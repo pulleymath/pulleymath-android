@@ -40,7 +40,7 @@ class UserTest: ContextTest() {
 
         assertEquals("기성", user.firstName)
         assertEquals("권", user.lastName)
-//        assertEquals("권기성", user.name)
+        assertEquals("권기성", user.name)
         assertEquals("01031245615", user.cellPhone)
         assertEquals("sori@mathflat.com", user.email)
         assertEquals("서울특별시",user.schoolLocation)
@@ -50,25 +50,25 @@ class UserTest: ContextTest() {
         assertEquals(false, user.agreeAppPush)
         assertEquals(false, user.agreeMarketing)
         assertEquals("서비스 서비스스", user.serviceName)
-//        assertEquals("2019.06.27", DateTimeUtils.yyyyMMddFormat.format(user.startDate))
-//        assertEquals("2019.12.27", DateTimeUtils.yyyyMMddFormat.format(user.endDate))
+        assertEquals("2019.06.27", DateTimeUtils.yyyyMMddFormat.format(user.startDate))
+        assertEquals("2019.12.27", DateTimeUtils.yyyyMMddFormat.format(user.endDate))
     }
 
 
     @Test
     fun `rawField에 따른 해당 field 값들이 적절하게 리턴되어야한다`() {
-//        val user = User()
-//        user.rawInitStudied = "3110"
-//        assertEquals(setOf(BigUnit.다항식), user.studiedUnit)
-//
-//        user.rawInitStudied = "3110,3111,3112"
-//        assertEquals(setOf(BigUnit.다항식, BigUnit.방정식과_부등식, BigUnit.도형의_방정식), user.studiedUnit)
-//
-//        user.rawInitStudied = "3321,3332,3111"
-//        assertEquals(setOf(BigUnit.미분법, BigUnit.공간도형, BigUnit.방정식과_부등식), user.studiedUnit)
-//
-//        user.rawInitStudied = ""
-//        assertEquals(setOf<BigUnit>(), user.studiedUnit)
+        val user = User()
+        user.rawInitStudied = "3110"
+        assertEquals(setOf(BigUnit.다항식), user.studiedUnit)
+
+        user.rawInitStudied = "3110,3111,3112"
+        assertEquals(setOf(BigUnit.다항식, BigUnit.방정식과_부등식, BigUnit.도형의_방정식), user.studiedUnit)
+
+        user.rawInitStudied = "3321,3332,3111"
+        assertEquals(setOf(BigUnit.미분법, BigUnit.공간도형, BigUnit.방정식과_부등식), user.studiedUnit)
+
+        user.rawInitStudied = ""
+        assertEquals(setOf<BigUnit>(), user.studiedUnit)
     }
 
 }

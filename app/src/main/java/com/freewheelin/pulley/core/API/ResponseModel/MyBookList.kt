@@ -8,13 +8,13 @@ data class MyBookList(
         val myPieceStorageList: MutableList<Book>
 ) {
     private fun sync() {
-        pinBookPlanCount = myPieceStorageList.filter { it.isPinned }.size
+        pinBookPlanCount = myPieceStorageList.filter { it.pin }.size
         totalPlanList = myPieceStorageList.size
 
     }
 
     fun publicSync() {
-        pinBookPlanCount = myPieceStorageList.filter { it.isPinned }.size
+        pinBookPlanCount = myPieceStorageList.filter { it.pin }.size
         totalPlanList = myPieceStorageList.size
     }
     fun removeBook(book: Book, cb: ((index: Int) -> Unit)? = null) {

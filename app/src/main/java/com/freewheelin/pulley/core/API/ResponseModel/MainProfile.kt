@@ -2,8 +2,9 @@ package com.freewheelin.pulley.core.API.ResponseModel
 
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.model.User.Companion.TYPE_FREE_ING
+import com.freewheelin.pulley.model.User.Companion.TYPE_PAID_ING
 import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.Preferences
 import java.lang.Math.abs
 import java.util.*
 
@@ -32,35 +33,12 @@ class MainProfile {
     val dailySolvedProblemCount: Int
         get() = studentGoalInfo.dailySolvedProblemCount
 
-    val totalSolvedCountStr: String
-        get() = "${totalSolvedProblemCount + totalSolvedWeakProblemCount}"
-
-    val ddayStr: String
-        get() {
-            val existTarget = getTargetTitleAndDate()
-            val dday = getDDay(existTarget?.third)
-            return if (dday < 0) {
-                getDDayText(null)
-            } else {
-                getDDayText(existTarget?.third)
-            }
-        }
-    val ddayTargetStr: String
-        get() {
-            val existTarget = getTargetTitleAndDate()
-            val dday = getDDay(existTarget?.third)
-            return if (dday < 0) {
-                getDDayTitle(null)
-            } else {
-                getDDayTitle(existTarget?.second)
-            }
-        }
-//    fun getDDayTitle(targetTitle: String?): String {
-//        if(targetTitle == null)
-//            return defaultDDay.description
-//        else
-//            return targetTitle
-//    }
+    fun getDDayTitle(targetTitle: String?): String {
+        if(targetTitle == null)
+            return defaultDDay.description
+        else
+            return targetTitle
+    }
 
     fun getDDayText(targetDay: Date?): String {
         val dday = getDDay(targetDay)
@@ -71,13 +49,6 @@ class MainProfile {
         } else {
             "D-${abs(dday)}"
         }
-    }
-
-    fun getDDayTitle(targetTitle: String?): String {
-        if(targetTitle == null)
-            return defaultDDay.description
-        else
-            return targetTitle
     }
 
     fun getDDay(targetDay: Date?): Int {
@@ -116,18 +87,17 @@ class MainProfile {
         return emptyList()
     }
 
-    private fun getTargetTitleAndDate(): Triple<Int, String, Date>? {
-        val targetTitle = Preferences.targetDateTitle.get()
-        val targetDate = Preferences.targetDate.get()
-        val targetID = Preferences.targetID.get()
-        return if(targetTitle.isEmpty() || targetDate == 0L) {
-            null
-        } else {
-            Triple(targetID, targetTitle, Date(targetDate))
-        }
-    }
+    // deprecated
+//    fun isExpiredUser(): Boolean {
+//        val availableSet = setOf(TYPE_FREE_ING, TYPE_PAID_ING)
+//        return !availableSet.contains(memberType)
+//    }
 
-
+    // deprecated
+//    fun isPaidUser(): Boolean {
+//        val availableSet = setOf(TYPE_PAID_ING)
+//        return availableSet.contains(memberType)
+//    }
 }
 
 class DDay {

@@ -18,7 +18,6 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
@@ -46,9 +45,6 @@ import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
-import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import kotlinx.coroutines.*
@@ -68,7 +64,6 @@ class SolveActivity : BaseActivity(),
     private val binding: ActivitySolveBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_solve, null,false)
     }
-    val viewModel: SolveActViewModel by viewModels()
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScreenHeight(this) }
@@ -146,6 +141,7 @@ class SolveActivity : BaseActivity(),
         setContentView(binding.root)
 
         initUI()
+
 //        val content = getSerializable(this@SolveActivity, ContentManager.ARG_CONTENT, Content::class.java)
         val content = intent.getSerializableExtra(ContentManager.ARG_CONTENT) as? Content
 
@@ -153,6 +149,7 @@ class SolveActivity : BaseActivity(),
 
         Log.d("문제풀기", "content=$content")
         Log.d("문제풀기", "isReview=$isReview")
+
         if(isReview)
             initReviewContent(content)
         else
@@ -163,7 +160,7 @@ class SolveActivity : BaseActivity(),
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         setInitPosition()
-        initObserve()
+
 //        setSpen()
     }
 
@@ -359,8 +356,6 @@ class SolveActivity : BaseActivity(),
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
-                        answerView.selectedBook = it
-                        answerView.showChallengeStampIv(it)
                         speedAnswerView.showMarkingBtn()
                     }
                 }
@@ -523,8 +518,6 @@ class SolveActivity : BaseActivity(),
                 spyBtn.visibility = View.GONE
             }
 
-            vm = viewModel
-            lifecycleOwner = this@SolveActivity
             galleryView.layoutParams.width = GalleryView.getGalleryViewWidth(this@SolveActivity)
             solveCl.layoutParams.width = screenWidth
             galleryView.delegate = this@SolveActivity
@@ -558,9 +551,6 @@ class SolveActivity : BaseActivity(),
             clearBtn.setOnClickListener { onClearBtnClicked() }
             scrapBtn.setOnClickListener { onScrapBtnClicked() }
             reportBtn.setOnClickListener { onSirenBtnClicked() }
-            // 스타트챌린지 중일 때 plusIv 및 stampIv turn on,
-            // 스타트챌린지 중이 아닐 때: 구독 basic_p 이상인 경우 plusIv turn on
-            // 이외의 경우 lockIv
             // 풀리플러스 처리
             lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
             plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
@@ -573,28 +563,22 @@ class SolveActivity : BaseActivity(),
                     }
                 }
             }
-            changeSimilarProblemCl.setOnBasicPOrHigherClickListener (cb = { onChangeSimilarBtnClicked() })
+            changeSimilarProblemCl.setOnClickListener { onChangeSimilarBtnClicked() }
             answerView.markingBtn.setOnClickListener {
                 LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
                 onMarkingBtnClicked()
             }
             answerView.submitBtn.setOnClickListener {
-//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
                 onSubmitBtnClicked()
-                viewModel.sendSubmitLog(content?.pieceID, "유형학습-바로") {
-
-                }
             }
             speedAnswerView.markingBtn.setOnClickListener {
                 LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onMarkingBtnClicked()
             }
             speedAnswerView.submitBtn.setOnClickListener {
-//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
+                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onSubmitBtnClicked()
-                viewModel.sendSubmitLog(content?.pieceID, "유형학습-빠른") {
-
-                }
             }
             pencilcaseView.listener = this@SolveActivity
             problemMemoView.set(pencilcaseView)
@@ -721,22 +705,6 @@ class SolveActivity : BaseActivity(),
                         }
                     }
                 }
-            }
-        }
-    }
-    private fun initObserve () {
-        viewModel.apply {
-            joinedChallengeList.observe(this@SolveActivity) {
-                it  .filter { it.userStatus == ChallengeUserStatus.ING }
-                    .filter { it.startChallenge?.isPatternOfCourseInProgress == true }
-                    .forEach { _ ->
-                        isStartChallengeInProgress.postValue(true)
-
-                        user?.serviceType?.let {
-                            val isEnabled = it.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
-                            enableTargetService.postValue(isEnabled)
-                        }
-                    }
             }
         }
     }
@@ -1377,8 +1345,6 @@ class SolveActivity : BaseActivity(),
 
 
         problem.getSimilarProblem(this, user!!, content!!) {
-            viewModel.sendAddSimilarLog(content, selectedProblem)
-
             if(it == null) {
                 showNotExistSimilarToast()
             } else {
@@ -1510,19 +1476,14 @@ class SolveActivity : BaseActivity(),
         anim.duration = 250
         binding.addSimilarProblemCl.startAnimation(anim)
 
-        showTooltipIfNeedOnAnim(Tutor.TooltipType.addSimilar, anim)
-        showTooltipIfNeedOnAnim(Tutor.TooltipType.addSimilarOfStartChallenge, anim)
-
-    }
-    fun showTooltipIfNeedOnAnim(type: Tutor.TooltipType, anim: ScaleAnimation) {
-        if(type.isNeedToShow()) {
+        if(Tutor.TooltipType.addSimilar.isNeedToShow()) {
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(p0: Animation?) {
                 }
 
                 override fun onAnimationEnd(p0: Animation?) {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        Tutor.showToolTipIfNeed(binding.addSimilarProblemCl, type)
+                        Tutor.showToolTipIfNeed(binding.addSimilarProblemCl, Tutor.TooltipType.addSimilar)
                     }, 500)
                 }
 
@@ -1617,9 +1578,10 @@ class SolveActivity : BaseActivity(),
         return when(content) {
             is Book -> {
                 val book = (content as Book)
-                var title = "${book.bookName}"
-                if (book.subject.trim().isNotEmpty()) { title += " / ${book.subject}" }
-                if (book.chapter.trim().isNotEmpty()) { title += " / ${book.chapter}" }
+                var title = "${book.bookName} / ${book.subject}"
+                if (book.chapter?.isNotEmpty() == true) {
+                    title += " / ${book.chapter}"
+                }
                 title
             }
             is Test, is Piece -> {

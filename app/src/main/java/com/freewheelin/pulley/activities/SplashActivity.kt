@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
@@ -22,7 +21,6 @@ import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.model.ServerStatus
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.utils.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -43,7 +41,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var appUpdateManager : AppUpdateManager? = null
     private val UPDATE_IMMEDIATE = 700
     private val UPDATE_FLEXIBLE = 701
-    val viewModel: SplashActViewModel by viewModels()
     private val binding: ActivitySplashBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
     }
@@ -51,6 +48,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        MyApplication.firstLaunchGoConceptFlag = false
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         requestedOrientation = if(isMobileUI) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -187,14 +185,11 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
 
-        if (isNeedOnboarding) {
-            startActivity(OnboardingActivity::class.java)
-            return
-        }
-
         if(MyApplication.user?.token?.isNotEmpty() == true) {
-            viewModel.fetchUser { user ->
+            MyApplication.user?.syncMyInfo(this) { user ->
                 MyApplication.appFirstMainLaunchFlag = false
+                MyApplication.user = user
+                MyApplication.token = user.token
                 MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
 
                 if (user.isExceedDevice) {

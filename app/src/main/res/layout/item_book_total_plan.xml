@@ -188,17 +188,6 @@
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/challengeStampIv"
-                android:layout_width="50dp"
-                android:layout_height="64dp"
-                android:src="@drawable/challenge_stamp_3d_image"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

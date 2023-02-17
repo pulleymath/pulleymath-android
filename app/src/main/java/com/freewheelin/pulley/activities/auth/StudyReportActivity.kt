@@ -129,6 +129,7 @@ class StudyReportActivity : BaseActivity() {
     }
 
     fun moveToMain() {
+//        MyApplication.firstLaunchGoConceptFlag = false
         val intent = LearningTabActivity.getIntent(this, )
         startActivity(intent)
     }

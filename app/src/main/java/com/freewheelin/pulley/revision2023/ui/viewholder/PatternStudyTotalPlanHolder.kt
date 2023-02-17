@@ -11,6 +11,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanHolder
 import com.freewheelin.pulley.databinding.ItemBookTotalPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.ClientBookType
+import com.freewheelin.pulley.utils.scrollToView
 
 class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanHolder(binding.root) {
 
@@ -22,8 +23,7 @@ class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanH
             book.clientBookType = ClientBookType.ALL
 
             setTag(tags) {
-                val filterType = FilterType.convertTagAtFiltertType(it)
-                studyListener?.filterFromTagOnCard(filterType)
+                studyListener?.filterFromTagOnCard(it)
             }
             solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
             problemCntTv.text = book.totalNumber.toString() + "문제"
@@ -35,12 +35,7 @@ class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanH
                 solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
             }
 
-            challengeStampIv.visibility = if (book.markingState == "YET" && book.pieceSubCategory == "START")
-                View.VISIBLE
-            else
-                View.GONE
             guideTv.text = book.description
-
         }
 
 

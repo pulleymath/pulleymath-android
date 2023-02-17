@@ -121,10 +121,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     fun isValid() : Boolean{
         binding.apply {
-            if (emailField.text.isEmpty() || pwField.text.isEmpty()) {
+            if (emailField.text.isEmpty() == true || pwField.text.isEmpty() == true) {
                 return false
             }
-            return emailField.text.isValidEmail() && pwField.text.isValidPW()
+            return emailField.text.isValidEmail() == true && pwField.text.isValidPW() == true
         }
     }
 
@@ -135,7 +135,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     var requested = false
 
-    private fun onLoginBtnClicked() {
+    fun onLoginBtnClicked() {
         binding.apply {
             val email = emailField.text
             val pw = pwField.text
@@ -146,6 +146,12 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 if (pw.isEmpty()) pwField.showErrorMsg("비밀번호를 입력해주세요.")
                 return
             }
+
+            // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
+//        if(!email.isValidEmail() ) {
+//            emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
+//            return
+//        }
 
             emailField.isShownError = false
             pwField.isShownError = false
@@ -186,8 +192,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
 
-
-    private fun errorHandle(res: ResponseBody<SignInAppToken>) {
+    fun errorHandle(res: ResponseBody<SignInAppToken>) {
         val error = res.error
         val errMsg = res.message
         binding.apply {
@@ -232,9 +237,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     disposables += API_APP.putToken(token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { _ ->
+                        .subscribe({ _ ->
                             Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-                        }
+                        }, { })
                 }
             })
         }
@@ -248,13 +253,15 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         Log.d(javaClass.simpleName, "template=${res.error}")
 
         if (res.error == null) {
-            when (res.data?.isValidPhone) {
-                false -> {
+            when {
+                res.data?.isValidPhone == false -> {
                     ConfirmPhoneDialog(this, successCB = {
+//                        commitUser()
                         goLearningTab()
                     }, failCB = { clearToken() }).show()
                 }
                 else -> {
+//                    commitUser()
                     goLearningTab()
                 }
             }
@@ -307,6 +314,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }, { error ->
                 responseFailed(this, Throwable(error.message))
             })
+    }
+
+    private fun goInitSetting() {
+        startActivity(InitSettingActivity.getIntent(this))
+        finishAffinity()
     }
 
     fun onSignupBtnClicked() {

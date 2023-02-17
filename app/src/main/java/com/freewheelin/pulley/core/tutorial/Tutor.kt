@@ -12,7 +12,6 @@ class Tutor {
 
         takeNoteScroll,
         addSimilar,
-        addSimilarOfStartChallenge,
         changeSimilar,
         additionalStudyInWrongNote,
         additionalStudyInAnalysis,
@@ -32,7 +31,6 @@ class Tutor {
                 return when (this) {
                     takeNoteScroll -> BalloonWindow.Position.left
                     addSimilar -> BalloonWindow.Position.below
-                    addSimilarOfStartChallenge -> BalloonWindow.Position.below
                     changeSimilar -> BalloonWindow.Position.below
                     additionalStudyInWrongNote -> BalloonWindow.Position.right
                     additionalStudyInAnalysis -> BalloonWindow.Position.above
@@ -48,7 +46,6 @@ class Tutor {
                 return when (this) {
                     takeNoteScroll -> Preferences.tooltipShowingCntTakeNoteScroll
                     addSimilar -> Preferences.tooltipShowingCntAddSimilar
-                    addSimilarOfStartChallenge -> Preferences.tooltipShowingCntAddSimilarOfStartChallenge
                     changeSimilar -> Preferences.tooltipShowingCntChangeSimilar
                     additionalStudyInWrongNote -> Preferences.tooltipShowingCntAdditionalStudyInWrongNote
                     additionalStudyInAnalysis -> Preferences.tooltipShowingCntAdditionalStudyInAnalysis
@@ -69,7 +66,7 @@ class Tutor {
     }
 
     companion object {
-        fun showToolTipIfNeed(view: View?, tooltipType: TooltipType) {
+        fun showToolTipIfNeed(view: View?, tooltipType: TooltipType, dimView: FocusedDimView? = null) {
             if (!tooltipType.isNeedToShow()) return
             if (view == null) return
 
@@ -89,7 +86,7 @@ class Tutor {
             if(tooltipType == TooltipType.recommendPlan)
                 window.offset = 100
 
-            window.show(tooltipType)
+            window.show(tooltipType, dimView)
         }
     }
 }

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_fafafa"
+    tools:context=".activities.learning.tabFragment.main.MainFragment">
+
+    <TextView
+        android:id="@+id/analysisGuideTv"
+        style="@style/TextBlack_4c4c4c.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp96"
+        android:lineSpacingExtra="@dimen/sp18"
+        android:text="소정님의 예상 등급이 변동되었습니다.\n확인하러 가볼까요?"
+        android:textSize="@dimen/sp36"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/dDayTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <ImageView
+        android:id="@+id/ddayIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dday"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/dDayTv"
+        app:layout_constraintBottom_toBottomOf="@+id/dDayTv"
+        app:layout_constraintStart_toStartOf="@+id/analysisGuideTv"/>
+
+    <TextView
+        android:id="@+id/dDayTv"
+        style="@style/TextRed_fe7b67.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp24"
+        android:text="2021 수능까지 D-90"
+        android:textSize="@dimen/sp24"
+        android:visibility="invisible"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/analysisBtn"
+        app:layout_constraintStart_toEndOf="@+id/ddayIv"
+        app:layout_constraintTop_toBottomOf="@+id/analysisGuideTv"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/analysisBtn"
+        android:layout_width="@dimen/dp264"
+        android:layout_height="@dimen/dp96"
+        android:layout_marginTop="@dimen/dp96"
+        android:visibility="invisible"
+        android:background="@drawable/bg_purple_6d6dff_round"
+        app:layout_constraintStart_toStartOf="@+id/analysisGuideTv"
+        app:layout_constraintTop_toBottomOf="@+id/dDayTv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            style="@style/TextPurple_acacff.Bold"
+            android:id="@+id/topAnalysisLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:text="딱 이것만 알고 싶은"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/middleAnalysisLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+        <TextView
+            style="@style/TextWhite_ffffff.ExtraBold"
+            android:id="@+id/middleAnalysisLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 분석 보기 >"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toStartOf="@+id/topAnalysisLabel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topAnalysisLabel"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rightContainerCl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white_ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline4">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        style="@style/Border_Grey_e8e8e8_Vertical"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c.ExtraBold"
+        android:id="@+id/guideTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp18"
+        android:text="수학은 벼락치기가 안돼요!"
+        app:layout_constraintStart_toStartOf="@+id/guideBtn"
+        app:layout_constraintTop_toTopOf="@+id/analysisGuideTv"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <TextView
+        style="@style/TextBlack_4c4c4c"
+        android:id="@+id/guideContentsTv"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text=""
+        android:layout_marginTop="@dimen/dp24"
+        android:textSize="@dimen/sp16"
+        android:layout_marginBottom="@dimen/dp60"
+        android:lineSpacingExtra="8sp"
+        app:layout_constraintTop_toBottomOf="@+id/guideTitleTv"
+        app:layout_constraintBottom_toTopOf="@+id/guideBtn"
+        app:layout_constraintStart_toStartOf="@+id/guideBtn"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/guideBtn"
+        android:layout_width="@dimen/dp264"
+        android:layout_height="@dimen/dp96"
+        android:background="@drawable/bg_grey_f2f2f2_round"
+        app:layout_constraintStart_toStartOf="@+id/rightContainerCl"
+        app:layout_constraintBottom_toBottomOf="@+id/analysisBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            style="@style/TextGrey_c0c0c0.Bold"
+            android:id="@+id/topGuideLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:text="딱 이것만 알고 싶은"
+            android:textSize="@dimen/sp14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/middleGuideLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+        <TextView
+            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/middleGuideLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상황별 가이드 보러가기 >"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toStartOf="@+id/topGuideLabel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topGuideLabel"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyRateView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66875" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

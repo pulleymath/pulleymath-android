@@ -18,7 +18,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -40,33 +39,33 @@ import com.freewheelin.pulley.activities.auth.InitTestActivity.Companion.COMPLET
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
-import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.main.MainFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_ANALYSIS
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_MOCK
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_TEST
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_UNIT
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_WRONG
+import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.MarketingManager
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.snackTest.SnackTestFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
-import com.freewheelin.pulley.activities.mypage.*
-import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
-import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
+import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
+import com.freewheelin.pulley.activities.mypage.*
+import com.freewheelin.pulley.bases.*
+import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.model.Notice
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.viewmodel.LearningTabViewModel
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.snackBar.SnackBar
 import com.freewheelin.pulley.views.snackBar.SnackBarView
@@ -104,11 +103,11 @@ class LearningTabActivity : PermissionActivity(),
     ViewPager.OnPageChangeListener,
     DrawerLayout.DrawerListener,
     LifecycleObserver,
-    AppUsageMonitorListener {
+    AppUsageMonitorListener,
+    LearningTabInterface {
 
     var snackBar: SnackBar? = null
     var mypageFragment = MyMainPageFragment()
-    private val viewModel: LearningTabViewModel by viewModels()
 
     private val binding: ActivityLearningBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_learning, null, false)
@@ -125,7 +124,6 @@ class LearningTabActivity : PermissionActivity(),
     var doubleBackToExitPressedOnce = false
 
     lateinit var tabMoveReceiver: BroadcastReceiver
-    lateinit var challengeReceiver: BroadcastReceiver
 
     var currentPagePosition = 0
 
@@ -161,7 +159,15 @@ class LearningTabActivity : PermissionActivity(),
         var referActivity: Activity? = null
     }
 
-    var tabFragment: MutableList<LearningTabFragment> = mutableListOf()
+    var tabFragment: MutableList<LearningTabFragment> = mutableListOf(
+//        MainFragment.newInstance(),
+//        ConceptCourseFragment.newInstance(),
+//        BookFragment.newInstance(),
+//        MockExamFragment.newInstance(),
+//        SnackTestFragment.newInstance(),
+//        WrongNoteFragment.newInstance(),
+//        AnalysisFragment.newInstance()
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -169,23 +175,38 @@ class LearningTabActivity : PermissionActivity(),
 
         // TODO 추후 푸시알람 실행시 어딘가로 보내야할수도 있다.
         val target = intent.getStringExtra("target_android")
-        tabFragment = mutableListOf(
-            MainFragment.newInstance(),
-            ConceptCourseFragment.newInstance(),
-            PatternStudyFragment.newInstance(),
-            MockExamFragment.newInstance(),
-            SnackTestFragment.newInstance(),
-            WrongNoteFragment.newInstance(),
-            AnalysisFragment.newInstance()
-        )
+
+//        if (tabFragment == null) {
+            if (isTablet) {
+                tabFragment = mutableListOf(
+                    MainFragment.newInstance(),
+                    ConceptCourseFragment.newInstance(),
+//                    BookFragment.newInstance(),
+                    PatternStudyFragment.newInstance(),
+                    MockExamFragment.newInstance(),
+                    SnackTestFragment.newInstance(),
+                    WrongNoteFragment.newInstance(),
+                    AnalysisFragment.newInstance()
+                )
+            } else {
+                tabFragment = mutableListOf(
+                    MainFragment.newInstance(),
+                    PatternStudyFragment.newInstance(),
+//                    BookFragment.newInstance(),
+                    MockExamFragment.newInstance(),
+                    SnackTestFragment.newInstance(),
+                    WrongNoteFragment.newInstance(),
+                    AnalysisFragment.newInstance()
+                )
+            }
+//        }
 
         if (user?.showMainUnivTab == true) {
             tabFragment.add(AffiliatedTestFragment.newInstance())
         }
 
         setContentView(binding.root)
-        initReceiver()
-        initObserve()
+
         requestNotice()
 
         with(binding) {
@@ -194,12 +215,14 @@ class LearningTabActivity : PermissionActivity(),
             viewPager.setPagingEnabled(false)
             viewPager.offscreenPageLimit = 5
 
+//        tabLayout.setupWithViewPager(viewPager)
 
             isFromTutorial = intent.getBooleanExtra(FROM_TUTORIAL, false)
 
             val isFromInitTest = intent.getBooleanExtra(ARG_FROM_INIT_TEST, false)
             if(isFromInitTest) {
-
+//            viewPager.currentItem = 3
+//            (tabFragment[3] as BookFragment).isStartWithInitTest = true
             }
 
             viewPager.addOnPageChangeListener(this@LearningTabActivity)
@@ -251,7 +274,7 @@ class LearningTabActivity : PermissionActivity(),
             // 핸드폰이면 과외 메뉴 숨기기
             if(!isTablet) {
                 if(tabLayout.tabCount > 7) tabLayout.removeTabAt(7)
-//                tabLayout.removeTabAt(1)
+                tabLayout.removeTabAt(1)
             }
 
             drawerView.addDrawerListener(this@LearningTabActivity)
@@ -307,11 +330,34 @@ class LearningTabActivity : PermissionActivity(),
 //            onSpyBtnClicked()
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(this@LearningTabActivity)
+            tabMoveReceiver = object : BroadcastReceiver() {
+                override fun onReceive(p0: Context?, intent: Intent?) {
+//                openStudyHistory("단원 분석", "단원 학습지 만들기")
+                    intent?.let { intent ->
+                        val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
+                        setSelectedTab(tabIndex)
+                        when(tabIndex) {
+                            6 -> {
+                                (tabFragment[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
+                            }
+                        }
 
+                        val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
+                        if (!wantScroll) return
+
+                        when {
+                            intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
+                                val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
+//                                (tabFragment[2] as BookFragment).scrollToTotalLabel(subject)
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+            }
 
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
-            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT))
-// for Api.class
+            // for Api.class
             if(referActivity == null) referActivity = this@LearningTabActivity
             registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
 //            registerReceiver(firebasePushEventReceiver, IntentFilter("FIREBASE-PUSH"))
@@ -319,85 +365,7 @@ class LearningTabActivity : PermissionActivity(),
             userTest()
         }
     }
-    fun initReceiver () {
-        tabMoveReceiver = object : BroadcastReceiver() {
-            override fun onReceive(p0: Context?, intent: Intent?) {
-//                openStudyHistory("단원 분석", "단원 학습지 만들기")
-                intent?.let { intent ->
-                    val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
-                    setSelectedTab(tabIndex)
-                    when(tabIndex) {
-                        6 -> {
-                            (tabFragment[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
-                        }
-                    }
 
-                    val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
-                    if (!wantScroll) return
-
-                    when {
-                        intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
-                            val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
-                            // TODO scroll
-//                            (tabFragment[2] as? PatternStudyFragment)?.let {
-//                                it.goPulleyMathBooks()
-//                            }
-//                            (tabFragment[2] as BookFragment).scrollToTotalLabel(subject)
-                        }
-                        else -> {}
-                    }
-                }
-            }
-        }
-        challengeReceiver = object : BroadcastReceiver() {
-            override fun onReceive(ctx: Context?, intent: Intent?) {
-                intent?.let {
-                    val challengeCourseId = it.getIntExtra(ChallengeManager.COURSE_ID, -1)
-                    when (challengeCourseId) {
-                        ChallengeManager.CourseName.스타트챌린지_개념.id -> {
-                            tabMove(1)
-                        }
-                        ChallengeManager.CourseName.스타트챌린지_유형.id,
-                        ChallengeManager.CourseName.스타트챌린지_북스.id,
-                        ChallengeManager.CourseName.스타트챌린지_워크북.id -> {
-                            tabMoveAndSendBroadcast(2, challengeCourseId)
-                        }
-                        else -> { tabMove(0) }
-                    }
-                }
-            }
-            fun tabMoveAndSendBroadcast(tabIndex: Int, courseId: Int?) {
-                tabMove(tabIndex)
-                ChallengeManager.getPatternStudyMoveIntent(courseId).let { intent ->
-                    LocalBroadcastManager.getInstance(this@LearningTabActivity).sendBroadcast(intent)
-                }
-            }
-        }
-    }
-
-    private fun initObserve() {
-        viewModel.apply {
-            user.observe(this@LearningTabActivity) {
-                MyApplication.user?.run {
-                    it.noShowAddOptionalDate = noShowAddOptionalDate
-                    it.noShowAddOptionalSubject = noShowAddOptionalSubject
-                    it.excludeSubjectCode = excludeSubjectCode
-                    it.recentSubjectCode = recentSubjectCode
-                }
-                MyApplication.user = it
-                MyApplication.token = it.token
-
-                it.commit("LearningTabAct observe")
-            }
-        }
-    }
-    fun setUserObserveAttachedByMainFragment() {
-        viewModel.user.observe(this) {
-            tabFragment.find { it.screenName == "메인" }?.let { frag ->
-                (frag as MainFragment).viewModel.initUserInfo()
-            }
-        }
-    }
     var spyCount = 0
 
     fun setOnSpyMode() {
@@ -465,15 +433,6 @@ class LearningTabActivity : PermissionActivity(),
 //        }
 //    }
 
-    fun tabMove(index: Int) {
-        binding.apply {
-            tabLayout.selectTab(tabLayout.getTabAt(index))
-        }
-    }
-    fun moveConceptCourseSubject(id: Int) {
-        val conceptFragment = tabFragment.find { it.screenName == "개념" } as ConceptCourseFragment?
-        conceptFragment?.moveSubjectId(id)
-    }
     override fun onResume() {
         super.onResume()
         AppUsageMonitor.startAppUsage()
@@ -488,13 +447,21 @@ class LearningTabActivity : PermissionActivity(),
 
             CoroutineScope(Dispatchers.IO).launch {
                 ServerStatusManager.setServerInspectionDialog(this@LearningTabActivity)
+                if (isTablet) {
+                    delay(500)
+                    withContext(Dispatchers.Main) {
+                        if (!MyApplication.firstLaunchGoConceptFlag) {
+                            tabLayout.selectTab(tabLayout.getTabAt(1))
+                            MyApplication.firstLaunchGoConceptFlag = true
+                        }
+                    }
+                }
             }
 
             checkAffiliatedTestExist()
             checkNewAlarm()
         }
     }
-
     @SuppressLint("CheckResult")
     private fun checkAffiliatedTestExist() {
         if (user?.showMainUnivTab != true) {
@@ -571,7 +538,6 @@ class LearningTabActivity : PermissionActivity(),
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(tabMoveReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(challengeReceiver)
         AppUsageMonitor.finishAppUsage()
 
         referActivity = null
@@ -686,11 +652,17 @@ class LearningTabActivity : PermissionActivity(),
     }
 
     fun handleUser() {
-        viewModel.fetchUser { user ->
+
+        user!!.syncMyInfo(this) { user ->
+
+//            if(MyApplication.user?.studentType == null) {
+//                DialogUtils.showNeedInitTestDialog(this)
+//            }
             if(!user.isValidPhone || user.isExceedDevice) { // 폰 변경, 기기중복 시 세션만료
                 sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
             }
             else if(user.isNeedToUpdateGrade()) {
+                MyApplication.user = user
                 try {
                     UpdateGradeDialog {
                         DaebakToast.show(this, "저장 완료! 업데이트 되었습니다.")
@@ -700,6 +672,13 @@ class LearningTabActivity : PermissionActivity(),
                 } catch (e: IllegalStateException) {
                     println("error : ${e}")
                 }
+            }
+            /*
+                preference 반영
+             */
+            else {
+                MyApplication.user = user
+                user.commit("LearningTab handleUser")
             }
         }
     }
@@ -783,11 +762,6 @@ class LearningTabActivity : PermissionActivity(),
 
     fun setSelectedTab(index: Int) {
         binding.tabLayout.getTabAt(index)?.select()
-    }
-    fun setConceptCourseSubjectId(index: Int) {
-        (tabFragment[1] as? ConceptCourseFragment)?.let {
-            it.viewModel.selectedSubjectId.postValue(index)
-        }
     }
 
     private fun requestNotice() {
@@ -880,6 +854,10 @@ class LearningTabActivity : PermissionActivity(),
 //        Log.d("MONITOR", "[LEARNING] TICK - ${AppUsageMonitor.accumulatedUsageTime }")
     }
 
+    override fun openMarketingDialog(mainProfile: MainProfile) {
+        MarketingManager.setMarketingBanner(this, mainProfile)
+    }
+
     // 네비게이션 드로워 메뉴에서 키보드 닫기 및 뒤로가기 처리
     var isOutSideClicked = false
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
@@ -939,5 +917,9 @@ class LearningTabActivity : PermissionActivity(),
             lessonRequest -> DaebakToast.show(this, "카메라와 마이크 권한요청을 수락해야지만 과외서비스를 사용할 수 있습니다.")
         }
     }
+}
+
+interface LearningTabInterface {
+    fun openMarketingDialog(mainProfile: MainProfile)
 }
 

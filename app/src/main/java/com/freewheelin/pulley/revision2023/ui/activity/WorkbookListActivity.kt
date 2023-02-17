@@ -18,6 +18,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
+import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
@@ -30,7 +31,9 @@ import com.freewheelin.pulley.views.snackBar.SnackBarView
 import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListener,
     BookFilterListener,
@@ -160,11 +163,11 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 //                dialog.show()
             }
             ActionType.pin -> {
-                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
+                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
                 val itemValue = "전체문제집"
                 LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", itemName, itemValue)
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
-                viewModel.togglePin(id, !book.isPinned) {
+                viewModel.togglePin(id, !book.pin) {
                     setSnackBar()
                 }
             }
@@ -219,9 +222,5 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
     override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
         fetchCustomBook()
-        viewModel.completedWorkbookChallenge {
-            //TODO 챌린지 완성
-            println("asoaso 챌린지 - 워크북 챌린지 완료")
-        }
     }
 }

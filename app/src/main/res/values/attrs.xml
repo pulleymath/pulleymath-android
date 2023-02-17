@@ -255,8 +255,4 @@
             <enum name="workbook" value="1" />
         </attr>
     </declare-styleable>
-
-    <declare-styleable name="MainUserStatusChip">
-        <attr name="status" format="integer" />
-    </declare-styleable>
 </resources>

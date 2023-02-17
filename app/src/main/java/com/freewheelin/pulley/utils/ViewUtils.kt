@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -19,13 +20,13 @@ import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.views.TooltipWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.squareup.picasso.Callback
@@ -34,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 
@@ -166,39 +168,12 @@ fun View.hide(duration:Long = 500, cb:(() -> Unit)? = null) {
     })
     startAnimation(anim)
 }
-fun View.hideToGone(duration:Long = 500, cb:(() -> Unit)? = null) {
-    if(this.visibility == View.GONE)
-        return
-
-    val anim = AlphaAnimation(1f, 0f)
-    anim.duration = duration
-    anim.setAnimationListener(object: Animation.AnimationListener{
-        override fun onAnimationRepeat(p0: Animation?) {
-        }
-
-        override fun onAnimationEnd(p0: Animation?) {
-            visibility = View.GONE
-            if(cb == null) return else cb()
-        }
-
-        override fun onAnimationStart(p0: Animation?) {
-        }
-    })
-    startAnimation(anim)
-}
 
 fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
     if(visibility == View.INVISIBLE || visibility == View.GONE)
         return
     else
         hide(duration, cb)
-}
-
-fun View.hideGoneIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
-    if(visibility == View.INVISIBLE || visibility == View.GONE)
-        return
-    else
-        hideToGone (duration, cb)
 }
 
 fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
@@ -210,28 +185,6 @@ fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
             DialogUtils.confirmHasPulleyPlus(context) {
                 PulleyPlusPriceDialog(context).show()
             }
-        }
-    }
-}
-fun View.setOnBasicCOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.BASIC_C, cb, deniedCb)
-}
-fun View.setOnBasicPOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.BASIC_P, cb, deniedCb)
-}
-fun View.setOnStandardOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.STANDARD, cb, deniedCb)
-}
-fun View.setOnPremiumClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.PREMIUM, cb, deniedCb)
-}
-fun View.setOnClickListenerByServiceTypeOrHigher(criterionServiceType: PaidServiceType, cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
-    this.setOnClickListener {
-        val serviceTypeValue = user?.serviceType?.rawValue ?: 0
-        if(serviceTypeValue >= criterionServiceType.rawValue) {
-            cb(it)
-        } else {
-            deniedCb(it)
         }
     }
 }
@@ -611,12 +564,12 @@ fun ImageView.setCookingImageURL(url: String) {
 }
 fun View.setMarginTop(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        topMargin = dp.toPx()
+        setMarginTop(dp.toPx())
     }
 }
 fun View.setMarginBottom(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        bottomMargin = dp.toPx()
+        setMarginBottom(dp.toPx())
     }
 }
 fun View.setMarginStart(dp: Int) {
