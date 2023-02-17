@@ -30,7 +30,6 @@ import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.editText.*
@@ -176,8 +175,8 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                         (error as? HttpException)?.response()?.errorBody()?.string()?.let {
                             val listType = object: TypeToken<ResponseBody<SignInAppToken>>(){}.type
                             val response: ResponseBody<SignInAppToken> = Gson().fromJson(it, listType)
-                            Log.e(javaClass.simpleName, "group error=${error.localizedMessage} , ${error.message}, ${response.error}")
-                            response.error?.let { error -> errorHandle(error) }
+                            Log.e(javaClass.simpleName, "group error=${error.localizedMessage} , ${error.message}, ${response.error}, ${response.message}")
+                            errorHandle(response)
 
                         }
 
@@ -187,16 +186,19 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
 
-    private fun errorHandle(errMsg: String) {
+
+    private fun errorHandle(res: ResponseBody<SignInAppToken>) {
+        val error = res.error
+        val errMsg = res.message
         binding.apply {
-            when (errMsg) {
+            when (error) {
                 WRONG_LOGINID -> {
-                    emailField.showErrorMsg(errMsg)
+                    emailField.showErrorMsg(errMsg ?: "")
                     pwField.isShownError = false
                 }
                 WRONG_LOGINPW, NOT_MATCH_PW -> {
                     emailField.isShownError = false
-                    pwField.showErrorMsg(errMsg)
+                    pwField.showErrorMsg(errMsg ?: "")
                 }
                 NOT_FOUND_DATA -> {
                     pwField.isShownError = false
@@ -204,7 +206,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 }
                 LOGINID_INVALID -> {
                     pwField.isShownError = false
-                    emailField.showErrorMsg(errMsg)
+                    emailField.showErrorMsg(errMsg ?: "")
                 }
                 LOCK_ACCOUNT -> {
                     DialogUtils.lockAccountDialog(this@LoginActivity) {
@@ -259,7 +261,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         } else {
             clearToken()
             binding.apply {
-                res.message?.let { errorHandle(it) }
+                errorHandle(res)
             }
         }
     }
