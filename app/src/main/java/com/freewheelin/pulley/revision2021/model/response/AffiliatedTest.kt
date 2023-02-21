@@ -336,8 +336,8 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
             "물리학" -> {
                 when (score) {
                     in 0..40 -> 1
-                    in 41..85 -> 2
-                    in 86..100 -> 3
+                    in 41..70 -> 2
+                    in 71..100 -> 3
                     else -> 2
                 }
             }
