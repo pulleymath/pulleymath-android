@@ -267,6 +267,7 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
     var workbook_id: Int = 0
     var no: Int = 0
     var subject: String? = null
+    // TODO subject TO enum 고려하기
     lateinit var unit: String
     lateinit var part: String
     lateinit var intention: String

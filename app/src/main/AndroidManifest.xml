@@ -263,7 +263,12 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
-
+        <activity
+            android:name=".revision2023.ui.activity.UnivAdditionalLearningActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape" />
         <service
             android:name=".service.PulleyFirebaseMessagingService"
             android:enabled="true"
