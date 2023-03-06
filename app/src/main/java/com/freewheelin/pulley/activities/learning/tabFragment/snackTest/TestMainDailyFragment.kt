@@ -14,7 +14,10 @@ import com.freewheelin.pulley.databinding.FragmentTestMainBinding
 import com.freewheelin.pulley.databinding.FragmentTestMainResultBinding
 import com.freewheelin.pulley.databinding.FragmentTestMainUnavailableTestBinding
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import java.util.*
 
 class TestMainDailyFragment : TestMainBaseFragment() {
@@ -245,9 +248,22 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                 user!!.getAllSubjectText()
             }
 
-            startBtn.setOnClickListener {
-                listener?.onSolveBtnClicked(test)
+            val showLockIv = user?.serviceType?.isFreeUser == true
+            if (showLockIv) {
+                startBtn.setLock(ButtonLockImage.mid20)
+                startBtn.toDisableUI()
+            } else {
+                startBtn.setUnlock()
+                startBtn.isEnableUI()
             }
+
+            startBtn.setOnPaidUserClickListener(cb = {
+                listener?.onSolveBtnClicked(test)
+            },
+            deniedCb = {
+                val dialog = PurchaseGuideDialog()
+                childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+            })
 
             settingBtn.setOnClickListener {
                 listener?.onSettingBtnClicked(test)

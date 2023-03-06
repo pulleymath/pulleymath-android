@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -7,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -26,10 +28,13 @@ import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
 import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
 import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.buttons.SecondaryButton
 import com.freewheelin.pulley.views.textViews.SortableListener
@@ -37,6 +42,7 @@ import com.freewheelin.pulley.views.textViews.SortableTextView
 
 interface CustomizeBookDialogListener {
     fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book)
+    fun onDeniedUser()
 }
 
 class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, ObservableHashSetListener<CommercialBookPage> {
@@ -84,7 +90,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     // 체크박스 사용 막
     var blockCheck = false
 
-    constructor(context: Context, listener: CustomizeBookDialogListener?): super(context) {
+    var isWorkbookStartChallengeInProgress = false
+    constructor(context: Context, isStartChallengeInProgress: Boolean, listener: CustomizeBookDialogListener?): super(context) {
         setContentView(R.layout.dialog_book_customize)
         // fullscreen dialog
         if(!context.isTablet) {
@@ -93,7 +100,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
                 WindowManager.LayoutParams.MATCH_PARENT
             )
         }
-
+        isWorkbookStartChallengeInProgress = isStartChallengeInProgress
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
         this.listener = listener
@@ -195,26 +202,50 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         nowCheckbox.visibility = View.GONE
         bookListRv.adapter = CommercialAdapter()
         bookListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        actionBtn.toDisableUI()
         bookEmptyTv.visibility = View.INVISIBLE
+        challengeStampIv.visibility = if (isWorkbookStartChallengeInProgress) View.VISIBLE else View.GONE
+        nowCheckbox.isEnabled = !isWorkbookStartChallengeInProgress
+        val color = if (isWorkbookStartChallengeInProgress) R.color.gray_700_opa_30 else R.color.gray_800
+        nowCheckbox.setTextColor(ContextCompat.getColor(context, color))
 
-        actionBtn.setOnClickListener {
-            onActionBtnClicked()
+        actionBtn.toDisableUI()
+
+        val isAvailable = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.PREMIUM) == true
+
+        if (!isWorkbookStartChallengeInProgress && !isAvailable) {
+            actionBtn.setLock(ButtonLockImage.mid20)
+        } else {
+            actionBtn.setUnlock()
         }
+
+        actionBtn.setOnPremiumClickListener(cb = {
+            onActionBtnClicked()
+        }, deniedCb = {
+            if (isWorkbookStartChallengeInProgress) {
+                onActionBtnClicked()
+            } else {
+//                val dialog = PurchaseGuideDialog()
+//                val fm = (context as AppCompatActivity).supportFragmentManager
+//                fm.let { dialog.show(it, "purchaseGuideDialog")}
+//                DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "여기서 또 다이얼로그 나와도 괜찮음? ")
+                dismiss()
+                listener?.onDeniedUser()
+            }
+        })
 
         cancelBtn.setOnClickListener {
             onCancelBtnClicked()
         }
 
-        nowCheckbox.setOnCheckedChangeListener { compoundButton, isCheck ->
+        nowCheckbox.setOnCheckedChangeListener { _, isCheck ->
             val itemValue = if(isCheck) "체크" else "안체크"
             LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-바로풀기체크", itemValue)
         }
         subjectSl.listener = this
-        subjectSl.isSelected = true
         subjectSl.order = SortableTextView.Order.ascend
 
         bookSl.listener = this
+        bookSl.isSelected = true
         bookSeriesSl.listener = this
         publisherSl.listener = this
 
@@ -236,7 +267,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     }
 
     private fun onActionBtnClicked() {
-        if(actionBtn.isEnableUI() == false) return
+        if(!actionBtn.isEnableUI()) return
 
         when(step) {
             1 -> {
@@ -259,10 +290,10 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
                     R.id.originRb -> WrongManagementDialog.Level.normal
                     else -> WrongManagementDialog.Level.harder
                 }
-                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-만들기",
-                        "문제수: ${problemPerCnt}\n"+
-                        "난이도: ${level.eventValue}\n"+
-                        "클리어: ${if(containClear) "포함" else "미포함"}")
+//                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-만들기",
+//                        "문제수: ${problemPerCnt}\n"+
+//                        "난이도: ${level.eventValue}\n"+
+//                        "클리어: ${if(containClear) "포함" else "미포함"}")
                 BookManager.makeCustomBook(
                         context,
                         user!!,
@@ -284,6 +315,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initStep2() {
         checkedPageProblem.listener = this
         problemPerCnt = 1
@@ -316,7 +348,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             false
         }
 
-        plusBtn.setOnTouchListener { view, motionEvent ->
+        plusBtn.setOnTouchListener { _, motionEvent ->
             if ((motionEvent.action == MotionEvent.ACTION_UP || motionEvent.action == MotionEvent.ACTION_CANCEL) && autoIncrement) {
                 autoIncrement = false
                 syncProblemCnt()
@@ -339,7 +371,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         }
         allCheckBox.setOnCheckedChangeListener(null)
         allCheckBox.isChecked = false
-        allCheckBox.setOnCheckedChangeListener { compoundButton, isChecked ->
+        allCheckBox.setOnCheckedChangeListener { _, isChecked ->
             val problems = pages?.get(selectedPage)
             if(problems != null) {
                 if (isChecked)
@@ -349,8 +381,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             }
         }
         
-        BookManager.getCommercialBookPage(context, selectedBook!!) {
-            this.pages = it?.groupBy { it.page }
+        BookManager.getCommercialBookPage(context, selectedBook!!) { list ->
+            this.pages = list?.groupBy { it.page }
             pageRv.adapter = PageAdapter()
             pageRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             selectedPage = this.pages?.toList()?.getOrNull(0)?.first
@@ -503,7 +535,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     fun syncProblemCnt() {
         actionBtn.startLoding()
         delayHandler.removeCallbacksAndMessages(null)
-        if(checkedPageProblem.isEmpty() == true) {
+        if(checkedPageProblem.isEmpty()) {
             setProblemCnt(0)
         } else {
             val problemPerCnt = problemPerCnt
@@ -529,13 +561,37 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     private fun setProblemCnt(cnt: Int) {
         totalCntTv.text = "$cnt"
-        if(cnt in 1 .. 100) {
+        val isUserServiceTypePremium = user?.serviceType == PaidServiceType.PREMIUM
+        if (isWorkbookStartChallengeInProgress && !isUserServiceTypePremium) {
+            when (cnt) {
+                0 -> {
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    cntImpossibleCl.visibility = View.INVISIBLE
+                    blockCheck = false
+                    actionBtn.toDisableUI()
+                }
+                in 1 .. 5 -> {
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+                    cntImpossibleCl.visibility = View.INVISIBLE
+                    blockCheck = false
+                    actionBtn.toEnableUI()
+                }
+                else -> {
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    cntImpossibleCl.visibility = View.VISIBLE
+                    cntImpossibleTv.text = "스타트 챌린지에서는 최대 5문제까지 만들 수 있습니다.\n범위를 다시 선택해주세요."
+                    actionBtn.toDisableUI()
+                    blockCheck = true
+                }
+            }
+        } else if(cnt in 1 .. 100) {
             totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
             cntImpossibleCl.visibility = View.INVISIBLE
             blockCheck = false
             actionBtn.toEnableUI()
         } else {
             totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+            cntImpossibleTv.text = "최대 100문제까지 만들 수 있습니다."
             if(cnt == 0) {
                 cntImpossibleCl.visibility = View.INVISIBLE
                 blockCheck = false
@@ -585,12 +641,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             problemPerCnt -= 1
         cntTv.text = problemPerCnt.toString()
     }
-    inner class RptUpdater : Runnable {
-        private var delay: Long
-
-        constructor(delay: Long=300): super() {
-            this.delay = delay
-        }
+    inner class RptUpdater(private var delay: Long = 300) : Runnable {
 
         override fun run() {
             val postDelay = if (delay < 0)  50 else delay
@@ -629,11 +680,13 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     lateinit var includeRb: RadioButton
     lateinit var excludeRb: RadioButton
     lateinit var cntImpossibleCl: ConstraintLayout
+    lateinit var cntImpossibleTv: TextView
     lateinit var step1Header: ConstraintLayout
     lateinit var step1Body: ConstraintLayout
     lateinit var cntImpossibleIv: ImageView
     lateinit var plusBtn: ImageButton
     lateinit var minusBtn: ImageButton
+    lateinit var challengeStampIv: ImageView
     lateinit var allCheckBox: CheckBox
     lateinit var totalCntTv: TextView
     lateinit var cntTv: TextView
@@ -662,9 +715,11 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         includeRb = findViewById(R.id.includeRb)
         excludeRb = findViewById(R.id.excludeRb)
         cntImpossibleCl = findViewById(R.id.cntImpossibleCl)
+        cntImpossibleTv = findViewById(R.id.cntImpossibleTv)
         cntImpossibleIv = findViewById(R.id.cntImpossibleIv)
         plusBtn = findViewById(R.id.plusBtn)
         minusBtn = findViewById(R.id.minusBtn)
+        challengeStampIv = findViewById(R.id.challengeStampIv)
         allCheckBox = findViewById(R.id.allCheckBox)
         step1Header = findViewById(R.id.step1Header)
         step1Body = findViewById(R.id.step1Body)
@@ -674,16 +729,16 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 }
 
 class CommercialBookHolder(val itemBinding: ItemCommercialListBinding): RecyclerView.ViewHolder(itemBinding.root) {
-    val subjectTv = itemBinding.subjectTv
-    val bookTv = itemBinding.bookTv
-    val bookSeriesTv = itemBinding.bookSeriesTv
-    val publisherTv = itemBinding.publisherTv
 
     fun set(commercialBook: CommercialBook) {
-        subjectTv.text = commercialBook.subjectType?.text
-        bookTv.text = commercialBook.bookName
-        bookSeriesTv.text = commercialBook.bookTag
-        publisherTv.text = commercialBook.publisher
+        itemBinding.apply {
+            subjectTv.text = commercialBook.subjectType?.text
+            bookTv.text = commercialBook.bookName
+            bookSeriesTv.text = commercialBook.bookTag
+            publisherTv.text = commercialBook.publisher
+            hasBestTag = commercialBook.tag == CommercialBook.Tag.Best
+            hasNewTag = commercialBook.tag == CommercialBook.Tag.New
+        }
     }
 }
 

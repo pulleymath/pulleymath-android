@@ -2,22 +2,17 @@ package com.freewheelin.pulley.core.manage
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.freewheelin.pulley.core.API.ResponseModel.WeeklyProblemCount
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
-import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
-import com.freewheelin.pulley.views.DaebakToast
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -35,15 +30,15 @@ object TestManager {
     var isNeedToFullDailyResultInTab = false
 
     fun getTestList(context: Context, user: User, cb: (tests: List<Test>) -> Unit) {
-        API_V2.getTestList(user.studentID).enqueue(object: Callback<List<Test>> {
-            override fun onFailure(call: Call<List<Test>>, t: Throwable) {
+        API_V3.getTestList(user.studentID).enqueue(object: Callback<ResponseBody<List<Test>>> {
+            override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<List<Test>>, response: Response<List<Test>>) {
+            override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
                 val test = response.body()
-                if(test != null && response.isSuccessful) {
-                    cb(test)
+                if(test?.data != null && response.isSuccessful) {
+                    cb(test.data)
                 } else {
                     responseError(context, response)
                 }
@@ -53,8 +48,8 @@ object TestManager {
     }
 
     fun getDailyTest(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
-
-        API_V2.getDailyTest(user!!.studentID).enqueue(object: Callback<Template<Test>>{
+        println("asoaso user!!.studentID :${user.studentID}")
+        API_V2.getDailyTest(user.studentID).enqueue(object: Callback<Template<Test>>{
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
                 // 데이터를 가져올 수 없습니다.
                 responseFailed(context, t)
@@ -170,10 +165,10 @@ object TestManager {
             }
 
             override fun onResponse(call: Call<Template<Test>>, response: Response<Template<Test>>) {
-                val test = response.body()?.data
-                test?.arrangeProblem()
-                if(response.isSuccessful && test != null) {
-                    successCB(test)
+                val resTest = response.body()?.data
+                resTest?.arrangeProblem()
+                if(response.isSuccessful && resTest != null) {
+                    successCB(resTest)
                 } else {
                     responseError(context, response, param)
                 }

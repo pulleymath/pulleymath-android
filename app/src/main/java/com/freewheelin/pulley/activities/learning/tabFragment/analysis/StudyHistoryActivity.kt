@@ -25,6 +25,8 @@ import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.DabakTabRadioListener
@@ -158,80 +160,95 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                 holder.listBinding.borderView.visibility = View.VISIBLE
             }
 
+
             holder.listBinding.reportBtn.setOnClickListener {
-                LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
-                when(content.pieceCategoryTag) {
-                    BookType.MO -> {
-                        getMockWithOptionalSubjects(content) { mock ->
-                            val intent = MockReportActivity.getIntent(this@StudyHistoryActivity, mock)
-                            startActivity(intent)
-                        }
-                    }
-                    BookType.TEST -> {
-                        val test = Test(content)
-                        when(test.getTestType()) {
-                            Test.TestType.weekly ->  {
-                                val intent = WeeklyTestReportActivity.getIntent(this@StudyHistoryActivity, test)
+                if (content.isLocked) {
+                    val dialog = PurchaseGuideDialog()
+                    supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//                    DialogUtils.confirmDialog(this@StudyHistoryActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
+                } else {
+                    LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
+                    when(content.pieceCategoryTag) {
+                        BookType.MO -> {
+                            getMockWithOptionalSubjects(content) { mock ->
+                                val intent = MockReportActivity.getIntent(this@StudyHistoryActivity, mock)
                                 startActivity(intent)
                             }
-                            Test.TestType.wrong -> {
-                                val intent = WrongTestReportActivity.getIntent(this@StudyHistoryActivity, test)
-                                startActivity(intent)
-                            }
-                            else -> {
-                                LogUtils.assert(false, "예상치 못한 테스트 타입 ${test.getTestType()}")
+                        }
+                        BookType.TEST -> {
+                            val test = Test(content)
+                            when(test.getTestType()) {
+                                Test.TestType.weekly ->  {
+                                    val intent = WeeklyTestReportActivity.getIntent(this@StudyHistoryActivity, test)
+                                    startActivity(intent)
+                                }
+                                Test.TestType.wrong -> {
+                                    val intent = WrongTestReportActivity.getIntent(this@StudyHistoryActivity, test)
+                                    startActivity(intent)
+                                }
+                                else -> {
+                                    LogUtils.assert(false, "예상치 못한 테스트 타입 ${test.getTestType()}")
+                                }
                             }
                         }
-                    }
-                    else -> {
-                        LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
+                        else -> {
+                            LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
+                        }
                     }
                 }
             }
 
-            holder.listBinding.solveBtn.setOnClickListener {
-                LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
-                when(content.pieceCategoryTag) {
-                    BookType.MO -> {
-                        if(content.isCompleted()) {
-                            getMockWithOptionalSubjects(content) { mock ->
-                                val intent = SolveActivity.getReviewIntent(this@StudyHistoryActivity, mock)
-                                startActivity(intent)
+            holder.listBinding.solveBtnWrapperCl.setOnClickListener {
+                if (content.isLocked) {
+                    val dialog = PurchaseGuideDialog()
+                    supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//                    DialogUtils.confirmDialog(this@StudyHistoryActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
+                } else {
+                    LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역풀기")
+                    when(content.pieceCategoryTag) {
+                        BookType.MO -> {
+                            if(content.isCompleted()) {
+                                getMockWithOptionalSubjects(content) { mock ->
+                                    val intent = SolveActivity.getReviewIntent(this@StudyHistoryActivity, mock)
+                                    startActivity(intent)
+                                }
+                            } else {
+                                val exam = MockExam(content)
+                                MockExamGuideDialog(this@StudyHistoryActivity, exam, true, this@StudyHistoryActivity).show()
                             }
-                        } else {
-                            val exam = MockExam(content)
-                            MockExamGuideDialog(this@StudyHistoryActivity, exam, true, this@StudyHistoryActivity).show()
                         }
-                    }
-                    BookType.CUSTOM_BOOK -> {
-                        val intent = SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
-                        startActivity(intent)
-                    }
-                    BookType.BOOK -> {
-                        val intent = if(content.isCompleted())
-                            SolveActivity.getReviewIntent(this@StudyHistoryActivity, Book(content))
-                        else
-                            SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
-                        startActivity(intent)
-                    }
-
-                    BookType.NOTE, BookType.RECOMMEND -> {
-                        val intent = if(content.isCompleted()) {
-                            SolveActivity.getReviewIntent(this@StudyHistoryActivity, Piece(content))
-                        } else {
-                            SolveActivity.getIntent(this@StudyHistoryActivity, Piece(content))
+                        BookType.CUSTOM_BOOK -> {
+                            val intent = SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
+                            startActivity(intent)
                         }
-                        startActivity(intent)
-                    }
+                        BookType.BOOK -> {
+                            println("asoaso solveBtnWrapperCl content!!! subca?: ${content.pieceSubCategory}")
+                            val intent = if(content.isCompleted())
+//                                SolveActivity.getReviewIntent(this@StudyHistoryActivity, Book(content))
+                                SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
+                            else
+                                SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
+                            startActivity(intent)
+                        }
 
-                    BookType.TEST -> {
-                        val intent = if(content.isCompleted())
-                            SolveActivity.getReviewIntent(this@StudyHistoryActivity, Test(content))
-                        else
-                            SolveActivity.getIntent(this@StudyHistoryActivity, Test(content))
-                        startActivity(intent)
+                        BookType.NOTE, BookType.RECOMMEND -> {
+                            val intent = if(content.isCompleted()) {
+                                SolveActivity.getReviewIntent(this@StudyHistoryActivity, Piece(content))
+                            } else {
+                                SolveActivity.getIntent(this@StudyHistoryActivity, Piece(content))
+                            }
+                            startActivity(intent)
+                        }
+
+                        BookType.TEST -> {
+                            val intent = if(content.isCompleted())
+                                SolveActivity.getReviewIntent(this@StudyHistoryActivity, Test(content))
+                            else
+                                SolveActivity.getIntent(this@StudyHistoryActivity, Test(content))
+                            startActivity(intent)
+                        }
+                        else -> {}
                     }
-                    else -> {}
                 }
             }
         }

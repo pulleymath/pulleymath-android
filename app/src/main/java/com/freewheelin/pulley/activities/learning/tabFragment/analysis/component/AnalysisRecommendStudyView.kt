@@ -4,20 +4,25 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.findFragment
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.WeakChapterResult
 import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.utils.partialFontAndColored
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.bars.VerticalBar
-import com.freewheelin.pulley.views.buttons.PrimaryButton
 
 interface AnalysisRecommendStudyViewListener {
     fun onRecommendBtnClicked(view: AnalysisRecommendStudyView)
+//    fun onDeniedCallback()
 
 }
 class AnalysisRecommendStudyView: ConstraintLayout {
@@ -29,12 +34,14 @@ class AnalysisRecommendStudyView: ConstraintLayout {
     var myCorrectRateBar: VerticalBar
     var averageCorrectRateBar: VerticalBar
     var averageBarLabel: TextView
-    var actionBtn: PrimaryButton
+//    var actionBtn: PrimaryButton
+    var actionBtnWrapperCl: ConstraintLayout
 
     var guideTv: TextView
     var unitTv: TextView
     var recommendTv: TextView
     var myBarLabel: TextView
+    var actionLockIv: ImageView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_analysis_recommend_study, this)
@@ -42,12 +49,13 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         myCorrectRateBar = findViewById(R.id.myCorrectRateBar)
         averageCorrectRateBar = findViewById(R.id.averageCorrectRateBar)
         averageBarLabel = findViewById(R.id.averageBarLabel)
-        actionBtn = findViewById(R.id.actionBtn)
+        actionBtnWrapperCl = findViewById(R.id.actionBtnWrapperCl)
 
         guideTv = findViewById(R.id.guideTv)
         unitTv = findViewById(R.id.intentionTv)
         recommendTv = findViewById(R.id.recommendTv)
         myBarLabel = findViewById(R.id.myBarLabel)
+        actionLockIv = findViewById(R.id.actionLockIv)
 
         myCorrectRateBar.value = 0.3f
         myCorrectRateBar.barHeight = resources.getDimension(R.dimen.dp120)
@@ -57,7 +65,12 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         averageCorrectRateBar.barWidth = resources.getDimension(R.dimen.dp56)
         averageCorrectRateBar.color = ContextCompat.getColor(context, R.color.grey_e0e0e0)
         averageBarLabel.text = "등급\n평균"
-        actionBtn.setOnClickListener { listener?.onRecommendBtnClicked(this) }
+        actionBtnWrapperCl.setOnBasicPOrHigherClickListener(cb = { listener?.onRecommendBtnClicked(this) },
+            deniedCb = {
+//                listener?.onDeniedCallback()
+                val dialog = PurchaseGuideDialog()
+                FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisRecommendStudyView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+            })
     }
 
     fun setUpUI(result: WeakChapterResult, curation: Curation) {
@@ -107,5 +120,8 @@ class AnalysisRecommendStudyView: ConstraintLayout {
                         ContextCompat.getColor(context!!, R.color.purple_6D6DFF),
                         text2
                 )
+
+        val showLockIv = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == false
+        actionLockIv.visibleIf(showLockIv)
     }
 }

@@ -16,9 +16,9 @@ class StudyChapter: BaseDiffItem, Serializable {
             children = listOf()
         }
         fun createFooter() = StudyChapter().apply {
-            id = -2
+            id = 999999
             name = ""
-            sequence = -2
+            sequence = 999999
             children = listOf()
         }
         fun createTutorial() = StudyChapter().apply {
@@ -59,6 +59,7 @@ class StudyChapter: BaseDiffItem, Serializable {
     var sequence: Int = 0
     var progress: Progress? = null
     var lastStudiedAt: String? = null
+    var category: String? = null
     var children: List<StudyChapter> = listOf()
 
     var parentName: String = ""
@@ -70,6 +71,7 @@ class StudyChapter: BaseDiffItem, Serializable {
     var isParentChapterLast: Boolean = false
     var parentSequence: Int = 0
 
+    var isLocked = false
     val lastStudiedFormatting: String
         get() {
             if (lastStudiedAt == null) return "학습을 시작해보세요!"
@@ -88,7 +90,7 @@ class StudyChapter: BaseDiffItem, Serializable {
                 3 -> { "Ⅲ" }
                 else -> { "" }
             }
-            return "$seq. ${parentName}"
+            return if (sequence == TUTORIAL_SEQUENCE) "" else "$seq. ${parentName}"
         }
 
     val middleTitle: String
@@ -171,7 +173,9 @@ class StudyChapter: BaseDiffItem, Serializable {
             }
             return 0.0
         }
-
+    fun isStartChallengeRewardCard(): Boolean {
+        return category == "START_REWARD"
+    }
     fun isChildExist(index: Int): Boolean {
         return children.size > index
     }

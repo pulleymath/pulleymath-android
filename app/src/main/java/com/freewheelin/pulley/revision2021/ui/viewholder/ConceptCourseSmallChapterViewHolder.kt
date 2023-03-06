@@ -3,19 +3,20 @@ package com.freewheelin.pulley.revision2021.ui.viewholder
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.databinding.ItemSmallChapterBinding
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 
 class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterBinding, private val viewModel: ConceptCourseViewModel, val getResult: ActivityResultLauncher<Intent>): RecyclerView.ViewHolder(binding.root) {
@@ -26,10 +27,12 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             isNextItemExist = item.hasNextItem
             lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
 
-            smallChapterTitleTv.text = item.name
+            smallChapterTitleTv.text = item.name.trim()
 
             setFirstItemMarginStart(rootCl, item.isFirstSmallItem)
+            setFirstItemMarginStart(challengeStampIv, item.isFirstSmallItem)
             setLastItemMarginEnd(rootCl, item.isLastSmallItem)
+            setLastItemMarginEnd(challengeStampIv, item.isLastSmallItem)
             setExerciseTvTextColor(item)
             setViewMarginEnd(backgroundExerciseProgressBarIv, item)
             setViewMarginEnd(backgroundPatternProgressBarIv, item)
@@ -47,24 +50,62 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setDoneStampIv(item)
             setRightArrowIv(item)
             setSmallChapterRootCl(item)
-
+            setChallengeStampIv(item)
+            setLockIv(item)
         }
     }
     private fun setSmallChapterRootCl(item: StudyChapter) {
         binding.smallChapterRootCl.apply {
             setOnTouchListener(BoongthEffect())
             setOnClickListener {
-                if (item.sequence == StudyChapter.TUTORIAL_SEQUENCE) {
-                    context.applicationContext.startActivity(LCTutorialActivity.getIntentAddFlags(context, true))
+                if (item.isLocked) {
+                    val dialog = PurchaseGuideDialog()
+                    val fm = (context as AppCompatActivity).supportFragmentManager
+                    fm.let { dialog.show(it, "purchaseGuideDialog")}
                     return@setOnClickListener
                 }
-                viewModel.createLearningCourseOnStudentId(item.id) {
-                    val chapterId = item.id
-                    val name = item.name
-                    val subjectId = viewModel.selectedSubjectId.value ?: LCSubject.SubjectIndicator.MathSang.rawValue
-                    getResult.launch(LearningCourseActivity.getIntent(context, subjectId, chapterId, name))
+                if (item.sequence == StudyChapter.TUTORIAL_SEQUENCE) {
+                    getResult.launch(LCTutorialActivity.getIntentAddFlags(context))
+                    return@setOnClickListener
                 }
+                val isUnderBasicC = MyApplication.user?.serviceType?.isUnderBasicC() == true
+                val isStartChallengeRewardCard = item.isStartChallengeRewardCard()
+                if (isUnderBasicC && !isStartChallengeRewardCard) {
+                    DialogUtils.confirmDialog(context,
+                        "이 학습지로 선택하실 건가요?",
+                        "학습지 1개만 무료로 이용 가능해요 :)",
+                        "아니오",
+                        "네, 선택할래요",
+                        rightBtnCB = {
+                            createLearningCourse(item)
+                        })
+                    return@setOnClickListener
+                }
+
+                createLearningCourse(item)
             }
+        }
+    }
+    private fun createLearningCourse(item: StudyChapter) {
+        viewModel.createLearningCourseOnStudentId(item.id) {
+            val chapterId = item.id
+            val name = item.name
+            val subjectId = viewModel.selectedSubjectId.value ?: LCSubject.SubjectIndicator.MathSang.rawValue
+            getResult.launch(LearningCourseActivity.getIntent(context, subjectId, chapterId, name))
+        }
+    }
+    private fun setLockIv(item: StudyChapter) {
+        binding.lockIv.apply {
+            visibility = if (item.isLocked) View.VISIBLE else View.GONE
+        }
+    }
+    private fun setChallengeStampIv(item: StudyChapter) {
+        val isConceptChallengeInProgress = viewModel.joinedChallengeList.value?.find {
+            it.startChallenge?.isConceptCourseInProgress == true
+        } != null
+        val isStartCategory = item.category == "START"
+        binding.challengeStampIv.apply {
+            visibility = if (isConceptChallengeInProgress && isStartCategory) View.VISIBLE else View.GONE
         }
     }
     private fun setRightArrowIv(item: StudyChapter) {
@@ -115,7 +156,6 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setTextColor(ContextCompat.getColor(context, color))
         }
     }
-
     private fun setBetweenWhiteBar(item: StudyChapter) {
         binding.whiteBarView.apply {
             visibility = if (item.progress?.pattern?.userWrongCount == 0) View.GONE else View.VISIBLE
@@ -208,9 +248,9 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
         view.setMarginEnd(value)
     }
     private fun setFirstItemMarginStart(view: View, isFirstItem: Boolean) {
-        view.setMarginStart(if (isFirstItem) 22 else 0)
+        view.setMarginStart(if (isFirstItem) 48 else 0)
     }
     private fun setLastItemMarginEnd(view: View, isLastItem: Boolean) {
-        view.setMarginEnd(if (isLastItem) 22 else 0)
+        view.setMarginEnd(if (isLastItem) 48 else 0)
     }
 }

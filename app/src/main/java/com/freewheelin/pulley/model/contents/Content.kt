@@ -59,7 +59,8 @@ open class Content: Serializable {
 //    var id: Int = 0
     var pieceID: Int = 0
 
-    @PrimaryKey(autoGenerate = false)var assignID: Int? = null
+//    @PrimaryKey(autoGenerate = false) var assignID: Int? = null
+    var assignID: Int? = null
 
     var problems: List<Problem> = listOf()
     @Ignore
@@ -93,6 +94,8 @@ open class Content: Serializable {
     // Book 과 Mock에서 사용함
     var chapter: String = ""
 
+    var isLocked: Boolean = true
+
     val category: PieceCategory
         get() {
             if(!isDerivedContent() && getPieceCategory().contains(PieceCategory.mockExam))
@@ -125,6 +128,18 @@ open class Content: Serializable {
     var updateDateTime: Date? = null
 
     var pieceSubCategory: String = ""
+    fun isStartChallengePiece(): Boolean {
+        return pieceSubCategory == "START"
+    }
+    fun isStartChallengeRewardPiece(): Boolean {
+        return pieceSubCategory == "START_REWARD"
+    }
+    fun isStartChallengeBookPiece(): Boolean {
+        return pieceSubCategory == "START" && pieceCategoryTag == BookType.BOOK
+    }
+    fun isStartChallengeRewardBookPiece(): Boolean {
+        return pieceSubCategory == "START_REWARD" && pieceCategoryTag == BookType.BOOK
+    }
     constructor()
     constructor(content: Content) {
         this.pieceID = content.pieceID
@@ -138,9 +153,15 @@ open class Content: Serializable {
         this.similarProblemNumber = content.similarProblemNumber
         this.bookName = content.bookName
         this.pieceCategoryTag = content.pieceCategoryTag
+
         // mockID 추가
         this.mockID = content.mockID
         // book과 mock에서 사용함
+        this.chapter = content.chapter
+
+        this.pieceSubCategory = content.pieceSubCategory
+        this.isLocked = content.isLocked
+        this.updateDateTime = content.updateDateTime
         this.chapter = content.chapter
     }
 

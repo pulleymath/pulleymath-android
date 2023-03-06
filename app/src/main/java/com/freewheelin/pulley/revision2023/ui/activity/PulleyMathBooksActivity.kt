@@ -8,37 +8,30 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.book.*
-import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.Banner
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.BookManager
-import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
-import com.freewheelin.pulley.databinding.ItemTestBinding
-import com.freewheelin.pulley.dialogs.CustomizeBookDialog
-import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
 import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.model.contents.Book
-import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
-import com.freewheelin.pulley.revision2021.model.CookingInfoItem
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
+import com.freewheelin.pulley.revision2021.utils.observeOnce
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
+import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
@@ -46,27 +39,27 @@ import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.snackBar.SnackBar
 import com.freewheelin.pulley.views.snackBar.SnackBarView
 import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 
 class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListener, PatternStudyListener, BookFilterListener,
-    EmailInputDialogListener, CustomizeBookDialogListener {
+    EmailInputDialogListener {
 
     val binding: ActivityPulleyMathBooksBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_pulley_math_books, null, false)
     }
     private val viewModel: PulleyMathBooksViewModel by viewModels()
-    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, this)
+    lateinit var totalPlanAdapter: PatternStudyTotalPlanAdapter
+    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     companion object {
+        const val FOCUS_ON_TOTAL_LABEL = "FOCUS_ON_TOTAL_LABEL"
+        const val CHALLENGE_PATTERN_FINISHED = 302
         @JvmStatic
-        fun getIntent(context: Context): Intent {
+        fun getIntent(context: Context, isFocus: Boolean = false): Intent {
             return Intent(context, PulleyMathBooksActivity::class.java).apply {
-
+                putExtra(FOCUS_ON_TOTAL_LABEL, isFocus)
             }
         }
     }
@@ -85,6 +78,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        val isFocusingOnTotalLabel = intent.getBooleanExtra(FOCUS_ON_TOTAL_LABEL, false)
 
         binding.apply {
             vm = viewModel
@@ -93,24 +87,29 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             initAdapter()
             initUI()
             initRecommend()
+            initActivityResult()
             btnBack.setOnClickListener {
                 finish()
             }
         }
 
         viewModel.apply {
+            checkActionOfStartChallenge {
+                val guideDialog = ChallengeGuideManager.getStartGuideMission2()
+                supportFragmentManager.let { guideDialog.show(it, "getStartGuideMission2") }
+            }
+
             playTotalLoadingView.observe(this@PulleyMathBooksActivity) {
                 if (it) {
                     binding.totalLoadingView.playAnimation()
                 } else {
                     binding.totalLoadingView.cancelAnimation()
-
                 }
             }
             books.observe(this@PulleyMathBooksActivity) {
-
                 if (latestFilters == binding.filterView.selectedFilterTypes) {
                     totalPlanAdapter.submitList(it)
+                    binding.totalRv.scrollToPosition(0)
                     if (it.isEmpty()) {
                         binding.totalEmptyContainer.show(300)
                     } else {
@@ -126,6 +125,13 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     playTotalLoadingView.postValue(false)
                     showTotalPlanCover.postValue(false)
                 }
+            }
+            initPositionSettingFlag.observeOnce(this@PulleyMathBooksActivity) {
+                if (!isFocusingOnTotalLabel) return@observeOnce
+                val outArr = arrayOf(0, 0).toIntArray()
+                binding.totalLabelTv.getLocationOnScreen(outArr)
+                val yValueOnView = outArr[1] - 100.toPx()
+                binding.rootView.smoothScrollTo(0, yValueOnView)
             }
         }
     }
@@ -145,6 +151,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     fun initAdapter() {
         binding.apply {
+            totalPlanAdapter = PatternStudyTotalPlanAdapter (this@PulleyMathBooksActivity, this@PulleyMathBooksActivity, viewModel)
             totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, 3)
             totalRv.adapter = totalPlanAdapter
             totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), 0, 3))
@@ -175,6 +182,33 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             }
         }
     }
+    private fun initActivityResult() {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                CHALLENGE_PATTERN_FINISHED -> {
+                    viewModel.joinedChallengeList.value?.find { it.isStartChallenge }?.startChallenge?.let { startChallenge ->
+                        if (startChallenge.isPulleyBooksCourseFinished) {
+                            val turnOnCompletedDialog = {
+                                val completedDialog = ChallengeCompletedDialog(startChallenge,
+                                    ChallengeManager.CourseName.스타트챌린지_유형.id,
+                                ) {
+                                    ChallengeManager.getMainTabMoveIntent(it).let {
+                                        LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                                        finish()
+                                    }
+                                }
+                                supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog2") }
+                            }
+
+                            val finishGuideDialog = ChallengeGuideManager
+                                .getFinishGuideFromMission2(nextEvent = turnOnCompletedDialog)
+                            supportFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun scrollLogEvent() {
         LogUtils.logEvent(this@PulleyMathBooksActivity, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체문제집")
     }
@@ -187,11 +221,11 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                 dialog.show()
             }
             ActionType.pin -> {
-                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
+                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
                 val itemValue = "전체문제집"
                 LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
-                viewModel.togglePin(id, !book.pin) {
+                viewModel.togglePin(id, !book.isPinned) {
                     setSnackBar()
                     viewModel.collectRecommendList(false) {}
                 }
@@ -214,8 +248,8 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
             override fun onActionBtnClicked(view: SnackBarView) {
                 snackBar.dismiss()
-                finish()
                 setResult(PatternStudyFragment.PLAN_PINNED, intent)
+                finish()
             }
         })
         CoroutineScope(Dispatchers.Main).launch {
@@ -233,12 +267,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     override fun onSolveClicked(holder: PlanHolder, book: Book) {
         val intent = SolveActivity.getIntent(this, book)
-        startActivity(intent)
+        getResult.launch(intent)
     }
 
     override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
-//        LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집선택버튼")
-//        CustomizeBookDialog(this, null, book).show()
         println("onMakeCustomBookClicked")
     }
 
@@ -272,8 +304,34 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         DaebakToast.show(this, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
     }
 
-    override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
-        println("onMadeCustomBook")
-
+    fun scrollToTotalLabel(subject: String?) {
+        subject?.let {
+            val targetHashSet = setFilterType(it)
+            binding.filterView.selectedFilterTypes = targetHashSet
+            binding.filterView.adapter?.notifyDataSetChanged()
+        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.rootView.scrollToView(binding.totalLabelTv)
+        }, 1500)
+    }
+    fun setFilterType(subject: String): HashSet<FilterType> {
+        val defaultSet = mutableSetOf(
+            FilterType.워크북_미포함,
+            FilterType.핀_포함,
+            FilterType.계열_전체,
+            FilterType.유형_전체,
+            FilterType.추천_2_3등급
+        )
+        when (subject) {
+            "수학(상)" -> defaultSet.add(FilterType.과목_수학_상)
+            "수학(하)" -> defaultSet.add(FilterType.과목_수학_하)
+            "수학1" -> defaultSet.add(FilterType.과목_수학1)
+            "수학2" -> defaultSet.add(FilterType.과목_수학2)
+            "미적분" -> defaultSet.addAll(listOf(FilterType.과목_미적분, FilterType.과목_수학2))
+            "확률과 통계" -> defaultSet.add(FilterType.과목_확통)
+            "기하" -> defaultSet.add(FilterType.과목_기하)
+            else -> defaultSet.add(FilterType.과목_수학1)
+        }
+        return defaultSet.toHashSet()
     }
 }

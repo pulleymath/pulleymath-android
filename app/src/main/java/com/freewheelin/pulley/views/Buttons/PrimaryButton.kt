@@ -124,6 +124,25 @@ open class PrimaryButton: ConstraintLayout {
 //        if (value) toEnableUI() else toDisableUI()
 //    }
 
+    fun setLock(lockImage:ButtonLockImage = ButtonLockImage.small16,
+                color: ButtonLockColor = ButtonLockColor.white) {
+        imageLock.visibility = View.VISIBLE
+        when (lockImage) {
+            ButtonLockImage.mid20 -> imageLock.setImageResource(R.drawable.ic_lock_20_white)
+            ButtonLockImage.mid24 -> imageLock.setImageResource(R.drawable.ic_lock_24_white)
+            ButtonLockImage.big48 -> imageLock.setImageResource(R.drawable.ic_lock_48_white)
+            else -> imageLock.setImageResource(R.drawable.ic_lock_16_white)
+        }
+
+        when (color) {
+            ButtonLockColor.white -> {
+                imageLock.setColorFilter(button.currentTextColor)
+            }
+            ButtonLockColor.purple -> {
+                imageLock.setColorFilter(ContextCompat.getColor(context, R.color.purple_300))
+            }
+        }
+    }
     fun setLock(hasPulleyPlus:Boolean,
                 lockImage:ButtonLockImage = ButtonLockImage.small16,
                 mode: ButtonMode = ButtonMode.normal,

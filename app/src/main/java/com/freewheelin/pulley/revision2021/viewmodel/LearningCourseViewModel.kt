@@ -77,7 +77,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchCourseList =>${response.data}")
                 response.data?.let {
-                    val firstPattern = it.first { it.courseType == CourseType.Pattern }
+                    val firstPattern = it.find { it.courseType == CourseType.Pattern }
                     val firstPatternIndex = it.indexOf(firstPattern)
                     val mutableCourseList = it.toMutableList()
 

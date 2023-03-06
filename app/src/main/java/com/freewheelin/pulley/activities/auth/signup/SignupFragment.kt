@@ -25,6 +25,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.assets.URL
@@ -35,6 +37,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.databinding.FragmentSignupBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.revision2023.viewmodel.SignupFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.DaebakToast
@@ -56,6 +59,7 @@ import kotlin.concurrent.timerTask
 class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
 
     var signupInterface: StudentInfoInterface? = null
+    private val viewModel: SignupFragViewModel by viewModels()
 
     lateinit var countryCodes:List<CountryCodeResponse.CountryCode>
     var countryCode = "82"
@@ -256,6 +260,7 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
                 countryCodes = result.data
                 setSpinner()
             }, { /* */ })
+
     }
 
     private fun setSpinner() {
@@ -350,6 +355,18 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             }
 
             setPhoneRequest()
+
+            if (BuildConfig.FLAVOR == "beta") {
+                greetingLabel.setOnClickListener {
+                    if (emailDet.text.isValidEmail()) {
+                        viewModel.sendCreateDummyUser(emailDet.text) {
+                            DaebakToast.show(requireContext(), "${emailDet.text} 계정이 생성되었습니다.")
+                        }
+                    } else {
+                        DaebakToast.show(requireContext(), "이메일이 없거나 형식이 맞지 않습니다.")
+                    }
+                }
+            }
         }
     }
 

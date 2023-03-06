@@ -163,7 +163,7 @@ class UserHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExam
             // TODO 이부분 기획이 안되어있고 리포트나 솔브나 토큰 권한문제로 에러가 나기때문에
             // 제대로하려면 기획 + 서버 api 와의 협의가 필요함
             holder.listBinding.reportBtn.visibility = View.INVISIBLE
-            holder.listBinding.solveBtn.visibility = View.INVISIBLE
+            holder.listBinding.solveBtnWrapperCl.visibility = View.INVISIBLE
         }
     }
 }

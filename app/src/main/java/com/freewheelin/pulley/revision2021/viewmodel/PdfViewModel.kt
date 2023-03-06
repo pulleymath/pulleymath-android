@@ -1,24 +1,37 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
+import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
+import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
+import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class PdfViewModel : BaseViewModel(), LifecycleObserver {
+class PdfViewModel(application: Application): BaseAndroidViewModel(application) {
 
+    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val pdfRepository: PdfRepository by lazy { PdfRepository() }
+    private val challengeRepository by lazy { ChallengeRepository.instance }
 
     val pdfOrgList by lazy { MutableLiveData<List<Pdf>>() }
     val pdfList by lazy { MutableLiveData<List<Pdf>>() }
@@ -43,6 +56,7 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
     val isOpenableBookSelected = MutableLiveData(false)
 
     val pdfListLength = MutableLiveData("0")
+    val joinedChallengeList = challengeRepository.joinedChallengeList
 
     var ySum: Int = 0
 
@@ -212,6 +226,54 @@ class PdfViewModel : BaseViewModel(), LifecycleObserver {
         isOpenableBookSelected.postValue(isChecked)
         filter()
         ySum = 0
+    }
+
+    fun sendLog(bookId: Int?, isOpened: Boolean, callback: () -> Unit = {}) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val logResponse = postLog(bookId, isOpened)
+            if (logResponse.isChallengeCourse.not()) return@launch
+            callback()
+        }
+    }
+
+    suspend fun postLog(bookId: Int?, isOpened: Boolean): V2LogUserResponse {
+        val name = if(isOpened) "열기" else "닫기"
+        return legacyV2Repository.postLog(
+            event = PulleyEvent.BUTTON_CLICK,
+            itemCategory = "풀리북스",
+            itemName = name,
+            itemValue = "bookId=${bookId}",
+            itemNote = null,
+        )
+    }
+    fun checkActionOfStartChallenge(cb: () -> Unit) {
+        joinedChallengeList.value
+            ?.filter { it.userStatus == ChallengeUserStatus.ING }
+            ?.filter { it.startChallenge?.isCommercialBooksInProgress == true }
+            ?.forEach { _ -> cb() }
+    }
+    fun openTutorialPdfBook(bookId: Int, callback: () -> Unit = {}) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val logResponse = postLog(bookId, true)
+            if (logResponse.isChallengeCourse.not()) return@launch
+            val startChallenge = logResponse.challengeStatus.find { it.isStartChallenge } ?: return@launch
+            updateChallenge(startChallenge)
+            callback()
+        }
+    }
+    fun closeTutorialPdfBook(bookId: Int, callback: (Challenge) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val logResponse = postLog(bookId, false)
+            println("asoaso logRes : ${logResponse.isChallengeCourse}")
+            if (logResponse.isChallengeCourse.not()) return@launch
+            val startChallenge = logResponse.challengeStatus.find { it.isStartChallenge } ?: return@launch
+            updateChallenge(startChallenge)
+            callback(startChallenge)
+        }
+    }
+
+    fun updateChallenge (challenge: Challenge) {
+        challengeRepository.updateChallengeList(challenge)
     }
 }
 

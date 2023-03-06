@@ -10,6 +10,8 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.FragmentTestMainWrongBinding
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.ButtonMode
@@ -40,9 +42,22 @@ class TestMainWrongFragment : TestMainBaseFragment() {
         test?.let { test ->
             configureUI(test)
             binding.apply {
-                startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
-                startBtn.setOnClickListener { listener?.onSolveBtnClicked(test) }
-                reportTv.setOnClickListener { listener?.onReportBtnClicked(test) }
+                val showLockIv = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == false
+                if (showLockIv) startBtn.setLock(ButtonLockImage.mid20)
+                else startBtn.setUnlock()
+
+                startBtn.setOnPaidUserClickListener(cb = {
+                    listener?.onSolveBtnClicked(test)
+                }, deniedCb = {
+                    val dialog = PurchaseGuideDialog()
+                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                })
+
+                reportTv.setOnPaidUserClickListener(cb = { listener?.onReportBtnClicked(test) },
+                    deniedCb = {
+                        val dialog = PurchaseGuideDialog()
+                        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                    })
             }
         }
     }

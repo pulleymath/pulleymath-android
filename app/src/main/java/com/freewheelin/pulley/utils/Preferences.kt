@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.utils
 
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.challenge.StartChallengeInfoAppear
+import com.google.gson.Gson
 
 object Preferences {
 
@@ -31,6 +33,7 @@ object Preferences {
 
     val tooltipShowingCntTakeNoteScroll = APPreference(0)
     val tooltipShowingCntAddSimilar = APPreference(0)
+    val tooltipShowingCntAddSimilarOfStartChallenge = APPreference(0)
     val tooltipShowingCntChangeSimilar = APPreference(0)
     val tooltipShowingCntAdditionalStudyInAnalysis = APPreference(0)
     val tooltipShowingCntAdditionalStudyInWrongNote = APPreference(0)
@@ -57,6 +60,16 @@ object Preferences {
 
     var isConceptLearningTutorialPassed = APPreference(false)
     var floatingAnswerSheetLastLocation = APPreference("")
+    val _startChallengeAlreadyAppeared = APPreference("")
+    var startChallengeAlreadyAppeared: StartChallengeInfoAppear
+        get() {
+            val infoStr = _startChallengeAlreadyAppeared.get()
+            return Gson().fromJson(infoStr, StartChallengeInfoAppear::class.java) ?: StartChallengeInfoAppear(listOf())
+        }
+        set (value) {
+            val scInfoStr = Gson().toJson(value)
+            _startChallengeAlreadyAppeared.set(scInfoStr)
+        }
 }
 
 

@@ -43,6 +43,7 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.textViews.UpDownTextView.Change.*
@@ -176,7 +177,7 @@ class UserAnalysisActivity : AppCompatActivity(),
                 studyRateView.listener = this@UserAnalysisActivity
                 recommendStudyView.listener = this@UserAnalysisActivity
                 initChart(timeCountChart)
-                mainAnalysisBtn.setOnClickListener {
+                mainAnalysisWarpperCl.setOnClickListener {
                     LogUtils.logEvent(this@UserAnalysisActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
                     val intent = Intent(this@UserAnalysisActivity, UserAnalysisAllActivity::class.java)
                     intent.putExtra(KEY_STUDENT_ID, user.studentID)
@@ -478,6 +479,11 @@ class UserAnalysisActivity : AppCompatActivity(),
 //            startActivity(intent)
 //        }
     }
+
+//    override fun onDeniedCallback() {
+//        val dialog = PurchaseGuideDialog()
+//        supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//    }
 
     // 공부하기 버튼 삭제 필요
     override fun onStudyBtnClicked(view: AnalysisTodayStudyListView) {

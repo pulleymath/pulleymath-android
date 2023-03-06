@@ -152,8 +152,10 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     private fun loginSuccess(user:User?) {
-        if(MyApplication.user == null) MyApplication.user = user
-        else MyApplication.user!!.update(user)
+        MyApplication.user = user
+        MyApplication.token = user?.token
+//        if(MyApplication.user == null) MyApplication.user = user
+//        else MyApplication.user!!.update(user)
         startActivity(InitSettingCompleteActivity.getIntent(this))
     }
 

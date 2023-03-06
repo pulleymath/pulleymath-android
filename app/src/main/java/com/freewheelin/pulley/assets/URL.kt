@@ -35,5 +35,5 @@ object URL {
     val 구매촉구_메인 = "https://pulleymath.com/math_plus?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-main"
     val 구매촉구_마이페이지 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=pay-start-edit"
 
-    val 건국대_시험_로그인 = "https://pulleymath.com/konkuk/login"
+    val 건국대_시험_로그인 = "https://pulleymath.com/konkuk"
 }

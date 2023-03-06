@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
@@ -22,6 +23,7 @@ import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.FacebookEvent
 import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.utils.visibleIf
 import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -75,6 +77,10 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         with(binding) {
             nameTv.text = user.fullName
             emailTv.text = user.email
+            if (BuildConfig.FLAVOR == "beta") {
+                studentIdTv.text = user.studentID
+                studentIdTv.visibleIf(true)
+            }
             phoneTv.text = user.cellPhone
 
             emailModifyBtn.text = if(user.isValidEmail) "변경하기" else "인증하기"
@@ -127,23 +133,23 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         (activity as LearningTabActivity).moveTo(fragment)
     }
 
-    private fun getDurationText(user: User): String {
-        if(user.startDate == null || user.endDate == null) {
-            Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
-                    "studentID: ${user.studentID}, " +
-                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
-                    "startDate: ${user.startDate}, " +
-                    "endDate: ${user.endDate}")
-            return ""
-        } else {
-            val now = Date()
-            val startDate: Date = if(now > user.startDate) now else user.startDate!!
-            val endDate = user.endDate!!
-
-            DateTimeUtils.yyyyMMddFormat?.run {
-                return if (startDate < endDate) "${format(user.startDate)} - ${format(user.endDate)}"
-                else "${format(user.startDate)} - ${format(user.endDate)}"
-            }
-        }
-    }
+//    private fun getDurationText(user: User): String {
+//        if(user.startDate == null || user.endDate == null) {
+//            Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
+//                    "studentID: ${user.studentID}, " +
+//                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
+//                    "startDate: ${user.startDate}, " +
+//                    "endDate: ${user.endDate}")
+//            return ""
+//        } else {
+//            val now = Date()
+//            val startDate: Date = if(now > user.startDate) now else user.startDate!!
+//            val endDate = user.endDate!!
+//
+//            DateTimeUtils.yyyyMMddFormat?.run {
+//                return if (startDate < endDate) "${format(user.startDate)} - ${format(user.endDate)}"
+//                else "${format(user.startDate)} - ${format(user.endDate)}"
+//            }
+//        }
+//    }
 }

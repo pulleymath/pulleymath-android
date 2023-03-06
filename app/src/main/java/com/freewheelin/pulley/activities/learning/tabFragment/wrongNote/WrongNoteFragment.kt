@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import android.content.res.Resources
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
@@ -34,7 +35,6 @@ import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.componen
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragmentListener
 import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
@@ -52,6 +52,8 @@ import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.PieceCategory
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.WrongManageView
@@ -97,6 +99,7 @@ class WrongNoteFragment : LearningTabFragment(),
     var groupedProblemsByOrder: List<Pair<String, List<Problem>>> = listOf()
 
     lateinit var binding: FragmentWrongNoteBinding
+    val viewModel: WrongNoteFragViewModel by viewModels()
 
     override var screenName = "오답노트"
 
@@ -144,10 +147,6 @@ class WrongNoteFragment : LearningTabFragment(),
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(changeRecevier, IntentFilter(ProblemManager.EVENT_WRONG_NOTE_CHANGED))
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if(wrongNoteFilterFragment.isAdded && scrapNoteFilterFragment.isAdded) {
@@ -170,6 +169,18 @@ class WrongNoteFragment : LearningTabFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         selectedProblem.listener = this
+        binding.apply {
+            vm = viewModel
+        }
+        viewModel.apply {
+            user.observe(viewLifecycleOwner) { user ->
+                user?.let {
+                    println("asoaso WrongNoteFrag User Observe")
+                    val available = it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
+                    showLockIcon.postValue(!available)
+                }
+            }
+        }
     }
 
     override fun onAllSelectedClicked(isChecked: Boolean) {
@@ -259,10 +270,11 @@ class WrongNoteFragment : LearningTabFragment(),
                 viewPager.setPaddingBottom(0)
 
             } else {
-                if (tabLayout.selectedTabPosition == 0) {
-                    wrongManageView.studyWrongBtn.text = "오답학습하기"
+                val isWrongNoteFragment = tabLayout.selectedTabPosition == 0
+                wrongManageView.studyWrongBtn.text = if (isWrongNoteFragment) {
+                    "학습지 만들기"
                 } else {
-                    wrongManageView.studyWrongBtn.text = "추가학습하기"
+                    "추가 학습하기"
                 }
                 wrongManageView.active("${set.size}문제가 선택되었습니다.")
                 wrongManageView.show(true)

@@ -63,12 +63,12 @@ class MemoView: FreeDrawView {
             val iterator = mPaths.iterator()
             parent.requestDisallowInterceptTouchEvent(true)
             while(iterator.hasNext()) {
-                var e = iterator.next()
+                val e = iterator.next()
 
-                for (i in 0 until (motionEvent?.getHistorySize() ?: 0)) {
-                    var point = Point()
+                for (i in 0 until (motionEvent?.historySize ?: 0)) {
+                    val point = Point()
 
-                    if (motionEvent?.getHistoricalX(i) == null || motionEvent?.getHistoricalY(i) == null)
+                    if (motionEvent?.getHistoricalX(i) == null)
                         continue
 
                     point.x = motionEvent.getHistoricalX(i)

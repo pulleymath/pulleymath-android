@@ -86,11 +86,12 @@ fun retrofit(apiVersion: Version): Retrofit {
 
             addInterceptor(
                 Interceptor { chain ->
-                    Log.d("인증", "intercepter ==================> ${MyApplication.token}")
+                    val token = user?.token ?: MyApplication.token
+                    Log.d("인증", "intercepter ==================> $token")
                     Log.d("인증", "intercepter ==================> DeviceUid : ${APHelper.deviceId()}, Name : ${APHelper.deviceName}")
 
                     val builder = chain.request().newBuilder()
-                            .header("Authorization", "Bearer ${MyApplication.token}")
+                            .header("Authorization", "Bearer $token")
                             .header("DeviceUid", APHelper.deviceId())
                             .header("DeviceName", APHelper.deviceName)
                             .header("Platform", "ANDROID")

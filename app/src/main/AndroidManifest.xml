@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.freewheelin.pulley" >
+    package="com.freewheelin.pulley">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -43,7 +43,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup" >
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".revision2023.ui.activity.PurchaseWebViewActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.WorkbookListActivity"
             android:exported="false"
@@ -115,7 +119,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/provider_id"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -194,7 +198,7 @@
             android:name=".activities.SplashActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:screenOrientation="sensorLandscape" >
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -237,7 +241,7 @@
         <receiver
             android:name=".bases.UpdateReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
@@ -263,16 +267,11 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".revision2023.ui.activity.UnivAdditionalLearningActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape" />
+
         <service
             android:name=".service.PulleyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -29,69 +29,63 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:tabGravity="center"
+                    app:tabPaddingStart="@dimen/dp24"
+                    app:tabPaddingEnd="@dimen/dp24"
                     app:tabIndicatorHeight="0dp"
                     app:tabSelectedTextColor="@color/white_ffffff"
                     app:tabTextAppearance="@style/AppTheme.TabBar.TabText"
                     app:tabTextColor="@color/grey_818181" >
-<!--                    추후에 베타이미지 제거할때 다시 사용하면됨 -->
-<!--                    app:tabPaddingStart="@dimen/dp24"-->
-<!--                    app:tabPaddingEnd="@dimen/dp24"-->
 
-<!--                    추후에 베타이미지 제거할 때 layout 줄 지우면 됨-->
+<!--                    추후에 베타이미지 추가할 때 layout 줄 넣으면 됨-->
+<!--                    android:layout="@layout/item_tab_item_custom"-->
+<!--                    android:layout="@layout/item_tab_item_custom_on_beta"-->
+
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="메인" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom_on_beta"
                         android:text="개념" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="유형" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="모의고사" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="테스트" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="오답노트" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="분석" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout="@layout/item_tab_item_custom"
                         android:text="과외" />
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout="@layout/item_tab_item_custom"
-                        android:text="KU" />
+                        android:text="-KU" />
 
                 </com.google.android.material.tabs.TabLayout>
 

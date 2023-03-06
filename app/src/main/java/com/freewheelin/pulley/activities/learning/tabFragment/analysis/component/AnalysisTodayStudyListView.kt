@@ -9,12 +9,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.ItemStudyListBinding
+import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.Content
-import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.SecondaryButton
 
 interface AnalysisTodayStudyListViewListener {
@@ -47,6 +52,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
 
         setList()
         viewAllListBtn.setOnClickListener {
+            println("asoaso viewAllListBtn click!!! listener null? : ${listener == null}")
             listener?.onStudyHistoryBtnClicked(this)
         }
         studyBtn.setOnClickListener {
@@ -84,11 +90,30 @@ class AnalysisTodayStudyListView: ConstraintLayout {
             holder.set(piece)
             if (isUserAnalysis) holder.setUserAnalysisUI()
 
-            holder.listBinding.solveBtn.setOnClickListener {
-                listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
+            holder.listBinding.solveBtnWrapperCl.apply {
+                // TODO start challenge reward는 islocked 이 풀려있나?
+                setOnClickListener {
+                    if (piece.isLocked) {
+//                        DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "돈내놔!")
+                        val dialog = PurchaseGuideDialog()
+                        FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisTodayStudyListView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                    }
+                    else {
+                        println("asoaso solveBtnWrapperCl click!!! listener null? : ${listener == null}")
+                        println("asoaso solveBtnWrapperCl click!!! bookSeries: ${Book(piece).bookCategoryList?.bookSeries}")
+                        println("asoaso solveBtnWrapperCl click!!! subca?: ${piece.pieceSubCategory}")
+                        listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
+                    }
+                }
             }
-            holder.listBinding.reportBtn.setOnClickListener {
-                listener?.onReportBtnClicked(this@AnalysisTodayStudyListView, piece)
+            holder.listBinding.reportBtn.apply {
+                setOnClickListener {
+                    if (piece.isLocked) {
+                        val dialog = PurchaseGuideDialog()
+                        FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisTodayStudyListView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                    }
+                    else { listener?.onReportBtnClicked(this@AnalysisTodayStudyListView, piece) }
+                }
             }
             Log.d("테스트", "setList($index, $newOne)")
             if(index == 0 && newOne) holder.setHighlight()
@@ -104,7 +129,6 @@ class StudyListViewHolder(val listBinding: ItemStudyListBinding): RecyclerView.V
         listBinding.apply {
             dateTv.text = DateTimeUtils.mMDashddFormat.format(piece.updateDateTime)
             titleTv.text = piece.subject
-//        problemCntTv.text = if(piece.similarProblemNumber > 0) "${piece.markedNumber}(+${piece.similarProblemNumber})문제" else "${piece.markedNumber}문제"
 
             val solvedCnt = piece.markedNumber + piece.similarProblemNumber
             val totalCnt = piece.totalNumber + piece.similarProblemNumber
@@ -121,12 +145,14 @@ class StudyListViewHolder(val listBinding: ItemStudyListBinding): RecyclerView.V
             } else {
                 reportBtn.visibility = View.INVISIBLE
             }
+
+            solveLockIv.visibleIf(piece.isLocked)
         }
 
     }
 
     fun setUserAnalysisUI() {
-        listBinding.solveBtn.visibility = View.INVISIBLE
+        listBinding.solveBtnWrapperCl.visibility = View.INVISIBLE
     }
 
     fun setHighlight() {

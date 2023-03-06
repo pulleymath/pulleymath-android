@@ -5,8 +5,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Xfermode
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +16,6 @@ import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.utils.DelayDebounce
 import com.freewheelin.pulley.utils.setMarginStart
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 interface CookingPencilcase {
     val ERASE_THICK: Float
@@ -121,6 +115,10 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
             listener?.onEditTypeChanged(value)
         }
     private fun setMode(mode: Xfermode?) {
+        println("xjcl2 - setMode nul? :${mode == null}, memoviews size: ${memoViews.size}")
+        memoViews.forEach {
+            println("xjcl2 - setmode  memoId: ${it.memoId}")
+        }
         memoViews.forEach {
             if (mode == null) it.setPencil(mode, penColor.value, penColor.alpha, thickness.width)
             else it.setEraser(ERASE_THICK)
@@ -307,7 +305,7 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
     }
 
     private fun setSelectedBackground(view: View) {
-        view.setBackgroundResource(R.drawable.bg_gray_200_round_5_ripple_gray200)
+        view.setBackgroundResource(R.drawable.bg_gray_200_round_5_ripple)
     }
 
     private var pencilDebounce: DelayDebounce<View>? = DelayDebounce()

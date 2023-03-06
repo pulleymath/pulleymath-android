@@ -139,6 +139,44 @@
                             app:layout_constraintEnd_toEndOf="@+id/signupTv"
                             app:layout_constraintStart_toStartOf="@+id/signupTv" />
 
+                        <Button
+                            android:id="@+id/dummyLoginBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="test1234로 시작하기"
+                            android:background="@drawable/bg_btn_round_common"
+                            app:layout_constraintTop_toBottomOf="@id/signupGuideTv"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="16dp"
+                            android:paddingHorizontal="16dp"
+                            android:textColor="@color/white"/>
+
+                        <Button
+                            android:id="@+id/liveBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Live"
+                            android:textAllCaps="false"
+                            android:background="@drawable/bg_btn_round_common"
+                            app:layout_constraintTop_toBottomOf="@id/signupGuideTv"
+                            app:layout_constraintStart_toEndOf="@id/dummyLoginBtn"
+                            android:layout_marginTop="16dp"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginStart="16dp"
+                            android:textColor="@color/white"/>
+                        <Button
+                            android:id="@+id/stagingBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Staging"
+                            android:textAllCaps="false"
+                            android:background="@drawable/bg_btn_round_common"
+                            app:layout_constraintTop_toBottomOf="@id/signupGuideTv"
+                            app:layout_constraintStart_toEndOf="@id/liveBtn"
+                            android:layout_marginTop="16dp"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginStart="16dp"
+                            android:textColor="@color/white"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

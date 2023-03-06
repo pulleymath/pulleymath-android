@@ -18,6 +18,8 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.widget.*
+import androidx.activity.addCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
@@ -45,6 +47,11 @@ import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
+import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import kotlinx.coroutines.*
@@ -64,6 +71,7 @@ class SolveActivity : BaseActivity(),
     private val binding: ActivitySolveBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_solve, null,false)
     }
+    val viewModel: SolveActViewModel by viewModels()
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this) }
     val screenHeight by lazy { DisplayUtils.getScreenHeight(this) }
@@ -140,16 +148,16 @@ class SolveActivity : BaseActivity(),
 
         setContentView(binding.root)
 
+        initObserve()
         initUI()
-
 //        val content = getSerializable(this@SolveActivity, ContentManager.ARG_CONTENT, Content::class.java)
         val content = intent.getSerializableExtra(ContentManager.ARG_CONTENT) as? Content
 
         isReview = intent.getBooleanExtra(IS_REVIEW, false)
 
         Log.d("문제풀기", "content=$content")
+        Log.d("문제풀기", "asoaso subca?=${content?.pieceSubCategory}")
         Log.d("문제풀기", "isReview=$isReview")
-
         if(isReview)
             initReviewContent(content)
         else
@@ -160,7 +168,7 @@ class SolveActivity : BaseActivity(),
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         setInitPosition()
-
+        initStartChallenge()
 //        setSpen()
     }
 
@@ -180,10 +188,10 @@ class SolveActivity : BaseActivity(),
         AppUsageMonitor.finishStudy(this)
         super.onDestroy()
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        binding.timerView?.deinitTimer()
+        binding.timerView.deinitTimer()
     }
 
-    override fun onBackPressed() {
+    fun backBtnAction() {
         Log.d("문제풀기", "onBackPressed()")
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
         if(answeredSet.isNotEmpty()) {
@@ -193,58 +201,20 @@ class SolveActivity : BaseActivity(),
 
             DialogUtils.showProblemSolveExitDialog(this, answeredSet.size, onExitClicked = {
                 saveMemo()
-                super.onBackPressed()
+                viewModel.startChallengeCompletedCallback()
+                finish()
             }, cancelListener = canceListener)
         } else {
             saveMemo()
-            super.onBackPressed()
+            viewModel.startChallengeCompletedCallback()
+            finish()
         }
     }
-
-    // spen 처리
-//    private var mSpenRemote: SpenRemote? = null
-//    private var mSpenUnitManager: SpenUnitManager? = null
-//
-//    private fun setSpen() {
-//        mSpenRemote = SpenRemote.getInstance()
-//        mSpenRemote?.isFeatureEnabled(FEATURE_TYPE_BUTTON)
-//
-//        Log.d("펜체크", "setSpen() = $mSpenRemote, ${mSpenRemote?.isConnected}")
-//
-//        if(mSpenRemote?.isConnected == false) {
-//            mSpenRemote?.connect(this,
-//                object : SpenRemote.ConnectionResultCallback {
-//
-//                    override fun onSuccess(manager : SpenUnitManager) {
-//                        mSpenUnitManager = manager
-//                        spenListener(manager)
-//                    }
-//
-//                    override fun onFailure(error: Int) {
-//                        Log.e("펜체크", "could not connect!")
-//                    }
-//                })
-//        }
-//    }
-//
-//    private fun spenListener(mSpenUnitManager: SpenUnitManager) {
-//        val button = mSpenUnitManager.getUnit(SpenUnit.TYPE_BUTTON)
-//        Log.d("펜체크", "spenListener() = $mSpenUnitManager")
-//        mSpenUnitManager.registerSpenEventListener({ event ->
-//            val buttonEvent = ButtonEvent(event)
-//
-//            Log.d("펜체크", "SpenEvent=$event")
-//
-//            when (buttonEvent.action) {
-//                ButtonEvent.ACTION_DOWN -> {
-//                    Log.d("펜체크", "Spen Button Pressed")
-//                }
-//                ButtonEvent.ACTION_UP -> {
-//                    Log.d("펜체크", "Spen Button Released")
-//                }
-//            }
-//        }, button)
-//    }
+    fun addBackBtnCallback() {
+        onBackPressedDispatcher.addCallback(this) {
+            backBtnAction()
+        }
+    }
 
     fun initReviewContent(content: Content?) {
         Log.d("문제풀기", "initReview content======>$content")
@@ -260,6 +230,7 @@ class SolveActivity : BaseActivity(),
                         BookManager.reviewBookV2(this@SolveActivity, content, user!!) {
                             it.arrangeChapter()
                             this@SolveActivity.content = it
+                            viewModel.selectedContent.postValue(it)
                             galleryView.set(it)
                             speedAnswerView.set(it)
                             answerView.showMarkingBtn()
@@ -268,6 +239,7 @@ class SolveActivity : BaseActivity(),
                     } else {
                         BookManager.reviewCustomBookV2(this@SolveActivity, content, user!!) {
                             this@SolveActivity.content = it
+                            viewModel.selectedContent.postValue(it)
                             galleryView.set(it)
                             speedAnswerView.set(it)
                             answerView.showMarkingBtn()
@@ -280,6 +252,7 @@ class SolveActivity : BaseActivity(),
                     itemValue = "테스트-리뷰"
                     TestManager.getTestReview(this@SolveActivity, user!!, content) {
                         this@SolveActivity.content = it
+                        viewModel.selectedContent.postValue(it)
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
@@ -291,6 +264,7 @@ class SolveActivity : BaseActivity(),
                     itemValue = "모의고사-리뷰"
                     MockExamManager.getExamReviewProblems(this@SolveActivity, content, user!!) { it ->
                         this@SolveActivity.content = it
+                        viewModel.selectedContent.postValue(it)
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
@@ -310,6 +284,7 @@ class SolveActivity : BaseActivity(),
                     if (isNeedSync) {
                         PieceManager.getPieceReviewProblems(this@SolveActivity, content, user!!) {
                             this@SolveActivity.content = it
+                            viewModel.selectedContent.postValue(it)
                             galleryView.set(it)
                             speedAnswerView.set(it)
                             answerView.showMarkingBtn()
@@ -317,6 +292,7 @@ class SolveActivity : BaseActivity(),
                         }
                     } else {
                         this@SolveActivity.content = content
+//                        viewModel.selectedContent.postValue(content)
                         galleryView.set(content)
                         speedAnswerView.set(content)
                         answerView.showMarkingBtn()
@@ -330,6 +306,7 @@ class SolveActivity : BaseActivity(),
                         val subject = intent.getStringExtra(PieceManager.ARG_PIECE_SUBJECT)?:""
                         PieceManager.getReviewInfo(this@SolveActivity, subject, it, user!!) {
                             this@SolveActivity.content = it
+                            viewModel.selectedContent.postValue(it)
                             galleryView.set(it)
                             speedAnswerView.set(it)
                             answerView.showMarkingBtn()
@@ -353,9 +330,12 @@ class SolveActivity : BaseActivity(),
                     BookManager.getBook(this@SolveActivity, content, user!!) {
                         Log.d("유형학습", "init getBook======>$it")
                         this@SolveActivity.content = it
+                        viewModel.selectedContent.postValue(it)
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
+                        answerView.selectedBook = it
+//                        answerView.showChallengeStampIv(it)
                         speedAnswerView.showMarkingBtn()
                     }
                 }
@@ -370,6 +350,7 @@ class SolveActivity : BaseActivity(),
                             TestManager.getDailyTest(this@SolveActivity, user!!, content) {
                                 it.scoringTestPieceCount = content.scoringTestPieceCount
                                 this@SolveActivity.content = it
+                                viewModel.selectedContent.postValue(it)
                                 galleryView.set(it)
                                 galleryView.hideFilter()
                                 speedAnswerView.set(it)
@@ -381,6 +362,7 @@ class SolveActivity : BaseActivity(),
                             TestManager.getTest(this@SolveActivity, user!!, content) {
                                 it.scoringTestPieceCount = content.scoringTestPieceCount
                                 this@SolveActivity.content = it
+                                viewModel.selectedContent.postValue(it)
                                 galleryView.set(it)
                                 galleryView.hideFilter()
                                 speedAnswerView.set(it)
@@ -444,7 +426,7 @@ class SolveActivity : BaseActivity(),
                         content.time = it.time
 //                    content.problems.forEach { if(it.getResultByScoring() != Result.yet) { it.rawResult == Result.yet.rawValue } }
                         this@SolveActivity.content = content
-
+//                        viewModel.selectedContent.postValue(content)
                         if (content.time != null && !isRestart) {
                             val time = content.time!!
                             if (time >= 6000) {
@@ -480,6 +462,7 @@ class SolveActivity : BaseActivity(),
                     PieceManager.getProblems(this@SolveActivity, content, user!!) {
                         content.problems = it
                         this@SolveActivity.content = content
+//                        viewModel.selectedContent.postValue(content)
                         galleryView.set(content)
                         speedAnswerView.set(content)
                         answerView.showMarkingBtn()
@@ -518,6 +501,8 @@ class SolveActivity : BaseActivity(),
                 spyBtn.visibility = View.GONE
             }
 
+            vm = viewModel
+            lifecycleOwner = this@SolveActivity
             galleryView.layoutParams.width = GalleryView.getGalleryViewWidth(this@SolveActivity)
             solveCl.layoutParams.width = screenWidth
             galleryView.delegate = this@SolveActivity
@@ -536,7 +521,7 @@ class SolveActivity : BaseActivity(),
             solutionContainer.visibility = View.GONE
             speedAnswerView.visibility = View.GONE
 
-            backBtn.setOnClickListener { onBackPressed() }
+            backBtn.setOnClickListener { backBtnAction() }
             galleryBtn.setOnClickListener { onGalleryBtnClicked() }
             galleryBtn.extensionTouchArea(8.toPx())
             galleryCloser.setOnTouchListener { view, motionEvent ->
@@ -551,45 +536,64 @@ class SolveActivity : BaseActivity(),
             clearBtn.setOnClickListener { onClearBtnClicked() }
             scrapBtn.setOnClickListener { onScrapBtnClicked() }
             reportBtn.setOnClickListener { onSirenBtnClicked() }
+            // 스타트챌린지 중일 때 plusIv 및 stampIv turn on,
+            // 스타트챌린지 중이 아닐 때: 구독 basic_p 이상인 경우 plusIv turn on
+            // 이외의 경우 lockIv
             // 풀리플러스 처리
-            lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
-            plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
-            addSimilarProblemCl.setOnClickListener {
-                if(user!!.hasPulleyPlus) {
+//            lockIv.visibility = if(user!!.hasPulleyPlus) View.GONE else View.VISIBLE
+//            plusIv.visibility = if(user!!.hasPulleyPlus) View.VISIBLE else View.GONE
+            addSimilarProblemCl.setOnBasicPOrHigherClickListener(cb = {
+                onAddSimilarBtnClicked()
+            }, deniedCb = {
+                if (viewModel.isOnlyStartChallengePiece.value == true) {
                     onAddSimilarBtnClicked()
                 } else {
-                    DialogUtils.confirmHasPulleyPlus(this@SolveActivity) {
-                        PulleyPlusPriceDialog(this@SolveActivity).show()
+                    // TODO
+                    val dialog = PurchaseGuideDialog()
+                    supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                }
+            })
+            changeSimilarProblemCl.setOnBasicPOrHigherClickListener(
+                cb = { onChangeSimilarBtnClicked() },
+                deniedCb = {
+                    if (viewModel.isOnlyStartChallengePiece.value == true) {
+                        onChangeSimilarBtnClicked()
+                    } else {
+                        // TODO
+                        val dialog = PurchaseGuideDialog()
+                        supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }
                 }
-            }
-            changeSimilarProblemCl.setOnClickListener { onChangeSimilarBtnClicked() }
+            )
+
             answerView.markingBtn.setOnClickListener {
                 LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
                 onMarkingBtnClicked()
             }
             answerView.submitBtn.setOnClickListener {
-                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
+//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "바로-채점하기", itemValue)
                 onSubmitBtnClicked()
+                viewModel.sendSubmitLog(content?.pieceID, "유형학습-바로", answeredSet.size)
             }
             speedAnswerView.markingBtn.setOnClickListener {
                 LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onMarkingBtnClicked()
             }
             speedAnswerView.submitBtn.setOnClickListener {
-                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
+//                LogUtils.logEvent(this@SolveActivity, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "빠른-채점하기", itemValue)
                 onSubmitBtnClicked()
+                viewModel.sendSubmitLog(content?.pieceID, "유형학습-빠른", answeredSet.size)
             }
             pencilcaseView.listener = this@SolveActivity
             problemMemoView.set(pencilcaseView)
             solutionMemoView.set(pencilcaseView)
 
-            speedyScoreSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
+            speedyScoreSwitch.setOnCheckedChangeListener { _, isChecked ->
                 onSpeedyScoringCheckChanged(isChecked)
-            })
-            solutionSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { button, isChecked ->
+            }
+            solutionSwitch.setOnCheckedChangeListener { _, isChecked ->
                 onShowSolutionCheckChanged(isChecked)
-            })
+            }
 
             val imageWidth = when(densityLevel) {
                 DensityLevel.Low -> screenWidth / 2
@@ -708,11 +712,48 @@ class SolveActivity : BaseActivity(),
             }
         }
     }
+    private fun initObserve () {
+        viewModel.apply {
+            joinedChallengeList.observe(this@SolveActivity) {
+                val isInProgress = it.filter { it.userStatus == ChallengeUserStatus.ING }
+                        .find { it.startChallenge?.isPulleyBooksCourseInProgress == true } != null
+                isStartChallengeInProgress.postValue(isInProgress)
+            }
+            userInRepo.observe(this@SolveActivity) {
+                binding.apply {
+                    val isEnabled = it?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
+                    enableTargetService.postValue(isEnabled)
+                }
+            }
+            isStartChallengeInProgress.observe(this@SolveActivity) {
+//                binding.challengeStampIv.visibility = if (it) View.VISIBLE else View.GONE
+                (content as? Book)?.let { book ->
+                    binding.answerView.showChallengeStampIv(book, it)
+                }
+            }
+            selectedContent.observe(this@SolveActivity) {
+                content = it
+                isStartChallengeInProgress.postValue(isStartChallengeInProgress.value)
+                (it as? Book)?.let { book ->
+                    println("asoaso pieceSubCategory : ${book.pieceSubCategory}")
+                    if (book.isStartChallengeBookPiece()) {
+                        isOnlyStartChallengePiece.postValue(it.isStartChallengeBookPiece())
+                    }
+                }
+            }
+        }
+    }
+    private fun initStartChallenge() {
+        viewModel.pendingStartChallengeCompletedCallback = {
+            setResult(PulleyMathBooksActivity.CHALLENGE_PATTERN_FINISHED)
+        }
+    }
 
     fun onMarkingBtnClicked() {
         if (content == null || answeredSet.isEmpty()) return
         if(content is Test) {
             ContentManager.score(this, user!!, content!!, answeredSet) {
+                viewModel.sendSubmitLog(content!!.pieceID, "유형학습", answeredSet.size)
                 val scoredCnt = answeredSet.size
                 answeredSet.forEach { it.mark() }
                 answeredSet.clear()
@@ -737,6 +778,7 @@ class SolveActivity : BaseActivity(),
             }
 
             ContentManager.score(this, user!!, content!!, answeredSet) {
+                viewModel.sendSubmitLog(content!!.pieceID, "유형학습", answeredSet.size)
                 val scoredCnt = answeredSet.size
 
                 answeredSet.forEach { it.mark() }
@@ -1345,6 +1387,8 @@ class SolveActivity : BaseActivity(),
 
 
         problem.getSimilarProblem(this, user!!, content!!) {
+            viewModel.sendAddSimilarLog(content, selectedProblem)
+
             if(it == null) {
                 showNotExistSimilarToast()
             } else {
@@ -1439,6 +1483,7 @@ class SolveActivity : BaseActivity(),
         if(selectedProblem?.isSimilarProblem() == true) { // 유사문제 이면
              if(selectedProblem?.userAnswer == null)  { // 답이 없으면 유사문제 가림
                  binding.changeSimilarProblemCl.visibility = View.VISIBLE
+                 binding.challengeStampIv.visibility = View.GONE
                  binding.addSimilarProblemCl.visibility = View.GONE
                  Tutor.showToolTipIfNeed(binding.changeSimilarProblemCl, Tutor.TooltipType.changeSimilar)
             } else {
@@ -1465,6 +1510,12 @@ class SolveActivity : BaseActivity(),
     }
 
     fun animAddSimilarShowing() {
+        binding.challengeStampIv.visibility = if (viewModel.isStartChallengeInProgress.value == true && content?.isStartChallengePiece() == true) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
         if(binding.addSimilarProblemCl.visibility == View.VISIBLE)
             return
 
@@ -1476,14 +1527,19 @@ class SolveActivity : BaseActivity(),
         anim.duration = 250
         binding.addSimilarProblemCl.startAnimation(anim)
 
-        if(Tutor.TooltipType.addSimilar.isNeedToShow()) {
+        showTooltipIfNeedOnAnim(Tutor.TooltipType.addSimilar, anim)
+        showTooltipIfNeedOnAnim(Tutor.TooltipType.addSimilarOfStartChallenge, anim)
+
+    }
+    fun showTooltipIfNeedOnAnim(type: Tutor.TooltipType, anim: ScaleAnimation) {
+        if(type.isNeedToShow()) {
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(p0: Animation?) {
                 }
 
                 override fun onAnimationEnd(p0: Animation?) {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        Tutor.showToolTipIfNeed(binding.addSimilarProblemCl, Tutor.TooltipType.addSimilar)
+                        Tutor.showToolTipIfNeed(binding.addSimilarProblemCl, type)
                     }, 500)
                 }
 
@@ -1531,7 +1587,7 @@ class SolveActivity : BaseActivity(),
             binding.numTv.text = problem.getCurNumberText()
             binding.numExtTv.text = "${problem.getExtNumberText()}"
 
-            if(content?.similarCount?:0 > 0)
+            if(content?.similarCount ?: 0 > 0)
                 binding.totalCntTv.text = "/ ${content?.originCount} (+${content?.similarCount})"
             else
                 binding.totalCntTv.text = "/ ${content?.originCount}"
@@ -1578,10 +1634,9 @@ class SolveActivity : BaseActivity(),
         return when(content) {
             is Book -> {
                 val book = (content as Book)
-                var title = "${book.bookName} / ${book.subject}"
-                if (book.chapter?.isNotEmpty() == true) {
-                    title += " / ${book.chapter}"
-                }
+                var title = "${book.bookName}"
+                if (book.subject.trim().isNotEmpty()) { title += " / ${book.subject}" }
+                if (book.chapter.trim().isNotEmpty()) { title += " / ${book.chapter}" }
                 title
             }
             is Test, is Piece -> {
@@ -1809,7 +1864,7 @@ class SolveActivity : BaseActivity(),
             mockExamSummery?.let {
                 val optionalSubjects = mockExamSummery.optionalSubjectSummary
 
-                for(subject in optionalSubjects?: arrayOf()) {
+                for(subject in optionalSubjects) {
                     if (subject.isSelected) {
                         optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
                     }

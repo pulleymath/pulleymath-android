@@ -35,7 +35,7 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
     fun startFloatAnim() {
         val anim = ValueAnimator.ofFloat(0f, PI.toFloat())
         anim.duration = 1200
-        anim.repeatCount = 2
+        anim.repeatCount = 3
         anim.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator) {
             }
@@ -70,7 +70,7 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
         })
     }
 
-    fun show(type: Tutor.TooltipType, focusedDimView: FocusedDimView?) {
+    fun show(type: Tutor.TooltipType) {
         val toolTipView =  getContentView(type)
 
         startFloatAnim()
@@ -92,6 +92,14 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
                 view.findViewById<ImageView>(R.id.imageView).setImageResource(R.drawable.ic_tooltip_add_similar)
                 view.findViewById<TextView>(R.id.contentsTv).text = "같은 유형 문제를 추가해\n" +
                         "취약점을 채워보세요 :)"
+                view
+            }
+            Tutor.TooltipType.addSimilarOfStartChallenge -> {
+                val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical_img, null)
+                view.findViewById<ImageView>(R.id.imageView).setImageResource(R.drawable.ic_tooltip_add_similar)
+                view.findViewById<TextView>(R.id.contentsTv).text = "문제를 풀면\n" +
+                    "유사문항을 계속\n" +
+                    "추가할 수 있어요 :)"
                 view
             }
             Tutor.TooltipType.changeSimilar -> {

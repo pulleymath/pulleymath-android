@@ -10,13 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.ListAdapter
@@ -33,6 +35,10 @@ import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.utils.Preferences
@@ -50,11 +56,16 @@ class PdfListActivity : AppCompatActivity() {
     private val PDF_DIR by lazy {"$filesDir/pdfs"}
     private val PDF_URL_PREFIX = "${Network.baseNodeUrl}/v1/pdf"
 
+    companion object {
+        val COMMERCIAL_PDF_EXITED = 302
+        val RESULT_BOOK_ID = "RESULT_BOOK_ID"
+    }
     private val binding: ActivityPdfListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_pdf_list, null, false)
     }
 
     private val viewModel:PdfViewModel by viewModels()
+    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +100,9 @@ class PdfListActivity : AppCompatActivity() {
         }
 
         initUI()
+        initActivityResult()
     }
+
 
     private fun createCacheDir() {
         File(PDF_DIR)?.let { outputDir ->
@@ -106,6 +119,30 @@ class PdfListActivity : AppCompatActivity() {
         }
     }
 
+    private fun initActivityResult() {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+            when (it.resultCode) {
+                COMMERCIAL_PDF_EXITED -> {
+                    val bookId = it.data?.getIntExtra(RESULT_BOOK_ID, -1) ?: -1
+                    if (bookId == -1) return@registerForActivityResult
+                    viewModel.closeTutorialPdfBook(bookId) { startChallenge ->
+                        // TODO 챌린지라면 완료 후
+                        val completedDialog = ChallengeCompletedDialog(startChallenge,
+                            ChallengeManager.CourseName.스타트챌린지_북스.id
+                        ) {
+                            ChallengeManager.getMainTabMoveIntent(it).let {
+                                LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                                finish()
+                            }
+                        }
+                        supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog3") }
+                    }
+                }
+            }
+        }
+    }
+
     private fun initUI() {
         with(binding) {
             subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.subjectItems)
@@ -113,62 +150,54 @@ class PdfListActivity : AppCompatActivity() {
         }
 
         with(viewModel) {
-            stickyAppBarShow.observe(this@PdfListActivity,
-                { isShow ->
-                    if (!isShow) {
-                        val adapter = (binding.recyclerPdf.adapter as PdfAdapter)
-                        val headerBinding = adapter.headerBinding
-                            headerBinding?.purchaseSwtich?.isChecked =
-                                isOpenableBookSelected.value!!
+            stickyAppBarShow.observe(this@PdfListActivity) { isShow ->
+                if (!isShow) {
+                    val adapter = (binding.recyclerPdf.adapter as PdfAdapter)
+                    val headerBinding = adapter.headerBinding
+                    headerBinding?.purchaseSwtich?.isChecked =
+                        isOpenableBookSelected.value!!
+                }
+            }
+            subjectSelectedPosition.observe(this@PdfListActivity) { position ->
+                position?.let {
+                    subjectFilter =
+                        if (position > 0) PdfListFilter.subject.keys.toList().get(it) else ""
+                    filter()
+                    ySum = 0
+                }
+            }
+            categorySelectedPosition.observe(this@PdfListActivity) { position ->
+                position?.let {
+                    categoryFilter =
+                        if (position > 0) PdfListFilter.category.keys.toList().get(it) else ""
+                    filter()
+                    ySum = 0
+                }
+            }
+            searchText.observe(this@PdfListActivity) { query ->
+                query?.let {
+                    with(binding) {
+                        val currentQuery = searchName.query
+                        if (query != currentQuery) {
+                            searchName.setQuery(it, false)
+                        }
+                        if (query != "") searchName.isIconified = false
                     }
-                })
-            subjectSelectedPosition.observe(this@PdfListActivity,
-                object : Observer<Int> {
-                    override fun onChanged(position: Int?) {
-                        position?.let {
-                            subjectFilter = if(position > 0) PdfListFilter.subject.keys.toList().get(it) else ""
-                            filter()
-                            ySum = 0
+                }
+            }
+            isSearchViewIconified.observe(this@PdfListActivity) { isIconified ->
+                with(binding) {
+                    searchName.let { searchView ->
+                        if (searchView.isIconified == isIconified) {
+                            searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
                         }
                     }
-                })
-            categorySelectedPosition.observe(this@PdfListActivity,
-                object : Observer<Int> {
-                    override fun onChanged(position: Int?) {
-                        position?.let {
-                            categoryFilter = if (position > 0) PdfListFilter.category.keys.toList().get(it) else ""
-                            filter()
-                            ySum = 0
-                        }
-                    }
-                })
-            searchText.observe(this@PdfListActivity,
-                object : Observer<String> {
-                    override fun onChanged(query: String?) {
-                        query?.let {
-                            with(binding) {
-                                val currentQuery = searchName.query
-                                if (query != currentQuery) {
-                                    searchName.setQuery(it, false)
-                                }
-                                if (query != "") searchName.isIconified = false
-                            }
-                        }
-                    }
-                })
-            isSearchViewIconified.observe(this@PdfListActivity,
-                object : Observer<Boolean> {
-                    override fun onChanged(isIconified: Boolean) {
-                        with(binding) {
-                            searchName.let { searchView ->
-                                if (searchView.isIconified == isIconified) {
-                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
-                                }
-                            }
-                        }
-                    }
-
-                })
+                }
+            }
+            checkActionOfStartChallenge {
+                val guideDialog = ChallengeGuideManager.getStartGuideMission3()
+                supportFragmentManager.let { guideDialog.show(it, "getStartGuideMission3") }
+            }
         }
     }
 
@@ -235,54 +264,41 @@ class PdfListActivity : AppCompatActivity() {
                 categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.categoryItems)
 
                 viewModel.run {
-                    subjectSelectedPosition.observe(this@PdfListActivity,
-                        object : Observer<Int> {
-                            override fun onChanged(position: Int?) {
-                                position?.let {
-                                    spinnerSubject.setSelection(it)
-                                }
-                            }
-                        })
-                    categorySelectedPosition.observe(this@PdfListActivity,
-                        object : Observer<Int> {
-                            override fun onChanged(position: Int?) {
-                                position?.let {
-                                    spinnerCategory.setSelection(it)
-                                }
-                            }
-                        })
-                    pdfListLength.observe(this@PdfListActivity,
-                        object : Observer<String> {
-                            override fun onChanged(str: String?) {
-                                str?.let {
-                                    pdfListCountTv.text = it
-                                }
-                            }
-                        })
-                    searchText.observe(this@PdfListActivity,
-                        object : Observer<String> {
-                            override fun onChanged(query: String?) {
-                                query?.let {
-                                    with(binding) {
-                                        val currentQuery = searchNameInHeader.query
-                                        if (query != currentQuery) {
-                                            searchNameInHeader.setQuery(it, false)
-                                        }
-                                        if (query != "") searchNameInHeader.isIconified = false
-                                    }
-                                }
-                            }
-                        })
-                    isHeaderSearchViewIconified.observe(this@PdfListActivity,
-                        { isIconified ->
+                    subjectSelectedPosition.observe(this@PdfListActivity) { position ->
+                        position?.let {
+                            spinnerSubject.setSelection(it)
+                        }
+                    }
+                    categorySelectedPosition.observe(this@PdfListActivity) { position ->
+                        position?.let {
+                            spinnerCategory.setSelection(it)
+                        }
+                    }
+                    pdfListLength.observe(this@PdfListActivity) { str ->
+                        str?.let {
+                            pdfListCountTv.text = it
+                        }
+                    }
+                    searchText.observe(this@PdfListActivity) { query ->
+                        query?.let {
                             with(binding) {
-                                this.searchNameInHeader.let { searchView ->
-                                    if (searchView.isIconified == isIconified) {
-                                        searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
-                                    }
+                                val currentQuery = searchNameInHeader.query
+                                if (query != currentQuery) {
+                                    searchNameInHeader.setQuery(it, false)
+                                }
+                                if (query != "") searchNameInHeader.isIconified = false
+                            }
+                        }
+                    }
+                    isHeaderSearchViewIconified.observe(this@PdfListActivity) { isIconified ->
+                        with(binding) {
+                            this.searchNameInHeader.let { searchView ->
+                                if (searchView.isIconified == isIconified) {
+                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
                                 }
                             }
-                        })
+                        }
+                    }
                 }
             }
         }
@@ -300,7 +316,7 @@ class PdfListActivity : AppCompatActivity() {
         fun bind(item: Pdf) {
             /** 다운로드 체크 */
             item.downloaded.set(File(makeLocalPdfName(item)).exists())
-            item.subject = PdfListFilter.subject.get(item.subject_code)?:""
+            item.subject = PdfListFilter.subject[item.subject_code] ?:""
             if (item.subject == "과목 전체") {
                 item.subject = ""
             }
@@ -318,7 +334,8 @@ class PdfListActivity : AppCompatActivity() {
             Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}")
 
             if (!pdf.is_purchased) {
-                openShop(pdf)
+//                openShop(pdf)
+                openPurchasedGuideDialog()
             } else if (!pdf.downloading.get() && pdf.is_purchased) { // 다운로드 중이면 disabled
                 if (pdf.downloaded.get()) { open(pdf) } else { beforeDownload(pdf) }
             } else {
@@ -355,6 +372,10 @@ class PdfListActivity : AppCompatActivity() {
             }
         }
 
+        private fun openPurchasedGuideDialog() {
+            val dialog = PurchaseGuideDialog(withPdfDesc = true)
+            supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+        }
         private fun openShop(pdf: Pdf) {
             DialogUtils.confirmBuyPulleyBooks(this@PdfListActivity, "${pdf.title} ${pdf.subject}") {
                 val url = "${Network.shopUrl}/shop/${pdf.shop_id}/books?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=books_buy"
@@ -374,8 +395,7 @@ class PdfListActivity : AppCompatActivity() {
 
         /** open viewer */
         private fun openPdf(context: Context, pdf:Pdf, answerPath:String, answerLinks:List<PdfLinkAnswerItem>) {
-            Intent(context, PdfViewerActivity::class.java).apply {
-
+            val intent = Intent(context, PdfViewerActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(makeLocalPdfName(pdf))
 
@@ -402,10 +422,13 @@ class PdfListActivity : AppCompatActivity() {
                 if (linkString.isNotEmpty() && linkString.length > 1) {
                     putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
                 }
-
-                runOnUiThread {
-                    context.startActivity(this)
-                }
+//                runOnUiThread {
+//                    context.startActivity(this)
+//                }
+            }
+            viewModel.openTutorialPdfBook(pdf.cm_book_id)
+            runOnUiThread {
+                getResult.launch(intent)
             }
         }
 
@@ -505,7 +528,7 @@ class PdfListActivity : AppCompatActivity() {
 
             // pdf root directory 없으면 생성
             if(!file.parentFile.exists()) {
-                file.parentFile.mkdirs()
+                file.parentFile?.mkdirs()
             }
 
             FileOutputStream(file, true).use { stream ->

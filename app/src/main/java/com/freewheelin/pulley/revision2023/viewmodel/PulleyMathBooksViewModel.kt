@@ -8,21 +8,17 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListener
 import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
-import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.model.contents.Book
-import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
+import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
-import com.freewheelin.pulley.revision2023.service.PatternStudyApi
-import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
 import com.freewheelin.pulley.utils.show
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
@@ -31,6 +27,7 @@ import java.util.concurrent.TimeUnit
 class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(application) {
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
     lateinit var recommendBookListViews: List<RecommendBookListView>
+    private val challengeRepository by lazy { ChallengeRepository.instance }
     lateinit var planListener: PlanListener
 
     val showEmptyContainer = MutableLiveData<Boolean>(false)
@@ -39,9 +36,11 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     val playTotalLoadingView = MutableLiveData<Boolean>(false)
     val showTotalPlanCover = MutableLiveData<Boolean>(false)
     val showDummyBottomView = MutableLiveData<Boolean>(false)
+    val joinedChallengeList = challengeRepository.joinedChallengeList
 
-    val _books = MutableLiveData<List<Book>>()
+    private val _books = MutableLiveData<List<Book>>()
     val books: LiveData<List<Book>> = _books
+    val initPositionSettingFlag = MutableLiveData<Unit>()
 
     lateinit var totalAdapter: PatternStudyTotalPlanAdapter
 
@@ -50,11 +49,14 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
         latestFilters = filters
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val newBookList = patternStudyRepository.fetchAllBookList(filterString)
-            showTotalLoadingView.postValue(false)
-            playTotalLoadingView.postValue(false)
-            showRecyclerView.postValue(true)
-            _books.postValue(newBookList)
+            patternStudyRepository.fetchAllBookList(filterString)?.let { newBookList ->
+                showTotalLoadingView.postValue(false)
+                playTotalLoadingView.postValue(false)
+                showRecyclerView.postValue(true)
+                _books.postValue(newBookList)
+                delay(1000)
+                initPositionSettingFlag.postValue(Unit)
+            }
         }
     }
 
@@ -82,7 +84,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     }
     fun collectRecommendList(isInit: Boolean = true, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val newRecommendList = fetchRecommendList()
+            val newRecommendList = fetchRecommendList() ?: return@launch
             newRecommendList.forEachIndexed { index, book ->
                 val title = book.title
                 val bookList = book.targetBookPlanList
@@ -99,7 +101,13 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
             cb()
         }
     }
-    suspend fun fetchRecommendList(): List<RecommendBookList> {
+    suspend fun fetchRecommendList(): List<RecommendBookList>? {
         return patternStudyRepository.fetchRecommendBooks()
+    }
+    fun checkActionOfStartChallenge(cb: () -> Unit) {
+        joinedChallengeList.value
+            ?.filter { it.userStatus == ChallengeUserStatus.ING }
+            ?.filter { it.startChallenge?.isPulleyBooksCourseInProgress == true }
+            ?.forEach { _ -> cb() }
     }
 }

@@ -46,6 +46,11 @@ class CommercialBook {
     var bookTag: String? = null
     var publisher: String? = null
     var pieceID: Int
+    var tag: Tag = Tag.None
+
+    enum class Tag {
+        None, New, Best
+    }
 
 
     constructor(book: Book) {

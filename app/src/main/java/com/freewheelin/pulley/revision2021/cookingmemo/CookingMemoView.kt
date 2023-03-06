@@ -28,7 +28,7 @@ class CookingMemoView: FreeDrawView {
     var isBlocked: Boolean = false
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
-
+//        println("xjcl2 onTouch ")
         if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
             isPencilcaseVisibleBeforeOnTouchDraw = isPencilPanelVisible()
         }
@@ -47,7 +47,7 @@ class CookingMemoView: FreeDrawView {
             saveDrawing()
             return true
         }
-
+//        println("xjcl2 onTouch 1 : ${pencilcase?.editType} : ${pencilcase?.editType == CookingPencilcase.EditType.pencil}")
         if(pencilcase?.editType == CookingPencilcase.EditType.pencil && buttonType != MotionEvent.BUTTON_STYLUS_PRIMARY) {
             if (motionEvent?.pointerCount == 2) {
                 parent.requestDisallowInterceptTouchEvent(false)

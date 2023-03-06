@@ -22,7 +22,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment.Companion.SHOW_ADDITIONAL_LEARNING
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.DialogAffiliatedTestReportDialogBinding
@@ -219,20 +218,13 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 context.startActivity(intent)
             }
             addtionalLearningBtn.setOnClickListener {
-                println("asoaso additional learning btn! subject: ${subject}")
-                if (subject == "물리학") {
-                    val intent = Intent(SHOW_ADDITIONAL_LEARNING)
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-                    close()
-                } else {
-                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
-                    intent.putExtra(PieceManager.EVENT_SCROLL, true)
-                    intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
-                    intent.putExtra(PieceManager.EVENT_FILTER, subject)
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-                    close()
-                }
+                val intent = Intent(PieceManager.EVENT_MOVE_TAB)
+                intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
+                intent.putExtra(PieceManager.EVENT_SCROLL, true)
+                intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
+                intent.putExtra(PieceManager.EVENT_FILTER, subject)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+                close()
             }
             var messageByUniv = if(user?.showMainKUTab == true) "KU진단 " else ""
             messageByUniv = "${messageByUniv}결과에 맞는 보완학습을 진행해보세요."
@@ -291,12 +283,11 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
             Handler(Looper.getMainLooper()).post {
                 binding.apply {
                     when (subject) {
-                        "확률과 통계", "미적분", "물리학" -> {
+                        "확률과 통계", "미적분" -> {
                             label2Tv.visibility = View.VISIBLE
                             supportLearnCl.visibility = View.VISIBLE
                         }
                         else -> {
-                            println("asoaso subject: ${subject}")
                             label2Tv.visibility = View.GONE
                             supportLearnCl.visibility = View.GONE
                         }

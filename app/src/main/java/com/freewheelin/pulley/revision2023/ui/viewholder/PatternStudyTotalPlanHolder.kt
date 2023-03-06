@@ -1,9 +1,6 @@
 package com.freewheelin.pulley.revision2023.ui.viewholder
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
@@ -11,9 +8,9 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanHolder
 import com.freewheelin.pulley.databinding.ItemBookTotalPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.ClientBookType
-import com.freewheelin.pulley.utils.scrollToView
+import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
 
-class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanHolder(binding.root) {
+class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding, private val pulleyMathBooksViewModel: PulleyMathBooksViewModel?) : PlanHolder(binding.root) {
 
     override fun set(book: Book) {
         super.set(book)
@@ -23,7 +20,8 @@ class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanH
             book.clientBookType = ClientBookType.ALL
 
             setTag(tags) {
-                studyListener?.filterFromTagOnCard(it)
+                val filterType = FilterType.convertTagAtFiltertType(it)
+                studyListener?.filterFromTagOnCard(filterType)
             }
             solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
             problemCntTv.text = book.totalNumber.toString() + "문제"
@@ -35,9 +33,25 @@ class PatternStudyTotalPlanHolder(val binding: ItemBookTotalPlanBinding) : PlanH
                 solveCntTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
             }
 
+            setVisibleChallengeStamp()
+//            challengeStampIv.visibility = if (book.markingState == "YET" && book.pieceSubCategory == "START")
+//                View.VISIBLE
+//            else
+//                View.GONE
             guideTv.text = book.description
+
         }
 
 
+    }
+    fun setVisibleChallengeStamp() {
+        val visible = pulleyMathBooksViewModel?.joinedChallengeList?.value?.find {
+            it.startChallenge?.isPulleyBooksCourseInProgress == true
+        } != null
+
+        binding.challengeStampIv.visibility = if (visible && book.isStartChallengeBookPiece())
+            View.VISIBLE
+        else
+            View.GONE
     }
 }

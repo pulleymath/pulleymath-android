@@ -25,7 +25,6 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
     val currentTimeString by lazy { MutableLiveData<String>() }
     val selectedTabIndex by lazy { MutableLiveData<Int>(0) }
     val showNothingDataView by lazy { MutableLiveData(false) }
-//    val showAdditionalLearning by lazy { MutableLiveData(false) }
 
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
         val studentId = user?.studentID ?: return

@@ -12,7 +12,6 @@ import android.util.TypedValue
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -20,13 +19,15 @@ import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginTop
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.views.TooltipWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.squareup.picasso.Callback
@@ -35,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 
@@ -168,6 +168,26 @@ fun View.hide(duration:Long = 500, cb:(() -> Unit)? = null) {
     })
     startAnimation(anim)
 }
+fun View.hideToGone(duration:Long = 500, cb:(() -> Unit)? = null) {
+    if(this.visibility == View.GONE)
+        return
+
+    val anim = AlphaAnimation(1f, 0f)
+    anim.duration = duration
+    anim.setAnimationListener(object: Animation.AnimationListener{
+        override fun onAnimationRepeat(p0: Animation?) {
+        }
+
+        override fun onAnimationEnd(p0: Animation?) {
+            visibility = View.GONE
+            if(cb == null) return else cb()
+        }
+
+        override fun onAnimationStart(p0: Animation?) {
+        }
+    })
+    startAnimation(anim)
+}
 
 fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
     if(visibility == View.INVISIBLE || visibility == View.GONE)
@@ -176,15 +196,49 @@ fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
         hide(duration, cb)
 }
 
-fun View.setPermissionClickListener(cb: (view: View) -> Unit) {
+fun View.hideGoneIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
+    if(visibility == View.INVISIBLE || visibility == View.GONE)
+        return
+    else
+        hideToGone (duration, cb)
+}
+
+fun View.setOnPaidUserClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
     this.setOnClickListener {
-        if(user?.hasPulleyPlus == true) {
-            cb(it)
-    //            DialogUtils.showExpiredDialog(context)
+        if (user?.serviceType == PaidServiceType.NONE) {
+            deniedCb(it)
         } else {
-            DialogUtils.confirmHasPulleyPlus(context) {
-                PulleyPlusPriceDialog(context).show()
-            }
+            cb(it)
+        }
+    }
+}
+fun View.setOnBasicCOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
+    this.setOnClickListener {
+        val serviceTypeValue = user?.serviceType?.rawValue ?: 0
+        val isServiceTypeBasicC = user?.serviceType == PaidServiceType.BASIC_C
+        if(isServiceTypeBasicC || serviceTypeValue >= PaidServiceType.STANDARD.rawValue) {
+            cb(it)
+        } else {
+            deniedCb(it)
+        }
+    }
+}
+fun View.setOnBasicPOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
+    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.BASIC_P, cb, deniedCb)
+}
+fun View.setOnStandardOrHigherClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
+    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.STANDARD, cb, deniedCb)
+}
+fun View.setOnPremiumClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
+    setOnClickListenerByServiceTypeOrHigher(PaidServiceType.PREMIUM, cb, deniedCb)
+}
+fun View.setOnClickListenerByServiceTypeOrHigher(criterionServiceType: PaidServiceType, cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
+    this.setOnClickListener {
+        val serviceTypeValue = user?.serviceType?.rawValue ?: 0
+        if(serviceTypeValue >= criterionServiceType.rawValue) {
+            cb(it)
+        } else {
+            deniedCb(it)
         }
     }
 }
@@ -564,12 +618,12 @@ fun ImageView.setCookingImageURL(url: String) {
 }
 fun View.setMarginTop(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        setMarginTop(dp.toPx())
+        topMargin = dp.toPx()
     }
 }
 fun View.setMarginBottom(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        setMarginBottom(dp.toPx())
+        bottomMargin = dp.toPx()
     }
 }
 fun View.setMarginStart(dp: Int) {
@@ -581,4 +635,7 @@ fun View.setMarginEnd(dp: Int) {
     this.layoutParams = (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
         marginEnd = dp.toPx()
     }
+}
+fun View.visibleIf(isVisible: Boolean) {
+    this.visibility = if(isVisible) View.VISIBLE else View.GONE
 }

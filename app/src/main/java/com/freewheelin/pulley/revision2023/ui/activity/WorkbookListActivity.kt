@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -18,11 +19,14 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
-import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
+import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.revision2023.viewmodel.WorkbookListViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.GridMarginDecoration
@@ -31,9 +35,7 @@ import com.freewheelin.pulley.views.snackBar.SnackBarView
 import com.freewheelin.pulley.views.snackBar.SnackBarViewListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.max
 
 class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListener,
     BookFilterListener,
@@ -42,7 +44,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_workbook_list, null, false)
     }
     private val viewModel: WorkbookListViewModel by viewModels()
-    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null)
+    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null, null)
 
     companion object {
         @JvmStatic
@@ -65,14 +67,12 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 finish()
             }
             createWorkbookCl.setOnClickListener {
-                if (user!!.hasPulleyPlus) {
-                    CustomizeBookDialog(this@WorkbookListActivity, this@WorkbookListActivity).show()
-                } else {
-                    DialogUtils.confirmHasPulleyPlus(this@WorkbookListActivity) {
-                        PulleyPlusPriceDialog(this@WorkbookListActivity).show()
-                    }
-                }
+                val isStartChallengeInProgress = viewModel.showStartChallengeStamp.value == true
+                CustomizeBookDialog(this@WorkbookListActivity, isStartChallengeInProgress, this@WorkbookListActivity).show()
             }
+
+//            DialogUtils.confirmDialog(this@WorkbookListActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
+
         }
         viewModel.apply {
             playTotalLoadingView.observe(this@WorkbookListActivity) {
@@ -104,6 +104,14 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                     playTotalLoadingView.postValue(false)
                     showTotalPlanCover.postValue(false)
                 }
+            }
+            joinedChallengeList.observe(this@WorkbookListActivity) {
+                val isWorkbookStartChallengeInProgress = it.find { it.startChallenge?.isWorkbooksInProgress == true } != null
+                showStartChallengeStamp.postValue(isWorkbookStartChallengeInProgress)
+            }
+            checkActionOfStartChallenge {
+                val guideDialog = ChallengeGuideManager.getStartGuideMission4()
+                supportFragmentManager.let { guideDialog.show(it, "getStartGuideMission3") }
             }
         }
     }
@@ -163,11 +171,11 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 //                dialog.show()
             }
             ActionType.pin -> {
-                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
+                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
                 val itemValue = "전체문제집"
                 LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", itemName, itemValue)
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
-                viewModel.togglePin(id, !book.pin) {
+                viewModel.togglePin(id, !book.isPinned) {
                     setSnackBar()
                 }
             }
@@ -222,5 +230,24 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
     override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
         fetchCustomBook()
+        viewModel.completedWorkbookChallenge { startChallenge ->
+            //TODO 챌린지 완료
+
+            val completedDialog = ChallengeCompletedDialog(startChallenge,
+                ChallengeManager.CourseName.스타트챌린지_워크북.id,
+            ) {
+                ChallengeManager.getMainTabMoveIntent(it).let {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                    finish()
+                }
+            }
+
+            supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog4") }
+        }
+    }
+
+    override fun onDeniedUser() {
+        val dialog = PurchaseGuideDialog()
+        supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
     }
 }

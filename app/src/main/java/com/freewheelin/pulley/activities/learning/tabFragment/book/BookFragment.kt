@@ -41,7 +41,7 @@ import com.freewheelin.pulley.views.GridMarginDecoration
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 
-class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener, CustomizeBookDialogListener {
+class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListener, BookFilterListener {
 
     lateinit var binding: FragmentBookBinding
 
@@ -108,11 +108,11 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             }
 
             // 워크북 잠금 아이콘
-            iconLock.visibility = if (user!!.hasPulleyPlus) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
+//            iconLock.visibility = if (user!!.hasPulleyPlus) {
+//                View.GONE
+//            } else {
+//                View.VISIBLE
+//            }
             workbookBtn.setOnClickListener {
                 LogUtils.logEvent(
                     requireContext(),
@@ -121,13 +121,6 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     "유형학습",
                     "전체-워크북만들기"
                 )
-                if (user!!.hasPulleyPlus) {
-                    CustomizeBookDialog(requireContext(), this@BookFragment).show()
-                } else {
-                    DialogUtils.confirmHasPulleyPlus(requireContext()) {
-                        PulleyPlusPriceDialog(requireContext()).show()
-                    }
-                }
             }
 
             // 전체플랜
@@ -231,18 +224,18 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     fun getMyPlanList(cb: () -> Unit) {
         binding.apply {
             // Did
-            BookManager.getMyBookList(requireContext(), user!!) {
+            BookManager.getMyBookList(user!!) {
                 myBooks = it
 
-                myPlanCntTv?.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
-                pinCntTv?.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
+                myPlanCntTv.text = "총 ${it?.myPieceStorageList?.size ?: 0}개 "
+                pinCntTv.text = "핀 설정 ${it?.pinBookPlanCount ?: 0}개 "
                 if (it == null || it.myPieceStorageList.size == 0) {
-                    myBookEmptyContainer?.visibility = View.VISIBLE
-                    myPlanRv?.visibility = View.INVISIBLE
+                    myBookEmptyContainer.visibility = View.VISIBLE
+                    myPlanRv.visibility = View.INVISIBLE
                 } else {
-                    myBookEmptyContainer?.visibility = View.INVISIBLE
-                    myPlanRv?.visibility = View.VISIBLE
-                    myPlanRv?.adapter?.notifyDataSetChanged()
+                    myBookEmptyContainer.visibility = View.INVISIBLE
+                    myPlanRv.visibility = View.VISIBLE
+                    myPlanRv.adapter?.notifyDataSetChanged()
                 }
 
                 cb()
@@ -274,7 +267,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
         //did
         BookManager.getRecommendBookList(requireContext(), user!!) {
             if (it != null) {
-                for (i in 0 until it.size) {
+                for (i in it.indices) {
                     val recommend = it[i]
                     val title = recommend.title
                     val bookList = recommend.targetBookPlanList
@@ -376,7 +369,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             books[index] = book
         }
 
-        if(binding.filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.pin == true) {
+        if(binding.filterView.selectedFilterTypes.contains(FilterType.핀_미포함) && book.isPinned == true) {
             books?.remove(book)
         }
 
@@ -434,7 +427,8 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
             super.set(book)
 
             setTag(tags) {
-                filterFromTagOnCard(it)
+                val filterType = FilterType.convertTagAtFiltertType(it)
+                filterFromTagOnCard(filterType)
             }
             solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
             problemCntTv.text = book.totalNumber.toString() + "문제"
@@ -458,7 +452,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                 dialog.show()
             }
             ActionType.pin -> {
-                val itemName = if(book.pin) "핀해제하기" else "핀설정하기"
+                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
                 val itemValue = if(holder is MyPlanHolder) "나의플랜" else if(holder is RecommendPlanHolder) "추천플랜" else "전체플랜"
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
                 //did
@@ -522,35 +516,35 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
 
     override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집선택버튼")
-        CustomizeBookDialog(requireContext(), this, book).show()
+//        CustomizeBookDialog(requireContext(), this, book).show()
     }
 
-    override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
-        getMyPlanList {
-            (activity as LearningTabActivity).showSnackBar("${book.bookName}으로 워크북이 만들어졌습니다.", "나의플랜으로 이동", action = {
-                val index = myBooks?.myPieceStorageList?.indexOfFirst { it.assignID == book.assignID }
-                binding.rootView.smoothScrollTo(0, 0)
-
-                if(index != null) {
-                    val scroller = object: LinearSmoothScroller(context) {
-                        override fun getHorizontalSnapPreference(): Int {
-                            return SNAP_TO_START
-                        }
-                    }
-                    scroller.targetPosition = index
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        try {
-                            binding.myPlanRv.layoutManager?.startSmoothScroll(scroller)
-                        } catch (e:Exception) {
-                            Log.e("워크북생성", "error===>${e.localizedMessage}, position=>$index")
-                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "워크북생성", "나의플랜으로 이동")
-                        }
-                    }, 300)
-                }
-            })
-            getTotalList()
-        }
-    }
+//    override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
+//        getMyPlanList {
+//            (activity as LearningTabActivity).showSnackBar("${book.bookName}으로 워크북이 만들어졌습니다.", "나의플랜으로 이동", action = {
+//                val index = myBooks?.myPieceStorageList?.indexOfFirst { it.assignID == book.assignID }
+//                binding.rootView.smoothScrollTo(0, 0)
+//
+//                if(index != null) {
+//                    val scroller = object: LinearSmoothScroller(context) {
+//                        override fun getHorizontalSnapPreference(): Int {
+//                            return SNAP_TO_START
+//                        }
+//                    }
+//                    scroller.targetPosition = index
+//                    Handler(Looper.getMainLooper()).postDelayed({
+//                        try {
+//                            binding.myPlanRv.layoutManager?.startSmoothScroll(scroller)
+//                        } catch (e:Exception) {
+//                            Log.e("워크북생성", "error===>${e.localizedMessage}, position=>$index")
+//                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "워크북생성", "나의플랜으로 이동")
+//                        }
+//                    }, 300)
+//                }
+//            })
+//            getTotalList()
+//        }
+//    }
     fun setFilterType(subject: String): HashSet<FilterType> {
         val defaultSet = mutableSetOf(
             FilterType.워크북_미포함,

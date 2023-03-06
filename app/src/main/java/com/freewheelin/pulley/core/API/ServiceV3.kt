@@ -1,11 +1,10 @@
 package com.freewheelin.pulley.core.API
 
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
+import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.MockExamAnalysis
-import com.freewheelin.pulley.model.ResponseBody
-import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.core.manage.ResponseBookInfo2
+import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import io.reactivex.Observable
@@ -62,4 +61,25 @@ interface  ServiceV3 {
     @POST("/test/report")
     fun getTestReport(@Body param: Parameter): Call<Template<Test>>
 
+    @GET("v3/books/all")
+    fun getBooksNew(@Query("filter") filter: String,
+                    @Query("order") order: String,
+                    @Query("category") category: String): Call<List<Book>>
+
+    @GET("books/{studentID}/{assignID}/problems")
+    fun getBook(@Path("studentID") studentID: String, @Path("assignID") assignID: Int): Call<ResponseBody<ResponseBookInfo2>>
+
+
+    @GET("books/{studentID}/plans")
+    fun getMyBookList(@Path("studentID") studentID: String): Call<ResponseBody<MyBookList>>
+
+    @GET("daily-summary/{studentID}/pieces/all")
+    fun getStudyList(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
+
+    @GET("daily-summary/{studentID}/pieces")
+    fun getDailyPiece(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
+
+//    @GET("test/{studentID}?now=2023-03-04 12:00:00")
+    @GET("test/{studentID}")
+    fun getTestList(@Path("studentID") studentID: String): Call<ResponseBody<List<Test>>>
 }

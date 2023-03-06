@@ -87,41 +87,62 @@
                     android:layout_weight="1"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/createWorkbookCl"
+                    android:id="@+id/createWorkbookClWrapper"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/bg_purple_300_round_18_ripple"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="@dimen/dp48"
-                    android:layout_marginTop="@dimen/dp32"
-                    >
-                    <ImageView
-                        android:id="@+id/plusTv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_plus"
-                        android:layout_marginStart="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/createWorkbookCl"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="워크북 만들기"
-                        style="@style/h5"
-                        android:layout_marginEnd="20dp"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toEndOf="@+id/plusTv"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="36dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="@drawable/bg_purple_300_round_18_ripple"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginEnd="@dimen/dp48"
+                        android:layout_marginTop="@dimen/dp32"
+                        >
+                        <ImageView
+                            android:id="@+id/plusTv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_plus"
+                            android:layout_marginStart="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="워크북 만들기"
+                            style="@style/h5"
+                            android:layout_marginEnd="20dp"
+                            android:textColor="@color/white"
+                            app:layout_constraintStart_toEndOf="@+id/plusTv"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:id="@+id/challengeStampIv"
+                        android:layout_width="50dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/challenge_stamp_3d_image"
+                        visibleIf="@{ vm.showStartChallengeStamp }"
+                        app:layout_constraintStart_toStartOf="@+id/createWorkbookCl"
+                        app:layout_constraintBottom_toBottomOf="@+id/createWorkbookCl"
+                        app:layout_constraintEnd_toEndOf="@+id/createWorkbookCl"
+                        />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             </LinearLayout>
 

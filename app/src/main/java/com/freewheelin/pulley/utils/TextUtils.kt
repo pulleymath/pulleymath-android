@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.utils
 
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
 import android.text.Html
@@ -11,6 +12,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.UnderlineSpan
 import android.util.Patterns
 import android.view.View
+import android.widget.TextView
 import com.freewheelin.pulley.model.MyLog
 import java.text.DecimalFormat
 import java.util.regex.Pattern
@@ -37,6 +39,9 @@ class TextUtils {
     }
 }
 
+fun TextView.underline() {
+    this.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+}
 fun CharSequence.partialUnderline(text: String, onClick: (() -> Unit)? = null): CharSequence {
     return this.partialUnderline(this.indexOf(text), this.indexOf(text) + text.length, onClick)
 }

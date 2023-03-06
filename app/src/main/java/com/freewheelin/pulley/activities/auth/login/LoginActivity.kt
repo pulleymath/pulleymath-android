@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.activities.auth.login
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,11 +11,15 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.SplashActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActivity
 import com.freewheelin.pulley.activities.auth.signup.SignupActivity
@@ -30,8 +36,10 @@ import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.viewmodel.LoginActViewModel
 import com.freewheelin.pulley.views.editText.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -69,6 +77,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             return Intent(context, LoginActivity::class.java)
         }
     }
+    val viewModel: LoginActViewModel by viewModels()
 
     private val binding: ActivityLoginBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_login, null, false)
@@ -105,7 +114,49 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             loginBtn.toDisableUI()
 
             setListener()
+
+            dummyLoginBtn.apply {
+                visibility = if (BuildConfig.FLAVOR == "beta") {
+                    View.VISIBLE
+                } else { View.GONE }
+
+                setOnClickListener {
+                    pwField.text = "test1234"
+                    if (loginBtn.isEnableUI()) this@LoginActivity.onLoginBtnClicked()
+                }
+            }
+            liveBtn.apply {
+                visibility = if (BuildConfig.FLAVOR == "beta") {
+                    View.VISIBLE
+                } else { View.GONE }
+
+                setOnClickListener {
+                    changeServerApi(true)
+                    Toast.makeText(this@LoginActivity, "Live Api!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            stagingBtn.apply {
+                visibility = if (BuildConfig.FLAVOR == "beta") {
+                    View.VISIBLE
+                } else { View.GONE }
+
+                setOnClickListener {
+                    changeServerApi(false)
+                    Toast.makeText(this@LoginActivity, "Staging Api!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
         }
+    }
+    fun changeServerApi(isLive: Boolean) {
+        val api = if (isLive) Network.Server.live.toString() else Network.Server.staging.toString()
+        Preferences.onServerAPI.set(api)
+//        val intent = Intent(this@LoginActivity, SplashActivity::class.java)
+//        val mPendingIntentId = 123456
+//        val mPendingIntent = PendingIntent.getActivity(this@LoginActivity, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
+//        val mgr = this@LoginActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+//        System.exit(0)
     }
 
     fun setListener() {
@@ -121,10 +172,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     fun isValid() : Boolean{
         binding.apply {
-            if (emailField.text.isEmpty() == true || pwField.text.isEmpty() == true) {
+            if (emailField.text.isEmpty() || pwField.text.isEmpty()) {
                 return false
             }
-            return emailField.text.isValidEmail() == true && pwField.text.isValidPW() == true
+            return emailField.text.isValidEmail() && pwField.text.isValidPW()
         }
     }
 
@@ -135,7 +186,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     var requested = false
 
-    fun onLoginBtnClicked() {
+    private fun onLoginBtnClicked() {
         binding.apply {
             val email = emailField.text
             val pw = pwField.text
@@ -146,12 +197,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 if (pw.isEmpty()) pwField.showErrorMsg("비밀번호를 입력해주세요.")
                 return
             }
-
-            // 서버에서 체크, 로컬에서는 I1213 형식의 아이디를 사용해야 되기 때문에 valid 체크 할 수 없음
-//        if(!email.isValidEmail() ) {
-//            emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
-//            return
-//        }
 
             emailField.isShownError = false
             pwField.isShownError = false
@@ -192,7 +237,8 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
 
-    fun errorHandle(res: ResponseBody<SignInAppToken>) {
+
+    private fun errorHandle(res: ResponseBody<SignInAppToken>) {
         val error = res.error
         val errMsg = res.message
         binding.apply {
@@ -237,9 +283,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     disposables += API_APP.putToken(token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ _ ->
+                        .subscribe { _ ->
                             Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-                        }, { })
+                        }
                 }
             })
         }
@@ -253,15 +299,13 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         Log.d(javaClass.simpleName, "template=${res.error}")
 
         if (res.error == null) {
-            when {
-                res.data?.isValidPhone == false -> {
+            when (res.data?.isValidPhone) {
+                false -> {
                     ConfirmPhoneDialog(this, successCB = {
-//                        commitUser()
                         goLearningTab()
                     }, failCB = { clearToken() }).show()
                 }
                 else -> {
-//                    commitUser()
                     goLearningTab()
                 }
             }
@@ -296,29 +340,34 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     }
 
     private fun goLearningTab() {
-        disposables += API_V3.getUserObservable()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ res ->
-                res.data.let {
-                    MyApplication.user = it
-                    MyApplication.token = it.token
-                    commitUser()
+        viewModel.fetchUser {
+            MyApplication.user = it
+            MyApplication.token = it.token
+            commitUser()
 
-                    putFcmToken()
+            putFcmToken()
 
-                    startActivity(Intent(this, LearningTabActivity::class.java))
-                    finishAffinity()
-                }
-            }, { error ->
-                responseFailed(this, Throwable(error.message))
-            })
-    }
-
-    private fun goInitSetting() {
-        startActivity(InitSettingActivity.getIntent(this))
-        finishAffinity()
+            startActivity(Intent(this, LearningTabActivity::class.java))
+            finishAffinity()
+        }
+//        disposables += API_V3.getUserObservable()
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .timeout(3, TimeUnit.SECONDS)
+//            .subscribe({ res ->
+//                res.data.let {
+//                    MyApplication.user = it
+//                    MyApplication.token = it.token
+//                    commitUser()
+//
+//                    putFcmToken()
+//
+//                    startActivity(Intent(this, LearningTabActivity::class.java))
+//                    finishAffinity()
+//                }
+//            }, { error ->
+//                responseFailed(this, Throwable(error.message))
+//            })
     }
 
     fun onSignupBtnClicked() {

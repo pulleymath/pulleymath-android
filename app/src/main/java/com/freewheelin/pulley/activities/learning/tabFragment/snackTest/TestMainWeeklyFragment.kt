@@ -14,7 +14,10 @@ import com.freewheelin.pulley.databinding.FragmentTestMainUnavailableTestBinding
 import com.freewheelin.pulley.databinding.FragmentTestMainWeeklyBinding
 import com.freewheelin.pulley.databinding.FragmentTestMainWeeklyFinishBinding
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import java.util.*
 
 
@@ -79,10 +82,16 @@ class TestMainWeeklyFragment : TestMainBaseFragment() {
                     startBtn.show(duration)
                 }
 
-//            startBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid24, ButtonMode.pulley_plus)
-                startBtn.setOnClickListener {
+                val showLockIv = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == false
+                if (showLockIv) startBtn.setLock(ButtonLockImage.mid20)
+                else startBtn.setUnlock()
+
+                startBtn.setOnPaidUserClickListener(cb = {
                     listener?.onSolveBtnClicked(test!!)
-                }
+                }, deniedCb = {
+                    val dialog = PurchaseGuideDialog()
+                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                })
             }
         }
     }
@@ -134,6 +143,7 @@ class TestMainWeeklyFragment : TestMainBaseFragment() {
                 settingBtn.visibility = View.INVISIBLE
 
                 titleTv.text = test.subject
+
                 tick()
             }
         }

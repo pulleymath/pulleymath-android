@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,7 @@ import com.freewheelin.pulley.databinding.ItemMypageListBinding
 import com.freewheelin.pulley.dialogs.UpdateDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
@@ -143,6 +145,7 @@ class MyMainPageFragment : Fragment() {
 
     lateinit var typeReceiver: BroadcastReceiver
     lateinit var binding: FragmentMyMainPageBinding
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,8 +221,9 @@ class MyMainPageFragment : Fragment() {
                     binding.rightBtn.text = "로그아웃"
                     binding.rightBtn.setOnClickListener {
                         this.dismiss()
-                        MyApplication.user?.logout { errorMsg ->
-                            activity?.finish()
+                        MyApplication.user?.logout {
+                            viewModel.updateUser(MyApplication.user)
+                            activity?.finishAffinity()
                             val intent = Intent(activity, LoginActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             activity?.startActivity(intent)
@@ -387,7 +391,7 @@ class MyMainPageFragment : Fragment() {
 
                         val intent = Intent(context, SplashActivity::class.java)
                         val mPendingIntentId = 123456
-                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
                         val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
                         System.exit(0)

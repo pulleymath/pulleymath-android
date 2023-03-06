@@ -59,6 +59,8 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     var testPeriodMinutes: Int = 0
     var workbookSeq: Int = 0
 
+    var currentTimeString: String? = null
+
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
         println("buttonView = [$buttonView], isChecked = [$isChecked]")
         showSolutionView.postValue(isChecked)
@@ -71,6 +73,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "getTestResult list=>${res.data}")
+                currentTimeString = res.current_time
                 res.data?.let { resData ->
                     studentWorkbook = resData.student_workbook
                     val answerList = resData.answer_list
@@ -103,6 +106,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "testproblem list=>${res.data}")
                 // 원본
+                currentTimeString = res.current_time
                 res.data?.let { resData ->
 
                     studentWorkbook = resData.user_workbook
@@ -139,11 +143,10 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun finishTest(callback: (()->Unit)) {
         val studentId = user?.studentID
         if (studentId != null) {
-            affiliatedTestRepository.finishTest(studentId, workbookId)
+            compositeDisposable += affiliatedTestRepository.finishTest(studentId, workbookId)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
@@ -165,11 +168,10 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         }
     }
 
-    @SuppressLint("CheckResult")
     fun openProblem(problemNo: Int) {
         val studentId = user?.studentID
         if (studentId != null) {
-            affiliatedTestRepository.openProblem(studentId, workbookId, problemNo)
+            compositeDisposable += affiliatedTestRepository.openProblem(studentId, workbookId, problemNo)
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
@@ -193,20 +195,12 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         insertAnswer(problem)
         isSubmitBtnActive.value = answeredSet.isNotEmpty()
 
-        val newList = problemList.value?.replace(problem)
-        problemList.postValue(newList)
+        problemList.value?.replace(problem)?.let { newList ->
+            problemList.postValue(newList)
+        }
+
     }
 
-    fun getServerTime(cb: (String) -> Unit) {
-        compositeDisposable += affiliatedTestRepository.getServerTimeNow()
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ serverTime ->
-                cb(serverTime.now)
-            }, { error ->
-                Log.e(javaClass.simpleName, "insertAnswer error=${error.localizedMessage}")
-            })
-    }
     fun insertAnswer(problem: AffiliatedTestProblem) {
         val studentId = user?.studentID
         val problemNo = problem.no

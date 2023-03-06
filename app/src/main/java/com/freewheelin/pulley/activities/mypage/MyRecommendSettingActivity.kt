@@ -270,30 +270,30 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
         tran.commit()
     }
 
-    private fun getDurationText(user: User): String {
-        if(user.startDate == null || user.endDate == null) {
-//            LogUtils.assert(false, "유저 start 또 enddate가 존재하지 않음 " +
-//                    "studentID: ${user.studentID}" +
-//                    "mebership: ${user.memberExperiencedType}" +
-//                    "startDate: ${user.startDate}" +
-//                    "endDate: ${user.endDate}")
-            return ""
-        } else {
-            val now = Date()
-            val startDate: Date = if(now > user.startDate) now else user.startDate!!
-            val endDate = user.endDate!!
-
-            if(startDate < endDate) {
-                return "${DateTimeUtils.yyyyMMddFormat.format(user.startDate)}" +
-                        " - " +
-                        "${DateTimeUtils.yyyyMMddFormat.format(user.endDate)}"
-            } else {
-                return "${DateTimeUtils.yyyyMMddFormat.format(user.startDate)}" +
-                        " - " +
-                        "${DateTimeUtils.yyyyMMddFormat.format(user.endDate)}"
-            }
-        }
-    }
+//    private fun getDurationText(user: User): String {
+//        if(user.startDate == null || user.endDate == null) {
+////            LogUtils.assert(false, "유저 start 또 enddate가 존재하지 않음 " +
+////                    "studentID: ${user.studentID}" +
+////                    "mebership: ${user.memberExperiencedType}" +
+////                    "startDate: ${user.startDate}" +
+////                    "endDate: ${user.endDate}")
+//            return ""
+//        } else {
+//            val now = Date()
+//            val startDate: Date = if(now > user.startDate) now else user.startDate!!
+//            val endDate = user.endDate!!
+//
+//            if(startDate < endDate) {
+//                return "${DateTimeUtils.yyyyMMddFormat.format(user.startDate)}" +
+//                        " - " +
+//                        "${DateTimeUtils.yyyyMMddFormat.format(user.endDate)}"
+//            } else {
+//                return "${DateTimeUtils.yyyyMMddFormat.format(user.startDate)}" +
+//                        " - " +
+//                        "${DateTimeUtils.yyyyMMddFormat.format(user.endDate)}"
+//            }
+//        }
+//    }
 
     override fun onModifyCompleted() {
         setUpUI()

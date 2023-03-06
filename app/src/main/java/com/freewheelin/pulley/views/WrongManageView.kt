@@ -9,10 +9,23 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.databinding.ViewWrongManageBinding
+import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
+import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
+import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
+import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
+import com.freewheelin.pulley.utils.DialogUtils
+import com.freewheelin.pulley.utils.setOnBasicPOrHigherClickListener
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.buttons.*
 
@@ -46,36 +59,44 @@ class WrongManageView: ConstraintLayout {
 
     var isActive: Boolean = false
     var listener: WrongManageViewListener? = null
+    var studyWrongBtn: TextView
 
-    var containerCl: ConstraintLayout
-    var studyWrongBtn: PrimaryButton
-    var reviewBtn: SecondaryButton
-    var guideTv: TextView
-    var btnContainerLl: LinearLayout
+//    var containerCl: ConstraintLayout
+//    var reviewBtn: SecondaryButton
+//    var guideTv: TextView
+//    var btnContainerLl: LinearLayout
 
+    private var binding: ViewWrongManageBinding
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_wrong_manage, this, true)
+        binding = ViewWrongManageBinding.inflate(LayoutInflater.from(context), this, true)
+        binding.apply {
+            lifecycleOwner = context.getLifecycleOwner()
 
-        containerCl = findViewById(R.id.containerCl)
-        studyWrongBtn = findViewById(R.id.studyWrongBtn)
-        reviewBtn = findViewById(R.id.reviewBtn)
-        guideTv = findViewById(R.id.guideTv)
-        btnContainerLl = findViewById(R.id.btnContainerLl)
+            containerCl.isClickable = true
+            // setLock first
+//            studyWrongBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus)
+//            reviewBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus, ButtonLockColor.purple)
 
-        containerCl.isClickable = true
-        // setLock first
-        studyWrongBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus)
-        reviewBtn.setLock(user!!.hasPulleyPlus, ButtonLockImage.mid20, ButtonMode.pulley_plus, ButtonLockColor.purple)
+            studyWrongBtn = studyWrongTv
+            studyWrongCl.setOnBasicPOrHigherClickListener(cb = {
+                if(isActive) { listener?.onStudyBtnClicked(this@WrongManageView) }
+                else { showInactiveToast() }
+            }, deniedCb = {
+                val dialog = PurchaseGuideDialog()
+                val fm = (context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
+//                FragmentManager.findFragment<WrongNoteFragment>(it).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+//                DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "열려라 참깨")
 
-        studyWrongBtn.setOnClickListener {
-            if(isActive == false)
-                showInactiveToast()
-            else {
-                listener?.onStudyBtnClicked(this)
-            }
-        }
-        reviewBtn.setOnClickListener {
-            listener?.onReviewBtnClicked(this)
+            })
+            reviewCl.setOnBasicPOrHigherClickListener(cb = {
+                listener?.onReviewBtnClicked(this@WrongManageView)
+            }, deniedCb = {
+                val dialog = PurchaseGuideDialog()
+//                FragmentManager.findFragment<WrongNoteFragment>(it).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                val fm = (context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
+            })
         }
 
         inactive()
@@ -144,7 +165,7 @@ class WrongManageView: ConstraintLayout {
         }
         btn.setImageResource(type.resId)
         btn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round)
-        btnContainerLl.addView(btn)
+        binding.btnContainerLl.addView(btn)
         btn.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
         btn.setOnClickListener {
             if(!isActive)
@@ -162,26 +183,30 @@ class WrongManageView: ConstraintLayout {
     }
 
     fun active(guideText: String) {
-        studyWrongBtn.toEnableUI()
-        guideTv.visibility = View.VISIBLE
-        guideTv.text = guideText
+        binding.apply {
+//            studyWrongBtn.toEnableUI()
+            guideTv.visibility = View.VISIBLE
+            guideTv.text = guideText
 
-        buttons.forEach {
-            it.clearColorFilter()
+            buttons.forEach {
+                it.clearColorFilter()
+            }
+
+            isActive = true
         }
-
-        isActive = true
     }
 
     fun inactive() {
-        studyWrongBtn.toDisableUI()
-        guideTv.visibility = View.GONE
+        binding.apply {
+//            studyWrongBtn.toDisableUI()
+            guideTv.visibility = View.GONE
 
-        buttons.forEach {
-            it.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
+            buttons.forEach {
+                it.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
+            }
+
+            isActive = false
         }
-
-        isActive = false
     }
 
     fun showInactiveToast() {
@@ -190,6 +215,13 @@ class WrongManageView: ConstraintLayout {
 
 
     fun hideReviewBtn() {
-        reviewBtn.visibility = View.GONE
+        binding.reviewCl.visibility = View.GONE
+    }
+
+    fun setViewModel(vm: BaseAndroidViewModel) {
+
+        (vm as WrongNoteFragViewModel).apply {
+            binding.fragmentVM = this
+        }
     }
 }

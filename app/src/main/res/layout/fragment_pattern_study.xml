@@ -82,6 +82,18 @@
                                 app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv1"
                                 app:layout_constraintStart_toStartOf="parent"/>
 
+                            <ImageView
+                                android:id="@+id/challengeStampInPulleyMathBooksIv"
+                                android:layout_width="50dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/challenge_stamp_3d_image"
+                                visibleIf="@{ vm.showPulleyMathChallengeStamp }"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/categoryIv1"
+                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -137,6 +149,18 @@
                                 app:lineHeight="16sp"
                                 app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv2"
                                 app:layout_constraintStart_toStartOf="parent"/>
+
+                            <ImageView
+                                android:id="@+id/challengeStampInCommercialBooksIv"
+                                android:layout_width="50dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/challenge_stamp_3d_image"
+                                visibleIf="@{ vm.showCommercialBooksChallengeStamp }"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/categoryIv2"
+                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv2"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -195,6 +219,18 @@
                                 android:layout_marginStart="@dimen/dp24"
                                 app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv3"
                                 app:layout_constraintStart_toStartOf="parent"/>
+
+                            <ImageView
+                                android:id="@+id/challengeStampInWorkbooksIv"
+                                android:layout_width="50dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/challenge_stamp_3d_image"
+                                visibleIf="@{ vm.showWorkbooksChallengeStamp }"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/categoryIv3"
+                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv3"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -354,15 +390,15 @@
             </LinearLayout>
         </ScrollView>
 
-<!--        <com.freewheelin.pulley.revision2023.ui.view.StartChallengePatternStudyGuideView-->
-<!--            android:id="@+id/guideView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:visibility="@{ vm.showGuideView ? View.VISIBLE : View.GONE }"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+        <com.freewheelin.pulley.revision2023.ui.view.StartChallengePatternStudyGuideView
+            android:id="@+id/guideView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{ vm.showGuideView ? View.VISIBLE : View.GONE }"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

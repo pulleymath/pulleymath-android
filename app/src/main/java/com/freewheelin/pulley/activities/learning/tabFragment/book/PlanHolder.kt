@@ -1,19 +1,24 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.book
 
-import android.animation.Animator
 import android.animation.ValueAnimator
 import android.graphics.drawable.ColorDrawable
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.ClientBookType
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.squareup.picasso.Picasso
 
@@ -36,17 +41,19 @@ interface PatternStudyListener {
 abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
     lateinit var book: Book
 
-    val pin get() = view.findViewById<ImageView>(R.id.pin)
-    val bookNameTv get() = view.findViewById<TextView>(R.id.bookNameTv)
-    val seriesTv get() = view.findViewById<TextView>(R.id.seriesTv)
-    val subjectTv get() = view.findViewById<TextView>(R.id.subjectTv)
-    val chapterTv get() = view.findViewById<TextView>(R.id.chapterTv)
-    val actionBtn get() = view.findViewById<ImageView>(R.id.actionBtn)
-    val workbookIv get() = view.findViewById<ImageView>(R.id.workbookIv)
-    val backgroudCl get() = view.findViewById<ConstraintLayout>(R.id.backgroundCl)
-    val reviewBtn get() = view.findViewById<PrimaryButton>(R.id.reviewBtn)
-    val makingCustomBookBtn get() = view.findViewById<Button>(R.id.makingCustomBook)
-    val finishContainer get() = view.findViewById<LinearLayout>(R.id.finishContainer)
+    private val ivWrapperCl get() = view.findViewById<ConstraintLayout>(R.id.ivWrapperCl)
+    private val pin get() = view.findViewById<ImageView>(R.id.pin)
+    private val lockIv get() = view.findViewById<ImageView>(R.id.lockIv)
+    private val bookNameTv get() = view.findViewById<TextView>(R.id.bookNameTv)
+    private val seriesTv get() = view.findViewById<TextView>(R.id.seriesTv)
+    private val subjectTv get() = view.findViewById<TextView>(R.id.subjectTv)
+    private val chapterTv get() = view.findViewById<TextView>(R.id.chapterTv)
+    private val actionBtn get() = view.findViewById<ImageView>(R.id.actionBtn)
+    private val workbookIv get() = view.findViewById<ImageView>(R.id.workbookIv)
+    private val backgroudCl get() = view.findViewById<ConstraintLayout>(R.id.backgroundCl)
+    val reviewBtn: PrimaryButton get() = view.findViewById(R.id.reviewBtn)
+    private val makingCustomBookBtn get() = view.findViewById<Button>(R.id.makingCustomBook)
+    val finishContainer: LinearLayout get() = view.findViewById(R.id.finishContainer)
 
     open var actionList = listOf(ActionType.pin)
     var listener: PlanListener? = null
@@ -56,8 +63,8 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
     var popupWindow: PopupWindow? = null
 
-    val bgIv get() = view.findViewById<ImageView>(R.id.bgIv)
-    val foldIv get() = view.findViewById<ImageView>(R.id.foldIv)
+    private val bgIv get() = view.findViewById<ImageView>(R.id.bgIv)
+    private val foldIv get() = view.findViewById<ImageView>(R.id.foldIv)
 
     open fun set(book: Book) {
         this.book = book
@@ -74,7 +81,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         subjectTv.setTextColor(textColor)
         chapterTv.setTextColor(textColor)
 
-        seriesTv.text = book.bookCategoryList?.bookSeries
+        seriesTv.text = "${book.bookCategoryList?.bookSeries} ${book.bookCategoryList?.bookCategory}"
 
         val width = view.context.resources.getDimension(R.dimen.dp168).toInt()
         val actionBtnWidth = view.context.resources.getDimension(R.dimen.dp64).toInt()
@@ -94,27 +101,31 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             popupWindow?.showAtLocation(actionBtn, Gravity.NO_GRAVITY, locationInts[0] - width + actionBtnWidth + 16.toPx(), locationInts[1] + topMargin)
         }
 
-        if (book.pin) {
-            pin.visibility = View.VISIBLE
+        if (book.isLocked) {
+            ivWrapperCl.visibility = View.VISIBLE
+            lockIv.showIfNeed(100)
+            pin.hideGoneIfNeed(100)
+        } else if (book.isPinned) {
+            ivWrapperCl.visibility = View.VISIBLE
+            pin.showIfNeed(100)
+            lockIv.hideGoneIfNeed(100)
         } else {
-            pin.visibility = View.GONE
+
+            pin.hideGoneIfNeed(100)
+            lockIv.hideGoneIfNeed(100)
+            ivWrapperCl.hideGoneIfNeed(100)
         }
 
-        itemView.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_CANCEL || motionEvent.action == MotionEvent.ACTION_UP) {
-                startExpandAnim()
-            } else {
-                startScaleAnim()
-            }
-            false
-        }
-
+        itemView.setOnTouchListener(BoongthEffect())
         reviewBtn.setOnClickListener {
+            if (book.isLocked) {
+                //TODO
+                val dialog = PurchaseGuideDialog()
+                val fm = (view.context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
+                return@setOnClickListener
+            }
             listener?.onSolveClicked(this, book)
-//            listener?.onReviewBtnClikced(this, book)
-        }
-        makingCustomBookBtn.setOnClickListener {
-            listener?.onMakeCustomBookClicked(this, book)
         }
 
         when (book.pieceCategoryTag) {
@@ -144,45 +155,56 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         if (book.isCompleted()) {
             reviewBtn.visibility = View.VISIBLE
             finishContainer.visibility = View.VISIBLE
+            itemView.setOnTouchListener(BoongthEffect())
             itemView.setOnClickListener {
-                startScaleAnim {
-                    startExpandAnim {
-//                        listener?.onReviewBtnClicked(this, book)
-                        listener?.onSolveClicked(this, book)
-                    }
+                if (book.isLocked) {
+                    val dialog = PurchaseGuideDialog()
+                    val fm = (view.context as AppCompatActivity).supportFragmentManager
+                    fm.let { dialog.show(it, "purchaseGuideDialog")}
+                    return@setOnClickListener
+                } else {
+                    checkRewardSelect()
                 }
             }
         } else {
             reviewBtn.visibility = View.INVISIBLE
             finishContainer.visibility = View.INVISIBLE
+            itemView.setOnTouchListener(BoongthEffect())
             itemView.setOnClickListener {
-                startScaleAnim {
-                    startExpandAnim {
-                        listener?.onSolveClicked(this, book)
-                    }
+                if (book.isLocked) {
+                    val dialog = PurchaseGuideDialog()
+                    val fm = (view.context as AppCompatActivity).supportFragmentManager
+                    fm.let { dialog.show(it, "purchaseGuideDialog")}
+                    return@setOnClickListener
+                } else {
+                    checkRewardSelect()
                 }
             }
         }
     }
 
-    fun setTag(tags: List<TextView>, cb: ((FilterType) -> Unit) = {}) {
+    fun setTag(tags: List<TextView>, cb: ((String) -> Unit) = {}) {
         if (book.isCompleted()) {
             tags.forEach { it.visibility = View.INVISIBLE }
         } else {
             tags.forEach { it.visibility = View.GONE }
-            val tagFilterType = book.tagOnFilterType
-            for(i in tagFilterType.indices) {
-                val tagView = tags.getOrNull(i)
+            val tagStrList = book.splitedTag
+            book.splitedTag.forEachIndexed { index, tag ->
+                val tagView = tags.getOrNull(index)
                 tagView?.visibility = View.VISIBLE
-                tagView?.text = tagFilterType[i].text
+                tagView?.text = tag
                 tagView?.setOnClickListener {
-                    cb(tagFilterType[i])
+                    cb(tag)
                 }
+            }
+            for(i in tagStrList.indices) {
+
             }
         }
     }
 
     fun setCommercialUI() {
+        println("asoaso 삐용삐용 setCommercialUI setCommercialUI setCommercialUI setCommercialUI")
         chapterTv.visibility = View.GONE
         workbookIv.visibility = View.VISIBLE
         seriesTv.visibility = View.INVISIBLE
@@ -195,11 +217,10 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
         reviewBtn.visibility = View.INVISIBLE
         finishContainer.visibility = View.INVISIBLE
-        itemView.setOnClickListener {
-            startScaleAnim {
-                startExpandAnim {}
-            }
-        }
+        itemView.setOnTouchListener(BoongthEffect())
+        itemView.setOnPremiumClickListener(cb = {
+
+        })
     }
 
     fun setCustomBookUI() {
@@ -212,92 +233,37 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         makingCustomBookBtn.visibility = View.INVISIBLE
         actionBtn.visibility = View.VISIBLE
 
-        if (book.markedNumber == 0)
-            foldIv.visibility = View.INVISIBLE
-        else
-            foldIv.visibility = View.VISIBLE
+        foldIv.visibility = if (book.markedNumber == 0) View.INVISIBLE else View.VISIBLE
+        reviewBtn.visibility = if (book.isCompleted()) View.VISIBLE else View.INVISIBLE
+        finishContainer.visibility = if (book.isCompleted()) View.VISIBLE else View.INVISIBLE
 
-        if (book.isCompleted()) {
-            reviewBtn.visibility = View.VISIBLE
-            finishContainer.visibility = View.VISIBLE
-            itemView.setOnClickListener {
-                startScaleAnim {
-                    startExpandAnim {
-                        listener?.onSolveClicked(this, book)
-                    }
-                }
+        itemView.setOnTouchListener(BoongthEffect())
+        itemView.setOnClickListener {
+            if (book.isLocked) {
+                val dialog = PurchaseGuideDialog()
+                val fm = (view.context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
+                return@setOnClickListener
             }
+            listener?.onSolveClicked(this, book)
+        }
+    }
+    fun checkRewardSelect() {
+        val isUnderBasicP = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == true
+        val isStartChallengeBook = book.isStartChallengePiece()
+        val isStartChallengeRewardBook = book.isStartChallengeRewardPiece()
+        if (isUnderBasicP && !isStartChallengeBook && !isStartChallengeRewardBook) {
+            DialogUtils.confirmDialog(view.context,
+                "이 학습지로 선택하실 건가요?",
+                "학습지 1개만 무료로 이용 가능해요 :)",
+                "아니오",
+                "네, 선택할래요",
+                rightBtnCB = {
+                    listener?.onSolveClicked(this, book)
+                })
         } else {
-            reviewBtn.visibility = View.INVISIBLE
-            finishContainer.visibility = View.INVISIBLE
-            itemView.setOnClickListener {
-                startScaleAnim {
-                    startExpandAnim {
-                        listener?.onSolveClicked(this, book)
-                    }
-                }
-            }
+            listener?.onSolveClicked(this, book)
         }
-    }
-
-    fun startExpandAnim(cb: (() -> Unit)? = null) {
-        val fromScale = itemView.scaleX
-        scaleAnim?.cancel()
-        scaleAnim = null
-        if (expandAnim == null) {
-            expandAnim = ValueAnimator.ofFloat(fromScale, 1f)
-            expandAnim?.addUpdateListener {
-                val value = it.animatedValue as Float
-                itemView.scaleX = value
-                itemView.scaleY = value
-            }
-            expandAnim?.duration = (3000 * (1 - fromScale)).toLong()
-            expandAnim?.start()
-        }
-
-        expandAnim?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator) {}
-
-            override fun onAnimationEnd(p0: Animator) {
-                if (cb != null)
-                    cb()
-            }
-
-            override fun onAnimationCancel(p0: Animator) {}
-
-            override fun onAnimationStart(p0: Animator) {}
-
-        })
-    }
-
-    fun startScaleAnim(cb: (() -> Unit)? = null) {
-        val fromScale = itemView.scaleX
-        expandAnim?.cancel()
-        expandAnim = null
-        if (scaleAnim == null) {
-            scaleAnim = ValueAnimator.ofFloat(fromScale, 0.95f)
-            scaleAnim?.addUpdateListener {
-                val value = it.animatedValue as Float
-                itemView.scaleX = value
-                itemView.scaleY = value
-            }
-            scaleAnim?.duration = (3000 * (fromScale - 0.95)).toLong()
-            scaleAnim?.start()
-        }
-
-        scaleAnim?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator) {}
-
-            override fun onAnimationEnd(p0: Animator) {
-                if (cb != null)
-                    cb()
-            }
-
-            override fun onAnimationCancel(p0: Animator) {}
-
-            override fun onAnimationStart(p0: Animator) {}
-
-        })
     }
 
     inner class ActionAdapter : RecyclerView.Adapter<PlanActionHolder>() {
@@ -313,29 +279,21 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         override fun onBindViewHolder(holder: PlanActionHolder, position: Int) {
             val action = actionList[position]
 
-            when (action) {
-                ActionType.delete -> {
-                    holder.button.text = "나의 문제집에서 빼기"
-                }
-
-                ActionType.mail -> {
-                    holder.button.text = "메일 보내기"
-                }
-
-                ActionType.pin -> {
-                    holder.button.text = if (book.pin) "핀 해제하기" else "핀 설정하기"
-                }
+            val message = when (action) {
+                ActionType.delete -> "나의 문제집에서 빼기"
+                ActionType.mail -> "메일 보내기"
+                ActionType.pin -> if (book.isPinned) "핀 해제하기" else "핀 설정하기"
             }
-            if (action == ActionType.mail) {
-                holder.button.setOnClickListener {
+
+            holder.button.apply {
+                text = message
+                setOnBasicPOrHigherClickListener(cb = {
                     popupWindow?.dismiss()
                     listener?.onActionBtnClicked(action, book, this@PlanHolder)
-                }
-            } else {
-                holder.button.setOnClickListener {
-                    popupWindow?.dismiss()
-                    listener?.onActionBtnClicked(action, book, this@PlanHolder)
-                }
+                }, deniedCb = {
+                    // TODO change
+                    DaebakToast.show(context, "핀 설정은 유형 베이직, 스탠다드, 프리미엄 회원만 이용 가능합니다 :)")
+                })
             }
         }
     }
@@ -343,12 +301,12 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
 
 class MyPlanHolder(override var view: View) : PlanHolder(view) {
 
-    val solveDateLabel = view.findViewById<TextView>(R.id.solveDateLabel)
-    val solveDateTv = view.findViewById<TextView>(R.id.solveDateTv)
-    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
-    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
-    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
-    val solveCntLabel = view.findViewById<TextView>(R.id.solveCntLabel)
+    private val solveDateLabel = view.findViewById<TextView>(R.id.solveDateLabel)
+    private val solveDateTv = view.findViewById<TextView>(R.id.solveDateTv)
+    private val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+    private val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+    private val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
+    private val solveCntLabel = view.findViewById<TextView>(R.id.solveCntLabel)
 
 
     override var actionList = listOf(ActionType.pin, ActionType.mail, ActionType.delete)
@@ -358,7 +316,7 @@ class MyPlanHolder(override var view: View) : PlanHolder(view) {
         super.set(book)
 
         if (book.updateDateTime != null)
-            solveDateTv.text = "${DateTimeUtils.mMddFormat.format(book.updateDateTime)}"
+            solveDateTv.text = book.updateDateTime?.let { DateTimeUtils.mMddFormat.format(it) }
         if (book.isCompleted()) {
             reviewBtn.visibility = View.VISIBLE
             finishContainer.visibility = View.VISIBLE
@@ -369,7 +327,7 @@ class MyPlanHolder(override var view: View) : PlanHolder(view) {
             solveCntLabel.visibility = View.VISIBLE
         }
 
-        problemCntTv.text = book.totalNumber.toString() + "문제"
+        problemCntTv.text = "${book.totalNumber}문제"
         solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
         correctRateTv.text = "${book.score}%"
 
@@ -390,9 +348,9 @@ class MyPlanHolder(override var view: View) : PlanHolder(view) {
 }
 
 class RecommendPlanHolder(override var view: View) : PlanHolder(view) {
-    val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
-    val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
-    val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
+    private val solveCntTv = view.findViewById<TextView>(R.id.solveCntTv)
+    private val problemCntTv = view.findViewById<TextView>(R.id.problemCntTv)
+    private val correctRateTv = view.findViewById<TextView>(R.id.correctRateTv)
 
     val tags = listOf(view.findViewById<TextView>(R.id.tag1), view.findViewById<TextView>(R.id.tag2))
     override fun set(book: Book) {
@@ -401,7 +359,7 @@ class RecommendPlanHolder(override var view: View) : PlanHolder(view) {
 
         setTag(tags)
         solveCntTv.text = "${book.markedNumber}/${book.totalNumber}"
-        problemCntTv.text = book.totalNumber.toString() + "문제"
+        problemCntTv.text = "${book.totalNumber}문제"
         correctRateTv.text = "${book.score}%"
 
         if (book.markedNumber == 0) {
@@ -413,5 +371,5 @@ class RecommendPlanHolder(override var view: View) : PlanHolder(view) {
 }
 
 class PlanActionHolder(var view: View) : RecyclerView.ViewHolder(view) {
-    val button = view.findViewById<Button>(R.id.listItem)
+    val button: Button = view.findViewById(R.id.listItem)
 }

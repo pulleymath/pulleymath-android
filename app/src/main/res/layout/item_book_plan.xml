@@ -4,15 +4,41 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="@dimen/dp32">
-    
-    <ImageView
-        android:id="@+id/pin"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ivWrapperCl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_pin"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/seriesTv"
-        app:layout_constraintBottom_toBottomOf="@+id/seriesTv"/>
+        app:layout_constraintBottom_toBottomOf="@+id/seriesTv">
+
+        <ImageView
+            android:id="@+id/pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/lockIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock_20_white"
+            android:visibility="gone"
+            app:tint="@color/gray_500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/workbookIv"
@@ -21,9 +47,9 @@
         android:src="@drawable/ic_workbook"
         android:layout_marginStart="8dp"
         app:layout_goneMarginLeft="0dp"
-        app:layout_constraintTop_toTopOf="@+id/pin"
-        app:layout_constraintBottom_toBottomOf="@+id/pin"
-        app:layout_constraintStart_toEndOf="@+id/pin"/>
+        app:layout_constraintTop_toTopOf="@+id/ivWrapperCl"
+        app:layout_constraintBottom_toBottomOf="@+id/ivWrapperCl"
+        app:layout_constraintStart_toEndOf="@+id/ivWrapperCl"/>
 
     <TextView
         style="@style/TextGrey_c0c0c0.Bold"
@@ -37,7 +63,7 @@
         app:layout_goneMarginStart="0dp"
         app:layout_goneMarginLeft="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pin" />
+        app:layout_constraintStart_toEndOf="@+id/ivWrapperCl" />
 
     <TextView
         style="@style/TextBlack_4c4c4c.ExtraBold"

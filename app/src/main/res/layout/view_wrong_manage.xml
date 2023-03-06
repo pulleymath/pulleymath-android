@@ -1,70 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
-        android:src="@drawable/shadow_wrong_manage"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <data>
+        <import type="android.view.View" />
+        <variable name="fragmentVM" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel"/>
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerCl"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@drawable/bg_white_ffffff_round_top_only_10"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
-            android:id="@+id/studyWrongBtn"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="32dp"
-            android:text="오답학습하기"
-            android:textSize="16sp"
-            app:buttonTheme="orange"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
-            android:id="@+id/reviewBtn"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:text="문제 리뷰하기"
-            app:buttonTheme="blue"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/studyWrongBtn"/>
-
-        <TextView
-            style="@style/TextGrey_c0c0c0"
-            android:id="@+id/guideTv"
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginEnd="16dp"
-            android:text="설명 텍스트"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/reviewBtn" />
+            android:layout_marginBottom="56dp"
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/shadow_wrong_manage"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/btnContainerLl"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginStart="@dimen/dp24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerCl"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_white_ffffff_round_top_only_10"
             app:layout_constraintBottom_toBottomOf="parent">
-        </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/studyWrongCl"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/bg_btn_round_common"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" >
+
+                <ImageView
+                    android:id="@+id/wrongLockIv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_lock_20_white"
+                    app:tint="@color/white"
+                    visibleIf="@{ fragmentVM.showLockIcon }"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/studyWrongTv"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <TextView
+                    android:id="@+id/studyWrongTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/h5"
+                    android:textColor="@color/white"
+                    android:text="학습지 만들기"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/wrongLockIv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/reviewCl"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_purple_100_round_5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/studyWrongCl">
+
+                <ImageView
+                    android:id="@+id/reviewLockIv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_lock_20_white"
+                    app:tint="@color/purple_300"
+                    visibleIf="@{ fragmentVM.showLockIcon }"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/reviewTv"
+                    app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                <TextView
+                    android:id="@+id/reviewTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/h5"
+                    android:textColor="@color/purple_300"
+                    android:text="리뷰하기"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/reviewLockIv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/TextGrey_c0c0c0"
+                android:id="@+id/guideTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginEnd="16dp"
+                android:text="설명 텍스트"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/reviewCl" />
+
+            <LinearLayout
+                android:id="@+id/btnContainerLl"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</merge>
+</layout>

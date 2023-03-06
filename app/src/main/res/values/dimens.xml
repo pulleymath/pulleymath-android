@@ -44,6 +44,7 @@
     <dimen name="dp168">144dp</dimen>
     <dimen name="dp160">140dp</dimen>
     <dimen name="dp144">120dp</dimen>
+    <dimen name="dp130">110dp</dimen>
     <dimen name="dp120">100dp</dimen>
     <dimen name="dp104">96dp</dimen>
     <dimen name="dp100">90dp</dimen>

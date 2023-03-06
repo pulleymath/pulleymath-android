@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
@@ -41,6 +42,9 @@ import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
 import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.ButtonMode
@@ -66,12 +70,12 @@ class AnalysisFragment : LearningTabFragment(),
         MockExamGuideDialogListener {
 
     companion object {
-
         fun newInstance(): AnalysisFragment {
             return AnalysisFragment()
         }
     }
     lateinit var binding: FragmentAnalysisBinding
+    val viewModel: AnalysisFViewModel by viewModels()
 
     override var screenName = "분석"
 
@@ -82,11 +86,44 @@ class AnalysisFragment : LearningTabFragment(),
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_analysis, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.apply {
+            userInRepo.observe(viewLifecycleOwner) { user ->
+                user?.let {
+                    val showLockImage = !it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
+                    binding.analysisLockIv.visibleIf(showLockImage)
+//                    binding.sampleWrapperCl.visibleIf(showLockImage)
+                }
+            }
+        }
+        binding.apply {
+            todayStudyView.listener = this@AnalysisFragment
+            studyRateView.listener = this@AnalysisFragment
+            recommendStudyView.listener = this@AnalysisFragment
+
+            initChart(timeCountChart)
+
+            mainAnalysisWarpperCl.setOnBasicPOrHigherClickListener(cb = {
+                LogUtils.logEvent(
+                    requireContext(),
+                    user,
+                    PulleyEvent.BUTTON_CLICK,
+                    "데일리서머리",
+                    "전체분석보기"
+                )
+                val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
+                startActivity(intent)
+            }, deniedCb = {
+                val dialog = PurchaseGuideDialog()
+                childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//                DialogUtils.confirmDialog(requireContext(), "[테스트]구독중이 아닙니다.", "하하")
+            })
+        }
     }
 
     override fun onResume() {
@@ -161,6 +198,9 @@ class AnalysisFragment : LearningTabFragment(),
                 }
 
                 setChartData(study.weekStudyData)
+                sampleWrapperCl.setOnClickListener {
+                    DaebakToast.show(requireContext(), "아직 업서요")
+                }
             }
         } catch(e:Exception) {
             Log.e("화면크래쉬", "error==>${e.localizedMessage}")
@@ -190,38 +230,7 @@ class AnalysisFragment : LearningTabFragment(),
         }
     }
 
-    override fun initUI() {
-        if (!::binding.isInitialized) return
-        try {
-            binding.apply {
-                todayStudyView.listener = this@AnalysisFragment
-                studyRateView.listener = this@AnalysisFragment
-                recommendStudyView.listener = this@AnalysisFragment
-                initChart(timeCountChart)
-
-                mainAnalysisBtn.setLock(
-                    user!!.hasPulleyPlus,
-                    ButtonLockImage.mid24,
-                    ButtonMode.pulley_plus
-                )
-
-                mainAnalysisBtn.setOnClickListener {
-                    LogUtils.logEvent(
-                        requireContext(),
-                        user,
-                        PulleyEvent.BUTTON_CLICK,
-                        "데일리서머리",
-                        "전체분석보기"
-                    )
-                    val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-
-        }catch(e:Exception) {
-            Log.e("화면크래쉬", "error==>${e.localizedMessage}")
-        }
-    }
+    override fun initUI() {}
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
@@ -390,6 +399,7 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView) {
+        println("asoaso onStudyHistoryBtnClicked!!!")
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보기")
         val intent = StudyHistoryActivity.getIntent(requireContext())
         startActivity(intent)
@@ -410,17 +420,18 @@ class AnalysisFragment : LearningTabFragment(),
             }
             BookType.CUSTOM_BOOK -> {
                 val intent = if (content.isCompleted())
-//                    SolveActivity.getReviewIntent(requireContext(), Book(content))
                     SolveActivity.getIntent(requireContext(), Book(content))
                 else
                     SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
             BookType.BOOK -> {
-                val intent = if (content.isCompleted())
-                    SolveActivity.getReviewIntent(requireContext(), Book(content))
-                else
-                    SolveActivity.getIntent(requireContext(), Book(content))
+//                val intent = if (content.isCompleted())
+//                    SolveActivity.getReviewIntent(requireContext(), Book(content))
+//                else
+                println("asoaso solveBtnWrapperCl click!!! 22 subca?: ${content.pieceSubCategory}")
+                println("asoaso solveBtnWrapperCl click!!! 33 subca?: ${Book(content).pieceSubCategory}")
+                val intent = SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
 
@@ -445,6 +456,7 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onReportBtnClicked(view: AnalysisTodayStudyListView, content: Content) {
+        println("asoaso onReportBtnClicked 2")
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
         when(content.pieceCategoryTag) {
             BookType.MO -> {
@@ -525,6 +537,11 @@ class AnalysisFragment : LearningTabFragment(),
             startActivity(intent)
         }
     }
+
+//    override fun onDeniedCallback() {   val dialog = PurchaseGuideDialog()
+//        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//
+//    }
 
     override fun onStudyBtnClicked(view: AnalysisTodayStudyListView) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "공부하기버튼")

@@ -37,6 +37,8 @@ import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
@@ -339,9 +341,27 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                     holder.setMiddleHolderUI()
 
                 holder.set(exam)
-                remainBtn.setOnClickListener { onSolveBtnClicked(exam) }
-                reportBtn.setOnClickListener { onReportBtnClicked(exam) }
-                reviewBtn.setOnClickListener { onReviewBtnClicked(exam) }
+                if (exam.isTwins) {
+                    remainBtn.setOnPaidUserClickListener(cb = { onSolveBtnClicked(exam) },
+                        deniedCb = {
+                            val dialog = PurchaseGuideDialog()
+                            childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                        })
+                    reportBtnCl.setOnPaidUserClickListener(cb = { onReportBtnClicked(exam) },
+                        deniedCb = {
+                            val dialog = PurchaseGuideDialog()
+                            childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                        })
+                    reviewBtnCl.setOnPaidUserClickListener(cb = { onReviewBtnClicked(exam) },
+                        deniedCb = {
+                            val dialog = PurchaseGuideDialog()
+                            childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                        })
+                } else {
+                    remainBtn.setOnClickListener { onSolveBtnClicked(exam) }
+                    reportBtnCl.setOnClickListener { onReportBtnClicked(exam) }
+                    reviewBtnCl.setOnClickListener { onReviewBtnClicked(exam) }
+                }
             }
         }
 
@@ -400,8 +420,12 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
 
             typeTv.text = exam.type.getStr()
             gradeTv.text = "고${exam.grade}"
-
             titleTv.text = exam.title //+ if(exam.count > 0) " (${exam.count})" else ""
+
+            val isServiceTypeBasicPOrHigher = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == true
+            reportBtnLockIv.visibleIf(!isServiceTypeBasicPOrHigher && exam.isTwins)
+            reviewBtnLockIv.visibleIf(!isServiceTypeBasicPOrHigher && exam.isTwins)
+
 
             exam.personalData?.let {
                 // 제거 후
@@ -447,9 +471,9 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
 
                     correctCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
-                    reportBtn.visibility = View.VISIBLE
+                    reportBtnCl.visibility = View.VISIBLE
                     remainBtn.visibility = View.INVISIBLE
-                    reviewBtn.visibility = View.VISIBLE
+                    reviewBtnCl.visibility = View.VISIBLE
 
                     correctPercentTv.visibility = View.VISIBLE
                     correctCountTv.visibility = View.VISIBLE
@@ -468,11 +492,11 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
                     if (view.context.isTablet) {
                         ratingIv.visibility = View.INVISIBLE
                         ratingTv.visibility = View.VISIBLE
-                        reportBtn.visibility = View.INVISIBLE
+                        reportBtnCl.visibility = View.INVISIBLE
                         remainBtn.visibility = View.VISIBLE
-                        reviewBtn.visibility = View.INVISIBLE
+                        reviewBtnCl.visibility = View.INVISIBLE
 
-                        remainCountText.text = "${it.totalNumber - it.markedNumber}문항"
+                        remainCountText.text = "${it.totalNumber - it.markedNumber}문항 남음"
 
                         correctPercentTv.visibility = View.VISIBLE
                         correctCountTv.visibility = View.GONE

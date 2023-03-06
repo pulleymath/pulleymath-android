@@ -173,6 +173,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/bottomContainer">
 
@@ -657,6 +658,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/challengeStampIv"
+                android:layout_width="35dp"
+                android:layout_height="45dp"
+                android:src="@drawable/challenge_stamp_3d_image"
+                app:layout_constraintStart_toStartOf="@+id/actionBtn"
+                app:layout_constraintBottom_toBottomOf="@+id/actionBtn"
+                app:layout_constraintEnd_toEndOf="@+id/actionBtn"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

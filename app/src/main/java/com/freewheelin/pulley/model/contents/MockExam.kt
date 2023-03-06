@@ -71,7 +71,7 @@ class MockExam: Content {
             }
     }
     var examType: ExamType? = null
-
+    var isTwins: Boolean = false
     fun isPersonalCompleted() : Boolean {
         return personalData?.markingState == "COMPLETED"
     }

@@ -10,10 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,13 +32,15 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.buttons.PrimaryButton
 import java.util.*
 
 class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogListener, MockExamGuideDialogListener {
@@ -48,6 +53,8 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
     var listener: MockTabListener? = null
     lateinit var receiver: BroadcastReceiver
     lateinit var clearReceiver: BroadcastReceiver
+
+    val viewModel: MockFViewModel by viewModels()
 
     companion object {
         @JvmStatic
@@ -101,6 +108,11 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        viewModel.apply {
+            userInRepo.observe(viewLifecycleOwner) {
+
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -165,6 +177,8 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
     private fun initUI() {
         with(binding) {
+            lifecycleOwner = viewLifecycleOwner
+
             mockRv.adapter = MockListAdapter()
             mockRv.layoutManager = LinearLayoutManager(context)
 
@@ -262,20 +276,27 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             val test = tests!![position]
             holder.set(test)
 
-            holder.testBtn.setOnClickListener {
-                if (holder.testBtn.isEnableUI()) {
-                    if(test.needPulleyPlus && user?.hasPulleyPlus != true) {
-                        DialogUtils.confirmHasPulleyPlus(requireContext()) {
-                            PulleyPlusPriceDialog(requireContext()).show()
-                        }
-                    } else {
-                        MockExamGuideDialog(
-                            requireContext(),
-                            test,
-                            false,
-                            this@NewMockFragment
-                        ).show()
+            if (test.isTwins) {
+                holder.testBtnCl.setOnPaidUserClickListener(
+                    cb = { MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show() },
+                    deniedCb = {
+                        val dialog = PurchaseGuideDialog()
+                        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }
+                )
+                holder.testInProgressBtnWrapperCl.setOnPaidUserClickListener(
+                    cb = { MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show() },
+                    deniedCb = {
+                        val dialog = PurchaseGuideDialog()
+                        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                    }
+                )
+            } else {
+                holder.testBtnCl.setOnClickListener {
+                    MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
+                }
+                holder.testInProgressBtnWrapperCl.setOnClickListener {
+                    MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
                 }
             }
 
@@ -290,16 +311,19 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
 
 class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    var typeTv = view.findViewById<TextView>(R.id.typeTv)
-    var gradeTv = view.findViewById<TextView>(R.id.gradeTv)
-    var yearTv = view.findViewById<TextView>(R.id.yearTv)
-    var monthTv = view.findViewById<TextView>(R.id.monthTv)
-    var titleTv = view.findViewById<TextView>(R.id.titleTv)
-    var testBtn = view.findViewById<PrimaryButton>(R.id.testBtn)
-    var horizontalBorder = view.findViewById<View>(R.id.horizontalBorder)
-    var updateTag = view.findViewById<TextView>(R.id.updateTag)
-    var outContainer = view.findViewById<View>(R.id.outContainer)
-//    val mailBtn = view.mailBtn
+    var typeTv: TextView = view.findViewById(R.id.typeTv)
+    var gradeTv: TextView = view.findViewById(R.id.gradeTv)
+    private var yearTv: TextView = view.findViewById(R.id.yearTv)
+    var monthTv: TextView = view.findViewById(R.id.monthTv)
+    var titleTv: TextView = view.findViewById(R.id.titleTv)
+    var testBtnCl: ConstraintLayout = view.findViewById(R.id.testBtnWrapperCl)
+    var testBtnTv: TextView = view.findViewById(R.id.testBtnTv)
+    var testBtnLockIv: ImageView = view.findViewById(R.id.testBtnLockIv)
+    var testInProgressBtnWrapperCl: ConstraintLayout = view.findViewById(R.id.testInProgressBtnWrapperCl)
+    var testInProgressBtnTv: TextView = view.findViewById(R.id.testInProgressBtnTv)
+    var horizontalBorder: View = view.findViewById(R.id.horizontalBorder)
+    var updateTag: TextView = view.findViewById(R.id.updateTag)
+    var outContainer: View = view.findViewById(R.id.outContainer)
 
     fun set(exam: MockExam) {
         typeTv.text = exam.type.getStr()
@@ -317,18 +341,23 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         when (exam.getMakringState()) {
             MarkingState.YET -> {
-                testBtn.text = "풀기"
-                testBtn.toEnableUI()
-                setPulleyPlusButton(exam)
+                testBtnCl.visibility = View.VISIBLE
+                testInProgressBtnWrapperCl.visibility = View.GONE
+                testBtnTv.text = "풀기"
+//                testBtn.toEnableUI()
+                setLockIv(exam)
             }
             MarkingState.ING -> {
-                testBtn.text = "푸는 중"
-                testBtn.toProcessingUI()
+                testBtnCl.visibility = View.GONE
+                testInProgressBtnWrapperCl.visibility = View.VISIBLE
+                testInProgressBtnTv.text = "푸는 중"
+//                testBtn.toProcessingUI()
 
             }
             MarkingState.COMPLETED -> {
-                testBtn.text = "다시 풀기"
-                testBtn.toEnableUI()
+                testBtnTv.text = "다시 풀기"
+
+//                testBtn.toEnableUI()
             }
             else -> {}
         }
@@ -348,16 +377,14 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun setPulleyPlusButton(exam: MockExam) {
-        if(exam.needPulleyPlus) {
-            testBtn.setLock(user?.hasPulleyPlus ?: false, ButtonLockImage.small16, ButtonMode.pulley_plus)
-        } else {
-            testBtn.setUnlock()
-        }
+    fun setLockIv(exam: MockExam) {
+        val isPaidUser = user?.serviceType?.isPaidUser == true
+
+        testBtnLockIv.visibleIf(!isPaidUser && exam.isTwins)
     }
 
-    fun setNormalButton() {
-        testBtn.setUnlock()
+    private fun setNormalButton() {
+        testBtnLockIv.visibility = View.GONE
     }
 
     fun setMidHolderUI() {

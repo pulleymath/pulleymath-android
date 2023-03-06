@@ -84,19 +84,98 @@
                         app:layout_constraintStart_toEndOf="@+id/percentCompareTv"
                         app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
-                        android:id="@+id/mainAnalysisBtn"
-                        android:layout_width="match_parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/mainAnalysisWarpperCl"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_marginStart="@dimen/dp48"
+                        android:layout_marginTop="@dimen/dp64"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:background="@drawable/bg_btn_round_common"
+                        android:layout_marginBottom="@dimen/dp48"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/sampleWrapperCl"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv">
+
+                        <ImageView
+                            android:id="@+id/analysisLockIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_lock_20_white"
+                            app:tint="@color/white"
+                            android:layout_marginEnd="8dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/mainAnalysisTv"
+                            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                        <TextView
+                            android:id="@+id/mainAnalysisTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/h4"
+                            android:textColor="@color/white"
+                            android:text="전체 분석 보러가기"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/analysisLockIv"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/sampleWrapperCl"
+                        android:layout_width="100dp"
                         android:layout_height="@dimen/dp56"
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp64"
                         android:layout_marginEnd="@dimen/dp48"
+                        android:background="@drawable/bg_purple_100_round_5"
                         android:layout_marginBottom="@dimen/dp48"
-                        android:text="내 전체 분석 보기"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv" />
+                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv">
+
+                        <ImageView
+                            android:id="@+id/samplePaperIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_preview"
+                            app:tint="@color/purple_300"
+                            android:layout_marginEnd="8dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/sampleTv"
+                            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                        <TextView
+                            android:id="@+id/sampleTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/h4"
+                            android:textColor="@color/purple_300"
+                            android:text="샘플"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/samplePaperIv"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                    <com.freewheelin.pulley.views.buttons.PrimaryButton-->
+<!--                        android:id="@+id/mainAnalysisBtn"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/dp56"-->
+<!--                        android:layout_marginStart="@dimen/dp48"-->
+<!--                        android:layout_marginTop="@dimen/dp64"-->
+<!--                        android:layout_marginEnd="@dimen/dp48"-->
+<!--                        android:layout_marginBottom="@dimen/dp48"-->
+<!--                        android:text="내 전체 분석 보기"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv" />-->
 
                     <ImageButton
                         android:id="@+id/shareBtn"

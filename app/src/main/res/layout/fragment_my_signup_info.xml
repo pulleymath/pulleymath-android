@@ -235,6 +235,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
 
+                    <TextView
+                        android:id="@+id/studentIdTv"
+                        style="@style/TextBlack_4c4c4c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:text="B260153"
+                        android:textSize="@dimen/sp16"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/resetPasswordLabel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />
+
                     <com.freewheelin.pulley.views.buttons.SecondaryButton
                         android:id="@+id/nameModifyBtn"
                         android:layout_width="96dp"

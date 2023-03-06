@@ -115,9 +115,9 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
 
     fun patternQuizScoring(callback: (scoring: LCPatternScoring) -> Unit) {
         val userAnswer = ScoringReq("3")
-        val patternQuizId = 690
+        val patternQuizId = 690 // 컨텐츠와 서버에서 협의된 튜토리얼 패턴 퀴즈 id
         val studentId = user?.studentID ?: return
-        compositeDisposable +=patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
+        compositeDisposable += patternRepository.patternQuizScoring(patternQuizId, studentId, userAnswer = userAnswer)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ response ->
@@ -128,7 +128,7 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     }
 
     fun createLearningCourseOnStudentId(callback: () -> Unit) {
-        val chapterId = 175
+        val chapterId = 175 // 컨텐츠와 서버에서 협의된 튜토리얼 챕터 id
         val studentId = MyApplication.user?.studentID ?: return
 
         compositeDisposable +=studyRepository.createLearningCourse(chapterId, studentId)

@@ -518,7 +518,10 @@ open class PdfViewerActivity : Activity() {
 
     private fun setButtons(view:View) {
         mBackButton = view.findViewById(R.id.backBtn)
-        mBackButton.setOnClickListener { finish() }
+        mBackButton.setOnClickListener {
+            callSetResult()
+            finish()
+        }
         mAnswerButton = view.findViewById(R.id.answerBtn)
         mAnswerButton.setOnClickListener {
             loadAnswerPages()
@@ -777,7 +780,16 @@ open class PdfViewerActivity : Activity() {
             mSearchText?.clearFocus()
             return
         }
-        if (mDocView?.popHistory() != true) super.onBackPressed()
+        if (mDocView?.popHistory() != true) {
+            callSetResult()
+            super.onBackPressed()
+        }
+    }
+    private fun callSetResult() {
+        val pdfListActivity_COMMERCIAL_PDF_EXITED = 302
+        val pdfListActivity_RESULT_BOOK_ID = "RESULT_BOOK_ID"
+        intent.putExtra(pdfListActivity_RESULT_BOOK_ID, bookId)
+        setResult(pdfListActivity_COMMERCIAL_PDF_EXITED, intent)
     }
 
     /** Read Log */

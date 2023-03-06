@@ -14,7 +14,7 @@ class BookCategoryList: Serializable {
 
 enum class BookType {
     COMMERCIAL,
-    CUSTOM_BOOK,
+    CUSTOM_BOOK, // 워크북
     BOOK,
     MO,
     RECOMMEND,
@@ -48,7 +48,7 @@ enum class ClientBookType {
         }
 }
 
-@Entity(tableName = "plan_book_table")
+//@Entity(tableName = "plan_book_table")
 class Book: Content, BaseDiffItem {
 
     var description: String = ""
@@ -66,6 +66,10 @@ class Book: Content, BaseDiffItem {
             return if (bookTag == null) listOf()
             else bookTag!!.split(",").map { tag -> convertTagAtFiltertType(tag) }
         }
+    val splitedTag: List<String>
+        get() {
+           return bookTag?.split(",") ?: listOf()
+        }
 
     var addNewAssignPlan: Boolean = false
     var uploadNewPlan = false
@@ -80,7 +84,8 @@ class Book: Content, BaseDiffItem {
 
     val originProblems: List<Problem>
         get() = problems.filter { !it.isSimilarProblem() }
-    var pin: Boolean = false
+    var isPinned: Boolean = false
+
     var backgroundImageUrl: String = ""
     var recommendType = ""
     var clientBookType:ClientBookType = ClientBookType.ALL

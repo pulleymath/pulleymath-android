@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+// init test와 관련된 테스트를 없애서 이 액티비티도 사용하지 않음 230228
 class StudyReportActivity : BaseActivity() {
     var isFromInit: Boolean = false
     companion object {
@@ -86,17 +86,17 @@ class StudyReportActivity : BaseActivity() {
             })
             bottomActionButton.setOnClickListener {
                 LogUtils.logEvent(this@StudyReportActivity, user!!, PulleyEvent.INIT_TEST, "스낵보고서", "공부시작")
-                if(!user!!.hasPulleyPlus)
-                    FacebookEvent.log(this@StudyReportActivity, FacebookEvent.TUTORIAL_FINISHED)
+//                if(!user!!.hasPulleyPlus)
+//                    FacebookEvent.log(this@StudyReportActivity, FacebookEvent.TUTORIAL_FINISHED)
                 moveToMain()
             }
 
             mailGuideText.setOnClickListener { onMailBtnClicked() }
             mailBtn.setOnClickListener { onMailBtnClicked() }
-            if(user!!.hasPulleyPlus)
-                bottomActionButton.text = "스낵테스트 종료하기"
-            else
-                bottomActionButton.text = "스낵테스트 종료하기"
+//            if(user!!.hasPulleyPlus)
+//                bottomActionButton.text = "스낵테스트 종료하기"
+//            else
+//                bottomActionButton.text = "스낵테스트 종료하기"
         }
     }
 
@@ -129,9 +129,8 @@ class StudyReportActivity : BaseActivity() {
     }
 
     fun moveToMain() {
-//        MyApplication.firstLaunchGoConceptFlag = false
-        val intent = LearningTabActivity.getIntent(this, )
-        startActivity(intent)
+//        val intent = LearningTabActivity.getIntent(this, )
+//        startActivity(intent)
     }
 
     fun showHeaderView() {

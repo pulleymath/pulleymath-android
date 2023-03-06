@@ -11,15 +11,18 @@ import com.freewheelin.pulley.databinding.ItemBookMyPlanBinding
 import com.freewheelin.pulley.databinding.ItemBookTotalPlanBinding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.ui.viewholder.PatternStudyTotalPlanHolder
+import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
 
 class PatternStudyTotalPlanAdapter(
     private val planListener: PlanListener,
-    private val patternStudyListener: PatternStudyListener?
+    private val patternStudyListener: PatternStudyListener?,
+    private val pulleyMathBooksViewModel: PulleyMathBooksViewModel?
 ): ListAdapter<Book, RecyclerView.ViewHolder>(DiffCallback<Book>()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemBookTotalPlanBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PatternStudyTotalPlanHolder(binding)
+        return PatternStudyTotalPlanHolder(binding, pulleyMathBooksViewModel)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

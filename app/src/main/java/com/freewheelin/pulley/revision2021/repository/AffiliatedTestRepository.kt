@@ -6,8 +6,6 @@ import com.freewheelin.pulley.revision2021.model.response.AffiliatedMediaLog
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestApi
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestService
-import com.freewheelin.pulley.revision2021.repository.remote.SpringService
-import com.freewheelin.pulley.revision2021.repository.remote.SpringService2
 
 class AffiliatedTestRepository private constructor() {
     companion object {
@@ -16,7 +14,6 @@ class AffiliatedTestRepository private constructor() {
     val currentProblem by lazy { MutableLiveData<AffiliatedTestProblem>() }
 
     private val affiliatedTestService : AffiliatedTestService by lazy { AffiliatedTestApi.univTestService() }
-    private val springService : SpringService2 by lazy { AffiliatedTestApi.springService() }
 
     fun groupList(schoolID: Int, majorID: String) = affiliatedTestService.getGroupList(schoolID, majorID)
     fun workbookList(groupIdList: String) = affiliatedTestService.getWorkbookList(groupIdList)
@@ -34,5 +31,4 @@ class AffiliatedTestRepository private constructor() {
     fun makeMediaLog(params: AffiliatedMediaLog) = affiliatedTestService.makeMediaLog(params)
     fun finishMediaLog(responseMediaId: Int, params: AffiliatedMediaLog) = affiliatedTestService.finishMediaLog(responseMediaId, params)
 
-    fun getServerTimeNow() = springService.getServerTime()
 }

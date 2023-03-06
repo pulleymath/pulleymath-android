@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/gray_200">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/smallChapterRootCl"
@@ -31,30 +32,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/shadow_main_page_card"
+                android:background="@drawable/bg_white_round_10_ripple_gray200"
                 >
+<!--                android:background="@drawable/shadow_main_page_card"-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rootView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="16dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/smallChapterTitleTv"
-                        android:layout_width="0dp"
+                        android:layout_width="210dp"
                         android:layout_height="wrap_content"
                         style="@style/h5"
+                        android:text="하하하"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:lineHeight="20dp"
                         android:textColor="@color/blue_black_200"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/lockIv"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock_20_white"
+                        android:layout_marginStart="16dp"
+                        app:tint="@color/purple_gray_300"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/smallChapterTitleTv"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
@@ -193,6 +202,17 @@
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="6dp"/>
 
+<!--                    <ImageView-->
+<!--                        android:id="@+id/challengeStampIv"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/challenge_stamp_3d_image"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        />-->
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -203,11 +223,21 @@
                 android:layout_height="110dp"
                 android:src="@drawable/img_tutorial_stamp"
                 android:layout_marginEnd="26dp"
-                android:layout_marginVertical="26dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/rootCl"
+            />
+
+            <ImageView
+                android:id="@+id/challengeStampIv"
+                android:layout_width="50dp"
+                android:layout_height="64dp"
+                android:src="@drawable/challenge_stamp_3d_image"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-            />
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -216,11 +246,12 @@
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:src="@drawable/ic_study_arrow_right"
-            app:tint="@color/purple_200"
+            app:tint="@color/purple_gray_400"
             app:layout_constraintStart_toEndOf="@+id/smallChapterRootCl"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

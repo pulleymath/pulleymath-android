@@ -12,6 +12,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
 import com.freewheelin.pulley.revision2023.service.PatternStudyApi
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
@@ -27,8 +28,10 @@ import java.util.concurrent.TimeUnit
 
 class PatternStudyViewModel(application: Application): BaseAndroidViewModel(application) {
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
+    private val challengeRepository by lazy { ChallengeRepository.instance }
 
     lateinit var myPlanAdapter: PatternStudyMyPlanAdapter
+    val joinedChallengeList = challengeRepository.joinedChallengeList
 
     private val _myPlans = MutableLiveData<MyBookList>()
     val myPlans: LiveData<MyBookList> = _myPlans
@@ -37,6 +40,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val pinCount = MutableLiveData<String>("")
     val showMyPlanEmptyView = MutableLiveData<Boolean>(false)
     val showMyPlan = MutableLiveData<Boolean>(false)
+    val showGuideView = MutableLiveData<Boolean>(false)
     val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [나의문제집]에서 자동으로 빠집니다.\n" +
         "   그렇게 빠진 문제집은 [전체문제집]에서 다시 볼 수 있습니다.\n" +
         "\n" +
@@ -44,6 +48,10 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
         "   채점한 문제가 총 2문제 이하이고 최근 30일 동안 학습하지 않았다면 \n   영구 삭제됩니다.\n" +
         "\n" +
         "- 핀을 꽂아둔 모든 문제집은 빠지거나 삭제되지 않습니다."
+
+    val showPulleyMathChallengeStamp = MutableLiveData<Boolean>(false)
+    val showCommercialBooksChallengeStamp = MutableLiveData<Boolean>(false)
+    val showWorkbooksChallengeStamp = MutableLiveData<Boolean>(false)
 
     fun initMyPlanAdapterItem() {
 //        patternStudyRepository.run {
@@ -62,7 +70,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     private fun collectAllMyPlans() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
-            val newMyPlans = fetchMyPlans()
+            val newMyPlans = fetchMyPlans() ?: return@launch
             _isLoading.postValue(false)
 
 //            val oldBook = myPlanBooks.value?.filterNot { it in newMyPlans.myPieceStorageList }
@@ -79,12 +87,10 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
         }
     }
 
-    suspend fun fetchMyPlans(): MyBookList {
+    suspend fun fetchMyPlans(): MyBookList? {
         return patternStudyRepository.fetchMyPlans()
     }
-    private suspend fun deleteMyPlan(book: Book) {
-        patternStudyRepository.deleteMyPlans(book)
-    }
+
     private suspend fun upsertMyPlans(books: List<Book>) {
 //        patternStudyRepository.upsertAllMyPlans(books)
 

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.ChallengeGuideDialogViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+<!--        android:background="@color/dim_black_333333_70a"-->
+
+        <TextView
+            android:id="@+id/challengeGuideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ vm.guideTxt }"
+            android:background="@drawable/bg_gray_200_round_20"
+            style="@style/h5"
+            android:gravity="center"
+            android:paddingHorizontal="30dp"
+            android:paddingVertical="20dp"
+            android:layout_marginBottom="39dp"
+            android:lineHeight="18dp"
+            app:layout_constraintBottom_toTopOf="@id/pullingIv"
+            app:layout_constraintStart_toStartOf="@id/pullingIv"
+            app:layout_constraintEnd_toEndOf="@id/pullingIv"/>
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_pulling_peak"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toTopOf="@id/pullingIv"
+            app:layout_constraintStart_toStartOf="@id/pullingIv"
+            app:layout_constraintEnd_toEndOf="@id/pullingIv"/>
+        <ImageView
+            android:id="@+id/pullingIv"
+            android:layout_width="220dp"
+            android:layout_height="180dp"
+            android:src="@drawable/pulling_character_normal"
+            android:layout_marginTop="34dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/moveTargetChallengePlaceBtnCl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            visibleIf="@{ vm.showButtons }"
+            android:background="@drawable/bg_btn_round_common_round_10"
+            android:paddingVertical="16dp"
+            android:paddingHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/pullingIv"
+            app:layout_constraintStart_toStartOf="@id/pullingIv"
+            app:layout_constraintEnd_toEndOf="@id/pullingIv">
+
+            <TextView
+                android:id="@+id/moveTargetChallengePlaceTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ vm.nextTxt }"
+                style="@style/h4"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_arrow_l1_right"
+                app:tint="@color/white"
+                app:layout_constraintStart_toEndOf="@+id/moveTargetChallengePlaceTv"
+                app:layout_constraintTop_toTopOf="@+id/moveTargetChallengePlaceTv"
+                app:layout_constraintBottom_toBottomOf="@+id/moveTargetChallengePlaceTv"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/dismissTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/moveTargetChallengePlaceBtnCl"
+            app:layout_constraintStart_toStartOf="@id/moveTargetChallengePlaceBtnCl"
+            app:layout_constraintEnd_toEndOf="@+id/moveTargetChallengePlaceBtnCl"
+            android:text="다른 미션 둘러보기"
+            android:padding="8dp"
+            visibleIf="@{ vm.showButtons }"
+            style="@style/h5"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp"
+            />
+<!--            android:onClick="@{ () -> vm.disappearStartChallengeGuide() }"-->
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/sprinkleLottieView"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            visibleIf="@{ vm.showSprinkleView }"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_fileName="sprinkle_effect.json" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

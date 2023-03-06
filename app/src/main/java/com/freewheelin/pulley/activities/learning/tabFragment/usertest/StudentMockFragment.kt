@@ -313,9 +313,9 @@ class StudentMockHolder(val itemBinding: ItemMyMockListBinding) : RecyclerView.V
     var remainCountText = itemBinding.remainCountText
     var dateTv = itemBinding.dateTv
     var ratingIv = itemBinding.ratingIv
-    val reportBtn = itemBinding.reportBtn
+    val reportBtn = itemBinding.reportBtnCl
     val horizontalBorder = itemBinding.horizontalBorder
-    val reviewBtn = itemBinding.reviewBtn
+    val reviewBtn = itemBinding.reviewBtnCl
     val containerCl = itemBinding.containerCl
     val outContainerCl = itemBinding.outContainerCl
 
