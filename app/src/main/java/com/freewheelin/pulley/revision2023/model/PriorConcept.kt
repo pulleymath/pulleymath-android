@@ -23,6 +23,7 @@ data class PriorConcept(
     val priorConceptCookingName: String,
     val priorConceptSubjectName: String,
     val tags: List<String>,
+    val sequence: Int,
 ): BaseDiffItem {
     override fun getId(): String {
         return "$learningCoursePriorConceptId"

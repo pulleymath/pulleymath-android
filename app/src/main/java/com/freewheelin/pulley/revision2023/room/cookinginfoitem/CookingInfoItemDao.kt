@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.cookinginfoitem
 
 import androidx.room.*
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import kotlinx.coroutines.flow.Flow
@@ -8,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CookingInfoItemDao {
 
-    @Query("SELECT * FROM lc_cooking_info_item_table where cookingId=:cookingId")
-    fun getAllCookingInfoItem(cookingId: Int): Flow<List<CookingInfoItem>>
+    @Query("SELECT * FROM lc_cooking_info_item_table where cookingId=:cookingId and studentId=:studentId")
+    fun getAllCookingInfoItem(cookingId: Int, studentId: String? = user?.studentID): Flow<List<CookingInfoItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: CookingInfoItem)

@@ -21,6 +21,7 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
 
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
+    val joinedChallengeList = challengeRepository.joinedChallengeList
     val user = userRepository.user
 
     fun fetchUser(cb: (User) -> Unit) {
@@ -31,7 +32,24 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
     }
     fun fetchUserChallenges() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            challengeRepository.getChallengesOnStatus(ChallengeUserStatus.ING)
+            challengeRepository.getChallengesOnStatus()
+        }
+    }
+
+    fun showStartChallengeFinishEffect() : Boolean {
+        joinedChallengeList.value?.find { it.isStartChallenge }?.let { sc ->
+            val isDone = sc.userStatus == ChallengeUserStatus.DONE
+            println("asoaso - isDone : ${isDone}, sc.remainRewardsCount > 0 :${sc.remainRewardsCount} , ${sc.remainRewardsCount > 0}")
+            return isDone && sc.remainRewardsCount > 0 && !sc.finishEffectAlreadyAppear
+        }
+        return false
+    }
+    fun updateChallengeFinishFlag() {
+        joinedChallengeList.value?.find { it.isStartChallenge }?.let { sc ->
+            val isDone = sc.userStatus == ChallengeUserStatus.DONE
+            if (isDone && sc.remainRewardsCount > 0) {
+                sc.finishEffectAlreadyAppear = true
+            }
         }
     }
 }

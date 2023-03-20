@@ -34,6 +34,7 @@
     <dimen name="dp450">450dp</dimen>
     <dimen name="dp400">400dp</dimen>
     <dimen name="dp328">328dp</dimen>
+    <dimen name="dp300">300dp</dimen>
     <dimen name="dp280">280dp</dimen>
     <dimen name="dp264">264dp</dimen>
     <dimen name="dp248">248dp</dimen>
@@ -125,7 +126,7 @@
     <dimen name="learning_myExam_list_end_margin">240dp</dimen>
     <dimen name="learning_myExam_problemCnt_start_margin">8dp</dimen>
 
-    <dimen name="learning_wrongNote_filter_width">344dp</dimen>
+    <dimen name="learning_wrongNote_filter_width">279dp</dimen>
     <dimen name="learning_book_filter_width">376dp</dimen>
 
     <dimen name="MyPage_width">560dp</dimen>

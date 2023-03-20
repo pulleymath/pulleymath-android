@@ -10,11 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyCustomerBinding
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.views.DaebakToast
 import java.lang.Exception
@@ -23,6 +26,8 @@ class MyCustomerFragment : MyPageBaseFragment() {
 
     val user
         get() = requireActivity().application.user!!
+
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
 
     lateinit var binding: FragmentMyCustomerBinding
@@ -44,11 +49,19 @@ class MyCustomerFragment : MyPageBaseFragment() {
             }
 
             termsBtn.setOnClickListener {
-                IntentUtils.openWebLink(requireContext(), URL.이용약관, requireContext().packageManager)
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
 
             privacyBtn.setOnClickListener {
-                IntentUtils.openWebLink(requireContext(), URL.개인정보취급방침, requireContext().packageManager)
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
             backBtn.setOnClickListener { onBackBtnClicked() }
         }

@@ -121,7 +121,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 } else { View.GONE }
 
                 setOnClickListener {
-                    pwField.text = "test1234"
+                    pwField.text = "vmfl515!dnlf"
                     if (loginBtn.isEnableUI()) this@LoginActivity.onLoginBtnClicked()
                 }
             }
@@ -151,12 +151,12 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     fun changeServerApi(isLive: Boolean) {
         val api = if (isLive) Network.Server.live.toString() else Network.Server.staging.toString()
         Preferences.onServerAPI.set(api)
-//        val intent = Intent(this@LoginActivity, SplashActivity::class.java)
-//        val mPendingIntentId = 123456
-//        val mPendingIntent = PendingIntent.getActivity(this@LoginActivity, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
-//        val mgr = this@LoginActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-//        System.exit(0)
+        val intent = Intent(this@LoginActivity, SplashActivity::class.java)
+        val mPendingIntentId = 123456
+        val mPendingIntent = PendingIntent.getActivity(this@LoginActivity, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
+        val mgr = this@LoginActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
+        System.exit(0)
     }
 
     fun setListener() {

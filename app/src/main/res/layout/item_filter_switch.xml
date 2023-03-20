@@ -10,14 +10,14 @@
 
         <TextView
             android:id="@+id/textView"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/b1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="필터"
             android:textSize="@dimen/sp16" />
 
         <Switch
-            style="@style/Switch.Grey"
+            style="@style/Switch"
             android:id="@+id/filterSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

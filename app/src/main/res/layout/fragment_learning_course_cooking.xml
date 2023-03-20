@@ -143,16 +143,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
 
-        <ProgressBar
-            android:id="@+id/rightViewProgress"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:indeterminateTint="@color/purple_200"
-            app:layout_constraintStart_toEndOf="@+id/leftScrollView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <FrameLayout
             android:id="@+id/selectionFl"
             android:layout_width="match_parent"

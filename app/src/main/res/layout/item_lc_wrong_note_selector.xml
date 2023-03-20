@@ -26,7 +26,7 @@
             android:text="@{ (position + 1) + `` }"
             android:gravity="center"
             android:textColor="@{ item.isAnswerSubmitted ? @color/purple_300 : @color/gray_800 }"
-            android:background="@{ vm.currentCardIndex == position ? (item.isAnswerSubmitted ? @drawable/bg_purple_100_stroke_purple_300_round_5_ripple : @drawable/bg_gray_300_stroke_purple_300_round_5_ripple) : (item.isAnswerSubmitted ? @drawable/bg_purple_100_round_5 : @drawable/bg_gray_300_round_5_ripple) }"
+            android:background="@{ vm.currentCardIndex == position ? (item.isAnswerSubmitted ? @drawable/bg_purple_100_stroke_purple_300_round_5_ripple : @drawable/bg_gray_300_stroke_purple_300_round_5_ripple) : (item.isAnswerSubmitted ? @drawable/bg_purple_100_round_ripple : @drawable/bg_gray_300_round_5_ripple) }"
             layout_margin_end_dimen="@{ isLastPosition ? @dimen/dp0 : @dimen/dp12 }"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

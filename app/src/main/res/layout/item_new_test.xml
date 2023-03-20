@@ -144,7 +144,7 @@
         android:layout_height="36dp"
         android:layout_marginEnd="@dimen/dp16"
         android:visibility="gone"
-        android:background="@drawable/bg_purple_100_round_5"
+        android:background="@drawable/bg_purple_100_round_ripple"
         app:layout_constraintBottom_toBottomOf="@id/yearTv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/yearTv">

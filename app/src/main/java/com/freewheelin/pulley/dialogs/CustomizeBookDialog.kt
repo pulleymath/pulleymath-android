@@ -52,15 +52,28 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             if(value == 1) {
                 cancelBtn.text = "취소"
                 actionBtn.text = "다음"
+                actionBtn.layoutParams.width = 90.toPx()
                 selectGuideLabel.visibility = View.VISIBLE
                 nowCheckbox.visibility = View.GONE
+
+                val isAvailable = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.PREMIUM) == true
+                if (!isWorkbookStartChallengeInProgress && !isAvailable) {
+                    actionBtn.setLock(ButtonLockImage.mid20)
+                    actionBtn.setNextArrow(false)
+                } else {
+                    actionBtn.setUnlock()
+                    actionBtn.setNextArrow(true)
+                }
+
             } else {
                 if (step == 2)
                     cancelBtn.text = "이전"
 
                 actionBtn.text = "워크북 만들기"
+                actionBtn.layoutParams.width = 120.toPx()
                 selectGuideLabel.visibility = View.INVISIBLE
                 nowCheckbox.visibility = View.VISIBLE
+                actionBtn.setNextArrow(false)
             }
         }
 
@@ -195,7 +208,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     private fun initUI() {
 //        setCancelable(false)
         initComponents()
-
+        step = 1
         subjectTab.labels = listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
         subjectTab.listener = this
         step2Container.visibility = View.GONE
@@ -210,13 +223,8 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
         actionBtn.toDisableUI()
 
-        val isAvailable = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.PREMIUM) == true
 
-        if (!isWorkbookStartChallengeInProgress && !isAvailable) {
-            actionBtn.setLock(ButtonLockImage.mid20)
-        } else {
-            actionBtn.setUnlock()
-        }
+
 
         actionBtn.setOnPremiumClickListener(cb = {
             onActionBtnClicked()

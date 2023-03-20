@@ -56,6 +56,12 @@ enum class PaidServiceType(val rawValue: Int) {
     fun isUnderBasicC(): Boolean {
         return this.rawValue < BASIC_C.rawValue || this.rawValue == BASIC_P.rawValue
     }
+    fun isUnderBasicP(): Boolean {
+        return this.rawValue < BASIC_P.rawValue
+    }
+    fun isUnderPremium(): Boolean {
+        return this.rawValue < PREMIUM.rawValue
+    }
     companion object {
         fun ConvertToType(value: Int): PaidServiceType {
             return when (value) {

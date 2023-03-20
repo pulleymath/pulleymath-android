@@ -6,7 +6,7 @@
     tools:context=".revision2023.ui.fragment.PurchaseGuide3Fragment">
 
     <data>
-        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel"/>
         <import type="android.view.View"/>
     </data>
 

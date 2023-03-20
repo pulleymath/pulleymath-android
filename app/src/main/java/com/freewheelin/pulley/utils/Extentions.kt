@@ -64,7 +64,7 @@ fun responseFailed(context: Context, throwable: Throwable, isShown500Error:Boole
     if(!context.isNetworkConnected)
         DialogUtils.showNetworkErr(context)
     else if (BuildConfig.FLAVOR == "beta") {
-        DialogUtils.showDialog(context, throwable.message.toString(), "")
+        DialogUtils.showDialog(context, throwable.message.toString(), "베타버전만 출력됨")
     } else {
         DialogUtils.showServerErr(context)
     }

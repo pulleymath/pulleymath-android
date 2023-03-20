@@ -9,7 +9,7 @@ object URL {
 
     // TODO : URL 수정 필요
     val 결제정보 = "https://pulleymath.com?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=payment_info"
-    val 구매내역 = "https://pulleymath.com?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=purchase_history"
+    val 구매내역 = "https://pulleymath.com/mypage"
     val 환불신청 = "https://pulleymath.com?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=refund"
     val 풀리플러스가격이미지 = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/app/images/image_popup_pulleymathplus.png"
 
@@ -18,7 +18,7 @@ object URL {
     val 풀리과외구매 = "https://pulleymath.com/remote_class?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
     val 풀리북스구매 = "https://pulleymath.com/books?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=buy"
 
-    val 공지사항 = "https://bit.ly/3eHgidW"
+    val 공지사항 = "https://pulleymath.com/notice"
     val FAQ = "https://bit.ly/3sTgD5A"
 
     val 풀리활용가이드_메인 = "https://pulleymath.com/notice/tip/guide/main/4433?utm_source=pulley_app&utm_medium=social&utm_campaign=guide&utm_content=main-appmain"

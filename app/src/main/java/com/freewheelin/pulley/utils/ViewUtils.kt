@@ -91,6 +91,13 @@ fun View.extensionTouchArea(left: Int, top: Int, right: Int, bottom: Int) {
     }
 }
 
+fun View.showOrHideIf(isShow: Boolean, duration:Long = 500, cb:(View) -> Unit = {}) {
+    if (isShow) {
+        show(duration, cb)
+    } else {
+        hide(duration, cb)
+    }
+}
 fun View.show(duration:Long = 500, cb:((view: View) -> Unit)? = null) {
     visibility = View.VISIBLE
     val anim = AlphaAnimation(0f, 1f)
@@ -148,7 +155,7 @@ fun View.showIfNeed(duration: Long = 500, cb:((view: View) -> Unit)? = null) {
         show(duration, cb)
 }
 
-fun View.hide(duration:Long = 500, cb:(() -> Unit)? = null) {
+fun View.hide(duration:Long = 500, cb:((View) -> Unit)? = null) {
     if(this.visibility == View.INVISIBLE)
         return
 
@@ -160,7 +167,7 @@ fun View.hide(duration:Long = 500, cb:(() -> Unit)? = null) {
 
         override fun onAnimationEnd(p0: Animation?) {
             visibility = View.INVISIBLE
-            if(cb == null) return else cb()
+            if(cb == null) return else cb(this@hide)
         }
 
         override fun onAnimationStart(p0: Animation?) {
@@ -189,7 +196,7 @@ fun View.hideToGone(duration:Long = 500, cb:(() -> Unit)? = null) {
     startAnimation(anim)
 }
 
-fun View.hideIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
+fun View.hideIfNeed(duration: Long = 500, cb:((View) -> Unit)? = null) {
     if(visibility == View.INVISIBLE || visibility == View.GONE)
         return
     else

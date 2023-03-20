@@ -1,23 +1,31 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
+import com.freewheelin.pulley.revision2023.repository.AuthRepository
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
-class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
+class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
     private val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
+    private val authRepository by lazy { AuthRepository.instance }
 
     val affiliatedTestCardList by lazy { MutableLiveData<List<AffiliatedTestCard>>() }
 
@@ -25,6 +33,7 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
     val currentTimeString by lazy { MutableLiveData<String>() }
     val selectedTabIndex by lazy { MutableLiveData<Int>(0) }
     val showNothingDataView by lazy { MutableLiveData(false) }
+//    val showAdditionalLearning by lazy { MutableLiveData(false) }
 
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
         val studentId = user?.studentID ?: return
@@ -144,5 +153,13 @@ class AffiliatedTestViewModel: BaseViewModel(), LifecycleObserver {
 
     fun setTabIndex(index: Int) {
         selectedTabIndex.postValue(index)
+    }
+    fun getTempToken(cb: (String) -> Unit = {}) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val tempToken = authRepository.getTempToken()
+            withContext(Dispatchers.Main) {
+                cb(tempToken.token)
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ import com.freewheelin.pulley.core.ScreenTheme
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.utils.DialogUtils
+import com.freewheelin.pulley.utils.visibleIf
 
 enum class ButtonTheme {
     Primary_Blue,
@@ -40,7 +41,7 @@ enum class ButtonTheme {
             Primary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round)!!
             Primary_Black -> ContextCompat.getDrawable(context, R.drawable.bg_black_4c4c4c_round)!!
             Primary_Orange -> ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)!!
-            Secondary_Blue -> ContextCompat.getDrawable(context, R.drawable.rp_bg_purple_ecebff_round)!!
+            Secondary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_100_round_ripple)!!
             Secondary_Grey -> ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round)!!
         }
     }
@@ -81,6 +82,7 @@ open class PrimaryButton: ConstraintLayout {
 
     var buttonText: TextView
     var imageLock: ImageView
+    var imageNextArrow: ImageView
     var button: Button
     var lottie: LottieAnimationView
 
@@ -89,6 +91,7 @@ open class PrimaryButton: ConstraintLayout {
         theme = ButtonTheme.Primary_Blue
 
         imageLock = findViewById(R.id.imageLock)
+        imageNextArrow = findViewById(R.id.imageNextArrow)
         button = findViewById(R.id.button)
         buttonText = findViewById(R.id.buttonText)
         lottie = findViewById(R.id.lottie)
@@ -124,6 +127,9 @@ open class PrimaryButton: ConstraintLayout {
 //        if (value) toEnableUI() else toDisableUI()
 //    }
 
+    fun setNextArrow(isShow: Boolean) {
+        imageNextArrow.visibleIf(isShow)
+    }
     fun setLock(lockImage:ButtonLockImage = ButtonLockImage.small16,
                 color: ButtonLockColor = ButtonLockColor.white) {
         imageLock.visibility = View.VISIBLE
@@ -190,7 +196,7 @@ open class PrimaryButton: ConstraintLayout {
 
         when(screenTheme) {
             ScreenTheme.Bright -> {
-                buttonText.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.white))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_non_ripple)
             }
 
@@ -213,8 +219,8 @@ open class PrimaryButton: ConstraintLayout {
         when(screenTheme) {
             ScreenTheme.Bright, ScreenTheme.BrightOutside -> {
 //                button.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                buttonText.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                button.background = ContextCompat.getDrawable(context, R.drawable.rp_bg_purple_ecebff_round)!!
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_100_round_ripple)!!
             }
 
             ScreenTheme.Dark -> {

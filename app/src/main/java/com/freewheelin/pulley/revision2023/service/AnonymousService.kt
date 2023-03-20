@@ -21,4 +21,7 @@ interface AnonymousService {
 
     @GET("anonymous/v2/commerce/plus/android")
     suspend fun getPurchaseGuide(): ResponseForceBody<PurchaseGuide>
+
+    @GET("/anonymous/v1/analysis/sample")
+    suspend fun getAnalysisSample(): ResponseForceBody<Analysis>
 }

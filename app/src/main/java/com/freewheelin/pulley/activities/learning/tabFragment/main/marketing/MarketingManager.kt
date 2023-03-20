@@ -28,7 +28,7 @@ object MarketingManager {
     val URL = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing.json"
     val URL_BETA = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing_beta.json"
 
-    fun getInfo(context: Context, mainProfile: MainProfile, callback:(marketing: Marketing?)->Unit) {
+    fun getInfo(context: Context, callback:(marketing: Marketing?)->Unit) {
 
         val url = when (Preferences.onServerAPI.get()) {
             Network.Server.live.toString() -> URL
@@ -43,7 +43,7 @@ object MarketingManager {
                 val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
                 if(data != null && data.isNotEmpty()) {
                     Gson().fromJson(data, Marketing::class.java).let { marketing ->
-                        if(isShow(context, mainProfile, marketing)) {
+                        if(isShow(context, marketing)) {
                             withContext(Dispatchers.Main) {
                                 callback(marketing)
                             }
@@ -56,7 +56,7 @@ object MarketingManager {
         }
     }
 
-    fun isShow(context: Context, mainProfile:MainProfile, marketing:Marketing) : Boolean {
+    fun isShow(context: Context, marketing:Marketing) : Boolean {
         val pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         var nowDate = Calendar.getInstance()
 
@@ -67,11 +67,11 @@ object MarketingManager {
             val dateDiff = (nowDate.time.time - saveDateParsed.time).toFloat() / (60 * 60 * 24 * 1000).toFloat()
             if (dateDiff < 7) return false
         }
-        filterBanner(mainProfile, marketing)
+        filterBanner(marketing)
         return marketing.banners.isNotEmpty()
     }
 //    1643026270780 - 1642987740000 = 38530780
-    fun filterBanner(mainProfile:MainProfile, marketing:Marketing) {
+    fun filterBanner(marketing:Marketing) {
         val studentSegment = getStudentSegment(user?.grade)
         val userSegment = user?.serviceType!!
         val tz = TimeZone.getTimeZone("Asia/Seoul")
@@ -115,10 +115,10 @@ object MarketingManager {
         pref.edit().putString(key, today).apply()
     }
 
-    fun setMarketingBanner(context: Context, mainProfile: MainProfile) {
-        getInfo(context, mainProfile) { marketing ->
-            if(marketing != null && isShow(context, mainProfile, marketing)) {
-                val dialog = MarketingDialog(context, marketing!!)
+    fun setMarketingBanner(context: Context) {
+        getInfo(context) { marketing ->
+            if(marketing != null && isShow(context, marketing)) {
+                val dialog = MarketingDialog(context, marketing)
                 dialog.setCancelable(false)
                 dialog.show()
             }

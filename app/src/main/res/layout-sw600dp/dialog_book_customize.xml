@@ -678,7 +678,7 @@
 
             <com.freewheelin.pulley.views.buttons.PrimaryButton
                 android:id="@+id/actionBtn"
-                android:layout_width="@dimen/primaryBtn_width_160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp48"
                 android:text="다음"
                 app:buttonTheme="blue"

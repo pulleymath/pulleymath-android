@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.repository.remote
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
+import com.freewheelin.pulley.revision2023.model.ServerTimeNow
 //import dagger.Module
 //import dagger.Provides
 //import dagger.hilt.InstallIn
@@ -15,8 +16,13 @@ import retrofit2.http.*
 object AffiliatedTestApi {
 //    @Provides
     fun univTestService() : AffiliatedTestService  = Network.retrofit(Network.Type.mockTest).create(AffiliatedTestService::class.java)
+    fun springService() : SpringService2  = Network.retrofit(Network.Type.spring).create(SpringService2::class.java)
 }
-
+interface SpringService2 {
+    @GET("now")
+    fun getServerTime()
+        : Observable<ServerTimeNow>
+}
 interface AffiliatedTestService {
     @GET("test/group/list")
     fun getGroupList(@Query("school_id") schoolID :Int,

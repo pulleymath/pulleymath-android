@@ -11,13 +11,20 @@ object ChallengeManager {
     const val SEQUENCE = "SEQUENCE"
     const val COURSE_ID = "COURSE_ID"
 
-    fun getMainTabMoveIntent(course: ChallengeCourse?): Intent {
+    fun getMainTabMoveIntent(nextCourse: ChallengeCourse?): Intent {
         return Intent(MAIN_SCREEN_TAB_MOVE_EVENT).apply {
-            val courseId = getCourseId(course?.challengeCourseId)
+            val courseId = getCourseId(nextCourse?.challengeCourseId)
             putExtra(COURSE_ID, courseId)
             if (courseId == 0) {
                 putExtra(IS_START_CHALLENGE_COMPLETED, true)
             }
+        }
+    }
+    // TODO
+    fun checkChallengeFinishIntent(isChallengeCompleted: Boolean): Intent {
+        return Intent(MAIN_SCREEN_TAB_MOVE_EVENT).apply {
+            putExtra(COURSE_ID, 0)
+            putExtra(IS_START_CHALLENGE_COMPLETED, isChallengeCompleted)
         }
     }
     fun getConceptStudyMoveIntent(courseId: Int?): Intent {
@@ -45,9 +52,9 @@ object ChallengeManager {
             CourseName.스타트챌린지_유형.id -> { 2 }
             CourseName.스타트챌린지_북스.id -> { 3 }
             CourseName.스타트챌린지_워크북.id -> { 4 }
-//            CourseName.위클리챌린지_Day1.id -> { 0 }
-//            CourseName.위클리챌린지_Day2.id -> { 0 }
-//            CourseName.위클리챌린지_Day3.id -> { 0 }
+            CourseName.위클리챌린지_Day1.id -> { 5 }
+            CourseName.위클리챌린지_Day2.id -> { 6 }
+            CourseName.위클리챌린지_Day3.id -> { 7 }
             else -> 0
         }
     }

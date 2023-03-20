@@ -433,20 +433,24 @@
             android:id="@+id/conceptFragProgressCl"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/gray_100"
-            android:visibility="@{ vm.showProgress ? View.VISIBLE : View.GONE }"
+            android:background="@color/gray_200"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerWrapperCl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
+<!--            android:visibility="@{ vm.isLoading ? View.VISIBLE : View.GONE }"-->
 
-            <ProgressBar
-                android:id="@+id/studyProgress"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:indeterminateTint="@color/purple_200"
-                app:layout_constraintStart_toStartOf="parent"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadingLottie"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:lottie_speed="1"
+                app:lottie_repeatMode="restart"
+
+                app:lottie_loop="true"
+                app:lottie_fileName="circle_loading.json"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

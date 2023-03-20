@@ -28,7 +28,7 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="3dp"
             android:textColor="@color/purple_300"
-            android:background="@drawable/bg_purple_100_round_5"/>
+            android:background="@drawable/bg_purple_100_round_ripple"/>
 
         <TextView
             android:id="@+id/nameTv"

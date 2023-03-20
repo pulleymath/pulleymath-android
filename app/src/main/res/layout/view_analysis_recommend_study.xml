@@ -108,7 +108,7 @@
         android:layout_height="@dimen/dp56"
         android:layout_marginTop="@dimen/dp32"
         android:clickable="true"
-        android:background="@drawable/bg_purple_100_round_5"
+        android:background="@drawable/bg_purple_100_round_ripple"
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/recommendTv"
         app:layout_constraintBottom_toBottomOf="parent">

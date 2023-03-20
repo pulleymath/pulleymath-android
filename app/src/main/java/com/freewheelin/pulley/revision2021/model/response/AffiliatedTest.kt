@@ -267,6 +267,7 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
     var workbook_id: Int = 0
     var no: Int = 0
     var subject: String? = null
+    // TODO subject TO enum 고려하기
     lateinit var unit: String
     lateinit var part: String
     lateinit var intention: String
@@ -336,8 +337,8 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
             "물리학" -> {
                 when (score) {
                     in 0..40 -> 1
-                    in 41..85 -> 2
-                    in 86..100 -> 3
+                    in 41..70 -> 2
+                    in 71..100 -> 3
                     else -> 2
                 }
             }

@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.pattern
 
 import androidx.room.*
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import kotlinx.coroutines.flow.Flow
@@ -8,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PatternDao {
 
-    @Query("SELECT * FROM lc_pattern_table where patternId=:patternId")
-    fun getAllPatternQuiz(patternId: Int): Flow<List<LCPatternQuiz>>
+    @Query("SELECT * FROM lc_pattern_table where patternId=:patternId and studentId=:studentId")
+    fun getAllPatternQuiz(patternId: Int, studentId: String? = user?.studentID): Flow<List<LCPatternQuiz>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pattern: LCPatternQuiz)

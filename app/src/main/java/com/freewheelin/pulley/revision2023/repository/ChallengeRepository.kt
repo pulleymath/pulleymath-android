@@ -21,8 +21,8 @@ class ChallengeRepository() {
     // TODO joined challenge list 를 업데이트하는 api와 로직추가해야함
 
 
-    suspend fun getChallengesOnStatus(status: ChallengeUserStatus) {
-        api.getChallengesOnStatus(status = status).data?.let {
+    suspend fun getChallengesOnStatus(status: ChallengeUserStatus? = null) {
+        api.getChallengesOnStatus(status = status).data.let {
             println("asoaso update JoinedChallengeList : [getChallengesOnStatus]")
             it.forEach {
                 println("asoaso --- update - ${it.challengeId} / ${it.challengeName} / ${it.userStatus}")

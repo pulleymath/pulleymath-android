@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel"/>
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -131,7 +136,7 @@
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp64"
                         android:layout_marginEnd="@dimen/dp48"
-                        android:background="@drawable/bg_purple_100_round_5"
+                        android:background="@drawable/bg_purple_100_round_ripple"
                         android:clickable="true"
                         android:layout_marginBottom="@dimen/dp48"
                         app:layout_constraintBottom_toBottomOf="parent"

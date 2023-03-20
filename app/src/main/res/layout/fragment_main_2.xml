@@ -433,19 +433,22 @@
                             android:id="@+id/challengeLoadingContainer"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:background="#88ffffff"
-                            android:visibility="@{ vm.isLoading() ? View.VISIBLE : View.GONE }"
+                            android:background="#FFFFFF"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/missionRv">
 
-                            <ProgressBar
-                                android:id="@+id/progressBar3"
-                                style="?android:attr/progressBarStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/loadingLottie"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
+                                android:layout_gravity="center"
+                                app:lottie_speed="1.5"
+                                app:lottie_repeatMode="restart"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                app:lottie_fileName="circle_loading.json"/>
                         </FrameLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,6 +53,7 @@ enum class FilterType {
     추천_3_4등급,
     추천_4등급이하,
 
+//    핀_제외,
     핀_포함,
     핀_미포함,
 
@@ -62,14 +63,15 @@ enum class FilterType {
     companion object {
         fun convertTagAtFiltertType(tag: String): FilterType {
             return when (tag.trim()) {
-                "기출" -> 유형_기출서
-                "문제풀이" -> 유형_유형서
-                "내신대비" -> 유형_내신서
+                "유형서" -> 유형_유형서
+                "내신서" -> 유형_내신서
+                "기출서" -> 유형_기출서
+                "모든 등급" -> 추천_전체
                 "1등급" -> 추천_1등급
                 "2~3등급" -> 추천_2_3등급
                 "3~4등급" -> 추천_3_4등급
                 "4등급이하" -> 추천_4등급이하
-                else -> 추천_1등급
+                else -> 과목_전체
             }
         }
 
@@ -99,8 +101,8 @@ enum class FilterType {
             추천_3_4등급 -> "3-4등급"
             추천_4등급이하 -> "4등급 이하"
 
+            핀_미포함 -> "핀 설정한 문제집 제외"
             핀_포함 -> "핀 설정한 문제집 포함"
-            핀_미포함 -> "핀 설정한 문제집 미포함"
 
             워크북_포함 -> "워크북 포함"
             워크북_미포함 -> "워크북 미포함"
@@ -135,8 +137,8 @@ enum class FilterType {
                 추천_3_4등급 -> return setOf(추천_전체)
                 추천_4등급이하 -> return setOf(추천_전체)
 
-                핀_포함 -> return setOf(핀_미포함)
                 핀_미포함 -> return setOf(핀_포함)
+                핀_포함 -> return setOf(핀_미포함)
 
                 워크북_포함 -> return setOf(워크북_미포함)
                 워크북_미포함 -> return setOf(워크북_포함)
@@ -147,8 +149,8 @@ enum class FilterType {
         get() {
             return when(this) {
                 과목_확통 -> "확률과통계"
+                핀_미포함 -> "핀제외"
                 핀_포함 -> "핀포함"
-                핀_미포함 -> "핀미포함"
                 워크북_포함 -> "워크북 포함"
                 워크북_미포함 -> "워크북 미포함"
                 else -> text
@@ -207,19 +209,19 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
         }
     var filters: List<Pair<String, List<FilterType>>> = listOf()
     private val totalInitFilters = listOf(
-            Pair("보기설정" , listOf(핀_미포함)), // 워크북은 유료화때문에 book filter에서 노출되지 않음
+            Pair("보기설정" , listOf(핀_포함)), // 워크북은 유료화때문에 book filter에서 노출되지 않음
             Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
             Pair("문제집 유형" , listOf(유형_전체, 유형_유형서, 유형_내신서, 유형_기출서)),
             Pair("추천등급" , listOf(추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하))
     )
 
     private val workbookInitFilter = listOf(
-        Pair("보기설정" , listOf(핀_미포함)),
+        Pair("보기설정" , listOf(핀_포함)),
         Pair("과목" , listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)),
     )
 
     var selectedFilterTypes: HashSet<FilterType> = hashSetOf(
-            워크북_미포함, 핀_미포함, 계열_전체, 과목_전체, 유형_전체, 추천_전체
+            워크북_미포함, 핀_포함, 계열_전체, 과목_전체, 유형_전체, 추천_전체
     )
     val customBookInitFilterTypes: HashSet<FilterType> = hashSetOf(
             과목_전체, 유형_전체, 추천_전체
@@ -241,7 +243,7 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
                     return if (indexPath.type == Type.header || indexPath.section == 0) {
                         6
                     } else {
-                        2
+                        3
                     }
                 }
             }
@@ -305,23 +307,23 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
                 val row = indexPath.row
 
                 if(row == 0)
-                    holder.text = "핀 설정한 문제집 포함"
+                    holder.text = "핀 설정한 문제집 제외"
                 else
                     holder.text = "워크북 포함"
 
                 itemBinding.filterSwitch.setOnCheckedChangeListener(null)
 
                 if(row == 0)
-                    itemBinding.filterSwitch.isChecked = selectedFilterTypes.contains(핀_포함)
+                    itemBinding.filterSwitch.isChecked = selectedFilterTypes.contains(핀_미포함)
                 else
                     itemBinding.filterSwitch.isChecked = selectedFilterTypes.contains(워크북_포함)
 
                 itemBinding.filterSwitch.setOnCheckedChangeListener { button, isChecked ->
                     val willAddFilter = if(isChecked) {
-                        if(row == 0) 핀_포함
+                        if(row == 0) 핀_미포함
                         else 워크북_포함
                     } else {
-                        if(row == 0)핀_미포함
+                        if(row == 0)핀_포함
                         else 워크북_미포함
                     }
 
@@ -384,11 +386,11 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
                     outRect.left = 2.toPx()
                 } else {
                     when {
-                        indexPath.row % 3 == 0 -> outRect.right = 4.toPx()
-                        indexPath.row % 3 == 1 -> {
-                            outRect.left = 2.toPx()
-                            outRect.right = 2.toPx()
-                        }
+                        indexPath.row % 2 == 0 -> outRect.right = 4.toPx()
+//                        indexPath.row % 3 == 1 -> {
+//                            outRect.left = 2.toPx()
+//                            outRect.right = 2.toPx()
+//                        }
                         else -> outRect.left = 4.toPx()
                     }
                 }

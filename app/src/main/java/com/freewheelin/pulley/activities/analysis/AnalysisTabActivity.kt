@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -16,6 +17,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.tabFragment.AnalysisByLevelFragment
 import com.freewheelin.pulley.activities.analysis.tabFragment.AnalysisStudyAmountFragment
 import com.freewheelin.pulley.activities.analysis.tabFragment.AnalysisUnitFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.IS_SAMPLE
 import com.freewheelin.pulley.bases.BaseNavActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
@@ -23,10 +25,12 @@ import com.freewheelin.pulley.databinding.ActivityAnalysisTabBinding
 import com.freewheelin.pulley.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.model.Analysis
+import com.freewheelin.pulley.revision2023.viewmodel.AnalysisTabActViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.extensionTouchArea
 import com.freewheelin.pulley.utils.showBalloon
 import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.views.DaebakToast
 import com.google.android.material.tabs.TabLayout
 import org.joda.time.LocalDate
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
@@ -69,24 +73,32 @@ class AnalysisTabActivity : BaseNavActivity(),
         pickerDialog
     }
 
-    val analysisTab: List<AnalysisTabDelegate> = listOf(
-            AnalysisUnitFragment.newInstance(),
-            AnalysisByLevelFragment.newInstance(),
-            AnalysisStudyAmountFragment.newInstance()
-    )
+    var analysisTab: List<AnalysisTabDelegate> = listOf()
     val binding: ActivityAnalysisTabBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_analysis_tab, null, false)
     }
+    val viewModel: AnalysisTabActViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        val isSample = intent.getBooleanExtra(IS_SAMPLE, false)
+        viewModel.isSampleLiveData.postValue(isSample)
+        viewModel.isSample = isSample
+        analysisTab = listOf(
+            AnalysisUnitFragment.newInstance(isSample),
+            AnalysisByLevelFragment.newInstance(),
+            AnalysisStudyAmountFragment.newInstance()
+        )
         configTab(0)
         configTab(1)
         configTab(2)
         replaceFragment(analysisTab[0])
         binding.apply {
-            scrollView.setOnScrollChangeListener(this@AnalysisTabActivity)
+            vm = viewModel
+            lifecycleOwner = this@AnalysisTabActivity
 
+            scrollView.setOnScrollChangeListener(this@AnalysisTabActivity)
             val to = LocalDate.now()
             val from = LocalDate.now().minusDays(6)
             configUI(from, to)
@@ -98,24 +110,24 @@ class AnalysisTabActivity : BaseNavActivity(),
             }
 
             prevBtn.setOnClickListener {
-                val from = dialog.from
-                val to = dialog.to
+                val dialogFrom = dialog.from
+                val dialogTo = dialog.to
                 val duration = dialog.period
 
-                dialog.from = from.minusDays(duration)
-                dialog.to = to.minusDays(duration)
+                dialog.from = dialogFrom.minusDays(duration)
+                dialog.to = dialogTo.minusDays(duration)
                 dialog.binding.selectRangeBtn.performClick()
 
                 configUI(dialog.from, dialog.to)
             }
 
             nextBtn.setOnClickListener {
-                val from = dialog.from
-                val to = dialog.to
+                val dialogFrom = dialog.from
+                val dialogTo = dialog.to
                 val duration = dialog.period
 
-                dialog.from = from.plusDays(duration)
-                dialog.to = to.plusDays(duration)
+                dialog.from = dialogFrom.plusDays(duration)
+                dialog.to = dialogTo.plusDays(duration)
                 dialog.binding.selectRangeBtn.performClick()
 
                 configUI(dialog.from, dialog.to)
@@ -159,7 +171,11 @@ class AnalysisTabActivity : BaseNavActivity(),
     }
 
     override fun onUpdateClicked(picker: DateRangePickerDialog, from: LocalDate, to: LocalDate, type:DateRangePickerDialog.Type) {
-        analysisTab[binding.tabLayout.selectedTabPosition].onPeriodSelected(dialog.from, dialog.to, dialog.period)
+        if (viewModel.isSample) {
+            DaebakToast.show(this, "샘플 데이터 입니다 :D")
+        } else {
+            analysisTab[binding.tabLayout.selectedTabPosition].onPeriodSelected(dialog.from, dialog.to, dialog.period)
+        }
         configUI(from, to)
     }
 
@@ -228,30 +244,27 @@ class AnalysisTabActivity : BaseNavActivity(),
             }
             val period = DateTimeUtils.getPeriod(from, to)
             val formerDate = from.minusDays(period - 1)
-
-            user!!.getAnalysis(this@AnalysisTabActivity, from.toDate(), to.toDate(), formerDate.toDate()) {
+            viewModel.fetchAnalysis(from, to, formerDate) {
                 this@AnalysisTabActivity.analysis = it
-
-                if(it?.myScore != null) {
+                if(it.myScore != null) {
                     correctRateTv.text = "${it.myScore}%"
                 } else {
                     correctRateTv.text = "-"
                 }
 
-                if(it?.myRating != null) {
+                if(it.myRating != null) {
                     ratingTv.text = "${it.myRating}등급"
                 } else {
                     ratingTv.text = "-"
                 }
 
-                if(it?.problemTotalCount != null && it.problemTotalCount != 0) {
+                if(it.problemTotalCount != null && it.problemTotalCount != 0) {
                     problemCntTv.text = "${it.problemTotalCount}문제"
                 } else {
                     problemCntTv.text = "-"
                 }
 
                 analysisTab[tabLayout.selectedTabPosition].onPeriodSelected(dialog.from, dialog.to, dialog.period)
-
             }
 
             if (dialog.from.plusDays(dialog.period) > LocalDate.now()) {

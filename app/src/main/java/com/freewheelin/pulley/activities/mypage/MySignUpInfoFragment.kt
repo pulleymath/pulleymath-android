@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
@@ -20,6 +21,8 @@ import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.databinding.FragmentMySignupInfoBinding
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.FacebookEvent
 import com.freewheelin.pulley.utils.IntentUtils
@@ -32,6 +35,7 @@ import java.util.*
 
 class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     lateinit var binding: FragmentMySignupInfoBinding
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
     companion object {
         const val RELOAD = "reload"
@@ -126,7 +130,11 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     fun onMemebershipBtnClicked() {
         // facebook
         FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
-        IntentUtils.openWebLink(requireContext(), URL.홈페이지, requireContext().packageManager)
+        viewModel.getTempToken { shortToken ->
+            val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
+            val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+            IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+        }
     }
 
     fun moveTo(fragment: Fragment) {

@@ -27,28 +27,31 @@ import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
+import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.Companion.RE_FETCH
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity
 import com.freewheelin.pulley.revision2023.ui.activity.WorkbookListActivity
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.viewmodel.PatternStudyViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import com.pulleymath.android.pdf.utils.onThrottleClick
 
 class PatternStudyFragment : LearningTabFragment(),
-    PlanListener,
+    PlanListenerV2,
     EmailInputDialogListener {
     private lateinit var binding: FragmentPatternStudyBinding
     private val viewModel: PatternStudyViewModel by viewModels()
 
     override var screenName = "유형"
 
-    private val myPlanAdapter = PatternStudyMyPlanAdapter (this)
+    private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail, ActionType.delete), OriginType.MyPlan, isGridLayout = false)
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
+    lateinit var reFetchReceiver: BroadcastReceiver
 
     companion object {
         val PLAN_PINNED = 401
@@ -86,7 +89,13 @@ class PatternStudyFragment : LearningTabFragment(),
                 }
             }
         }
-
+        reFetchReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    viewModel.initMyPlanAdapterItem()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -95,6 +104,7 @@ class PatternStudyFragment : LearningTabFragment(),
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pattern_study, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.PATTERN_STUDY_MOVE_EVENT))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reFetchReceiver, IntentFilter(RE_FETCH))
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == PLAN_PINNED) {
                 binding.apply {
@@ -117,11 +127,9 @@ class PatternStudyFragment : LearningTabFragment(),
                 initAdapter()
                 initGuide()
 
-                guideView.setViewModel(viewModel)
-
-                pulleyMathBookCv.setOnClickListener { goPulleyMathBooks() }
-                commercialBookCv.setOnClickListener { goPdfList() }
-                workBookCv.setOnClickListener { goWorkbooks() }
+                pulleyMathBookCv.onThrottleClick { goPulleyMathBooks() }
+                commercialBookCv.onThrottleClick { goPdfList() }
+                workBookCv.onThrottleClick { goWorkbooks() }
             }
             viewModel.apply {
                 myPlans.observe(viewLifecycleOwner) {
@@ -153,7 +161,8 @@ class PatternStudyFragment : LearningTabFragment(),
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = myPlanAdapter
                 val itemSpace = resources.getDimension(R.dimen.dp16).toInt()
-                addItemDecoration(MarginDecoration(itemSpace))
+                val sideItemSpace = resources.getDimension(R.dimen.dp48).toInt()
+                addItemDecoration(MarginDecoration(itemSpace, sideItemSpace, sideItemSpace))
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
@@ -191,34 +200,6 @@ class PatternStudyFragment : LearningTabFragment(),
 
     }
 
-    override fun onActionBtnClicked(action: ActionType, book: Book, holder: PlanHolder) {
-
-        when (action) {
-            ActionType.mail -> {
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일보내기")
-                val dialog = EmailInputDialog(requireContext(), listOf(book), user!!, this)
-                dialog.show()
-            }
-            ActionType.pin -> {
-                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
-                val itemValue = if(holder is MyPlanHolder) "나의문제집" else if(holder is RecommendPlanHolder) "추천문제집" else "전체문제집"
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
-
-                val id = if(book.assignID == null) book.pieceID else book.assignID!!
-                viewModel.togglePin(id, !book.isPinned) {
-                    viewModel.initMyPlanAdapterItem()
-                }
-            }
-            ActionType.delete -> {
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
-
-                viewModel.removeFromMyPlan(book) {
-                    viewModel.initMyPlanAdapterItem()
-                }
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         viewModel.initMyPlanAdapterItem()
@@ -242,23 +223,6 @@ class PatternStudyFragment : LearningTabFragment(),
             getResult.launch(it)
         }
     }
-    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
-        val itemValue = if(holder is MyPlanHolder) "나의문제집" else if(holder is RecommendPlanHolder) "추천문제집" else "전체문제집"
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
-        val intent = SolveActivity.getReviewIntent(requireContext(), book)
-        startActivity(intent)
-
-    }
-
-    override fun onSolveClicked(holder: PlanHolder, book: Book) {
-        val intent = SolveActivity.getIntent(requireContext(), book)
-        startActivity(intent)
-    }
-
-    override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "문제집선택버튼")
-//        CustomizeBookDialog(requireContext(), this, book).show()
-    }
 
     override fun onSentEmail() {
         DaebakToast.show(requireContext(), "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
@@ -276,5 +240,41 @@ class PatternStudyFragment : LearningTabFragment(),
     override fun onDestroyView() {
         super.onDestroyView()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(challengeReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reFetchReceiver)
+    }
+
+    override fun onActionBtnClicked(action: ActionType, book: Book) {
+        when (action) {
+            ActionType.mail -> {
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일보내기")
+                val dialog = EmailInputDialog(requireContext(), listOf(book), user!!, this)
+                dialog.show()
+            }
+            ActionType.pin -> {
+                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
+                val itemValue = "문제집"
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", itemName, itemValue)
+
+                val id = if(book.assignID == null) book.pieceID else book.assignID!!
+                viewModel.togglePin(id, !book.isPinned) {
+                    viewModel.initMyPlanAdapterItem()
+                }
+            }
+            ActionType.delete -> {
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
+
+                viewModel.removeFromMyPlan(book) {
+                    viewModel.initMyPlanAdapterItem()
+                }
+            }
+        }
+    }
+    override fun onSolveClicked(book: Book) {
+        val intent = SolveActivity.getIntent(requireContext(), book)
+        startActivity(intent)
+    }
+
+    override fun filterFromTagOnCard(filterType: String) {
+        // blank
     }
 }

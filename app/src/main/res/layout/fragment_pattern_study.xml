@@ -11,7 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gray_200"
+        >
         <ScrollView
             android:id="@+id/scrollRootView"
             android:layout_width="match_parent"
@@ -34,15 +36,15 @@
                         android:id="@+id/pulleyMathBookCv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="5dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
                         android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginBottom="@dimen/dp48"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/commercialBookCv"
                         app:layout_constraintBottom_toBottomOf="parent">
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -53,7 +55,7 @@
                                 android:layout_width="0dp"
                                 android:src="@drawable/illust_category_1"
                                 android:layout_height="wrap_content"
-                                android:scaleType="fitStart"
+                                android:scaleType="fitXY"
                                 android:adjustViewBounds="true"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +103,7 @@
                         android:id="@+id/commercialBookCv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="5dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
                         android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp24"
@@ -119,7 +121,7 @@
                                 android:id="@+id/categoryIv2"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:scaleType="fitStart"
+                                android:scaleType="fitXY"
                                 android:adjustViewBounds="true"
                                 android:src="@drawable/illust_category_2"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -131,7 +133,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/h3"
-                                android:text="출판사 문제집"
+                                android:text="풀리북스"
                                 android:layout_marginTop="@dimen/dp24"
                                 android:layout_marginStart="@dimen/dp24"
                                 app:layout_constraintTop_toBottomOf="@+id/categoryIv2"
@@ -169,7 +171,7 @@
                         android:id="@+id/workBookCv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="5dp"
+                        app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
                         android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp24"
@@ -188,7 +190,7 @@
                                 android:id="@+id/categoryIv3"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:scaleType="fitStart"
+                                android:scaleType="fitXY"
                                 android:adjustViewBounds="true"
                                 android:src="@drawable/illust_category_3"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -241,7 +243,6 @@
                     android:id="@+id/myPlanCl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/purple_8D8Db3"
                     app:layout_constraintTop_toBottomOf="@+id/pulleyMathBookCv"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -253,7 +254,6 @@
                         android:layout_height="wrap_content"
                         style="@style/h3"
                         android:text="나의 문제집"
-                        android:textColor="@color/white"
                         android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp48"
                         app:layout_constraintTop_toTopOf="parent"
@@ -266,7 +266,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{ vm.myPlanCount }"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray_600"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="2dp"
                         app:layout_constraintStart_toEndOf="@+id/myPlanTv"
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="|"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray_600"
                         android:layout_marginStart="8dp"
                         app:layout_constraintStart_toEndOf="@+id/myPlanCntTv"
                         app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
@@ -289,7 +289,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{ vm.pinCount }"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray_600"
                         android:layout_marginStart="8dp"
                         app:layout_constraintStart_toEndOf="@+id/myPlanCntBorder"
                         app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
@@ -301,7 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="이런 문제집은 자동으로 삭제돼요!"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray_600"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintEnd_toStartOf="@+id/myPlanDeleteGuideTv"
                         app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
@@ -311,8 +311,8 @@
                         android:id="@+id/myPlanDeleteGuideTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:layout_marginEnd="@dimen/dp32"
+                        android:textColor="@color/gray_600"
+                        android:layout_marginEnd="@dimen/dp48"
                         android:text="기준보기"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBaseline_toBaselineOf="@+id/myPlanCntTv"/>
@@ -320,7 +320,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1.6dp"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/gray_600"
                         app:layout_constraintStart_toStartOf="@+id/myPlanDeleteGuideTv"
                         app:layout_constraintEnd_toEndOf="@+id/myPlanDeleteGuideTv"
                         app:layout_constraintTop_toBottomOf="@+id/myPlanDeleteGuideTv"/>
@@ -337,11 +337,10 @@
                             android:id="@+id/myPlanRv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/dp64"
                             android:paddingTop="@dimen/dp32"
                             android:paddingBottom="@dimen/dp64"
-                            android:paddingEnd="@dimen/dp32"
-                            android:visibility="@{ vm.showMyPlan ? View.VISIBLE : View.INVISIBLE }"/>
+                            visibleIf="@{ vm.showMyPlan }"
+                            />
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -361,6 +360,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/empty_my_plan"
+                            app:tint="@color/gray_500"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -373,7 +373,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
                             android:textSize="@dimen/sp16"
-                            android:textColor="#88ffffff"
+                            android:textColor="@color/gray_600"
                             android:lineSpacingExtra="8sp"
                             android:gravity="center_horizontal"
                             android:text="내가 공부하는 문제집이 여기에 모여요 :)\n 원하는 문제집을 골라볼까요?"
@@ -389,16 +389,5 @@
 
             </LinearLayout>
         </ScrollView>
-
-        <com.freewheelin.pulley.revision2023.ui.view.StartChallengePatternStudyGuideView
-            android:id="@+id/guideView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="@{ vm.showGuideView ? View.VISIBLE : View.GONE }"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

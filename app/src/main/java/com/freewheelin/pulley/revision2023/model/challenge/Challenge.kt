@@ -19,6 +19,7 @@ data class MainChallengeHeaderItem(
     @PrimaryKey(autoGenerate = false) val id: Int,
     val status: ChallengeStatus,
     val name: String,
+    val seq: Int,
     var isSelected: Boolean = false,
     var studentId: String? = user?.studentID
 ): Serializable {
@@ -44,6 +45,7 @@ open class Challenge: Serializable {
     val seq: Int = -1
     val reward: ChallengeReward? = null
     val courses: List<ChallengeCourse> = listOf()
+    val successfulUserCount: Int? = null
 
     // ----
     val startChallenge: StartChallenge?
@@ -104,12 +106,8 @@ open class Challenge: Serializable {
             val endDateStr = DateTimeUtils.yy_MM_dd.format(endDateTime.toDate())
             return "$startDateStr ~ $endDateStr"
         }
-//
-//    fun isChallengeCourseInProgress(courseId: Int): Boolean {
-//        if (userStatus != ChallengeUserStatus.ING) return false
-//        val course = courses.find { it.challengeCourseId == courseId } ?: return false
-//        return course.status == ChallengeUserStatus.ING
-//    }
+
+    var finishEffectAlreadyAppear: Boolean = false
 }
 
 data class ChallengeReward (

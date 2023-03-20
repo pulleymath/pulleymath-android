@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
@@ -21,5 +22,8 @@ class AnonymousRepository() {
 
     suspend fun getPurchaseGuide(): PurchaseGuide {
         return api.getPurchaseGuide().data
+    }
+    suspend fun getAnalysisSample(): Analysis {
+        return api.getAnalysisSample().data
     }
 }

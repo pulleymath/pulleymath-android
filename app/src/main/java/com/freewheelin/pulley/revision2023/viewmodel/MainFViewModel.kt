@@ -64,7 +64,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             flowAllChallengeHeader()
                 .onEach { items ->
                     if (items.size > 1) {
-                        _challengeHeaders.value = items.sortedBy { it.id }
+                        _challengeHeaders.value = items.sortedBy { it.seq }
                     }
                 }
                 .launchIn(viewModelScope)
@@ -90,12 +90,15 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     }
 
     fun collectChallengeDetail(challengeId: Int) {
+        contentJob?.cancel("다른 챌린지 헤더 클릭으로 인한 취소", CancellationException())
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             fetchAllChallengeDetailItem(challengeId)?.let { newItem ->
                 currentMission.postValue(newItem)
                 println("asoaso currentMission posted3")
                 updateChallengeMissions(newItem)
+                delay(300)
+                _isLoading.postValue(false)
             }
         }
     }
@@ -125,8 +128,6 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
             postValue(listOf(missionHeader) + missionList)
         }
-        delay(200)
-        _isLoading.postValue(false)
     }
 //    suspend fun deleteChallengeDetail(item: MainChallengeDetailItem) {
 //        repository.deleteChallengeDetail(item)
@@ -138,8 +139,10 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
     fun joinChallenge(challengeId: Int, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+
             repository.joinChallenge(challengeId)?.let { detailItem ->
-                challengeRepository.updateChallengeList(detailItem)
+                challengeRepository.getChallengesOnStatus()
+//                challengeRepository.updateChallengeList(detailItem)
                 currentMission.postValue(detailItem)
                 cb()
             }
@@ -153,25 +156,31 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
                 responseFailed(getApplication<Application>().applicationContext, Throwable("${res.error} ${res.message}"))
                 return@launch
             }
-            res.data?.let {
-                println("asoaso currentMission posted1 ")
-                challengeRepository.updateChallengeList(it)
-            }
             withContext(Dispatchers.Main) {
                 cb()
             }
+            res.data?.let {
+                challengeRepository.updateChallengeList(it)
+            }
+
         }
     }
 
     override fun onChallengeHeaderClick(item: MainChallengeHeaderItem) {
-        contentJob?.cancel("다른 챌린지 헤더 클릭으로 인한 취소", CancellationException())
+//        contentJob?.cancel("다른 챌린지 헤더 클릭으로 인한 취소", CancellationException())
 
         if (item.status.isNotAvailable()) {
             toastMessage.postValue("2주, 4주 완성 챌린지는 준비 중이에요 :)")
             return
         }
+        val prevSelectedHeader = _challengeHeaders.value?.find { it.id == item.id && it.isSelected }
+        if (prevSelectedHeader != null) {
+            println("asoaso 기존 클릭되어있던 대상")
+            return
+        }
 
-        _challengeHeaders.postValue(_challengeHeaders.value?.map { header ->
+        println("asoaso ")
+        _challengeHeaders.postValue(challengeHeaders.value?.map { header ->
             header.copy(isSelected = header == item)
         })
 
@@ -184,18 +193,4 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             LocalBroadcastManager.getInstance(context).sendBroadcast(it)
         }
     }
-//    fun updateCurrentChallenge() {
-//        println("asoaso updateCurrentChallenge 1")
-//        val challenge = joinedChallengeList.value
-//            ?.find {
-//                println("asoaso updateCurrentChallenge 2 /// ${it.challengeId} , ${currentMission.value?.challengeId}")
-//                it.challengeId == currentMission.value?.challengeId
-//            } ?: return
-//        println("asoaso updateCurrentChallenge 2")
-//        currentMission.value?.courses?.forEach {
-//            println("asoaso --- ${it.courseName} / ${it.status}")
-//        }
-//        currentMission.postValue(challenge)
-//
-//    }
 }

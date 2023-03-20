@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.AnalysisTabActViewModel"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,6 +46,22 @@
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintStart_toStartOf="@+id/tabLayout"
             app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
+        <TextView
+            android:id="@+id/sampleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample"
+            style="@style/mo_h6"
+            visibleIf="@{ vm.isSampleLiveData }"
+            android:background="@drawable/bg_gray_600_round"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            app:layout_constraintTop_toTopOf="@+id/backBtn"
+            app:layout_constraintStart_toEndOf="@+id/backBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+            android:textColor="@color/white"
+            />
 
         <Button
             style="@style/TextGrey_9f9f9f.Bold"

@@ -40,7 +40,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val pinCount = MutableLiveData<String>("")
     val showMyPlanEmptyView = MutableLiveData<Boolean>(false)
     val showMyPlan = MutableLiveData<Boolean>(false)
-    val showGuideView = MutableLiveData<Boolean>(false)
+
     val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [나의문제집]에서 자동으로 빠집니다.\n" +
         "   그렇게 빠진 문제집은 [전체문제집]에서 다시 볼 수 있습니다.\n" +
         "\n" +
@@ -71,24 +71,19 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             val newMyPlans = fetchMyPlans() ?: return@launch
+//            val myHistory = fetchMyHistory()
             _isLoading.postValue(false)
-
-//            val oldBook = myPlanBooks.value?.filterNot { it in newMyPlans.myPieceStorageList }
-//            oldBook?.forEach { deleteMyPlan(it) }
             upsertMyPlans(newMyPlans.myPieceStorageList)
-//            adapterUpdateIfNewConceptSizeZero(newConcepts)
-
-//            val planCount = "총 ${newMyPlans.myPieceStorageList.size}개 "
-//            val pinText = "핀 설정 ${newMyPlans.pinBookPlanCount}개 "
-//            myPlanCount.postValue(planCount)
-//            pinCount.postValue(pinText)
-//            showMyPlanEmptyView.postValue(newMyPlans.myPieceStorageList.isEmpty())
-//            showMyPlan.postValue(!newMyPlans.myPieceStorageList.isEmpty())
+//            upsertMyPlans(myHistory)
         }
     }
 
     suspend fun fetchMyPlans(): MyBookList? {
         return patternStudyRepository.fetchMyPlans()
+    }
+
+    suspend fun fetchMyHistory(): List<Book> {
+        return patternStudyRepository.fetchHistory()
     }
 
     private suspend fun upsertMyPlans(books: List<Book>) {

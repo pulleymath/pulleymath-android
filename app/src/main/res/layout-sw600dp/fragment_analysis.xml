@@ -3,10 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel"/>
+    </data>
+
     <ScrollView
+        android:id="@+id/scrollContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollContainer">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,7 +137,7 @@
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp64"
                         android:layout_marginEnd="@dimen/dp48"
-                        android:background="@drawable/bg_purple_100_round_5"
+                        android:background="@drawable/bg_purple_100_round_ripple"
                         android:layout_marginBottom="@dimen/dp48"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -163,19 +169,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--                    <com.freewheelin.pulley.views.buttons.PrimaryButton-->
-<!--                        android:id="@+id/mainAnalysisBtn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/dp56"-->
-<!--                        android:layout_marginStart="@dimen/dp48"-->
-<!--                        android:layout_marginTop="@dimen/dp64"-->
-<!--                        android:layout_marginEnd="@dimen/dp48"-->
-<!--                        android:layout_marginBottom="@dimen/dp48"-->
-<!--                        android:text="내 전체 분석 보기"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv" />-->
 
                     <ImageButton
                         android:id="@+id/shareBtn"

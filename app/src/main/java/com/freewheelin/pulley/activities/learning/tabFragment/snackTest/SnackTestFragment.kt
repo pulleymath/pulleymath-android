@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
 import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.DailyTestReportActivity
@@ -30,6 +31,7 @@ import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
@@ -48,6 +50,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     override var screenName = "테스트"
 
     lateinit var binding: FragmentSnackTestBinding
+    val viewModel: SnackTestFragViewModel by viewModels()
 
     var timer: Timer? = null
     var currentMainFragment: TestMainBaseFragment? = null
@@ -93,7 +96,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initUI()
+        init()
         syncTestList()
     }
 
@@ -164,7 +167,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     override fun onMoveBtnClikced(test: Test) {
         if(test.wrongInfo.totalProblemCount == 0) {
             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "유형학습")
-            (activity as LearningTabActivity).setSelectedTab(3)
+            (activity as LearningTabActivity).setSelectedTab(2)
         } else {
             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "오답노트")
             (activity as LearningTabActivity).setSelectedTab(5)
@@ -176,8 +179,13 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun initUI() {
-        if (!::binding.isInitialized) return
+
+    }
+    private fun init() {
         binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             dailyContainer.setOnClickListener { onSelectorContainerClicked(it) }
             weeklyContainer.setOnClickListener { onSelectorContainerClicked(it) }
             wrongContainer.setOnClickListener { onSelectorContainerClicked(it) }

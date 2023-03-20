@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import com.freewheelin.pulley.revision2021.model.LCCookingWrapper
@@ -76,7 +77,10 @@ class LCCookingRepository(val context: Context, private val applicationScope: Co
     }
 
     suspend fun upsertAllInfoItem(items: List<CookingInfoItem>) {
-        infoItemDao.upsertAll(items)
+        val newItems = items.map {
+            it.copy(studentId = user?.studentID)
+        }
+        infoItemDao.upsertAll(newItems)
     }
 
     suspend fun delete(info: CookingInfo) {

@@ -52,7 +52,6 @@ import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNot
 import com.freewheelin.pulley.activities.mypage.*
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.manage.*
-import com.freewheelin.pulley.core.manage.TestManager.ARG_FROM_INIT_TEST
 import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
@@ -61,6 +60,7 @@ import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragm
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager.IS_START_CHALLENGE_COMPLETED
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity.Companion.PURCHASE_SUCCESS
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.viewmodel.LearningTabViewModel
@@ -120,6 +120,7 @@ class LearningTabActivity : PermissionActivity(),
 
     lateinit var tabMoveReceiver: BroadcastReceiver
     lateinit var challengeReceiver: BroadcastReceiver
+    lateinit var purchaseReceiver: BroadcastReceiver
 
     var currentPagePosition = 0
 
@@ -180,7 +181,9 @@ class LearningTabActivity : PermissionActivity(),
 
             tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
+                    println("asoaso onTabSelected ${tab?.position}")
                     tab?.position?.let { position ->
+                        if (position == 0) { checkStartChallengeFinish() }
                         if (isTablet) {
                             when (position) {
                                 7 -> openLesson()
@@ -266,6 +269,7 @@ class LearningTabActivity : PermissionActivity(),
 
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT))
+            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(purchaseReceiver, IntentFilter(PURCHASE_SUCCESS))
 // for Api.class
             if(referActivity == null) referActivity = this@LearningTabActivity
             registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
@@ -336,15 +340,7 @@ class LearningTabActivity : PermissionActivity(),
                             tabMoveAndSendPatternStudyBroadcast(2, challengeCourseId)
                         }
                         else -> {
-                            val isStartChallengeCompleted = intent.getBooleanExtra(IS_START_CHALLENGE_COMPLETED, false)
                             tabMove(0)
-                            if (isStartChallengeCompleted) {
-                                tabFragment.find { it.screenName == "메인" }?.let { frag ->
-//                                    CoroutineScope(Dispatchers.Main).launch {
-                                        (frag as MainFragment).showStartChallengeCompletedGuide()
-//                                    }
-                                }
-                            }
                         }
                     }
                 }
@@ -360,6 +356,16 @@ class LearningTabActivity : PermissionActivity(),
                 tabMove(tabIndex)
                 ChallengeManager.getConceptStudyMoveIntent(courseId).let { intent ->
                     LocalBroadcastManager.getInstance(this@LearningTabActivity).sendBroadcast(intent)
+                }
+            }
+        }
+        purchaseReceiver = object : BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    println("qwoqwo purchaseReceiver onreceive 1")
+                    viewModel.fetchUser {
+                        println("qwoqwo purchaseReceiver onreceive 2")
+                    }
                 }
             }
         }
@@ -469,6 +475,17 @@ class LearningTabActivity : PermissionActivity(),
             tabLayout.selectTab(tabLayout.getTabAt(index))
         }
     }
+    fun checkStartChallengeFinish() {
+        val isStartChallengeCompleted = intent.getBooleanExtra(IS_START_CHALLENGE_COMPLETED, false)
+        println("asoaso  - - - - - iss cc ${isStartChallengeCompleted} , ${viewModel.showStartChallengeFinishEffect()}")
+        if (isStartChallengeCompleted || viewModel.showStartChallengeFinishEffect()) {
+
+            tabFragment.find { it.screenName == "메인" }?.let { frag ->
+                (frag as MainFragment).showStartChallengeCompletedGuide()
+                viewModel.updateChallengeFinishFlag()
+            }
+        }
+    }
     fun moveConceptCourseSubject(id: Int) {
         val conceptFragment = tabFragment.find { it.screenName == "개념" } as ConceptCourseFragment?
         conceptFragment?.moveSubjectId(id)
@@ -571,6 +588,7 @@ class LearningTabActivity : PermissionActivity(),
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(tabMoveReceiver)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(challengeReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(purchaseReceiver)
         AppUsageMonitor.finishAppUsage()
 
         referActivity = null
@@ -676,10 +694,10 @@ class LearningTabActivity : PermissionActivity(),
 //            } else if(user?.token?.isEmpty() == true) {
 //                sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
             } else {
-                if (MyApplication.appFirstMainLaunchFlag) {
+                if (MyApplication.isAppFirstLaunch) {
                     handleUser()
                 }
-                MyApplication.appFirstMainLaunchFlag = true
+                MyApplication.isAppFirstLaunch = false
             }
         }
     }

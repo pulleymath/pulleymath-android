@@ -6,6 +6,7 @@
 
     <data>
         <import type="android.view.View" />
+        <variable name="planListener" type="com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel"/>
     </data>
 
@@ -65,9 +66,9 @@
                 android:id="@+id/totalPlanContainerLl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/gray_200"
                 android:descendantFocusability="blocksDescendants"
-                android:orientation="vertical"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8">
+                android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/headerTv"
@@ -82,10 +83,10 @@
 
 
                     <View
-                        style="@style/Border_Grey_e8e8e8_Horizontal"
                         android:id="@+id/topBorder"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:background="@color/gray_400"
                         android:layout_marginTop="@dimen/dp32"/>
 
 
@@ -93,7 +94,6 @@
                         android:id="@+id/recommendBookContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white_ffffff"
                         app:layout_constraintTop_toBottomOf="@+id/topBorder"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
@@ -111,10 +111,11 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/recommendLl"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:minHeight="200dp"
                             android:layout_marginTop="@dimen/dp24"
                             app:layout_constraintTop_toBottomOf="@+id/recommendLabel"
                             app:layout_constraintStart_toStartOf="parent"
@@ -123,35 +124,72 @@
                             <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/firstRecommendList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
 
                             <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/secondRecommendList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/firstRecommendList"
+                                />
 
                             <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/thirdRecommendList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/secondRecommendList"
+                                />
 
                             <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/fourthRecommendList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/thirdRecommendList"
+                                />
 
-                        </LinearLayout>
+                            <FrameLayout
+                                android:id="@+id/loadingContainer"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:minHeight="200dp"
+                                android:background="@color/gray_200"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent">
 
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/loadingLottie"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    android:layout_gravity="center"
+                                    app:lottie_speed="1"
+                                    app:lottie_repeatMode="restart"
+                                    app:lottie_autoPlay="true"
+                                    app:lottie_loop="true"
+                                    app:lottie_fileName="circle_loading.json"/>
+                            </FrameLayout>
 
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     <View
-                        style="@style/Border_Grey_e8e8e8_Horizontal"
                         android:id="@+id/topBorder2"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:background="@color/gray_400"
                         android:layout_marginTop="@dimen/dp32"/>
 
 
@@ -174,19 +212,19 @@
 
                         <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
                             android:id="@+id/filterView"
-                            android:layout_width="@dimen/learning_wrongNote_filter_width"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="600dp"
+                            android:minHeight="700dp"
                             android:clipToPadding="false"
-                            android:paddingStart="@dimen/dp48"
+                            android:paddingStart="@dimen/dp32"
                             android:paddingEnd="@dimen/dp32"
                             android:paddingBottom="@dimen/dp24"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/totalLabelTv" />
                         <View
-                            style="@style/Border_Grey_e8e8e8_Vertical"
                             android:layout_width="1dp"
                             android:layout_height="0dp"
+                            android:background="@color/gray_400"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/filterView"/>
@@ -194,7 +232,7 @@
                         <com.freewheelin.pulley.views.GridRecyclerView
                             android:id="@+id/totalRv"
                             android:layout_width="0dp"
-                            android:layout_height="620dp"
+                            android:layout_height="720dp"
                             android:layout_marginStart="1dp"
                             android:paddingHorizontal="@dimen/dp32"
                             android:paddingTop="@dimen/dp32"
@@ -207,19 +245,28 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintVertical_bias="0"/>
 
-
-                        <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/totalLoadingView"
-                            android:layout_width="@dimen/dp200"
-                            android:layout_height="@dimen/dp200"
-                            android:visibility="@{ vm.showTotalLoadingView ? View.VISIBLE : View.GONE }"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/totalRv"
-                            app:layout_constraintStart_toStartOf="@+id/totalRv"
+                        <FrameLayout
+                            android:id="@+id/totalLoadingContainer"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@color/gray_200"
                             app:layout_constraintTop_toTopOf="@+id/totalRv"
-                            app:lottie_autoPlay="true"
-                            app:lottie_fileName="circle_loading.json"
-                            app:lottie_loop="true" />
+                            app:layout_constraintStart_toStartOf="@+id/totalRv"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/totalRv"
+
+                            >
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/totalLoadingView"
+                                android:layout_width="@dimen/dp200"
+                                android:layout_height="@dimen/dp200"
+                                android:layout_gravity="center"
+                                app:lottie_speed="1"
+                                app:lottie_repeatMode="restart"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                app:lottie_fileName="circle_loading.json"/>
+                        </FrameLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/totalEmptyContainer"

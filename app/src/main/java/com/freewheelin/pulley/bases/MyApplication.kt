@@ -42,7 +42,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 
         var user:User? = null
         var token: String? = null
-        var appFirstMainLaunchFlag: Boolean = false
+        var isAppFirstLaunch: Boolean = true
     }
 
     var viewModel: AppViewModel = AppViewModel(this)

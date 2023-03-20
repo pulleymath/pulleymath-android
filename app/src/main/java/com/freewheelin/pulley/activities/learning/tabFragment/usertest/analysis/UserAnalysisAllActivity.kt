@@ -63,7 +63,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
     }
 
     val analysisTab: List<AnalysisTabDelegate> = listOf(
-            AnalysisUnitFragment.newInstance(),
+            AnalysisUnitFragment.newInstance(false),
             AnalysisByLevelFragment.newInstance(),
             AnalysisStudyAmountFragment.newInstance()
     )

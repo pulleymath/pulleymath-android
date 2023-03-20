@@ -45,7 +45,7 @@
                 style="@style/h4"
                 android:layout_weight="999"
                 android:gravity="center"
-                android:text="출판사 문제집"
+                android:text="풀리북스"
                 android:textColor="@color/white"/>
             <View
                 android:layout_width="48dp"

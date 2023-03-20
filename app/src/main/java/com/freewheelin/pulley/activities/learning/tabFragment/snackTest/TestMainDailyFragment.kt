@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
@@ -16,6 +17,7 @@ import com.freewheelin.pulley.databinding.FragmentTestMainUnavailableTestBinding
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import java.util.*
@@ -25,6 +27,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
     override var test: Test? = null
     override var testType: Test.TestType = Test.TestType.daily
     lateinit var binding: ViewDataBinding
+    val viewModel: SnackTestFragViewModel by viewModels()
 
     companion object {
         fun newInstance(test: Test?): TestMainDailyFragment {
@@ -50,6 +53,27 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             setUnavailableUI()
         else
             configureUI(test!!)
+
+        viewModel.apply {
+            userInRepo.observe(viewLifecycleOwner) { user ->
+                test?.let {
+                    if (!it.isCompleted()){
+                        val showLockIv = user?.serviceType?.isFreeUser == true
+                        if (binding is FragmentTestMainResultBinding) {
+                            val resultBinding = binding as FragmentTestMainResultBinding
+                            if (showLockIv) {
+                                resultBinding.startBtn.setLock(ButtonLockImage.mid20)
+//                                resultBinding.startBtn.toDisableUI()
+                            } else {
+                                resultBinding.startBtn.setUnlock()
+                                resultBinding.startBtn.toEnableUI()
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
     }
 
     override fun showMainContents() {
@@ -188,7 +212,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
         if(test.scoringTestPieceCount == 0) {
             configureInitUI(test)
-        } else if (test.isCompleted() == false){
+        } else if (!test.isCompleted()){
             configureMiddleUI(test)
         } else {
             configureFinishUI(test)
@@ -197,6 +221,9 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
     private fun configureInitUI(test: Test) {
         with(binding as FragmentTestMainBinding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             val date = Date()
             contentTv.text = "데일리 테스트는 응시할 때마다 문항이 새로 출제됩니다.\n문항 추천 기준은 아래와 같습니다."
             headerTv.text = "${date.month()}월 ${date.day()}일"
@@ -228,6 +255,9 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
     private fun configureMiddleUI(test: Test) {
         with(binding as FragmentTestMainResultBinding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             giftContainerCl.visibility = View.INVISIBLE
 
             titleTv.text = "${test.scoringTestPieceCount}회차 결과"
@@ -248,19 +278,11 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                 user!!.getAllSubjectText()
             }
 
-            val showLockIv = user?.serviceType?.isFreeUser == true
-            if (showLockIv) {
-                startBtn.setLock(ButtonLockImage.mid20)
-                startBtn.toDisableUI()
-            } else {
-                startBtn.setUnlock()
-                startBtn.isEnableUI()
-            }
-
             startBtn.setOnPaidUserClickListener(cb = {
                 listener?.onSolveBtnClicked(test)
             },
             deniedCb = {
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리테스트", "결제유도", "${test.scoringTestPieceCount + 1}회차 테스트 시작하기")
                 val dialog = PurchaseGuideDialog()
                 childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
             })
@@ -276,6 +298,9 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
     private fun configureFinishUI(test: Test) {
         with(binding as FragmentTestMainResultBinding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             if(TestManager.isNeedToFullDailyResultInTab) {
                 scoreTv.text = test.score.toString()
                 titleTv.text = "${test.scoringTestPieceCount}회차 결과"

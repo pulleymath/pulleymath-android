@@ -2,7 +2,10 @@ package com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -19,23 +22,26 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.component.CommunityJavascriptInterface
+import com.freewheelin.pulley.activities.lesson.LessonActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.FragmentAffiliatedTestBinding
 import com.freewheelin.pulley.databinding.ItemAffiliatedTestBinding
-import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel
+import com.freewheelin.pulley.revision2023.ui.activity.UnivAdditionalLearningActivity
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import java.io.File
@@ -48,12 +54,14 @@ class AffiliatedTestFragment: LearningTabFragment() {
     companion object {
 //        const val SHOW_REPORT = "SHOW_REPORT"
         const val SHOW_REPORT_INT = 1000
+        const val SHOW_ADDITIONAL_LEARNING = "SHOW_ADDITIONAL_LEARNING"
         fun newInstance(): AffiliatedTestFragment {
             return AffiliatedTestFragment()
         }
     }
 
     private val viewModel: AffiliatedTestViewModel by viewModels()
+    lateinit var additionalLearningReceiver: BroadcastReceiver
 
     override var screenName = "KU-AF"
     override fun initUI() {
@@ -80,11 +88,18 @@ class AffiliatedTestFragment: LearningTabFragment() {
             }
         }
 
+        additionalLearningReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, intent: Intent?) {
+                println("asoaso additional receiver")
+                startActivity(Intent(requireContext(), UnivAdditionalLearningActivity::class.java))
+            }
+        }
         bindingUI()
         return binding.root
     }
 
     private fun bindingUI () {
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(additionalLearningReceiver, IntentFilter(SHOW_ADDITIONAL_LEARNING))
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -106,7 +121,11 @@ class AffiliatedTestFragment: LearningTabFragment() {
             }
 
             webLinkTv.setOnClickListener {
-                IntentUtils.openWebLink(requireContext(), URL.건국대_시험_로그인, requireContext().packageManager)
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.건국대_시험_로그인.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
             webLinkTv.text = webLinkTv.text
                 .partialUnderline("웹으로 시험 응시하기") {
@@ -137,9 +156,58 @@ class AffiliatedTestFragment: LearningTabFragment() {
             }
 
             initWebView()
+//            initAdditionalLearningWebView()
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(additionalLearningReceiver)
+
+    }
+
+//    fun initAdditionalLearningWebView() {
+//        binding.apply {
+//            val token = user?.token ?: "-1"
+//
+//            val API_ADDITIONAL_LEARNING_DOMAIN = when (Preferences.onServerAPI.get()) {
+//                Network.Server.live.toString() -> "https://pulleymath.com/exam/study?token=${token}"
+//                Network.Server.staging.toString() -> "https://dev.pulleymath.com/exam/study?token=${token}"
+//                Network.Server.dev.toString() -> "https://dev.pulleymath.com/exam/study?token=${token}"
+//                else -> "https://pulleymath.com"
+//            }
+//            additionalLearningWebView.apply {
+//
+//                webViewClient = object: WebViewClient() {
+//                    override fun onPageFinished(view: WebView?, url: String?) {
+//                        super.onPageFinished(view, url);
+//                    }
+//
+//                    override fun onReceivedError(
+//                        view: WebView?,
+//                        request: WebResourceRequest?,
+//                        error: WebResourceError?
+//                    ) {
+//                        super.onReceivedError(view, request, error)
+//                        Toast.makeText(requireContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                }
+//
+////                webChromeClient = UnivCommunityClient()
+//                settings.apply {
+//                    javaScriptEnabled = true
+//                    mediaPlaybackRequiresUserGesture = false
+//                    domStorageEnabled = true
+//                    allowFileAccess = true
+//                }
+//
+//                loadUrl(API_ADDITIONAL_LEARNING_DOMAIN)
+////                addJavascriptInterface(CommunityJavascriptInterface(requireContext()), "AndroidFunction");
+//
+//            }
+//        }
+//    }
     fun initWebView() {
         binding.apply {
             val token = user?.token ?: "-1"
@@ -162,7 +230,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
                     error: WebResourceError?
                 ) {
                     super.onReceivedError(view, request, error)
-                    Toast.makeText(requireContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -376,6 +444,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
     }
 
     inner class UnivCommunityClient: WebChromeClient() {
+
         // https://stackoverflow.com/questions/29045637/html-input-type-file-is-not-working-on-webview-in-android-is-there-any-way-to
         override fun onShowFileChooser(
             webView: WebView?, filePathCallback: ValueCallback<Array<Uri?>?>,

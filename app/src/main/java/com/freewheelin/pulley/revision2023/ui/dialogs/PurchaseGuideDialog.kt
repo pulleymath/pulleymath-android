@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2023.ui.dialogs
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,20 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isTablet
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.DialogPurchaseGuideBinding
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide1Fragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2Fragment
+import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2MobileFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide3Fragment
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 
 class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, val startCallback: () -> Unit = {}): DialogFragment() {
 
-    private val viewModel: PurchaseGuideDialogViewModel by viewModels()
+    private val viewModel: PurchaseGuideViewModel by viewModels()
 
     private val binding: DialogPurchaseGuideBinding by lazy {
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_purchase_guide, null, false)
@@ -51,12 +57,7 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
     }
 
     fun setChildFragment(step: Int) {
-        val frag = when (step) {
-            1 -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
-            2 -> { PurchaseGuide2Fragment.newInstance() }
-            3 -> { PurchaseGuide3Fragment.newInstance() }
-            else -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
-        }
+        val frag = getFragment(step)
         sendViewModel(frag)
         moveTo(frag)
     }
@@ -70,12 +71,7 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
         }
     }
     fun replaceChildFragment(step: Int) {
-        val frag = when (step) {
-            1 -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
-            2 -> { PurchaseGuide2Fragment.newInstance() }
-            3 -> { PurchaseGuide3Fragment.newInstance() }
-            else -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
-        }
+        val frag = getFragment(step)
         sendViewModel(frag)
         replaceTo(frag)
     }
@@ -97,6 +93,9 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
         (frag as? PurchaseGuide2Fragment)?.apply {
             viewModel = this@PurchaseGuideDialog.viewModel
         }
+        (frag as? PurchaseGuide2MobileFragment)?.apply {
+            viewModel = this@PurchaseGuideDialog.viewModel
+        }
         (frag as? PurchaseGuide3Fragment)?.apply {
             viewModel = this@PurchaseGuideDialog.viewModel
         }
@@ -107,6 +106,21 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
             setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
             remove(frag)
             commit()
+        }
+    }
+
+    fun getFragment(step: Int): Fragment {
+        return when (step) {
+            1 -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
+            2 -> {
+                if (requireContext().isTablet) {
+                    PurchaseGuide2Fragment.newInstance()
+                } else {
+                    PurchaseGuide2MobileFragment.newInstance()
+                }
+            }
+            3 -> { PurchaseGuide3Fragment.newInstance() }
+            else -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
         }
     }
 

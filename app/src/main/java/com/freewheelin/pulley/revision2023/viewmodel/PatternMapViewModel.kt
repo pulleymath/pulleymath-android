@@ -6,10 +6,9 @@ import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.repository.PatternMapRepository
 import com.freewheelin.pulley.revision2023.repository.impl.PatternMapRepositoryImpl
 import com.freewheelin.pulley.revision2023.ui.adapter.LCPatternMapListAdapter
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 class PatternMapViewModel(application: Application) : BaseAndroidViewModel(application) {
 
@@ -40,13 +39,17 @@ class PatternMapViewModel(application: Application) : BaseAndroidViewModel(appli
     }
 
     fun collectAllPatternMaps(chapterId: Int) {
+        contentJob?.cancel("연속동작 취소", CancellationException())
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             val newPatternMaps = fetchAllPatternMaps(chapterId)
-            _isLoading.postValue(false)
             val oldPatternMaps = lcPatternMaps.value?.filterNot { it in newPatternMaps }
             oldPatternMaps?.forEach { deletePatternMap(it) }
+//            println("연속동작 딜레이이전")
+            delay(300)
+//            println("연속동작 딜레이이후")
             upsertPatternMaps(newPatternMaps)
+            _isLoading.postValue(false)
         }
     }
     suspend fun fetchAllPatternMaps(chapterId: Int): List<LCPatternMap> {

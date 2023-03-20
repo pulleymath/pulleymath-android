@@ -37,6 +37,7 @@ import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.databinding.FragmentSignupBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.SignupFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.PrimaryButton
@@ -317,7 +318,11 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             serviceAgreeCb.isClickable = true
             serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    IntentUtils.openWebLink(requireContext(), URL.이용약관, requireContext().packageManager)
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 
@@ -325,7 +330,11 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             personalAgreeCb.isClickable = true
             personalAgreeCb.allDocuText = personalAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    IntentUtils.openWebLink(requireContext(), URL.개인정보취급방침, requireContext().packageManager)
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 
@@ -333,7 +342,11 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             marketingAgreeCb.isClickable = true
             marketingAgreeCb.allDocuText = marketingAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    IntentUtils.openWebLink(requireContext(), URL.마케팅활용동의방안, requireContext().packageManager)
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.마케팅활용동의방안.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
 

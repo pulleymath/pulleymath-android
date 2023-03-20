@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="@+id/cardUpdateTag"
             app:layout_constraintBottom_toBottomOf="@+id/cardUpdateTag"
             app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/rp_bg_purple_ecebff_round"/>
+            android:background="@drawable/bg_purple_100_round_ripple"/>
 
         <TextView
             android:id="@+id/cardUpdateTag"

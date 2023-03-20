@@ -18,11 +18,9 @@ import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.*
 import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.MarketingManager
 import com.freewheelin.pulley.revision2023.viewmodel.MainFViewModel
-import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentMain2Binding
-import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeMissionAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
@@ -35,10 +33,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.model.challenge.StartChallengeInfoAppear
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.google.gson.Gson
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
 
 class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
@@ -46,7 +43,8 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     override var screenName: String = "메인"
     lateinit var binding: FragmentMain2Binding
 
-    var profileReceiver: BroadcastReceiver? = null
+    lateinit var profileReceiver: BroadcastReceiver
+
     val viewModel: MainFViewModel by viewModels()
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
         viewModel.onChallengeHeaderClick(item)
@@ -72,13 +70,22 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     override fun onResume() {
         super.onResume()
-//        viewModel.updateCurrentChallenge()
+        val scInfo = Preferences.startChallengeAlreadyAppeared
+        val appearedIds = scInfo.studentIds
+        val isAlreadyStartChallengeAppeared = appearedIds.contains(user?.studentID)
+        if (isAlreadyStartChallengeAppeared && MyApplication.isAppFirstLaunch) {
+            MarketingManager.setMarketingBanner(requireContext())
+        }
     }
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
         if (!::binding.isInitialized) return
         syncProfile()
+        if (challengeHeaderListAdapter.currentList.size > 0) {
+            val headerItem = challengeHeaderListAdapter.currentList[0]
+            viewModel.onChallengeHeaderClick(headerItem)
+        }
     }
 
 
@@ -92,7 +99,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         super.onViewCreated(view, savedInstanceState)
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(profileReceiver!!, IntentFilter(UserManager.EVENT_USER_MODIFYING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(profileReceiver, IntentFilter(UserManager.EVENT_USER_MODIFYING))
         viewModel.showWholeProgressBar.postValue(true)
         init()
 
@@ -122,7 +129,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             challengeMission.observe(viewLifecycleOwner) { list ->
                 binding.missionRv.apply {
                     if (list.isEmpty()) return@observe
-                    // TODO how to mobile?
                     list.first().parentDetailItem?.courses?.size?.let { spanCount ->
                         layoutManager = GridLayoutManager(requireContext(), spanCount, LinearLayoutManager.VERTICAL, false).also {
                             it.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
@@ -145,17 +151,17 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             mainProfile.observe(viewLifecycleOwner) { mainProfile ->
                 binding.apply {
                     showWholeProgressBar.postValue(false)
-                    MarketingManager.setMarketingBanner(requireContext(), mainProfile)
                 }
             }
 
-            currentMission.observeOnce(viewLifecycleOwner) {
-                blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!\"")
+            currentMission.observe(viewLifecycleOwner) {
+                if (!it.isStartChallenge) return@observe
+                blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
                 val scInfo = Preferences.startChallengeAlreadyAppeared
                 val appearedIds = scInfo.studentIds
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
 
-                if (isAlreadyAppearedUser) return@observeOnce
+                if (isAlreadyAppearedUser) return@observe
                 if (it.userStatus == ChallengeUserStatus.YET) {
                     val dialog = StartChallengeInfoDialog(it.challengeId) { challengeId ->
                         joinChallenge(challengeId)
@@ -173,6 +179,16 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                         it.challengeId == currentMission.value?.challengeId
                     } ?: return@observe
                 collectChallengeDetail(challenge.challengeId)
+            }
+            isLoading.observe(viewLifecycleOwner) { loading ->
+                binding.apply {
+                    if (loading) {
+                        challengeLoadingContainer.visibleIf(true)
+                        loadingLottie.playAnimation()
+                    } else {
+                        challengeLoadingContainer.hide(300)
+                    }
+                }
             }
         }
     }
@@ -224,16 +240,15 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 //        val dialog = PurchaseGuideDialog()
 //        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 
-//        val dialog = BlogWebViewFragment.newInstance("https://pulleymath.com")
-//        childFragmentManager.let { dialog.show(it, "BlogWebViewFragment") }
     }
 
     private fun onStartBtnClicked() {
-        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "구독하기버튼")
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "결제유도","풀리수학으로공부시작")
         FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
 //        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
-        val dialog = PurchaseGuideDialog(2)
-        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+//        val dialog = PurchaseGuideDialog(2)
+//        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+        startActivity(PurchaseGuideActivity.getIntent(requireContext()))
     }
 
     private fun onChallengeAction() {
@@ -278,8 +293,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         viewModel.askForRedeemOfChallenge(challenge.userChallengeId) {
             if (user?.serviceType?.isFreeUser == true) {
                 val dialog = StartChallengeInfoDialog(challenge.challengeId, true) { challengeId ->
-                    val dialog = PurchaseGuideDialog(2)
-                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                    startActivity(PurchaseGuideActivity.getIntent(requireContext()))
                 }
                 childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
             } else {
@@ -294,8 +308,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         super.onDestroy()
-        if(profileReceiver != null)
-            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(profileReceiver!!)
-
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(profileReceiver)
     }
 }

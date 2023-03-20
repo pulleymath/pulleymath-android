@@ -7,8 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
+import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.utils.visibleIf
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +23,7 @@ import kotlin.math.min
 
 class PurchaseGuide1Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide1Binding
-    var viewModel: PurchaseGuideDialogViewModel? = null
+    var viewModel: PurchaseGuideViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +52,10 @@ class PurchaseGuide1Fragment : Fragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             actionBtnWrapperCl.setOnClickListener { _ ->
-                viewModel?.replaceStep?.let { it(2) }
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "그랜드오픈2023", "구독제상품설명")
+                // TODO new page
+                viewModel?.exitBtn()
+                startActivity(PurchaseGuideActivity.getIntent(requireContext()))
             }
         }
         arguments?.let {

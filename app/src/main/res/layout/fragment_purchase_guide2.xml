@@ -6,7 +6,7 @@
     tools:context=".revision2023.ui.fragment.PurchaseGuide2Fragment">
 
     <data>
-        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel"/>
         <import type="android.view.View"/>
     </data>
 
@@ -79,22 +79,11 @@
                 android:background="@color/gray_200"
                 android:paddingHorizontal="24dp">
 
-                <TextView
-                    android:id="@+id/step3Tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="구독제 비교"
-                    style="@style/b3"
-                    android:padding="10dp"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/guideRv"
                     android:layout_width="0dp"
-                    android:layout_height="400dp"
-                    app:layout_constraintTop_toBottomOf="@+id/step3Tv"
+                    android:layout_height="420dp"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

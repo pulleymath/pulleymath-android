@@ -16,7 +16,7 @@ import com.freewheelin.pulley.revision2023.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PurchaseGuideDialogViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
+class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
     private val anonymousRepository by lazy { AnonymousRepository.instance }
@@ -28,18 +28,16 @@ class PurchaseGuideDialogViewModel(application: Application) : BaseAndroidViewMo
     lateinit var replaceStep: (Int) -> Unit
     lateinit var removeStep: (Fragment) -> Unit
 
-    private val _guides = MutableLiveData<PurchaseGuide>()
-    val guides: LiveData<PurchaseGuide> = _guides
-
     private val _guideOffers = MutableLiveData<List<PurchaseGuideOffer>>()
     val guideOffers: LiveData<List<PurchaseGuideOffer>> = _guideOffers
     val selectedOfferId = MutableLiveData<Int>()
 
+    val step = MutableLiveData(0)
 
     fun fetchGuides(cb: (User) -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val newGuides = anonymousRepository.getPurchaseGuide()
-            _guideOffers.postValue(newGuides.offers)
+            _guideOffers.postValue(newGuides.offers.sortedByDescending { it.offerId })
         }
     }
     fun getTempToken(cb: (String) -> Unit = {}) {

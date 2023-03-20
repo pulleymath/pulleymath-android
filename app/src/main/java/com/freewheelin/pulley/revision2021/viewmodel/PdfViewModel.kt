@@ -108,7 +108,8 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
             }
 
             if(openableBookFilter) {
-                result = result.filter { it.is_purchased || it.is_event_book }
+//                result = result.filter { it.is_purchased || it.is_event_book }
+                result = result.filter { !it.isLocked }
             }
 
             showEmpty.postValue(result.isEmpty())

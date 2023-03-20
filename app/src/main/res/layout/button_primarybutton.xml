@@ -24,19 +24,26 @@
 
         <ImageView
             android:id="@+id/imageLock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
             android:visibility="gone"
             android:src="@drawable/ic_lock_16_white"/>
 
         <TextView
             android:id="@+id/buttonText"
+            style="@style/h5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="text"
-            android:layout_marginHorizontal="@dimen/dp12"/>
+            android:text="다음"/>
 
+        <ImageView
+            android:id="@+id/imageNextArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_arrow_right_tail"/>
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView

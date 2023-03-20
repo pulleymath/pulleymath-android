@@ -3,7 +3,10 @@ package com.freewheelin.pulley.core.API
 import com.freewheelin.pulley.core.API.RequestModel.mypage.NotificationSettingRequest
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.*
 import com.freewheelin.pulley.model.ResponseBody
+import com.freewheelin.pulley.model.ResponseForceBody
+import com.freewheelin.pulley.model.ResponseListBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
+import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -13,14 +16,14 @@ interface  AppService {
     @PUT("app/v1/users/devices/token")
     fun putToken(@Query("appPushToken") appPushToken: String): Single<ResponseBody<Any>>
     // 쿠폰
-    @POST("app/v1/users/coupons")
+    @POST("app/v2/users/coupons")
     fun addCoupon(@Body coupon: NewCoupon): Single<ResponseBody<Any>>
 
-    @POST("app/v1/users/coupons/pulley")
-    fun useCoupon(@Query("couponId") couponId: Long): Single<ResponseBody<Any>>
+    @POST("v2/coupons/pulley")
+    fun useCoupon(@Query("couponId") couponId: Long): Single<ResponseBody<UseCouponResponse>>
 
-    @GET("app/v1/users/coupons")
-    fun summaryCoupon(): Single<SummaryCouponResponse>
+    @GET("app/v2/users/coupons")
+    fun fetchCoupons(): Single<ResponseListBody<CouponItem>>
     // 마이페이지
     @GET("app/v1/users/lesson/summary")
     fun summaryLesson(): Single<SummaryLessonResponse>

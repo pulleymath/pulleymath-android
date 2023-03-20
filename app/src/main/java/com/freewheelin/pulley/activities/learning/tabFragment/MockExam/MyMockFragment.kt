@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,7 @@ import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.textViews.SortableListener
 import com.freewheelin.pulley.views.textViews.SortableTextView
@@ -70,6 +72,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     lateinit var headerViewBinding: ItemMyMockHeaderBinding
     lateinit var receiver: BroadcastReceiver
     lateinit var clearReceiver: BroadcastReceiver
+    val viewModel: MockFViewModel by viewModels()
 
     var order: SortableTextView.Order = SortableTextView.Order.descend
     var selectedSort: SortType? = null
@@ -129,6 +132,11 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
         super.onViewCreated(view, savedInstanceState)
         initUI()
         setInitOrder()
+        viewModel.apply {
+            userInRepo.observe(viewLifecycleOwner) {
+                binding.myExamRv.adapter?.notifyDataSetChanged()
+            }
+        }
     }
 
     fun setInitOrder() {
@@ -344,16 +352,19 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                 if (exam.isTwins) {
                     remainBtn.setOnPaidUserClickListener(cb = { onSolveBtnClicked(exam) },
                         deniedCb = {
+                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "이어풀기 쌍둥이")
                             val dialog = PurchaseGuideDialog()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
                     reportBtnCl.setOnPaidUserClickListener(cb = { onReportBtnClicked(exam) },
                         deniedCb = {
+                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "리포트 쌍둥이")
                             val dialog = PurchaseGuideDialog()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
                     reviewBtnCl.setOnPaidUserClickListener(cb = { onReviewBtnClicked(exam) },
                         deniedCb = {
+                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "리뷰 쌍둥이")
                             val dialog = PurchaseGuideDialog()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
@@ -422,9 +433,9 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
             gradeTv.text = "고${exam.grade}"
             titleTv.text = exam.title //+ if(exam.count > 0) " (${exam.count})" else ""
 
-            val isServiceTypeBasicPOrHigher = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == true
-            reportBtnLockIv.visibleIf(!isServiceTypeBasicPOrHigher && exam.isTwins)
-            reviewBtnLockIv.visibleIf(!isServiceTypeBasicPOrHigher && exam.isTwins)
+            val isPaidUser = user?.serviceType?.isPaidUser == true
+            reportBtnLockIv.visibleIf(!isPaidUser && exam.isTwins)
+            reviewBtnLockIv.visibleIf(!isPaidUser && exam.isTwins)
 
 
             exam.personalData?.let {

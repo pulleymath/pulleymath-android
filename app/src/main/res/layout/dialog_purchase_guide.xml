@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel"/>
         <import type="android.view.View"/>
     </data>
 

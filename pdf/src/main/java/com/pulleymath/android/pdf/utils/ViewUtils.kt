@@ -34,6 +34,10 @@ fun View.onDebounceClick(action: (v: View) -> Unit) {
     val listener = View.OnClickListener { action(it) }
     setOnClickListener(OnDebounceClickListener(listener))
 }
+fun View.onThrottleClick(action: (v: View) -> Unit) {
+    val listener = View.OnClickListener { action(it) }
+    setOnClickListener(OnThrottleClickListener(listener))
+}
 
 fun ByteArray.toBitmap(): Bitmap {
     return BitmapFactory.decodeByteArray(this, 0, size)

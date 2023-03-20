@@ -162,7 +162,7 @@ class OMRAdapter(val context: Context,
     var selectedOMRAnswer: OMRAnswer? = null
 
     override fun onBindViewHolder(holder: OMRAnswerView, _position: Int) {
-        val position = holder.adapterPosition
+        val position = holder.bindingAdapterPosition
         val isLast = (position == singleCount - 1 && type == OMRView.OMRViewType.LEFT) || (position == singleCount + shortCount - 1)
 
         (holder as? OMRShortAnswer)?.apply {
@@ -276,7 +276,7 @@ class OMRSingleAnswerView (itemBinding: ItemOmrAnswerBinding) : OMRAnswerView(it
         }
         answerSelectionView.answer = hashSet
 
-        horizontalBorder.visibility = if ((adapterPosition + 1) % 10 == 5 || isLast) View.VISIBLE else View.INVISIBLE
+        horizontalBorder.visibility = if ((bindingAdapterPosition + 1) % 10 == 5 || isLast) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onAnswerChanged(view: AnswerSelectionView, answerStr: String?) {
@@ -305,7 +305,7 @@ class OMRShortAnswer(val itemBinding: ItemOmrShortAnswerBinding) : OMRAnswerView
         this.answer = omrAnswer
         numberTv.text = (omrAnswer.problemNum).toString()
 
-        horizontalBorder.visibility = if ((adapterPosition + 1) % 10 == 5 || isLast) View.VISIBLE else View.INVISIBLE
+        horizontalBorder.visibility = if ((bindingAdapterPosition + 1) % 10 == 5 || isLast) View.VISIBLE else View.INVISIBLE
 
         answerEt.run {
             setText(omrAnswer.answer?.toString())

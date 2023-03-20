@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.repository.impl
 
 import android.content.Context
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.repository.PatternMapRepository
 import com.freewheelin.pulley.revision2023.room.patternmap.PatternMapDao
@@ -38,7 +39,10 @@ class PatternMapRepositoryImpl(val context: Context, private val applicationScop
     }
 
     override suspend fun upsertAll(patternMaps: List<LCPatternMap>) {
-        dao.upsertAll(patternMaps)
+        val newMaps = patternMaps.map {
+            it.copy(studentId = user?.studentID)
+        }
+        dao.upsertAll(newMaps)
     }
 
     override suspend fun delete(patternMap: LCPatternMap) {

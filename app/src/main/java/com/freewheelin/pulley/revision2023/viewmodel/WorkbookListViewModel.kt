@@ -15,7 +15,7 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +39,7 @@ class WorkbookListViewModel(application: Application): BaseAndroidViewModel(appl
 
     private val _customBooks = MutableLiveData<List<Book>>()
     val customBooks: LiveData<List<Book>> = _customBooks
-    lateinit var adapter: PatternStudyTotalPlanAdapter
+    lateinit var adapter: PatternStudyMyPlanAdapter
     var latestFilters: Set<FilterType>? = null
 
     val joinedChallengeList = challengeRepository.joinedChallengeList

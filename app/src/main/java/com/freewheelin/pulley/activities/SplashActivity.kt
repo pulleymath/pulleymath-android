@@ -204,7 +204,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         println("asoaso SplashACt : MyApplication.token : ${MyApplication.token}")
         if(MyApplication.user?.token?.isNotEmpty() == true) {
             viewModel.fetchUser { user ->
-                MyApplication.appFirstMainLaunchFlag = false
+                MyApplication.isAppFirstLaunch = true
                 MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
 
                 if (user.isExceedDevice) {

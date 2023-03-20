@@ -16,6 +16,8 @@ import com.freewheelin.pulley.revision2023.ui.adapter.LCPatternMapListAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PriorConceptAdapter
 import com.freewheelin.pulley.revision2023.viewmodel.PatternMapViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.PriorConceptViewModel
+import com.freewheelin.pulley.utils.hide
+import com.freewheelin.pulley.utils.visibleIf
 
 class PatternMapFragment : Fragment() {
 
@@ -62,6 +64,16 @@ class PatternMapFragment : Fragment() {
         viewModel.apply {
             lcPatternMaps.observe(viewLifecycleOwner) {
                 patternMapAdapter.submitList(it)
+            }
+            isLoading.observe(viewLifecycleOwner) { loading ->
+                binding.apply {
+                    if (loading) {
+                        challengeLoadingContainer.visibleIf(true)
+                        loadingLottie.playAnimation()
+                    } else {
+                        challengeLoadingContainer.hide(1000)
+                    }
+                }
             }
         }
     }

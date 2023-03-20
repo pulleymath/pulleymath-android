@@ -25,7 +25,7 @@ class PriorConceptViewModel(application: Application): BaseAndroidViewModel(appl
         priorConceptRepository.run {
             flowAllPriorConcepts(chapterId)
                 .onEach { concepts ->
-                    _priorConcepts.value = concepts.sortedBy { it.learningCoursePriorConceptId }
+                    _priorConcepts.value = concepts.sortedBy { it.sequence }
                 }
                 .launchIn(viewModelScope)
         }

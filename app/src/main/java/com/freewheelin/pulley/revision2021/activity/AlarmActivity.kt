@@ -22,6 +22,8 @@ import com.freewheelin.pulley.revision2021.activity.fragments.AlarmDetailFragmen
 import com.freewheelin.pulley.revision2021.model.response.Alarm
 import com.freewheelin.pulley.revision2021.viewmodel.AlarmViewModel
 import com.freewheelin.pulley.utils.DisplayUtils
+import com.freewheelin.pulley.utils.hide
+import com.freewheelin.pulley.utils.visibleIf
 
 
 class AlarmActivity : AppCompatActivity() {
@@ -60,13 +62,25 @@ class AlarmActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.wantClose.observe(this) { beClose ->
-            if (beClose) {
-                finish()
+        viewModel.apply {
+            wantClose.observe(this@AlarmActivity) { beClose ->
+                if (beClose) {
+                    finish()
+                }
             }
-        }
-        viewModel.wantGoAlarmList.observe(this) {
-            viewModel.fetchAlarmList()
+            wantGoAlarmList.observe(this@AlarmActivity) {
+                viewModel.fetchAlarmList()
+            }
+            showAlarmProgress.observe(this@AlarmActivity) { isShow ->
+                binding.apply {
+                    if (isShow) {
+                        loadingLottie.visibleIf(true)
+                        loadingLottie.playAnimation()
+                    } else {
+                        loadingLottie.hide(300)
+                    }
+                }
+            }
         }
     }
     private fun setMessageRv() {

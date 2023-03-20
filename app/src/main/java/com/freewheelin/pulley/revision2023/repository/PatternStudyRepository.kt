@@ -33,6 +33,9 @@ class PatternStudyRepository(val context: Context, private val applicationScope:
     suspend fun fetchMyPlans(): MyBookList? {
         return patternStudyApi.getPatternStudyPlanList().data
     }
+    suspend fun fetchHistory(): List<Book> {
+        return patternStudyApi.getPatternStudyHistory().data
+    }
 
     suspend fun fetchRecommendBooks(): List<RecommendBookList>? {
         return patternStudyApi.getPatternStudyRecommendBookList().data

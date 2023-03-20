@@ -9,14 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.databinding.FragmentMyPolicyBinding
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.views.DaebakToast
 
 class MyPolicyFragment : MyPageBaseFragment() {
     lateinit var binding: FragmentMyPolicyBinding
+    private val viewModel: MyMainPageFragViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -30,11 +35,20 @@ class MyPolicyFragment : MyPageBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.servicePolicyBtn.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.이용약관, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
+
         }
 
         binding.personalPolicyBtn.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.개인정보취급방침, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
         binding.backBtn.setOnClickListener { onBackBtnClicked() }
     }

@@ -214,7 +214,7 @@
                 android:layout_marginEnd="@dimen/dp16"
                 android:clickable="true"
                 android:paddingHorizontal="8dp"
-                android:background="@drawable/bg_purple_100_round_5"
+                android:background="@drawable/bg_purple_100_round_ripple"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" >

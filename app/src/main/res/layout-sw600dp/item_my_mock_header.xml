@@ -99,7 +99,7 @@
 
             <View
                 android:id="@+id/reportContainer"
-                android:layout_width="@dimen/dp80"
+                android:layout_width="90dp"
                 android:layout_height="@dimen/dp36"
                 android:layout_marginEnd="@dimen/dp16"
                 app:layout_constraintBottom_toBottomOf="@+id/dateSl"
@@ -108,8 +108,9 @@
 
             <View
                 android:id="@+id/reviewContainer"
-                android:layout_width="@dimen/dp80"
+                android:layout_width="90dp"
                 android:layout_height="@dimen/dp36"
+                android:layout_marginEnd="@dimen/dp16"
                 app:layout_constraintTop_toTopOf="@+id/dateSl"
                 app:layout_constraintBottom_toBottomOf="@+id/dateSl"
                 app:layout_constraintEnd_toEndOf="parent"/>

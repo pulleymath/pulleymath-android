@@ -252,7 +252,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
                     val title = recommend.title
                     val bookList = recommend.targetBookPlanList
                     val view = recommendBookListViews.getOrNull(i)
-                    view?.set(bookList.toMutableList(), title, i + 1, this@BookFragment)
+//                    view?.set(bookList.toMutableList(), title, i + 1, this@BookFragment)
                     view?.show { }
                 }
                 binding.recommendLabel.showIfNeed()
@@ -548,7 +548,7 @@ class BookFragment : LearningTabFragment(), PlanListener, EmailInputDialogListen
     fun setFilterType(subject: String): HashSet<FilterType> {
         val defaultSet = mutableSetOf(
             FilterType.워크북_미포함,
-            FilterType.핀_포함,
+            FilterType.핀_미포함,
             FilterType.계열_전체,
             FilterType.유형_전체,
             FilterType.추천_2_3등급

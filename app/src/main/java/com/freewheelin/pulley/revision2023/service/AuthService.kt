@@ -15,6 +15,5 @@ interface AuthService {
 
     @POST("v1/auth/token/temp")
     suspend fun getTempToken(
-//        @Body body: DummyCreatedUser
     ): ResponseForceBody<TempToken>
 }

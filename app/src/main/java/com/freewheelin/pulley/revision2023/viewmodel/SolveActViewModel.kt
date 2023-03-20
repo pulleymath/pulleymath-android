@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
@@ -79,5 +80,12 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
     }
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
+    }
+
+    fun fetchUser(cb: (User) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val user = userRepository.getUser()
+            cb(user)
+        }
     }
 }

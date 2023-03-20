@@ -195,14 +195,22 @@ class MyMainPageFragment : Fragment() {
             AppSetting -> moveTo(MyAppSettingFragment())
             Home -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","홈페이지 바로 가기")
-                IntentUtils.openWebLink(requireContext(), URL.홈페이지, requireContext().packageManager)
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
             Guide -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","활용가이드보기")
                 IntentUtils.openWebLink(requireContext(), URL.풀리활용가이드_마이페이지, requireContext().packageManager)
             }
             Notice -> {
-                IntentUtils.openWebLink(requireContext(), URL.공지사항, requireContext().packageManager)
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.공지사항.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
             FAQ -> {
                 IntentUtils.openWebLink(requireContext(), URL.FAQ, requireContext().packageManager)

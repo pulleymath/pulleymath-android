@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:paddingVertical="16dp"
                 style="@style/h5"
-                android:text="구독제 비교"
+                android:text="구독상품결제"
                 />
             <View
                 android:layout_width="0dp"

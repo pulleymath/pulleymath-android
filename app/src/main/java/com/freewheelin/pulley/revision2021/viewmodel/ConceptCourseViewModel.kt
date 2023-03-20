@@ -13,13 +13,17 @@ import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepositor
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -27,11 +31,12 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
     private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
 
+    val userInRepo = userRepository.user
     val subjectList by lazy { MutableLiveData<List<LCSubject>>() }
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
 
-    val showProgress = MutableLiveData<Boolean>(true)
     val selectedSubjectId = MutableLiveData<Int>(-1)
     val availableLastSubjectId = MutableLiveData<Int>(7)
     val showMobileHeader = MutableLiveData<Boolean>(false)
@@ -57,16 +62,19 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     }
 
     fun fetch(subjectId: Int) {
-//        if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) {
-//            setTutorialList()
-//            return
-//        }
+        println("asoaso conceptcourse fetch! subjectId:${subjectId}")
+        _isLoading.postValue(true)
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnError { showProgress.postValue(false) }
-            .doOnComplete { showProgress.postValue(false) }
+            .doOnError { _isLoading.postValue(false) }
+            .doOnComplete {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(300)
+                    _isLoading.postValue(false)
+                }
+            }
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 response.data?.let {
@@ -126,6 +134,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     }
 
     fun onHeaderSubjectBtnClick(subjectId: Int) {
+        if (this.selectedSubjectId.value == subjectId) return
         this.selectedSubjectId.postValue(subjectId)
     }
 

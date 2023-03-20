@@ -19,11 +19,11 @@ class AppViewModel(application: Application) : BaseAndroidViewModel(application)
 
     fun fetchUserChallenges() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            fetchChallengeWithIng()
+            fetchJoinedChallenge()
         }
     }
-    suspend fun fetchChallengeWithIng() {
-        challengeRepository.getChallengesOnStatus(ChallengeUserStatus.ING)
+    suspend fun fetchJoinedChallenge() {
+        challengeRepository.getChallengesOnStatus()
     }
 
     fun updateUser(user: User) {

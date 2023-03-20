@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -126,6 +127,11 @@ open class Content: Serializable {
     var createDateTime: Date = Date()
     var solveDateTime: Date? = null
     var updateDateTime: Date? = null
+
+    val updateDateTimeOnMMdd: String
+        get() {
+            return updateDateTime?.let { DateTimeUtils.mMDashddFormat.format(it) } ?: ""
+        }
 
     var pieceSubCategory: String = ""
     fun isStartChallengePiece(): Boolean {

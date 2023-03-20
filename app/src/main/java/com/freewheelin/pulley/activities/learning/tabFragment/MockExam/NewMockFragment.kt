@@ -41,6 +41,10 @@ import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.freewheelin.pulley.views.buttons.ButtonLockImage
 import com.freewheelin.pulley.views.buttons.ButtonMode
 import com.freewheelin.pulley.views.DaebakToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogListener, MockExamGuideDialogListener {
@@ -68,6 +72,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
         super.onCreate(savedInstanceState)
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
+                binding.loadingContainer.visibleIf(true)
                 MockExamManager.getNewMockExamList(context, user!!) {
                     this@NewMockFragment.examList = it
                     with(binding) {
@@ -78,6 +83,9 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
                         filteredMockList = ArrayList(tests)
                         mockRv.adapter?.notifyDataSetChanged()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            binding.loadingContainer.hide(300)
+                        }
                         setVisibilityEmptyGuide()
                     }
                 }
@@ -110,7 +118,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
         initUI()
         viewModel.apply {
             userInRepo.observe(viewLifecycleOwner) {
-
+                binding.mockRv.adapter?.notifyDataSetChanged()
             }
         }
     }
@@ -203,10 +211,15 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             gradeFilter.items = gradeStrArrayList
 
             val user = requireActivity().application!!.user!!
+            binding.loadingContainer.visibleIf(true)
             MockExamManager.getNewMockExamList(requireContext(), user) {
                 this@NewMockFragment.examList = it
                 this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
                 mockRv.adapter?.notifyDataSetChanged()
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(300)
+                    binding.loadingContainer.hide()
+                }
 
                 examList?.let{ list ->
                     yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
@@ -280,6 +293,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
                 holder.testBtnCl.setOnPaidUserClickListener(
                     cb = { MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show() },
                     deniedCb = {
+                        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "풀기 쌍둥이")
                         val dialog = PurchaseGuideDialog()
                         childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }
@@ -287,6 +301,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
                 holder.testInProgressBtnWrapperCl.setOnPaidUserClickListener(
                     cb = { MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show() },
                     deniedCb = {
+                        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "푸는중 쌍둥이")
                         val dialog = PurchaseGuideDialog()
                         childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }

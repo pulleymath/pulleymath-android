@@ -51,7 +51,7 @@ enum class ClientBookType {
 //@Entity(tableName = "plan_book_table")
 class Book: Content, BaseDiffItem {
 
-    var description: String = ""
+    var description: String? = ""
     var bookTag: String? = null
     val tag: List<String>
         get() {
@@ -70,6 +70,20 @@ class Book: Content, BaseDiffItem {
         get() {
            return bookTag?.split(",") ?: listOf()
         }
+    val splitedTag1: String
+        get() {
+            val tags = bookTag?.split(",") ?: listOf("", "")
+            return tags[0]
+        }
+    val splitedTag2: String
+        get() {
+            val tags = bookTag?.split(",") ?: listOf("", "")
+            return tags[1]
+        }
+    val showPlanTag: Boolean
+        get() {
+            return !isCompleted() && splitedTag1.isNotEmpty() && splitedTag2.isNotEmpty()
+        }
 
     var addNewAssignPlan: Boolean = false
     var uploadNewPlan = false
@@ -81,6 +95,19 @@ class Book: Content, BaseDiffItem {
 
     var activeRecommendTag: String? = null
     var bookCategoryList: BookCategoryList? = null
+    val bookPlanV2Series: String
+        get() {
+            bookCategoryList?.let {
+                val series = it.bookSeries
+                val category = it.bookCategory
+                return "$series $category"
+            }
+            return if (pieceCategoryTag == BookType.CUSTOM_BOOK) {
+                "워크북"
+            } else
+                ""
+
+        }
 
     val originProblems: List<Problem>
         get() = problems.filter { !it.isSimilarProblem() }
@@ -88,6 +115,7 @@ class Book: Content, BaseDiffItem {
 
     var backgroundImageUrl: String = ""
     var recommendType = ""
+    var bookCoverId = 8
     var clientBookType:ClientBookType = ClientBookType.ALL
 
     constructor()

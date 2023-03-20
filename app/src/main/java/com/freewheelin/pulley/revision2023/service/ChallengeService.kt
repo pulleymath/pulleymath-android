@@ -37,7 +37,7 @@ interface ChallengeService {
     @GET("v1/users/{studentId}/user-challenges")
     suspend fun getChallengesOnStatus(
         @Path("studentId") studentId: String = user?.studentID!!,
-        @Query("status") status: ChallengeUserStatus,
+        @Query("status") status: ChallengeUserStatus?,
     ): ResponseListBody<Challenge>
 
     @POST("v1/users/{studentId}/user-challenges/{userChallengeId}/redeem")

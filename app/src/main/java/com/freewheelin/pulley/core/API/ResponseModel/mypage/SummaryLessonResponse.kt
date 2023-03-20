@@ -18,3 +18,7 @@ data class SummaryLessonItemDetail (
     var endAt: String?,
     var nextPaymentAt: String?
 )
+
+data class UseCouponResponse (
+    val message: String
+)

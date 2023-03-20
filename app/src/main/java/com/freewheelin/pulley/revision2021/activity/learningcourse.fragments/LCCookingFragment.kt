@@ -280,6 +280,8 @@ class LCCookingFragment() : Fragment(),
         }
         fun addVideo(item: CookingInfoItem) {
             itemBinding.apply {
+                loadingContainer.visibleIf(true)
+                videoLoadingLottie.playAnimation()
 
                 val marginHorizontal = 64.toPx()
                 val vWidth = (((screenWidth * 0.55) - marginHorizontal) / 16 * 9).toInt()
@@ -294,7 +296,7 @@ class LCCookingFragment() : Fragment(),
                     (activity as LearningCourseActivity).hidePencilcasePanel()
                 },
                 {
-                        binding.rightViewProgress.visibility = View.GONE
+                    itemBinding.loadingContainer.hide(300)
                 })
                 webView.webChromeClient = CookingChromeClient(requireActivity())
                 webView.addJavascriptInterface(CookingWebClientClickEventListener {

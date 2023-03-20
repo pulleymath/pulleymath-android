@@ -1,81 +1,57 @@
 package com.freewheelin.pulley.revision2023.ui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.UnderlineSpan
-import androidx.fragment.app.Fragment
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.map
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.URL
-import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide2Binding
-import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
+import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.revision2023.ui.adapter.PurchaseGuideAdapter
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel
-import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.utils.partialFontAndColored
-import com.freewheelin.pulley.utils.partialUnderline
-import com.freewheelin.pulley.utils.toPx
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class PurchaseGuide2Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide2Binding
-    var viewModel: PurchaseGuideDialogViewModel? = null
-    private val guideAdapter = PurchaseGuideAdapter { selected ->
+    var viewModel: PurchaseGuideViewModel? = null
+    private val guideAdapter = PurchaseGuideAdapter (guideImageClickListener = { selected ->
         viewModel?.updateGuides(selected)
-
-    }
+    },  compareTextClickListener = {
+        viewModel?.setStep?.let { it(3) }
+    })
     private lateinit var getResult: ActivityResultLauncher<Intent>
+    val screenHeight by lazy { DisplayUtils.getScreenHeight(requireContext()) }
 
-    override fun onResume() {
-        super.onResume()
-        binding.apply {
-//            CoroutineScope(Dispatchers.Main).launch {
-//                delay(200)
-//                val bottomMargin = 24.toPx()
-//                val step3TvMarginTop = 2.toPx()
-//                val step3TvHeight = step3Tv.height
-//                val rvHeight = guideRv.height
-//                val totalHeight = step3TvMarginTop + step3TvHeight + rvHeight + bottomMargin
-//                scrollRoot.layoutParams.height = min(totalHeight, 420.toPx())
-//            }
-        }
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_purchase_guide2, container, false)
         return binding.root
     }
+
+    fun initReceiver() {
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-
-            step3Tv.text = step3Tv.text
-                .partialUnderline(0, 6)
-                .partialFontAndColored(Theme.bold(requireContext()), ContextCompat.getColor(requireContext(), R.color.gray_800), 0, 6)
+            initReceiver()
             guideRv.apply {
                 this.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 adapter = guideAdapter
@@ -83,35 +59,42 @@ class PurchaseGuide2Fragment : Fragment() {
 
             actionBtnWrapperCl.setOnClickListener { _ ->
 //                 TODO to webview 가능하면 웹뷰로 하고 안되면 크롬으로 넘기
-//                startActivity(PurchaseWebViewActivity.getIntent(requireContext()))
 
                 viewModel?.selectedOfferId?.value?.let { offerId ->
-                    viewModel?.getTempToken {
-                        val token = it
-                        val encodedUri = "/shop/${offerId}/plus"
-                        val url = "${Network.purchaseSubscriptionUrl}${token}&uri=${encodedUri}"
-                        println("asoaso url ${url}")
-                        IntentUtils.openWebLink(requireContext(), url, (activity as AppCompatActivity).packageManager)
-                    }
+                    getResult.launch(PurchaseWebViewActivity.getIntent(requireContext(), offerId))
                 }
             }
-            step3Tv.setOnClickListener {
-                viewModel?.setStep?.let { it(3) }
-            }
         }
-        viewModel?.apply {
 
+        viewModel?.apply {
             guideOffers.observe(viewLifecycleOwner) {
-                guideAdapter.submitList(it)
+                val tempHeader = it[0]
+                val listIncludeHeader = listOf(tempHeader) + it
+                guideAdapter.submitList(listIncludeHeader)
             }
         }
     }
-
+    fun createOfferIv (offer: PurchaseGuideOffer, isSelectedImg: Boolean): GuideImageView = GuideImageView(requireContext()).also { view ->
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        view.offerId = offer.offerId
+        view.isSelectedImage = isSelectedImg
+        view.layoutParams = params
+        view.adjustViewBounds = true
+        view.setMarginBottom(dp = 10)
+        Glide.with(requireContext())
+            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
+            .into(view)
+        view.setOnClickListener { _ ->
+            viewModel?.updateGuides(offer)
+        }
+    }
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when(it.resultCode) {
-                success -> {
-                // TODO app user refrash
+                purchaseSuccess -> {
                     viewModel?.exitBtn()
                 }
                 common -> {}
@@ -119,7 +102,7 @@ class PurchaseGuide2Fragment : Fragment() {
         }
     }
     companion object {
-        const val success = 200
+        const val purchaseSuccess = 200
         const val common = 400
         @JvmStatic
         fun newInstance() =
@@ -128,5 +111,11 @@ class PurchaseGuide2Fragment : Fragment() {
 
                 }
             }
+    }
+    inner class GuideImageView: androidx.appcompat.widget.AppCompatImageView {
+        constructor(context: Context): super(context)
+        constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+        var isSelectedImage = false
+        var offerId = 0
     }
 }

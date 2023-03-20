@@ -18,6 +18,7 @@ import com.freewheelin.pulley.activities.WrongTestReportActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyListViewHolder
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.MockExamManager
@@ -163,9 +164,9 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
             holder.listBinding.reportBtn.setOnClickListener {
                 if (content.isLocked) {
+                    LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "분석_전체학습내역", "결제유도", "리포트")
                     val dialog = PurchaseGuideDialog()
                     supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
-//                    DialogUtils.confirmDialog(this@StudyHistoryActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
                 } else {
                     LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
                     when(content.pieceCategoryTag) {
@@ -200,6 +201,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
             holder.listBinding.solveBtnWrapperCl.setOnClickListener {
                 if (content.isLocked) {
+                    LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "분석_전체학습내역", "결제유도", "풀기/리뷰")
                     val dialog = PurchaseGuideDialog()
                     supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                    DialogUtils.confirmDialog(this@StudyHistoryActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
@@ -222,7 +224,6 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                             startActivity(intent)
                         }
                         BookType.BOOK -> {
-                            println("asoaso solveBtnWrapperCl content!!! subca?: ${content.pieceSubCategory}")
                             val intent = if(content.isCompleted())
 //                                SolveActivity.getReviewIntent(this@StudyHistoryActivity, Book(content))
                                 SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))

@@ -1,7 +1,10 @@
 package com.freewheelin.pulley.activities.learning.tabFragment.analysis
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -20,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
@@ -70,12 +74,17 @@ class AnalysisFragment : LearningTabFragment(),
         MockExamGuideDialogListener {
 
     companion object {
+        const val IS_SAMPLE = "IS_SAMPLE"
+        const val TAB_SCROLL_EVENT = "TAB_SCROLL_EVENT"
+        const val TAB_SCROLL_EVENT_TARGET = "TAB_SCROLL_EVENT_TARGET"
+
         fun newInstance(): AnalysisFragment {
             return AnalysisFragment()
         }
     }
     lateinit var binding: FragmentAnalysisBinding
     val viewModel: AnalysisFViewModel by viewModels()
+    lateinit var tabScrollReceiver: BroadcastReceiver
 
     override var screenName = "분석"
 
@@ -87,21 +96,30 @@ class AnalysisFragment : LearningTabFragment(),
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_analysis, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        initReceiver()
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(tabScrollReceiver, IntentFilter(TAB_SCROLL_EVENT))
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.apply {
             userInRepo.observe(viewLifecycleOwner) { user ->
                 user?.let {
                     val showLockImage = !it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
                     binding.analysisLockIv.visibleIf(showLockImage)
-//                    binding.sampleWrapperCl.visibleIf(showLockImage)
+
+                    val showLockIv = user.serviceType.isUnderBasicP()
+                    binding.recommendStudyView.actionLockIv.visibleIf(showLockIv)
+                    binding.studyRateView.actionLockIv.visibleIf(showLockIv)
                 }
             }
         }
         binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             todayStudyView.listener = this@AnalysisFragment
             studyRateView.listener = this@AnalysisFragment
             recommendStudyView.listener = this@AnalysisFragment
@@ -119,13 +137,32 @@ class AnalysisFragment : LearningTabFragment(),
                 val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
                 startActivity(intent)
             }, deniedCb = {
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "전체분석보러가기")
                 val dialog = PurchaseGuideDialog()
                 childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                DialogUtils.confirmDialog(requireContext(), "[테스트]구독중이 아닙니다.", "하하")
             })
         }
     }
+    fun initReceiver () {
+        tabScrollReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, intent: Intent?) {
+                intent?.let {
+                    val target = it.getStringExtra(TAB_SCROLL_EVENT_TARGET)
+                    when (target) {
+                        "todayStudyView" -> {
+                            val outArr = arrayOf(0, 0).toIntArray()
+                            binding.todayStudyView.getLocationOnScreen(outArr)
+                            val yValueOnView = outArr[1] - 100.toPx()
+                            binding.scrollContainer.smoothScrollTo(0, yValueOnView)
+                        }
+                        else -> {}
+                    }
+                }
+            }
 
+        }
+    }
     override fun onResume() {
         super.onResume()
 
@@ -199,7 +236,9 @@ class AnalysisFragment : LearningTabFragment(),
 
                 setChartData(study.weekStudyData)
                 sampleWrapperCl.setOnClickListener {
-                    DaebakToast.show(requireContext(), "아직 업서요")
+                    val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
+                    intent.putExtra(IS_SAMPLE, true)
+                    startActivity(intent)
                 }
             }
         } catch(e:Exception) {

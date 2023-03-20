@@ -49,12 +49,14 @@ class TestMainWrongFragment : TestMainBaseFragment() {
                 startBtn.setOnPaidUserClickListener(cb = {
                     listener?.onSolveBtnClicked(test)
                 }, deniedCb = {
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "오답테스트", "결제유도", "시작")
                     val dialog = PurchaseGuideDialog()
                     childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                 })
 
                 reportTv.setOnPaidUserClickListener(cb = { listener?.onReportBtnClicked(test) },
                     deniedCb = {
+                        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "오답테스트", "결제유도", "리포트")
                         val dialog = PurchaseGuideDialog()
                         childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     })

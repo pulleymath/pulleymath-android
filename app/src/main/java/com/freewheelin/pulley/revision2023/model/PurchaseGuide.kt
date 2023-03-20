@@ -9,6 +9,7 @@ data class PurchaseGuide (
 
 data class PurchaseGuideOffer (
     val offerId: Int,
+    val productSubType: PaidServiceType,
     val commonImageUrl: String,
     val selectedImageUrl : String,
     val isSelected: Boolean = false

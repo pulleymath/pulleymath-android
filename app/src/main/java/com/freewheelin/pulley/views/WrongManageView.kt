@@ -24,9 +24,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
-import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.utils.setOnBasicPOrHigherClickListener
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.*
 
 interface WrongManageViewListener {
@@ -82,18 +80,18 @@ class WrongManageView: ConstraintLayout {
                 if(isActive) { listener?.onStudyBtnClicked(this@WrongManageView) }
                 else { showInactiveToast() }
             }, deniedCb = {
+                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "학습지만들기")
+
                 val dialog = PurchaseGuideDialog()
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
-//                FragmentManager.findFragment<WrongNoteFragment>(it).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
-//                DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "열려라 참깨")
 
             })
             reviewCl.setOnBasicPOrHigherClickListener(cb = {
                 listener?.onReviewBtnClicked(this@WrongManageView)
             }, deniedCb = {
+                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "리뷰하기")
                 val dialog = PurchaseGuideDialog()
-//                FragmentManager.findFragment<WrongNoteFragment>(it).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
             })

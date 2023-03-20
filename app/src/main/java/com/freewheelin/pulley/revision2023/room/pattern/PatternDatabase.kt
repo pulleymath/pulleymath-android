@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.utils.converters.PatternQuizConceptTypeConverter
@@ -15,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
     entities = [
         LCPatternQuiz::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(
@@ -40,11 +43,18 @@ abstract class PatternDatabase: RoomDatabase() {
                     "lc_pattern_database"
                 )
                     .addCallback(PatternDatabaseCallback(applicationScope))
-                    .addMigrations()
+                    .addMigrations(MIGRATION_2_TO_3)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
+            }
+        }
+        private val MIGRATION_2_TO_3: Migration = object : Migration(2,3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.run {
+                    execSQL("ALTER TABLE lc_pattern_table ADD COLUMN studentId TEXT NULLABLE DEFAULT ''")
+                }
             }
         }
     }

@@ -43,6 +43,6 @@ class CookingExerciseHeaderBtn: androidx.appcompat.widget.AppCompatButton {
 
     fun setStateCommon() {
         setTextColor(ContextCompat.getColor(context, R.color.purple_200))
-        setBackgroundResource(R.drawable.bg_purple_100_round_5)
+        setBackgroundResource(R.drawable.bg_purple_100_round_ripple)
     }
 }

@@ -268,9 +268,54 @@ object BindingAdapter {
         view.visibility = if (show == true) View.VISIBLE else View.GONE
     }
     @JvmStatic
+    @BindingAdapter("visibleOrInvisibleIf")
+    fun visibleOrInvisibleIf(view: View, show: Boolean?) {
+        view.visibility = if (show == true) View.VISIBLE else View.INVISIBLE
+    }
+    @JvmStatic
     @BindingAdapter("setUserServiceType")
     fun makeUserStatusChip(view: MainUserStatusChip, type: PaidServiceType?) {
         view.type = type
     }
 
+    @JvmStatic
+    @BindingAdapter("planV2Cover")
+    fun loadPlanV2Cover(view: ImageView, id: Int?) {
+        id?.let {
+            val imgRes = when (it) {
+                1 -> R.drawable.book_plan_v2_cover_1
+                2 -> R.drawable.book_plan_v2_cover_2
+                3 -> R.drawable.book_plan_v2_cover_3
+                4 -> R.drawable.book_plan_v2_cover_4
+                5 -> R.drawable.book_plan_v2_cover_5
+                6 -> R.drawable.book_plan_v2_cover_6
+                7 -> R.drawable.book_plan_v2_cover_7
+                8 -> R.drawable.book_plan_v2_cover_8
+                9 -> R.drawable.book_plan_v2_cover_9
+                10 -> R.drawable.book_plan_v2_cover_10
+                11 -> R.drawable.book_plan_v2_cover_11
+                12 -> R.drawable.book_plan_v2_cover_12
+                13 -> R.drawable.book_plan_v2_cover_13
+                14 -> R.drawable.book_plan_v2_cover_14
+                15 -> R.drawable.book_plan_v2_cover_15
+                16 -> R.drawable.book_plan_v2_cover_16
+                17 -> R.drawable.book_plan_v2_cover_17
+                18 -> R.drawable.book_plan_v2_cover_18
+                19 -> R.drawable.book_plan_v2_cover_19
+                20 -> R.drawable.book_plan_v2_cover_20
+                21 -> R.drawable.book_plan_v2_cover_21
+                22 -> R.drawable.book_plan_v2_cover_22
+                23 -> R.drawable.book_plan_v2_cover_23
+                24 -> R.drawable.book_plan_v2_cover_24
+                25 -> R.drawable.book_plan_v2_cover_25
+                26 -> R.drawable.book_plan_v2_cover_26
+                27 -> R.drawable.book_plan_v2_cover_27
+                28 -> R.drawable.book_plan_v2_cover_28
+                29 -> R.drawable.book_plan_v2_cover_29
+                30 -> R.drawable.book_plan_v2_cover_30
+                else -> R.drawable.book_plan_v2_cover_8
+            }
+            view.setImageResource(imgRes)
+        }
+    }
 }

@@ -244,7 +244,7 @@ class User {
                 MyApplication.token = ""
                 MyApplication.user?.token = ""
                 MyApplication.user = null
-                MyApplication.appFirstMainLaunchFlag = false
+                MyApplication.isAppFirstLaunch = true
 //                MyApplication.user?.commit("logout")
 
                 callback(null)

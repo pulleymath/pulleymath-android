@@ -56,9 +56,9 @@ object Network {
         else -> "https://api.channel.io"
     }
 //    var purchaseSubscriptionUrl = "${springUrl}/gateway?token="
-    var purchaseSubscriptionUrl = when (Preferences.onServerAPI.get()) {
-        Server.live.toString() -> "${Preferences.shopUrl.get()}/gateway?token="
-        else -> "${Preferences.devShopUrl.get()}/gateway?token="
+    var webRedirectUrlOnShortToken = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> "${Preferences.shopUrl.get()}/ottway?token="
+        else -> "${Preferences.devShopUrl.get()}/ottway?token="
     }
     var token = ""
 

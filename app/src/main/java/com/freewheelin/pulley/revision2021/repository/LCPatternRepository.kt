@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository
 
 import android.content.Context
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.remote.LCPatternApi
@@ -32,7 +33,10 @@ class LCPatternRepository(val context: Context, private val applicationScope: Co
         dao.insert(pattern)
     }
     suspend fun upsertAll(patterns: List<LCPatternQuiz>) {
-        dao.upsertAll(patterns)
+        val newPatterns = patterns.map {
+            it.copy(studentId = user?.studentID)
+        }
+        dao.upsertAll(newPatterns)
     }
     suspend fun delete(pattern: LCPatternQuiz) {
         dao.delete(pattern)

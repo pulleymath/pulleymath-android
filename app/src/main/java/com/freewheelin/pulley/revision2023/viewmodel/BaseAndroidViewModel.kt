@@ -35,10 +35,12 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
                 println("throwable NullPointerException : ${throwable} / ${throwable.message}")
             }
             is retrofit2.HttpException -> {
-                println("throwable HttpException 1 : ${throwable.code()} / ${throwable.message}")
+                println("throwable HttpException : ${throwable.code()} / ${throwable.message}")
             }
             else -> {
-                responseFailed(getApplication<Application>().applicationContext, throwable)
+                CoroutineScope(Dispatchers.Main).launch {
+                    responseFailed(getApplication<Application>().applicationContext, throwable)
+                }
             }
         }
 

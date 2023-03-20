@@ -6,19 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.findFragment
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.WeakChapterResult
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.bars.VerticalBar
+import io.channel.plugin.android.util.lifecycleOwner
 
 interface AnalysisRecommendStudyViewListener {
     fun onRecommendBtnClicked(view: AnalysisRecommendStudyView)
@@ -67,9 +71,11 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         averageBarLabel.text = "등급\n평균"
         actionBtnWrapperCl.setOnBasicPOrHigherClickListener(cb = { listener?.onRecommendBtnClicked(this) },
             deniedCb = {
-//                listener?.onDeniedCallback()
+                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "추천유형학습풀기")
+
                 val dialog = PurchaseGuideDialog()
-                FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisRecommendStudyView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                val fm = (context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
             })
     }
 
@@ -120,8 +126,6 @@ class AnalysisRecommendStudyView: ConstraintLayout {
                         ContextCompat.getColor(context!!, R.color.purple_6D6DFF),
                         text2
                 )
-
-        val showLockIv = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == false
-        actionLockIv.visibleIf(showLockIv)
     }
+
 }

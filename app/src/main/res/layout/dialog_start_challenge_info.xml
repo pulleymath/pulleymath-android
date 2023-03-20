@@ -13,13 +13,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootCl"
-        android:layout_width="448dp"
+        android:layout_width="400dp"
         android:layout_height="match_parent">
 <!--        android:layout_height="@dimen/dp768">-->
 
         <ScrollView
             android:id="@+id/scrollRootView"
-            android:layout_width="448dp"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/updateGradeCl"
-                android:layout_width="448dp"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
                     />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/infoScrollContainer"
-                    android:layout_width="448dp"
+                    android:layout_width="400dp"
                     android:layout_height="match_parent"
                     app:layout_constraintTop_toBottomOf="@+id/headerLl"
                     app:layout_constraintEnd_toEndOf="parent"

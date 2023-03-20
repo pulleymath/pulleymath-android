@@ -1,21 +1,22 @@
 package com.freewheelin.pulley.core.API.ResponseModel.mypage
 
-data class SummaryCouponResponse (
-    var data : List<SummaryCouponItem>,
-    var error: String?,
-    var message: String?
-)
-
-
-data class SummaryCouponItem (
+data class CouponItem (
     var couponDetailID: Long,
     var couponCampaignTitle: String,
     var description: String,
     var endAt : String,
     var couponGiveType: String,
-    var couponType: String
+    var couponType: CouponType,
+    var canApplyNow: Boolean
 ) {
     fun canUse(): Boolean {
-        return couponType == "PLUS" && (couponGiveType == "DAY" || couponGiveType == "MONTH")
+        return couponType == CouponType.PLUS && (couponGiveType == "DAY" || couponGiveType == "MONTH")
+    }
+
+    enum class CouponType {
+        PLUS,
+        LESSON,
+        GOODS,
+        BOOKS
     }
 }

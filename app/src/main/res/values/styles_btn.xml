@@ -7,7 +7,7 @@
     </style>
     
     <style name="BtnBlue_e9f5ff">
-        <item name="android:background">@drawable/rp_bg_purple_ecebff_round</item>
+        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
         <item name="android:textColor">@color/purple_6D6DFF</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
@@ -106,17 +106,17 @@
     
     <style name="Btn_Blue.Secondary.L" parent="Secondary.L">
         <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/rp_bg_purple_ecebff_round</item>
+        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
     </style>
 
     <style name="Btn_Blue.Secondary.M" parent="Secondary.M">
         <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/rp_bg_purple_ecebff_round</item>
+        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
     </style>
 
     <style name="Btn_Blue.Secondary.S" parent="Secondary.S">
         <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/rp_bg_purple_ecebff_round</item>
+        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
     </style>
 
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ItemSmallChapterBinding
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
@@ -59,6 +60,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
             setOnTouchListener(BoongthEffect())
             setOnClickListener {
                 if (item.isLocked) {
+                    LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "개념카드", "결제유도", "잠금버튼")
                     val dialog = PurchaseGuideDialog()
                     val fm = (context as AppCompatActivity).supportFragmentManager
                     fm.let { dialog.show(it, "purchaseGuideDialog")}

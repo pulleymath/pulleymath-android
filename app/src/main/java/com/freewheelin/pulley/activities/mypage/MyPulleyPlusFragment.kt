@@ -1,8 +1,5 @@
 package com.freewheelin.pulley.activities.mypage
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,16 +10,20 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryPlusItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyPlusBinding
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -33,6 +34,8 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pulley_plus, container, false)
         return binding.root
     }
+    private val compositeDisposable = CompositeDisposable()
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
     lateinit var backBtn: ImageButton
     lateinit var btnOpenPulleyPlus: LinearLayout
@@ -72,15 +75,23 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
             onBackBtnClicked()
         }
         btnOpenPulleyPlus.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.풀리플러스구매, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.풀리플러스구매.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
         btnShowPaidList.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.구매내역, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
     }
 
     private fun load() {
-        API_APP.summaryPlus()
+        compositeDisposable += API_APP.summaryPlus()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
@@ -97,7 +108,7 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
     }
 
     private fun setPaidContainer(data: SummaryPlusItem) {
-        prodNameTv.text = data.detail?.title
+        prodNameTv.text = data.detail.title
 
         val start = DateTimeUtils.convertServerStr(data.detail.startedAt)
         val end = DateTimeUtils.convertServerStr(data.detail.endAt)
@@ -113,5 +124,10 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
 
     fun moveTo(frag: Fragment) {
         (activity as LearningTabActivity).moveTo(frag)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
     }
 }

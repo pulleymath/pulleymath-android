@@ -23,8 +23,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 350
-        versionName '1.4.125'
+        versionCode 352
+        versionName '1.5.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,6 +37,7 @@ android {
         }
 
         debug {
+            resValue("string", "PORT_NUMBER", "8089")
         }
     }
 
@@ -228,5 +229,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }
 

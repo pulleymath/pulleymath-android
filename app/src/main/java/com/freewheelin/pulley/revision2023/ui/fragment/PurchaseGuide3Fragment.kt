@@ -6,20 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide3Binding
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideDialogViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
 import com.freewheelin.pulley.utils.toPx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class PurchaseGuide3Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide3Binding
-    var viewModel: PurchaseGuideDialogViewModel? = null
+    var viewModel: PurchaseGuideViewModel? = null
 //    var setStep: ((Int) -> Unit)? = null
 
     override fun onResume() {

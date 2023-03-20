@@ -45,6 +45,10 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2023.ui.activity.PurchaseGuideActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+        <activity
             android:name=".revision2023.ui.activity.PurchaseWebViewActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
@@ -263,6 +267,12 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activities.lesson.LessonActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".revision2023.ui.activity.UnivAdditionalLearningActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"

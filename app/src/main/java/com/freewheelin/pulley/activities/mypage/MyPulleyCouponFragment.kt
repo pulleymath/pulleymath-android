@@ -1,8 +1,7 @@
 package com.freewheelin.pulley.activities.mypage
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,22 +10,30 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryCouponItem
+import com.freewheelin.pulley.core.API.ResponseModel.mypage.CouponItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyCouponBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
+import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.Companion.RE_FETCH
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.views.buttons.PrimaryButton
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class MyPulleyCouponFragment : MyPageBaseFragment() {
@@ -36,6 +43,8 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pulley_coupon, container, false)
         return binding.root
     }
+    private val compositeDisposable = CompositeDisposable()
+    val viewModel: MyMainPageFragViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,35 +64,24 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                 if(number.isNotEmpty()) {
                     val newCoupon = NewCoupon(number)
                     registBtn.toProcessingUI()
-                    API_APP.addCoupon(newCoupon)
+                    compositeDisposable += API_APP.addCoupon(newCoupon)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result ->
                             Log.d(javaClass.simpleName, "$result")
-                            if (result.error != null) {
-                                val msg = if(result.error == "NOT_FOUND_DATA") {
-                                    "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
-                                } else {
-                                    "쿠폰을 사용할 수 없습니다."
-                                }
-                                DialogUtils.confirmDialog(requireContext(), "확인", msg)
-                            } else {
-                                DaebakToast.show(requireContext(), "쿠폰이 등록되었습니다.")
-                                couponEt.setText("")
-                                load()
-                            }
+                            DaebakToast.show(requireContext(), "쿠폰이 등록되었습니다.")
+                            couponEt.setText("")
+                            load()
                             registBtn.toEnableUI()
                         }, { throwable ->
-                            val msg = if (throwable is HttpException) {
+
+                            var msg = if (throwable is HttpException) {
                                 val result = Gson().fromJson(throwable.response()?.errorBody()?.string(), ResponseBody::class.java)
-                                if(result.error == "NOT_FOUND_DATA") {
-                                    "쿠폰이 존재하지 않습니다, 쿠폰 코드를 확인해주세요."
-                                } else {
-                                    "쿠폰을 사용할 수 없습니다."
-                                }
+                                result.message?: ""
                             } else {
-                                "알수 없는 오류가 발생하였습니다. 다시 시도하세요!"
+                                "알수 없는 오류가 발생하였습니다."
                             }
+                            msg += "\n\n쿠폰 사용에 문제가 있으신 경우\n카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다."
                             DialogUtils.confirmDialog(requireContext(), "확인", msg)
                             registBtn.toEnableUI()
                         })
@@ -93,19 +91,19 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
     }
 
     private fun load() {
-        API_APP.summaryCoupon()
+        compositeDisposable += API_APP.fetchCoupons()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 Log.d(javaClass.simpleName, "$result")
-                setList(result.data!!.sortedByDescending { it.couponDetailID })
+                setList(result.data.sortedByDescending { it.couponDetailID })
             }, {
-
+                println("asoaso ")
             })
     }
 
     lateinit var adapter: CouponAdapter
-    private fun setList(list: List<SummaryCouponItem>) {
+    private fun setList(list: List<CouponItem>) {
         with(binding) {
             adapter = CouponAdapter(list.toMutableList())
             recyclerView.adapter = adapter
@@ -113,17 +111,11 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
         }
     }
 
-    private fun removeItemInList(position: Int) {
-        adapter.list.removeAt(position)
-        adapter.notifyItemRemoved(position)
-        DaebakToast.show(requireContext(), "쿠폰이 사용되었습니다")
-    }
-
     fun moveTo(frag: Fragment) {
         (activity as LearningTabActivity).moveTo(frag)
     }
 
-    inner class CouponAdapter(val list: MutableList<SummaryCouponItem>): RecyclerView.Adapter<CouponAdapter.Holder>() {
+    inner class CouponAdapter(val list: MutableList<CouponItem>): RecyclerView.Adapter<CouponAdapter.Holder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             return Holder(LayoutInflater.from(parent.context).inflate(R.layout.item_my_pulley_coupon, parent, false))
@@ -137,7 +129,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
 
         inner class Holder(val view:View): RecyclerView.ViewHolder(view) {
 
-            lateinit var item:SummaryCouponItem
+            lateinit var item:CouponItem
             var textName: TextView
             var textBenefit: TextView
             var textPeriod: TextView
@@ -155,35 +147,44 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                 useBtnButton = view.findViewById(R.id.useBtnButton)
                 useBtnProgress = view.findViewById(R.id.useBtnProgress)
 
-                useBtn.setOnClickListener { useCoupon() }
-                useBtnButton.setOnClickListener { useCoupon() }
             }
 
             fun useCoupon() {
-                if(item.canUse()) {
-                    useBtnProgress.visibility = View.VISIBLE
-                    API_APP.useCoupon(item.couponDetailID)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ result ->
-                            Log.d(javaClass.simpleName, "$result")
-                            useBtnProgress.visibility = View.GONE
-                            removeItemInList(adapterPosition)
+                useBtnProgress.visibility = View.VISIBLE
+                compositeDisposable += API_APP.useCoupon(item.couponDetailID)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ result ->
+                        Log.d(javaClass.simpleName, "useCoupon ${result.data}")
+                        useBtnProgress.visibility = View.GONE
 
-                            // 쿠폰적용을 위해 액티비티 재시작
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                val intent = requireActivity().intent
-                                requireActivity().finish()
-                                startActivity(intent)
-                            }, 1500)
-                        }, {
-                            DialogUtils.confirmDialog(requireContext(), "확인", "쿠폰을 사용할 수 없습니다.")
-                            useBtnProgress.visibility = View.GONE
-                        })
-                }
+                        viewModel.fetchUser {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                DialogUtils.confirmV2(requireContext(), "쿠폰이 사용되었습니다", "${result.data?.message}", isOneBtn = true)
+                            }
+                            val reFetchReceiverIntent = Intent(RE_FETCH)
+                            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(reFetchReceiverIntent)
+                        }
+                        load()
+                    }, {
+                        if(it is HttpException) {
+                            val res = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
+                            println("asoaso response ${res.message}")
+                            var message = res.message ?: "쿠폰을 사용할 수 없습니다."
+                            message += "\n\n쿠폰 사용에 문제가 있으신 경우\n카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다."
+//                                DialogUtils.confirmDialog(requireContext(), "쿠폰 사용 오류", message)
+                            DialogUtils.confirmV2(requireContext(), "쿠폰 사용 오류", message, isOneBtn = true)
+
+                        } else {
+                            println("https use coupon throwable : ${it.message}")
+                            DialogUtils.serverErrDialog(requireContext())
+                        }
+                        useBtnProgress.visibility = View.GONE
+                    })
+
             }
 
-            fun set(item: SummaryCouponItem) {
+            fun set(item: CouponItem) {
                 this.item = item
                 textName.text = item.couponCampaignTitle
                 textBenefit.text = item.description
@@ -191,7 +192,11 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                 val end = DateTimeUtils.convertServerStr(item.endAt)
                 textPeriod.text = end
 
-                if(item.canUse()) {
+
+                useBtn.setOnClickListener { useCouponDialog() }
+                useBtnButton.setOnClickListener { useCouponDialog() }
+
+                if(item.canApplyNow) {
                     useBtnText.visibility = View.GONE
                     useBtnButton.visibility = View.VISIBLE
                 } else {
@@ -199,6 +204,18 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                     useBtnButton.visibility = View.GONE
                 }
             }
+            fun useCouponDialog() {
+                if (item.canApplyNow) {
+                    val dialogTitle = "${item.couponCampaignTitle}을 지금 사용하시겠습니까?"
+                    val dialogContent = "쿠폰은 바로 적용되며, 현재 이용중인 서비스 및 쿠폰의 종류에 따라 이용 또는 할인 예약이 됩니다."
+                    DialogUtils.confirmV2(requireContext(), dialogTitle, dialogContent, successCb = { useCoupon() })
+                }
+            }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
     }
 }

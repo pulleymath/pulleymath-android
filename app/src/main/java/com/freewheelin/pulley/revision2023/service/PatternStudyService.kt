@@ -28,6 +28,11 @@ interface PatternStudyService {
         @Path("studentID") studentId: String = user?.studentID!!
     ): ResponseBody<MyBookList>
 
+    @GET("v2/study-history/{studentID}/pieces/all")
+    suspend fun getPatternStudyHistory(
+        @Path("studentID") studentId: String = user?.studentID!!
+    ): ResponseListBody<Book>
+
     @GET("v3/books/recommend/{studentID}")
     suspend fun getPatternStudyRecommendBookList(
         @Path("studentID") studentId: String = user?.studentID!!

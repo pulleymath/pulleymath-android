@@ -4,9 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
@@ -28,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.bases.*
@@ -50,6 +49,7 @@ import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.utils.*
@@ -80,6 +80,8 @@ class SolveActivity : BaseActivity(),
     var solutionGesture: SolveGestures? = null
     var content: Content? = null
     var isReview:Boolean = false
+
+    lateinit var purchaseReceiver: BroadcastReceiver
 
     companion object {
 
@@ -147,7 +149,7 @@ class SolveActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-
+        initReceiver()
         initObserve()
         initUI()
 //        val content = getSerializable(this@SolveActivity, ContentManager.ARG_CONTENT, Content::class.java)
@@ -156,7 +158,7 @@ class SolveActivity : BaseActivity(),
         isReview = intent.getBooleanExtra(IS_REVIEW, false)
 
         Log.d("문제풀기", "content=$content")
-        Log.d("문제풀기", "asoaso subca?=${content?.pieceSubCategory}")
+        Log.d("문제풀기", "asoaso pieceSubCategory?=${content?.pieceSubCategory}")
         Log.d("문제풀기", "isReview=$isReview")
         if(isReview)
             initReviewContent(content)
@@ -189,6 +191,8 @@ class SolveActivity : BaseActivity(),
         super.onDestroy()
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         binding.timerView.deinitTimer()
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(purchaseReceiver)
     }
 
     fun backBtnAction() {
@@ -420,7 +424,7 @@ class SolveActivity : BaseActivity(),
                     mainFormatTool.visibility = View.GONE
 
                     MockExamManager.getMockProblems(this@SolveActivity, content, user!!) {
-                        Log.d("문제풀기", "모의고사 it=${it.assignID}")
+                        Log.d("문제풀기", "모의고사 it=${it.assignID}, isRestart=${isRestart}")
                         content.assignID = it.assignID
                         content.problems = it.problems
                         content.time = it.time
@@ -711,6 +715,17 @@ class SolveActivity : BaseActivity(),
                 }
             }
         }
+    }
+    private fun initReceiver() {
+        purchaseReceiver = object : BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let { viewModel.fetchUser {} }
+            }
+        }
+
+        LocalBroadcastManager
+            .getInstance(this)
+            .registerReceiver(purchaseReceiver, IntentFilter(PurchaseWebViewActivity.PURCHASE_SUCCESS))
     }
     private fun initObserve () {
         viewModel.apply {

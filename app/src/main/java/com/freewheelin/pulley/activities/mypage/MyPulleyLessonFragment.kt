@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
@@ -20,6 +21,8 @@ import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryLessonItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.IntentUtils
 import com.freewheelin.pulley.views.DaebakToast
@@ -32,6 +35,7 @@ class MyPulleyLessonFragment : MyPageBaseFragment() {
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_pulley_lesson, container, false)
     }
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
     lateinit var backBtn: ImageButton
     lateinit var btnOpenPulleyLesson: LinearLayout
@@ -61,10 +65,18 @@ class MyPulleyLessonFragment : MyPageBaseFragment() {
             onBackBtnClicked()
         }
         btnOpenPulleyLesson.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.풀리과외구매, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.풀리과외구매.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
         btnShowPaidList.setOnClickListener {
-            IntentUtils.openWebLink(requireContext(), URL.구매내역, requireContext().packageManager)
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2021.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import java.io.Serializable
@@ -34,6 +35,7 @@ data class LCPatternQuiz(
     val hintUsageCount: Int,
     val hints: List<LCPatternQuizHint>,
     val concepts: List<LCPatternConcept>,
+    val studentId: String? = user?.studentID
 
 ): BaseDiffItem, Serializable {
     override fun getId(): String {

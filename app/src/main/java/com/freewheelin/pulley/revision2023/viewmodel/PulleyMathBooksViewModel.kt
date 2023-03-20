@@ -6,14 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
-import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListener
+import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2
 import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.utils.show
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +28,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
     lateinit var recommendBookListViews: List<RecommendBookListView>
     private val challengeRepository by lazy { ChallengeRepository.instance }
-    lateinit var planListener: PlanListener
+    lateinit var planListener: PlanListenerV2
 
     val showEmptyContainer = MutableLiveData<Boolean>(false)
     val showRecyclerView = MutableLiveData<Boolean>(false)
@@ -42,7 +42,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     val books: LiveData<List<Book>> = _books
     val initPositionSettingFlag = MutableLiveData<Unit>()
 
-    lateinit var totalAdapter: PatternStudyTotalPlanAdapter
+    lateinit var planAdapter: PatternStudyMyPlanAdapter
 
     var latestFilters: Set<FilterType>? = null
     fun fetchTotalBooks(filters: Set<FilterType>) {
@@ -54,7 +54,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
                 playTotalLoadingView.postValue(false)
                 showRecyclerView.postValue(true)
                 _books.postValue(newBookList)
-                delay(1000)
+                delay(500)
                 initPositionSettingFlag.postValue(Unit)
             }
         }
@@ -84,6 +84,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     }
     fun collectRecommendList(isInit: Boolean = true, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            _isLoading.postValue(true)
             val newRecommendList = fetchRecommendList() ?: return@launch
             newRecommendList.forEachIndexed { index, book ->
                 val title = book.title
@@ -98,6 +99,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
                     view?.show { }
                 }
             }
+            _isLoading.postValue(false)
             cb()
         }
     }

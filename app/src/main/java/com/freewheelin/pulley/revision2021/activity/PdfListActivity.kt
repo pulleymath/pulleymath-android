@@ -35,6 +35,7 @@ import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
@@ -130,8 +131,8 @@ class PdfListActivity : AppCompatActivity() {
                         // TODO 챌린지라면 완료 후
                         val completedDialog = ChallengeCompletedDialog(startChallenge,
                             ChallengeManager.CourseName.스타트챌린지_북스.id
-                        ) {
-                            ChallengeManager.getMainTabMoveIntent(it).let {
+                        ) { nextCourse ->
+                            ChallengeManager.getMainTabMoveIntent(nextCourse).let {
                                 LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                                 finish()
                             }
@@ -331,12 +332,12 @@ class PdfListActivity : AppCompatActivity() {
         override fun onItemClick(pdf: Pdf) {
             if (pdf.opening.get()) return // pdf 여는중일때 클릭방지
 
-            Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}")
+            Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}, isPremium ?: ${user?.serviceType}")
 
-            if (!pdf.is_purchased) {
+            if (pdf.isLocked) {
 //                openShop(pdf)
                 openPurchasedGuideDialog()
-            } else if (!pdf.downloading.get() && pdf.is_purchased) { // 다운로드 중이면 disabled
+            } else if (!pdf.downloading.get()) { // 다운로드 중이면 disabled
                 if (pdf.downloaded.get()) { open(pdf) } else { beforeDownload(pdf) }
             } else {
                 showDownloadCancelMsg()

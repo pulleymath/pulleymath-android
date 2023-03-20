@@ -17,6 +17,10 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
+import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindPwFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.IS_SAMPLE
+import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT
+import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT_TARGET
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
@@ -82,7 +86,13 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
     companion object {
         @JvmStatic
-        fun newInstance() = AnalysisUnitFragment()
+        fun newInstance(isSample: Boolean): AnalysisUnitFragment {
+            val fragment = AnalysisUnitFragment()
+            val bundle = Bundle()
+            bundle.putBoolean(IS_SAMPLE, isSample)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     lateinit var binding: FragmentAnalysisUnitBinding
@@ -103,7 +113,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             achieveOrderRadio.listener = this@AnalysisUnitFragment
 
             initUI()
-            configureUI(from, to, DateTimeUtils.getPeriod(from, to))
+            configureUI(DateTimeUtils.getPeriod(from, to))
             unitRv.layoutManager = LinearLayoutManager(context)
             unitRv.isFocusable = false
 
@@ -120,9 +130,9 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         super.onPeriodSelected(from, to, period)
         selectedChapter.clear()
         if(from > LocalDate.now() || analysis == null)
-            configureEmptyUI(from, to)
+            configureEmptyUI()
         else
-            configureUI(from, to,  period)
+            configureUI(period)
     }
 
     override fun onItemChanged(set: ObservableHashSet<ChapterAnalysis>) {
@@ -132,7 +142,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                 learnBtn.toDisableUI()
                 reviewBtn.toDisableUI()
             } else {
-                val problemCount = set.sumBy { it.problemTotalNumber }
+                val problemCount = set.sumOf { it.problemTotalNumber }
                 unitSelectGuideTv.text = "${problemCount}개의 문제를 학습합니다."
                 learnBtn.toEnableUI()
                 reviewBtn.toEnableUI()
@@ -143,9 +153,19 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
     private fun initUI() {
         selectedChapter.listener = this
         selectedChapter.clear()
+        val isSample = arguments?.getBoolean(IS_SAMPLE) ?: false
         with(binding) {
             unitSelectGuideTv.text = ""
             learnBtn.setOnClickListener {
+                if (isSample) {
+                    if (learnBtn.isEnableUI()) {
+                        DaebakToast.show(requireContext(), "유사한 문제를 만들어 풀어볼 수 있어요!")
+                        return@setOnClickListener
+                    } else {
+                        DaebakToast.show(requireContext(), "보완할 단원을 선택해보세요!")
+                        return@setOnClickListener
+                    }
+                }
                 if(learnBtn.isEnableUI()) {
                     LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
                     val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
@@ -192,6 +212,16 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             }
 
             reviewBtn.setOnClickListener {
+                if (isSample) {
+                    if (reviewBtn.isEnableUI()) {
+                        DaebakToast.show(requireContext(), "푼 문제를 다시 확인해 볼 수 있어요!")
+                        return@setOnClickListener
+                    } else {
+                        DaebakToast.show(requireContext(), "보완할 단원을 선택해보세요!")
+                        return@setOnClickListener
+                    }
+                }
+
                 if(reviewBtn.isEnableUI()) {
                     ContentManager.getReview(requireContext(), user!!, selectedChapter.toList(), from.toDate(), to.toDate()) {
                         val intent = SolveActivity.getReviewIntent(requireContext(), it, false)
@@ -202,7 +232,8 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         }
     }
 
-    private fun configureUI(from: LocalDate, to: LocalDate, period: Int) {
+//    private fun configureUI(from: LocalDate, to: LocalDate, period: Int) {
+    private fun configureUI(period: Int) {
         configureSummarySectionUI(period)
         configureAchieveSectionUI()
         configureUnitSectionUI()
@@ -213,7 +244,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             allCheckBox.setOnCheckedChangeListener(null)
             val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
             allCheckBox.isChecked = selectedChapter.containsAll(chapters)
-            allCheckBox.setOnCheckedChangeListener { button, isChecked ->
+            allCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(isChecked)
                     selectedChapter.addAll(chapters)
                 else
@@ -300,7 +331,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
             unitGuideTv.text = template.getUnitChapterQ(analysis?.chapterAnalysis)
             val chapters = chapterTreeList?.map { it.leaf() }?.flatten()?.map { it.chapter } ?: listOf()
-            allCheckBox.setOnCheckedChangeListener { button, isChecked ->
+            allCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if(isChecked)
                     selectedChapter.addAll(chapters)
                 else
@@ -311,7 +342,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         }
     }
 
-    fun configureEmptyUI(from: LocalDate, to: LocalDate) {
+    fun configureEmptyUI() {
         with(binding) {
             guideView.visibility = View.VISIBLE
             val guideEmptyText = notExistDataText
@@ -363,8 +394,8 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                 override fun onActionBtnClicked(view: SnackBarView) {
                     activity?.finish()
 //                    snackBarWindow.dismiss()
-                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 1)
+                    val intent = Intent(TAB_SCROLL_EVENT)
+                    intent.putExtra(TAB_SCROLL_EVENT_TARGET, "todayStudyView")
                     LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
                 }
             })
@@ -390,7 +421,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             holder.checkbox.setOnCheckedChangeListener(null)
 
             holder.checkbox.isChecked = selectedChapter.containsAll(chapterTree.leaf().map { it.chapter})
-            holder.checkbox.setOnCheckedChangeListener { button, isCheckecd ->
+            holder.checkbox.setOnCheckedChangeListener { _, isCheckecd ->
                 if(isCheckecd) {
                     selectedChapter.addAll(chapterTree.leaf().map { it.chapter})
                 } else
@@ -400,7 +431,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                 configureAllCheckBoxUI()
                 Tutor.showToolTipIfNeed(holder.checkbox, Tutor.TooltipType.additionalStudyInAnalysis)
             }
-            holder.itemView.setOnTouchListener { p0, p1 ->
+            holder.itemView.setOnTouchListener { _, _ ->
                 Tutor.showToolTipIfNeed(holder.checkbox, Tutor.TooltipType.additionalStudyInAnalysis)
                 false
             }

@@ -2,10 +2,12 @@ package com.freewheelin.pulley.revision2021.model.response
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponseNode
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import java.io.Serializable
 
 /** Pdf */
@@ -41,6 +43,11 @@ class Pdf : BaseDiffItem, Serializable {
     val downloadProgress: ObservableInt = ObservableInt(0)
     val downloaded: ObservableBoolean = ObservableBoolean(false)
 
+    val isLocked: Boolean
+        get() {
+            val underPremium = user?.serviceType?.isUnderPremium() == true
+            return underPremium && !is_purchased && !is_event_book
+        }
     override fun equals(other: Any?): Boolean {
         return id == (other as Pdf).id
     }

@@ -49,6 +49,9 @@ import com.freewheelin.pulley.revision2021.views.AffiliatedTestGalleryView
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.*
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
@@ -501,24 +504,24 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            setScreenDimComeInBeforeTestStart()
-        }, 800)
-        if (viewModel.isReview.value == true) return
+        viewModel.getServerTime { serverTimeNow ->
+            Handler(Looper.getMainLooper()).postDelayed({
+                setScreenDimComeInBeforeTestStart(serverTimeNow)
+            }, 800)
+            if (viewModel.isReview.value == true) return@getServerTime
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            setRemainingTimer()
-            set5MinTimer()
-        }, 800)
+            Handler(Looper.getMainLooper()).postDelayed({
+                setRemainingTimer(serverTimeNow)
+                set5MinTimer(serverTimeNow)
+            }, 800)
+        }
+
     }
 
-    private fun set5MinTimer() {
+    private fun set5MinTimer(serverTimeNow: String) {
         val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() ?: return
-        val currentServerTimeString = viewModel.currentTimeString ?: return
-//        val before5MinItEnds = "2022-02-07 11:36:00"
-
         val paredDate = sdf.parse(before5MinItEnds)
-        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
         val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
         lastFiveMinTimer = object : CountDownTimer(timeDiffMilli, 1000) {
@@ -535,13 +538,10 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         }.start()
     }
 
-    private fun setScreenDimComeInBeforeTestStart() {
+    private fun setScreenDimComeInBeforeTestStart(serverTimeNow: String) {
         val startedAt = viewModel.getStartedTime() ?: return
-        val currentServerTimeString = viewModel.currentTimeString ?: return
-//        val startedAt = "2022-02-07 10:00:00"
-
         val paredDate = sdf.parse(startedAt)
-        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
         val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
         dimScreenTimer = object : CountDownTimer(timeDiffMilli, 1000) {
@@ -568,17 +568,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     }
 
-    private fun setRemainingTimer() {
+    private fun setRemainingTimer(serverTimeNow: String) {
         if (!viewModel.showTimer) return
-
         val finishedAt = viewModel.getFinishedTime() ?: return
-        //        val finishedAt = "2022-02-07 23:20:00"
-        val currentServerTimeString = viewModel.currentTimeString ?: return
-
         val paredDate = sdf.parse(finishedAt)
-        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
-        val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
+        val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
         remainingTimer = object : CountDownTimer(timeDiffMilli, 1000) {
             override fun onTick(diff: Long) {
                 val hour = diff / 1000 / 3600

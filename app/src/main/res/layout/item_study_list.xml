@@ -107,7 +107,7 @@
                 android:layout_height="@dimen/dp36"
                 android:layout_marginStart="@dimen/dp8"
                 android:clickable="true"
-                android:background="@drawable/bg_purple_100_round_5">
+                android:background="@drawable/bg_purple_100_round_ripple">
 
                 <ImageView
                     android:id="@+id/solveLockIv"

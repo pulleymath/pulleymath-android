@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager.findFragment
 import com.freewheelin.pulley.R
@@ -14,6 +15,8 @@ import com.freewheelin.pulley.core.API.ResponseModel.Curation
 import com.freewheelin.pulley.core.API.ResponseModel.NormalNoteRatio
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.setOnBasicPOrHigherClickListener
 import com.freewheelin.pulley.utils.visibleIf
 
@@ -52,8 +55,11 @@ class AnalysisStudyRateView: ConstraintLayout {
     private fun initUI() {
         actionBtnWrapperCl.setOnBasicPOrHigherClickListener(cb = { listener?.onWrongStudyBtnClicked(this) },
             deniedCb = {
+                LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "추천문제풀기")
                 val dialog = PurchaseGuideDialog()
-                findFragment<PurchaseGuideDialog>(this).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                val fm = (context as AppCompatActivity).supportFragmentManager
+                fm.let { dialog.show(it, "purchaseGuideDialog")}
+//                findFragment<PurchaseGuideDialog>(this).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
 //                dialog.show()
 //                supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "열려라 참깨")
@@ -67,7 +73,5 @@ class AnalysisStudyRateView: ConstraintLayout {
         chartNormalTv.text = "${ratio.normalRatio}"
         chartNoteTv.text = "${ratio.noteRatio}"
 
-        val showLockIv = user?.serviceType?.isTypeEqualOrHigher(PaidServiceType.BASIC_P) == false
-        actionLockIv.visibleIf(showLockIv)
     }
 }

@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2023.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.model.DummyCreatedUser
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.service.UserApi
@@ -21,6 +22,7 @@ class UserRepository() {
         return api.getUser().data!!.let {
             println("asoaso - - - - - getUser, ${it.token}")
             _user.postValue(it)
+            MyApplication.user = it
             it
         }
     }

@@ -39,27 +39,17 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        dialog?.setCanceledOnTouchOutside(false)
         return binding.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        println("asoaso completedCourseId:${completedCourseId} [[onDestory]] ")
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        println("asoaso completedCourseId:${completedCourseId} [[onDismiss]] ")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("asoaso completedCourseId:${completedCourseId} [[onViewCreated]] ")
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
 
-            scrollRootView.isVerticalScrollBarEnabled = false
+            scrollRootView.isVerticalScrollBarEnabled = true
             stampLottie.playAnimation()
             stampLottie.addAnimatorListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {

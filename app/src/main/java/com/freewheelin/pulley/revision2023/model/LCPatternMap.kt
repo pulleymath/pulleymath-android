@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.model
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 
 data class LCPatternMapWrapper(
@@ -17,7 +18,8 @@ data class LCPatternMap (
     val name: String,
     val imageUrl: String,
     val progress: List<LCPatternMapProgress>,
-    val chapterId: Int
+    val chapterId: Int,
+    val studentId: String? = user?.studentID,
 ): BaseDiffItem {
     override fun getId(): String {
         return "$patternId"

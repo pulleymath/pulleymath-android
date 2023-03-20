@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class ObserveUtils {
@@ -59,6 +61,19 @@ fun <T> debounce(
         debounceJob = coroutineScope.launch {
             delay(waitMs)
             destinationFunction(param)
+        }
+    }
+}
+
+fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
+    var lastEmissionTime = 0L
+    collect { upstream ->
+        val currentTime = System.currentTimeMillis()
+        val mayEmit = currentTime - lastEmissionTime > windowDuration
+        if (mayEmit)
+        {
+            lastEmissionTime = currentTime
+            emit(upstream)
         }
     }
 }

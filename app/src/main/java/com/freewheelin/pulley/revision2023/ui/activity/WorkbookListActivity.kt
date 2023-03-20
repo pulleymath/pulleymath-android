@@ -15,14 +15,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.tabFragment.book.*
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
-import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyTotalPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
+import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
@@ -37,14 +38,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListener,
-    BookFilterListener,
+class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2, BookFilterListener,
     CustomizeBookDialogListener {
     val binding: ActivityWorkbookListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_workbook_list, null, false)
     }
     private val viewModel: WorkbookListViewModel by viewModels()
-    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null, null)
+//    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null, null)
+    lateinit var planAdapter: PatternStudyMyPlanAdapter
 
     companion object {
         @JvmStatic
@@ -85,7 +86,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
             }
             customBooks.observe(this@WorkbookListActivity) {
                 if (latestFilters == binding.filterView.selectedFilterTypes || latestFilters == binding.filterView.customBookInitFilterTypes) {
-                    totalPlanAdapter.submitList(it)
+                    planAdapter.submitList(it)
                     if (it.isEmpty()) {
                         binding.totalEmptyContainer.show(300)
                         showEmptyContainer.postValue(true)
@@ -117,9 +118,12 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     }
     fun initAdapter() {
         binding.apply {
-            totalRv.layoutManager = GridLayoutManager(this@WorkbookListActivity, 3)
-            totalRv.adapter = totalPlanAdapter
-            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), 0, 3))
+            val spanCount = if (isTablet) 4 else 3
+            totalRv.layoutManager = GridLayoutManager(this@WorkbookListActivity, spanCount)
+            planAdapter = PatternStudyMyPlanAdapter (this@WorkbookListActivity, listOf(ActionType.pin), PatternStudyMyPlanAdapter.OriginType.Workbook)
+            totalRv.adapter = planAdapter
+            val columnSpace = resources.getDimension(R.dimen.dp24).toInt()
+            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), columnSpace, spanCount))
             totalRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -128,7 +132,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                     }
                 }
             })
-            viewModel.adapter = totalPlanAdapter
+            viewModel.adapter = planAdapter
         }
     }
 
@@ -162,30 +166,6 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         viewModel.fetchCustomBook(filters)
     }
 
-
-    override fun onActionBtnClicked(action: ActionType, book: Book, holder: PlanHolder) {
-        when (action) {
-            ActionType.mail -> {
-//                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일보내기")
-//                val dialog = EmailInputDialog(this, listOf(book), user!!, this)
-//                dialog.show()
-            }
-            ActionType.pin -> {
-                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
-                val itemValue = "전체문제집"
-                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", itemName, itemValue)
-                val id = if(book.assignID == null) book.pieceID else book.assignID!!
-                viewModel.togglePin(id, !book.isPinned) {
-                    setSnackBar()
-                }
-            }
-            ActionType.delete -> {
-                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", "나의문제집빼기")
-                viewModel.removeFromMyPlan(book)
-            }
-        }
-    }
-
     private fun setSnackBar() {
         val snackBar = SnackBar(this, "핀 설정은 나의 문제집에서 확인할 수 있습니다.", "바로가기")
         snackBar.setSnackBarViewListener(object : SnackBarViewListener {
@@ -204,22 +184,6 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         }
     }
 
-
-    override fun onReviewBtnClicked(holder: PlanHolder, book: Book) {
-        val itemValue = "전체문제집"
-        LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "리뷰하기", itemValue)
-        val intent = SolveActivity.getReviewIntent(this, book)
-        startActivity(intent)
-    }
-
-    override fun onSolveClicked(holder: PlanHolder, book: Book) {
-        val intent = SolveActivity.getIntent(this, book)
-        startActivity(intent)
-    }
-
-    override fun onMakeCustomBookClicked(holder: PlanHolder, book: Book) {
-
-    }
     private fun scrollLogEvent() {
         LogUtils.logEvent(this@WorkbookListActivity, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체문제집")
     }
@@ -249,5 +213,40 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     override fun onDeniedUser() {
         val dialog = PurchaseGuideDialog()
         supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+    }
+
+    override fun onActionBtnClicked(action: ActionType, book: Book) {
+        when (action) {
+            ActionType.mail -> {
+//                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "메일보내기")
+//                val dialog = EmailInputDialog(this, listOf(book), user!!, this)
+//                dialog.show()
+            }
+            ActionType.pin -> {
+                val itemName = if(book.isPinned) "핀해제하기" else "핀설정하기"
+                val itemValue = "전체문제집"
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", itemName, itemValue)
+                val id = if(book.assignID == null) book.pieceID else book.assignID!!
+                viewModel.togglePin(id, !book.isPinned) {
+                    setSnackBar()
+                }
+            }
+            ActionType.delete -> {
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", "나의문제집빼기")
+                viewModel.removeFromMyPlan(book)
+            }
+        }
+    }
+
+    override fun onSolveClicked(book: Book) {
+        val intent = SolveActivity.getIntent(this, book)
+        startActivity(intent)
+    }
+
+    override fun filterFromTagOnCard(filterType: String) {
+        val type = FilterType.convertTagAtFiltertType(filterType)
+        binding.filterView.selectedFilterTypes.add(type)
+        binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
+        binding.filterView.adapter?.notifyDataSetChanged()
     }
 }

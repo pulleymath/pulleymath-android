@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{ `0`+ number + `. ` + cookingExercise.name }"
                 style="@style/mo_h6"
-                android:background="@drawable/bg_purple_100_round_5"
+                android:background="@drawable/bg_purple_100_round_ripple"
                 android:textColor="@color/purple_300"
                 android:paddingVertical="3dp"
                 android:paddingHorizontal="8dp"

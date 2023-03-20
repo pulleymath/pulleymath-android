@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
@@ -30,15 +29,12 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ConceptCourseFragment : LearningTabFragment() {
     companion object {
         val RESULT_OK = 301
         val CHALLENGE_TUTORIAL_FINISH = 302
+        val RE_FETCH = "RE_FETCH"
         fun newInstance() = ConceptCourseFragment()
     }
 
@@ -47,6 +43,7 @@ class ConceptCourseFragment : LearningTabFragment() {
     val viewModel: ConceptCourseViewModel by viewModels()
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
+    lateinit var reFetchReceiver: BroadcastReceiver
 
     override var screenName = "개념"
 
@@ -79,6 +76,14 @@ class ConceptCourseFragment : LearningTabFragment() {
                 }
             }
         }
+        reFetchReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    println("qwoqwo purchaseReceiver onreceive 1")
+                    fetch()
+                }
+            }
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +92,7 @@ class ConceptCourseFragment : LearningTabFragment() {
         initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_concept_course, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.CONCEPT_STUDY_MOVE_EVENT))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reFetchReceiver, IntentFilter(RE_FETCH))
         return binding.root
     }
 
@@ -99,12 +105,8 @@ class ConceptCourseFragment : LearningTabFragment() {
 
 
             studyRv.adapter = ChapterAdapter()
-            studyRv.setOnClickListener {
-                viewModel.showProgress.postValue(!viewModel.showProgress.value!!)
-            }
         }
         viewModel.apply {
-            showProgress.postValue(true)
             onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
             selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
                 if (subjectId > -1) { fetch(subjectId) }
@@ -116,6 +118,17 @@ class ConceptCourseFragment : LearningTabFragment() {
             joinedChallengeList.observe(viewLifecycleOwner) {
 
             }
+            isLoading.observe(viewLifecycleOwner) { loading ->
+                binding.apply {
+                    if (loading) {
+                        conceptFragProgressCl.visibleIf(true)
+                        loadingLottie.playAnimation()
+                    } else {
+                        conceptFragProgressCl.hide(300)
+                    }
+                }
+            }
+
         }
     }
 
@@ -186,12 +199,9 @@ class ConceptCourseFragment : LearningTabFragment() {
                             val completedDialog = ChallengeCompletedDialog(startChallenge,
                                 ChallengeManager.CourseName.스타트챌린지_개념.id
                             ) {
-//                                CoroutineScope(Dispatchers.Main).launch {
-//                                    delay(500)
-                                    ChallengeManager.getMainTabMoveIntent(it).let {
-                                        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
-                                    }
-//                                }
+                                ChallengeManager.getMainTabMoveIntent(it).let {
+                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
+                                }
                             }
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }
@@ -202,7 +212,6 @@ class ConceptCourseFragment : LearningTabFragment() {
                         childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
                     }
                 }
-
             }
         }
     }
@@ -214,5 +223,6 @@ class ConceptCourseFragment : LearningTabFragment() {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(challengeReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reFetchReceiver)
     }
 }

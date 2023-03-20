@@ -107,18 +107,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     var presenter: ChatContract.Presenter? = null
 
     private fun hideSystemUI() {
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-//        WindowInsetsControllerCompat(window, binding.root).let { controller ->
-//            controller.hide(WindowInsetsCompat.Type.systemBars())
-//            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-//        }
-
-        // https://cloudylab.blogspot.com/2015/02/android-full-screen.html
-
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

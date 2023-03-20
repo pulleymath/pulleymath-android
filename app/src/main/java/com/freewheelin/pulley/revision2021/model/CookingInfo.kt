@@ -5,6 +5,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable
@@ -221,7 +222,8 @@ data class CookingInfoItem(
     val order: String = "",
     val exerciseList: List<CookingExercise>? = null,
     var type: ItemType = ItemType.Video,
-    var video: CookingInfo.Video? = null
+    var video: CookingInfo.Video? = null,
+    var studentId: String? = user?.studentID
 ): BaseDiffItem, Serializable {
     override fun getId(): String {
         return "${itemId}"

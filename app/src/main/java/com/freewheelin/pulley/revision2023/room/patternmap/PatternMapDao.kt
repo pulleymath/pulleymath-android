@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.patternmap
 
 import androidx.room.*
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import kotlinx.coroutines.flow.Flow
@@ -8,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PatternMapDao {
 
-    @Query("SELECT * FROM lc_pattern_map_table where chapterId=:chapterId")
-    fun getAllPriorConcepts(chapterId: Int): Flow<List<LCPatternMap>>
+    @Query("SELECT * FROM lc_pattern_map_table where chapterId=:chapterId and studentId=:studentId")
+    fun getAllPriorConcepts(chapterId: Int, studentId: String? = user?.studentID): Flow<List<LCPatternMap>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(patternMap: LCPatternMap)

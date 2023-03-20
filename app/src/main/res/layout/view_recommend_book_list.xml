@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        style="@style/h4"
-        android:id="@+id/indexLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/purple_200"
-        android:text="#1"
-        android:layout_marginStart="@dimen/dp48"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+    <data>
+        <import type="android.view.View" />
+    </data>
 
-    <TextView
-        style="@style/h4"
-        android:id="@+id/guideTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="시험이 밝았습니다.\n유형은 고개를 들어주세요."
-        android:layout_marginStart="@dimen/dp16"
-        android:lineSpacingExtra="@dimen/sp12"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/indexLabel"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp24"
-        android:paddingBottom="@dimen/dp24"
-        android:paddingStart="@dimen/dp64"
-        android:layout_marginBottom="@dimen/dp24"
-        app:layout_constraintTop_toBottomOf="@+id/guideTv"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        >
+
+        <TextView
+            style="@style/h4"
+            android:id="@+id/indexLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purple_300"
+            android:text="#1"
+            android:layout_marginStart="@dimen/dp48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/h4"
+            android:id="@+id/guideTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시험이 밝았습니다.\n유형은 고개를 들어주세요."
+            android:layout_marginStart="@dimen/dp16"
+            android:lineSpacingExtra="@dimen/sp12"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/indexLabel"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp24"
+            android:paddingBottom="@dimen/dp24"
+            app:layout_constraintTop_toBottomOf="@+id/guideTv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,14 +2,11 @@ package com.freewheelin.pulley.utils
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -24,11 +21,9 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.DialogDaebakBinding
 import com.freewheelin.pulley.databinding.DialogDaebakTitleOnlyBinding
-import com.freewheelin.pulley.databinding.DialogDaebakV2ConfirmBinding
 import com.freewheelin.pulley.dialogs.BannerDialog
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.views.DaebakToast
-import java.lang.Exception
+import com.freewheelin.pulley.revision2023.ui.dialogs.DaebakDialogV2
 import java.util.*
 
 enum class DialogType {
@@ -44,9 +39,8 @@ class DialogUtils {
                        content: String,
                        leftBtnText: String = "취소",
                        rightBtnText: String = "완료") {
-            var dialog = makeDialog(context, title, content, leftBtnText, rightBtnText)
+            confirmV2(context,title,content,leftBtnText,rightBtnText)
 
-            dialog.show()
         }
 
         fun confirmDialog(context: Context,
@@ -54,22 +48,9 @@ class DialogUtils {
                        content: String,
                        leftBtnText: String = "취소",
                        rightBtnText: String = "확인",
-                       leftBtnCB: (()->Unit)? = null,
-                       rightBtnCB: (() -> Unit)? = null) {
-            makeDialog(context,
-                    title,
-                    content,
-                    leftBtnText,
-                    rightBtnText).apply {
-                binding.leftBtn.setOnClickListener {
-                    dismiss()
-                    leftBtnCB?.let{ it() }
-                }
-                binding.rightBtn.setOnClickListener {
-                    dismiss()
-                    rightBtnCB?.let{ it() }
-                }
-            }.show()
+                       leftBtnCB: () -> Unit = {},
+                       rightBtnCB: () -> Unit = {}) {
+            confirmV2(context,title,content,leftBtnText,rightBtnText, false, leftBtnCB, rightBtnCB)
         }
 
         fun makeDialog(context: Context,
@@ -82,6 +63,7 @@ class DialogUtils {
             dialog.binding.contentTv.text = content
             dialog.binding.leftBtn.text = leftBtnText
             dialog.binding.rightBtn.text = rightBtnText
+
             return dialog
         }
 
@@ -92,10 +74,14 @@ class DialogUtils {
         }
 
         fun networkErrDialog(context: Context): DaebakDialog {
+            val title = "네트워크 연결이 필요합니다."
+            val content = "네트워크 연결에 실패했습니다.\n와이파이 설정을 확인해 주세요."
+
+//            confirmV2(context, title, content, rightBtnText = "확인", isOneBtn = true)
             val dialog = DaebakDialog(context)
             dialog.type = DialogType.default
-            dialog.binding.titleTv.text = "네트워크 연결이 필요합니다."
-            dialog.binding.contentTv.text = "네트워크 연결에 실패했습니다.\n와이파이 설정을 확인해 주세요."
+            dialog.binding.titleTv.text = title
+            dialog.binding.contentTv.text = content
             dialog.binding.rightBtn.text = "확인"
             dialog.binding.leftBtn.visibility = View.GONE
             return dialog
@@ -321,34 +307,6 @@ class DialogUtils {
                 dialog.show()
         }
 
-        // deprecated
-//        fun showExpiredDDayDialog(context: Context, dday: Int, memberType: String) {
-//            val title = if(dday != 0) {
-//                if(memberType == User.TYPE_FREE_ING)
-//                    "${dday}일 뒤 풀리수학 체험이 끝나요!"
-//                else
-//                    "${dday}일 뒤 풀리수학 이용기간이 만료됩니다!"
-//            } else {
-//                if(memberType == User.TYPE_FREE_ING)
-//                    "오늘 풀리수학 체험이 끝나요!"
-//                else
-//                    "오늘 풀리수학 이용기간이 만료됩니다!"
-//            }
-//
-//            val content = "풀리수학을 더 이용하고 싶다면\n서비스 이용권을 구매해주세요!"
-//
-//            val dialog = makeDialog(context, title, content, "닫기", "구입하러가기")
-//            dialog.rightBtn.setOnClickListener {
-//                dialog.dismiss()
-//                FacebookEvent.log(context, FacebookEvent.TUTORIAL_FINISHED)
-//
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(URL.홈페이지)
-//                context.startActivity(intent)
-//            }
-//            dialog.show()
-//        }
-
         fun showReluctanceDialog(context: Context, leftBtnCB: () -> Unit, rightBtnCB: (() -> Unit)? = null) {
             val title = "그냥 종료하시는 거예요?\uD83D\uDE22"
             val contents = "풀리수학이 준비한 테스트\n" +
@@ -469,24 +427,41 @@ class DialogUtils {
                 dialog.show()
         }
 
-        fun confirmHasPulleyPlus(context: Context, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun confirmV2(context: Context,
+                      title: String,
+                      content: String,
+                      leftBtnText: String = "취소",
+                      rightBtnText: String = "확인",
+                      isOneBtn: Boolean = false,
+                      cancelCb: ()-> Unit = {},
+                      successCb: () -> Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = successCb, cancelCallback = cancelCb)
+            dialog.binding.titleTv.text = title
+            dialog.binding.contentTv.text = content
+            dialog.binding.leftBtn.text = leftBtnText
+            dialog.binding.rightBtn.text = rightBtnText
+            dialog.isOneBtn = isOneBtn
+            dialog.show(context)
+        }
+
+        fun confirmHasPulleyPlus(context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.setCancelable(false)
             dialog.show(context)
         }
 
-        fun confirmBuyPulleyBooks(context: Context, bookName:String?, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun confirmBuyPulleyBooks(context: Context, bookName:String?, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "문제집 구매 후 풀이가 가능합니다."
-            dialog.binding.contentTv.text = "${bookName}\n출판사 문제집을 구매하시겠습니까?"
+            dialog.binding.contentTv.text = "${bookName}\n풀리북스를 구매하시겠습니까?"
             dialog.binding.leftBtn.text = "더 고민해볼래요"
             dialog.binding.rightBtn.text = "구매하기"
             dialog.setCancelable(false)
             dialog.show(context)
         }
 
-        fun v2SubmitDialog (context: Context, callback: (()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2SubmitDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "검토까지 끝났나요?"
             dialog.binding.contentTv.text = "제출하시면 시험은 종료됩니다."
             dialog.binding.leftBtn.text = "취소"
@@ -494,8 +469,8 @@ class DialogUtils {
             dialog.setCancelable(false)
             dialog.show(context)
         }
-        fun v2SubmitUnCompletedDialog (context: Context, remainingCount: Int, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2SubmitUnCompletedDialog (context: Context, remainingCount: Int, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "풀지 않은 문제: ${remainingCount}개"
             dialog.binding.contentTv.text = "제출하시면 풀지 않은 문제는 모두 오답처리되며 시험이 종료됩니다."
             dialog.binding.leftBtn.text = "취소"
@@ -504,8 +479,8 @@ class DialogUtils {
             dialog.show(context)
         }
 
-        fun v2GetOutSolveViewDialog (context: Context, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2GetOutSolveViewDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "화면을 나가도 시험은 진행됩니다."
             dialog.binding.contentTv.text = "푼 문제는 시험시간이 끝나거나\n제출할 때까지 채점되지 않습니다."
             dialog.binding.leftBtn.text = "계속 응시하기"
@@ -514,8 +489,8 @@ class DialogUtils {
             dialog.setCancelable(false)
             dialog.show(context)
         }
-        fun v2FinishTestDialog (context: Context, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2FinishTestDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "테스트가 종료되었습니다."
             dialog.binding.contentTv.text = "수고하셨습니다 :)\n보고서로 시험결과를 확인해볼까요?"
             dialog.binding.leftBtn.text = ""
@@ -524,8 +499,8 @@ class DialogUtils {
             dialog.setCancelable(false)
             dialog.show(context)
         }
-        fun v2AffiliatedTestStartWarningDialog (context: Context, callback:(()->Unit)?) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2AffiliatedTestStartWarningDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "시험을 시작하시겠습니까?"
             dialog.binding.contentTv.text = "시험이 시작된 후에는 시험을 중단할 수 없습니다."
             dialog.binding.leftBtn.text = "취소"
@@ -533,8 +508,8 @@ class DialogUtils {
             dialog.setCancelable(true)
             dialog.show(context)
         }
-        fun v2LoginErrDialog (context: Context, callback:(()->Unit)? = {}) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2LoginErrDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "로그인에 실패했습니다."
             dialog.binding.contentTv.text = "문제가 지속될 경우\n카카오톡(@풀리는수학)으로 문의 바랍니다."
             dialog.binding.leftBtn.text = ""
@@ -543,11 +518,33 @@ class DialogUtils {
             dialog.setCancelable(true)
             dialog.show(context)
         }
-        fun v2NotFoundErrDialog (context: Context, callback:(()->Unit)? = {}) {
-            val dialog = DaebakDialogV2Confirm(context, callback)
+        fun v2NotFoundErrDialog (context: Context, callback:()->Unit = {}) {
+            val dialog = DaebakDialogV2(context, successCallback = callback)
             dialog.binding.titleTv.text = "잘못된 API요청입니다."
             dialog.binding.contentTv.text = "문제가 지속될 경우\n카카오톡(@풀리는수학)으로 문의 바랍니다."
             dialog.binding.leftBtn.text = ""
+            dialog.binding.rightBtn.text = "확인"
+            dialog.isOneBtn = true
+            dialog.setCancelable(true)
+            dialog.show(context)
+        }
+        fun purchaseConfirmDialog (context: Context, message: String, cancelCallback: () -> Unit = {}, callback: () -> Unit = {}) {
+            val dialog = DaebakDialogV2(context,
+                cancelCallback = cancelCallback,
+                successCallback = callback)
+            dialog.binding.titleTv.text = "결제 안내"
+            dialog.binding.contentTv.text = message
+            dialog.binding.leftBtn.text = "취소"
+            dialog.binding.rightBtn.text = "확인"
+            dialog.setCancelable(true)
+            dialog.show(context)
+        }
+        fun purchaseAlertDialog (context: Context, message: String, cancelCallback: () -> Unit = {}, callback: () -> Unit = {}) {
+            val dialog = DaebakDialogV2(context,
+                cancelCallback = cancelCallback,
+                successCallback = callback)
+            dialog.binding.titleTv.text = "결제 안내"
+            dialog.binding.contentTv.text = message
             dialog.binding.rightBtn.text = "확인"
             dialog.isOneBtn = true
             dialog.setCancelable(true)
@@ -622,62 +619,4 @@ class DialogUtils {
             binding.rightBtn.setOnClickListener { dismiss() }
         }
     }
-
-    class DaebakDialogV2Confirm(context: Context, val callback: (() -> Unit)? = null) : Dialog(context) {
-        val binding: DialogDaebakV2ConfirmBinding by lazy {
-            DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_daebak_v2_confirm, null, false)
-        }
-
-        var title: String?
-            get() = binding.titleTv.text.toString()
-            set(value) {
-                binding.titleTv.text = value
-            }
-
-        var contents: String?
-            get() = binding.contentTv.text.toString()
-            set(value) {
-                binding.contentTv.text = value
-            }
-        var isConfirmBtnRed: Boolean = false
-            set(value) {
-                if (value) {
-                    binding.rightBtn.setBackgroundResource(R.drawable.bg_red_fe7b67_round_ripple)
-                    binding.leftBtn.setTextColor(context.getColor(R.color.gray_800))
-
-                } else {
-                    binding.rightBtn.setBackgroundResource(R.drawable.bg_purple_6d6dff_round)
-                    binding.leftBtn.setTextColor(context.getColor(R.color.purple_300))
-                }
-                field = value
-            }
-
-        var isOneBtn: Boolean = false
-            set(value) {
-                if (value) {
-                    binding.leftBtn.visibility = View.GONE
-                    val height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36F, context.resources.displayMetrics).toInt()
-                    val params = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, height, 10f)
-                    binding.rightBtn.layoutParams = params
-                } else {
-                    binding.leftBtn.visibility = View.VISIBLE
-                }
-                field = value
-            }
-
-        init {
-            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setContentView(binding.root)
-            binding.leftBtn.setOnClickListener { dismiss() }
-            binding.rightBtn.setOnClickListener {
-                dismiss()
-                callback?.run { this() }
-            }
-        }
-
-        fun show(context: Context) {
-            if(context is Activity && !context.isFinishing) super.show()
-        }
-    }
 }
-

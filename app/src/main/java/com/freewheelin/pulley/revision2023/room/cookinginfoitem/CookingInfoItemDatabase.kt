@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import com.freewheelin.pulley.revision2023.utils.converters.*
@@ -14,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
     entities = [
         CookingInfoItem::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 
@@ -43,9 +46,17 @@ abstract class CookingInfoItemDatabase: RoomDatabase() {
                     "cooking_info_item_database"
                 )
                     .addCallback(CookingInfoItemDatabaseCallback(applicationScope))
+                    .addMigrations(MIGRATION_1_TO_2)
                     .build()
                 INSTANCE = instance
                 instance
+            }
+        }
+        private val MIGRATION_1_TO_2: Migration = object : Migration(1,2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.run {
+                    execSQL("ALTER TABLE lc_cooking_info_item_table ADD COLUMN studentId TEXT NULLABLE DEFAULT ''")
+                }
             }
         }
     }

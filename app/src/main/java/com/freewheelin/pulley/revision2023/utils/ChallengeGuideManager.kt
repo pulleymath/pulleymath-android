@@ -28,7 +28,8 @@ class ChallengeGuideManager {
 
         fun getStartGuideMission2(nextEvent: () -> Unit = {}, exitEvent: () -> Unit = {}): DialogFragment {
             return ChallengeGuideDialog(
-                guideText = "챌린지 풀리수학 문제집을 선택해서\n문제를 풀고, 유사문제를 만들어봐!",
+                guideText = "스타트 챌린지 문제집을 선택해서\n문제를 풀고, 유사문제를 만들어봐!",
+                highlightText = "스타트 챌린지"
             )
         }
         fun getFinishGuideFromMission2(nextEvent: () -> Unit = {}, exitEvent: () -> Unit = {}): DialogFragment {

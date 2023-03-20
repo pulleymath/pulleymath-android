@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -94,14 +95,12 @@ class AnalysisTodayStudyListView: ConstraintLayout {
                 // TODO start challenge reward는 islocked 이 풀려있나?
                 setOnClickListener {
                     if (piece.isLocked) {
-//                        DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "돈내놔!")
+                        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "풀기/리뷰")
                         val dialog = PurchaseGuideDialog()
-                        FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisTodayStudyListView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                        val fm = (context as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "purchaseGuideDialog")}
                     }
                     else {
-                        println("asoaso solveBtnWrapperCl click!!! listener null? : ${listener == null}")
-                        println("asoaso solveBtnWrapperCl click!!! bookSeries: ${Book(piece).bookCategoryList?.bookSeries}")
-                        println("asoaso solveBtnWrapperCl click!!! subca?: ${piece.pieceSubCategory}")
                         listener?.onSolveBtnClicked(this@AnalysisTodayStudyListView, piece)
                     }
                 }
@@ -109,13 +108,15 @@ class AnalysisTodayStudyListView: ConstraintLayout {
             holder.listBinding.reportBtn.apply {
                 setOnClickListener {
                     if (piece.isLocked) {
+                        LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "리포트")
                         val dialog = PurchaseGuideDialog()
-                        FragmentManager.findFragment<PurchaseGuideDialog>(this@AnalysisTodayStudyListView).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
+                        val fm = (context as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "purchaseGuideDialog")}
                     }
                     else { listener?.onReportBtnClicked(this@AnalysisTodayStudyListView, piece) }
                 }
             }
-            Log.d("테스트", "setList($index, $newOne)")
+
             if(index == 0 && newOne) holder.setHighlight()
             recyclerView.addView(holder.listBinding.root)
         }
