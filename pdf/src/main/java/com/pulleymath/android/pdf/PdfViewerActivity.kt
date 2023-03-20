@@ -786,10 +786,8 @@ open class PdfViewerActivity : Activity() {
         }
     }
     private fun callSetResult() {
-        val pdfListActivity_COMMERCIAL_PDF_EXITED = 302
-        val pdfListActivity_RESULT_BOOK_ID = "RESULT_BOOK_ID"
-        intent.putExtra(pdfListActivity_RESULT_BOOK_ID, bookId)
-        setResult(pdfListActivity_COMMERCIAL_PDF_EXITED, intent)
+        intent.putExtra(RESULT_BOOK_ID, bookId)
+        setResult(COMMERCIAL_PDF_EXITED, intent)
     }
 
     /** Read Log */
@@ -888,6 +886,9 @@ open class PdfViewerActivity : Activity() {
 
         const val KEY_TEST_API_FLAG = "test_api_flag"
         const val KEY_API_FLAG = "api_flag"
+
+        const val COMMERCIAL_PDF_EXITED = 302
+        const val RESULT_BOOK_ID = "RESULT_BOOK_ID"
 
         var studentId: String = ""
         var token: String = ""
