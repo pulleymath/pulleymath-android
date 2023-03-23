@@ -7,202 +7,248 @@
         <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.PdfListActivity.PdfItemClickListener"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.Pdf"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel"/>
+        <variable name="isTopRow" type="Boolean"/>
+        <variable name="isLeftColumn" type="Boolean"/>
+        <variable name="isRightColumn" type="Boolean"/>
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/gray_200"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{()->listener.onItemClick(item)}"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/dp24">
+        android:layout_marginBottom="26dp"
+        android:layout_marginStart="@dimen/dp14"
+        android:layout_marginEnd="@dimen/dp14"
 
-        <ImageView
-            android:id="@+id/imgCover"
-            bind_img_url="@{item.cover_url}"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp24"
-            android:layout_marginEnd="@dimen/dp36"
-            android:background="@drawable/bg_white_ffffff"
-            android:elevation="5dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="20:27"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+        layout_margin_top_dimen="@{ isTopRow ? @dimen/dp32 : @dimen/dp0 }"
+        >
 
-        <TextView
-            android:id="@+id/textTitle"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/dp36"
-            android:maxLines="2"
-            android:text="@{item.title}"
-            android:textSize="@dimen/dp18"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgCover" />
-
-        <TextView
-            android:id="@+id/textSubject"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/dp36"
-            android:text="@{item.subject}"
-            android:textSize="@dimen/dp18"
-            android:visibility="@{ item.subject.isEmpty() ? View.GONE : View.VISIBLE }"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textTitle" />
-
-        <TextView
-            android:id="@+id/textPublisher"
-            style="@style/TextGrey_9f9f9f.ExtraBold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/dp36"
-            android:text="@{item.publisher.name}"
-            android:textSize="@dimen/dp14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textSubject" />
-
-        <TextView
-            android:id="@+id/textCategory"
-            style="@style/TextGrey_9f9f9f.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:elevation="5dp"
-            android:background="@drawable/bg_grey_f2f2f2_round_2_no_ripple"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp"
-            android:text="@{item.category}"
-            android:textSize="@dimen/dp14"
-            app:layout_constraintBottom_toBottomOf="@+id/imgCover"
-            app:layout_constraintEnd_toEndOf="@+id/imgCover" />
-
-        <TextView
-            android:id="@+id/textNewMark"
-            style="@style/TextWhite_ffffff.ExtraBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_red_fe7b67_round_2_no_ripple"
-            android:elevation="5dp"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp"
-            android:text="NEW"
-            android:textSize="@dimen/dp14"
-            android:visibility="@{ item.is_new_mark ? View.VISIBLE : View.INVISIBLE }"
-            app:layout_constraintBottom_toBottomOf="@+id/textCategory"
-            app:layout_constraintEnd_toStartOf="@+id/textCategory"
-            app:layout_constraintTop_toTopOf="@+id/textCategory" />
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imgDownload"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading ? View.VISIBLE : View.INVISIBLE }"-->
-<!--            android:elevation="6dp"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/textTitle"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/imgCover"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/imgCover"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/imgCover"-->
-<!--            app:srcCompat="@drawable/ic_download_file" />-->
-
-        <ImageView
-            android:id="@+id/imgDownload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.isLocked ? View.VISIBLE : View.INVISIBLE }"
-            android:elevation="6dp"
-            app:layout_constraintBottom_toTopOf="@+id/textTitle"
-            app:layout_constraintEnd_toEndOf="@+id/imgCover"
-            app:layout_constraintStart_toStartOf="@+id/imgCover"
-            app:layout_constraintTop_toTopOf="@+id/imgCover"
-            app:srcCompat="@drawable/ic_download_file" />
-
-        <!-- lock -->
-        <FrameLayout
-            android:id="@+id/imgLock"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:elevation="6dp"
-            android:background="@color/dim_black_333333"
-            visibleIf="@{ item.isLocked }"
-            app:layout_constraintEnd_toEndOf="@+id/imgCover"
-            app:layout_constraintStart_toStartOf="@+id/imgCover"
-            app:layout_constraintTop_toTopOf="@+id/imgCover"
-            app:layout_constraintBottom_toBottomOf="@+id/imgCover">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardRootCl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
             <ImageView
+                android:id="@+id/imgCover"
+                bind_img_url="@{item.landscape_cover_url}"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/gradient_top_to_bottom"
+                visibleIf="@{ item.isLocked }"
+                app:layout_constraintTop_toTopOf="@+id/imgCover"
+                app:layout_constraintStart_toStartOf="@+id/imgCover"
+                app:layout_constraintEnd_toEndOf="@+id/imgCover"
+                app:layout_constraintBottom_toBottomOf="@+id/imgCover"/>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:elevation="7dp"
-                app:srcCompat="@drawable/ic_lock_48_white" />
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="20dp"
+                app:layout_constraintTop_toTopOf="@+id/imgCover"
+                app:layout_constraintStart_toStartOf="@+id/imgCover">
 
-        </FrameLayout>
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_lock_24_white"
+                    visibleIf="@{ item.isLocked }"
+                    />
 
-        <ImageView
-            android:id="@+id/imgDownloadCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
-            android:elevation="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
-            app:layout_constraintEnd_toEndOf="@+id/imgDownload"
-            app:layout_constraintStart_toStartOf="@+id/imgDownload"
-            app:layout_constraintTop_toTopOf="@+id/imgDownload"
-            app:srcCompat="@drawable/ic_download_cancel" />
+            </LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bodyCl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:background="@drawable/bg_white_ripple_gray_200"
+                app:layout_constraintTop_toBottomOf="@+id/imgCover"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="@dimen/dp72"
-            android:layout_height="@dimen/dp72"
-            android:indeterminate="false"
-            android:progressDrawable="@drawable/circular_progress_bar"
-            android:background="@drawable/circle_shape"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:elevation="6dp"
-            android:indeterminateTint="@color/purple_6D6DFF"
-            android:max="100"
-            android:progress="@{item.downloadProgress}"
-            android:visibility="@{item.downloading ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
-            app:layout_constraintEnd_toEndOf="@+id/imgDownload"
-            app:layout_constraintStart_toStartOf="@+id/imgDownload"
-            app:layout_constraintTop_toTopOf="@+id/imgDownload" />
+                <TextView
+                    android:id="@+id/publisherTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/b3"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/gray_600"
+                    android:text="@{ item.publisher.name + `(` + item.category + `)` , default = 진학사_심화서}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <LinearLayout
+                    android:id="@+id/bookInfoLl"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/publisherTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/openingProgress"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="@dimen/dp72"
-            android:layout_height="@dimen/dp72"
-            android:indeterminateTint="@color/purple_6D6DFF"
-            android:visibility="@{item.opening ? View.VISIBLE : View.INVISIBLE}"
-            android:elevation="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgDownload"
-            app:layout_constraintEnd_toEndOf="@+id/imgDownload"
-            app:layout_constraintStart_toStartOf="@+id/imgDownload"
-            app:layout_constraintTop_toTopOf="@+id/imgDownload" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/bookNameTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/h4"
+                        android:textColor="@color/gray_800"
+                        android:text="@{ item.title , default = 블랙라벨블랙라벨}"
+                        />
+                    <TextView
+                        android:id="@+id/bookSubjectTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/h6"
+                        android:textColor="@color/gray_800"
+                        android:text="@{ item.subject , default = 수학_상}"
+                        android:layout_marginTop="4dp"
+                        />
+
+                </LinearLayout>
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/downloadCl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.isLocked ? View.VISIBLE : View.INVISIBLE }"
+                    android:background="@drawable/bg_purple_100_round_ripple"
+                    app:layout_constraintVertical_bias="1"
+                    app:layout_constraintTop_toBottomOf="@id/bookInfoLl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/downloadIv"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_download_slim"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/downloadTv"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="packed"/>
+                    <TextView
+                        android:id="@+id/downloadTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/h6"
+                        android:text="다운로드"
+                        android:textColor="@color/purple_300"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginStart="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/downloadIv"
+                        app:layout_constraintEnd_toStartOf="@+id/freeTv"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/freeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="무료"
+                        style="@style/h6"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_red_300_round"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/downloadTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/downloadProgressCl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    visibleIf="@{ item.downloading }"
+                    android:background="@drawable/bg_purple_100_round_ripple"
+                    app:layout_constraintVertical_bias="1"
+                    app:layout_constraintTop_toBottomOf="@id/bookInfoLl"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ProgressBar
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:progress="@{ item.downloadProgress }"
+                        android:progressDrawable="@drawable/progress_bar_linear"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/downloadProgressTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/h6"
+                        android:text="취소"
+                        android:textColor="@{ item.downloading ? item.downloadProgress > 50 ? @color/white : @color/purple_300 : @color/purple_300 }"
+                        android:layout_marginVertical="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <FrameLayout
+                android:id="@+id/loadingContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                visibleIf="@{ item.opening }"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    app:lottie_speed="1"
+                    app:lottie_repeatMode="restart"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_fileName="circle_loading.json"/>
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -125,12 +125,20 @@ open class Content: Serializable {
 
     @Expose @SerializedName("dateTime")
     var createDateTime: Date = Date()
-    var solveDateTime: Date? = null
     var updateDateTime: Date? = null
+    var solveDateTime: Date? = null
 
     val updateDateTimeOnMMdd: String
         get() {
             return updateDateTime?.let { DateTimeUtils.mMDashddFormat.format(it) } ?: ""
+        }
+    val solveDateTimeOnMMdd: String
+        get() {
+            return solveDateTime?.let { DateTimeUtils.mMDashddFormat.format(it) } ?: ""
+        }
+    val isShowSolveDateTime: Boolean
+        get() {
+            return solveDateTime != null
         }
 
     var pieceSubCategory: String = ""

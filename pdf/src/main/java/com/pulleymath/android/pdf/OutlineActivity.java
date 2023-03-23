@@ -33,8 +33,7 @@ import android.widget.ListView;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class OutlineActivity extends ListActivity
-{
+public class OutlineActivity extends ListActivity {
 	public static class Item implements Serializable {
 		public String title;
 		public int page;

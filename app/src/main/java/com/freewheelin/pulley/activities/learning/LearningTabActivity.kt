@@ -807,7 +807,6 @@ class LearningTabActivity : PermissionActivity(),
         }
     }
 
-
     fun moveTo(frag: Fragment, withAnim: Boolean = true) {
         supportFragmentManager.beginTransaction().apply {
             if (withAnim) setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right, R.anim.enter_to_left, R.anim.exit_to_right)

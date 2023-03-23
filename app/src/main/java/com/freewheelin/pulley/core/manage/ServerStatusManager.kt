@@ -2,6 +2,7 @@ package com.freewheelin.pulley.core.manage
 
 import android.app.Activity
 import android.util.Log
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.model.ServerStatus
@@ -19,11 +20,13 @@ object ServerStatusManager {
 
     fun requestInspectionFlag(): ServerStatus? {
         try {
-            val inspectionUrl = when (Preferences.onServerAPI.get()) {
+            var inspectionUrl = when (Preferences.onServerAPI.get()) {
                 Network.Server.live.toString() -> URL.SERVER_INSPECTION
                 Network.Server.staging.toString() -> URL.STAGING_SERVER_INSPECTION
                 else -> URL.SERVER_INSPECTION
             }
+            if (BuildConfig.FLAVOR == "beta") inspectionUrl = URL.STAGING_SERVER_INSPECTION
+
             val data = Jsoup
                 .connect(inspectionUrl)
                 .ignoreContentType(true)

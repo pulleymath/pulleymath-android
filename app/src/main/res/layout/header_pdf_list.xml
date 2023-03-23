@@ -14,20 +14,42 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f2f2f2"
+        android:background="@color/gray_200"
+        android:layout_marginStart="@dimen/dp_minus35"
+        android:layout_marginEnd="@dimen/dp_minus35"
         tools:context=".revision2021.activity.PdfListActivity">
-
+        
         <TextView
-            android:id="@+id/textTitle"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp48"
+            style="@style/h1"
             android:text="풀리북스"
-            android:textSize="@dimen/dp24"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="@dimen/dp48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <View
+            android:id="@+id/titleBottomBorderView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/gray_400"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTv"/>
+
+        <TextView
+            android:id="@+id/subtitleTv"
+            style="@style/h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp48"
+            android:text="나의 풀리북스"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleBottomBorderView" />
 
         <LinearLayout
             android:id="@+id/textTotalCountLayout"
@@ -35,26 +57,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginStart="@dimen/dp16"
-            app:layout_constraintBottom_toBottomOf="@+id/textTitle"
-            app:layout_constraintStart_toEndOf="@+id/textTitle">
+            app:layout_constraintBottom_toBottomOf="@+id/subtitleTv"
+            app:layout_constraintStart_toEndOf="@+id/subtitleTv">
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/h6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dp14"
                 android:text="총 "/>
             <TextView
                 android:id="@+id/pdfListCountTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/h6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dp14"
                 android:text="@{vm.pdfListLength}"/>
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/h6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dp14"
                 android:text="개"/>
         </LinearLayout>
 
@@ -62,10 +81,10 @@
             android:id="@+id/spinnerSubject"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/dp24"
             android:background="@drawable/bg_spinner_common"
-            app:layout_constraintStart_toStartOf="@+id/textTitle"
-            app:layout_constraintTop_toBottomOf="@+id/textTitle"
+            app:layout_constraintStart_toStartOf="@+id/subtitleTv"
+            app:layout_constraintTop_toBottomOf="@+id/subtitleTv"
             android:selectedItemPosition="@={vm.subjectSelectedPosition}"
             app:adapter="@{subjectSpinnerAdapter}" />
 
@@ -83,6 +102,8 @@
             android:id="@+id/purchaseTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/b1"
+            android:textColor="@color/gray_700"
             android:text="열람할 수 있는 책 보기"
             android:layout_marginStart="@dimen/dp16"
             app:layout_constraintStart_toEndOf="@+id/spinnerCategory"

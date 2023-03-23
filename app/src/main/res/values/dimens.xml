@@ -61,9 +61,12 @@
     <dimen name="dp52">46dp</dimen>
     <dimen name="dp50">44dp</dimen>
     <dimen name="dp48">40dp</dimen>
+    <dimen name="dp_minus48">-40dp</dimen>
     <dimen name="dp42">36dp</dimen>
     <dimen name="dp40">32dp</dimen>
     <dimen name="dp36">32dp</dimen>
+    <dimen name="dp35">30dp</dimen>
+    <dimen name="dp_minus35">-30dp</dimen>
     <dimen name="dp34">28dp</dimen>
     <dimen name="dp32">24dp</dimen>
     <dimen name="dp30">22dp</dimen>

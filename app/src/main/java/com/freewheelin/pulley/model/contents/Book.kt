@@ -73,16 +73,26 @@ class Book: Content, BaseDiffItem {
     val splitedTag1: String
         get() {
             val tags = bookTag?.split(",") ?: listOf("", "")
-            return tags[0]
+            if (tags.isNotEmpty()) {
+                return tags[0]
+            }
+            return ""
         }
     val splitedTag2: String
         get() {
             val tags = bookTag?.split(",") ?: listOf("", "")
-            return tags[1]
+            if (tags.size > 1) {
+                return tags[1]
+            }
+            return ""
         }
-    val showPlanTag: Boolean
+    val showPlanTag1: Boolean
         get() {
-            return !isCompleted() && splitedTag1.isNotEmpty() && splitedTag2.isNotEmpty()
+            return !isCompleted() && splitedTag1.isNotEmpty()
+        }
+    val showPlanTag2: Boolean
+        get() {
+            return !isCompleted() && splitedTag2.isNotEmpty()
         }
 
     var addNewAssignPlan: Boolean = false

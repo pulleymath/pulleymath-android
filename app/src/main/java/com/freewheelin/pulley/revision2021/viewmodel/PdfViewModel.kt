@@ -205,7 +205,7 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
     }
 
     val onScrollListener = object: RecyclerView.OnScrollListener() {
-        val threshold: Int = 158
+        val threshold: Int = 395
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (ySum < 0) ySum = 0

@@ -60,9 +60,9 @@
             bind_pdf_response="@{vm.pdfList}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp36"
-            android:layout_marginEnd="@dimen/dp12"
+            android:clipToPadding="false"
             tools:addOnScrollListener="@{vm.onScrollListener}"
+            android:paddingHorizontal="@dimen/dp35"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,15 +109,16 @@
             android:orientation="horizontal"
             android:visibility="@{vm.stickyAppBarShow ? View.VISIBLE : View.INVISIBLE}"
             android:alpha="@{vm.stickyAppBarAlpha}"
+            android:paddingStart="@dimen/dp48"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
+<!--                android:layout_marginStart="@dimen/dp24"-->
             <com.freewheelin.pulley.revision2021.views.Spinner
                 android:id="@+id/spinnerSubject"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp24"
                 android:layout_marginEnd="@dimen/dp10"
                 android:background="@drawable/bg_spinner_common"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -142,6 +143,8 @@
                 android:id="@+id/purchaseTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/b1"
+                android:textColor="@color/gray_700"
                 android:text="열람할 수 있는 책 보기"
                 android:layout_marginStart="@dimen/dp16"
                 app:layout_constraintStart_toEndOf="@+id/spinnerCategory"

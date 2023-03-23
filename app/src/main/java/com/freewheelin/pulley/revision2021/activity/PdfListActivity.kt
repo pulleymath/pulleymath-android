@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.activity
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,10 +15,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -25,25 +29,25 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ActivityPdfListBinding
 import com.freewheelin.pulley.databinding.HeaderPdfListBinding
 import com.freewheelin.pulley.databinding.ItemPdfBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
-import com.freewheelin.pulley.utils.DialogUtils
-import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.GridMarginDecoration
 import com.pulleymath.android.pdf.PdfViewerActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -78,11 +82,12 @@ class PdfListActivity : AppCompatActivity() {
             vm = viewModel
             val adapter = PdfAdapter(viewModel)
             recyclerPdf.adapter = adapter
-            val manager = GridLayoutManager(baseContext, 5)
+            val spanCount = if(isTablet) 5 else 4
+            val manager = GridLayoutManager(baseContext, spanCount)
             manager.spanSizeLookup = object : SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return when(position) {
-                        0 -> 5
+                        0 -> spanCount
                         else -> 1
                     }
                 }
@@ -246,7 +251,7 @@ class PdfListActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             when (position) {
                 0 -> (holder as HeaderViewHolder).bind(getItem(position))
-                else -> (holder as PdfHolder).bind(getItem(position))
+                else -> (holder as PdfHolder).bind(getItem(position), position)
             }
         }
 
@@ -314,7 +319,13 @@ class PdfListActivity : AppCompatActivity() {
     inner class PdfHolder(private val binding: ItemPdfBinding): RecyclerView.ViewHolder(binding.root), PdfItemClickListener {
         private val downloadThreads = arrayListOf<Thread>()
         private val downloadConnections = arrayListOf<HttpURLConnection>()
-        fun bind(item: Pdf) {
+
+        init {
+            binding.apply {
+                lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
+            }
+        }
+        fun bind(item: Pdf, position: Int) {
             /** 다운로드 체크 */
             item.downloaded.set(File(makeLocalPdfName(item)).exists())
             item.subject = PdfListFilter.subject[item.subject_code] ?:""
@@ -322,9 +333,18 @@ class PdfListActivity : AppCompatActivity() {
                 item.subject = ""
             }
 
-            binding.listener = this
-            binding.item = item
-            binding.vm = viewModel
+            binding.apply {
+                val spanCount = 5
+                val positionWithoutHeader = position - 1
+                listener = this@PdfHolder
+                this.item = item
+                vm = viewModel
+                isTopRow = positionWithoutHeader < spanCount
+                isLeftColumn = positionWithoutHeader % spanCount == 0
+                isRightColumn = positionWithoutHeader % spanCount == (spanCount - 1)
+            }
+
+
 
             println("피디에프 ${item.title} ${item.subject} ${item.id} downloaded=${item.downloaded.get()}, downloading=${item.downloading.get()}, is_purchased=${item.is_purchased}")
         }

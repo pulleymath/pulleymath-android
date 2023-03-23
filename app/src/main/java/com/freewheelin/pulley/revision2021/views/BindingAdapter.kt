@@ -48,7 +48,7 @@ object BindingAdapter {
     }
     @JvmStatic
     @BindingAdapter("layout_margin_start_dimen")
-    fun setLayoutMarginBottom(view: View, dimen: Float) {
+    fun setLayoutMarginStart(view: View, dimen: Float) {
         view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             this.marginStart = dimen.toInt()
         }
@@ -59,6 +59,13 @@ object BindingAdapter {
     fun setLayoutMarginEnd(view: View, dimen: Float) {
         view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             this.marginEnd = dimen.toInt()
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("layout_margin_bottom_dimen")
+    fun setLayoutMarginBottom(view: View, dimen: Float) {
+        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            this.bottomMargin = dimen.toInt()
         }
     }
 

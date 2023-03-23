@@ -49,8 +49,8 @@ class GridMarginDecoration: RecyclerView.ItemDecoration {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildLayoutPosition(view)
-
         val perSpace = (columnSpace * (columnCnt - 1)) / columnCnt
+
         if(columnCnt == 3) {
             when (position % columnCnt) {
                 0 -> {
@@ -65,7 +65,22 @@ class GridMarginDecoration: RecyclerView.ItemDecoration {
                     outRect.right =  perSpace / 2
                 }
             }
+        } else if (columnCnt == 5) {
+            when (position % columnCnt) {
+                columnCnt - 1 -> {
+                    outRect.left = perSpace
+                }
+                0 -> {
+                    outRect.right = perSpace
+                }
+
+                else -> {
+                    outRect.left = columnSpace / 2
+                    outRect.right = columnSpace / 2
+                }
+            }
         } else {
+
             when (position % columnCnt) {
                 0 -> {
                     outRect.right = perSpace
