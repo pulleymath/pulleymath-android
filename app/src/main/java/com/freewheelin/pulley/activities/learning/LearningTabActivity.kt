@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
@@ -150,6 +151,8 @@ class LearningTabActivity : PermissionActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        setScreenOrientation() // TODO 모바일 portrait 적용할때 사용
 
         // TODO 추후 푸시알람 실행시 어딘가로 보내야할수도 있다.
         val target = intent.getStringExtra("target_android")
@@ -869,6 +872,13 @@ class LearningTabActivity : PermissionActivity(),
         startActivity(intent)
 //        val intent = SolveActivity.getIntent(this)
 //        startActivity(intent)
+    }
+    private fun setScreenOrientation() {
+        requestedOrientation = if (resources.getBoolean(R.bool.isPortrait)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        }
     }
 
     override fun monitoringTick() {

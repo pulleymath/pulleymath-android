@@ -170,6 +170,11 @@ val Context.isTablet: Boolean
         return resources.getBoolean(R.bool.isTablet)
     }
 
+val Context.isMobile: Boolean
+    get() {
+        return resources.getBoolean(R.bool.isMobile)
+    }
+
 val Context.underMinHeight:Boolean
     get() {
         val config = resources.configuration

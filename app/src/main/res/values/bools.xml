@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    추후 모바일기기 세로모드 대응시 사용 -->
+    <bool name="isPortrait">true</bool>
+</resources>

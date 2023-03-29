@@ -15,6 +15,8 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.bases.isMobile
+import com.freewheelin.pulley.bases.isMobileUI
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ActivityPurchaseGuideBinding
@@ -48,14 +50,12 @@ class PurchaseGuideActivity : AppCompatActivity() {
         setContentView(binding.root)
         addBackBtnCallback()
         initActivityResult()
+
         binding.apply {
             viewModel.fetchGuides()
 
-            premiumIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.PREMIUM) }
-            standardIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.STANDARD) }
-            basicPIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_P) }
-            basicCIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_C) }
-
+            initUiIfTablet()
+            initUiIfMobile()
             compareTv.setOnClickListener {
                 viewModel.step.postValue(1)
             }
@@ -67,25 +67,50 @@ class PurchaseGuideActivity : AppCompatActivity() {
             step.observe(this@PurchaseGuideActivity) { step ->
                 when (step) {
                     0 -> {
-                        binding.scrollRoot.visibleIf(true)
-                        binding.compareTv.visibleIf(true)
-                        binding.compareFl.hide { }
-                        binding.compareScrollView.hide {  }
+                        binding.apply {
+                            bodyCl.visibleIf(isTablet)
+                            mobileScrollRoot.visibleIf(isMobile)
+                            compareTv.visibleIf(true)
+                            compareFl.hide { }
+                            compareScrollView.hide {  }
+                        }
                     }
                     1 -> {
-                        binding.scrollRoot.visibleIf(false)
-                        binding.compareTv.visibleIf(false)
-                        if (isTablet) {
-                            binding.compareFl.showTransition(300, ViewTransition.SlideFromRight)
-                        } else {
-                            binding.compareScrollView.showTransition(300, ViewTransition.SlideFromRight)
+                        binding.apply {
+                            bodyCl.visibleIf(false)
+                            mobileScrollRoot.visibleIf(false)
+                            compareTv.visibleIf(false)
+                            if (isTablet) {
+                                compareFl.showTransition(300, ViewTransition.SlideFromRight)
+                            } else {
+                                compareScrollView.showTransition(300, ViewTransition.SlideFromRight)
+                            }
                         }
+
                     }
                     else -> {}
                 }
             }
         }
     }
+
+    private fun initUiIfTablet() = with(binding) {
+        if (isTablet) {
+            premiumClickView.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.PREMIUM) }
+            standardIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.STANDARD) }
+            basicPIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_P) }
+            basicCIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_C) }
+        }
+    }
+    private fun initUiIfMobile() = with(binding) {
+        if (isMobile) {
+            mobilePremiumClickView.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.PREMIUM) }
+            mobileStandardIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.STANDARD) }
+            mobileBasicPIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_P) }
+            mobileBasicCIv.setOnClickListener { openPurchaseGuideWebView(PaidServiceType.BASIC_C) }
+        }
+    }
+
     private fun addBackBtnCallback() {
         onBackPressedDispatcher.addCallback(this) {
             onBackBtn()

@@ -2,6 +2,7 @@
 <!-- 태블릿사이즈 대응-->
 <resources>
     <bool name="isTablet">true</bool>
+    <bool name="isMobile">false</bool>
     <dimen name="dialog_mock_exam_width">650dp</dimen>
     <dimen name="pulley_plus_price_height">400dp</dimen>
 </resources>
