@@ -402,7 +402,10 @@ class LearningTabActivity : PermissionActivity(),
     fun setUserObserveAttachedByMainFragment() {
         viewModel.user.observe(this) {
             tabFragment.find { it.screenName == "메인" }?.let { frag ->
-                (frag as MainFragment).viewModel.initUserInfo()
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(500)
+                    (frag as MainFragment).viewModel.initUserInfo()
+                }
             }
         }
     }
