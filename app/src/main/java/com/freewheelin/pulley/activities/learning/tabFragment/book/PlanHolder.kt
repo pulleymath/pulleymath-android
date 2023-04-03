@@ -58,6 +58,10 @@ class BookPlanV2Holder(
         cardContainer.layoutParams.width = if (isGridLayout) FrameLayout.LayoutParams.MATCH_PARENT else 195.toPx()
         itemView.setOnTouchListener(BoongthEffect())
         itemView.setOnClickListener {
+//            if (item.isGuest) {
+//                // TODO login dialog
+//                LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "게스트로그인", "잠금버튼")
+//            }
             if (item.isLocked) {
                 LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                 val dialog = PurchaseGuideDialog()

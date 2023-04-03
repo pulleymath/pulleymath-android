@@ -111,7 +111,7 @@ class PdfListActivity : AppCompatActivity() {
 
 
     private fun createCacheDir() {
-        File(PDF_DIR)?.let { outputDir ->
+        File(PDF_DIR).let { outputDir ->
             if (!outputDir.exists()) {
                 outputDir.mkdirs()
             }
@@ -334,14 +334,14 @@ class PdfListActivity : AppCompatActivity() {
             }
 
             binding.apply {
-                val spanCount = 5
-                val positionWithoutHeader = position - 1
                 listener = this@PdfHolder
                 this.item = item
                 vm = viewModel
-                isTopRow = positionWithoutHeader < spanCount
-                isLeftColumn = positionWithoutHeader % spanCount == 0
-                isRightColumn = positionWithoutHeader % spanCount == (spanCount - 1)
+//                val spanCount = 5
+//                val positionWithoutHeader = position - 1
+//                isTopRow = positionWithoutHeader < spanCount
+//                isLeftColumn = positionWithoutHeader % spanCount == 0
+//                isRightColumn = positionWithoutHeader % spanCount == (spanCount - 1)
             }
 
 
