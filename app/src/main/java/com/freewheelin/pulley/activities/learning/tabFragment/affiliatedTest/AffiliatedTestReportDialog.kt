@@ -181,7 +181,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
         var stepStick3 = view.findViewById<View>(R.id.stepStick3)
         var tooltipView = view.findViewById<View>(R.id.tooltipView)
         var reviewStartBtn = view.findViewById<PrimaryButton>(R.id.reviewStartBtn)
-        var addtionalLearningBtn = view.findViewById<PrimaryButton>(R.id.addtionalLearningBtn)
+        var additionalLearningBtn = view.findViewById<PrimaryButton>(R.id.additionalLearningBtn)
         var label2Tv = view.findViewById<TextView>(R.id.label2Tv)
         var label3Tv = view.findViewById<TextView>(R.id.label3Tv)
         var supportLearnTitleTv = view.findViewById<TextView>(R.id.supportLearnTitleTv)
@@ -218,7 +218,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 val intent = AffiliatedTestSolveActivity.getReviewIntent(context, workbook)
                 context.startActivity(intent)
             }
-            addtionalLearningBtn.setOnClickListener {
+            additionalLearningBtn.setOnClickListener {
                 println("asoaso additional learning btn! subject: ${subject}")
                 if (subject == "물리학") {
                     val intent = Intent(SHOW_ADDITIONAL_LEARNING)
@@ -226,7 +226,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                     close()
                 } else {
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
+                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 5)
                     intent.putExtra(PieceManager.EVENT_SCROLL, true)
                     intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
                     intent.putExtra(PieceManager.EVENT_FILTER, subject)
