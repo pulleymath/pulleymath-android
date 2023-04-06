@@ -61,7 +61,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             finishAffinity()
         }
         viewModel.user.observe(this) {
-            println("asoaso SplashAct user init : ${it?.studentID} ${it?.token}")
             MyApplication.user = it
             MyApplication.token = it?.token
         }
@@ -206,23 +205,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             viewModel.fetchUser { user ->
                 MyApplication.isAppFirstLaunch = true
                 MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
-
-                if (user.isExceedDevice) {
-                    // commit 은 기기 삭제후에
-                    DeviceManagerDialog(this, successCB = {
-                        startActivity(Intent(this, LearningTabActivity::class.java))
-                        finishAffinity()
-                    }, failCB = {
-                        MyApplication.user!!.token = ""
-                        MyApplication.token = ""
-                        MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [failed]")
-                        startActivity(StartActivity::class.java)
-                        finishAffinity()
-                    }).show()
-
-                } else {
-                    toLogin()
-                }
+                toLogin()
             }
         } else {
             startActivity(StartActivity::class.java)

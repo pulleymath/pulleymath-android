@@ -60,7 +60,6 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 
         if (Preferences.userDataString.get().isNotEmpty()) {
             val user = Gson().fromJson(Preferences.userDataString.get(), User::class.java)
-            println("asoaso myApp : ${user.studentID}")
             viewModel.updateUser(user)
         }
     }

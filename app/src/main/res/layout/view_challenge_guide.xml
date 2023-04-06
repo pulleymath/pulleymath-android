@@ -17,6 +17,17 @@
         app:layout_constraintBottom_toBottomOf="parent">
 <!--        android:background="@color/dim_black_333333_70a"-->
 
+        <ImageView
+            android:id="@+id/exitBtn"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/icon_x"
+            app:tint="@color/gray_500"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
         <TextView
             android:id="@+id/challengeGuideTv"
             android:layout_width="wrap_content"
@@ -95,7 +106,7 @@
             app:layout_constraintEnd_toEndOf="@+id/moveTargetChallengePlaceBtnCl"
             android:text="다른 미션 둘러보기"
             android:padding="8dp"
-            visibleIf="@{ vm.showButtons }"
+            visibleIf="@{ vm.showDismissButtons }"
             style="@style/h5"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"

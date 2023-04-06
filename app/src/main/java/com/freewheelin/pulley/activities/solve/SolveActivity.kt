@@ -1727,6 +1727,7 @@ class SolveActivity : BaseActivity(),
     private fun showSimilarProblemAddedToast(problem: Problem) {
         val problemNum = problem.problemNum.toString() + "번"
 
+
         DaebakToast.show(this, "'${problemNum}'문제의 유사문제가 추가되었습니다.")
     }
 

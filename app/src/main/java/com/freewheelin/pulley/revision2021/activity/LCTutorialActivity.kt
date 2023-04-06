@@ -126,8 +126,6 @@ class LCTutorialActivity : AppCompatActivity() {
 
     }
     private fun goToMainActivity(isEnded: Boolean = false) {
-
-        println("asoaso completed go to mainACtivity ")
         if (isEnded) {
             setResult(ConceptCourseFragment.CHALLENGE_TUTORIAL_FINISH, intent)
         }

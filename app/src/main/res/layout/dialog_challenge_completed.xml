@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/b1r"
-                        android:text="다음 미션으로 이동해 진행해보세요:)"
+                        android:text="@{ vm.subtitle, default=다음_미션으로_이동해_진행해보세요}"
                         android:gravity="center"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +110,7 @@
                         android:layout_marginTop="8dp"/>
                     <androidx.gridlayout.widget.GridLayout
                         android:id="@+id/stampGl"
-                        android:layout_width="332dp"
+                        android:layout_width="272dp"
                         android:layout_height="wrap_content"
                         app:rowCount="2"
                         app:columnCount="2"

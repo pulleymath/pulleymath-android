@@ -20,6 +20,7 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
@@ -29,6 +30,10 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ConceptCourseFragment : LearningTabFragment() {
     companion object {
@@ -69,7 +74,7 @@ class ConceptCourseFragment : LearningTabFragment() {
                     println("asoaso CCF challengeReceiver courseId : ${challengeCourseId}")
                     when (challengeCourseId) {
                         ChallengeManager.CourseName.스타트챌린지_개념.id -> {
-                            setHeaderSubject()
+                            actionOnStartChallenge()
                         }
                         else -> {}
                     }
@@ -102,8 +107,6 @@ class ConceptCourseFragment : LearningTabFragment() {
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-
-
             studyRv.adapter = ChapterAdapter()
         }
         viewModel.apply {
@@ -150,10 +153,17 @@ class ConceptCourseFragment : LearningTabFragment() {
             if (it != -1) { viewModel.fetch(it) }
         }
     }
-    fun setHeaderSubject() {
+    fun actionOnStartChallenge() {
         viewModel.checkHeaderSelectedActionOfRelatedChallenge()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(700)
+            launchTutorialActivity()
+        }
     }
 
+    fun launchTutorialActivity () {
+        getResult.launch(LCTutorialActivity.getIntent(requireContext()))
+    }
     inner class ChapterAdapter(): ListAdapter<StudyChapter, RecyclerView.ViewHolder>(DiffCallback<StudyChapter>()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return ChapterViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_study_chapter, parent, false))

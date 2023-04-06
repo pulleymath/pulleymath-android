@@ -12,6 +12,7 @@ class ChallengeGuideDialogViewModel(application: Application): BaseAndroidViewMo
     val highlightTxt = MutableLiveData<String>()
     val pullingImage = MutableLiveData<ChallengeGuideDialog.PullingImage>()
     val showButtons = MutableLiveData<Boolean>()
+    val showDismissButtons = MutableLiveData<Boolean>()
     val showSprinkleView = MutableLiveData<Boolean>()
 
 }

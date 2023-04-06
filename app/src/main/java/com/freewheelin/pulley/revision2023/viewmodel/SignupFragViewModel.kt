@@ -24,7 +24,9 @@ class SignupFragViewModel(application: Application): BaseAndroidViewModel(applic
     fun sendCreateDummyUser(email: String, callback: () -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             createDummyUser(email)
-            callback()
+            withContext(Dispatchers.Main) {
+                callback()
+            }
         }
     }
 

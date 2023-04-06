@@ -2,10 +2,13 @@ package com.freewheelin.pulley.revision2023.service
 
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.model.ResponseBody
+import com.freewheelin.pulley.model.ResponseForceBody
 import com.freewheelin.pulley.model.ResponseListBody
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCompletedSubtitle
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderWrapper
 import retrofit2.Response
 import retrofit2.http.GET
@@ -45,4 +48,7 @@ interface ChallengeService {
         @Path("userChallengeId") userChallengeId: Int,
         @Path("studentId") studentId: String = user?.studentID!!,
     ): ResponseBody<Challenge>
+
+    @GET("/v1/info/messages/challenge/course?os=ANDROID")
+    suspend fun getCompletedSubtitle(): ResponseForceBody<HighlightMessage>
 }

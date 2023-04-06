@@ -102,7 +102,7 @@ class User {
     var token:String = ""
 
     // 중복기기 체크
-    var isExceedDevice = false
+//    var isExceedDevice = false
     var isValidPhone = false
     var isValidEmail = false
 
@@ -245,7 +245,7 @@ class User {
                 MyApplication.user?.token = ""
                 MyApplication.user = null
                 MyApplication.isAppFirstLaunch = true
-//                MyApplication.user?.commit("logout")
+                Preferences.userDataString.set("")
 
                 callback(null)
             }

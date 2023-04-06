@@ -49,6 +49,7 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
 
+            viewModel.getChallengeCompleteInfo()
             scrollRootView.isVerticalScrollBarEnabled = true
             stampLottie.playAnimation()
             stampLottie.addAnimatorListener(object : AnimatorListenerAdapter() {
@@ -77,7 +78,6 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             val partText = if (nextCourse?.challengeCourseId == 3) "로" else "으로"
             nextChallengeTv.text = "${courseName}${partText} 이동하기"
             nextChallengeBtnCl.setOnClickListener {
-                println("asoaso nextChallengeBtncl" )
                 dismiss()
                 callback(nextCourse)
             }

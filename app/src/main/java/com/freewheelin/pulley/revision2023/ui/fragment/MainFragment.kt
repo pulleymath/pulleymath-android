@@ -34,8 +34,13 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
@@ -163,10 +168,10 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
                 if (isAlreadyAppearedUser) return@observe
                 if (it.userStatus == ChallengeUserStatus.YET) {
-                    val dialog = StartChallengeInfoDialog(it.challengeId) { challengeId ->
-                        joinChallenge(challengeId)
-                    }
-                    childFragmentManager.let { dialog.show(it, "StartChallengeInfoDialog") }
+                    joinChallenge(it.challengeId)
+//                    val dialog = StartChallengeInfoDialog(it.challengeId) { challengeId ->
+//                    }
+//                    childFragmentManager.let { dialog.show(it, "StartChallengeInfoDialog") }
                     val studentId = user?.studentID ?: ""
                     val newList = scInfo.studentIds + listOf(studentId)
                     scInfo.studentIds = newList.toSet().toList()
@@ -224,22 +229,28 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     }
 
     private fun onDDayBtnClicked() {
-        val spyCount = (activity as LearningTabActivity).spyCount
+//        val spyCount = (activity as LearningTabActivity).spyCount
         val setOnSpyMode = { (activity as LearningTabActivity).setOnSpyMode() }
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "디데이꺽쇠")
         val dialog = DDaySettingDialog(requireContext(), setOnSpyMode)
         dialog.listener = this
         dialog.show()
 
-//        val dialog = StartChallengeInfoDialog(1, true) { challengeId ->
-//            //TODO where we go?
-//
-//        }
-//        childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
+//        val dialog = ChallengeGuideManager.getStartGuideMission1(
+//            nextEvent = {
+//                (activity as LearningTabActivity).setSelectedTab(1)
+//                (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.Tutorial.rawValue)
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    delay(700)
+//                    (activity as LearningTabActivity).launchConceptCourseTutorial()
+//                }
+//            }
+//        )
+//        childFragmentManager.let { dialog.show(it, "StartGuide") }
 
-//        val dialog = PurchaseGuideDialog()
-//        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
-
+//        val finishGuideDialog = ChallengeGuideManager
+//            .getFinishGuideFromMission1(nextEvent = {  })
+//        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
     }
 
     private fun onStartBtnClicked() {
@@ -275,7 +286,8 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             val dialog = ChallengeGuideManager.getStartGuideMission1(
                 nextEvent = {
                     (activity as LearningTabActivity).setSelectedTab(1)
-                    (activity as LearningTabActivity).setConceptCourseSubjectId(0)
+                    (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.MathSang.rawValue)
+                    (activity as LearningTabActivity).launchConceptCourseTutorial()
                 }
             )
             childFragmentManager.let { dialog.show(it, "StartGuide") }

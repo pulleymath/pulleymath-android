@@ -44,11 +44,6 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         super.onDestroy()
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-//    fun onAppForeground() {
-//        VersionManager.requestVersionInfo(this) {}
-//    }
-
     fun onLoginBtnClicked() {
         startActivity(LoginActivity::class.java)
         finish()
@@ -61,11 +56,9 @@ class StartActivity : BaseActivity(), LifecycleObserver {
 
     private fun initTablet() {
         with(binding) {
-            startBtn.visibility = View.INVISIBLE
             loginTv.visibility = View.INVISIBLE
             loginLabel.visibility = View.INVISIBLE
             loginBorder.visibility = View.INVISIBLE
-            balloonCl.visibility = View.INVISIBLE
 
             startBtn.setOnClickListener {
                 onStartBtnClicked()
@@ -89,14 +82,9 @@ class StartActivity : BaseActivity(), LifecycleObserver {
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
-                    startBtn.show()
                     loginTv.show()
                     loginLabel.show()
                     loginBorder.show()
-                    balloonCl.show {
-                        val anim = AnimationUtils.loadAnimation(this@StartActivity, R.anim.balloon_anim)
-                        it.startAnimation(anim)
-                    }
                 }
 
                 override fun onAnimationCancel(p0: Animator) {

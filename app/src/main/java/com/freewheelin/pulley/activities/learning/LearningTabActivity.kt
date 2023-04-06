@@ -710,7 +710,7 @@ class LearningTabActivity : PermissionActivity(),
 
     fun handleUser() {
         viewModel.fetchUser { user ->
-            if(!user.isValidPhone || user.isExceedDevice) { // 폰 변경, 기기중복 시 세션만료
+            if(!user.isValidPhone) { // 폰 변경시 세션만료
                 sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
             }
             else if(user.isNeedToUpdateGrade()) {
@@ -810,6 +810,13 @@ class LearningTabActivity : PermissionActivity(),
     fun setConceptCourseSubjectId(index: Int) {
         (tabFragment[1] as? ConceptCourseFragment)?.let {
             it.viewModel.selectedSubjectId.postValue(index)
+        }
+    }
+    fun launchConceptCourseTutorial() {
+        println("asoaso launchConceptCourseTutorial! 1")
+        (tabFragment[1] as? ConceptCourseFragment)?.let {
+            println("asoaso launchConceptCourseTutorial! 2")
+            it.launchTutorialActivity()
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.model.DummyCreatedUser
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.service.UserApi
 import com.freewheelin.pulley.revision2023.service.UserService
 
@@ -33,5 +34,8 @@ class UserRepository() {
     suspend fun createDummyUser(email: String) {
         val dummyUser = DummyCreatedUser(email)
         api.adminCreateUser(dummyUser)
+    }
+    suspend fun getSignupMessage(): HighlightMessage {
+        return api.getSignupMessage().data
     }
 }

@@ -29,7 +29,9 @@ class ChallengeGuideDialog(val guideText: String = "",
                            val highlightText: String? = null,
                            val pullingIvSrc: PullingImage = PullingImage.Normal,
                            val showBottomButtons: Boolean = false,
+                           val showBottomDismissButtons: Boolean = false,
                            val showSprinkle: Boolean = false,
+                           val canDismissOutSide: Boolean = true,
                            val nextEvent: () -> Unit = {},
                            val dismissEvent: () -> Unit = {},
                            val exitEvent: () -> Unit = {}
@@ -55,11 +57,13 @@ class ChallengeGuideDialog(val guideText: String = "",
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        dialog?.setCanceledOnTouchOutside(canDismissOutSide)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setFullscreenDialog()
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -71,12 +75,14 @@ class ChallengeGuideDialog(val guideText: String = "",
                 underline()
                 setOnClickListener {
                     dismiss()
-                    exitEvent()
                 }
             }
             rootView.setOnClickListener {
                 dismiss()
                 nextEvent()
+            }
+            exitBtn.setOnClickListener {
+                dismiss()
             }
         }
 
@@ -87,6 +93,7 @@ class ChallengeGuideDialog(val guideText: String = "",
         highlightText?.let { setHighlightText(it) }
         setPullingIvSrc(pullingIvSrc)
         setShowBottomButtons(showBottomButtons)
+        setShowBottomDismissButtons(showBottomDismissButtons)
 
         viewModel.apply {
             highlightTxt.observe(viewLifecycleOwner) {
@@ -123,6 +130,10 @@ class ChallengeGuideDialog(val guideText: String = "",
         }
     }
 
+    private fun setFullscreenDialog() {
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    }
+
     enum class PullingImage {
         Normal, StampNormal, Happy, RightHandUp, LeftHandUp
     }
@@ -155,5 +166,8 @@ class ChallengeGuideDialog(val guideText: String = "",
     }
     fun setShowBottomButtons(value: Boolean) {
         viewModel.showButtons.postValue(value)
+    }
+    fun setShowBottomDismissButtons(value: Boolean) {
+        viewModel.showDismissButtons.postValue(value)
     }
 }

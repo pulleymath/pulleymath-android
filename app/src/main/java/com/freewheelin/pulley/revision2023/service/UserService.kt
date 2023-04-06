@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2023.service
 
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -18,4 +19,7 @@ interface UserService {
     suspend fun adminCreateUser(
         @Body body: DummyCreatedUser
     ): ResponseBody<Unit>
+
+    @GET("v1/users/signup/app/message")
+    suspend fun getSignupMessage(): ResponseForceBody<HighlightMessage>
 }

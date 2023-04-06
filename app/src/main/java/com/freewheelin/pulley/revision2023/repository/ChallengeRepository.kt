@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.service.ChallengeApi
@@ -60,6 +61,8 @@ class ChallengeRepository() {
                 listOf(newChallenge)
             })
         }
-
+    }
+    suspend fun getChallengeCompletedDialogSubtitle(): HighlightMessage{
+        return api.getCompletedSubtitle().data
     }
 }

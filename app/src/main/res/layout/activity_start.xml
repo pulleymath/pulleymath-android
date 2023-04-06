@@ -64,18 +64,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="@dimen/primaryBtn_width_200dp"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.43" />
 
+        <ImageView
+            android:id="@+id/nowJoinIv"
+            android:layout_width="292dp"
+            android:layout_height="64dp"
+            android:src="@drawable/new_join_10000won_coupon"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/startBtn"
+            app:layout_constraintEnd_toEndOf="@id/startBtn"/>
 
         <Button
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:layout_marginTop="@dimen/dp64"
             android:text="가입하고 공부 시작하기"
             app:layout_constraintStart_toStartOf="@+id/topLabel"
             app:layout_constraintEnd_toEndOf="@+id/topLabel"
-            app:layout_constraintTop_toBottomOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/nowJoinIv"
             android:background="@drawable/bg_purple_6d6dff_round_40"
             />
 
@@ -122,6 +130,7 @@
             android:id="@+id/balloonCl"
             android:layout_width="136dp"
             android:layout_height="128dp"
+            android:visibility="gone"
             android:background="@drawable/ic_balloon_purple"
             android:layout_marginBottom="@dimen/dp28"
             android:layout_marginStart="28dp"
