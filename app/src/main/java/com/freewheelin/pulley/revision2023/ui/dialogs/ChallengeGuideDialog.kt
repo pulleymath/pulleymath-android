@@ -83,6 +83,7 @@ class ChallengeGuideDialog(val guideText: String = "",
             }
             exitBtn.setOnClickListener {
                 dismiss()
+                exitEvent()
             }
         }
 

@@ -288,6 +288,9 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                     (activity as LearningTabActivity).setSelectedTab(1)
                     (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.MathSang.rawValue)
                     (activity as LearningTabActivity).launchConceptCourseTutorial()
+                },
+                exitEvent = {
+                    MarketingManager.setMarketingBanner(requireContext())
                 }
             )
             childFragmentManager.let { dialog.show(it, "StartGuide") }
