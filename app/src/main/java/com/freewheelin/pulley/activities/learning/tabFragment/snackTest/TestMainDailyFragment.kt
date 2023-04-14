@@ -223,6 +223,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
         with(binding as FragmentTestMainBinding) {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
+            isGuestUser = user?.serviceType?.isGuestUser == true
 
             val date = Date()
             contentTv.text = "데일리 테스트는 응시할 때마다 문항이 새로 출제됩니다.\n문항 추천 기준은 아래와 같습니다."

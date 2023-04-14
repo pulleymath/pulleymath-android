@@ -16,6 +16,7 @@ import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.model.contents.BookType
 import com.freewheelin.pulley.model.contents.ClientBookType
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.buttons.PrimaryButton
@@ -46,7 +47,8 @@ class BookPlanV2Holder(
     private val binding: ItemBookPlanV2Binding,
     private val planListener: PlanListenerV2,
     private val actions: List<ActionType>,
-    private val isGridLayout: Boolean = true
+    private val isGridLayout: Boolean = true,
+    private val viewModel: BaseAndroidViewModel? = null
 ): RecyclerView.ViewHolder(binding.root) {
 //    var actionList = listOf(ActionType.pin)
     var popupWindow: PopupWindow? = null
@@ -58,10 +60,11 @@ class BookPlanV2Holder(
         cardContainer.layoutParams.width = if (isGridLayout) FrameLayout.LayoutParams.MATCH_PARENT else 195.toPx()
         itemView.setOnTouchListener(BoongthEffect())
         itemView.setOnClickListener {
-//            if (item.isGuest) {
-//                // TODO login dialog
-//                LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "게스트로그인", "잠금버튼")
-//            }
+            if (user?.serviceType?.isGuestUser == true) {
+                LogUtils.logEvent(itemView.context, user!!, PulleyEvent.LEARNING_CARD_CLICK, "유형카드", "${item.bookName}", "${item.subject}-${item.chapter}")
+                viewModel?.guestException()
+                return@setOnClickListener
+            }
             if (item.isLocked) {
                 LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                 val dialog = PurchaseGuideDialog()
@@ -226,6 +229,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         reviewBtn.setOnClickListener {
             if (book.isLocked) {
                 //TODO
+                LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                 val dialog = PurchaseGuideDialog()
                 val fm = (view.context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
@@ -264,6 +268,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             itemView.setOnTouchListener(BoongthEffect())
             itemView.setOnClickListener {
                 if (book.isLocked) {
+                    LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                     val dialog = PurchaseGuideDialog()
                     val fm = (view.context as AppCompatActivity).supportFragmentManager
                     fm.let { dialog.show(it, "purchaseGuideDialog")}
@@ -278,6 +283,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
             itemView.setOnTouchListener(BoongthEffect())
             itemView.setOnClickListener {
                 if (book.isLocked) {
+                    LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                     val dialog = PurchaseGuideDialog()
                     val fm = (view.context as AppCompatActivity).supportFragmentManager
                     fm.let { dialog.show(it, "purchaseGuideDialog")}
@@ -346,6 +352,7 @@ abstract class PlanHolder(open val view: View) : RecyclerView.ViewHolder(view) {
         itemView.setOnTouchListener(BoongthEffect())
         itemView.setOnClickListener {
             if (book.isLocked) {
+                LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
                 val dialog = PurchaseGuideDialog()
                 val fm = (view.context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}

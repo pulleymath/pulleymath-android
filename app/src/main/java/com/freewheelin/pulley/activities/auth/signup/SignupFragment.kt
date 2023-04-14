@@ -30,6 +30,7 @@ import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.*
 import com.freewheelin.pulley.core.API.RequestModel.sign.AuthPhoneRequest
 import com.freewheelin.pulley.core.API.RequestModel.sign.ConfirmCodeRequest
@@ -57,7 +58,7 @@ import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
+class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2Listener, PasswordFieldV2EnterListener, InputFieldV2Listener, InputFieldV2EnterListener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
 
     var signupInterface: StudentInfoInterface? = null
     private val viewModel: SignupFragViewModel by viewModels()
@@ -289,8 +290,11 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             codeDet.editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
             fullNameDet.editText.toKoreanKeyboard()
             fullNameDet.listener = this@SignupFragment
+            fullNameDet.enterListener = this@SignupFragment
             emailDet.listener = this@SignupFragment
+            emailDet.enterListener = this@SignupFragment
             pwDet.listener = this@SignupFragment
+            pwDet.enterListener = this@SignupFragment
             allCb.listener = this@SignupFragment
             order14Cb.listener = this@SignupFragment
             serviceAgreeCb.listener = this@SignupFragment
@@ -305,23 +309,33 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
 //        confirmCompleteCl.visibility = View.INVISIBLE
             codeConfirmIv.visibility = View.INVISIBLE
 
+            fullNameDet.text = if (isGuestUser) user?.fullName ?: "" else ""
             pwDet.inputEt.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
                 source.toString().filterNot { it.isWhitespace() }
             })
             pwConfirmDet.listener = this@SignupFragment
+            pwConfirmDet.enterListener = this@SignupFragment
             pwConfirmDet.inputEt.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
                 source.toString().filterNot { it.isWhitespace() }
             })
+
+            pwConfirmDet.setAfterTextDebounce(viewLifecycleOwner)
+//
             phoneNumDet.listener = this@SignupFragment
 
             serviceAgreeCb.binding.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
             serviceAgreeCb.isClickable = true
             serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    viewModel.getTempToken { shortToken ->
-                        val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
-                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    if (user?.serviceType?.isGuestUser == true) {
+                        val targetUrl = URL.이용약관
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    } else {
+                        viewModel.getTempToken { shortToken ->
+                            val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
+                            val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                            IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                        }
                     }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
@@ -330,10 +344,15 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             personalAgreeCb.isClickable = true
             personalAgreeCb.allDocuText = personalAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    viewModel.getTempToken { shortToken ->
-                        val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
-                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    if (user?.serviceType?.isGuestUser == true) {
+                        val targetUrl = URL.개인정보취급방침
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    } else {
+                        viewModel.getTempToken { shortToken ->
+                            val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
+                            val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                            IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                        }
                     }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
@@ -342,20 +361,18 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
             marketingAgreeCb.isClickable = true
             marketingAgreeCb.allDocuText = marketingAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    viewModel.getTempToken { shortToken ->
-                        val relativeUrl = URL.마케팅활용동의방안.substringAfter("https://pulleymath.com")
-                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    if (user?.serviceType?.isGuestUser == true) {
+                        val targetUrl = URL.개인정보취급방침
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    } else {
+                        viewModel.getTempToken { shortToken ->
+                            val relativeUrl = URL.마케팅활용동의방안.substringAfter("https://pulleymath.com")
+                            val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                            IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                        }
                     }
                 }
                 .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
-
-
-            buttonToLogin.paintFlags = buttonToLogin.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-
-            buttonToLogin.setOnClickListener {
-                startActivity(LoginActivity.getIntent(requireContext()))
-            }
 
             backBtn.setOnClickListener {
                 signupInterface?.goBack()
@@ -754,5 +771,25 @@ class SignupFragment : Fragment(), PasswordFieldV2Listener, InputFieldV2Listener
     var authType: String = "ALIMTALK"
     override fun onCheckedChanged(switch: CompoundButton?, flag: Boolean) {
         authType = if (flag) "SMS" else "ALIMTALK"
+    }
+
+    override fun onEnter(view: View) {
+        val nextEditText = when (view.id) {
+            R.id.fullNameDet -> {
+                binding.emailDet.editText
+            }
+            R.id.emailDet -> {
+                binding.pwDet.inputEt
+            }
+            R.id.pwDet -> {
+                binding.pwConfirmDet.inputEt
+            }
+            R.id.pwConfirmDet -> {
+                binding.phoneNumDet.editText
+            }
+            else -> null
+        }
+        val imm =  requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(nextEditText,0)
     }
 }

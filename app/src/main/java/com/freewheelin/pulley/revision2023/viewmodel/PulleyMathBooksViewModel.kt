@@ -36,6 +36,8 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     val playTotalLoadingView = MutableLiveData<Boolean>(false)
     val showTotalPlanCover = MutableLiveData<Boolean>(false)
     val showDummyBottomView = MutableLiveData<Boolean>(false)
+    val showRecommendBook = MutableLiveData<Boolean>(false)
+
     val joinedChallengeList = challengeRepository.joinedChallengeList
 
     private val _books = MutableLiveData<List<Book>>()
@@ -86,6 +88,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             val newRecommendList = fetchRecommendList() ?: return@launch
+            showRecommendBook.postValue(newRecommendList.isNotEmpty())
             newRecommendList.forEachIndexed { index, book ->
                 val title = book.title
                 val bookList = book.targetBookPlanList

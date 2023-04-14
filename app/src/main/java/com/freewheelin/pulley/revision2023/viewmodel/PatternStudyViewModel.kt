@@ -11,6 +11,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBook
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
@@ -75,6 +76,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
             _isLoading.postValue(false)
             upsertMyPlans(newMyPlans.myPieceStorageList)
 //            upsertMyPlans(myHistory)
+            _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }
 

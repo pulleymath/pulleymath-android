@@ -174,6 +174,7 @@
             <enum name="editText" value="0"/>
             <enum name="spinner" value = "1"/>
         </attr>
+        <attr name="InputFieldV2_nextFocusDown" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="PulleySpinner">
@@ -212,6 +213,8 @@
         <attr name="PasswordFieldV2_Hint" format="string" />
         <attr name="PasswordFieldV2_ShowErrorIcon" format="boolean" />
         <attr name="PasswordFieldV2_maxLength" format="integer" />
+        <attr name="PasswordFieldV2_nextFocusDown" format="integer" />
+
     </declare-styleable>
 
     <declare-styleable name="PulleyTextField">

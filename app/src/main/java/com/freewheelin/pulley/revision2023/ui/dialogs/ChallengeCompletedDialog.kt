@@ -15,15 +15,12 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogChallengeCompletedBinding
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.view.MissionStampView
 import com.freewheelin.pulley.revision2023.viewmodel.ChallengeCompletedViewModel
 import com.freewheelin.pulley.utils.AnimUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 
-class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: Int, val callback: (course: ChallengeCourse?) -> Unit): DialogFragment() {
+class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: Int, val moveEvent: (course: ChallengeCourse?) -> Unit, val exitEvent: () -> Unit = {}): DialogFragment() {
 
     private val viewModel: ChallengeCompletedViewModel by viewModels()
 
@@ -69,6 +66,7 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             }
 
             viewModel.onExitClickCallback = {
+                exitEvent()
                 dismiss()
             }
 
@@ -79,7 +77,7 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             nextChallengeTv.text = "${courseName}${partText} 이동하기"
             nextChallengeBtnCl.setOnClickListener {
                 dismiss()
-                callback(nextCourse)
+                moveEvent(nextCourse)
             }
         }
     }

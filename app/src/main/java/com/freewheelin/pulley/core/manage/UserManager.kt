@@ -17,6 +17,8 @@ object UserManager {
 
     const val ARG_DESSERT_TYPE = "ARG_DESSERT_TYPE"
     const val EVENT_USER_MODIFYING = "EVENT_USER_MODIFYING"
+    const val EVENT_USER_UPDATE = "EVENT_USER_UPDATE"
+    const val RE_CONFIGURE_UI = "RE_CONFIGURE_UI"
 
     fun setInitStudy(context: Context, user: User, units: Collection<BigUnitV3>, successCB: () -> Unit, faildCB: (() -> Unit)? = null) {
         val param: Parameter = Parameter(

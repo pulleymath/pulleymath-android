@@ -47,7 +47,9 @@
 
             <View
                 android:id="@+id/progressBorder"
-                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:background="@color/grey_e8e8e8"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="@dimen/dp32"
                 android:layout_marginBottom="@dimen/dp32"
@@ -399,7 +401,9 @@
 
             <View
                 android:id="@+id/progressBorder2"
-                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:background="@color/grey_e8e8e8"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="@dimen/dp32"
                 android:layout_marginBottom="@dimen/dp32"

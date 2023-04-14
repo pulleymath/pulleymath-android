@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.model.DummyCreatedUser
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
@@ -37,5 +38,11 @@ class UserRepository() {
     }
     suspend fun getSignupMessage(): HighlightMessage {
         return api.getSignupMessage().data
+    }
+    suspend fun getMainProfile(): MainProfile {
+        return api.getProfiles().data
+    }
+    suspend fun requestRewardSignUp() {
+        api.requestRewardSignUp()
     }
 }

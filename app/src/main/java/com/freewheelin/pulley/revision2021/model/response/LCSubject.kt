@@ -50,5 +50,23 @@ class LCSubject: Serializable {
                     MathKiha -> "기하"
                 }
             }
+        companion object {
+            fun convertRawToSubject(rawValue: Int): SubjectIndicator {
+                return when (rawValue) {
+                    Tutorial.rawValue -> Tutorial
+                    OutOfCurriculum.rawValue -> OutOfCurriculum
+                    MiddleSchoolCurriculum.rawValue -> MiddleSchoolCurriculum
+                    MathSang.rawValue -> MathSang
+                    MathHa.rawValue -> MathHa
+                    Math1.rawValue -> Math1
+                    Math2.rawValue -> Math2
+                    MathProbabilityAndStatistics.rawValue -> MathProbabilityAndStatistics
+                    MathCalculus.rawValue -> MathCalculus
+                    MathKiha.rawValue -> MathKiha
+                    else -> MathSang
+                }
+            }
+
+        }
     }
 }

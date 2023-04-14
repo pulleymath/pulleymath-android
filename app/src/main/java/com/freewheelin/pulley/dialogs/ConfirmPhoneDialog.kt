@@ -17,7 +17,6 @@ import com.freewheelin.pulley.core.API.RequestModel.sign.ConfirmCodeRequest
 import com.freewheelin.pulley.core.API.ResponseModel.sign.CountryCodeResponse
 import com.freewheelin.pulley.core.API_ANONYMOUS
 import com.freewheelin.pulley.core.API_V2
-import com.freewheelin.pulley.databinding.DialogBannerBinding
 import com.freewheelin.pulley.databinding.DialogConfirmPhoneBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.utils.DialogUtils

@@ -7,11 +7,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
@@ -22,7 +20,6 @@ import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.DialogDaebakBinding
 import com.freewheelin.pulley.databinding.DialogDaebakTitleOnlyBinding
-import com.freewheelin.pulley.dialogs.BannerDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.ui.dialogs.DaebakDialogV2
 import java.util.*
@@ -204,30 +201,6 @@ class DialogUtils {
                 dialog.dismiss()
                 FacebookEvent.log(context, FacebookEvent.SUBSCRIBE_STARTED)
                 IntentUtils.openWebLink(context, URL.홈페이지, context.packageManager)
-            }
-            dialog.show()
-        }
-
-        fun showFreeStartDialog(context: Context, user: User, cb:() -> Unit) {
-            val dialog = BannerDialog(context, "지금부터\n무료체험이 시작됩니다!")
-            dialog.binding.rightBtn.text = "START"
-            dialog.setCancelable(false)
-            dialog.binding.rightBtn.setOnClickListener {
-                user.startFreeMembership(context) {
-                    dialog.dismiss()
-                    cb()
-                }
-            }
-            dialog.show()
-        }
-
-        fun showRushForPayDialog(context: Context, clickAction:() -> Unit) {
-            val dialog = BannerDialog(context, "한달에 만구천원으로\n풀리수학과 공부해요!")
-            dialog.binding.rightBtn.text = "START"
-            dialog.binding.rightBtn.setOnClickListener {
-                dialog.dismiss()
-                clickAction()
-
             }
             dialog.show()
         }

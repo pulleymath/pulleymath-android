@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -20,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.SplashActivity
+import com.freewheelin.pulley.activities.StartActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActivity
 import com.freewheelin.pulley.activities.auth.signup.SignupActivity
@@ -86,8 +88,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this) {
+            onBackBtnClicked()
+        }
         binding.run {
-            greetingLabel.text = "안녕하세요.\n풀리수학에 오신 것을 환영합니다 :)"
+            greetingLabel.text = "서비스 이용을 위해 로그인 해주세요 :)"
             val content = SpannableString(findIdPwTv.text)
             content.setSpan(UnderlineSpan(), 0, content.length, 0)
             loginBtn.setOnClickListener {
@@ -100,7 +105,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 onSignupBtnClicked()
             }
             findIdPwTv.extensionTouchArea(12.toPx())
-            emailField.text = user?.email ?: ""
+            emailField.text = Preferences.signedEmail.get()
             emailField.editText.inputType =
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailField.listener = this@LoginActivity
@@ -146,7 +151,14 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
                 }
             }
+            backBtn.setOnClickListener {
+                onBackBtnClicked()
+            }
         }
+    }
+    private fun onBackBtnClicked() {
+        startActivity(StartActivity.getIntent(this))
+        finishAffinity()
     }
     fun changeServerApi(isLive: Boolean) {
         val api = if (isLive) Network.Server.live.toString() else Network.Server.staging.toString()
@@ -161,7 +173,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     fun setListener() {
         binding.apply {
-            emailField.editText.doAfterTextChanged { text ->
+            emailField.editText.doAfterTextChanged { _ ->
                 if (isValid()) loginBtn.toEnableUI() else loginBtn.toDisableUI()
             }
             pwField.inputEt.doAfterTextChanged {
@@ -170,12 +182,14 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
 
-    fun isValid() : Boolean{
+    fun isValid() : Boolean {
         binding.apply {
+            val email = emailField.text.trim()
+            val pw = pwField.text.trim()
             if (emailField.text.isEmpty() || pwField.text.isEmpty()) {
                 return false
             }
-            return emailField.text.isValidEmail() && pwField.text.isValidPW()
+            return email.isValidEmail() && pw.isValidPW()
         }
     }
 

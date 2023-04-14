@@ -72,6 +72,7 @@ class User {
     var regionName: String? = ""
 
     var cellPhone: String = ""
+    var parentNumber: String? = ""
 
     var initSettingCompleted: Boolean = false
     var initTestCompleted: Boolean = false
@@ -444,18 +445,23 @@ class User {
     }
 
     fun getCommonSubjectText() : String {
+        rawInitStudied = rawInitStudied ?: ""
         val units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
+
         val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
         return subjects
     }
 
     fun getOptionalSubjectText() : String {
+        rawInitOptional = rawInitOptional ?: ""
         val units = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
         return subjects
     }
 
     fun getAllSubjectText() : String {
+        rawInitStudied = rawInitStudied ?: ""
+        rawInitOptional = rawInitOptional ?: ""
         var units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val optionalUnits = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
         val subjects = units.plus(optionalUnits)

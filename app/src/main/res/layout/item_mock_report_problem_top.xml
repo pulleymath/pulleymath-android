@@ -109,7 +109,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView
@@ -121,7 +122,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView
@@ -133,7 +135,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView
@@ -146,7 +149,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView
@@ -158,7 +162,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView
@@ -170,7 +175,8 @@
                     android:textSize="@dimen/sp16" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:background="@color/grey_e8e8e8"
+                    android:layout_width="1dp"
                     android:layout_height="16dp" />
 
                 <TextView

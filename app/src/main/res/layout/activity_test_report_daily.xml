@@ -215,8 +215,9 @@
                                 app:layout_constraintStart_toStartOf="parent" />
 
                             <View
-                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_width="1dp"
                                 android:layout_height="match_parent"
+                                android:background="@color/grey_e8e8e8"
                                 app:layout_constraintStart_toEndOf="@+id/numberLabel" />
 
                             <TextView
@@ -230,8 +231,9 @@
                                 app:layout_constraintStart_toEndOf="@+id/numberLabel" />
 
                             <View
-                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
+                                android:background="@color/grey_e8e8e8"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/resultLabel"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -247,8 +249,9 @@
                                 app:layout_constraintStart_toEndOf="@+id/resultLabel" />
 
                             <View
-                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
+                                android:background="@color/grey_e8e8e8"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -264,8 +267,9 @@
                                 app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel" />
 
                             <View
-                                style="@style/Border_Grey_e8e8e8_Vertical"
+                                android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
+                                android:background="@color/grey_e8e8e8"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel"
                                 app:layout_constraintTop_toTopOf="parent" />

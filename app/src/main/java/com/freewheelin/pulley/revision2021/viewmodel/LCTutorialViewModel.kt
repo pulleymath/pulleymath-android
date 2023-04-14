@@ -18,6 +18,8 @@ import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.utils.ViewTransition
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
@@ -127,16 +129,12 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
             })
     }
 
-    fun createLearningCourseOnStudentId(callback: () -> Unit) {
+    fun createLearningCourseOnStudentId() {
         val chapterId = 175 // 컨텐츠와 서버에서 협의된 튜토리얼 챕터 id
         val studentId = MyApplication.user?.studentID ?: return
 
-        compositeDisposable +=studyRepository.createLearningCourse(chapterId, studentId)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
-            }.subscribe()
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            studyRepository.suspendCreateLearningCourse(chapterId, studentId)
+        }
     }
 }

@@ -39,7 +39,8 @@
             android:textSize="14sp" />
 
         <View
-            style="@style/Border_Grey_f2f2f2_Horizontal"
+            android:background="@color/grey_f2f2f2"
+            android:layout_height="1dp"
             android:id="@+id/horizontalBorder"
             android:layout_width="match_parent"
             android:layout_marginTop="28dp"/>

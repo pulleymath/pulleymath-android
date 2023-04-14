@@ -51,9 +51,11 @@
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"/>
 
 
-        <View style="@style/Border_Grey_e8e8e8_Vertical"
+        <View
             android:id="@+id/firstColumnBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp96"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
@@ -72,9 +74,11 @@
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"/>
 
 
-        <View style="@style/Border_Grey_e8e8e8_Vertical"
+        <View
             android:id="@+id/secondColumnBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/Report_Unit_list_correctRate_width"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"

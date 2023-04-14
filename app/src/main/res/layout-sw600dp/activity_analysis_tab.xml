@@ -160,18 +160,20 @@
 
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/leftVerticalBorder"
+                    android:layout_width="1dp"
                     android:layout_height="32dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintTop_toTopOf="@+id/correctRateContainer"
                     app:layout_constraintEnd_toStartOf="@+id/ratingContainer"
                     app:layout_constraintBottom_toBottomOf="@+id/correctRateContainer" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/rightVerticalBorder"
+                    android:layout_width="1dp"
                     android:layout_height="32dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginStart="8dp"
                     app:layout_constraintTop_toTopOf="@+id/ratingContainer"
                     app:layout_constraintBottom_toBottomOf="@+id/ratingContainer"

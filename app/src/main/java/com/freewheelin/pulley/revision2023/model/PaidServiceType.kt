@@ -1,13 +1,12 @@
 package com.freewheelin.pulley.revision2023.model
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.google.gson.annotations.SerializedName
 
 enum class PaidServiceType(val rawValue: Int) {
+    GUEST(-1),
     NONE(0),
     PAID_ING(1),
     BASIC_C(2),
@@ -17,12 +16,19 @@ enum class PaidServiceType(val rawValue: Int) {
     ALL(100);
 
     val isPaidUser: Boolean
-        get() { return this != NONE }
-    val isFreeUser: Boolean
+        get() { return this.rawValue > 0 }
+    val isNoneUser: Boolean
         get() { return this == NONE }
+    val isBasicC: Boolean
+        get() { return this == BASIC_C }
+    val isGuestUser: Boolean
+        get() { return this == GUEST }
+    val isFreeUser: Boolean
+        get() { return this.rawValue <= 0  }
 
     fun convertTextOnMainChip(): String {
         return when (this) {
+            GUEST -> "Guest"
             BASIC_C -> "개념 Basic"
             BASIC_P -> "유형 Basic"
             STANDARD -> "Standard"
@@ -39,13 +45,13 @@ enum class PaidServiceType(val rawValue: Int) {
             STANDARD -> ContextCompat.getDrawable(context, R.drawable.bg_gray_600_round_13)!!
             PREMIUM -> ContextCompat.getDrawable(context, R.drawable.bg_yellow_300_round_13)!!
             PAID_ING -> ContextCompat.getDrawable(context, R.drawable.bg_bronze_round_13)!!
-            NONE -> ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_13)!!
+            NONE, GUEST -> ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_13)!!
             else -> ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_13)!!
         }
     }
     fun convertColorOnMainChip(context: Context): Int {
         return when (this) {
-            NONE -> ContextCompat.getColor(context, R.color.gray_700)
+            NONE, GUEST -> ContextCompat.getColor(context, R.color.gray_700)
             else -> ContextCompat.getColor(context, R.color.white_ffffff)
         }
     }

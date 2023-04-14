@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="@{ vm.showTabletHeader ? View.VISIBLE : View.GONE }"
+                visibleIf="@{ vm.showTabletHeader }"
                 android:layout_marginTop="48dp"
                 android:layout_marginHorizontal="48dp"
                 app:layout_constraintTop_toTopOf="parent"

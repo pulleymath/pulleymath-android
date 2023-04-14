@@ -9,27 +9,22 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.*
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
 import com.freewheelin.pulley.databinding.ViewInputV2Binding
-import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
-import com.freewheelin.pulley.revision2021.utils.debounce
+import com.freewheelin.pulley.utils.pxToSp
 import com.freewheelin.pulley.utils.setPaddingTop
 import com.freewheelin.pulley.views.ArduousSpinner
 import com.freewheelin.pulley.views.ArduousSpinnerListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding2.widget.textChanges
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 interface InputFieldV2Listener {
     fun onFieldFocusChanged(view: InputFieldV2, hasFocus: Boolean)
@@ -109,6 +104,7 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
     }
 
     var editText: TextInputEditText
+//    var editText: EditText
     var inputLayout: TextInputLayout
     var spinner: ArduousSpinner
     val containerCl: ConstraintLayout
@@ -138,30 +134,14 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
             }
 
             override fun onTextChanged(sequence: CharSequence, p1: Int, p2: Int, p3: Int) {
-                if(sequence.isEmpty()) {
-                    editText.textSize = 16f
-                } else {
-                    editText.textSize = 18f
-                }
+//                if(sequence.isEmpty()) {
+//                    editText.textSize = resources.getDimension(R.dimen.sp16).pxToSp()
+//                } else {
+//                    editText.textSize = resources.getDimension(R.dimen.sp16).pxToSp()
+//                }
             }
         })
 
-//        editText.textChanges()
-//            .debounce(300, TimeUnit.MILLISECONDS)
-//            .subscribeOn(Schedulers.io())
-//            .subscribeBy(
-//                onNext = {
-//                    println("asoaso text changes")
-//                    listener?.onFieldValueChanged(this@InputFieldV2)
-//                },
-//                onComplete = {
-//                    println("asoaso text onComplete")
-//                },
-//                onError = {
-//                    println("asoaso text onError")
-//
-//                }
-//            )
 
         spinner.listener = this
         isShownError = false
@@ -171,9 +151,11 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
         listener?.onFieldFocusChanged(this, hasFocus)
 
         editText.setOnKeyListener { _, keyCode, event ->
-            if(event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                enterListener?.onEnter(this)
-                true
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (event.action == KeyEvent.ACTION_DOWN) {
+                    enterListener?.onEnter(this)
+                    true
+                }
             }
             false
         }
@@ -190,6 +172,8 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.InputFieldV2)
         inputLayout.hint = array.getString(R.styleable.InputFieldV2_InputFieldV2_Hint)
+        editText.nextFocusDownId = array.getInt(R.styleable.InputFieldV2_InputFieldV2_nextFocusDown, -1);
+
         val showErrorDrawable = array.getBoolean(R.styleable.InputFieldV2_InputFieldV2_ShowErrorIcon, true)
         if (!showErrorDrawable) {
             inputLayout.errorIconDrawable = null

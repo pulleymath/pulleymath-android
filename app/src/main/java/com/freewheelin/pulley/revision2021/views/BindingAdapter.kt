@@ -3,9 +3,9 @@ package com.freewheelin.pulley.revision2021.views
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.*
 import androidx.annotation.ColorInt
+import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
@@ -324,5 +324,15 @@ object BindingAdapter {
             }
             view.setImageResource(imgRes)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("searchview_hint_size")
+    fun setSearchViewHindSize(v: SearchView, dimen: Float) {
+        ((((v.getChildAt(0) as LinearLayout
+            ).getChildAt(2) as LinearLayout
+            ).getChildAt(1) as LinearLayout
+            ).getChildAt(0) as AutoCompleteTextView
+            ).setTextSize(dimen, dimen)
     }
 }

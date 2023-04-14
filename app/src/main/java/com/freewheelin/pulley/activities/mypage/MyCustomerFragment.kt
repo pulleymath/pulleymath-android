@@ -19,6 +19,7 @@ import com.freewheelin.pulley.databinding.FragmentMyCustomerBinding
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.IntentUtils
+import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.DaebakToast
 import java.lang.Exception
 
@@ -49,18 +50,28 @@ class MyCustomerFragment : MyPageBaseFragment() {
             }
 
             termsBtn.setOnClickListener {
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                if (user.serviceType.isGuestUser) {
+                    val targetUrl = URL.이용약관
                     IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.이용약관.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
             }
 
             privacyBtn.setOnClickListener {
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                if (user.serviceType.isGuestUser) {
+                    val targetUrl = URL.개인정보취급방침
                     IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.개인정보취급방침.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
             }
             backBtn.setOnClickListener { onBackBtnClicked() }

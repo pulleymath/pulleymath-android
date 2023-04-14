@@ -19,8 +19,9 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintStart_toEndOf="@+id/numberTv" />
 
         <ImageView
@@ -34,8 +35,9 @@
             app:layout_constraintStart_toEndOf="@+id/numberTv" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/resultIv"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,8 +53,9 @@
             app:layout_constraintStart_toEndOf="@+id/resultIv" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/totalCorrectRateTv"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,8 +71,9 @@
             app:layout_constraintStart_toEndOf="@+id/totalCorrectRateTv" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/sameCorrectRateTv"
             app:layout_constraintTop_toTopOf="parent" />
@@ -97,13 +101,15 @@
 
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
+            android:background="@color/grey_e8e8e8"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <View

@@ -33,6 +33,7 @@ import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.model.contents.MarkingState
 import com.freewheelin.pulley.model.contents.MockExam
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.utils.*
@@ -293,9 +294,18 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
                 holder.testBtnCl.setOnPaidUserClickListener(
                     cb = { MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show() },
                     deniedCb = {
-                        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "풀기 쌍둥이")
-                        val dialog = PurchaseGuideDialog()
-                        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "풀기-쌍둥이")
+                        if (user?.serviceType?.isGuestUser == true) {
+                            LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "새모의고사", "가입유도", "풀기-쌍둥이")
+                            val dialog = JoinInduceForGuestDialog {
+                                viewModel.errorStatusReset()
+                            }
+                            childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+                        } else {
+                            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "풀기 쌍둥이")
+                            val dialog = PurchaseGuideDialog()
+                            childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                        }
                     }
                 )
                 holder.testInProgressBtnWrapperCl.setOnPaidUserClickListener(
@@ -308,7 +318,16 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
                 )
             } else {
                 holder.testBtnCl.setOnClickListener {
-                    MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "풀기")
+                    if (user?.serviceType?.isGuestUser == true) {
+                        LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "새모의고사", "가입유도")
+                        val dialog = JoinInduceForGuestDialog {
+                            viewModel.errorStatusReset()
+                        }
+                        childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+                    } else {
+                        MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
+                    }
                 }
                 holder.testInProgressBtnWrapperCl.setOnClickListener {
                     MockExamGuideDialog(requireContext(), test, false, this@NewMockFragment).show()
@@ -393,8 +412,11 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setLockIv(exam: MockExam) {
+        if (user?.serviceType?.isGuestUser == true) {
+            testBtnLockIv.visibleIf(false)
+            return
+        }
         val isPaidUser = user?.serviceType?.isPaidUser == true
-
         testBtnLockIv.visibleIf(!isPaidUser && exam.isTwins)
     }
 

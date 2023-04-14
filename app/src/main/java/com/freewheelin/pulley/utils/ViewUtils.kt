@@ -212,7 +212,7 @@ fun View.hideGoneIfNeed(duration: Long = 500, cb:(() -> Unit)? = null) {
 
 fun View.setOnPaidUserClickListener(cb: (view: View) -> Unit, deniedCb: (view: View) -> Unit ? = {}) {
     this.setOnClickListener {
-        if (user?.serviceType == PaidServiceType.NONE) {
+        if (user?.serviceType?.isFreeUser == true) {
             deniedCb(it)
         } else {
             cb(it)

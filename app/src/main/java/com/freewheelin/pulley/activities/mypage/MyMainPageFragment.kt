@@ -5,9 +5,7 @@ import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.*
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,14 +33,12 @@ import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.Version.v1
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.databinding.FragmentMyMainPageBinding
-import com.freewheelin.pulley.databinding.ItemMypageHeaderBinding
 import com.freewheelin.pulley.databinding.ItemMypageListBinding
 import com.freewheelin.pulley.dialogs.UpdateDialog
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
@@ -60,7 +56,12 @@ enum class SettingCategory(val title: String) {
     val setting: List<Setting>
         get() {
             return when (this) {
-                PRIVATE -> listOf(SignUpInfo, StudyInfo)
+                PRIVATE -> {
+                    if (user?.serviceType?.isGuestUser == true)
+                        listOf(SignUpInfo)
+                    else
+                        listOf(SignUpInfo, StudyInfo)
+                }
                 SERVICE -> listOf(PulleyPlus, PulleyLesson, PulleyBooks, CouponBox)
                 SETTING -> listOf(AppSetting)
                 SUPPORT -> listOf(Home, Guide, Notice, Customer, Version) // 고객지원 -> , FAQ, Contact, Policy
@@ -176,6 +177,10 @@ class MyMainPageFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
     fun onSettingClicked(setting: Setting) {
         when (setting) {
             SignUpInfo -> moveTo(MySignUpInfoFragment())
@@ -195,10 +200,15 @@ class MyMainPageFragment : Fragment() {
             AppSetting -> moveTo(MyAppSettingFragment())
             Home -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","홈페이지 바로 가기")
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
-                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                if (user?.serviceType?.isGuestUser == true) {
+                    val pulleyHome = Preferences.shopUrl.get()
+                    IntentUtils.openWebLink(requireContext(), pulleyHome, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
             }
             Guide -> {
@@ -206,10 +216,15 @@ class MyMainPageFragment : Fragment() {
                 IntentUtils.openWebLink(requireContext(), URL.풀리활용가이드_마이페이지, requireContext().packageManager)
             }
             Notice -> {
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.공지사항.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                if (user?.serviceType?.isGuestUser == true) {
+                    val targetUrl = URL.공지사항
                     IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.공지사항.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
             }
             FAQ -> {
@@ -528,7 +543,7 @@ class MyMainPageFragment : Fragment() {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 
     fun onCheckChanged(setting: Setting, value: Boolean) {

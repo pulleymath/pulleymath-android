@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.NullPointerException
 
 enum class PulleyEvent {
     ACTIVE,
@@ -30,7 +31,8 @@ enum class PulleyEvent {
     INDUCE,
     DIALOG,
     ERROR,
-    PROBLEM_NOT_EXIST;
+    PROBLEM_NOT_EXIST,
+    LEARNING_CARD_CLICK; // 학습 관련 카드 클릭
 
     companion object {
         fun init(value: String): PulleyEvent {
@@ -43,6 +45,7 @@ enum class PulleyEvent {
                 "DIALOG" -> return DIALOG
                 "INDUCE" -> return INDUCE
                 "ERROR" -> return ERROR
+                "LEARNING_CARD_CLICK" -> return LEARNING_CARD_CLICK
                 "PROBLEM_NOT_EXIST" -> return PROBLEM_NOT_EXIST
                 else -> {
                     LogUtils.assert(false, "unexpected Case ${value}")
@@ -134,7 +137,11 @@ object LogUtils {
             param("user_id", id)
         }
         if(isSPYMode && Preferences.onLoggingEvent.get()) {
-            Toast.makeText(context, "SignUp 이벤트가 생성되었습니다!!!", Toast.LENGTH_SHORT).show()
+            try {
+                Toast.makeText(context, "SignUp 이벤트가 생성되었습니다!!!", Toast.LENGTH_SHORT).show()
+            } catch (e: NullPointerException) {
+                Log.e("LogSignUpEvent"," SignUpEvent Toast ERROR")
+            }
         }
     }
 }

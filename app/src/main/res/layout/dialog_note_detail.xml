@@ -153,9 +153,10 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/firstVerticalBorder"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginStart="12dp"
                     app:layout_constraintStart_toEndOf="@+id/resultIv"
                     app:layout_constraintTop_toTopOf="@+id/resultIv"
@@ -174,9 +175,10 @@
                     app:layout_constraintStart_toEndOf="@+id/firstVerticalBorder"/>
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/secondVerticalBorder"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginStart="12dp"
                     app:layout_constraintStart_toEndOf="@+id/levelTv"
                     app:layout_constraintTop_toTopOf="@+id/resultIv"

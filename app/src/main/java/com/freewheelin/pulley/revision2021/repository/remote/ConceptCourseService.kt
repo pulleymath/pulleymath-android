@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
@@ -33,6 +34,12 @@ interface ConceptCourseService {
         @Path("chapterId") chapterId: Int,
         @Path("studentId") studentId: String,
     ): Completable
+
+    @POST("users/{studentId}/chapters/{chapterId}")
+    suspend fun suspendCreateLearningCourse(
+        @Path("chapterId") chapterId: Int,
+        @Path("studentId") studentId: String,
+    ): ResponseBody<String?>
 
     @GET("users/{studentId}/chapters/{chapterId}/summary")
     fun fetchCourseSummary(

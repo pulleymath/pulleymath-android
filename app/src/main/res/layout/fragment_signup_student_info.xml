@@ -35,10 +35,30 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical"
+                android:paddingTop="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/stepIndicatorCl"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_300">
+
+                    <View
+                        android:id="@+id/stepIndicator"
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@color/purple_300"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/infoConatiner"
@@ -51,7 +71,7 @@
                         style="@style/TextBlack_4c4c4c.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp56"
+                        android:layout_marginTop="@dimen/dp32"
                         android:layout_marginBottom="@dimen/dp48"
                         android:lineSpacingExtra="12sp"
                         android:text="마지막으로,\n추천에 필요한 정보를 알려주세요!"
@@ -183,6 +203,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/selectMajor" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

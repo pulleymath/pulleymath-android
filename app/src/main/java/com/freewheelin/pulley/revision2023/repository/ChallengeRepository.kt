@@ -40,14 +40,13 @@ class ChallengeRepository() {
         _joinedChallengeList.value?.let { list ->
             println("asoaso ---- updateChallengeList --- ")
             val challengeList = list.map {
-                println("qwoqwo id 비교 : ${it.challengeId} / ${newChallenge.challengeId}")
                 if (it.challengeId == newChallenge.challengeId) {
                     newChallenge
                 } else {
                     it
                 }
             }
-            println("qwoqwo challengeList :${challengeList.size}")
+
             challengeList.forEach {
                 println("asoaso --- ${it.challengeId} / ${it.challengeName} / ${it.userStatus}")
                 it.courses.forEach {

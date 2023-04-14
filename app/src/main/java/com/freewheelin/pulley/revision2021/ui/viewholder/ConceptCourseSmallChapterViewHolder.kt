@@ -59,6 +59,11 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
         binding.smallChapterRootCl.apply {
             setOnTouchListener(BoongthEffect())
             setOnClickListener {
+                if (user?.serviceType?.isGuestUser == true) {
+                    LogUtils.logEvent(context, user!!, PulleyEvent.LEARNING_CARD_CLICK, "개념", item.parentName, item.name)
+                    viewModel.guestException()
+                    return@setOnClickListener
+                }
                 if (item.isLocked) {
                     LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "개념카드", "결제유도", "잠금버튼")
                     val dialog = PurchaseGuideDialog()

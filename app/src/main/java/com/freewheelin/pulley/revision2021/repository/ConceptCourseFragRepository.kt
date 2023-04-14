@@ -9,5 +9,6 @@ class ConceptCourseFragRepository {
     fun getAvailableSubject() = courseService.getAvailableSubject()
     fun getChapterOnSubject(subjectId: Int, studentId: String) = courseService.getChapterOnSubject(subjectId, studentId)
     fun createLearningCourse(chapterId: Int, studentId: String) = courseService.createLearningCourse(chapterId, studentId)
+    suspend fun suspendCreateLearningCourse(chapterId: Int, studentId: String) = courseService.suspendCreateLearningCourse(chapterId, studentId)
     fun fetchCourseSummary(chapterId: Int, studentId: String) = courseService.fetchCourseSummary(chapterId, studentId)
 }

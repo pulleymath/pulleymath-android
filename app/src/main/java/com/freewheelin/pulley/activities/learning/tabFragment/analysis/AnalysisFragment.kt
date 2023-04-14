@@ -47,6 +47,7 @@ import com.freewheelin.pulley.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel
 import com.freewheelin.pulley.utils.*
@@ -107,8 +108,10 @@ class AnalysisFragment : LearningTabFragment(),
         viewModel.apply {
             userInRepo.observe(viewLifecycleOwner) { user ->
                 user?.let {
-                    val showLockImage = !it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
-                    binding.analysisLockIv.visibleIf(showLockImage)
+                    // guest과 BasicC만 표시
+                    val isNoneUser = it.serviceType.isNoneUser
+                    val isBasicC = it.serviceType.isBasicC
+                    binding.analysisLockIv.visibleIf(isNoneUser || isBasicC)
 
                     val showLockIv = user.serviceType.isUnderBasicP()
                     binding.recommendStudyView.actionLockIv.visibleIf(showLockIv)
@@ -127,20 +130,23 @@ class AnalysisFragment : LearningTabFragment(),
             initChart(timeCountChart)
 
             mainAnalysisWarpperCl.setOnBasicPOrHigherClickListener(cb = {
-                LogUtils.logEvent(
-                    requireContext(),
-                    user,
-                    PulleyEvent.BUTTON_CLICK,
-                    "데일리서머리",
-                    "전체분석보기"
-                )
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "전체분석보기")
                 val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
                 startActivity(intent)
             }, deniedCb = {
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "전체분석보러가기")
-                val dialog = PurchaseGuideDialog()
-                childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "전체분석보러가기")
+                if (user?.serviceType?.isGuestUser == true) {
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "분석", "가입유도", "전체분석보러가기")
+                    val dialog = JoinInduceForGuestDialog {
+                        viewModel.errorStatusReset()
+                    }
+                    childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+                } else {
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "전체분석보러가기")
+                    val dialog = PurchaseGuideDialog()
+                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                DialogUtils.confirmDialog(requireContext(), "[테스트]구독중이 아닙니다.", "하하")
+                }
             })
         }
     }

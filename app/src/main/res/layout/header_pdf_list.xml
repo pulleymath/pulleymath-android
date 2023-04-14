@@ -29,16 +29,29 @@
             android:layout_marginStart="@dimen/dp48"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/subTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp16"
+            style="@style/b2r"
+            android:text="제휴 출판사 문제집이 통째로!\n무겁게 책 들고 다니지 마세요 :)"
+            android:textColor="@color/gray_600"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTv"/>
+
         <View
             android:id="@+id/titleBottomBorderView"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/dp32"
             android:background="@color/gray_400"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleTv"/>
+            app:layout_constraintTop_toBottomOf="@id/subTitleTv"/>
 
         <TextView
             android:id="@+id/subtitleTv"
@@ -128,6 +141,7 @@
             android:layout_marginEnd="@dimen/dp48"
             android:visibility="visible"
             android:queryHint="문제집명으로 검색하세요."
+            searchview_hint_size="@{ @dimen/sp18 }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:setOnQueryTextListener="@{vm.searchViewTextQueryListener}"

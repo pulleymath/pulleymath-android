@@ -106,9 +106,11 @@
 
 
 
-            <View style="@style/Border_Grey_e8e8e8_Vertical"
+            <View
                 android:id="@+id/verticalBorder"
+                android:layout_width="1dp"
                 android:layout_height="32dp"
+                android:background="@color/grey_e8e8e8"
                 android:layout_marginTop="@dimen/dp16"
                 app:layout_constraintTop_toBottomOf="@+id/lastCompareCl"
                 app:layout_constraintStart_toStartOf="parent"

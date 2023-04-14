@@ -10,6 +10,7 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
@@ -62,7 +63,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     }
 
     fun fetch(subjectId: Int) {
-        println("asoaso conceptcourse fetch! subjectId:${subjectId}")
         _isLoading.postValue(true)
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
@@ -135,6 +135,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
     fun onHeaderSubjectBtnClick(subjectId: Int) {
         if (this.selectedSubjectId.value == subjectId) return
+
         this.selectedSubjectId.postValue(subjectId)
     }
 
@@ -143,6 +144,9 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
         val listWithHeaderAndFooter = listOf(tutorialChapter)
 
         chapterList.postValue(listWithHeaderAndFooter)
+    }
+    fun chapterReset() {
+        chapterList.postValue(null)
     }
 
 

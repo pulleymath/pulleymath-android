@@ -89,16 +89,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
         <View
-            style="@style/Border_Grey_f2f2f2_Horizontal"
+            android:background="@color/grey_f2f2f2"
+            android:layout_height="1dp"
             android:id="@+id/horizontalBorder"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
             android:id="@+id/firstBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginStart="@dimen/dp104"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -106,9 +107,10 @@
 
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
             android:id="@+id/secondBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
             app:layout_constraintTop_toTopOf="parent"
@@ -116,9 +118,10 @@
 
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
             android:id="@+id/thirdBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp168"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

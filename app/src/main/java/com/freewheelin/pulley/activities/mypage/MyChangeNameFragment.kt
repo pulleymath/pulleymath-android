@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.activities.mypage
 
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,11 +13,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentMyRenameBinding
 import com.freewheelin.pulley.utils.isValidName
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -73,6 +77,7 @@ class MyChangeNameFragment : MyPageBaseFragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     fun requestApi() {
 
         binding.changeBtn.startLoding()
@@ -84,6 +89,8 @@ class MyChangeNameFragment : MyPageBaseFragment() {
                     user.fullName = binding.name.text
                     user.commit("MyRenameFragment requestApi")
                     setFragmentResult(MySignUpInfoFragment.RELOAD, bundleOf())
+                    val profileModifyIntent = Intent(UserManager.EVENT_USER_MODIFYING)
+                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(profileModifyIntent)
                     onBackBtnClicked()
                 },{
                     Log.e(javaClass.simpleName, "error=${it.localizedMessage}")

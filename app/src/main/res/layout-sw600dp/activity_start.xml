@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.StartActViewModel"/>
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -80,7 +84,7 @@
             android:id="@+id/nowJoinIv"
             android:layout_width="292dp"
             android:layout_height="64dp"
-            android:src="@drawable/new_join_10000won_coupon"
+            android:src="@drawable/now_look_around"
             android:layout_marginTop="44dp"
             app:layout_constraintTop_toBottomOf="@id/guideline"
             app:layout_constraintStart_toStartOf="@id/startBtn"
@@ -89,51 +93,48 @@
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:text="가입하고 공부 시작하기"
+            android:text="시작하기"
             app:layout_constraintStart_toStartOf="@+id/topLabel"
             app:layout_constraintEnd_toEndOf="@+id/topLabel"
             app:layout_constraintTop_toBottomOf="@+id/nowJoinIv"
             android:background="@drawable/bg_purple_6d6dff_round_40"
             />
 
-        <TextView
-            style="@style/TextBlack_4c4c4c"
-            android:id="@+id/loginLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp14"
-            android:text="풀리수학 회원이신가요?"
-            android:layout_marginTop="@dimen/dp32"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startBtn"
-            app:layout_constraintEnd_toStartOf="@+id/loginTv"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
+        <View
+            android:id="@+id/borderView"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:background="@color/gray_400"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@id/startBtn"
+            app:layout_constraintEnd_toEndOf="@id/startBtn"
+            app:layout_constraintTop_toBottomOf="@id/startBtn" />
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            android:id="@+id/signupTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            style="@style/mo_h5"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/gray_600"
+            app:layout_constraintTop_toTopOf="@id/borderView"
+            app:layout_constraintEnd_toStartOf="@id/borderView"
+            app:layout_constraintBottom_toBottomOf="@id/borderView"
+            />
+
+        <TextView
             android:id="@+id/loginTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="로그인"
-            android:textSize="@dimen/sp14"
-            android:padding="8dp"
-            app:layout_constraintTop_toTopOf="@+id/loginLabel"
-            app:layout_constraintBottom_toBottomOf="@+id/loginLabel"
-            app:layout_constraintStart_toEndOf="@+id/loginLabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
-
-        <View
-            android:id="@+id/loginBorder"
-            android:layout_height="1dp"
-            android:background="@color/purple_6D6DFF"
-            android:layout_width="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/loginTv"
-            app:layout_constraintStart_toStartOf="@+id/loginTv"
-            app:layout_constraintEnd_toEndOf="@+id/loginTv" />
+            style="@style/mo_h5"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/gray_600"
+            app:layout_constraintTop_toTopOf="@id/borderView"
+            app:layout_constraintBottom_toBottomOf="@id/borderView"
+            app:layout_constraintStart_toEndOf="@id/borderView"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/balloonCl"
@@ -162,6 +163,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!--            visibleIf="@{ vm.isLoading }"-->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:indeterminateTint="@color/purple_300"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

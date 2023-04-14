@@ -5,7 +5,7 @@
         <item name="android:textColor">@color/white_ffffff</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
-    
+
     <style name="BtnBlue_e9f5ff">
         <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
         <item name="android:textColor">@color/purple_6D6DFF</item>

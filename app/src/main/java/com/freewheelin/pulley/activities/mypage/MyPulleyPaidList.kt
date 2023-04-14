@@ -1,7 +1,5 @@
 package com.freewheelin.pulley.activities.mypage
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +36,6 @@ class MyPulleyPaidList : MyPageBaseFragment() {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 }

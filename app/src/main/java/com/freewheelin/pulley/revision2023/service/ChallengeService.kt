@@ -8,7 +8,6 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCompletedSubtitle
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderWrapper
 import retrofit2.Response
 import retrofit2.http.GET
@@ -49,6 +48,6 @@ interface ChallengeService {
         @Path("studentId") studentId: String = user?.studentID!!,
     ): ResponseBody<Challenge>
 
-    @GET("/v1/info/messages/challenge/course?os=ANDROID")
+    @GET("v2/info/messages/challenge/course?os=ANDROID")
     suspend fun getCompletedSubtitle(): ResponseForceBody<HighlightMessage>
 }

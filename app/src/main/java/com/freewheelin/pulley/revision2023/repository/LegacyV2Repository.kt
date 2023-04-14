@@ -7,6 +7,7 @@ import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.VersionManager
 import com.freewheelin.pulley.revision2023.model.V2LogUser
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.service.LegacyV2Api
 import com.freewheelin.pulley.revision2023.service.LegacyV2Service
 import com.freewheelin.pulley.utils.PulleyEvent
@@ -34,5 +35,9 @@ class LegacyV2Repository(val context: Context, private val applicationScope: Cor
             versionCode = VersionManager.appVersion,
         )
         return legacyV2Api.postLog(log).data
+    }
+
+    suspend fun changeParentPhoneNumber(req: ParentPhoneNumberRequest) {
+        legacyV2Api.patchParentPhoneNumber(req)
     }
 }

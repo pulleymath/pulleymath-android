@@ -422,9 +422,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/topBorder" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
+                    android:background="@color/grey_e8e8e8"
                     app:layout_constraintTop_toTopOf="@+id/topBorder"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/filterView"/>

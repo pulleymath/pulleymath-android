@@ -1,11 +1,14 @@
 package com.freewheelin.pulley.revision2023.ui.activity
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -22,15 +25,20 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.*
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
 import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.utils.observeOnce
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
@@ -53,6 +61,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     private val viewModel: PulleyMathBooksViewModel by viewModels()
     lateinit var planAdapter: PatternStudyMyPlanAdapter
     private lateinit var getResult: ActivityResultLauncher<Intent>
+    lateinit var userUpdateReceiver: BroadcastReceiver
 
     companion object {
         const val FOCUS_ON_TOTAL_LABEL = "FOCUS_ON_TOTAL_LABEL"
@@ -80,6 +89,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initReceiver()
         val isFocusingOnTotalLabel = intent.getBooleanExtra(FOCUS_ON_TOTAL_LABEL, false)
 
         binding.apply {
@@ -160,7 +170,33 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     }
                 }
             }
+            errorAction.observe(this@PulleyMathBooksActivity) { type ->
+                when(type) {
+                    HttpException403, GuestException -> showGuestJoinInduceDialog()
+                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                }
+            }
         }
+    }
+
+    private fun initReceiver() {
+        userUpdateReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                println("asoaso userUpdateReceiver!")
+                intent?.let {
+                    finish()
+                }
+            }
+        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(userUpdateReceiver, IntentFilter(UserManager.EVENT_USER_UPDATE))
+
+    }
+
+    private fun showGuestJoinInduceDialog() {
+        val dialog = JoinInduceForGuestDialog {
+            viewModel.errorStatusReset()
+        }
+        supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }
 
     fun initUI () {
@@ -178,7 +214,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     fun initAdapter() {
         binding.apply {
-            planAdapter = PatternStudyMyPlanAdapter (this@PulleyMathBooksActivity, listOf(ActionType.pin), PatternStudyMyPlanAdapter.OriginType.PulleyMathTotal)
+            planAdapter = PatternStudyMyPlanAdapter (this@PulleyMathBooksActivity, listOf(ActionType.pin), OriginType.PulleyMathTotal, viewModel = viewModel)
 
             val spanCount = if(isTablet) 4 else 3
             totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, spanCount)
@@ -220,14 +256,27 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     viewModel.joinedChallengeList.value?.find { it.isStartChallenge }?.startChallenge?.let { startChallenge ->
                         if (startChallenge.isPulleyBooksCourseFinished) {
                             val turnOnCompletedDialog = {
-                                val completedDialog = ChallengeCompletedDialog(startChallenge,
-                                    ChallengeManager.CourseName.스타트챌린지_유형.id,
-                                ) {
+                                val moveEvent: (ChallengeCourse?) -> Unit = { it ->
                                     ChallengeManager.getMainTabMoveIntent(it).let {
                                         LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                                         finish()
                                     }
                                 }
+                                val completedDialog = ChallengeCompletedDialog(startChallenge,
+                                    ChallengeManager.CourseName.스타트챌린지_유형.id,
+                                    moveEvent = moveEvent,
+                                    exitEvent = {
+                                        val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_유형.id)
+                                        if (nextCourse != null) {
+                                            val induceDialog = ChallengeInduceDialog(
+                                                ChallengeInduceDialog.Type.OneMore,
+                                                course = nextCourse,
+                                                moveEvent = moveEvent
+                                            )
+                                            supportFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
+                                        }
+                                    }
+                                )
                                 supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog2") }
                             }
 
@@ -264,6 +313,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     override fun filterFromTagOnCard(filterType: String) {
         println("asoaso filterFromTagOnCard : ${filterType}")
+        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "유형카드", "태그", filterType)
         val type = FilterType.convertTagAtFiltertType(filterType)
         println("asoaso filterFromTagOnCard : type : ${type}")
         binding.filterView.selectedFilterTypes.add(type)
@@ -354,5 +404,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     override fun onSolveClicked(book: Book) {
         val intent = SolveActivity.getIntent(this, book)
         getResult.launch(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userUpdateReceiver)
     }
 }

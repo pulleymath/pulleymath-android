@@ -24,6 +24,9 @@ open class MyPageBaseFragment: Fragment() {
 //            onBackBtnClicked()
 //        }
     }
+    fun removeThisPage() {
+        (activity as? LearningTabActivity)?.removeMyPageTo(this)
+    }
     fun onBackBtnClicked() {
         Log.d(javaClass.simpleName, "onBackBtnClicked=$this, activity=${activity?.javaClass?.simpleName}")
 

@@ -146,6 +146,17 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/subTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp48"
+                android:layout_marginTop="@dimen/dp16"
+                style="@style/b2r"
+                android:text="문제집에서 내가 원하는 부분만 골라\n나만의 워크북을 만들어보세요."
+                android:textColor="@color/gray_600"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleTv"/>
 
             <View
                 style="@style/Border_Grey_e8e8e8_Horizontal"
@@ -159,6 +170,19 @@
                 android:background="@color/gray_200"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/workbookLabelTv"
+                    style="@style/h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:text="만든 워크북"
+                    android:textColor="@color/gray_800"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
                     android:id="@+id/filterView"
                     android:layout_width="wrap_content"
@@ -169,13 +193,13 @@
                     android:paddingBottom="@dimen/dp24"
                     app:type="workbook"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/workbookLabelTv"
                     app:layout_constraintBottom_toBottomOf="parent"
                     />
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
+                    android:background="@color/grey_e8e8e8"
                     app:layout_constraintTop_toTopOf="@+id/filterView"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/filterView"/>

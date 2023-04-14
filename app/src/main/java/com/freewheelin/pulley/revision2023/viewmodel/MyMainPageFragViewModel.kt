@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
+import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.repository.AuthRepository
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
@@ -37,6 +38,15 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
             val tempToken = authRepository.getTempToken()
             withContext(Dispatchers.Main) {
                 cb(tempToken.token)
+            }
+        }
+    }
+    fun changeParentPhoneNumber(parentNumber: String, cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val req = ParentPhoneNumberRequest(parentNumber)
+            legacyV2Repository.changeParentPhoneNumber(req)
+            withContext(Dispatchers.Main) {
+                cb()
             }
         }
     }

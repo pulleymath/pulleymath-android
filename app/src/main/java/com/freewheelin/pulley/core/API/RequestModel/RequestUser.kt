@@ -9,7 +9,7 @@ data class RequestResetPassword(val authNumber:String, val changePassword:String
 data class RequestCheckCode(val code:String, val channel:String)
 
 class RequestSignup {
-
+    var studentId: String? = null
     var countryCode: String = "82"
     var name: String = ""
     var email: String = ""

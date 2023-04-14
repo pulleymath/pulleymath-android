@@ -3,7 +3,6 @@ package com.freewheelin.pulley.revision2021.activity
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +14,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
@@ -35,19 +32,20 @@ import com.freewheelin.pulley.databinding.ActivityPdfListBinding
 import com.freewheelin.pulley.databinding.HeaderPdfListBinding
 import com.freewheelin.pulley.databinding.ItemPdfBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.GridMarginDecoration
 import com.pulleymath.android.pdf.PdfViewerActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -134,14 +132,27 @@ class PdfListActivity : AppCompatActivity() {
                     if (bookId == -1) return@registerForActivityResult
                     viewModel.closeTutorialPdfBook(bookId) { startChallenge ->
                         // TODO 챌린지라면 완료 후
-                        val completedDialog = ChallengeCompletedDialog(startChallenge,
-                            ChallengeManager.CourseName.스타트챌린지_북스.id
-                        ) { nextCourse ->
-                            ChallengeManager.getMainTabMoveIntent(nextCourse).let {
+                        val moveEvent: (ChallengeCourse?) -> Unit = { it ->
+                            ChallengeManager.getMainTabMoveIntent(it).let {
                                 LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                                 finish()
                             }
                         }
+                        val completedDialog = ChallengeCompletedDialog(startChallenge,
+                            ChallengeManager.CourseName.스타트챌린지_북스.id,
+                            moveEvent = moveEvent,
+                            exitEvent = {
+                                val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_북스.id)
+                                if (nextCourse != null) {
+                                    val induceDialog = ChallengeInduceDialog(
+                                        ChallengeInduceDialog.Type.OneMore,
+                                        course = nextCourse,
+                                        moveEvent = moveEvent
+                                    )
+                                    supportFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
+                                }
+                            }
+                        )
                         supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog3") }
                     }
                 }
@@ -168,6 +179,7 @@ class PdfListActivity : AppCompatActivity() {
                 position?.let {
                     subjectFilter =
                         if (position > 0) PdfListFilter.subject.keys.toList().get(it) else ""
+                    LogUtils.logEvent(this@PdfListActivity, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "과목필터", subjectFilter)
                     filter()
                     ySum = 0
                 }
@@ -176,6 +188,7 @@ class PdfListActivity : AppCompatActivity() {
                 position?.let {
                     categoryFilter =
                         if (position > 0) PdfListFilter.category.keys.toList().get(it) else ""
+                    LogUtils.logEvent(this@PdfListActivity, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "학습유형필터", categoryFilter)
                     filter()
                     ySum = 0
                 }
@@ -315,7 +328,13 @@ class PdfListActivity : AppCompatActivity() {
             }
         }
     }
-
+    fun showGuestJoinInduceDialog() {
+        LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "풀리북스", "가입유도")
+        val dialog = JoinInduceForGuestDialog {
+            viewModel.errorStatusReset()
+        }
+        supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+    }
     inner class PdfHolder(private val binding: ItemPdfBinding): RecyclerView.ViewHolder(binding.root), PdfItemClickListener {
         private val downloadThreads = arrayListOf<Thread>()
         private val downloadConnections = arrayListOf<HttpURLConnection>()
@@ -337,11 +356,7 @@ class PdfListActivity : AppCompatActivity() {
                 listener = this@PdfHolder
                 this.item = item
                 vm = viewModel
-//                val spanCount = 5
-//                val positionWithoutHeader = position - 1
-//                isTopRow = positionWithoutHeader < spanCount
-//                isLeftColumn = positionWithoutHeader % spanCount == 0
-//                isRightColumn = positionWithoutHeader % spanCount == (spanCount - 1)
+                isGuestUser = user?.serviceType?.isGuestUser == true
             }
 
 
@@ -354,12 +369,19 @@ class PdfListActivity : AppCompatActivity() {
 
             Log.d("피디에프", "${pdf.title} ${pdf.subject} ${pdf.id} downloaded=${pdf.downloaded.get()}, downloading=${pdf.downloading.get()}, is_purchased=${pdf.is_purchased}, isPremium ?: ${user?.serviceType}")
 
-            if (pdf.isLocked) {
+            if (user?.serviceType?.isGuestUser == true) {
+                showGuestJoinInduceDialog()
+            } else if (pdf.isLocked) {
 //                openShop(pdf)
-                openPurchasedGuideDialog()
+                openPurchasedGuideDialog(pdf)
             } else if (!pdf.downloading.get()) { // 다운로드 중이면 disabled
-                if (pdf.downloaded.get()) { open(pdf) } else { beforeDownload(pdf) }
+                if (pdf.downloaded.get()) {
+                    open(pdf)
+                } else {
+                    beforeDownload(pdf)
+                }
             } else {
+                LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "다운로드취소", "cmBookId=${pdf.cm_book_id}")
                 showDownloadCancelMsg()
                 downloadThreads.forEach {
                     it.interrupt()
@@ -377,6 +399,7 @@ class PdfListActivity : AppCompatActivity() {
         }
 
         private fun open(pdf: Pdf) {
+            LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "오픈", "cmBookId=${pdf.cm_book_id}")
             pdf.opening.set(true)
             binding.root.context.let { context ->
                 viewModel.answer(pdf.cm_book_id) { answerLinks ->
@@ -393,7 +416,8 @@ class PdfListActivity : AppCompatActivity() {
             }
         }
 
-        private fun openPurchasedGuideDialog() {
+        private fun openPurchasedGuideDialog(pdf: Pdf) {
+            LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "결제유도", "cmBookId=${pdf.cm_book_id}")
             val dialog = PurchaseGuideDialog(withPdfDesc = true)
             supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
         }
@@ -454,6 +478,7 @@ class PdfListActivity : AppCompatActivity() {
         }
 
         private fun beforeDownload(pdf: Pdf) {
+            LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "다운로드", "cmBookId=${pdf.cm_book_id}")
             if (pdf.is_event_book) {
                 viewModel.eventBookCheck(pdf.cm_book_id) {
                     download(pdf)

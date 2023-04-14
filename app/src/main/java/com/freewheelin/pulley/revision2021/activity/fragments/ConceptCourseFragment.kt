@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.activity.fragments
 //import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -26,8 +29,11 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +45,6 @@ class ConceptCourseFragment : LearningTabFragment() {
     companion object {
         val RESULT_OK = 301
         val CHALLENGE_TUTORIAL_FINISH = 302
-        val RE_FETCH = "RE_FETCH"
         fun newInstance() = ConceptCourseFragment()
     }
 
@@ -48,7 +53,7 @@ class ConceptCourseFragment : LearningTabFragment() {
     val viewModel: ConceptCourseViewModel by viewModels()
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
-    lateinit var reFetchReceiver: BroadcastReceiver
+    lateinit var reconfigureReceiver: BroadcastReceiver
 
     override var screenName = "개념"
 
@@ -81,10 +86,10 @@ class ConceptCourseFragment : LearningTabFragment() {
                 }
             }
         }
-        reFetchReceiver = object: BroadcastReceiver() {
+        reconfigureReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
-                    println("qwoqwo purchaseReceiver onreceive 1")
+                    viewModel.chapterReset()
                     fetch()
                 }
             }
@@ -97,7 +102,7 @@ class ConceptCourseFragment : LearningTabFragment() {
         initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_concept_course, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.CONCEPT_STUDY_MOVE_EVENT))
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reFetchReceiver, IntentFilter(RE_FETCH))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         return binding.root
     }
 
@@ -112,7 +117,11 @@ class ConceptCourseFragment : LearningTabFragment() {
         viewModel.apply {
             onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
             selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
-                if (subjectId > -1) { fetch(subjectId) }
+                if (subjectId > -1) {
+                    val subject = SubjectIndicator.convertRawToSubject(subjectId)
+                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.inKorean)
+                    fetch(subjectId)
+                }
             }
 
             showMobileHeader.postValue(requireContext().isTablet.not())
@@ -131,10 +140,20 @@ class ConceptCourseFragment : LearningTabFragment() {
                     }
                 }
             }
-
+            errorAction.observe(viewLifecycleOwner) { type ->
+                when(type) {
+                    HttpException403, GuestException -> showGuestJoinInduceDialog()
+                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                }
+            }
         }
     }
-
+    private fun showGuestJoinInduceDialog() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.INDUCE, "개념", "가입유도")
+        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+            viewModel.errorStatusReset()
+        }
+    }
     private fun sendTutorialEventLog(seq: Int) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "개념학습유도", "${seq}")
     }
@@ -206,13 +225,27 @@ class ConceptCourseFragment : LearningTabFragment() {
                         viewModel.updateChallenge(startChallenge)
                         fetch()
                         val turnOnCompletedDialog = {
-                            val completedDialog = ChallengeCompletedDialog(startChallenge,
-                                ChallengeManager.CourseName.스타트챌린지_개념.id
-                            ) {
+                            val moveEvent: (ChallengeCourse?) -> Unit = { it ->
                                 ChallengeManager.getMainTabMoveIntent(it).let {
                                     LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
                                 }
                             }
+
+                            val completedDialog = ChallengeCompletedDialog(startChallenge,
+                                ChallengeManager.CourseName.스타트챌린지_개념.id,
+                                moveEvent = moveEvent,
+                                exitEvent = {
+                                    val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_개념.id)
+                                    if (nextCourse != null) {
+                                        val induceDialog = ChallengeInduceDialog(
+                                            ChallengeInduceDialog.Type.OneMore,
+                                            course = nextCourse,
+                                            moveEvent = moveEvent
+                                        )
+                                        childFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
+                                    }
+                                }
+                            )
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }
                         println("asoaso completed [[finishGuideDialog]] ")
@@ -233,6 +266,6 @@ class ConceptCourseFragment : LearningTabFragment() {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(challengeReceiver)
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reFetchReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
     }
 }

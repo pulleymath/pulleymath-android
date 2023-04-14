@@ -7,6 +7,7 @@
         <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.PdfListActivity.PdfItemClickListener"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.Pdf"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel"/>
+        <variable name="isGuestUser" type="Boolean"/>
 
     </data>
 
@@ -65,7 +66,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_lock_24_white"
-                    visibleIf="@{ item.isLocked }"
+                    visibleIf="@{ !isGuestUser &amp;&amp; item.isLocked }"
                     />
 
             </LinearLayout>
@@ -130,7 +131,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:visibility="@{ !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.isLocked ? View.VISIBLE : View.INVISIBLE }"
+                    android:visibility="@{ isGuestUser ? (item.isLocked ? View.INVISIBLE : View.VISIBLE) : !item.downloaded &amp;&amp; !item.downloading &amp;&amp; !item.isLocked ? View.VISIBLE : View.INVISIBLE }"
                     android:background="@drawable/bg_purple_100_round_ripple"
                     app:layout_constraintVertical_bias="1"
                     app:layout_constraintTop_toBottomOf="@id/bookInfoLl"
@@ -143,6 +144,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@drawable/ic_download_slim"
+                        visibleIf="@{ !isGuestUser }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/downloadTv"
@@ -153,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/h6"
-                        android:text="다운로드"
+                        android:text="@{ isGuestUser ? `가입하면` : `다운로드` }"
                         android:textColor="@color/purple_300"
                         android:layout_marginVertical="8dp"
                         android:layout_marginStart="4dp"

@@ -12,7 +12,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
-import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
@@ -99,8 +98,8 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
     private fun configureStudy(user: User) {
         with(binding) {
-            commonSubjectTv.text = user!!.getCommonSubjectText()
-            optionalSubjectTv.text = calcNoneText(user?.getOptionalSubjectText())
+            commonSubjectTv.text = user.getCommonSubjectText()
+            optionalSubjectTv.text = calcNoneText(user.getOptionalSubjectText())
         }
     }
 
@@ -115,6 +114,6 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 }

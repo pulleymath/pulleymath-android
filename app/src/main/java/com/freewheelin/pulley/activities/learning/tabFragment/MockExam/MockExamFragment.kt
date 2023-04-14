@@ -9,9 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMockTestBinding
+import com.freewheelin.pulley.utils.LogUtils
+import com.freewheelin.pulley.utils.PulleyEvent
 import com.google.android.material.tabs.TabLayoutMediator
 
 interface MockTabListener {
@@ -65,9 +69,6 @@ class MockExamFragment : LearningTabFragment(),
         binding.viewPager.setCurrentItem(0, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
     private var tabTitles = arrayOf("새로 풀기", "나의 모의고사")
     override fun initUI() {
         if (!::binding.isInitialized) return
@@ -76,6 +77,13 @@ class MockExamFragment : LearningTabFragment(),
 
             viewPager.adapter = ViewPagerAdapter(tabFragments, childFragmentManager, lifecycle)
             viewPager.isUserInputEnabled = false
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    val menuName = tabTitles.get(position)
+                    LogUtils.logEvent(requireContext(), user, PulleyEvent.MENU_CLICK, "모의고사", "${menuName}탭")
+                }
+            })
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.text = tabTitles[position]
             }.attach()

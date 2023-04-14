@@ -23,7 +23,6 @@ import com.freewheelin.pulley.databinding.ItemFilterSwitchBinding
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.v2.PolicyLayoutV2
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 
 
@@ -231,15 +230,15 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
 
     init {
         attrs?.let { setTypedArray(it) }
-        val filterAdatper = FilterAdapter()
-        filterAdatper.sectionType = SectionType.header
+        val filterAdapter = FilterAdapter()
+        filterAdapter.sectionType = SectionType.header
 
-        adapter = filterAdatper
+        adapter = filterAdapter
         addItemDecoration(SpaceItemDecoration())
         layoutManager = GridLayoutManager(context, 6, GridLayoutManager.VERTICAL, false).also {
             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    val indexPath = filterAdatper.getIndexPath(position)
+                    val indexPath = filterAdapter.getIndexPath(position)
                     return if (indexPath.type == Type.header || indexPath.section == 0) {
                         6
                     } else {

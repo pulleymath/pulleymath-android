@@ -8,7 +8,9 @@
         android:layout_height="56dp"
         android:id="@+id/containerCl">
 
-        <View style="@style/Border_Grey_f2f2f2_Horizontal"
+        <View android:background="@color/grey_f2f2f2"
+            android:layout_height="1dp"
+            android:layout_width="0dp"
             android:id="@+id/horizontalBorder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +42,9 @@
 
         <View
             android:id="@+id/firstBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginStart="@dimen/dp104"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/checkBox"
@@ -61,8 +64,9 @@
 
         <View
             android:id="@+id/secondBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginStart="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/firstBorder"
@@ -102,9 +106,10 @@
             app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Vertical"
             android:id="@+id/titleBorder"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintTop_toTopOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
@@ -125,8 +130,9 @@
 
         <View
             android:id="@+id/thirdBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
@@ -146,8 +152,9 @@
 
         <View
             android:id="@+id/fourthBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
@@ -167,8 +174,9 @@
 
         <View
             android:id="@+id/fifthBorder"
-            style="@style/Border_Grey_e8e8e8_Vertical"
+            android:layout_width="1dp"
             android:layout_height="16dp"
+            android:background="@color/grey_e8e8e8"
             android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toEndOf="parent"

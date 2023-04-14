@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,19 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.book.*
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.is10InchUI
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentPatternStudyBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.dialogs.*
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.Companion.RE_FETCH
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity
 import com.freewheelin.pulley.revision2023.ui.activity.WorkbookListActivity
@@ -51,7 +54,7 @@ class PatternStudyFragment : LearningTabFragment(),
     private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail, ActionType.delete), OriginType.MyPlan, isGridLayout = false)
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
-    lateinit var reFetchReceiver: BroadcastReceiver
+    lateinit var reConfigureReceiver: BroadcastReceiver
 
     companion object {
         val PLAN_PINNED = 401
@@ -89,7 +92,7 @@ class PatternStudyFragment : LearningTabFragment(),
                 }
             }
         }
-        reFetchReceiver = object: BroadcastReceiver() {
+        reConfigureReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
                     viewModel.initMyPlanAdapterItem()
@@ -104,7 +107,7 @@ class PatternStudyFragment : LearningTabFragment(),
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pattern_study, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.PATTERN_STUDY_MOVE_EVENT))
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reFetchReceiver, IntentFilter(RE_FETCH))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == PLAN_PINNED) {
                 binding.apply {
@@ -151,10 +154,21 @@ class PatternStudyFragment : LearningTabFragment(),
                     val isWorkbooksChallengeInProgress = it.find { it.startChallenge?.isWorkbooksInProgress == true } != null
                     showWorkbooksChallengeStamp.postValue(isWorkbooksChallengeInProgress)
                 }
+                errorAction.observe(viewLifecycleOwner) { type ->
+                    when(type) {
+                        CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
+                        else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                    }
+                }
             }
         }
     }
-
+    private fun showGuestJoinInduceDialog() {
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "유형학습", "가입유도")
+        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+            viewModel.errorStatusReset()
+        }
+    }
     private fun initAdapter () {
         binding.apply {
             myPlanRv.apply {
@@ -206,19 +220,19 @@ class PatternStudyFragment : LearningTabFragment(),
     }
 
     fun goPulleyMathBooks(isFocus: Boolean = false) {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체문제집")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "풀리수학문제집")
         PulleyMathBooksActivity.getIntent(requireContext(), isFocus).let {
             getResult.launch(it)
         }
     }
     fun goPdfList() {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "출판사문제집")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "풀리북스")
         Intent(requireContext(), PdfListActivity::class.java).let {
             startActivity(it)
         }
     }
     fun goWorkbooks() {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "전체-워크북만들기")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "워크북")
         WorkbookListActivity.getIntent(requireContext()).let {
             getResult.launch(it)
         }
@@ -240,7 +254,7 @@ class PatternStudyFragment : LearningTabFragment(),
     override fun onDestroyView() {
         super.onDestroyView()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(challengeReceiver)
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reFetchReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reConfigureReceiver)
     }
 
     override fun onActionBtnClicked(action: ActionType, book: Book) {

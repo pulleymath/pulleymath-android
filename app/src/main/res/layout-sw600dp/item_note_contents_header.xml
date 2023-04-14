@@ -71,8 +71,9 @@
                 android:layout_marginEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"/>
             <View
-                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_width="1dp"
                 android:layout_height="16dp"
+                android:background="@color/grey_e8e8e8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/levelOrder"/>
@@ -103,8 +104,9 @@
             </Button>
 
             <View
-                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_width="1dp"
                 android:layout_height="16dp"
+                android:background="@color/grey_e8e8e8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
@@ -121,8 +123,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
 
             <View
-                style="@style/Border_Grey_e8e8e8_Vertical"
+                android:layout_width="1dp"
                 android:layout_height="16dp"
+                android:background="@color/grey_e8e8e8"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/oldOrder"/>

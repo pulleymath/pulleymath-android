@@ -13,9 +13,15 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.vibrate
 import com.freewheelin.pulley.databinding.ViewInputPasswordV2Binding
+import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
+import com.freewheelin.pulley.revision2021.utils.debounce
+import com.freewheelin.pulley.utils.pxToSp
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -37,8 +43,6 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
 
     var listener: PasswordFieldV2Listener? = null
     var enterListener: PasswordFieldV2EnterListener? = null
-//    var errorTv: TextView
-//    var inputLayout: TextInputLayout
 
     var text: String
         get() {
@@ -81,32 +85,36 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
     }
     var binding: ViewInputPasswordV2Binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_input_password_v2, this, true)
 
-    init {
-
-//        errorTv = findViewById(R.id.errorTv)
-        inputEt = binding.inputEt
-//        inputLayout = findViewById(R.id.inputLayout)
-
-//        val check = findViewById<CheckBox>(R.id.checkEye)
-
-        inputEt.onFocusChangeListener = this
-        inputEt.addTextChangedListener(object: TextWatcher{
+    lateinit var viewLifecycleOwner: LifecycleOwner
+    lateinit var afterTextChangedDebounce: (Unit?) -> Unit
+    fun setAfterTextDebounce(owner: LifecycleOwner) {
+        afterTextChangedDebounce = debounce(800L, owner.lifecycleScope) {
+            isShownError = false
+            listener?.onFieldValueChanged(this@PasswordFieldV2)
+        }
+        inputEt.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                isShownError = false
-                listener?.onFieldValueChanged(this@PasswordFieldV2)
+                afterTextChangedDebounce(null)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(sequence: CharSequence, p1: Int, p2: Int, p3: Int) {
-                if(sequence.isEmpty()) {
-                    inputEt.textSize = 16f
-                } else {
-                    inputEt.textSize = 18f
-                }
+//                if(sequence.isEmpty()) {
+//                    inputEt.textSize = resources.getDimension(R.dimen.sp16).pxToSp()
+//                } else {
+//                    inputEt.textSize = resources.getDimension(R.dimen.sp16).pxToSp()
+//                }
             }
         })
+    }
+    init {
+        binding.lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
+
+        inputEt = binding.inputEt
+        inputEt.onFocusChangeListener = this
+
         binding.checkEye.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked)
                 inputEt.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -122,10 +130,12 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
         val edit = findViewById<TextInputEditText>(R.id.inputEt)
         listener?.onFieldFocusChanged(this, hasFocus)
 
-        edit.setOnKeyListener { _, _, event ->
-            if(event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                enterListener?.onEnter(this)
-                return@setOnKeyListener true
+        edit.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (event.action == KeyEvent.ACTION_DOWN) {
+                    enterListener?.onEnter(this)
+                    true
+                }
             }
             false
         }
@@ -134,6 +144,7 @@ class PasswordFieldV2: LinearLayout, View.OnFocusChangeListener {
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.PasswordFieldV2)
         binding.inputLayout.hint = array.getString(R.styleable.PasswordFieldV2_PasswordFieldV2_Hint)
+        binding.inputEt.nextFocusDownId = array.getInt(R.styleable.InputFieldV2_InputFieldV2_nextFocusDown, -1);
         val showErrorDrawable = array.getBoolean(R.styleable.PasswordFieldV2_PasswordFieldV2_ShowErrorIcon, false)
         if (!showErrorDrawable) {
             binding.inputLayout.errorIconDrawable = null

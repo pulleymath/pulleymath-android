@@ -13,13 +13,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+<!--                android:textCursorDrawable="@drawable/text_input_layout_cursor"-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-                app:boxBackgroundColor="@color/white_ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp64"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                app:errorEnabled="false"
+                app:boxBackgroundColor="@color/white"
                 app:helperText=" "
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -32,6 +34,7 @@
                     android:maxLines="1"
                     android:inputType="text"
                     android:textSize="@dimen/dp16"
+                    android:textCursorDrawable="@drawable/text_input_layout_cursor"
                     android:hint="이름" />
 
                 <com.freewheelin.pulley.views.ArduousSpinner

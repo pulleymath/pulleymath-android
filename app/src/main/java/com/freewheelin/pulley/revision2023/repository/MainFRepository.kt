@@ -28,7 +28,7 @@ class MainFRepository(val context: Context, private val applicationScope: Corout
     }
 
     fun flowAllChallengeHeader(): Flow<List<MainChallengeHeaderItem>> {
-        println("asoaso flow check StudentID : ${user?.studentID}")
+        println("asoaso flow check StudentID : ${user?.studentID} , ${user?.fullName}")
         return challengeHeaderDao.getAllHeaderItem()
     }
 

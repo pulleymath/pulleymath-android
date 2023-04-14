@@ -10,11 +10,16 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.UnderlineSpan
-import android.util.Patterns
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import com.freewheelin.pulley.model.MyLog
+import com.jakewharton.rxbinding2.widget.textChanges
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 class TextUtils {
@@ -39,6 +44,19 @@ class TextUtils {
     }
 }
 
+//fun EditText.setTextChangeDebounce(callback: (String) -> Unit): Disposable {
+//    val editTextChangeObservable = this.textChanges()
+//    return editTextChangeObservable
+//        // 마지막 글자 입력 0.8초 후에 onNext 이벤트로 데이터 발행
+//        .debounce(500, TimeUnit.MILLISECONDS)
+//        .subscribeOn(Schedulers.io())
+//        // 구독을 통해 이벤트 응답 처리
+//        .subscribeBy(
+//            onNext = { callback(it.toString()) },
+//            onComplete = {},
+//            onError = {}
+//        )  // Disposable 반환
+//}
 fun TextView.underline() {
     this.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 }
@@ -107,7 +125,7 @@ fun SpannableStringBuilder.partialFontAndColored(font: Typeface, color: Int, fro
 
 fun String.isValidName(): Boolean {
     return Pattern.compile(
-            "^([가-힣]{2,15})|[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*\$"
+            "^([가-힣 ]{2,15})|[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*\$"
 
     ).matcher(this).matches() && length >= 2 && length <= 15 // 길이 2 이상 15 이하
 }
@@ -121,7 +139,6 @@ fun String.isValidPhoneNum(): Boolean {
 fun String.isValidEmail(): Boolean {
     return this.isNotEmpty() && EMAIL_ADDRESS.matcher(this).matches()
 }
-
 val EMAIL_ADDRESS = Pattern.compile(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,64}" +
                 "\\@" +

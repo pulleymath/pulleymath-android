@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,11 +36,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
@@ -49,6 +52,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     lateinit var binding: FragmentMain2Binding
 
     lateinit var profileReceiver: BroadcastReceiver
+    lateinit var userUpdateReceiver: BroadcastReceiver
 
     val viewModel: MainFViewModel by viewModels()
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
@@ -70,6 +74,18 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
             }
+        }
+        userUpdateReceiver = object :BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                wasInitUI = false
+                syncProfile()
+            }
+        }
+    }
+    fun initChallenge() {
+        viewModel.apply {
+            cancelChallengeHeaderJob()
+            initChallenge()
         }
     }
 
@@ -105,6 +121,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(profileReceiver, IntentFilter(UserManager.EVENT_USER_MODIFYING))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(userUpdateReceiver, IntentFilter(UserManager.EVENT_USER_UPDATE))
         viewModel.showWholeProgressBar.postValue(true)
         init()
 
@@ -153,7 +170,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             toastMessage.observe(viewLifecycleOwner) {
                 DaebakToast.show(requireContext(), it)
             }
-            mainProfile.observe(viewLifecycleOwner) { mainProfile ->
+            mainProfile.observe(viewLifecycleOwner) { _ ->
                 binding.apply {
                     showWholeProgressBar.postValue(false)
                 }
@@ -162,6 +179,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             currentMission.observe(viewLifecycleOwner) {
                 if (!it.isStartChallenge) return@observe
                 blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
+                if (user?.serviceType?.isGuestUser == true) return@observe
                 val scInfo = Preferences.startChallengeAlreadyAppeared
                 val appearedIds = scInfo.studentIds
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
@@ -195,6 +213,12 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                     }
                 }
             }
+            errorAction.observe(viewLifecycleOwner) { type ->
+                when(type) {
+                    CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
+                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                }
+            }
         }
     }
 
@@ -212,20 +236,20 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                 viewModel.challengeDescAdapter = challengeMissionAdapter
             }
 
-            viewModel.initChallenge()
+            initChallenge()
         }
     }
 
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         if (event == Lifecycle.Event.ON_START) {
-            viewModel.fetchUserProfile(requireContext())
+            viewModel.fetchUserProfile()
         }
     }
 
     fun syncProfile() {
         Log.d("마케팅", "syncProfile() is called!!!")
-        viewModel.fetchUserProfile(requireContext())
+        viewModel.fetchUserProfile()
     }
 
     private fun onDDayBtnClicked() {
@@ -253,13 +277,24 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 //        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
     }
 
+    private fun showGuestJoinInduceDialog() {
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "메인", "가입유도")
+        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+            viewModel.errorStatusReset()
+        }
+    }
     private fun onStartBtnClicked() {
-        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "결제유도","풀리수학으로공부시작")
-        FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
-//        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
-//        val dialog = PurchaseGuideDialog(2)
-//        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
-        startActivity(PurchaseGuideActivity.getIntent(requireContext()))
+        if (user?.serviceType?.isGuestUser == true) {
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "가입유도","풀리수학으로공부시작")
+            showGuestJoinInduceDialog()
+        } else {
+            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "결제유도","풀리수학으로공부시작")
+            FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
+    //        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
+    //        val dialog = PurchaseGuideDialog(2)
+    //        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+            startActivity(PurchaseGuideActivity.getIntent(requireContext()))
+        }
     }
 
     private fun onChallengeAction() {
@@ -282,20 +317,25 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     }
 
     private fun joinChallenge(challengeId: Int) {
+        val nextEvent = {
+            (activity as LearningTabActivity).setSelectedTab(1)
+            (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.MathSang.rawValue)
+            (activity as LearningTabActivity).launchConceptCourseTutorial()
+        }
         viewModel.joinChallenge(challengeId) {
             val dialog = ChallengeGuideManager.getStartGuideMission1(
-                nextEvent = {
-                    (activity as LearningTabActivity).setSelectedTab(1)
-                    (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.MathSang.rawValue)
-                    (activity as LearningTabActivity).launchConceptCourseTutorial()
-                },
+                nextEvent = nextEvent,
                 exitEvent = {
-                    MarketingManager.setMarketingBanner(requireContext())
+                    val induceDialog = ChallengeInduceDialog(ChallengeInduceDialog.Type.Disappointed,
+                        nextEvent = nextEvent,
+                        exitEvent = {
+                            MarketingManager.setMarketingBanner(requireContext())
+                        }
+                    )
+                    childFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
                 }
             )
             childFragmentManager.let { dialog.show(it, "StartGuide") }
-            // TODO 주석처리 : 스챌 팝업플래그인데 앱출시할땐 주석 풀어야함
-//          Preferences.startChallengeAlreadyAppearedFlag.set(true)
         }
     }
     fun showStartChallengeCompletedGuide() {
@@ -306,8 +346,8 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     private fun askForRedeemOfChallenge(challenge: Challenge) {
         if (challenge.userChallengeId == null) return responseFailed(requireContext(), Throwable("userChallengeId cannot Null"))
         viewModel.askForRedeemOfChallenge(challenge.userChallengeId) {
-            if (user?.serviceType?.isFreeUser == true) {
-                val dialog = StartChallengeInfoDialog(challenge.challengeId, true) { challengeId ->
+            if (user?.serviceType?.isNoneUser == true) {
+                val dialog = StartChallengeInfoDialog(challenge.challengeId, true) { _ ->
                     startActivity(PurchaseGuideActivity.getIntent(requireContext()))
                 }
                 childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
@@ -324,5 +364,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         super.onDestroy()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(profileReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(userUpdateReceiver)
     }
 }

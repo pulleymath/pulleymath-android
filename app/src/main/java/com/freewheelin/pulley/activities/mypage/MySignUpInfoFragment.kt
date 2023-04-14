@@ -1,9 +1,6 @@
 package com.freewheelin.pulley.activities.mypage
 
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,19 +15,12 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
 import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMySignupInfoBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.FacebookEvent
-import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.utils.visibleIf
-import com.freewheelin.pulley.views.DaebakToast
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.*
+import com.freewheelin.pulley.utils.*
 
 
 class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
@@ -50,19 +40,44 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+
             nameModifyBtn.setOnClickListener { moveTo(MyChangeNameFragment()) }
             emailModifyBtn.setOnClickListener { moveTo(MyChangeEmailFragment()) }
             phoneModifyBtn.setOnClickListener { moveTo(MyChangePhoneFragment()) }
+            parentPhoneModifyBtn.setOnClickListener { moveTo(MyChangeParentPhoneNumberFragment()) }
             passwordModifyBtn.setOnClickListener { moveTo(MyChangePasswordFragment()) }
-            deviceBtn.setOnClickListener { moveTo(MyDeviceManagerFragment()) }
-//        membershipBtn.setOnClickListener { onMemebershipBtnClicked() }
             backBtn.setOnClickListener { onBackBtnClicked() }
 
-            val user = MyApplication.user ?: return
-            configureUI(user)
+            loginBtn.setOnClickListener {
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "가입유도", "연동하기")
+                (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+                    viewModel.errorStatusReset()
+                }
+            }
 
             setFragmentResultListener(RELOAD) { key, bundle ->
                 reload()
+            }
+            viewModel.user.observe(viewLifecycleOwner) {
+                it?.let {
+                    isGuestUser = it.serviceType.isGuestUser == true
+                    nameTv.text = it.fullName
+                    emailTv.text = it.email
+                    if (BuildConfig.FLAVOR == "beta") {
+                        studentIdTv.text = it.studentID
+                        studentIdTv.visibleIf(true)
+                    }
+                    phoneTv.text = it.cellPhone
+                    parentPhoneTv.text = it.parentNumber
+
+                    emailModifyBtn.text = if(it.isValidEmail) "변경하기" else "인증하기"
+
+                    ivConfirmPhone.visibleIf(it.isValidPhone)
+                    ivConfirmEmail.visibleIf(it.isValidEmail)
+                }
+
             }
         }
     }
@@ -70,94 +85,29 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     private fun reload() {
         val user = MyApplication.user!!
         Log.d(javaClass.simpleName, "user=${user.fullName}")
-        configureUI(user)
+        viewModel.updateUser(user)
     }
 
     override fun onModifyCompleted(user: User) {
-        configureUI(user)
-    }
-
-    fun configureUI(user: User) {
-        with(binding) {
-            nameTv.text = user.fullName
-            emailTv.text = user.email
-            if (BuildConfig.FLAVOR == "beta") {
-                studentIdTv.text = user.studentID
-                studentIdTv.visibleIf(true)
-            }
-            phoneTv.text = user.cellPhone
-
-            emailModifyBtn.text = if(user.isValidEmail) "변경하기" else "인증하기"
-
-//        if(user.isExpiredUser() || user.serviceName == null) {
-//            noSeviceLabel.visibility = View.VISIBLE
-//            membershipBtn.visibility = View.VISIBLE
-//            serviceNameLabel.visibility = View.GONE
-//            availableDurationLabel.visibility = View.GONE
-//            serviceTv.visibility = View.GONE
-//            availableDurationTv.visibility = View.GONE
-//        } else {
-//            noSeviceLabel.visibility = View.GONE
-//            membershipBtn.visibility = View.GONE
-//            serviceNameLabel.visibility = View.VISIBLE
-//            availableDurationLabel.visibility = View.VISIBLE
-//            serviceTv.visibility = View.VISIBLE
-//            availableDurationTv.visibility = View.VISIBLE
-//
-//            serviceTv.text = user.serviceName
-//            availableDurationTv.text = getDurationText(user)
-//        }
-
-            ivConfirmPhone.visibility = if(user.isValidPhone) View.VISIBLE else View.GONE
-            ivConfirmEmail.visibility = if(user.isValidEmail) View.VISIBLE else View.GONE
-
-            loadDeviceCount()
-        }
-    }
-
-    fun loadDeviceCount() {
-        API_V2.getDevices()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    val count = response.data?.size?:1
-                    binding.deviceCount.text = "등록 기기 : ${count}대"
-                }, {
-                    Log.e(javaClass.simpleName, "${it.localizedMessage}")
-                })
+        viewModel.updateUser(user)
     }
 
     fun onMemebershipBtnClicked() {
         // facebook
         FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
-        viewModel.getTempToken { shortToken ->
-            val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
-            val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+        if (user?.serviceType?.isGuestUser == true) {
+            val targetUrl = URL.홈페이지
             IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+        } else {
+            viewModel.getTempToken { shortToken ->
+                val relativeUrl = URL.홈페이지.substringAfter("https://pulleymath.com")
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            }
         }
     }
 
     fun moveTo(fragment: Fragment) {
-        (activity as LearningTabActivity).moveTo(fragment)
+        (activity as LearningTabActivity).addMyPage(fragment)
     }
-
-//    private fun getDurationText(user: User): String {
-//        if(user.startDate == null || user.endDate == null) {
-//            Log.e(javaClass.simpleName, "유저 start 또는 enddate가 존재하지 않음 " +
-//                    "studentID: ${user.studentID}, " +
-//                    "hasPulleyPlus: ${user.hasPulleyPlus}, " +
-//                    "startDate: ${user.startDate}, " +
-//                    "endDate: ${user.endDate}")
-//            return ""
-//        } else {
-//            val now = Date()
-//            val startDate: Date = if(now > user.startDate) now else user.startDate!!
-//            val endDate = user.endDate!!
-//
-//            DateTimeUtils.yyyyMMddFormat?.run {
-//                return if (startDate < endDate) "${format(user.startDate)} - ${format(user.endDate)}"
-//                else "${format(user.startDate)} - ${format(user.endDate)}"
-//            }
-//        }
-//    }
 }

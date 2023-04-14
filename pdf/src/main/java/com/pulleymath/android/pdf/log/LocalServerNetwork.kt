@@ -40,7 +40,7 @@ object LocalServerNetwork {
                 Interceptor { chain ->
                     val builder = chain.request().newBuilder()
                         .header("Authorization", "Bearer $token")
-                        .header("Platform", "ANDROID")
+//                        .header("Platform", "ANDROID")
                     val response = chain.proceed(builder.build())
                     return@Interceptor response
                 }

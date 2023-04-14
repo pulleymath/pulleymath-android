@@ -1,15 +1,10 @@
 package com.freewheelin.pulley.activities.mypage
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,16 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryBooksItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyBooksBinding
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.views.DaebakToast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 
 class MyPulleyBooksFragment : MyPageBaseFragment() {
     lateinit var binding: FragmentMyPulleyBooksBinding
@@ -52,18 +46,28 @@ class MyPulleyBooksFragment : MyPageBaseFragment() {
                 onBackBtnClicked()
             }
             btnOpenPulleyBooks.setOnClickListener {
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.풀리북스구매.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                if (user?.serviceType?.isGuestUser == true) {
+                    val targetUrl = URL.풀리북스구매
                     IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.풀리북스구매.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
 
             }
             btnShowPaidList.setOnClickListener {
-                viewModel.getTempToken { shortToken ->
-                    val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
-                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                if (user?.serviceType?.isGuestUser == true) {
+                    val targetUrl = URL.구매내역
                     IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                } else {
+                    viewModel.getTempToken { shortToken ->
+                        val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
+                        val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                        IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                    }
                 }
             }
         }
@@ -101,7 +105,7 @@ class MyPulleyBooksFragment : MyPageBaseFragment() {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 
     class BooksAdapter(val list: List<SummaryBooksItem>): RecyclerView.Adapter<BooksAdapter.Holder>() {

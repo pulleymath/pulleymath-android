@@ -1,16 +1,32 @@
 package com.freewheelin.pulley.core.manage
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.media.MediaDrm
 import android.media.UnsupportedSchemeException
 import android.os.Build
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import com.freewheelin.pulley.utils.Preferences
 import java.util.*
 
 object AndroidID {
 
+    fun getCreatedUUID(context: Context): String {
+        var uuid = ""
+        try {
+            uuid = getAndroidID(context)
+        } catch (e: Exception) {
+            uuid = Preferences.createdUUID.get()
+            if (uuid.isEmpty()) {
+                uuid = getUUID()
+                Preferences.createdUUID.set(uuid)
+            }
+        }
+
+        return uuid
+    }
     fun getUUID() : String {
         return UUID.randomUUID().toString().replace("-", "");
     }

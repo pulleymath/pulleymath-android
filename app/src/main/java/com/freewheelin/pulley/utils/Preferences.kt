@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.utils
 
 import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2023.model.challenge.StartChallengeInfoAppear
+import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
 import com.google.gson.Gson
 
 object Preferences {
@@ -61,15 +61,29 @@ object Preferences {
     var isConceptLearningTutorialPassed = APPreference(false)
     var floatingAnswerSheetLastLocation = APPreference("")
     val _startChallengeAlreadyAppeared = APPreference("")
-    var startChallengeAlreadyAppeared: StartChallengeInfoAppear
+    var startChallengeAlreadyAppeared: OnceAppearInfoByStudentId
         get() {
             val infoStr = _startChallengeAlreadyAppeared.get()
-            return Gson().fromJson(infoStr, StartChallengeInfoAppear::class.java) ?: StartChallengeInfoAppear(listOf())
+            return Gson().fromJson(infoStr, OnceAppearInfoByStudentId::class.java) ?: OnceAppearInfoByStudentId(listOf())
         }
         set (value) {
             val scInfoStr = Gson().toJson(value)
             _startChallengeAlreadyAppeared.set(scInfoStr)
         }
+
+    val _guestWelcomeMessageAppeared = APPreference("")
+    var guestWelcomeMessageAppeared: OnceAppearInfoByStudentId
+        get() {
+            val infoStr = _guestWelcomeMessageAppeared.get()
+            return Gson().fromJson(infoStr, OnceAppearInfoByStudentId::class.java) ?: OnceAppearInfoByStudentId(listOf())
+        }
+        set (value) {
+            val scInfoStr = Gson().toJson(value)
+            _guestWelcomeMessageAppeared.set(scInfoStr)
+        }
+    val createdUUID = APPreference("")
+    var signedEmail = APPreference("")
+
 }
 
 

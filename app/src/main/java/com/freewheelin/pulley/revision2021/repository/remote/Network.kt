@@ -92,12 +92,13 @@ object Network {
 
                 addInterceptor(
                         Interceptor { chain ->
+
                             val token = user?.token ?: MyApplication.token
                             val builder = chain.request().newBuilder()
                                 .header("Authorization", "Bearer $token")
                                 .header("DeviceUid", APHelper.deviceId())
                                 .header("DeviceName", APHelper.deviceName)
-                                .header("Platform", "ANDROID")
+//                                .header("Platform", "ANDROID")
                             val response = chain.proceed(builder.build())
 
                             val authorization = response.header("Authorization")

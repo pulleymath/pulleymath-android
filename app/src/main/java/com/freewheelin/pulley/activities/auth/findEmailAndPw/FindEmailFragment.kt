@@ -20,6 +20,8 @@ import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.databinding.FragmentFindEmailBinding
 import com.freewheelin.pulley.model.Template
+import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
+import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import retrofit2.Call
@@ -29,14 +31,20 @@ import retrofit2.Response
 class FindEmailFragment : Fragment() {
 
     companion object {
+        val IS_GUEST_USER = "IS_GUEST_USER"
         @JvmStatic
-        fun newInstance(): FindEmailFragment {
-            val fragment = FindEmailFragment()
+        fun newInstance(isGuestUser: Boolean = false): FindEmailFragment {
+            val fragment = FindEmailFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(IS_GUEST_USER, isGuestUser)
+                }
+            }
             return fragment
         }
     }
     lateinit var binding: FragmentFindEmailBinding
 
+    var isGuestUser = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_email, container, false)
@@ -45,6 +53,10 @@ class FindEmailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            isGuestUser = it.getBoolean(IS_GUEST_USER)
+        }
         binding.apply {
             inputGuideLabel.text = "가입하신 이메일을 찾아드릴게요!\n아래 내용을 입력해주세요."
             findEmailBtn.setOnClickListener {
@@ -76,7 +88,7 @@ class FindEmailFragment : Fragment() {
 
             signupBtn.paintFlags = signupBtn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             signupBtn.setOnClickListener {
-                val intent = SignupActivity.getIntent(requireContext())
+                val intent = SignupActivity.getIntent(requireContext(), isGuestUser)
                 startActivity(intent)
                 activity?.finish()
             }

@@ -28,6 +28,8 @@ import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.core.manage.UserManager.EVENT_USER_UPDATE
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
@@ -57,7 +59,8 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     var set: HashSet<TestPageBaseFragment> = HashSet()
     var scoringReceiver: BroadcastReceiver? = null
     var settingReceiver: BroadcastReceiver? = null
-    var clearRecevier: BroadcastReceiver? = null
+    var clearReceiver: BroadcastReceiver? = null
+    var reConfigureReceiver: BroadcastReceiver? = null
 
     var isStartWithInitTest = false
 
@@ -74,7 +77,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 syncTestList()
             }
         }
-        clearRecevier = object: BroadcastReceiver() {
+        clearReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 val fragmentActivity = activity
                 if(fragmentActivity is LearningTabActivity
@@ -83,10 +86,18 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
                 }
             }
         }
+        reConfigureReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                init()
+                syncTestList()
+            }
+
+        }
 
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(scoringReceiver!!, IntentFilter(TestManager.EVENT_TEST_SCORING))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(settingReceiver!!, IntentFilter(TestManager.EVENT_TEST_SETTING))
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearRecevier!!, IntentFilter(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver!!, IntentFilter(ProblemManager.EVENT_PROBLEM_CLEAR_CHANGED))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver!!, IntentFilter(RE_CONFIGURE_UI))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -101,12 +112,10 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     override fun onDestroy() {
-        if(scoringReceiver != null)
-            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(scoringReceiver!!)
-        if(settingReceiver != null)
-            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(settingReceiver!!)
-        if(clearRecevier != null)
-            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearRecevier!!)
+        listOf(scoringReceiver, settingReceiver, clearReceiver, reConfigureReceiver)
+            .forEach {
+                it?.let { LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(it) }
+            }
         super.onDestroy()
         deinitTimer()
     }
@@ -118,6 +127,12 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
     override fun onSolveBtnClicked(test: Test) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "테스트 시작하기", test.getTestType().eventItemValue)
+        if (user?.serviceType?.isGuestUser == true) {
+            (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+                viewModel.errorStatusReset()
+            }
+            return
+        }
         if(Date() > test.endDate && (test.getTestType() == Test.TestType.weekly || test.getTestType() == Test.TestType.daily)) {
             val dialog = DialogUtils.makeDialog(requireContext(), "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
             dialog.binding.rightBtn.visibility = View.GONE

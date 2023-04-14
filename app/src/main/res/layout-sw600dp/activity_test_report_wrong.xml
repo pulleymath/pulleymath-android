@@ -197,14 +197,18 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="0dp"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintTop_toTopOf="@+id/leftNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
                                     app:layout_constraintStart_toStartOf="@+id/leftNumTv"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="0dp"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintTop_toTopOf="@+id/leftNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
                                     app:layout_constraintEnd_toEndOf="@+id/leftNumTv"/>
@@ -221,8 +225,10 @@
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/leftNumTv"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintStart_toEndOf="@+id/leftResultTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
                                     app:layout_constraintTop_toTopOf="@+id/leftResultTv"/>
@@ -240,9 +246,11 @@
                                     app:layout_constraintStart_toEndOf="@+id/leftResultTv"
                                     app:layout_constraintEnd_toStartOf="@+id/leftCenterVerticalBorder"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
-                                    android:layout_height="@dimen/dp16"
+                                <View
                                     android:id="@+id/leftCenterVerticalBorder"
+                                    android:layout_width="1dp"
+                                    android:layout_height="@dimen/dp16"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintStart_toEndOf="@+id/leftCorrectRateTv"
                                     app:layout_constraintEnd_toStartOf="@+id/leftWrongCntTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
@@ -283,14 +291,18 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="0dp"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintTop_toTopOf="@+id/rightNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
                                     app:layout_constraintStart_toStartOf="@+id/rightNumTv"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="0dp"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintTop_toTopOf="@+id/rightNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
                                     app:layout_constraintEnd_toEndOf="@+id/rightNumTv"/>
@@ -307,8 +319,10 @@
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/rightNumTv"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintStart_toEndOf="@+id/rightResultTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightResultTv"
                                     app:layout_constraintTop_toTopOf="@+id/rightResultTv"/>
@@ -326,9 +340,11 @@
                                     app:layout_constraintStart_toEndOf="@+id/rightResultTv"
                                     app:layout_constraintEnd_toStartOf="@+id/rightCenterVerticalBorder"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
-                                    android:layout_height="@dimen/dp16"
+                                <View
                                     android:id="@+id/rightCenterVerticalBorder"
+                                    android:layout_width="1dp"
+                                    android:layout_height="@dimen/dp16"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintStart_toEndOf="@+id/rightCorrectRateTv"
                                     app:layout_constraintEnd_toStartOf="@+id/rightWrongCntTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightCorrectRateTv"
@@ -347,8 +363,10 @@
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"/>
 
-                                <View style="@style/Border_Grey_e8e8e8_Vertical"
+                                <View
+                                    android:layout_width="1dp"
                                     android:layout_height="0dp"
+                                    android:background="@color/grey_e8e8e8"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"/>

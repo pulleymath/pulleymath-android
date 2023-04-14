@@ -169,6 +169,7 @@
                 android:layout_marginEnd="@dimen/dp48"
                 android:visibility="visible"
                 android:queryHint="문제집명으로 검색하세요."
+                searchview_hint_size="@{ @dimen/sp18 }"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

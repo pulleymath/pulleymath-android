@@ -7,6 +7,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel"/>
+        <variable name="isGuestUser" type="Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,6 +120,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginEnd="@dimen/dp16"
+                visibleIf="@{ !isGuestUser }"
                 android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
                 android:src="@drawable/ic_gear"
                 app:layout_constraintEnd_toEndOf="parent"

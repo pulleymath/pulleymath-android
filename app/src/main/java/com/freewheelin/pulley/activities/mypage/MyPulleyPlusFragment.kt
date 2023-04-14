@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.SummaryPlusItem
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.databinding.FragmentMyPulleyPlusBinding
@@ -25,7 +26,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class MyPulleyPlusFragment : MyPageBaseFragment() {
     lateinit var binding: FragmentMyPulleyPlusBinding
@@ -56,7 +56,10 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
     }
 
     private fun setViews(view: View) {
-
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            isGuestUser = user?.serviceType?.isGuestUser == true
+        }
         freeContainer = view.findViewById(R.id.freeContainer)
         paidContainer = view.findViewById(R.id.paidContainer)
 
@@ -75,17 +78,27 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
             onBackBtnClicked()
         }
         btnOpenPulleyPlus.setOnClickListener {
-            viewModel.getTempToken { shortToken ->
-                val relativeUrl = URL.풀리플러스구매.substringAfter("https://pulleymath.com")
-                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+            if (user?.serviceType?.isGuestUser == true) {
+                val targetUrl = URL.풀리플러스구매
                 IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            } else {
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.풀리플러스구매.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
         }
         btnShowPaidList.setOnClickListener {
-            viewModel.getTempToken { shortToken ->
-                val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
-                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+            if (user?.serviceType?.isGuestUser == true) {
+                val targetUrl = URL.구매내역
                 IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+            } else {
+                viewModel.getTempToken { shortToken ->
+                    val relativeUrl = URL.구매내역.substringAfter("https://pulleymath.com")
+                    val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=${relativeUrl}"
+                    IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
+                }
             }
         }
     }
@@ -104,7 +117,7 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
                     paidContainer.visibility = View.VISIBLE
                     setPaidContainer(result.data!!)
                 }
-            }, { /* */ })
+            }, { })
     }
 
     private fun setPaidContainer(data: SummaryPlusItem) {
@@ -123,7 +136,7 @@ class MyPulleyPlusFragment : MyPageBaseFragment() {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 
     override fun onStop() {

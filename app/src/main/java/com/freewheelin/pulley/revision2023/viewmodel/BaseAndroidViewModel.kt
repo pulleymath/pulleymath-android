@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.utils.responseFailed
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -15,6 +16,9 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
     protected val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    protected val _errorAction = MutableLiveData<CoroutineExceptionType>()
+    val errorAction: LiveData<CoroutineExceptionType> = _errorAction
+
     protected var contentJob: Job? = null
 
     protected val contentExceptionHandler = CoroutineExceptionHandler { context, throwable ->
@@ -25,17 +29,28 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
         when (throwable) {
             is CancellationException -> {
                 _isLoading.postValue(false)
-                println("throwable CancellationException : ${throwable} / ${throwable.message}")
+                _errorAction.postValue(CoroutineExceptionType.Cancellation)
+                println("throwable - CancellationException : ${throwable} / ${throwable.message}")
             }
             is UnknownHostException -> {
                 _isLoading.postValue(false)
-                println("throwable UnknownHostException : ${throwable} / ${throwable.message}")
+                _errorAction.postValue(CoroutineExceptionType.UnknownHost)
+                println("throwable - UnknownHostException : ${throwable} / ${throwable.message}")
             }
             is NullPointerException -> {
-                println("throwable NullPointerException : ${throwable} / ${throwable.message}")
+                _errorAction.postValue(CoroutineExceptionType.NullPointer)
+                println("throwable - NullPointerException : ${throwable} / ${throwable.message}")
             }
             is retrofit2.HttpException -> {
-                println("throwable HttpException : ${throwable.code()} / ${throwable.message}")
+                println("throwable - HttpException : ${throwable.code()} / ${throwable.message}")
+                val type = when (throwable.code()) {
+                    400 -> CoroutineExceptionType.HttpException400
+                    401 -> CoroutineExceptionType.HttpException401
+                    403 -> CoroutineExceptionType.HttpException403
+                    502 -> CoroutineExceptionType.HttpException502
+                    else -> CoroutineExceptionType.HttpException
+                }
+                _errorAction.postValue(type)
             }
             else -> {
                 CoroutineScope(Dispatchers.Main).launch {
@@ -55,5 +70,12 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    fun guestException() {
+        _errorAction.postValue(CoroutineExceptionType.GuestException)
+    }
+    fun errorStatusReset() {
+        _errorAction.postValue(CoroutineExceptionType.NONE)
     }
 }

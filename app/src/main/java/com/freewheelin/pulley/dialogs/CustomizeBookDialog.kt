@@ -43,6 +43,7 @@ import com.freewheelin.pulley.views.textViews.SortableTextView
 interface CustomizeBookDialogListener {
     fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book)
     fun onDeniedUser()
+    fun onGuestUser()
 }
 
 class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, ObservableHashSetListener<CommercialBookPage> {
@@ -229,7 +230,10 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         actionBtn.setOnPremiumClickListener(cb = {
             onActionBtnClicked()
         }, deniedCb = {
-            if (isWorkbookStartChallengeInProgress) {
+            if (user?.serviceType?.isGuestUser == true) {
+                dismiss()
+                listener?.onGuestUser()
+            } else if (isWorkbookStartChallengeInProgress) {
                 onActionBtnClicked()
             } else {
 //                val dialog = PurchaseGuideDialog()

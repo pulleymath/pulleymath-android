@@ -1,11 +1,12 @@
 package com.freewheelin.pulley.activities.auth.findEmailAndPw
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.BaseActivity
@@ -20,22 +21,34 @@ class FindEmailAndPwActivity : BaseActivity() {
 
     companion object {
         const val PAGE = "page"
+        const val IS_GUEST_USER = "IS_GUEST_USER"
+
+        fun getIntent(context: Context, isGuestUser: Boolean): Intent {
+            return Intent(context, FindEmailAndPwActivity::class.java).apply {
+                putExtra(IS_GUEST_USER, isGuestUser)
+            }
+        }
+
     }
     private val binding: ActivityFindEmailAndPwBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_find_email_and_pw, null, false)
     }
+    var isGuestUser = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        isGuestUser = intent.getBooleanExtra(IS_GUEST_USER, false)
         binding.apply {
             backBtn.setOnClickListener {
                 finish()
             }
 
+
             val pagerAdapter = FindPagerAdapter(
                 listOf(
-                    FindEmailFragment.newInstance(),
-                    FindPwFragment.newInstance()
+                    FindEmailFragment.newInstance(isGuestUser),
+                    FindPwFragment.newInstance(isGuestUser)
                 ), this@FindEmailAndPwActivity
             )
             viewPager.adapter = pagerAdapter

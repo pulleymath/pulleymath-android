@@ -23,6 +23,7 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -53,15 +54,20 @@ import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNot
 import com.freewheelin.pulley.activities.mypage.*
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.manage.*
+import com.freewheelin.pulley.core.manage.UserManager.EVENT_USER_UPDATE
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager.IS_START_CHALLENGE_COMPLETED
+import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity.Companion.PURCHASE_SUCCESS
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.viewmodel.LearningTabViewModel
@@ -122,6 +128,7 @@ class LearningTabActivity : PermissionActivity(),
     lateinit var tabMoveReceiver: BroadcastReceiver
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var purchaseReceiver: BroadcastReceiver
+    lateinit var userUpdateReceiver: BroadcastReceiver
 
     var currentPagePosition = 0
 
@@ -175,6 +182,9 @@ class LearningTabActivity : PermissionActivity(),
         initObserve()
 
         with(binding) {
+            vm = viewModel
+            lifecycleOwner = this@LearningTabActivity
+
             viewPager.adapter = TabAdapter(supportFragmentManager)
 
             viewPager.setPagingEnabled(false)
@@ -218,7 +228,6 @@ class LearningTabActivity : PermissionActivity(),
             drawerView.addDrawerListener(this@LearningTabActivity)
             drawerView.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-            moveTo(mypageFragment, false)
             alarmBtn.setOnClickListener {
                 val intent = AlarmActivity.getIntent(this@LearningTabActivity)
                 startActivity(intent)
@@ -273,6 +282,7 @@ class LearningTabActivity : PermissionActivity(),
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT))
             LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(purchaseReceiver, IntentFilter(PURCHASE_SUCCESS))
+            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(userUpdateReceiver, IntentFilter(EVENT_USER_UPDATE))
 // for Api.class
             if(referActivity == null) referActivity = this@LearningTabActivity
             registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
@@ -365,9 +375,37 @@ class LearningTabActivity : PermissionActivity(),
         purchaseReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
-                    println("qwoqwo purchaseReceiver onreceive 1")
                     viewModel.fetchUser {
-                        println("qwoqwo purchaseReceiver onreceive 2")
+
+                    }
+                }
+            }
+        }
+        userUpdateReceiver = object : BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    viewModel.setPageProgress(true)
+                    viewModel.fetchUser {
+                        MyApplication.user = it
+                        MyApplication.token = it.token
+                        viewModel.putFcmToken()
+                        (tabFragment.first() as MainFragment).initChallenge()
+                        (tabFragment.first() as MainFragment).initChallenge()
+                        val reConfigureReceiverIntent = Intent(RE_CONFIGURE_UI)
+                        LocalBroadcastManager.getInstance(this@LearningTabActivity).sendBroadcast(reConfigureReceiverIntent)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(700)
+                            viewModel.setPageProgress(false)
+                            tabMove(0)
+                        }
+                    }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        supportFragmentManager.findFragmentByTag("joinInduceDialog")?.let {
+                            (it as? DialogFragment)?.dismiss()
+                        }
+                        if (binding.drawerView.isDrawerOpen(GravityCompat.END)) {
+                            binding.drawerView.closeDrawer(GravityCompat.END)
+                        }
                     }
                 }
             }
@@ -376,7 +414,7 @@ class LearningTabActivity : PermissionActivity(),
 
     private fun initObserve() {
         viewModel.apply {
-            user.observe(this@LearningTabActivity) { user ->
+            userInRepo.observe(this@LearningTabActivity) { user ->
                 user?.let {
                     if (MyApplication.user == null) {
                         MyApplication.user = it
@@ -397,10 +435,21 @@ class LearningTabActivity : PermissionActivity(),
                     it.commit("LearningTabAct observe")
                 }
             }
+            errorAction.observe(this@LearningTabActivity) { type ->
+                when(type) {
+                    HttpException403, GuestException -> {
+                        LogUtils.logEvent(this@LearningTabActivity, user, PulleyEvent.INDUCE, "앱메인화면", "가입유도")
+                        showGuestJoinInduceDialog {
+                            viewModel.errorStatusReset()
+                        }
+                    }
+                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                }
+            }
         }
     }
     fun setUserObserveAttachedByMainFragment() {
-        viewModel.user.observe(this) {
+        viewModel.userInRepo.observe(this) {
             tabFragment.find { it.screenName == "메인" }?.let { frag ->
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(500)
@@ -515,6 +564,46 @@ class LearningTabActivity : PermissionActivity(),
             checkAffiliatedTestExist()
             checkNewAlarm()
         }
+        showGuestWelcomeMessage()
+        saveSignedEmail()
+    }
+
+    fun saveSignedEmail() {
+        val userEmail = if (user?.serviceType?.isGuestUser == true) {
+            ""
+        } else {
+            user?.email ?: ""
+        }
+        Preferences.signedEmail.set(userEmail)
+    }
+
+    fun showGuestJoinInduceDialog(dismissCallback: () -> Unit) {
+        val dialog = JoinInduceForGuestDialog {
+            dismissCallback()
+            viewModel.errorStatusReset()
+        }
+        supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+    }
+    private fun showGuestWelcomeMessage() {
+        if (user?.serviceType?.isGuestUser == true) {
+            val appearedInfo = Preferences.guestWelcomeMessageAppeared
+            val appearedIds = appearedInfo.studentIds
+            val isWelcomeMessageAlreadyAppeared = appearedIds.contains(user?.studentID)
+            if (!isWelcomeMessageAlreadyAppeared) {
+                val userName = user?.fullName ?: "고객"
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000)
+                    DaebakToast.show(this@LearningTabActivity, "${userName}님, 풀리수학에 오신것을 환영해요!")
+                    setGuestWelcomeMessage(appearedInfo)
+                }
+            }
+        }
+    }
+    private fun setGuestWelcomeMessage(info: OnceAppearInfoByStudentId) {
+        val studentId = user?.studentID ?: ""
+        val newList = info.studentIds + listOf(studentId)
+        info.studentIds = newList.toSet().toList()
+        Preferences.guestWelcomeMessageAppeared = info
     }
 
     @SuppressLint("CheckResult")
@@ -595,6 +684,7 @@ class LearningTabActivity : PermissionActivity(),
         LocalBroadcastManager.getInstance(this).unregisterReceiver(tabMoveReceiver)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(challengeReceiver)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(purchaseReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userUpdateReceiver)
         AppUsageMonitor.finishAppUsage()
 
         referActivity = null
@@ -738,7 +828,11 @@ class LearningTabActivity : PermissionActivity(),
         this.snackBar?.dismiss()
     }
     fun onMypageBtnClicked() {
-//        replaceTo(mypageFragment, false)
+        val mypage = supportFragmentManager.fragments.find { it is MyMainPageFragment }
+        if (mypage !is MyMainPageFragment) {
+            addMyPage(mypageFragment)
+        }
+
         binding.drawerView.openDrawer(GravityCompat.END)
     }
 
@@ -813,18 +907,23 @@ class LearningTabActivity : PermissionActivity(),
         }
     }
     fun launchConceptCourseTutorial() {
-        println("asoaso launchConceptCourseTutorial! 1")
         (tabFragment[1] as? ConceptCourseFragment)?.let {
-            println("asoaso launchConceptCourseTutorial! 2")
             it.launchTutorialActivity()
         }
     }
 
-    fun moveTo(frag: Fragment, withAnim: Boolean = true) {
+    fun addMyPage(frag: Fragment, withAnim: Boolean = true) {
         supportFragmentManager.beginTransaction().apply {
             if (withAnim) setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right, R.anim.enter_to_left, R.anim.exit_to_right)
             add(R.id.container, frag)
             addToBackStack(null)
+            commit()
+        }
+    }
+    fun removeMyPageTo(frag: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
+            remove(frag)
             commit()
         }
     }
@@ -836,7 +935,7 @@ class LearningTabActivity : PermissionActivity(),
 //            tran?.setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
 //        tran?.remove(frag)
 //        tran?.commit()
-        mypageFragment.binding.rv?.adapter?.notifyDataSetChanged()
+        mypageFragment.binding?.rv?.adapter?.notifyDataSetChanged()
     }
 
     fun getSelectedTab(): LearningTabFragment {

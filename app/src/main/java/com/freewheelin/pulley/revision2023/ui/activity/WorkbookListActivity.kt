@@ -1,7 +1,9 @@
 package com.freewheelin.pulley.revision2023.ui.activity
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,14 +19,17 @@ import com.freewheelin.pulley.activities.learning.tabFragment.book.*
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
-import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
@@ -46,6 +51,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     private val viewModel: WorkbookListViewModel by viewModels()
 //    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null, null)
     lateinit var planAdapter: PatternStudyMyPlanAdapter
+    lateinit var userUpdateReceiver: BroadcastReceiver
 
     companion object {
         @JvmStatic
@@ -62,14 +68,25 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@WorkbookListActivity
+            initReceiver()
             initAdapter()
             initUI()
             btnBack.setOnClickListener {
                 finish()
             }
             createWorkbookCl.setOnClickListener {
-                val isStartChallengeInProgress = viewModel.showStartChallengeStamp.value == true
-                CustomizeBookDialog(this@WorkbookListActivity, isStartChallengeInProgress, this@WorkbookListActivity).show()
+                LogUtils.logEvent(this@WorkbookListActivity, user, PulleyEvent.BUTTON_CLICK,"워크북","워크북만들기")
+
+                if (user?.serviceType?.isGuestUser == true) {
+                    LogUtils.logEvent(this@WorkbookListActivity, user, PulleyEvent.INDUCE,"워크북","가입유도")
+                    val dialog = JoinInduceForGuestDialog {
+                        viewModel.errorStatusReset()
+                    }
+                    supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
+                } else {
+                    val isStartChallengeInProgress = viewModel.showStartChallengeStamp.value == true
+                    CustomizeBookDialog(this@WorkbookListActivity, isStartChallengeInProgress, this@WorkbookListActivity).show()
+                }
             }
 
 //            DialogUtils.confirmDialog(this@WorkbookListActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
@@ -115,6 +132,21 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 supportFragmentManager.let { guideDialog.show(it, "getStartGuideMission3") }
             }
         }
+    }
+
+    private fun initReceiver() {
+        userUpdateReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                println("asoaso userUpdateReceiver!")
+                intent?.let {
+                    finish()
+                }
+            }
+        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(userUpdateReceiver, IntentFilter(
+            UserManager.EVENT_USER_UPDATE)
+        )
+
     }
     fun initAdapter() {
         binding.apply {
@@ -195,24 +227,44 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
         fetchCustomBook()
         viewModel.completedWorkbookChallenge { startChallenge ->
-            //TODO 챌린지 완료
-
-            val completedDialog = ChallengeCompletedDialog(startChallenge,
-                ChallengeManager.CourseName.스타트챌린지_워크북.id,
-            ) {
+            val moveEvent: (ChallengeCourse?) -> Unit = { it ->
                 ChallengeManager.getMainTabMoveIntent(it).let {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(it)
                     finish()
                 }
             }
+            val completedDialog = ChallengeCompletedDialog(startChallenge,
+                ChallengeManager.CourseName.스타트챌린지_워크북.id,
+                moveEvent = moveEvent,
+                exitEvent = {
+                    val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_워크북.id)
+                    if (nextCourse != null) {
+                        val induceDialog = ChallengeInduceDialog(
+                            ChallengeInduceDialog.Type.OneMore,
+                            course = nextCourse,
+                            moveEvent = moveEvent
+                        )
+                        supportFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
+                    }
+                }
+            )
 
             supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog4") }
         }
     }
 
     override fun onDeniedUser() {
+        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "워크북", "결제유도", "다이얼로그-다음")
         val dialog = PurchaseGuideDialog()
         supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+    }
+
+    override fun onGuestUser() {
+        LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "워크북", "가입유도")
+        val dialog = JoinInduceForGuestDialog {
+            viewModel.errorStatusReset()
+        }
+        supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }
 
     override fun onActionBtnClicked(action: ActionType, book: Book) {
@@ -248,5 +300,9 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         binding.filterView.selectedFilterTypes.add(type)
         binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
         binding.filterView.adapter?.notifyDataSetChanged()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userUpdateReceiver)
     }
 }

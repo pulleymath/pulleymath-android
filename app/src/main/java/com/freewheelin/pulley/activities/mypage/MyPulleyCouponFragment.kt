@@ -18,10 +18,10 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.core.API.ResponseModel.mypage.CouponItem
 import com.freewheelin.pulley.core.API_APP
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentMyPulleyCouponBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.coupon.NewCoupon
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment.Companion.RE_FETCH
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.DialogUtils
@@ -112,7 +112,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
     }
 
     fun moveTo(frag: Fragment) {
-        (activity as LearningTabActivity).moveTo(frag)
+        (activity as LearningTabActivity).addMyPage(frag)
     }
 
     inner class CouponAdapter(val list: MutableList<CouponItem>): RecyclerView.Adapter<CouponAdapter.Holder>() {
@@ -162,7 +162,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             CoroutineScope(Dispatchers.Main).launch {
                                 DialogUtils.confirmV2(requireContext(), "쿠폰이 사용되었습니다", "${result.data?.message}", isOneBtn = true)
                             }
-                            val reFetchReceiverIntent = Intent(RE_FETCH)
+                            val reFetchReceiverIntent = Intent(RE_CONFIGURE_UI)
                             LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(reFetchReceiverIntent)
                         }
                         load()

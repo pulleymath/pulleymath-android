@@ -3,62 +3,69 @@ package com.freewheelin.pulley.activities.auth.signup
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
+import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActivity
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.assets.Major
 import com.freewheelin.pulley.bases.BaseActivity
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.hideKeyboard
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
-import com.freewheelin.pulley.core.API_V1
-import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.databinding.ActivitySignupBinding
-import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.viewmodel.SignUpActViewModel
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 
 class SignupActivity : BaseActivity(), StudentInfoInterface {
 
     companion object {
+        val IS_GUEST_USER = "IS_GUEST_USER"
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, SignupActivity::class.java)
             return intent
+        }
+        fun getIntent(context: Context, isGuestUser: Boolean): Intent {
+            return Intent(context, SignupActivity::class.java).apply {
+                putExtra(IS_GUEST_USER, isGuestUser)
+            }
         }
 
         var signup = RequestSignup()
     }
     lateinit var signupFragment: SignupFragment
     lateinit var studentInfoFragment: StudentInfoFragment
+    val viewModel: SignUpActViewModel by viewModels()
+
+    var isGuestUser = false
+
     private val binding: ActivitySignupBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_signup, null, false)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        isGuestUser = intent.getBooleanExtra(IS_GUEST_USER, false)
         initUI()
     }
 
@@ -71,7 +78,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     private fun setViewPager() {
-        signupFragment = SignupFragment()
+        signupFragment = SignupFragment(isGuestUser)
         studentInfoFragment = StudentInfoFragment()
 
         val pagerAdapter = SignupViewPagerAdapter(listOf(signupFragment,studentInfoFragment), this)
@@ -109,24 +116,27 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
-            API_V1.signup(signup).enqueue(object: Callback<Template<String?>> {
-                override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
-                    when(response.code()) {
-                        200 -> signupSuccess()
-                        else -> DialogUtils.showDialog(this@SignupActivity, "회원가입 실패", "회원가입이 정상적으로 진행되지 않았습니다\n다시 시도해 주세요!!")
+            // TODO  Signup 이후에 알림톡발송을 위한 API를 쏴야한다 4월13일
+            if (isGuestUser) {
+                signup.studentId = user?.studentID
+                viewModel.requestGuestSignUp(signup) {
+                    viewModel.requestSignUpReward {
+                        signupSuccess()
                     }
                 }
-
-                override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
-                    DialogUtils.showServerErr(this@SignupActivity)
+            } else {
+                viewModel.requestUserSignUp(signup) {
+                    viewModel.requestSignUpReward {
+                        signupSuccess()
+                    }
                 }
-            })
+            }
         }
     }
 
     private fun signupSuccess() {
-        LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
         CoroutineScope(Dispatchers.Main).launch {
+            LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
             login(signup.email, signup.password)
         }
     }
@@ -146,7 +156,11 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
                     200 -> loginSuccess(user)
                     else -> loginFailed(response)
                 }
-                finishAffinity()
+                if (isGuestUser) {
+                    finish()
+                } else {
+                    finishAffinity()
+                }
             }
         })
     }
@@ -156,7 +170,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         MyApplication.token = user?.token
 //        if(MyApplication.user == null) MyApplication.user = user
 //        else MyApplication.user!!.update(user)
-        startActivity(InitSettingCompleteActivity.getIntent(this))
+        startActivity(InitSettingCompleteActivity.getIntent(this, isGuestUser))
     }
 
     private fun loginFailed(response: Response<Template<User?>>) {

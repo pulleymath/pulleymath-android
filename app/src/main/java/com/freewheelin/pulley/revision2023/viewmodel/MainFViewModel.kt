@@ -7,6 +7,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
@@ -14,12 +15,15 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderItem
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.MainFRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeMissionAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
 import com.freewheelin.pulley.utils.responseFailed
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -29,6 +33,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
     private val repository: MainFRepository = MainFRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
 
     lateinit var challengeListAdapter: ChallengeHeaderListAdapter
     lateinit var challengeDescAdapter: ChallengeMissionAdapter
@@ -52,22 +57,25 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
     fun initUserInfo() {
         user?.let { user ->
-            showPaidView.postValue(user.serviceType != PaidServiceType.NONE)
+            showPaidView.postValue(user.serviceType.isPaidUser)
             userPaidServiceType.postValue(user.serviceType)
         }
     }
     fun initChallengeSetting() {
         challengeHeaders.value?.first()?.let { onChallengeHeaderClick(it) }
     }
+    var challengeHeaderJob: Job? = null
     fun initChallenge() {
         repository.run {
-            flowAllChallengeHeader()
+            challengeHeaderJob = flowAllChallengeHeader()
+                .cancellable()
                 .onEach { items ->
                     if (items.size > 1) {
                         _challengeHeaders.value = items.sortedBy { it.seq }
                     }
                 }
                 .launchIn(viewModelScope)
+
 //            flowAllChallengeDetails()
 //                .onEach { items ->
 //                    _challengeDetails.value = items
@@ -75,6 +83,9 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         }
         collectChallengeHeaderItem()
 //        collectChallengeDetail()
+    }
+    fun cancelChallengeHeaderJob() {
+        challengeHeaderJob?.cancel()
     }
 
     fun collectChallengeHeaderItem() {
@@ -86,6 +97,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             newHeaders = newHeaders.map { it.copy(studentId = user?.studentID!!) }
             upsertChallengeHeaders(newHeaders)
             _isLoading.postValue(false)
+            _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }
 
@@ -95,16 +107,18 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             _isLoading.postValue(true)
             fetchAllChallengeDetailItem(challengeId)?.let { newItem ->
                 currentMission.postValue(newItem)
-                println("asoaso currentMission posted3")
                 updateChallengeMissions(newItem)
                 delay(300)
                 _isLoading.postValue(false)
+                _errorAction.postValue(CoroutineExceptionType.NONE)
             }
         }
     }
-    fun fetchUserProfile(context: Context) {
-        UserManager.getProfile(context, user!!) {
-            mainProfile.postValue(it)
+    fun fetchUserProfile() {
+        CoroutineScope(Dispatchers.IO + contentExceptionHandler).launch {
+            val profile = userRepository.getMainProfile()
+            mainProfile.postValue(profile)
+            _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }
 
@@ -144,6 +158,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
                 challengeRepository.getChallengesOnStatus()
 //                challengeRepository.updateChallengeList(detailItem)
                 currentMission.postValue(detailItem)
+                _errorAction.postValue(CoroutineExceptionType.NONE)
                 cb()
             }
         }
@@ -151,6 +166,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     fun askForRedeemOfChallenge(userChallengeId: Int, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val res = repository.askForRedeemOfChallenge(userChallengeId)
+            _errorAction.postValue(CoroutineExceptionType.NONE)
             if (res.error != null) {
                 println("[[[[[ERROR askForRedeemOfChallenge]]]]]")
                 responseFailed(getApplication<Application>().applicationContext, Throwable("${res.error} ${res.message}"))

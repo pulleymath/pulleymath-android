@@ -55,7 +55,7 @@ class LCTutorialActivity : AppCompatActivity() {
             vm = viewModel
             lifecycleOwner = this@LCTutorialActivity
 
-            viewModel.createLearningCourseOnStudentId {}
+            viewModel.createLearningCourseOnStudentId()
 
             evenWrapperCl.setOnClickListener { nextEvent() }
             evenExitBtn.setOnClickListener {

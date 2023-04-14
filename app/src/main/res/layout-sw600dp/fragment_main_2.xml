@@ -428,7 +428,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="@{ vm.currentMission.successfulUserCount + `명 성공`}"
+                            android:text="@{ vm.currentMission.successfulUserCount + `명 참여완료`}"
                             android:textColor="@color/gray_600"
                             style="@style/h6"
                             app:layout_constraintTop_toTopOf="@+id/blurChallengeInfoIv"

@@ -48,11 +48,13 @@ class FindPwFragment : Fragment() {
 
     companion object {
         const val KEY_FROM = "key_from"
+        val IS_GUEST_USER = "IS_GUEST_USER"
 
-        fun newInstance(): FindPwFragment {
+        fun newInstance(isGuestUser: Boolean = false): FindPwFragment {
             val fragment = FindPwFragment()
             val bundle = Bundle()
             bundle.putString(KEY_FROM, From.SIGNUP.name)
+            bundle.putBoolean(IS_GUEST_USER, isGuestUser)
             fragment.arguments = bundle
             return fragment
         }
@@ -60,6 +62,7 @@ class FindPwFragment : Fragment() {
 
     var from:From = From.MYPAGE
     lateinit var binding: FragmentFindPwBinding
+    var isGuestUser = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_pw, container, false)
@@ -68,6 +71,9 @@ class FindPwFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            isGuestUser = it.getBoolean(FindEmailFragment.IS_GUEST_USER)
+        }
         binding.apply {
             from = From.get(arguments?.getString(KEY_FROM))
 
@@ -343,7 +349,9 @@ class FindPwFragment : Fragment() {
     }
 
     private fun onToLoginClicked() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
+        if (!isGuestUser) {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+        }
         activity?.finish()
     }
 

@@ -146,9 +146,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/firstSubjectTv" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/firstRatingBorder"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     app:layout_constraintBottom_toBottomOf="@+id/firstUnitTv"
                     app:layout_constraintEnd_toStartOf="@+id/firstProblemCntTv"
                     app:layout_constraintStart_toEndOf="@+id/firstUnitTv"
@@ -243,9 +244,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/secondSubjectTv" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/secondRatingBorder"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     app:layout_constraintBottom_toBottomOf="@+id/secondUnitTv"
                     app:layout_constraintEnd_toStartOf="@+id/secondProblemCntTv"
                     app:layout_constraintStart_toEndOf="@+id/secondUnitTv"
@@ -337,9 +339,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/thirdSubjectTv" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Vertical"
                     android:id="@+id/thirdRatingBorder"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     app:layout_constraintBottom_toBottomOf="@+id/thirdUnitTv"
                     app:layout_constraintEnd_toStartOf="@+id/thirdProblemCntTv"
                     app:layout_constraintStart_toEndOf="@+id/thirdUnitTv"
@@ -461,8 +464,9 @@
 
                 <View
                     android:id="@+id/firstColumnBorder"
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginEnd="@dimen/dp96"
                     app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
                     app:layout_constraintEnd_toStartOf="@+id/secondColumBorder"
@@ -482,8 +486,9 @@
 
                 <View
                     android:id="@+id/secondColumBorder"
-                    style="@style/Border_Grey_e8e8e8_Vertical"
+                    android:layout_width="1dp"
                     android:layout_height="16dp"
+                    android:background="@color/grey_e8e8e8"
                     android:layout_marginEnd="@dimen/Report_Unit_list_correctRate_width"
                     app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
                     app:layout_constraintEnd_toEndOf="parent"

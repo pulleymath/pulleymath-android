@@ -38,6 +38,7 @@ class PulleyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
+        Log.d(javaClass.simpleName, "new Token=>$token")
         if(user?.token?.isNotEmpty() == true) {
             Log.d(javaClass.simpleName, "new Token=>$token")
             if (token.isNotEmpty()) {

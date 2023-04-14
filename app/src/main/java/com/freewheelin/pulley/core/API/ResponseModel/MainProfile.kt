@@ -2,17 +2,18 @@ package com.freewheelin.pulley.core.API.ResponseModel
 
 import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.Preferences
 import java.lang.Math.abs
 import java.util.*
 
 class MainProfile {
-    var profileImageUrl: String = ""
-    var backgroundImageUrl: String = ""
     var studentName: String = ""
-    var hashTag: List<String> = emptyList()
+    var serviceType: PaidServiceType = PaidServiceType.NONE
     var totalSolvedProblemCount: Int = 0
+    var profileImageUrl: String = ""
+    var hashTag: List<String> = emptyList()
     var totalSolvedWeakProblemCount: Int = 0
     var curation: String = ""
     var numberOfUserText: Int = 0
