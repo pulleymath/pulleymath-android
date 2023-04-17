@@ -43,6 +43,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
@@ -125,7 +126,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         viewModel.showWholeProgressBar.postValue(true)
         init()
 
-        (activity as LearningTabActivity).setUserObserveAttachedByMainFragment()
+//        (activity as LearningTabActivity).setUserObserveAttachedByMainFragment()
     }
 
     fun init() {
@@ -133,7 +134,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-            viewModel.initUserInfo()
+//            viewModel.initUserInfo()
             initRv()
 
             dDayTv.setOnClickListener { onDDayBtnClicked() }
@@ -218,6 +219,10 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                     CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
+            }
+            userInRepo.observe(viewLifecycleOwner) {
+                showPaidView.postValue(it?.serviceType?.isPaidUser)
+                userPaidServiceType.postValue(it?.serviceType)
             }
         }
     }

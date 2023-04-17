@@ -7,6 +7,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
@@ -54,11 +55,12 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     val challengeMission: LiveData<List<ChallengeCourse>> = _challengeMissions
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
+    val userInRepo = userRepository.user
 
-    fun initUserInfo() {
-        user?.let { user ->
-            showPaidView.postValue(user.serviceType.isPaidUser)
-            userPaidServiceType.postValue(user.serviceType)
+    fun initUserInfo(user: User?) {
+        user?.let {
+            showPaidView.postValue(it.serviceType.isPaidUser)
+            userPaidServiceType.postValue(it.serviceType)
         }
     }
     fun initChallengeSetting() {

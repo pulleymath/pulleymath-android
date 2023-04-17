@@ -390,7 +390,6 @@ class LearningTabActivity : PermissionActivity(),
                         MyApplication.token = it.token
                         viewModel.putFcmToken()
                         (tabFragment.first() as MainFragment).initChallenge()
-                        (tabFragment.first() as MainFragment).initChallenge()
                         val reConfigureReceiverIntent = Intent(RE_CONFIGURE_UI)
                         LocalBroadcastManager.getInstance(this@LearningTabActivity).sendBroadcast(reConfigureReceiverIntent)
                         CoroutineScope(Dispatchers.Main).launch {
@@ -444,16 +443,6 @@ class LearningTabActivity : PermissionActivity(),
                         }
                     }
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
-                }
-            }
-        }
-    }
-    fun setUserObserveAttachedByMainFragment() {
-        viewModel.userInRepo.observe(this) {
-            tabFragment.find { it.screenName == "메인" }?.let { frag ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(500)
-                    (frag as MainFragment).viewModel.initUserInfo()
                 }
             }
         }

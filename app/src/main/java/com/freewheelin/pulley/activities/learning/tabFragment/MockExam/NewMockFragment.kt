@@ -211,29 +211,32 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             gradeStrArrayList.add(0, "학년 전체")
             gradeFilter.items = gradeStrArrayList
 
-            val user = requireActivity().application!!.user!!
             binding.loadingContainer.visibleIf(true)
-            MockExamManager.getNewMockExamList(requireContext(), user) {
-                this@NewMockFragment.examList = it
-                this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
-                mockRv.adapter?.notifyDataSetChanged()
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(300)
-                    binding.loadingContainer.hide()
+//            val user = requireActivity().application!!.user!!
+            user?.let { u ->
+                MockExamManager.getNewMockExamList(requireContext(), u) {
+                    this@NewMockFragment.examList = it
+                    this@NewMockFragment.filteredMockList = this@NewMockFragment.examList
+                    mockRv.adapter?.notifyDataSetChanged()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(300)
+                        binding.loadingContainer.hide()
+                    }
+
+                    examList?.let{ list ->
+                        yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
+                        monthTreeSet = TreeSet(list.groupBy { item -> item.month }.map { item -> item.key }.sorted())
+
+                        val monthStrArrayList = monthTreeSet.map { month -> "${month}월" }.toMutableList()
+                        monthStrArrayList.add(0, "출제월 전체")
+                        monthFilter.items = monthStrArrayList
+
+                        val yearStrArrayList = ArrayList(yearTreeSet.reversed().map { "${it}년" })
+                        yearStrArrayList.add(0, "출제 연도 전체")
+                        yearFilter.items = yearStrArrayList
+                    }
                 }
 
-                examList?.let{ list ->
-                    yearTreeSet = TreeSet(list.groupBy { item -> item.year }.map { item -> item.key }.sorted())
-                    monthTreeSet = TreeSet(list.groupBy { item -> item.month }.map { item -> item.key }.sorted())
-
-                    val monthStrArrayList = monthTreeSet.map { month -> "${month}월" }.toMutableList()
-                    monthStrArrayList.add(0, "출제월 전체")
-                    monthFilter.items = monthStrArrayList
-
-                    val yearStrArrayList = ArrayList(yearTreeSet.reversed().map { "${it}년" })
-                    yearStrArrayList.add(0, "출제 연도 전체")
-                    yearFilter.items = yearStrArrayList
-                }
             }
 
             mockRv.setOnScrollChangeListener { view, i, i2, i3, i4 ->
