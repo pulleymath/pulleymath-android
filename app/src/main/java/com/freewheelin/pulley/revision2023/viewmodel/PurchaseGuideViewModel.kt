@@ -30,6 +30,7 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
 
     private val _guideOffers = MutableLiveData<List<PurchaseGuideOffer>>()
     val guideOffers: LiveData<List<PurchaseGuideOffer>> = _guideOffers
+    val backgroundColor = MutableLiveData<String>()
     val selectedOfferId = MutableLiveData<Int>()
 
     val step = MutableLiveData(0)
@@ -38,6 +39,7 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val newGuides = anonymousRepository.getPurchaseGuide()
             _guideOffers.postValue(newGuides.offers.sortedByDescending { it.offerId })
+            backgroundColor.postValue(newGuides.backgroundColor)
         }
     }
     fun getTempToken(cb: (String) -> Unit = {}) {
@@ -47,13 +49,14 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
         }
     }
 
+
     fun updateGuides(selected: PurchaseGuideOffer) {
-        guideOffers.value?.map {
-            it.copy(isSelected = it.offerId == selected.offerId)
-        }?.let {
-            selectedOfferId.postValue(selected.offerId)
-            _guideOffers.postValue(it)
-        }
+//        guideOffers.value?.map {
+//            it.copy(isSelected = it.offerId == selected.offerId)
+//        }?.let {
+//            selectedOfferId.postValue(selected.offerId)
+//            _guideOffers.postValue(it)
+//        }
     }
 
     lateinit var onExitClickCallback: (() -> Unit)

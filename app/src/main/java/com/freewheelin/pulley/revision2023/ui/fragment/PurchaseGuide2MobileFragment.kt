@@ -80,15 +80,15 @@ class PurchaseGuide2MobileFragment : Fragment() {
                 binding.apply {
                     println("asoaso guideLl.childCount :${guideLl.childCount}")
                     if (guideLl.childCount > 0) {
-                        it.forEach { offer ->
-                            guideLl.children
-                                .filter { (it as GuideImageView).offerId == offer.offerId }
-                                .forEach {
-                                    (it as GuideImageView).let { view ->
-                                        view.visibleIf(offer.isSelected == view.isSelectedImage)
-                                    }
-                                }
-                        }
+//                        it.forEach { offer ->
+//                            guideLl.children
+//                                .filter { (it as GuideImageView).offerId == offer.offerId }
+//                                .forEach {
+//                                    (it as GuideImageView).let { view ->
+//                                        view.visibleIf(offer.isSelected == view.isSelectedImage)
+//                                    }
+//                                }
+//                        }
                     } else {
                         guideLl.removeAllViews()
                         it.forEach {
@@ -121,9 +121,9 @@ class PurchaseGuide2MobileFragment : Fragment() {
         view.layoutParams = params
         view.adjustViewBounds = true
         view.setMarginBottom(dp = 10)
-        Glide.with(requireContext())
-            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
-            .into(view)
+//        Glide.with(requireContext())
+//            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
+//            .into(view)
         view.setOnClickListener { _ ->
             viewModel?.updateGuides(offer)
         }

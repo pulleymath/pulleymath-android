@@ -84,9 +84,9 @@ class PurchaseGuide2Fragment : Fragment() {
         view.layoutParams = params
         view.adjustViewBounds = true
         view.setMarginBottom(dp = 10)
-        Glide.with(requireContext())
-            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
-            .into(view)
+//        Glide.with(requireContext())
+//            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
+//            .into(view)
         view.setOnClickListener { _ ->
             viewModel?.updateGuides(offer)
         }

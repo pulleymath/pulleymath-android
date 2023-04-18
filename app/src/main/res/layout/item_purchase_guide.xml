@@ -22,13 +22,13 @@
             android:layout_height="wrap_content"
             android:minHeight="105dp"
             android:adjustViewBounds="true"
-            cookingImgRes="@{ item.isSelected ? item.selectedImageUrl : item.commonImageUrl }"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="10dp"
             />
+<!--            cookingImgRes="@{ item.isSelected ? item.selectedImageUrl : item.commonImageUrl }"-->
 <!--        android:scaleType="centerCrop"-->
 
 

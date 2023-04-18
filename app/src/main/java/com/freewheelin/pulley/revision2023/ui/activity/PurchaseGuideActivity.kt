@@ -2,6 +2,8 @@ package com.freewheelin.pulley.revision2023.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.isMobile
 import com.freewheelin.pulley.bases.isMobileUI
@@ -52,6 +55,7 @@ class PurchaseGuideActivity : AppCompatActivity() {
         initActivityResult()
 
         binding.apply {
+            lifecycleOwner = this@PurchaseGuideActivity
             viewModel.fetchGuides()
 
             initUiIfTablet()
@@ -64,6 +68,32 @@ class PurchaseGuideActivity : AppCompatActivity() {
             }
         }
         viewModel.apply {
+            guideOffers.observe(this@PurchaseGuideActivity) {
+                it.forEach { offer ->
+                    binding.apply {
+                        val view = when (offer.productSubType) {
+                            PaidServiceType.BASIC_C -> if(isTablet) basicCIv else mobileBasicCIv
+                            PaidServiceType.BASIC_P -> if(isTablet) basicPIv else mobileBasicPIv
+                            PaidServiceType.STANDARD -> if(isTablet) standardIv else mobileStandardIv
+                            PaidServiceType.PREMIUM -> if(isTablet) premiumIv else mobilePremiumIv
+                            else -> null
+                        }
+                        view?.let { iv ->
+                            Glide.with(this@PurchaseGuideActivity)
+                                .load(offer.imageUrl)
+                                .into(iv)
+                        }
+                    }
+                }
+            }
+            backgroundColor.observe(this@PurchaseGuideActivity) {
+                binding.apply {
+                    val color = Color.parseColor("#${it}")
+                    val view = if (isTablet) { bodyCl } else { backgroundTopView }
+                    view.setBackgroundColor(color)
+                    view.invalidate()
+                }
+            }
             step.observe(this@PurchaseGuideActivity) { step ->
                 when (step) {
                     0 -> {
