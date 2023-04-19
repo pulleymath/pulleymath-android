@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.auth.signup
 
+import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -39,6 +40,7 @@ import com.freewheelin.pulley.databinding.FragmentSignupBinding
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.viewmodel.SignupFragViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.buttons.PrimaryButton
@@ -50,6 +52,9 @@ import com.freewheelin.pulley.views.v2.SpinnerV2
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -543,7 +548,22 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                     }
                     verifyNextBtn()
                 }, {
-                    DialogUtils.showServerErr(requireContext())
+                    when (it) {
+                        is retrofit2.HttpException -> {
+                            println("throwable - HttpException : ${it.code()} / ${it.message}")
+                            when (it.code()) {
+                                400 -> {
+                                    DaebakToast.show(requireContext(), "인증번호가 유효하지 않습니다", overDialog = true)
+                                }
+                                else -> {
+
+                                }
+                            }
+                        }
+                        else -> {
+                            DialogUtils.showServerErr(requireContext())
+                        }
+                    }
                 })
         }
     }

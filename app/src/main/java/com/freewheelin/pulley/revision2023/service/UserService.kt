@@ -31,6 +31,6 @@ interface UserService {
 
     @POST("v1/users/{studentId}/rewards/signup")
     suspend fun requestRewardSignUp(
-        @Path("studentId") studentId: String = user?.studentID!!,
+        @Path("studentId") studentId: String = user?.studentID ?: "dummyStudentId",
     ): ResponseBody<Unit?>
 }

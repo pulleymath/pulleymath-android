@@ -176,7 +176,6 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             DialogUtils.confirmV2(requireContext(), "쿠폰 사용 오류", message, isOneBtn = true)
 
                         } else {
-                            println("https use coupon throwable : ${it.message}")
                             DialogUtils.serverErrDialog(requireContext())
                         }
                         useBtnProgress.visibility = View.GONE

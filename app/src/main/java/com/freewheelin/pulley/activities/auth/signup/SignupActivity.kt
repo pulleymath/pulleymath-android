@@ -120,15 +120,11 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             if (isGuestUser) {
                 signup.studentId = user?.studentID
                 viewModel.requestGuestSignUp(signup) {
-                    viewModel.requestSignUpReward {
-                        signupSuccess()
-                    }
+                    signupSuccess()
                 }
             } else {
                 viewModel.requestUserSignUp(signup) {
-                    viewModel.requestSignUpReward {
-                        signupSuccess()
-                    }
+                    signupSuccess()
                 }
             }
         }
@@ -156,21 +152,22 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
                     200 -> loginSuccess(user)
                     else -> loginFailed(response)
                 }
-                if (isGuestUser) {
-                    finish()
-                } else {
-                    finishAffinity()
-                }
             }
         })
     }
 
     private fun loginSuccess(user:User?) {
-        MyApplication.user = user
-        MyApplication.token = user?.token
-//        if(MyApplication.user == null) MyApplication.user = user
-//        else MyApplication.user!!.update(user)
-        startActivity(InitSettingCompleteActivity.getIntent(this, isGuestUser))
+        viewModel.requestSignUpReward {
+            MyApplication.user = user
+            MyApplication.token = user?.token
+            startActivity(InitSettingCompleteActivity.getIntent(this, isGuestUser))
+            if (isGuestUser) {
+                finish()
+            } else {
+                finishAffinity()
+            }
+        }
+
     }
 
     private fun loginFailed(response: Response<Template<User?>>) {
