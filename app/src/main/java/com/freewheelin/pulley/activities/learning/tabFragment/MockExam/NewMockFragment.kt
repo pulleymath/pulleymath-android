@@ -84,6 +84,7 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
 
                         filteredMockList = ArrayList(tests)
                         mockRv.adapter?.notifyDataSetChanged()
+                        viewModel.newMockFragmentProgressHidePending = true
                         CoroutineScope(Dispatchers.Main).launch {
                             binding.loadingContainer.hide(300)
                         }
@@ -94,12 +95,17 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
         }
         clearReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
-                this@NewMockFragment.initUI()
                 initUI()
             }
         }
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_SCORING))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_CLEAR))
+    }
+    fun setHidePending() {
+        if (viewModel.newMockFragmentProgressHidePending) {
+            binding.loadingContainer.hide(300)
+            viewModel.newMockFragmentProgressHidePending = false
+        }
     }
 
     override fun onDestroy() {
@@ -212,7 +218,6 @@ class NewMockFragment : Fragment(), ArduousSpinnerListener, EmailInputDialogList
             gradeFilter.items = gradeStrArrayList
 
             binding.loadingContainer.visibleIf(true)
-//            val user = requireActivity().application!!.user!!
             user?.let { u ->
                 MockExamManager.getNewMockExamList(requireContext(), u) {
                     this@NewMockFragment.examList = it
@@ -392,6 +397,8 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
             }
             MarkingState.COMPLETED -> {
+                testBtnCl.visibility = View.VISIBLE
+                testInProgressBtnWrapperCl.visibility = View.GONE
                 testBtnTv.text = "다시 풀기"
 
 //                testBtn.toEnableUI()

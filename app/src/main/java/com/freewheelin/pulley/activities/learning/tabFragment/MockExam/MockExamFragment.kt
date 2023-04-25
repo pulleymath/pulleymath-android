@@ -16,6 +16,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMockTestBinding
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.hide
 import com.google.android.material.tabs.TabLayoutMediator
 
 interface MockTabListener {
@@ -68,6 +69,9 @@ class MockExamFragment : LearningTabFragment(),
     override fun onNewExamBtnClicked() {
         binding.viewPager.setCurrentItem(0, false)
     }
+    fun checkPendingHide() {
+        (tabFragments[0] as NewMockFragment).setHidePending()
+    }
 
     private var tabTitles = arrayOf("새로 풀기", "나의 모의고사")
     override fun initUI() {
@@ -82,6 +86,9 @@ class MockExamFragment : LearningTabFragment(),
                     super.onPageSelected(position)
                     val menuName = tabTitles.get(position)
                     LogUtils.logEvent(requireContext(), user, PulleyEvent.MENU_CLICK, "모의고사", "${menuName}탭")
+                    if (position == 0) {
+                        checkPendingHide()
+                    }
                 }
             })
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -99,13 +106,6 @@ class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentM
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> fragments[position]
-            1 -> {
-                val fragment = fragments[position]
-                fragment
-            }
-            else -> fragments[position]
-        }
+        return fragments[position]
     }
 }

@@ -23,6 +23,7 @@ class MockFViewModel(application: Application): BaseAndroidViewModel(application
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
+    var newMockFragmentProgressHidePending = false
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)

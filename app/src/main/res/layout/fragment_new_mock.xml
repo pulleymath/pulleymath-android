@@ -203,6 +203,7 @@
             android:id="@+id/loadingContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:background="#FFFFFF"
             app:layout_constraintTop_toTopOf="@+id/header"
             app:layout_constraintStart_toStartOf="parent"
