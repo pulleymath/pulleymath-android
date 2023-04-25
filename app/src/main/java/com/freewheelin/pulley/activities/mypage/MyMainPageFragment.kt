@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.SplashActivity
+import com.freewheelin.pulley.activities.StartActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
@@ -247,7 +248,7 @@ class MyMainPageFragment : Fragment() {
                         MyApplication.user?.logout {
                             viewModel.updateUser(MyApplication.user)
                             activity?.finishAffinity()
-                            val intent = Intent(activity, LoginActivity::class.java)
+                            val intent = Intent(activity, StartActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             activity?.startActivity(intent)
                         }

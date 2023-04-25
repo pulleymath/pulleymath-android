@@ -168,9 +168,9 @@
             android:name=".activities.auth.login.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+<!--            android:launchMode="singleInstance"-->
         <activity
             android:name=".activities.WrongTestReportActivity"
             android:exported="true"

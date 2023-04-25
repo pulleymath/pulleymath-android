@@ -157,8 +157,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
     private fun onBackBtnClicked() {
-        startActivity(StartActivity.getIntent(this))
-        finishAffinity()
+        finish()
     }
     fun changeServerApi(isLive: Boolean) {
         val api = if (isLive) Network.Server.live.toString() else Network.Server.staging.toString()
@@ -361,27 +360,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
             putFcmToken()
 
-            startActivity(Intent(this, LearningTabActivity::class.java))
+            val intent = Intent(this, LearningTabActivity::class.java)
+            startActivity(intent)
             finishAffinity()
         }
-//        disposables += API_V3.getUserObservable()
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .timeout(3, TimeUnit.SECONDS)
-//            .subscribe({ res ->
-//                res.data.let {
-//                    MyApplication.user = it
-//                    MyApplication.token = it.token
-//                    commitUser()
-//
-//                    putFcmToken()
-//
-//                    startActivity(Intent(this, LearningTabActivity::class.java))
-//                    finishAffinity()
-//                }
-//            }, { error ->
-//                responseFailed(this, Throwable(error.message))
-//            })
     }
 
     fun onSignupBtnClicked() {
