@@ -78,7 +78,7 @@ class EmailInputDialog(context: Context, contents: List<Content>, user: User, li
                     emailField.showErrorMsg("이메일 형식을 확인해주세요.")
                 } else {
                     listener?.onSendEmailBtnClicked()
-                    sendBtn.startLoding()
+                    sendBtn.startLoading()
                     val mockChecked = contents[0]
                     if(mockChecked is MockExam) {
                         MockExamManager.sendEmail(context, mockChecked, user, emailText) {

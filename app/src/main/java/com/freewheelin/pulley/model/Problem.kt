@@ -1,7 +1,9 @@
 package com.freewheelin.pulley.model
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.Log
+import androidx.recyclerview.widget.DiffUtil
 import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V1
@@ -9,6 +11,8 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.contents.Content
 import com.freewheelin.pulley.model.contents.PieceCategory
+import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
+import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.NumberUtils
@@ -112,6 +116,11 @@ open class Problem: Serializable {
             return if (rawUpdateDateTime == null) null
             else LocalDateTime.parse(rawUpdateDateTime).toDate()
         }
+    val updateDateTime_yyyyMMdd: String
+        get() {
+            val targetDate = updateDateTime ?: Date()
+            return DateTimeUtils.yyyyMMddFormat.format(targetDate)
+        }
 
     @Expose @SerializedName("scrapDateTime")
     var rawScrapDateTime: String? = null
@@ -120,6 +129,12 @@ open class Problem: Serializable {
             return if (rawScrapDateTime == null) null
             else LocalDateTime.parse(rawScrapDateTime).toDate()
         }
+    val scrapDateTime_yyyyMMdd: String
+        get() {
+            val targetDate = scrapDateTime ?: Date()
+            return DateTimeUtils.yyyyMMddFormat.format(targetDate)
+        }
+
     @Expose @SerializedName("clearDateTime")
     var rawClearDateTime: String? = null
     val clearDateTime: Date?

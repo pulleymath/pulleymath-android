@@ -3,6 +3,7 @@ package com.freewheelin.pulley.core.tutorial
 import android.view.View
 import com.freewheelin.pulley.utils.APPreference
 import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.views.FocusedDimView
 import com.freewheelin.pulley.views.tooltip.TutorWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
@@ -20,7 +21,8 @@ class Tutor {
         mailInMockExam,
         mailInMyStudy,
         recommendPlan,
-        analysisMain;
+        analysisMain,
+        middleIntroduceOpening;
 
         fun isNeedToShow(): Boolean {
             val maximumCnt = 1
@@ -40,6 +42,7 @@ class Tutor {
                     mailInMyStudy, mailInMockExam -> BalloonWindow.Position.above
                     analysisMain -> BalloonWindow.Position.below
                     recommendPlan -> BalloonWindow.Position.above
+                    middleIntroduceOpening -> BalloonWindow.Position.below
                 }
             }
 
@@ -57,6 +60,7 @@ class Tutor {
                     mailInMockExam -> Preferences.tooltipShowingCntMail
                     analysisMain -> Preferences.tooltipShowingCntAnalysisMain
                     recommendPlan -> Preferences.tooltipShowingCntRecommendPlan
+                    middleIntroduceOpening -> Preferences.tooltipShowingCntMiddleOpening
                 }
             }
 
@@ -88,6 +92,10 @@ class Tutor {
 
             if(tooltipType == TooltipType.recommendPlan)
                 window.offset = 100
+
+            if(tooltipType == TooltipType.middleIntroduceOpening) {
+                window.margin = -12
+            }
 
             window.show(tooltipType)
         }

@@ -166,7 +166,8 @@ class LCWrongNoteFragment : Fragment(),
 
     fun setHintBtn() {
         val size = viewModel.remainingHintSize.value
-        (activity as LCWrongNoteActivity).setHintBtn(size == 0, size)
+        val hintExist = viewModel.hintExist
+        (activity as LCWrongNoteActivity).setHintBtn(size == 0, size, hintExist)
     }
     private fun resetMemoView() {
         val noteActivity = (activity as LCWrongNoteActivity)

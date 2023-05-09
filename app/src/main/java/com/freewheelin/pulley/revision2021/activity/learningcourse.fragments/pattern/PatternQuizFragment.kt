@@ -417,7 +417,8 @@ class PatternQuizFragment() : Fragment(),
 
     fun setHintBtn() {
         val size = viewModel.remainingHintSize.value
-        (parentFragment as LCPatternFragment).setHintBtn(size == 0, size)
+        val hintExist = viewModel.hintExist
+        (parentFragment as LCPatternFragment).setHintBtn(size == 0, size, hintExist)
     }
 
     private fun resetMemoView() {

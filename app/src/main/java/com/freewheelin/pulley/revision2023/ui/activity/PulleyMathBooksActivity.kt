@@ -30,10 +30,14 @@ import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
 import com.freewheelin.pulley.dialogs.EmailInputDialog
 import com.freewheelin.pulley.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2021.utils.getStatusBarHeight
 import com.freewheelin.pulley.revision2021.utils.observeOnce
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
+import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
@@ -41,6 +45,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
+import com.freewheelin.pulley.revision2023.utils.listeners.BookFilterItemListener
 import com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
@@ -52,7 +57,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2, BookFilterListener,
+class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2,
     EmailInputDialogListener {
 
     val binding: ActivityPulleyMathBooksBinding by lazy {
@@ -60,6 +65,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
     private val viewModel: PulleyMathBooksViewModel by viewModels()
     lateinit var planAdapter: PatternStudyMyPlanAdapter
+    lateinit var filterAdapter: BookFilterAdapter
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var userUpdateReceiver: BroadcastReceiver
 
@@ -74,11 +80,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         }
     }
 
-
     var resumeCount = 0
     override fun onResume() {
         super.onResume()
-        val filters = binding.filterView.selectedFilterTypes.toSet()
+        val filters = viewModel.selectedFilterTypes.toSet()
         viewModel.fetchTotalBooks(filters)
         if (resumeCount > 0) {
             viewModel.collectRecommendList(false) {}
@@ -120,7 +125,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                 }
             }
             books.observe(this@PulleyMathBooksActivity) {
-                if (latestFilters == binding.filterView.selectedFilterTypes) {
+                if (latestFilters == selectedFilterTypes) {
                     planAdapter.submitList(it) {
                         Handler(Looper.getMainLooper()).post {
                             binding.totalRv.invalidateItemDecorations()
@@ -143,12 +148,19 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     showTotalPlanCover.postValue(false)
                 }
             }
+            filterElements.observe(this@PulleyMathBooksActivity) {
+                this@PulleyMathBooksActivity.filterAdapter.submitList(it)
+            }
             initPositionSettingFlag.observeOnce(this@PulleyMathBooksActivity) {
                 if (!isFocusingOnTotalLabel) return@observeOnce
                 val outArr = arrayOf(0, 0).toIntArray()
                 binding.totalLabelTv.getLocationOnScreen(outArr)
                 val yValueOnView = outArr[1] - 100.toPx()
                 binding.rootView.smoothScrollTo(0, yValueOnView)
+            }
+            scrollPositionTop.observe(this@PulleyMathBooksActivity) {
+                binding.totalRv.scrollToPosition(0);
+                binding.totalRv.layoutManager?.scrollToPosition(0);
             }
             isLoading.observe(this@PulleyMathBooksActivity) { loading ->
                 binding.apply {
@@ -173,7 +185,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             errorAction.observe(this@PulleyMathBooksActivity) { type ->
                 when(type) {
                     HttpException403, GuestException -> showGuestJoinInduceDialog()
-                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                    else -> { Log.e(javaClass.simpleName, "Error Not Handled : $type")}
                 }
             }
         }
@@ -182,7 +194,6 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     private fun initReceiver() {
         userUpdateReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
-                println("asoaso userUpdateReceiver!")
                 intent?.let {
                     finish()
                 }
@@ -205,23 +216,20 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             viewModel.showRecyclerView.postValue(false)
             viewModel.showTotalLoadingView.postValue(true)
             viewModel.playTotalLoadingView.postValue(true)
-            val filters = filterView.selectedFilterTypes.toSet()
-            viewModel.fetchTotalBooks(filters)
+            viewModel.fetchBookFilter()
             totalPlanContainerLl.layoutParams.height = DisplayUtils.getScreenHeight(this@PulleyMathBooksActivity)
-            filterView.listener = this@PulleyMathBooksActivity
         }
     }
 
     fun initAdapter() {
         binding.apply {
             planAdapter = PatternStudyMyPlanAdapter (this@PulleyMathBooksActivity, listOf(ActionType.pin), OriginType.PulleyMathTotal, viewModel = viewModel)
-
-            val spanCount = if(isTablet) 4 else 3
-            totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, spanCount)
+            val planSpanCount = if(isTablet) 4 else 2
+            totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, planSpanCount)
             totalRv.adapter = planAdapter
 
             val columnSpace = resources.getDimension(R.dimen.dp24).toInt()
-            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), columnSpace, spanCount))
+            totalRv.addItemDecoration(GridMarginDecoration(16.toPx(), columnSpace, planSpanCount))
             totalRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -232,7 +240,40 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     }
                 }
             })
+
+            filterAdapter = BookFilterAdapter (object : BookFilterItemListener {
+                override fun onToggle(isChecked: Boolean) {
+                    viewModel.switchCheckedContainPin(isChecked)
+                }
+
+                override fun onFilterItemClick(item: BookFilterElement) {
+                    viewModel.showEmptyContainer.postValue(false)
+                    viewModel.showRecyclerView.postValue(false)
+                    viewModel.showTotalLoadingView.postValue(true)
+                    viewModel.playTotalLoadingView.postValue(true)
+                    viewModel.onFilterItemClick(item)
+                }
+
+                override fun onCalendar() {}
+            })
+            val filterSpanCount = if(isTablet) 2 else 3
+            filterRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, filterSpanCount).also {
+                it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        viewModel.filterElements.value?.let { list ->
+                            return when (list[position].type) {
+                                BookFilterElement.Type.Item -> 1
+                                else -> filterSpanCount
+                            }
+                        }
+                        return 1
+                    }
+                }
+            }
             viewModel.planAdapter = planAdapter
+            filterRv.adapter = filterAdapter
+            filterRv.minimumHeight = if (isTablet) 650.toPx() else 550.toPx()
+            viewModel.filterAdapter = filterAdapter
         }
     }
 
@@ -250,15 +291,15 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         }
     }
     private fun initActivityResult() {
-        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
                 CHALLENGE_PATTERN_FINISHED -> {
                     viewModel.joinedChallengeList.value?.find { it.isStartChallenge }?.startChallenge?.let { startChallenge ->
                         if (startChallenge.isPulleyBooksCourseFinished) {
                             val turnOnCompletedDialog = {
-                                val moveEvent: (ChallengeCourse?) -> Unit = { it ->
-                                    ChallengeManager.getMainTabMoveIntent(it).let {
-                                        LocalBroadcastManager.getInstance(this).sendBroadcast(it)
+                                val moveEvent: (ChallengeCourse?) -> Unit = { course ->
+                                    ChallengeManager.getMainTabMoveIntent(course).let { intent ->
+                                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                                         finish()
                                     }
                                 }
@@ -312,14 +353,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
 
     override fun filterFromTagOnCard(filterType: String) {
-        println("asoaso filterFromTagOnCard : ${filterType}")
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "유형카드", "태그", filterType)
-        val type = FilterType.convertTagAtFiltertType(filterType)
-        println("asoaso filterFromTagOnCard : type : ${type}")
-        binding.filterView.selectedFilterTypes.add(type)
-        binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
-        binding.filterView.adapter?.notifyDataSetChanged()
-
+        val type = LearningFilterType.convertTagAtFilterType(filterType)
+        viewModel.updateFilterTypes(type)
+        viewModel.syncSelectedFilterType()
         getTotalListWithoutRefresh()
     }
     private fun getTotalListWithoutRefresh() {
@@ -327,53 +364,14 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             viewModel.showTotalPlanCover.postValue(true)
             viewModel.showTotalLoadingView.postValue(true)
             viewModel.playTotalLoadingView.postValue(true)
-            val filters = filterView.selectedFilterTypes.toSet()
+            val filters = viewModel.selectedFilterTypes.toSet()
 
             viewModel.fetchTotalBooks(filters)
         }
     }
 
-    override fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>) {
-        viewModel.showEmptyContainer.postValue(false)
-        viewModel.showRecyclerView.postValue(false)
-        viewModel.showTotalLoadingView.postValue(true)
-        viewModel.playTotalLoadingView.postValue(true)
-        viewModel.fetchTotalBooks(filters.toSet())
-    }
-
     override fun onSentEmail() {
         DaebakToast.show(this, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")
-    }
-
-    fun scrollToTotalLabel(subject: String?) {
-        subject?.let {
-            val targetHashSet = setFilterType(it)
-            binding.filterView.selectedFilterTypes = targetHashSet
-            binding.filterView.adapter?.notifyDataSetChanged()
-        }
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding.rootView.scrollToView(binding.totalLabelTv)
-        }, 1500)
-    }
-    fun setFilterType(subject: String): HashSet<FilterType> {
-        val defaultSet = mutableSetOf(
-            FilterType.워크북_미포함,
-            FilterType.핀_미포함,
-            FilterType.계열_전체,
-            FilterType.유형_전체,
-            FilterType.추천_2_3등급
-        )
-        when (subject) {
-            "수학(상)" -> defaultSet.add(FilterType.과목_수학_상)
-            "수학(하)" -> defaultSet.add(FilterType.과목_수학_하)
-            "수학1" -> defaultSet.add(FilterType.과목_수학1)
-            "수학2" -> defaultSet.add(FilterType.과목_수학2)
-            "미적분" -> defaultSet.addAll(listOf(FilterType.과목_미적분, FilterType.과목_수학2))
-            "확률과 통계" -> defaultSet.add(FilterType.과목_확통)
-            "기하" -> defaultSet.add(FilterType.과목_기하)
-            else -> defaultSet.add(FilterType.과목_수학1)
-        }
-        return defaultSet.toHashSet()
     }
 
     override fun onActionBtnClicked(action: ActionType, book: Book) {

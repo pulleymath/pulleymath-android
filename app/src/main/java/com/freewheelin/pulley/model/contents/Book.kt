@@ -7,7 +7,7 @@ import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable
 
-class BookCategoryList: Serializable {
+class  BookCategoryList: Serializable {
     var bookSeries: String = ""
     var bookCategory: String = ""
 }

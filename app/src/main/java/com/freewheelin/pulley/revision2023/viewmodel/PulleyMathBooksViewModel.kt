@@ -7,20 +7,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
 import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
+import com.freewheelin.pulley.revision2023.model.BookFilterParent
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
+import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.utils.show
+import com.google.gson.Gson
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +32,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
     lateinit var recommendBookListViews: List<RecommendBookListView>
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
     lateinit var planListener: PlanListenerV2
 
     val showEmptyContainer = MutableLiveData<Boolean>(false)
@@ -38,16 +43,77 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     val showDummyBottomView = MutableLiveData<Boolean>(false)
     val showRecommendBook = MutableLiveData<Boolean>(false)
 
+    val scrollPositionTop = MutableLiveData<Unit>()
+    private val _filterElements = MutableLiveData<List<BookFilterElement>>()
+    val filterElements: LiveData<List<BookFilterElement>> = _filterElements
+
     val joinedChallengeList = challengeRepository.joinedChallengeList
+    val schoolTypeInRepo = userRepository.schoolType
 
     private val _books = MutableLiveData<List<Book>>()
     val books: LiveData<List<Book>> = _books
     val initPositionSettingFlag = MutableLiveData<Unit>()
 
     lateinit var planAdapter: PatternStudyMyPlanAdapter
+    lateinit var filterAdapter: BookFilterAdapter
 
-    var latestFilters: Set<FilterType>? = null
-    fun fetchTotalBooks(filters: Set<FilterType>) {
+    var selectedFilterTypes: HashSet<LearningFilterType> = hashSetOf(
+        LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.유형_전체,
+        if (schoolType.isMiddle) LearningFilterType.추천레벨_전체 else LearningFilterType.추천_전체
+    )
+
+    fun switchCheckedContainPin(isChecked: Boolean) {
+        val addFilter = if (isChecked) LearningFilterType.핀_미포함 else LearningFilterType.핀_포함
+        updateFilterTypes(addFilter)
+
+        val filters = selectedFilterTypes.toSet()
+        fetchTotalBooks(filters)
+    }
+    fun updateFilterTypes(type: LearningFilterType) {
+        selectedFilterTypes.add(type)
+        selectedFilterTypes.removeAll(type.exclusiveSet)
+    }
+    fun onFilterItemClick(item: BookFilterElement) {
+        val type = item.filterType
+        val isContained = selectedFilterTypes.contains(type)
+        if (isContained) {
+            selectedFilterTypes.remove(type)
+        } else {
+            updateFilterTypes(type)
+        }
+        checkFiltersWhenRemoveSelfs(type)
+        syncSelectedFilterType()
+
+        val filters = selectedFilterTypes.toSet()
+        fetchTotalBooks(filters)
+
+    }
+    private fun checkFiltersWhenRemoveSelfs(type: LearningFilterType) {
+        // 자기자신이 제거될때
+        // 1. 섹션내에서 자기자신만 선택되어져있던 경우 : 필터에서 아예 없어지면 안됨
+        // 2. 같은 섹션 내에 다른 필터가 같이 선택되어져있는 경우 : 없어져야함
+        val sectionListWithoutSelected = type.sectionList.filter { it != type }
+        for (item in sectionListWithoutSelected) {
+            if (selectedFilterTypes.contains(item)) {
+                return
+            }
+        }
+        selectedFilterTypes.add(type)
+    }
+    fun syncSelectedFilterType() {
+        filterElements.value?.forEach {
+            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
+        }
+    }
+    private fun syncSelectedFilterType(filters: List<BookFilterElement>): List<BookFilterElement> {
+        return filters.map {
+            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
+            it
+        }
+    }
+
+    var latestFilters: Set<LearningFilterType>? = null
+    fun fetchTotalBooks(filters: Set<LearningFilterType>) {
         latestFilters = filters
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
@@ -58,10 +124,19 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
                 _books.postValue(newBookList)
                 delay(500)
                 initPositionSettingFlag.postValue(Unit)
+                scrollPositionTop.postValue(Unit)
             }
         }
     }
+    fun fetchBookFilter() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val filter = BookFilterParent.PULLEY_WORKBOOK
+            val elements = patternStudyRepository.fetchBookFilter(filter, BookFilterElement.getToggle())
 
+            val syncedElements = syncSelectedFilterType(elements)
+            _filterElements.postValue(syncedElements)
+        }
+    }
 
     fun togglePin(pieceId: Int, isPinned: Boolean, callback: () -> Unit) {
         compositeDisposable += patternStudyRepository.setPin(pieceId, isPinned)

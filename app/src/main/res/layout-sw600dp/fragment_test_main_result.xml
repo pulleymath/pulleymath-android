@@ -155,6 +155,7 @@
                 android:id="@+id/settingBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:visibility="gone"
                 android:src="@drawable/ic_gear"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginEnd="@dimen/dp16"

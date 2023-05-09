@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.mypage.MyRecommendSettingActivity">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="640dp"
@@ -167,6 +173,7 @@
                                     android:layout_marginTop="@dimen/dp16"
                                     android:text="공통과목 : "
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintStart_toStartOf="@+id/sameBelow50Label"
                                     app:layout_constraintTop_toBottomOf="@+id/sameBelow50Label" />
 
@@ -177,6 +184,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="수학(상), 수학(하), 수학1, 수학2"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintEnd_toStartOf="@+id/sameCommonButton"
                                     app:layout_constraintStart_toEndOf="@+id/sameCommonLabel"
                                     app:layout_constraintTop_toTopOf="@+id/sameCommonLabel" />
@@ -188,6 +196,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/sameCommonText" />
 
@@ -199,6 +208,7 @@
                                     android:layout_marginTop="@dimen/dp16"
                                     android:text="선택과목 : "
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintStart_toStartOf="@+id/sameCommonLabel"
                                     app:layout_constraintTop_toBottomOf="@+id/sameCommonText" />
 
@@ -209,6 +219,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="확률과 통계"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintBottom_toBottomOf="@+id/sameOptionalLabel"
                                     app:layout_constraintEnd_toStartOf="@+id/sameOptionalButton"
                                     app:layout_constraintHorizontal_bias="0.0"
@@ -222,9 +233,47 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintBottom_toBottomOf="@+id/sameOptionalText"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/sameOptionalText" />
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/middleSubjectLabel"-->
+<!--                                    style="@style/TextBlack_4c4c4c.Bold"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_marginTop="@dimen/dp16"-->
+<!--                                    android:text="선택과목 : "-->
+<!--                                    android:textSize="@dimen/sp14"-->
+<!--                                    app:layout_constraintStart_toStartOf="@+id/sameOptionalLabel"-->
+<!--                                    app:layout_constraintTop_toBottomOf="@+id/sameOptionalText" />-->
+
+                                <TextView
+                                    android:id="@+id/middleSubjectText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="확률과 통계"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    android:layout_marginTop="@dimen/dp16"
+                                    app:layout_constraintEnd_toStartOf="@+id/middleSubjectButton"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/sameOptionalLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/sameOptionalText"  />
+
+                                <TextView
+                                    android:id="@+id/middleSubjectButton"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    app:layout_constraintBottom_toBottomOf="@+id/middleSubjectText"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/middleSubjectText" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -236,7 +285,7 @@
                                 android:background="@color/grey_f2f2f2"
                                 android:orientation="vertical"
                                 android:padding="24dp"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <TextView
                                     android:id="@+id/sameOver50Label"
@@ -277,6 +326,18 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/sameMyText" />
+
+                                <TextView
+                                    android:id="@+id/sameMiddleMyButton"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/sameMyText" />
 
@@ -288,6 +349,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="36dp"
                                 android:layout_marginTop="@dimen/dp16"
+                                visibleIf="@{ vm.schoolType.isHigh }"
                                 android:text="수능 전범위"
                                 android:textSize="@dimen/sp16" />
 
@@ -299,7 +361,8 @@
                                 android:background="@color/grey_f2f2f2"
                                 android:orientation="vertical"
                                 android:padding="24dp"
-                                android:visibility="gone">
+                                >
+<!--                                android:visibility="gone"-->
 
                                 <TextView
                                     android:id="@+id/aheadCommonLabel"
@@ -374,7 +437,8 @@
                                 android:background="@color/grey_f2f2f2"
                                 android:orientation="vertical"
                                 android:padding="24dp"
-                                android:visibility="gone">
+                                >
+<!--                                android:visibility="gone"-->
 
                                 <TextView
                                     android:id="@+id/myChoiceLabel"
@@ -394,6 +458,7 @@
                                     android:layout_marginTop="16dp"
                                     android:text="공통과목 : "
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintStart_toStartOf="@+id/myChoiceLabel"
                                     app:layout_constraintTop_toBottomOf="@+id/myChoiceLabel" />
 
@@ -404,6 +469,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="수학(상), 수학(하), 수학1, 수학2"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintEnd_toStartOf="@+id/myChoiceCommonButton"
                                     app:layout_constraintStart_toEndOf="@+id/myChoiceCommonLabel"
                                     app:layout_constraintTop_toTopOf="@+id/myChoiceCommonLabel" />
@@ -415,6 +481,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/myChoiceCommonText" />
 
@@ -426,6 +493,7 @@
                                     android:layout_marginTop="16dp"
                                     android:text="선택과목 : "
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintStart_toStartOf="@+id/myChoiceCommonLabel"
                                     app:layout_constraintTop_toBottomOf="@+id/myChoiceCommonText" />
 
@@ -436,6 +504,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="확률과 통계"
                                     android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     app:layout_constraintBottom_toBottomOf="@+id/myChoiceOptionalLabel"
                                     app:layout_constraintEnd_toStartOf="@+id/myChoiceOptionalButton"
                                     app:layout_constraintHorizontal_bias="0.0"
@@ -448,11 +517,36 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
                                     android:textSize="@dimen/sp14"
                                     app:layout_constraintBottom_toBottomOf="@+id/myChoiceOptionalText"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/myChoiceOptionalText" />
 
+                                <TextView
+                                    android:id="@+id/myChoiceMiddleSubjectText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="중 1-1"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    android:layout_marginTop="16dp"
+                                    app:layout_constraintEnd_toStartOf="@+id/myChoiceMiddleSubjectButton"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/myChoiceOptionalLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/myChoiceOptionalLabel"   />
+
+                                <TextView
+                                    android:id="@+id/myChoiceMiddleSubjectButton"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceMiddleSubjectText"  />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </RadioGroup>
 

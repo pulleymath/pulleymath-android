@@ -72,10 +72,10 @@ class UserAnalysisAllActivity : BaseNavActivity(),
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
+//        val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
 
         user = User()
-        user.studentID = studentID
+//        user.studentID = studentID
         user.firstDate = Date(Date().time - 604800000L)
 
         configTab(0)

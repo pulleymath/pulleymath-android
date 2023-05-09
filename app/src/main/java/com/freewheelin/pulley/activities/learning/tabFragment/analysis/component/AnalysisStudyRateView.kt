@@ -59,10 +59,6 @@ class AnalysisStudyRateView: ConstraintLayout {
                 val dialog = PurchaseGuideDialog()
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
-//                findFragment<PurchaseGuideDialog>(this).childFragmentManager.let { dialog.show(it, "purchaseGuideDialog")}
-//                dialog.show()
-//                supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
-//                DialogUtils.confirmDialog(context, "[테스트]구독중이 아닙니다.", "열려라 참깨")
             })
     }
 

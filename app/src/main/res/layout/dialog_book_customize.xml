@@ -79,17 +79,6 @@
                         app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
                     <com.freewheelin.pulley.views.textViews.SortableTextView
-                        android:id="@+id/bookSeriesSl"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:padding="@dimen/dp16"
-                        app:label="판수"
-                        app:layout_constraintStart_toEndOf="@+id/secondBorder"
-                        app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
-
-                    <com.freewheelin.pulley.views.textViews.SortableTextView
                         android:id="@+id/publisherSl"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
@@ -116,18 +105,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
-
-
-                    <View
-                        android:id="@+id/secondBorder"
-                        android:layout_width="1dp"
-                        android:layout_height="16dp"
-                        android:background="@color/grey_e8e8e8"
-                        android:layout_marginEnd="@dimen/dp80"
-                        app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
-
 
                     <View
                         android:id="@+id/thirdBorder"
@@ -319,7 +296,7 @@
                         android:id="@+id/cntSection"
                         android:layout_width="match_parent"
                         android:layout_height="34dp"
-                        android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round"
+                        android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round"
                         app:layout_constraintTop_toBottomOf="@+id/typeSection">
 
                         <TextView
@@ -410,7 +387,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="34dp"
-                        android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round">
+                        android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round">
 
                         <ImageButton
                             android:id="@+id/levelQuestionIb"
@@ -490,7 +467,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="34dp"
-                        android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round">
+                        android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round">
 
                         <RadioGroup
                             android:id="@+id/clearRg"

@@ -118,6 +118,23 @@ class AnalysisFragment : LearningTabFragment(),
                     binding.studyRateView.actionLockIv.visibleIf(showLockIv)
                 }
             }
+            schoolType.observe(viewLifecycleOwner) {
+                binding.percentCompareTv.binding.topLabel.text = if(it.isHigh) {
+                    "오늘의 백분위"
+                } else {
+                    "오늘의 정답률"
+                }
+
+                user?.let { user ->
+                    user.getDailyStudy(requireContext()) { setUpStudyUI(it) }
+                    user.getDailyRecommend(requireContext(), callback = {
+                        setUpRecommendUI(it)
+                    }, failCB = {
+                        setUpRecommendUI(null)
+                    })
+                    user.getDailyPiece(requireContext()) { setUpPieceUI(it) }
+                }
+            }
         }
         binding.apply {
             vm = viewModel
@@ -171,16 +188,19 @@ class AnalysisFragment : LearningTabFragment(),
     }
     override fun onResume() {
         super.onResume()
+        user?.let {
+            it.getDailyStudy(requireContext()) { setUpStudyUI(it) }
+            it.getDailyRecommend(requireContext(), callback = {
+                setUpRecommendUI(it)
+            }, failCB = {
+                setUpRecommendUI(null)
+            })
+            it.getDailyPiece(requireContext()) {
+                setUpPieceUI(it)
+            }
 
-        user!!.getDailyStudy(requireContext()) { setUpStudyUI(it) }
-        user!!.getDailyRecommend(requireContext(), callback = {
-            setUpRecommendUI(it)
-        }, failCB = {
-            setUpRecommendUI(null)
-        })
-        user!!.getDailyPiece(requireContext()) {
-            setUpPieceUI(it)
         }
+
         initChart(binding.timeCountChart)
     }
 
@@ -227,19 +247,6 @@ class AnalysisFragment : LearningTabFragment(),
                     )
                 }
 
-                shareBtn.setOnClickListener {
-                    LogUtils.logEvent(
-                        requireContext(),
-                        user,
-                        PulleyEvent.BUTTON_CLICK,
-                        "데일리서머리",
-                        "공유하기"
-                    )
-                    val dialog = ShareAnalysisDialog(requireContext(), study)
-                    dialog.listener = this@AnalysisFragment
-                    dialog.show()
-                }
-
                 setChartData(study.weekStudyData)
                 sampleWrapperCl.setOnClickListener {
                     val intent = Intent(requireContext(), AnalysisTabActivity::class.java)
@@ -269,9 +276,12 @@ class AnalysisFragment : LearningTabFragment(),
                     recommendStudyView.showIfNeed()
                     studyRateView.showIfNeed()
                 }
-            }catch(e:Exception) {
+            } catch(e:Exception) {
                 Log.e("화면크래쉬", "error==>${e.localizedMessage}")
             }
+        } else {
+            binding.recommendStudyView.visibleIf(false)
+            binding.studyRateView.visibleIf(false)
         }
     }
 
@@ -279,13 +289,6 @@ class AnalysisFragment : LearningTabFragment(),
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        user!!.getDailyStudy(requireContext()) { setUpStudyUI(it) }
-        user!!.getDailyRecommend(requireContext(), callback = {
-            setUpRecommendUI(it)
-        }, failCB = {
-            setUpRecommendUI(null)
-        })
-        user!!.getDailyPiece(requireContext()) { setUpPieceUI(it) }
     }
 
     private fun setUpUI(summary: DailySummary) {
@@ -444,7 +447,6 @@ class AnalysisFragment : LearningTabFragment(),
     }
 
     override fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView) {
-        println("asoaso onStudyHistoryBtnClicked!!!")
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보기")
         val intent = StudyHistoryActivity.getIntent(requireContext())
         startActivity(intent)
@@ -527,7 +529,7 @@ class AnalysisFragment : LearningTabFragment(),
                 }
             }
             else -> {
-                LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
+                LogUtils.assert(false, "예상치 못한 카테고리")
             }
         }
     }
@@ -596,8 +598,22 @@ class AnalysisFragment : LearningTabFragment(),
 
     fun setTodayStudyNewOne() {
         Log.d("테스트", "AnalysisFragment => setTodayStudyNewOne.setList(true)")
-        scrollToView(binding.scrollContainer, binding.todayStudyView)
-        binding.todayStudyView.newOne = true
+        user?.let {
+            it.getDailyStudy(requireContext()) { setUpStudyUI(it) }
+            it.getDailyRecommend(requireContext(), callback = {
+                setUpRecommendUI(it)
+            }, failCB = {
+                setUpRecommendUI(null)
+            })
+            it.getDailyPiece(requireContext()) {
+                setUpPieceUI(it)
+                scrollToView(binding.scrollContainer, binding.todayStudyView)
+                binding.todayStudyView.newOne = true
+            }
+
+        }
+
+        initChart(binding.timeCountChart)
     }
 
     private fun scrollToView(scrollViewParent: ScrollView, view: View) {

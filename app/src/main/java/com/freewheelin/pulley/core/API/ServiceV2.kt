@@ -1,12 +1,13 @@
 package com.freewheelin.pulley.core.API
 
-import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API.RequestModel.*
 import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.*
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.*
+import com.freewheelin.pulley.revision2023.model.response.NoteStudyDetailResponse
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Call
@@ -103,8 +104,14 @@ interface  ServiceV2 {
     @PUT("daily-test/{studentID}")
     fun setUserDailySetup(@Path("studentID") studentID: String, @Body params: Parameter): Call<Void>
 
+    //deprecated
     @GET("test/{studentID}/reports")
     fun getDailyTestReport(@Path("studentID") studentID: String): Call<List<Test>>
+
+    @GET("notes/problem/{problemId}")
+    fun getProblemDetail(
+        @Path("problemId") problemId: Int
+    ): Call<ResponseForceBody<NoteStudyDetailResponse>>
 
     @PATCH("books/{studentID}/pins")
     fun setPin(@Path("studentID") studentID: String,
@@ -117,21 +124,27 @@ interface  ServiceV2 {
     @GET("commercials")
     fun getCommercials(@Query("subject") subject: CommercialSubject?): Call<List<CommercialBook>>
 
+    // deprecated
     @GET("commercials/{pieceID}/pages")
     fun getCommercialBookPage(@Path("pieceID") pieceID: Int): Call<CommercialBookPageResponse>
 
+    // deprecated
     @POST("commercials/{pieceID}/similar/problems")
     fun getCommercialSimilarCnt(
             @Path("pieceID") pieceID: Int,
             @Body params: Parameter): Call<Int>
 
 
+    // deprecated
     @POST("commercials/{pieceID}/custom")
     fun makeCustomBook(@Path("pieceID") pieceID: Int,
                        @Body params: Parameter): Call<Book>
 
     @POST("daily/study-time")
-    fun postStudyTime(@Body params: Parameter): Call<Void>
+    fun postStudyTime(
+        @Body params: Parameter,
+        @Query("schoolType") school: String? = MyApplication.schoolType.name
+    ): Call<Void>
 
     @GET("daily/study-time/{studentID}")
     fun getDailyStudyTime(@Path("studentID") studentID: String,
@@ -172,18 +185,21 @@ interface  ServiceV2 {
     @GET("daily-summary/{studentID}")
     fun getDailySummary(@Path("studentID") studentID: String): Call<DailySummary>
 
-    @GET("search/user")
-    fun getUserListByUserName(@Query("name") value: String): Call<Template<List<StudentManagerDialog.Student>>>
+//    @GET("search/user")
+//    fun getUserListByUserName(@Query("name") value: String): Call<Template<List<StudentManagerDialog.Student>>>
 
     @GET("daily-summary/{studentID}/pieces/all")
     fun getStudyList(@Path("studentID") studentID: String): Call<List<Content>>
 
+    // @Deprecated
     @POST("daily-summary/{studentID}/notes")
     fun makeWrongNote(@Path("studentID") studentID: String): Call<Piece>
 
+    //Deprecated
     @POST("daily-summary/{studentID}/weak")
     fun makeRecommend(@Path("studentID") studentID: String): Call<Book>
 
+    // Deprecated
     @GET("daily-summary/{studentID}/studies")
     fun getDailyStudy(@Path("studentID") studentID: String): Call<DailyStudy>
 

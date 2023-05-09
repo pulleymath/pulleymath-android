@@ -109,7 +109,7 @@ class NumberingButton: Button {
         return when(theme) {
             THEME_WHITE -> {
                 if (isSelected)
-                    R.drawable.bg_grey_f2f2f2_circle
+                    R.drawable.bg_gray_200_circle
                 else
                     R.drawable.bg_transparent_stroke_grey_f2f2f2_circle
             }

@@ -178,15 +178,22 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             }
 
             currentMission.observe(viewLifecycleOwner) {
+                println("askask currentMission update 1")
                 if (!it.isStartChallenge) return@observe
+                println("askask currentMission update 2")
                 blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
+                println("askask currentMission update 3")
                 if (user?.serviceType?.isGuestUser == true) return@observe
+                println("askask currentMission update 4")
                 val scInfo = Preferences.startChallengeAlreadyAppeared
                 val appearedIds = scInfo.studentIds
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
 
+                println("askask currentMission update 5")
                 if (isAlreadyAppearedUser) return@observe
+                println("askask currentMission update 6")
                 if (it.userStatus == ChallengeUserStatus.YET) {
+                    println("askask currentMission update 7")
                     joinChallenge(it.challengeId)
 //                    val dialog = StartChallengeInfoDialog(it.challengeId) { challengeId ->
 //                    }
@@ -324,10 +331,12 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     private fun joinChallenge(challengeId: Int) {
         val nextEvent = {
             (activity as LearningTabActivity).setSelectedTab(1)
-            (activity as LearningTabActivity).setConceptCourseSubjectId(LCSubject.SubjectIndicator.MathSang.rawValue)
+            (activity as LearningTabActivity).setConceptCourseAvailableFirstSubject()
             (activity as LearningTabActivity).launchConceptCourseTutorial()
         }
+        println("askask currentMission update 8")
         viewModel.joinChallenge(challengeId) {
+            println("askask currentMission update 9")
             val dialog = ChallengeGuideManager.getStartGuideMission1(
                 nextEvent = nextEvent,
                 exitEvent = {

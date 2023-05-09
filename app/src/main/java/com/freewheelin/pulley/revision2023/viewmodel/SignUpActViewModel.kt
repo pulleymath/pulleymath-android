@@ -49,4 +49,7 @@ class SignUpActViewModel(application: Application) : BaseAndroidViewModel(applic
             cb()
         }
     }
+    fun setLoading(isLoading: Boolean) {
+        _isLoading.postValue(isLoading)
+    }
 }

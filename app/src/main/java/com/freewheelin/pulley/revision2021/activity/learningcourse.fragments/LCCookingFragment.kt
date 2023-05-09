@@ -367,7 +367,7 @@ class LCCookingFragment() : Fragment(),
                     viewModel.useHint(quiz.exerciseQuizId) {
                         exercise?.exerciseQuizzes?.forEach { it.isHintUsed.set(false) }
                         quiz.isHintUsed.set(true)
-                        setHintImageToCooking(quiz.hintImageUrl)
+                        quiz.hintImageUrl?.let { hintImage -> setHintImageToCooking(hintImage) }
                     }
                 }
 

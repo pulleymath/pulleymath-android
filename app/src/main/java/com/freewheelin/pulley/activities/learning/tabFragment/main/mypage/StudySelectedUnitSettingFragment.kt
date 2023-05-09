@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.assets.BigUnitV3
@@ -18,6 +19,7 @@ import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentStudyUnitSelectedSettingBinding
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.PulleyInputSelection
@@ -76,29 +78,31 @@ class StudySelectedUnitSettingFragment : MyPageBaseFragment(), PulleyInputSelect
     }
 
     private fun setRecentUnit() {
-        with(binding) {
-            val userUnits = user!!.recentUnit
-            mathTopSelection.set( listOf(userUnits.contains(BigUnitV3.다항식), userUnits.contains(BigUnitV3.방정식과_부등식), userUnits.contains(BigUnitV3.도형의_방정식)))
-            mathBottomSelection.set( listOf(userUnits.contains(BigUnitV3.집합과_명제), userUnits.contains(BigUnitV3.함수), userUnits.contains(BigUnitV3.순열과_조합)))
-            math1Selection.set( listOf(userUnits.contains(BigUnitV3.지수함수와_로그함수), userUnits.contains(BigUnitV3.삼각함수), userUnits.contains(BigUnitV3.수열)))
-            math2Selection.set( listOf(userUnits.contains(BigUnitV3.함수의_극한과_연속), userUnits.contains(BigUnitV3.미분), userUnits.contains(BigUnitV3.적분)))
-            probAnsStatSelection.set( listOf(userUnits.contains(BigUnitV3.경우의_수), userUnits.contains(BigUnitV3.확률), userUnits.contains(BigUnitV3.통계)))
-            calculusSelection.set( listOf(userUnits.contains(BigUnitV3.수열의_극한), userUnits.contains(BigUnitV3.미분법), userUnits.contains(BigUnitV3.적분법)))
-            geometrySelection.set( listOf(userUnits.contains(BigUnitV3.이차곡선), userUnits.contains(BigUnitV3.벡터), userUnits.contains(BigUnitV3.공간도형)))
-        }
+        // TODO
+//        with(binding) {
+//            val userUnits = user!!.recentUnit
+//            mathTopSelection.set( listOf(userUnits.contains(BigUnitV3.다항식), userUnits.contains(BigUnitV3.방정식과_부등식), userUnits.contains(BigUnitV3.도형의_방정식)))
+//            mathBottomSelection.set( listOf(userUnits.contains(BigUnitV3.집합과_명제), userUnits.contains(BigUnitV3.함수), userUnits.contains(BigUnitV3.순열과_조합)))
+//            math1Selection.set( listOf(userUnits.contains(BigUnitV3.지수함수와_로그함수), userUnits.contains(BigUnitV3.삼각함수), userUnits.contains(BigUnitV3.수열)))
+//            math2Selection.set( listOf(userUnits.contains(BigUnitV3.함수의_극한과_연속), userUnits.contains(BigUnitV3.미분), userUnits.contains(BigUnitV3.적분)))
+//            probAnsStatSelection.set( listOf(userUnits.contains(BigUnitV3.경우의_수), userUnits.contains(BigUnitV3.확률), userUnits.contains(BigUnitV3.통계)))
+//            calculusSelection.set( listOf(userUnits.contains(BigUnitV3.수열의_극한), userUnits.contains(BigUnitV3.미분법), userUnits.contains(BigUnitV3.적분법)))
+//            geometrySelection.set( listOf(userUnits.contains(BigUnitV3.이차곡선), userUnits.contains(BigUnitV3.벡터), userUnits.contains(BigUnitV3.공간도형)))
+//        }
     }
 
     private fun setExcludedUnit() {
-        with(binding) {
-            val excluded = user!!.recentExcludedUnit
-            mathTopSelection.exclude( listOf(excluded.contains(BigUnitV3.다항식), excluded.contains(BigUnitV3.방정식과_부등식), excluded.contains(BigUnitV3.도형의_방정식)))
-            mathBottomSelection.exclude( listOf(excluded.contains(BigUnitV3.집합과_명제), excluded.contains(BigUnitV3.함수), excluded.contains(BigUnitV3.순열과_조합)))
-            math1Selection.exclude( listOf(excluded.contains(BigUnitV3.지수함수와_로그함수), excluded.contains(BigUnitV3.삼각함수), excluded.contains(BigUnitV3.수열)))
-            math2Selection.exclude( listOf(excluded.contains(BigUnitV3.함수의_극한과_연속), excluded.contains(BigUnitV3.미분), excluded.contains(BigUnitV3.적분)))
-            probAnsStatSelection.exclude( listOf(excluded.contains(BigUnitV3.경우의_수), excluded.contains(BigUnitV3.확률), excluded.contains(BigUnitV3.통계)))
-            calculusSelection.exclude( listOf(excluded.contains(BigUnitV3.수열의_극한), excluded.contains(BigUnitV3.미분법), excluded.contains(BigUnitV3.적분법)))
-            geometrySelection.exclude( listOf(excluded.contains(BigUnitV3.이차곡선), excluded.contains(BigUnitV3.벡터), excluded.contains(BigUnitV3.공간도형)))
-        }
+        // TODO
+//        with(binding) {
+//            val excluded = user!!.recentExcludedUnit
+//            mathTopSelection.exclude( listOf(excluded.contains(BigUnitV3.다항식), excluded.contains(BigUnitV3.방정식과_부등식), excluded.contains(BigUnitV3.도형의_방정식)))
+//            mathBottomSelection.exclude( listOf(excluded.contains(BigUnitV3.집합과_명제), excluded.contains(BigUnitV3.함수), excluded.contains(BigUnitV3.순열과_조합)))
+//            math1Selection.exclude( listOf(excluded.contains(BigUnitV3.지수함수와_로그함수), excluded.contains(BigUnitV3.삼각함수), excluded.contains(BigUnitV3.수열)))
+//            math2Selection.exclude( listOf(excluded.contains(BigUnitV3.함수의_극한과_연속), excluded.contains(BigUnitV3.미분), excluded.contains(BigUnitV3.적분)))
+//            probAnsStatSelection.exclude( listOf(excluded.contains(BigUnitV3.경우의_수), excluded.contains(BigUnitV3.확률), excluded.contains(BigUnitV3.통계)))
+//            calculusSelection.exclude( listOf(excluded.contains(BigUnitV3.수열의_극한), excluded.contains(BigUnitV3.미분법), excluded.contains(BigUnitV3.적분법)))
+//            geometrySelection.exclude( listOf(excluded.contains(BigUnitV3.이차곡선), excluded.contains(BigUnitV3.벡터), excluded.contains(BigUnitV3.공간도형)))
+//        }
     }
 
     private fun getSelectedUnits(view: PulleyInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
@@ -140,15 +144,23 @@ class StudySelectedUnitSettingFragment : MyPageBaseFragment(), PulleyInputSelect
         return excludedBigUnits
     }
 
+    val viewModel: MyMainPageFragViewModel by viewModels()
+
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "수정하기", "단원")
         if(binding.modifyBtn.isEnableUI()) {
-            UserManager.setRecentExclude(requireContext(), user!!, getCalcExcludedUnits(), successCB = {
+            val units = getCalcExcludedUnits()
+            viewModel.excludeSubjects(units.map { it.id }) {
                 listener?.onModifyCompleted()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    onBackBtnClicked()
-                }, 0)
-            })
+//                user?.setExcludeUnit(units) // TODO 어딘가 저장해야하나?
+                onBackBtnClicked()
+            }
+//            UserManager.setRecentExclude(requireContext(), user!!, getCalcExcludedUnits(), successCB = {
+//                listener?.onModifyCompleted()
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    onBackBtnClicked()
+//                }, 0)
+//            })
         }
     }
 

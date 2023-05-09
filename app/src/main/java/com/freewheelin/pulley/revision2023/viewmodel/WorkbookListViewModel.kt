@@ -8,13 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterCategory
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterOrder
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
+import com.freewheelin.pulley.revision2023.model.BookFilterParent
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
@@ -28,6 +33,9 @@ class WorkbookListViewModel(application: Application): BaseAndroidViewModel(appl
     private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
+
+    val schoolTypeInRepo = userRepository.schoolType
 
     val showEmptyContainer = MutableLiveData<Boolean>(false)
     val showRecyclerView = MutableLiveData<Boolean>(false)
@@ -40,11 +48,19 @@ class WorkbookListViewModel(application: Application): BaseAndroidViewModel(appl
     private val _customBooks = MutableLiveData<List<Book>>()
     val customBooks: LiveData<List<Book>> = _customBooks
     lateinit var adapter: PatternStudyMyPlanAdapter
-    var latestFilters: Set<FilterType>? = null
+    var latestFilters: Set<LearningFilterType>? = null
+
+    private val _filterElements = MutableLiveData<List<BookFilterElement>>()
+    val filterElements: LiveData<List<BookFilterElement>> = _filterElements
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
 
-    fun fetchCustomBook(filters: Set<FilterType>) {
+    var selectedFilterTypes: HashSet<LearningFilterType> = hashSetOf(
+        LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.유형_전체,
+        if (MyApplication.schoolType.isMiddle) LearningFilterType.추천레벨_전체 else LearningFilterType.추천_전체
+    )
+
+    fun fetchCustomBook(filters: Set<LearningFilterType>) {
 
         latestFilters = filters
 
@@ -112,5 +128,63 @@ class WorkbookListViewModel(application: Application): BaseAndroidViewModel(appl
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
+    }
+
+    fun fetchBookFilter() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val filter = BookFilterParent.CUSTOM_WORKBOOK
+            val elements = patternStudyRepository.fetchBookFilter(filter, BookFilterElement.getToggle())
+            val syncedElements = syncSelectedFilterType(elements)
+            _filterElements.postValue(syncedElements)
+        }
+    }
+    fun switchCheckedContainPin(isChecked: Boolean) {
+        val addFilter = if (isChecked) LearningFilterType.핀_미포함 else LearningFilterType.핀_포함
+        updateFilterTypes(addFilter)
+
+        val filters = selectedFilterTypes.toSet()
+        fetchCustomBook(filters)
+    }
+    fun onFilterItemClick(item: BookFilterElement) {
+        val type = item.filterType
+        val isContained = selectedFilterTypes.contains(type)
+        if (isContained) {
+            selectedFilterTypes.remove(type)
+        } else {
+            updateFilterTypes(type)
+        }
+        checkFiltersWhenRemoveSelfs(type)
+        syncSelectedFilterType()
+
+        val filters = selectedFilterTypes.toSet()
+        fetchCustomBook(filters)
+
+    }
+    fun updateFilterTypes(type: LearningFilterType) {
+        selectedFilterTypes.add(type)
+        selectedFilterTypes.removeAll(type.exclusiveSet)
+    }
+    private fun syncSelectedFilterType() {
+        filterElements.value?.forEach {
+            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
+        }
+    }
+    private fun syncSelectedFilterType(filters: List<BookFilterElement>): List<BookFilterElement> {
+        return filters.map {
+            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
+            it
+        }
+    }
+    private fun checkFiltersWhenRemoveSelfs(type: LearningFilterType) {
+        // 자기자신이 제거될때
+        // 1. 섹션내에서 자기자신만 선택되어져있던 경우 : 필터에서 아예 없어지면 안됨
+        // 2. 같은 섹션 내에 다른 필터가 같이 선택되어져있는 경우 : 없어져야함
+        val sectionListWithoutSelected = type.sectionList.filter { it != type }
+        for (item in sectionListWithoutSelected) {
+            if (selectedFilterTypes.contains(item)) {
+                return
+            }
+        }
+        selectedFilterTypes.add(type)
     }
 }

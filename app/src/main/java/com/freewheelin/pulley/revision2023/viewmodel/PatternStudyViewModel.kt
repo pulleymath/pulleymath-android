@@ -15,6 +15,7 @@ import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.service.PatternStudyApi
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.utils.show
@@ -30,9 +31,11 @@ import java.util.concurrent.TimeUnit
 class PatternStudyViewModel(application: Application): BaseAndroidViewModel(application) {
     private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
 
     lateinit var myPlanAdapter: PatternStudyMyPlanAdapter
     val joinedChallengeList = challengeRepository.joinedChallengeList
+    val schoolType = userRepository.schoolType
 
     private val _myPlans = MutableLiveData<MyBookList>()
     val myPlans: LiveData<MyBookList> = _myPlans
@@ -55,17 +58,6 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val showWorkbooksChallengeStamp = MutableLiveData<Boolean>(false)
 
     fun initMyPlanAdapterItem() {
-//        patternStudyRepository.run {
-//            flowMyPlans()
-//                .onEach { books ->
-//                    val myPlan = MyBookList(0, 0, books.toMutableList()).apply {
-//                        publicSync()
-//                    }
-//
-//                    _myPlans.value = myPlan
-//                }
-//                .launchIn(viewModelScope)
-//        }
         collectAllMyPlans()
     }
     private fun collectAllMyPlans() {

@@ -8,6 +8,8 @@ import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.*
+import com.freewheelin.pulley.revision2023.model.response.NoteStudyDetailResponse
+import com.freewheelin.pulley.revision2023.model.response.NoteStudyProblem
 import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
@@ -118,19 +120,15 @@ object ProblemManager {
         })
     }
 
-    fun getDetailInfo(context: Context, user: User, problem: Problem, successCB: (problem: Problem, detail: ProblemDetailInfo?, history: List<History>) -> Unit) {
-        val params: Parameter = Parameter(
-                "problemID" to problem.id,
-                "studentID" to user.studentID
-        )
+    fun getDetailInfo(context: Context, user: User, problem: Problem, successCB: (problem: Problem, detail: NoteStudyProblem?, history: List<History>) -> Unit) {
 
-        API_V1.getProblemDetail(params).enqueue(object: Callback<Template<ResponseProblemDetail>> {
-            override fun onFailure(call: Call<Template<ResponseProblemDetail>>, t: Throwable) {
+        API_V2.getProblemDetail(problem.id).enqueue(object: Callback<ResponseForceBody<NoteStudyDetailResponse>> {
+            override fun onFailure(call: Call<ResponseForceBody<NoteStudyDetailResponse>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Template<ResponseProblemDetail>>, response: Response<Template<ResponseProblemDetail>>) {
-                val detail = response.body()?.data?.problemInfo
+            override fun onResponse(call: Call<ResponseForceBody<NoteStudyDetailResponse>>, response: Response<ResponseForceBody<NoteStudyDetailResponse>>) {
+                val detail = response.body()?.data?.problem
                 val history = response.body()?.data?.history
                 if(response.isSuccessful && history != null) {
                     successCB(problem, detail, history)

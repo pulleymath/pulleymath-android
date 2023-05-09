@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.CourseSummary
@@ -12,7 +13,7 @@ import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-
+import retrofit2.http.Query
 
 
 object ConceptCourseApi {
@@ -21,7 +22,9 @@ object ConceptCourseApi {
 interface ConceptCourseService {
 
     @GET("subjects")
-    fun getAvailableSubject(): Observable<BaseCookingListResponse<LCSubject>>
+    fun getAvailableSubject(
+        @Query("schoolType") school: String? = MyApplication.schoolType.name,
+    ): Observable<BaseCookingListResponse<LCSubject>>
 
     @GET("subjects/{subjectId}/chapters/users/{studentId}")
     fun getChapterOnSubject(

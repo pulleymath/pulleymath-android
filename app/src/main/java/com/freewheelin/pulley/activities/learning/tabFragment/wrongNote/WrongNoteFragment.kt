@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -30,8 +29,6 @@ import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterType
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterType.*
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragmentListener
 import com.freewheelin.pulley.activities.solve.SolveActivity
@@ -52,6 +49,8 @@ import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.Result
 import com.freewheelin.pulley.model.contents.PieceCategory
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
+import com.freewheelin.pulley.revision2023.model.LearningFilterType.*
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
 import com.freewheelin.pulley.utils.*
@@ -89,13 +88,9 @@ class WrongNoteFragment : LearningTabFragment(),
     var selectedOrder = OrderType.recent
     var selectedProblem: ObservableHashSet<Problem> = ObservableHashSet()
 
-    var wrongNoteFilterFragment: NoteFilterFragment =
-        NoteFilterFragment.newInstance(getWrongNoteFilterAndTitle())
-    var scrapNoteFilterFragment: NoteFilterFragment =
-        NoteFilterFragment.newInstance(getScrapBookFilterAndTitle())
+    var wrongNoteFilterFragment: NoteFilterFragment = NoteFilterFragment.newWrongInstance()
+    var scrapNoteFilterFragment: NoteFilterFragment = NoteFilterFragment.newScrapInstance()
 
-    var wrongProblems: List<Problem>? = null
-    var scrapProblems: List<Problem>? = null
     var groupedProblemsByOrder: List<Pair<String, List<Problem>>> = listOf()
 
     lateinit var binding: FragmentWrongNoteBinding
@@ -103,17 +98,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
     override var screenName = "오답노트"
 
-    lateinit var changeRecevier: BroadcastReceiver
-
-    val from: LocalDate
-        get() {
-            return selectedFragment.from
-        }
-
-    val to: LocalDate
-        get() {
-            return selectedFragment.to
-        }
+    lateinit var changeReceiver: BroadcastReceiver
 
     val selectedFragment: NoteFilterFragment
         get() {
@@ -139,12 +124,12 @@ class WrongNoteFragment : LearningTabFragment(),
                 scrapNoteFilterFragment = scrapBeforeFragment
         }
 
-        changeRecevier = object: BroadcastReceiver() {
+        changeReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 onFragmentSelected()
             }
         }
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(changeRecevier, IntentFilter(ProblemManager.EVENT_WRONG_NOTE_CHANGED))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(changeReceiver, IntentFilter(ProblemManager.EVENT_WRONG_NOTE_CHANGED))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -156,7 +141,7 @@ class WrongNoteFragment : LearningTabFragment(),
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(changeRecevier)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(changeReceiver)
         super.onDestroy()
     }
 
@@ -171,6 +156,7 @@ class WrongNoteFragment : LearningTabFragment(),
         selectedProblem.listener = this
         binding.apply {
             vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
         }
         viewModel.apply {
             user.observe(viewLifecycleOwner) { user ->
@@ -179,6 +165,18 @@ class WrongNoteFragment : LearningTabFragment(),
                     val available = it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
                     showLockIcon.postValue(!available)
                 }
+            }
+            wrongProblem.observe(viewLifecycleOwner) {
+                val tabPosition = binding.tabLayout.selectedTabPosition
+                setGroupedProblem(tabPosition)
+            }
+            scrapProblem.observe(viewLifecycleOwner) {
+                val tabPosition = binding.tabLayout.selectedTabPosition
+                setGroupedProblem(tabPosition)
+            }
+            updateNotes.observe(viewLifecycleOwner) {
+                val tabPosition = binding.tabLayout.selectedTabPosition
+                setGroupedProblem(tabPosition)
             }
         }
     }
@@ -212,53 +210,47 @@ class WrongNoteFragment : LearningTabFragment(),
     override fun onFragmentSelected() {
         super.onFragmentSelected()
         val tabPosition = binding.tabLayout.selectedTabPosition
-        if (tabPosition == 0) {
-            ProblemManager.getWrongProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
-                wrongProblems = it
-                setGroupedProblem(tabPosition)
-            }
-        } else {
-            ProblemManager.getScrapProblems(requireContext(), user!!, from.toDate(), to.toDate()) {
-                scrapProblems = it
-                setGroupedProblem(tabPosition)
-            }
-        }
+//        if (tabPosition == 0) {
+//            viewModel.fetchWrongNotes ()
+//        } else {
+//            viewModel.fetchScrapNotes ()
+//        }
     }
 
     override fun onDateSet(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
 
         val tabPosition = binding.tabLayout.selectedTabPosition
+        viewModel.selectedFilterTabPosition = binding.tabLayout.selectedTabPosition
+//        val fromDate = when(type) {
+//            DateRangePickerDialog.Type.RECENT7 -> LocalDate.now().minusDays(6)
+//            DateRangePickerDialog.Type.RECENT14 -> LocalDate.now().minusDays(13)
+//            DateRangePickerDialog.Type.RECENT30 -> LocalDate.now().minusDays(29)
+//            else -> from
+//        }
+//        viewModel.from = fromDate
+//
+//        val toDate = when(type) {
+//            DateRangePickerDialog.Type.RECENT7, DateRangePickerDialog.Type.RECENT14, DateRangePickerDialog.Type.RECENT30 -> LocalDate.now()
+//            else -> to
+//        }
+//        viewModel.to = toDate
 
-        val fromDate = when(type) {
-            DateRangePickerDialog.Type.RECENT7 -> LocalDate.now().minusDays(6)
-            DateRangePickerDialog.Type.RECENT14 -> LocalDate.now().minusDays(13)
-            DateRangePickerDialog.Type.RECENT30 -> LocalDate.now().minusDays(29)
-            else -> from
-        }
-        selectedFragment.from = fromDate
+//        Log.d("날짜설정", "from=$fromDate, to=$toDate")
 
-        val toDate = when(type) {
-            DateRangePickerDialog.Type.RECENT7, DateRangePickerDialog.Type.RECENT14, DateRangePickerDialog.Type.RECENT30 -> LocalDate.now()
-            else -> to
-        }
-        selectedFragment.to = toDate
-
-        Log.d("날짜설정", "from=$fromDate, to=$toDate")
-
-        if (tabPosition == 0) {
-            ProblemManager.getWrongProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
-                wrongProblems = it
-                setGroupedProblem(tabPosition)
-            }
-        } else if (tabPosition == 1) {
-            ProblemManager.getScrapProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
-                scrapProblems = it
-                setGroupedProblem(tabPosition)
-            }
-        }
+//        if (tabPosition == 0) {
+//            ProblemManager.getWrongProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
+//                wrongProblems = it
+//                setGroupedProblem(tabPosition)
+//            }
+//        } else if (tabPosition == 1) {
+//            ProblemManager.getScrapProblems(requireContext(), user!!, fromDate.toDate(), toDate.toDate()) {
+//                scrapProblems = it
+//                setGroupedProblem(tabPosition)
+//            }
+//        }
     }
 
-    override fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<FilterType>) {
+    override fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<LearningFilterType>) {
         setGroupedProblem(binding.tabLayout.selectedTabPosition)
     }
 
@@ -300,7 +292,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
             else
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
-            dialog.binding.makeBtn.startLoding()
+            dialog.binding.makeBtn.startLoading()
             val problems = selectedProblem.toList()
             val cntPerProblem = dialog.cnt
             val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
@@ -359,7 +351,10 @@ class WrongNoteFragment : LearningTabFragment(),
                     (activity as LearningTabActivity).hideSnackBar()
                 }
 
-                override fun onPageSelected(position: Int) {}
+                override fun onPageSelected(position: Int) {
+                    // TODO 필터뷰 리로드
+
+                }
 
             })
             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -369,34 +364,11 @@ class WrongNoteFragment : LearningTabFragment(),
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     if (tab.position == 0) {
-                        ProblemManager.getWrongProblems(
-                            requireContext(),
-                            user!!,
-                            from.toDate(),
-                            to.toDate()
-                        ) {
-                            wrongProblems = it
-                            setGroupedProblem(tab.position)
-                        }
-                    }
-
-                    if (tab.position == 1) {
-                        LogUtils.logEvent(
-                            requireContext(),
-                            user!!,
-                            PulleyEvent.BUTTON_CLICK,
-                            "오답노트",
-                            "즐겨찾기"
-                        )
-                        ProblemManager.getScrapProblems(
-                            requireContext(),
-                            user!!,
-                            from.toDate(),
-                            to.toDate()
-                        ) {
-                            scrapProblems = it
-                            setGroupedProblem(tab.position)
-                        }
+                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답노트")
+//                        viewModel.fetchWrongNotes()
+                    } else if (tab.position == 1) {
+                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기")
+//                        viewModel.fetchScrapNotes()
                     }
                 }
             })
@@ -429,7 +401,10 @@ class WrongNoteFragment : LearningTabFragment(),
     }
 
     private fun setGroupedProblem(tabPosition: Int, withSelectedClear: Boolean = true) {
-        var problems = filterProblems((if (tabPosition == 0) wrongProblems else scrapProblems) ?: listOf(), tabPosition)
+        println("qwoqwo tabPosition : ${tabPosition}")
+        val selectedTabProblem = viewModel.getSelectedFilterProblem() ?: listOf()
+        var problems = filterProblems(selectedTabProblem, tabPosition)
+        println("qwoqwo problems size: ${problems.size}")
 
 
 
@@ -469,44 +444,47 @@ class WrongNoteFragment : LearningTabFragment(),
 
     private fun filterProblems(problems: List<Problem>, tabPosition: Int): List<Problem> {
         var filteredProblem = problems
-        val filters = selectedFragment.selectedFilterTypes
+        val filters = viewModel.selectedFilterTypes
 
+        val from = viewModel.from
+        val to = viewModel.to
         if(tabPosition == 0) {
             filteredProblem = filteredProblem
                 .filter { LocalDate(it.updateDateTime) in from..to }
                 .filter {
                 var clearCondition = false
-                if(filters.contains(클리어_미포함))
+                if(filters.contains(보기설정_클리어_미포함))
                     clearCondition = clearCondition || it.isClear == false
 
-                if(filters.contains(클리어_포함))
+                if(filters.contains(보기설정_클리어_포함))
                     clearCondition = true
 
                 clearCondition
             }
             //스크랩 필터는 초기화
-            scrapNoteFilterFragment.setFiltersStatus(filters)
+//            viewModel.setFilterStatus
+//            scrapNoteFilterFragment.setFiltersStatus(filters) // TODO 이걸왜함?  동기화작업
         } else {
             filteredProblem = filteredProblem
                 .filter { LocalDate(it.scrapDateTime) in from..to }
                 .filter {
                 var correctCondition = false
 
-                if(filters.contains(모든_보기설정))
+                if(filters.contains(보기설정_전체))
                     correctCondition = true
 
-                if(filters.contains(맞은_문제))
+                if(filters.contains(보기설정_맞은문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.correct)
 
-                if(filters.contains(틀린_문제))
+                if(filters.contains(보기설정_틀린문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.incorrect)
 
-                if(filters.contains(안_푼_문제))
+                if(filters.contains(보기설정_안_푼_문제))
                     correctCondition = (correctCondition || it.getResultByScoring() == Result.yet)
 
                 correctCondition
             }
-            wrongNoteFilterFragment.setFiltersStatus(filters)
+//            wrongNoteFilterFragment.setFiltersStatus(filters) // 동기화인듯?
         }
 
         filteredProblem = filteredProblem.filter {
@@ -528,7 +506,7 @@ class WrongNoteFragment : LearningTabFragment(),
             if(filters.contains(과목_수학2))
                 subjectCondition = (subjectCondition || subject.isMath2)
 
-            if(filters.contains(과목_확률과통계))
+            if(filters.contains(과목_확통))
                 subjectCondition = (subjectCondition || subject.isProbabilityAndStatistics)
 
             if(filters.contains(과목_미적분))
@@ -540,7 +518,7 @@ class WrongNoteFragment : LearningTabFragment(),
 
             var levelCondition = false
 
-            if(filters.contains(모든_난이도))
+            if(filters.contains(난이도_전체))
                 levelCondition = true
 
             if(filters.contains(난이도_하)) levelCondition = (levelCondition || it.problemLevel == 1)
@@ -552,20 +530,20 @@ class WrongNoteFragment : LearningTabFragment(),
 
             var pieceCategoryCondition = false
 
-            if(filters.contains(모든_학습유형))
+            if(filters.contains(학습유형_전체))
                 pieceCategoryCondition = true
 
-            if (filters.contains(유형_유형학습))
+            if (filters.contains(학습유형_유형학습))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.book))
-            if (filters.contains(유형_워크북))
+            if (filters.contains(학습유형_워크북))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.workbook))
-            if (filters.contains(유형_모의고사))
+            if (filters.contains(학습유형_모의고사))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.mockExam))
-            if (filters.contains(유형_오답학습))
+            if (filters.contains(학습유형_오답학습))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.note) || it.getPieceCategory().contains(PieceCategory.reference))
-            if (filters.contains(유형_테스트))
+            if (filters.contains(학습유형_테스트))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.dailyTest))
-            if (filters.contains(유형_추천학습))
+            if (filters.contains(학습유형_추천학습))
                 pieceCategoryCondition = (pieceCategoryCondition || it.getPieceCategory().contains(PieceCategory.recommned))
 
             subjectCondition && levelCondition && pieceCategoryCondition
@@ -593,23 +571,23 @@ class WrongNoteFragment : LearningTabFragment(),
         }
     }
 
-    fun getWrongNoteFilterAndTitle(): List<Pair<String, List<FilterType>>> {
-        return listOf(
-            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
-            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
-            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
-            Pair("보기 설정", listOf(클리어_미포함, 클리어_포함))
-        )
-    }
-
-    fun getScrapBookFilterAndTitle(): List<Pair<String, List<FilterType>>> {
-        return listOf(
-            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
-            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
-            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
-            Pair("보기 설정", listOf(모든_보기설정, 맞은_문제, 틀린_문제, 안_푼_문제))
-        )
-    }
+//    fun getWrongNoteFilterAndTitle(): List<Pair<String, List<FilterType>>> {
+//        return listOf(
+//            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
+//            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
+//            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
+//            Pair("보기 설정", listOf(클리어_미포함, 클리어_포함))
+//        )
+//    }
+//
+//    fun getScrapBookFilterAndTitle(): List<Pair<String, List<FilterType>>> {
+//        return listOf(
+//            Pair("과목", listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확률과통계, 과목_미적분, 과목_기하)),
+//            Pair("학습 유형", listOf(모든_학습유형, 유형_유형학습, 유형_워크북, 유형_모의고사, 유형_오답학습, 유형_테스트, 유형_추천학습)),
+//            Pair("난이도", listOf(모든_난이도, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)),
+//            Pair("보기 설정", listOf(모든_보기설정, 맞은_문제, 틀린_문제, 안_푼_문제))
+//        )
+//    }
 
     inner class NoteAdapter : SectionAdapter<RecyclerView.ViewHolder>() {
         override fun getItemViewType(indexPath: IndexPath): Int {
@@ -641,6 +619,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 val problems = groupedProblemsByOrder.flatMap { it.second }
 
                 this.selectedOrder = this@WrongNoteFragment.selectedOrder
+
                 itemBinding.clearGuideTv.text = "전체 ${problems.size}문제 중 ${problems.filter { it.isClear }.size}개 클리어"
                 itemBinding.problemCntTv.text = "${problems.size}개의 문제가 있습니다."
 
@@ -892,7 +871,7 @@ class WrongNoteFragment : LearningTabFragment(),
             itemBinding.apply {
                 guideIv.setImageResource(R.drawable.guide_empty_wrong)
                 guideTv.text = "오답문제가 이곳에 모여요!\n" +
-                    "세상 간편한 오답학습을 경험해보세요 :)"
+                    "간편한 오답학습을 경험해보세요 :)"
             }
         }
 

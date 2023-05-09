@@ -14,11 +14,13 @@ import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
 import com.freewheelin.pulley.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.databinding.FragmentAnalysisStudyAmountBinding
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.NumberAnalysis
 import com.freewheelin.pulley.model.curation.MyCuration
 import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.utils.visibleIf
 import com.freewheelin.pulley.views.textViews.UpDownTextView
 import com.freewheelin.pulley.views.charts.OneBarChart
 import org.joda.time.LocalDate
@@ -91,6 +93,7 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
             (0 until 6).forEach { getLegendViewComp(it).first.background.setTint(ringChart.legendColors[it]) }
             unitChart.isHighlightMaxAndMin = true
             dailyChart.isHighlightMaxAndMin = true
+            mockCntContainer.visibleIf(schoolType.isHigh)
         }
     }
 

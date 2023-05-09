@@ -279,10 +279,11 @@ class LCWrongNoteActivity : AppCompatActivity() {
     fun setPagerUserInputEnabled(enabled: Boolean) {
         binding.pagerWrapper.pager.isUserInputEnabled = enabled
     }
-    fun setHintBtn(flag: Boolean?, size: Int?) {
+    fun setHintBtn(flag: Boolean?, size: Int?, hintExist: Boolean) {
         if (flag != null && size != null) {
             viewModel.isHintBtnDisabled.postValue(flag)
             viewModel.setHintBtnText(size)
+            viewModel.hintExist.postValue(hintExist)
         }
     }
 

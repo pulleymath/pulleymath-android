@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
+        <variable name="isTablet" type="Boolean"/>
+        <variable name="isHighSchool" type="Boolean"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootCl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_200"
+        tools:showIn="@layout/fragment_concept_course"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/highSchoolCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            visibleAnimIf="@{ isHighSchool }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tabletTabWrapperCl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                visibleIf="@{ isTablet }"
+                android:layout_marginTop="48dp"
+                android:layout_marginHorizontal="48dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+
+                <LinearLayout
+                    android:id="@+id/bookmarkWrapperLl"
+                    android:layout_width="80dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/mathSangWrapperLl">
+                    <ImageButton
+                        android:id="@+id/bookmarkBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="@{ _ -> vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
+                        android:src="@drawable/ic_course_star"
+                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathSangWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bookmarkWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathHaWrapperLl">
+                    <Button
+                        android:id="@+id/mathSangBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
+                        android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
+                    <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathHaWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathSangWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/math1WrapperLl">
+                    <Button
+                        android:id="@+id/mathHaBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
+                        android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/math1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathHaWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/math2WrapperLl">
+                    <Button
+                        android:id="@+id/math1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue }"
+                        android:text="@{ SubjectIndicator.Math1.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/math2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/math1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathProbabilityAndStatisticsWrapperLl">
+                    <Button
+                        android:id="@+id/math2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue }"
+                        android:text="@{ SubjectIndicator.Math2.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathProbabilityAndStatisticsWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/math2WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathCalculusWrapperLl">
+                    <Button
+                        android:id="@+id/mathProbabilityAndStatisticsBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue }"
+                        android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathCalculusWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathProbabilityAndStatisticsWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/mathKihaWrapperLl">
+                    <Button
+                        android:id="@+id/mathCalculusBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue }"
+                        android:text="@{ SubjectIndicator.MathCalculus.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mathKihaWrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/mathCalculusWrapperLl"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <Button
+                        android:id="@+id/mathKihaBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue }"
+                        android:text="@{ SubjectIndicator.MathKiha.inKorean }"/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <HorizontalScrollView
+                android:id="@+id/headerScrollViewRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                visibleIf="@{ !isTablet }"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <LinearLayout
+                    android:id="@+id/scrollHeaderBtnWrapperLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginStart="48dp"
+                    >
+                    <LinearLayout
+                        android:id="@+id/scrollBookmarkWrapperLl"
+                        android:layout_width="80dp"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMathSangWrapperLl">
+                        <ImageButton
+                            android:id="@+id/scrollBookmarkBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
+                            android:src="@drawable/ic_course_star"
+                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                        <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMathSangWrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollBookmarkWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMathHaWrapperLl">
+                        <Button
+                            android:id="@+id/scrollMathSangBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
+                            android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
+                        <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMathHaWrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMathSangWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMath1WrapperLl">
+                        <Button
+                            android:id="@+id/scrollMathHaBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
+                            android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/scrollMath1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMathHaWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMath2WrapperLl">
+                        <Button
+                            android:id="@+id/scrollMath1Btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Math1.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMath2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMath1WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMathProbabilityAndStatisticsWrapperLl">
+                        <Button
+                            android:id="@+id/scrollMath2Btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Math2.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMathProbabilityAndStatisticsWrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMath2WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMathCalculusWrapperLl">
+                        <Button
+                            android:id="@+id/scrollMathProbabilityAndStatisticsBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue  }"
+                            android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMathCalculusWrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMathProbabilityAndStatisticsWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/scrollMathKihaWrapperLl">
+                        <Button
+                            android:id="@+id/scrollMathCalculusBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue  }"
+                            android:text="@{ SubjectIndicator.MathCalculus.inKorean }" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/scrollMathKihaWrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="90dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/scrollMathCalculusWrapperLl"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <Button
+                            android:id="@+id/scrollMathKihaBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="20dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue  }"
+                            android:text="@{ SubjectIndicator.MathKiha.inKorean }" />
+                        <!--                    android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathKiha.rawValue ? View.VISIBLE : View.GONE }"-->
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/middleSchoolCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            visibleAnimIf="@{ !isHighSchool }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tabletMiddleTabWrapperCl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="48dp"
+                android:layout_marginHorizontal="48dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside">
+<!--                visibleIf="@{ isTablet }"-->
+
+
+                <LinearLayout
+                    android:id="@+id/middleBookmarkWrapperLl"
+                    android:layout_width="80dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath1_1WrapperLl">
+                    <ImageButton
+                        android:id="@+id/middleBookmarkBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="@{ _ -> vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
+                        android:src="@drawable/ic_course_star"
+                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/middleMath1_1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle1_1) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleBookmarkWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath1_2WrapperLl">
+                    <Button
+                        android:id="@+id/middleMath1_1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
+                    <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/middleMath1_2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle1_2) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleMath1_1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath2_1WrapperLl">
+                    <Button
+                        android:id="@+id/middleMath1_2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/middleMath2_1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle2_1) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleMath1_2WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath2_2WrapperLl">
+                    <Button
+                        android:id="@+id/middleMath2_1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/middleMath2_2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle2_2) }"
+                    android:layout_marginStart="28dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleMath2_1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath3_1WrapperLl">
+                    <Button
+                        android:id="@+id/middleMath2_2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/middleMath3_1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle3_1) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleMath2_2WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/middleMath3_2WrapperLl">
+                    <Button
+                        android:id="@+id/middleMath3_1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/middleMath3_2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle3_2) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/middleMath3_1WrapperLl"
+                    >
+                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <Button
+                        android:id="@+id/middleMath3_2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue }"
+                        android:text="@{ SubjectIndicator.Middle3_2.inKorean }"/>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <HorizontalScrollView
+                android:id="@+id/headerMiddleScrollViewRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+<!--                visibleIf="@{ !isTablet }" 나중에 중등 다 생기면 -->
+                <LinearLayout
+                    android:id="@+id/middleScrollHeaderBtnWrapperLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginStart="48dp"
+                    >
+                    <LinearLayout
+                        android:id="@+id/middleScrollBookmarkWrapperLl"
+                        android:layout_width="80dp"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath1_1WrapperLl">
+                        <ImageButton
+                            android:id="@+id/middleScrollBookmarkBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
+                            android:src="@drawable/ic_course_star"
+                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                        <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath1_1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle1_1) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollBookmarkWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath1_2WrapperLl">
+                        <Button
+                            android:id="@+id/middleScrollMath1_1Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
+                        <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath1_2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle1_2) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollMath1_1WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath2_1WrapperLl">
+                        <Button
+                            android:id="@+id/middleScrollMath1_2Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath2_1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle2_1) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollMath1_2WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath2_2WrapperLl">
+                        <Button
+                            android:id="@+id/middleScrollMath2_1Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath2_2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle2_2) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollMath2_1WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath3_1WrapperLl">
+                        <Button
+                            android:id="@+id/middleScrollMath2_2Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath3_1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle3_1) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollMath2_2WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/middleScrollMath3_2WrapperLl">
+                        <Button
+                            android:id="@+id/middleScrollMath3_1Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/middleScrollMath3_2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Middle3_2) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/middleScrollMath3_1WrapperLl"
+                        app:layout_constraintEnd_toEndOf="parent">
+                        <Button
+                            android:id="@+id/middleScrollMath3_2Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Middle3_2.inKorean }" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

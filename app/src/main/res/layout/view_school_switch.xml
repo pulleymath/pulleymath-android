@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.viewmodel.LearningTabViewModel"/>
+        <variable name="isMiddleSchool" type="Boolean"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootCl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/schoolSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:checked="false"
+            android:switchMinWidth="56dp"
+            android:thumb="@drawable/switch_thumb_school"
+            app:track="@drawable/switch_track_school"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+        <!--            android:background="@null"-->
+
+        <TextView
+            android:layout_width="45dp"
+            android:layout_height="28dp"
+            style="@style/mo_h6"
+            android:text="고등"
+            android:gravity="center"
+            android:textColor="@{ isMiddleSchool ? @color/gray_700 : @color/white , default=@color/white }"
+            app:layout_constraintTop_toTopOf="@+id/schoolSwitch"
+            app:layout_constraintStart_toStartOf="@+id/schoolSwitch"
+            app:layout_constraintBottom_toBottomOf="@+id/schoolSwitch"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/middleWrapperCl"
+            android:layout_width="45dp"
+            android:layout_height="28dp"
+            app:layout_constraintTop_toTopOf="@+id/schoolSwitch"
+            app:layout_constraintEnd_toEndOf="@+id/schoolSwitch"
+            app:layout_constraintBottom_toBottomOf="@+id/schoolSwitch">
+
+            <TextView
+                android:id="@+id/middleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="중등"
+                style="@style/mo_h6"
+                android:textColor="@{ isMiddleSchool ? @color/white : @color/gray_600 , default=@color/gray_600 }"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/middleNTv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:id="@+id/middleNTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N"
+                android:layout_marginStart="2dp"
+                android:textColor="@color/red_300"
+                android:fontFamily="@font/font_pretendard_semibold"
+                android:textSize="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/middleTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

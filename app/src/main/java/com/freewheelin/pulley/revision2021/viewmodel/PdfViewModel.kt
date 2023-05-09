@@ -1,24 +1,26 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import com.freewheelin.pulley.revision2023.model.BookFilterParent
+import com.freewheelin.pulley.revision2023.model.BookFilterSection
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
+import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
@@ -32,6 +34,9 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
     private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val pdfRepository: PdfRepository by lazy { PdfRepository() }
     private val challengeRepository by lazy { ChallengeRepository.instance }
+    private val userRepository by lazy { UserRepository.instance }
+
+    val schoolTypeInRepo = userRepository.schoolType
 
     val pdfOrgList by lazy { MutableLiveData<List<Pdf>>() }
     val pdfList by lazy { MutableLiveData<List<Pdf>>() }
@@ -48,12 +53,10 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
     val stickyAppBarAlpha by lazy { MutableLiveData(0f) }
     val scrollShadowShow by lazy { MutableLiveData(false) }
 
-    val subjectItems by lazy { ArrayList(PdfListFilter.subjectList) }
-    val categoryItems by lazy { ArrayList(PdfListFilter.categoryList) }
-
     val categorySelectedPosition = MutableLiveData(0)
     val subjectSelectedPosition = MutableLiveData(0)
     val isOpenableBookSelected = MutableLiveData(false)
+    val filterInitial = MutableLiveData<Unit>()
 
     val pdfListLength = MutableLiveData("0")
     val joinedChallengeList = challengeRepository.joinedChallengeList
@@ -139,7 +142,7 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
         compositeDisposable += pdfRepository.eventBookCheck(eventBook)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
+            .subscribe({ _ ->
                 callback()
             }, { error ->
                 callback()
@@ -265,7 +268,7 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
     fun closeTutorialPdfBook(bookId: Int, callback: (Challenge) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val logResponse = postLog(bookId, false)
-            println("asoaso logRes : ${logResponse.isChallengeCourse}")
+
             if (logResponse.isChallengeCourse.not()) return@launch
             val startChallenge = logResponse.challengeStatus.find { it.isStartChallenge } ?: return@launch
             updateChallenge(startChallenge)
@@ -276,36 +279,41 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
     }
-}
+    private val patternStudyRepository = PatternStudyRepository(getApplication<Application>().applicationContext, viewModelScope)
 
-object PdfListFilter {
-
-    val subject = mapOf<String, String>(
-        "" to "과목 전체",
-        "41" to "수학(상)",
-        "42" to "수학(하)",
-        "43" to "수학1",
-        "44" to "수학2",
-        "45" to "확률과 통계",
-        "46" to "미적분",
-        "47" to "기하"
-    )
-
-    val subjectList = subject.values.toList()
-
-    val category = mapOf<String, String>(
-        "" to "학습 유형 전체",
-        "고등예비" to "고등예비",
-        "개념서" to "개념서",
-        "유형서" to "유형서",
-        "심화서" to "심화서",
-        "내신서" to "내신서",
-        "기출서" to "기출서",
-        "기출서" to "기출서",
-        "실전모의고사" to "실전모의고사",
-        "공식집" to "공식집",
-        // TODO:       "연산서" to "연산서", 소정쌤이 빼라고 함
-        )
-
-    val categoryList = category.values.toList()
+    fun fetchBookFilter() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val filter = BookFilterParent.COMMERCIAL_BOOK
+            val sections = patternStudyRepository.fetchOnlyBookFilter(filter)
+            initSubject(sections)
+            initCategory(sections)
+            filterInitial.postValue(Unit)
+        }
+    }
+    private fun initSubject(sections: List<BookFilterSection>) {
+        subject = mutableMapOf<String, String>("" to "과목 전체")
+        sections.find { it.filterTitle == "과목" }
+            .let { section ->
+                section?.filterItems
+                    ?.filter { it.name != "전체" }
+                    ?.forEach { item ->
+                        val filterType = LearningFilterType.valueOfNonNull(item.value)
+                        val subjectId = filterType.toSubjectV3.id.toString()
+                        subject.put(subjectId, filterType.displayedName)
+                    }
+            }
+    }
+    private fun initCategory(sections: List<BookFilterSection>) {
+        category = mutableMapOf<String, String>("" to "학습 유형 전체")
+        sections.find { it.filterTitle == "문제집 유형" }
+            .let { section ->
+                section?.filterItems
+                    ?.filter { it.name != "전체" }
+                    ?.forEach { item ->
+                    category.put(item.name, item.name)
+                }
+            }
+    }
+    var subject = mutableMapOf<String, String>("" to "과목 전체")
+    var category = mutableMapOf<String, String>("" to "학습 유형 전체")
 }

@@ -16,6 +16,7 @@ import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.contents.Content
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.utils.*
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -83,7 +84,7 @@ class User {
     var finishInitTestV2: Boolean = false
 
     @SerializedName("schoolType") @Expose
-    var rawSchoolType: String = ""
+    var rawSchoolType: SchoolType? = null
 
     @Expose @SerializedName("initMoGrade")
     var rating: Int = 0
@@ -164,19 +165,19 @@ class User {
                 .toSet()
         }
 
-    val recentUnit: Set<BigUnitV3>
-        get() {
-            val ids = recentSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
-                .toSet()
-        }
-
-    val recentExcludedUnit: Set<BigUnitV3>
-        get() {
-            val ids = excludeSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
-                .toSet()
-        }
+//    val recentUnit: Set<BigUnitV3>
+//        get() {
+//            val ids = recentSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
+//            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
+//                .toSet()
+//        }
+//
+//    val recentExcludedUnit: Set<BigUnitV3>
+//        get() {
+//            val ids = excludeSubjectCode.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
+//            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
+//                .toSet()
+//        }
 
     var firstDate: Date = Date()
 //    var startDate: Date? = null
@@ -212,8 +213,8 @@ class User {
         }
     var canUpdateGrade: Boolean = false
 
-    var recentSubjectCode:String = ""
-    var excludeSubjectCode:String = ""
+//    var recentSubjectCode:String = ""
+//    var excludeSubjectCode:String = ""
 
     constructor(json: Map<String, String>) {}
     constructor() {}
@@ -231,11 +232,6 @@ class User {
         Log.d("USER MODEL", "studiedUnit: " + rawInitStudied)
         Log.d("USER MODEL", "optionalUnit: " + rawInitOptional)
 
-        Log.d("USER MODEL", "recommendLevel: " + getRecommendLevelText())
-        Log.d("USER MODEL", "recommendChapter: " + getRecommendRangeText())
-
-        Log.d("USER MODEL", "recentSubjectCode: " + recentSubjectCode)
-        Log.d("USER MODEL", "excludeSubjectCode: " + excludeSubjectCode)
     }
 
     fun logout(callback: (error:String?)->Unit) {
@@ -312,7 +308,6 @@ class User {
     fun update(
             email: String? = null,
             fullName: String? = null,
-            schoolType: String? = null,
             initSettingCompleted: Boolean? = null,
             majorType: String? = null,
             schoolLocation: String? = null,
@@ -352,8 +347,6 @@ class User {
         if (regionID != null) this.regionID = regionID else this.regionID = 0
 
         if (regionName != null) this.regionName = regionName
-
-        if (schoolType != null) this.rawSchoolType = schoolType
 
         if (initMoGrade != null) this.rating = initMoGrade
 
@@ -428,22 +421,6 @@ class User {
         }
     }
 
-    fun getRecentSubjectText() : String {
-        var result = ""
-        if(recentSubjectCode.isNotEmpty()) {
-            val subjects = recentSubjectCode.split(", ").map { it.trim().toIntOrNull() }.filterNotNull()
-            val subjectSet = subjects.toSet()
-            val excludes = excludeSubjectCode.split(", ").map { it.trim().toIntOrNull() }.filterNotNull()
-            val excluded = subjectSet.minus(excludes)
-//            val temp = excluded.map { it / 10 }
-            result = excluded.sortedBy { it }.map { SubjectV3.init(it).filterText }.toSet().joinToString(", ")
-        }
-        if(result.isEmpty()) {
-            studiedUnit.map{ it.name }
-        }
-        return result
-    }
-
     fun getCommonSubjectText() : String {
         rawInitStudied = rawInitStudied ?: ""
         val units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
@@ -480,8 +457,8 @@ class User {
                         remoteUser.apply {
                             noShowAddOptionalDate = user!!.noShowAddOptionalDate
                             noShowAddOptionalSubject = user!!.noShowAddOptionalSubject
-                            excludeSubjectCode = user!!.excludeSubjectCode
-                            recentSubjectCode = user!!.recentSubjectCode
+//                            excludeSubjectCode = user!!.excludeSubjectCode
+//                            recentSubjectCode = user!!.recentSubjectCode
                         }
                     }
                     remoteUser.commit("syncMyInfo")
@@ -627,8 +604,8 @@ class User {
     }
 
     fun setExcludeUnit(bigUnit: Collection<BigUnitV3>) {
-        this.excludeSubjectCode = bigUnit.map { it.id }.joinToString()
-        commit("setExcludeUnit")
+//        this.excludeSubjectCode = bigUnit.map { it.id }.joinToString()
+//        commit("setExcludeUnit")
     }
 
     fun setOptionalUnit(bigUnit: Collection<BigUnitV3>) {
@@ -649,9 +626,9 @@ class User {
     }
 
     fun setRecentStudyCode(studyCodes:String, exclude:String) {
-        recentSubjectCode = studyCodes
-        excludeSubjectCode = exclude
-        commit("setRecentStudyCode")
+//        recentSubjectCode = studyCodes
+//        excludeSubjectCode = exclude
+//        commit("setRecentStudyCode")
     }
 
     fun getDailyAnalysis(context: Context, successCB: (summary: DailySummary) -> Unit) {
@@ -687,13 +664,13 @@ class User {
     }
 
     fun getDailyStudy(context:Context, callback: (DailyStudy)->Unit) {
-        API_V2.getDailyStudy(studentID).enqueue(object : Callback<DailyStudy> {
-            override fun onResponse(call: Call<DailyStudy>, response: Response<DailyStudy>) {
-                val data = response.body() ?: return responseError(context, response)
-                callback(data)
+        API_V3.getDailyStudy(studentID).enqueue(object : Callback<ResponseBody<DailyStudy>> {
+            override fun onResponse(call: Call<ResponseBody<DailyStudy>>, response: Response<ResponseBody<DailyStudy>>) {
+                val res = response.body() ?: return responseError(context, response)
+                res.data?.let { callback(it) }
             }
 
-            override fun onFailure(call: Call<DailyStudy>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody<DailyStudy>>, t: Throwable) {
                 responseFailed(context, t)
             }
         })
@@ -712,14 +689,18 @@ class User {
         })
     }
 
-    fun getDailyRecommend(context:Context, callback: (DailyRecommend?)->Unit, failCB: () -> Unit) {
-        API_V2.getDailyRecommend(studentID).enqueue(object : Callback<DailyRecommend?> {
-            override fun onResponse(call: Call<DailyRecommend?>, response: Response<DailyRecommend?>) {
-                val data = response.body() ?: return responseError(context, response)
-                callback(data)
+    fun getDailyRecommend(context:Context, callback: (DailyRecommend)->Unit, failCB: () -> Unit) {
+        API_V3.getDailyRecommend(studentID).enqueue(object : Callback<ResponseBody<DailyRecommend>> {
+            override fun onResponse(call: Call<ResponseBody<DailyRecommend>>, response: Response<ResponseBody<DailyRecommend>>) {
+                val res = response.body() ?: return responseError(context, response)
+                if (res.data != null) {
+                    callback(res.data)
+                } else {
+                    failCB()
+                }
             }
 
-            override fun onFailure(call: Call<DailyRecommend?>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody<DailyRecommend>>, t: Throwable) {
                 failCB()
             }
         })

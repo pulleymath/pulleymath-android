@@ -140,7 +140,7 @@
             style="@style/TextGrey_9f9f9f.ExtraBold"
             android:layout_width="88dp"
             android:layout_height="32dp"
-            android:background="@drawable/bg_grey_f2f2f2_stroke_grey_e8e8e8_round_16"
+            android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round_16"
             android:text="상세보기"
             android:textSize="@dimen/sp16"
             app:layout_constraintStart_toStartOf="parent"

@@ -27,9 +27,11 @@ import com.freewheelin.pulley.utils.partialFontAndColored
 class InitSettingCompleteActivity : AppCompatActivity() {
     companion object {
         val IS_GUEST_USER = "IS_GUEST_USER"
-        fun getIntent(context: Context, isGuestUser: Boolean = false): Intent {
+        val IS_HIGH_SCHOOL_USER = "IS_HIGH_SCHOOL_USER"
+        fun getIntent(context: Context, isHighSchoolUser: Boolean, isGuestUser: Boolean = false): Intent {
             return Intent(context, InitSettingCompleteActivity::class.java).apply {
                 putExtra(IS_GUEST_USER, isGuestUser)
+                putExtra(IS_HIGH_SCHOOL_USER, isHighSchoolUser)
             }
         }
     }
@@ -39,10 +41,13 @@ class InitSettingCompleteActivity : AppCompatActivity() {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_init_setting_complete, null, false)
     }
     var isGuestUser = false
+    var isHighSchoolUser = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        isGuestUser = intent.getBooleanExtra(SignupActivity.IS_GUEST_USER, false)
+        isGuestUser = intent.getBooleanExtra(IS_GUEST_USER, false)
+        isHighSchoolUser = intent.getBooleanExtra(IS_HIGH_SCHOOL_USER, true)
+        viewModel.updateSchoolType(isHighSchoolUser)
 
         viewModel.getAppSignupMessage()
 
@@ -60,7 +65,9 @@ class InitSettingCompleteActivity : AppCompatActivity() {
     }
 
     private fun moveToMain() {
-        startActivity(Intent(this, LearningTabActivity::class.java))
+        val intent = LearningTabActivity.getIntent(this)
+        startActivity(intent)
+
         if (isGuestUser) {
             val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
             LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)

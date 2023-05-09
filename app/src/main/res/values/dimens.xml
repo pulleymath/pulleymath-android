@@ -83,6 +83,7 @@
     <dimen name="dp8">5dp</dimen>
     <dimen name="dp6">4dp</dimen>
     <dimen name="dp5">4dp</dimen>
+    <dimen name="dp4">3dp</dimen>
     <dimen name="dp1">1dp</dimen>
     <dimen name="dp0">0dp</dimen>
 
@@ -132,7 +133,7 @@
     <dimen name="learning_myExam_list_end_margin">196dp</dimen>
     <dimen name="learning_myExam_problemCnt_start_margin">4dp</dimen>
 
-    <dimen name="learning_wrongNote_filter_width">233dp</dimen>
+    <dimen name="learning_wrongNote_filter_width">283dp</dimen>
     <dimen name="learning_book_filter_width">324dp</dimen>
 
     <dimen name="MyPage_width">484dp</dimen>

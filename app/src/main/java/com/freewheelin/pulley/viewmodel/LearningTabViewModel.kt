@@ -1,22 +1,17 @@
 package com.freewheelin.pulley.viewmodel
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API_APP
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeStatus
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
-import com.freewheelin.pulley.revision2023.model.challenge.StartChallenge
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -32,6 +27,7 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
     private val userRepository by lazy { UserRepository.instance }
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
+    val schoolType = userRepository.schoolType
     val showWholeLoading = MutableLiveData<Boolean>(false)
 
     fun setPageProgress(show: Boolean) {
@@ -40,6 +36,7 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
     fun fetchUser(cb: (User) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
+            initSchoolType(user.rawSchoolType ?: SchoolType.HIGH)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
         }
@@ -88,5 +85,11 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
                 }
             })
         }
+    }
+    fun initSchoolType(level: SchoolType) {
+        userRepository.initSchoolType(level)
+    }
+    fun updateSchoolType(level: SchoolType) {
+        userRepository.updateSchoolType(level)
     }
 }

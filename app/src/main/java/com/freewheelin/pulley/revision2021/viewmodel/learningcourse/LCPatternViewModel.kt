@@ -44,6 +44,7 @@ class LCPatternViewModel(application: Application): BaseAndroidViewModel(applica
 
     val selectedQuizIndex by lazy { MutableLiveData<Int>(0) }
     val isHintBtnDisabled by lazy { MutableLiveData<Boolean>(false) }
+    val hintExist by lazy { MutableLiveData<Boolean>(true) }
     val remainingHintSizeLive by lazy { MutableLiveData(0) }
 
     fun setPatternName(course: SingleCourseDesc) {

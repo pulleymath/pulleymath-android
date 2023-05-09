@@ -2,7 +2,7 @@
 
     <item
         android:state_selected="true"
-        android:drawable="@drawable/bg_grey_f2f2f2_round_18" />
+        android:drawable="@drawable/bg_gray_200_round_18" />
 
     <item android:drawable="@drawable/bg_grey_3d3d3d_round_18" />
 

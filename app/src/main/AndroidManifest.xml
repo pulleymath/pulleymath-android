@@ -88,13 +88,7 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.learning.tabFragment.usertest.analysis.UserHistoryActivity"
             android:exported="true" />
         <activity
             android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity"

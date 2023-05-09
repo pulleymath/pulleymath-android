@@ -77,7 +77,7 @@
 
     <style name="AppTheme.TabToolbar" parent="android:Theme.Holo">
         <item name="android:layout_height">@dimen/dp56</item>
-        <item name="android:background">@color/black_333333</item>
+        <item name="android:background">@color/black_200</item>
         <item name="android:elevation">8dp</item>
     </style>
 
@@ -109,13 +109,13 @@
     </style>
 
     <style name="Keypad_btn" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/bg_grey_f2f2f2_round</item>
+        <item name="android:background">@drawable/bg_gray_200_round</item>
         <item name="android:textColor">@color/grey_818181</item>
         <item name="android:textSize">@dimen/sp24</item>
     </style>
 
     <style name="Cooking_Keypad_btn" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/bg_grey_f2f2f2_round</item>
+        <item name="android:background">@drawable/bg_gray_200_round</item>
         <item name="android:textColor">@color/gray_700</item>
         <item name="android:textSize">@dimen/sp24</item>
         <item name="android:fontFamily">@font/font_pretendard_regular</item>

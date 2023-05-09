@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
@@ -28,9 +29,9 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     val tutorialImages = listOf(
-        R.drawable.android_concept_learning_tutorial_1,
-        R.drawable.android_concept_learning_tutorial_2,
-        R.drawable.android_concept_learning_tutorial_3,
+        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_1 else R.drawable.android_concept_learning_middle_tutorial_1,
+        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_2 else R.drawable.android_concept_learning_middle_tutorial_2,
+        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_3 else R.drawable.android_concept_learning_middle_tutorial_3,
         R.drawable.android_concept_learning_tutorial_4,
         R.drawable.android_concept_learning_tutorial_5,
         R.drawable.android_concept_learning_tutorial_6,

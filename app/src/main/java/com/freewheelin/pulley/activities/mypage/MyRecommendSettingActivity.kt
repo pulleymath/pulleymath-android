@@ -7,22 +7,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyInfoSettingFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudySelectedUnitSettingFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.*
 import com.freewheelin.pulley.assets.BigUnitV3
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityMyRecommendSettingBinding
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2021.model.response.Alarm
+import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
 import com.freewheelin.pulley.utils.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,20 +37,26 @@ import retrofit2.Response
 import java.util.*
 
 class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
+
+    val viewModel: SnackTestFragViewModel by viewModels()
+    val myPageViewModel: MyMainPageFragViewModel by viewModels()
     private val binding: ActivityMyRecommendSettingBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_my_recommend_setting, null, false)
     }
     companion object {
-        fun getIntent(context: Context): Intent {
-            val intent = Intent(context, MyRecommendSettingActivity::class.java)
+        val TEST_EXTRA = "TEST_EXTRA"
+        fun getIntent(context: Context, test: Test): Intent {
+            val intent = Intent(context, MyRecommendSettingActivity::class.java).apply {
+                putExtra(TEST_EXTRA, test)
+            }
             return intent
         }
     }
 
-    var commonUnits = setOf<BigUnitV3>()
-    var optionalUnits = setOf<BigUnitV3>()
-    var recentUnits = setOf<BigUnitV3>()
-    var excludedUnits = setOf<BigUnitV3>()
+//    var commonUnits = setOf<BigUnitV3>()
+//    var optionalUnits = setOf<BigUnitV3>()
+//    var recentUnits = setOf<BigUnitV3>()
+//    var excludedUnits = setOf<BigUnitV3>()
 
     val difficultyButtonIDs: List<Int>
         get() = listOf(R.id.lowButton, R.id.middleButton, R.id.highButton)
@@ -55,16 +67,62 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
     lateinit var commonUnitFragment:Fragment
     lateinit var optionalUnitFragment:Fragment
     lateinit var selectedUnitFragment:Fragment
+    lateinit var middleCommonUnitFragment:Fragment
 
+    var test: Test? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        test = intent.getSerializableExtra(TEST_EXTRA) as? Test
         setUpUI()
+        viewModel.apply {
+            val thisOwner = this@MyRecommendSettingActivity
+            schoolType.observe(thisOwner) {
+                println("qwoqwo MyRecommend Setting Activity schoolType : ${it}")
+
+            }
+            recommendCommonSubjects.observe(thisOwner) { subjects ->
+                binding.apply {
+                    val subjectNames = getSubjectNames(subjects)
+
+                    sameCommonText.text = subjectNames
+                    sameOptionalText.text = subjectNames
+                    myChoiceCommonText.text = subjectNames
+                    middleSubjectText.text = subjectNames
+                    myChoiceMiddleSubjectText.text = subjectNames
+                }
+            }
+            recommendOptionalSubjects.observe(thisOwner) { subjects ->
+
+                binding.apply {
+                    val subjectNames = getSubjectNames(subjects)
+                    aheadOptionalText.text = subjectNames
+                    myChoiceOptionalText.text = subjectNames
+                }
+            }
+        }
+    }
+    private fun getSubjectNames(list: List<RecommendSubject>): String {
+        return list
+            .filter {
+                it.chapters
+                    .map { it.isSelected }
+                    .reduce { p1, p2 ->
+                        p1 || p2
+                    }
+            }
+            .map { it.subjectName }
+            .joinTo(StringBuilder(), ", ").toString()
+
     }
 
     fun setUpUI() {
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
+        viewModel.fetchRecommendSubject()
+
         setScreen()
-        setUnitTempories()
+//        setUnitTempories()
         setFragment()
         setButtonUI()
         setRadioUI()
@@ -77,18 +135,19 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
         lp.height = DisplayUtils.getScreenHeight(this) - topBottomMargin.toInt()
         binding.rootView.layoutParams = lp
     }
-
-    fun setUnitTempories() {
-        commonUnits   = user!!.studiedUnit
-        optionalUnits = user!!.optionalUnit
-        recentUnits   = user!!.recentUnit
-        excludedUnits = user!!.recentExcludedUnit
-    }
+//
+//    fun setUnitTempories() {
+//        commonUnits   = user!!.studiedUnit
+//        optionalUnits = user!!.optionalUnit
+//        recentUnits   = user!!.recentUnit
+//        excludedUnits = user!!.recentExcludedUnit
+//    }
 
     fun setFragment() {
         commonUnitFragment = StudyCommonUnitSettingFragment()
         optionalUnitFragment = StudyOptionalUnitSettingFragment()
         selectedUnitFragment = StudySelectedUnitSettingFragment()
+        middleCommonUnitFragment = StudyMiddleCommonUnitSettingFragment()
     }
 
     fun setButtonUI() {
@@ -96,11 +155,14 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
             sameCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
             sameOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
             sameMyButton.setOnClickListener { moveTo(selectedUnitFragment) }
+            middleSubjectButton.setOnClickListener { moveTo(middleCommonUnitFragment) }
+            sameMiddleMyButton.setOnClickListener { moveTo(middleCommonUnitFragment) }
 
             aheadOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
 
             myChoiceCommonButton.setOnClickListener { moveTo(commonUnitFragment) }
             myChoiceOptionalButton.setOnClickListener { moveTo(optionalUnitFragment) }
+            myChoiceMiddleSubjectButton.setOnClickListener { moveTo(middleCommonUnitFragment) }
 
             cancelBtn.setOnClickListener {
                 cancelConfigure()
@@ -113,20 +175,29 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
 
     fun setRadioUI() {
         with(binding) {
-            val user = user ?: return
+            test?.let {
+                val level = it.dailyInfo.testLevel
+                val testLevel = Test.TestLevel.ordinalOfNonNull(level)
+                val levelRadioBtn = when (testLevel) {
+                    Test.TestLevel.HIGH -> R.id.highButton
+                    Test.TestLevel.LIKE_ME -> R.id.middleButton
+                    Test.TestLevel.EASY -> R.id.lowButton
+                }
+                levelRg.check(levelRadioBtn)
 
-            val recommendLevel = user.recommendLevel
-            val recommendChapter = user.recommendChapter
-
-            if(recommendLevel != null && recommendLevel > -1) {
-                levelRg.check(difficultyButtonIDs[recommendLevel])
-            } else {
-                levelRg.check(R.id.lowButton)
-            }
-            if(recommendChapter != null && recommendChapter > -1) {
-                rangeRg.check(coverRangeButtonIDs[recommendChapter])
-            } else {
-                rangeRg.check(R.id.sameButton)
+                val range = it.dailyInfo.testRange
+                val testRange = Test.TestRange.ordinalOfNonNull(range)
+                val radioBtn = when (testRange) {
+                    Test.TestRange.RECENT_RANGE -> R.id.sameButton
+                    Test.TestRange.ALL_RANGE ->
+                        if (schoolType.isMiddle) {
+                            R.id.tailButton
+                        } else {
+                            R.id.aheadButton
+                        }
+                    Test.TestRange.SUBJECT_BY_GRADE -> R.id.tailButton
+                }
+                rangeRg.check(radioBtn)
             }
 
             levelRg.setOnCheckedChangeListener { group, checkedId ->
@@ -142,15 +213,6 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
 
     fun setSubjectText() {
         with(binding) {
-            sameCommonText.text = calcNoneText(user?.getCommonSubjectText())
-            sameOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
-            sameMyText.text = calcNoneText(user?.getRecentSubjectText())
-
-//        aheadCommonText.text = calcNoneText(user?.getCommonSubjectText())
-            aheadOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
-
-            myChoiceCommonText.text = calcNoneText(user?.getCommonSubjectText())
-            myChoiceOptionalText.text = calcNoneText(user?.getOptionalSubjectText())
 
             if(user?.optionalUnit?.isNotEmpty() == true) {
                 myChoiceLabel.text = "수정하기에서 대단원 선택이 가능합니다."
@@ -171,7 +233,8 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
                 R.id.aheadButton -> {showRangeContainer(aheadContainer)}
                 R.id.tailButton -> {showRangeContainer(myChoiceContainer)}
                 else -> {
-                    if(user?.recentSubjectCode?.isNotEmpty() == true) {
+                    val isSubjectCodeNotEmpty = test?.dailyInfo?.subjectCode?.isNotEmpty() == true
+                    if(isSubjectCodeNotEmpty) {
                         showRangeContainer(sameContainerOver50)
                     } else {
                         showRangeContainer(sameContainerBelow50)
@@ -200,29 +263,16 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
                 "recommendLevel" to recommendLevel,
                 "recommendChapter" to recommendChapter
         )
+        myPageViewModel.updateRecommends(param) {
+            user!!.update(
+                recommendLevel = recommendLevel,
+                recommendChapter = recommendChapter
+            )
+            val intent = Intent(TestManager.EVENT_TEST_SETTING)
+            LocalBroadcastManager.getInstance(baseContext).sendBroadcast(intent)
 
-        API_V2.setUserDailySetup(user!!.studentID, param).enqueue(object: Callback<Void> {
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                responseFailed(baseContext, t)
-            }
-
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if(response.isSuccessful) {
-                    user!!.update(
-                            recommendLevel = recommendLevel,
-                            recommendChapter = recommendChapter
-                    )
-//                    dismiss()
-//                    showCompleteDialog()
-//                    listener?.onModifyCompleted(user)
-
-                    val intent = Intent(TestManager.EVENT_TEST_SETTING)
-                    LocalBroadcastManager.getInstance(baseContext).sendBroadcast(intent)
-
-                    finish()
-                }
-            }
-        })
+            finish()
+        }
     }
 
     fun cancelConfigure() {
@@ -268,6 +318,7 @@ class MyRecommendSettingActivity: AppCompatActivity(), MyPageActionListener {
             tran.setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
         tran.remove(frag)
         tran.commit()
+        viewModel.fetchRecommendSubject()
     }
 
 //    private fun getDurationText(user: User): String {

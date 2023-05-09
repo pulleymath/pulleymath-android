@@ -62,7 +62,7 @@
     <Button
         style="@style/TextBlack_4c4c4c.Bold"
         android:id="@+id/confirmBtn"
-        android:background="@drawable/bg_grey_f2f2f2_round_18"
+        android:background="@drawable/bg_gray_200_round_18"
         android:layout_width="@dimen/dp120"
         android:layout_height="@dimen/dp36"
         android:textSize="@dimen/sp16"

@@ -207,10 +207,11 @@ class LCPatternFragment : Fragment() {
             childFragmentManager.putFragment(outState, "LC4", tabFragments[3])
     }
 
-    fun setHintBtn(flag: Boolean?, size: Int?) {
+    fun setHintBtn(flag: Boolean?, size: Int?, hintExist: Boolean) {
         if (flag != null && size != null) {
             viewModel.isHintBtnDisabled.postValue(flag)
             viewModel.setHintBtnText(size)
+            viewModel.hintExist.postValue(hintExist)
         }
     }
     fun setHintBtnDisabled(flag: Boolean) {

@@ -71,6 +71,7 @@
             app:layout_constraintStart_toEndOf="@+id/totalCorrectRateTv" />
 
         <View
+            android:id="@+id/sameCorrectRateBorder"
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
             android:background="@color/grey_e8e8e8"

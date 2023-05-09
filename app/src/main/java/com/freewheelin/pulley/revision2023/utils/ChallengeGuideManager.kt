@@ -44,7 +44,7 @@ class ChallengeGuideManager {
 
         fun getStartGuideMission3(nextEvent: () -> Unit = {}, exitEvent: () -> Unit = {}): DialogFragment {
             return ChallengeGuideDialog(
-                guideText = "원하는 EBS 문제집 하나를 열어봐 :)",
+                guideText = "원하는 무료 문제집 하나를 열어봐 :)",
                 pullingIvSrc = ChallengeGuideDialog.PullingImage.RightHandUp,
 //                highlightText = "※ 처음 선택한 문제집으로 미션 진행 시 인정됨",
 //                nextEvent = nextEvent,

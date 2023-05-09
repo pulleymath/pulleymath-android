@@ -22,7 +22,6 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 
@@ -82,7 +81,7 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
             val current = currentPassword.text
             val new = newPassword.text
 
-            changeBtn.startLoding()
+            changeBtn.startLoading()
             val request = RequestChangePassword(current, new)
             API_V2.requestChangePassword(request)
                 .subscribeOn(Schedulers.io())

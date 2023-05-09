@@ -349,32 +349,42 @@ class SolveActivity : BaseActivity(),
                     timerView.visibility = View.INVISIBLE
                     mainFormatTool.visibility = View.VISIBLE
 
-                    when (content.getTestType()) {
-                        Test.TestType.daily -> {
-                            TestManager.getDailyTest(this@SolveActivity, user!!, content) {
-                                it.scoringTestPieceCount = content.scoringTestPieceCount
-                                this@SolveActivity.content = it
-                                viewModel.selectedContent.postValue(it)
-                                galleryView.set(it)
-                                galleryView.hideFilter()
-                                speedAnswerView.set(it)
-                                answerView.showSubmitBtn()
-                                speedAnswerView.showSubmitBtn()
-                            }
-                        }
-                        else -> {
-                            TestManager.getTest(this@SolveActivity, user!!, content) {
-                                it.scoringTestPieceCount = content.scoringTestPieceCount
-                                this@SolveActivity.content = it
-                                viewModel.selectedContent.postValue(it)
-                                galleryView.set(it)
-                                galleryView.hideFilter()
-                                speedAnswerView.set(it)
-                                answerView.showSubmitBtn()
-                                speedAnswerView.showSubmitBtn()
-                            }
-                        }
+                    viewModel.getTest(content.getTestType()) {
+                        it.scoringTestPieceCount = content.scoringTestPieceCount
+                        this@SolveActivity.content = it
+                        viewModel.selectedContent.postValue(it)
+                        galleryView.set(it)
+                        galleryView.hideFilter()
+                        speedAnswerView.set(it)
+                        answerView.showSubmitBtn()
+                        speedAnswerView.showSubmitBtn()
                     }
+//                    when (content.getTestType()) {
+//                        Test.TestType.daily -> {
+//                            TestManager.getDailyTest(this@SolveActivity, user!!, content) {
+//                                it.scoringTestPieceCount = content.scoringTestPieceCount
+//                                this@SolveActivity.content = it
+//                                viewModel.selectedContent.postValue(it)
+//                                galleryView.set(it)
+//                                galleryView.hideFilter()
+//                                speedAnswerView.set(it)
+//                                answerView.showSubmitBtn()
+//                                speedAnswerView.showSubmitBtn()
+//                            }
+//                        }
+//                        else -> {
+//                            TestManager.getTest(this@SolveActivity, user!!, content) {
+//                                it.scoringTestPieceCount = content.scoringTestPieceCount
+//                                this@SolveActivity.content = it
+//                                viewModel.selectedContent.postValue(it)
+//                                galleryView.set(it)
+//                                galleryView.hideFilter()
+//                                speedAnswerView.set(it)
+//                                answerView.showSubmitBtn()
+//                                speedAnswerView.showSubmitBtn()
+//                            }
+//                        }
+//                    }
                 }
                 is MockExam -> {
                     itemValue = "모의고사"
@@ -411,7 +421,7 @@ class SolveActivity : BaseActivity(),
                                 onSubmitClicked = {
                                     val time = solveTimerView.elapsedTime
                                     ContentManager.score(this@SolveActivity, user!!, content, content.problems.toSet(), time) {
-                                        val intent = MockReportActivity.getIntent(this@SolveActivity, content, it)
+                                        val intent = MockReportActivity.getIntent(this@SolveActivity, content)
                                         startActivity(intent)
                                         setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
                                         finish()
@@ -802,9 +812,9 @@ class SolveActivity : BaseActivity(),
                 binding.speedAnswerView.updateAll()
                 onProblemSelected(selectedProblem)
 
-                if(it?.isNeedToShowCompletedToast() == true) {
-                    SuccessToast.showCompleteDialogIfNeed(this, it)
-                }
+//                if(it?.isNeedToShowCompletedToast() == true) {
+//                    SuccessToast.showCompleteDialogIfNeed(this, it)
+//                }
 //                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
 //                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
 //                }
@@ -860,13 +870,15 @@ class SolveActivity : BaseActivity(),
 //                            if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
 //                                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
 //                            } else {
-                            if (test.getTestType() == Test.TestType.daily || test.getTestType() == Test.TestType.weekly)
+                            if (test.getTestType() == Test.TestType.daily || test.getTestType() == Test.TestType.weekly) {
                                 SubmitCompleteLottieDialog(this, test).show {
                                     SuccessToast.showCompleteDialogIfNeed(this, it)
                                 }
-                            else {
-                                SuccessToast.showCompleteDialogIfNeed(this, it)
                             }
+
+//                            else {
+//                                SuccessToast.showCompleteDialogIfNeed(this, it)
+//                            }
 //                            }
                         }
                     }

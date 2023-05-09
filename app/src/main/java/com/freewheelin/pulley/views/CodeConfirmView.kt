@@ -135,7 +135,7 @@ class CodeConfirmView : LinearLayout {
             Toast.makeText(context, "CodeConfirmInterface 인터페이스가 연결되지 않았습니다", Toast.LENGTH_LONG).show()
             return
         }
-        binding.btnRequestCode.startLoding()
+        binding.btnRequestCode.startLoading()
         // 구현체로 코드요청 후 콜백처리
         requestText = binding.editValue.text.toString().trim()
         binding.editValue.setText(requestText)
@@ -181,7 +181,7 @@ class CodeConfirmView : LinearLayout {
         confirmCode = binding.editCodeConfirm.text.toString()
         binding.editCodeConfirm.setText(confirmCode)
 
-        binding.btnCodeConfirm.startLoding()
+        binding.btnCodeConfirm.startLoading()
         codeInterface?.requestConfirm(requestText, confirmCode) { status, msg ->
             binding.btnCodeConfirm.completeLoading()
 

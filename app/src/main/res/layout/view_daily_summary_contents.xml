@@ -14,7 +14,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/bg_grey_f2f2f2_round_20"
+            android:background="@drawable/bg_gray_200_round_20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/summaryTitleLabel">

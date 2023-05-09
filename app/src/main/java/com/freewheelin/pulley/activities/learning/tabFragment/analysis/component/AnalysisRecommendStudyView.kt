@@ -86,17 +86,8 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         myCorrectRateBar.lowLabel = "나의\n정답률"
         averageCorrectRateBar.value = sameGradePercent
 
-        averageBarLabel.text = if (result.studentRating == 0) {
-            "중등\n평균"
-        } else {
-            "${result.studentRating}등급\n평균"
-        }
-
-        var userRatingText = "${user!!.rating}등급\n평균"
-        if(user!!.rating < 1) {
-            userRatingText = "4등급\n평균"
-        }
-        averageCorrectRateBar.lowLabel = userRatingText
+        averageBarLabel.text = "${result.studentRating}등급\n평균"
+        averageCorrectRateBar.lowLabel = "${result.studentRating}등급\n평균"
 
         if(myPercent < sameGradePercent) {
             myCorrectRateBar.color = ContextCompat.getColor(context!!, R.color.red_fe7b67)

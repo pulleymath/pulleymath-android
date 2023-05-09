@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.Grade
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityInitSettingBinding
@@ -117,7 +116,10 @@ class InitSettingActivity : AppCompatActivity() {
         val optionalSubject = selectionFragment.getSelectedUnit()
 
         UserManager.setUserInitSetting(this, user!!, grade, major, rating, commonSubject, optionalSubject) {
-            val intent = InitSettingCompleteActivity.getIntent(this)
+            val intent = InitSettingCompleteActivity.getIntent(
+                this,
+                isHighSchoolUser = true
+            )
             startActivity(intent)
             finish()
         }

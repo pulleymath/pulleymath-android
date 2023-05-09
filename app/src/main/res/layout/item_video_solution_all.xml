@@ -43,7 +43,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_grey_f2f2f2_round"
+                android:background="@drawable/bg_gray_200_round"
                 android:onClick="@{()->listener.onItemClick(item)}"
                 android:padding="12dp"
                 android:clickable="true"

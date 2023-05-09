@@ -17,7 +17,7 @@ import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.Type
 import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType.*
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.FilterButtonHolder
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder
+//import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.HeaderHolder
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ItemFilterSwitchBinding
 import com.freewheelin.pulley.utils.LogUtils
@@ -270,12 +270,12 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
         }
 
         override fun onBindViewHolder(holder: ViewHolder, indexPath: IndexPath) {
-            (holder as? HeaderHolder)?.apply {
-                if(indexPath.section == 0) {
-                    titleTv.height = 0
-                } else
-                    titleTv.text = filters[indexPath.section].first
-            }
+//            (holder as? HeaderHolder)?.apply {
+//                if(indexPath.section == 0) {
+//                    titleTv.height = 0
+//                } else
+//                    titleTv.text = filters[indexPath.section].first
+//            }
             (holder as? FilterButtonHolder)?.apply {
                 val filter = filters[indexPath.section].second[indexPath.row]
                 filterBtn.text = filter.text
@@ -339,9 +339,10 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            if (viewType == 0) {
-                return HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
-            } else if(viewType == 2) {
+//            if (viewType == 0) {
+//                return HeaderHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_note_filter_header, parent, false))
+//            } else
+            if(viewType == 2) {
                 return FilterButtonHolder(Button(parent.context))
             } else {
                 return FilterSwitchHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_filter_switch, parent, false))
@@ -351,7 +352,6 @@ class BookFilterView(context: Context, val attrs: AttributeSet?) : RecyclerView(
 
         private fun changeSelectedSetAfterRemoved(filter: FilterType, section: Int) {
             val siblingFilters = filters[section].second.filter { it != filter }
-
             for (siblingFilter in siblingFilters) {
                 if (selectedFilterTypes.contains(siblingFilter))
                     return

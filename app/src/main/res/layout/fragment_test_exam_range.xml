@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.fragment.SnackTestSelectExamRangeFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="640dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_white_fafafa_round">
+
+        <LinearLayout
+            android:id="@+id/myPageContainer"
+            android:layout_width="640dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/saveBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/guideLabel"
+                        style="@style/TextBlack_4c4c4c.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp48"
+                        android:lineSpacingExtra="@dimen/sp12"
+                        android:text="테스트에서\n추천받고 싶은 타입을 선택해주세요 :)"
+                        android:textSize="@dimen/sp24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/containerLl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp32"
+                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp32"
+                        android:layout_marginBottom="@dimen/dp32"
+                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp32"
+                        android:paddingTop="@dimen/dp32"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/guideLabel">
+
+                        <TextView
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="난이도"
+                            android:textSize="@dimen/sp18"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            style="@style/TextBlack_4c4c4c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="출제 범위"
+                            android:textSize="@dimen/sp18"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/rangeRg" />
+
+
+                        <RadioGroup
+                            android:id="@+id/levelRg"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/rangeRg"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <RadioButton
+                                android:id="@+id/lowButton"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:text="더 쉽게"
+                                android:textSize="@dimen/sp16" />
+
+                            <RadioButton
+                                android:id="@+id/middleButton"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="@dimen/dp32"
+                                android:text="수준에 맞게"
+                                android:textSize="@dimen/sp16" />
+
+                            <RadioButton
+                                android:id="@+id/highButton"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="@dimen/dp32"
+                                android:text="더 어렵게"
+                                android:textSize="@dimen/sp16" />
+                        </RadioGroup>
+
+
+                        <RadioGroup
+                            android:id="@+id/rangeRg"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp32"
+                            android:layout_marginTop="@dimen/dp32"
+                            android:layout_marginEnd="@dimen/dp32"
+                            android:layout_marginBottom="@dimen/dp32"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView2"
+                            app:layout_constraintTop_toBottomOf="@+id/levelRg">
+
+                            <RadioButton
+                                android:id="@+id/sameButton"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:text="최근 공부한 범위"
+                                android:textSize="@dimen/sp16" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/sameContainerBelow50"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="26dp"
+                                android:background="@color/grey_f2f2f2"
+                                android:orientation="vertical"
+                                android:padding="24dp"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:id="@+id/sameBelow50Label"
+                                    style="@style/TextGrey_9f9f9f.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="문제를 더 풀어야 추천이 가능해요.\n우선 처음 선택한 단원대로 추천할게요!"
+                                    android:textSize="@dimen/sp12"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/sameCommonLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/dp16"
+                                    android:text="공통과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintStart_toStartOf="@+id/sameBelow50Label"
+                                    app:layout_constraintTop_toBottomOf="@+id/sameBelow50Label" />
+
+                                <TextView
+                                    android:id="@+id/sameCommonText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="수학(상), 수학(하), 수학1, 수학2"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toStartOf="@+id/commonSubjectModifyBtn"
+                                    app:layout_constraintStart_toEndOf="@+id/sameCommonLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/sameCommonLabel" />
+
+                                <TextView
+                                    android:id="@+id/commonSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/sameCommonText" />
+
+                                <TextView
+                                    android:id="@+id/sameOptionalLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/dp16"
+                                    android:text="선택과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintStart_toStartOf="@+id/sameCommonLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/sameCommonText" />
+
+                                <TextView
+                                    android:id="@+id/sameOptionalText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="확률과 통계"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintBottom_toBottomOf="@+id/sameOptionalLabel"
+                                    app:layout_constraintEnd_toStartOf="@+id/optionalSubjectModifyBtn"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toEndOf="@+id/sameOptionalLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/sameOptionalLabel" />
+
+                                <TextView
+                                    android:id="@+id/optionalSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintBottom_toBottomOf="@+id/sameOptionalText"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/sameOptionalText" />
+
+                                <TextView
+                                    android:id="@+id/middleSubjectText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="확률과 통계"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    android:layout_marginTop="@dimen/dp16"
+                                    app:layout_constraintEnd_toStartOf="@+id/middleSubjectModifyBtn"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/sameOptionalLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/sameOptionalText"  />
+
+                                <TextView
+                                    android:id="@+id/middleSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    app:layout_constraintBottom_toBottomOf="@+id/middleSubjectText"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/middleSubjectText" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/sameContainerOver50"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="26dp"
+                                android:background="@color/grey_f2f2f2"
+                                android:orientation="vertical"
+                                android:padding="24dp"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:id="@+id/sameOver50Label"
+                                    style="@style/TextGrey_9f9f9f.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="아래의 과목/단원에서 5문제를 선별해 출제합니다."
+                                    android:textSize="@dimen/sp12"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/sameMyLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintStart_toStartOf="@+id/sameOver50Label"
+                                    app:layout_constraintTop_toBottomOf="@+id/sameOver50Label" />
+
+                                <TextView
+                                    android:id="@+id/sameMyText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="수학(상), 수학(하), 수학1, 수학2"
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintEnd_toStartOf="@+id/over50HighSubjectModifyBtn"
+                                    app:layout_constraintStart_toEndOf="@+id/sameMyLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/sameMyLabel" />
+
+                                <TextView
+                                    android:id="@+id/over50HighSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/sameMyText" />
+
+                                <TextView
+                                    android:id="@+id/over50MiddleSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/sameMyText" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <RadioButton
+                                android:id="@+id/aheadButton"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginTop="@dimen/dp16"
+                                visibleIf="@{ vm.schoolType.isHigh }"
+                                android:text="수능 전범위"
+                                android:textSize="@dimen/sp16" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/satAllRangeContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="26dp"
+                                android:background="@color/grey_f2f2f2"
+                                android:orientation="vertical"
+                                android:padding="24dp"
+                                >
+                                <!--                                android:visibility="gone"-->
+
+                                <TextView
+                                    android:id="@+id/satCommonLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="공통과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/satCommonText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="수학1, 수학2"
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/satCommonLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/satCommonLabel" />
+
+                                <TextView
+                                    android:id="@+id/satOptionalLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:text="선택과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/satCommonLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/satCommonLabel" />
+
+                                <TextView
+                                    android:id="@+id/satOptionalText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="수학(상), 수학(하), 수학1, 수학2"
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintEnd_toStartOf="@+id/satOptionalSubjectModifyBtn"
+                                    app:layout_constraintStart_toEndOf="@+id/satOptionalLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/satOptionalLabel" />
+
+                                <TextView
+                                    android:id="@+id/satOptionalSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/satOptionalText" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <RadioButton
+                                android:id="@+id/myChoiceBtn"
+                                style="@style/TextBlack_4c4c4c"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginTop="@dimen/dp16"
+                                android:text="내가 선택한 과목"
+                                android:textSize="@dimen/sp16" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/myChoiceContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="26dp"
+                                android:background="@color/grey_f2f2f2"
+                                android:orientation="vertical"
+                                android:padding="24dp"
+                                >
+
+                                <TextView
+                                    android:id="@+id/myChoiceLabel"
+                                    style="@style/TextGrey_9f9f9f.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="수정하기에서 대단원 선택이 가능합니다."
+                                    android:textSize="@dimen/sp12"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceCommonLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:text="공통과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintStart_toStartOf="@+id/myChoiceLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/myChoiceLabel" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceCommonText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="수학(상), 수학(하), 수학1, 수학2"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toStartOf="@+id/myChoiceCommonSubjectModifyBtn"
+                                    app:layout_constraintStart_toEndOf="@+id/myChoiceCommonLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceCommonLabel" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceCommonSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceCommonText" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceOptionalLabel"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:text="선택과목 : "
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintStart_toStartOf="@+id/myChoiceCommonLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/myChoiceCommonText" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceOptionalText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="확률과 통계"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    app:layout_constraintBottom_toBottomOf="@+id/myChoiceOptionalLabel"
+                                    app:layout_constraintEnd_toStartOf="@+id/myChoiceOptionalSubjectModifyBtn"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toEndOf="@+id/myChoiceOptionalLabel"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceOptionalLabel" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceOptionalSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    visibleIf="@{ vm.schoolType.isHigh }"
+                                    android:textSize="@dimen/sp14"
+                                    app:layout_constraintBottom_toBottomOf="@+id/myChoiceOptionalText"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceOptionalText" />
+
+                                <TextView
+                                    android:id="@+id/myChoiceMiddleSubjectText"
+                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="중 1-1"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    android:layout_marginTop="16dp"
+                                    app:layout_constraintEnd_toStartOf="@+id/myChoiceMiddleSubjectModifyBtn"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/myChoiceOptionalLabel"
+                                    app:layout_constraintTop_toBottomOf="@+id/myChoiceOptionalLabel"   />
+
+                                <TextView
+                                    android:id="@+id/myChoiceMiddleSubjectModifyBtn"
+                                    style="@style/TextPurple_6d6dff.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isMiddle }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceMiddleSubjectText"  />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </RadioGroup>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="144dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            android:background="@drawable/bg_grey_e8e8e8_round"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="취소"
+            android:textColor="@color/black_4c4c4c"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp32"
+            android:background="@drawable/bg_purple_6d6dff_round"
+            android:fontFamily="@font/font_pretendard_bold"
+            android:text="저장하기"
+            android:textColor="@color/white_ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cancelBtn" />
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/childContainer"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

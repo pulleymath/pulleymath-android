@@ -19,7 +19,7 @@
             android:id="@+id/headerLl"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:background="@color/black_333333"
+            android:background="@{ vm.schoolTypeInRepo.isHigh? @color/black_200 : @color/white }"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,8 @@
                 android:padding="@dimen/dp16"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_arrow_black_left"
-                app:tint="@color/color_white_ffffff" />
+                imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                app:tint="@color/gray_800" />
             <TextView
                 android:id="@+id/headerTitle"
                 android:layout_width="wrap_content"
@@ -44,7 +45,8 @@
                 android:layout_weight="999"
                 android:gravity="center"
                 android:text="풀리수학 문제집"
-                android:textColor="@color/white"/>
+                android:textColor="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
             <View
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
@@ -52,7 +54,7 @@
                 />
         </LinearLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/rootView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +90,7 @@
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp16"
                         style="@style/b2r"
-                        android:text="유형별 학습부터 기출, 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
+                        android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
                         android:textColor="@color/gray_600"/>
 
                     <View
@@ -220,39 +222,39 @@
                             android:textColor="@color/gray_800"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.freewheelin.pulley.activities.learning.tabFragment.book.BookFilterView
-                            android:id="@+id/filterView"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/filterRv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="700dp"
-                            android:clipToPadding="false"
-                            android:paddingStart="@dimen/dp32"
-                            android:paddingEnd="@dimen/dp32"
+                            android:nestedScrollingEnabled="false"
+                            android:paddingStart="@dimen/dp24"
+                            android:paddingEnd="@dimen/dp24"
                             android:paddingBottom="@dimen/dp24"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/totalLabelTv" />
+
                         <View
                             android:layout_width="1dp"
                             android:layout_height="0dp"
                             android:background="@color/gray_400"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/filterView"/>
+                            app:layout_constraintBottom_toBottomOf="@+id/filterRv"
+                            app:layout_constraintStart_toEndOf="@+id/filterRv"/>
 
                         <com.freewheelin.pulley.views.GridRecyclerView
                             android:id="@+id/totalRv"
                             android:layout_width="0dp"
-                            android:layout_height="720dp"
+                            android:layout_height="0dp"
                             android:layout_marginStart="1dp"
                             android:paddingHorizontal="@dimen/dp32"
-                            android:paddingTop="@dimen/dp32"
-                            android:paddingBottom="@dimen/dp64"
+                            android:paddingTop="@dimen/dp24"
+                            android:paddingBottom="@dimen/dp32"
                             android:clipToPadding="false"
                             android:visibility="@{ vm.showRecyclerView ? View.VISIBLE : View.INVISIBLE }"
+                            android:layout_marginBottom="32dp"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/filterView"
+                            app:layout_constraintBottom_toBottomOf="@+id/filterRv"
+                            app:layout_constraintStart_toEndOf="@+id/filterRv"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintVertical_bias="0"/>
 
@@ -284,10 +286,10 @@
                             android:visibility="@{ vm.showEmptyContainer ? View.VISIBLE : View.GONE }"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="@+id/filterView"
-                            app:layout_constraintStart_toEndOf="@+id/filterView"
+                            app:layout_constraintTop_toTopOf="@+id/filterRv"
+                            app:layout_constraintStart_toEndOf="@+id/filterRv"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="@+id/filterView">
+                            app:layout_constraintBottom_toBottomOf="@+id/filterRv">
 
                             <ImageView
                                 android:id="@+id/emptyIv"
@@ -321,7 +323,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
         <FrameLayout

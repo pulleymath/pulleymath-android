@@ -42,6 +42,10 @@ import com.freewheelin.pulley.views.DaebakToast
 import com.freewheelin.pulley.views.MarginDecoration
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.pulleymath.android.pdf.utils.onThrottleClick
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PatternStudyFragment : LearningTabFragment(),
     PlanListenerV2,
@@ -158,6 +162,12 @@ class PatternStudyFragment : LearningTabFragment(),
                     when(type) {
                         CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
                         else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                    }
+                }
+                schoolType.observe(viewLifecycleOwner) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(300)
+                        viewModel.initMyPlanAdapterItem()
                     }
                 }
             }

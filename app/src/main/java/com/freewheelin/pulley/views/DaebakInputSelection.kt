@@ -104,6 +104,9 @@ class DaebakInputSelection: ConstraintLayout, View.OnClickListener {
 class SelectionButton: androidx.appcompat.widget.AppCompatButton {
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
+    init {
+
+    }
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
         if(isSelected) {

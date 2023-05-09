@@ -7,14 +7,14 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.model.contents.Content
+import com.freewheelin.pulley.model.contents.Piece
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
-import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
-import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
-import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
-import com.freewheelin.pulley.revision2023.repository.UserRepository
+import com.freewheelin.pulley.revision2023.model.request.AnalysisAdvancedLearningRequest
+import com.freewheelin.pulley.revision2023.repository.*
+import com.freewheelin.pulley.utils.DateTimeUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,9 @@ class AnalysisTabActViewModel(application: Application): BaseAndroidViewModel(ap
     private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val userRepository by lazy { UserRepository.instance }
     private val anonymousRepository by lazy { AnonymousRepository.instance }
+    private val analysisRepository by lazy { AnalysisRepository.instance }
 
+    val schoolType = userRepository.schoolType
     val isSampleLiveData by lazy { MutableLiveData(false) }
 
     var isSample = false
@@ -40,9 +42,25 @@ class AnalysisTabActViewModel(application: Application): BaseAndroidViewModel(ap
                 }
             }
         } else {
-            user!!.getAnalysis(getApplication<Application>().applicationContext, from.toDate(), to.toDate(), formerDate.toDate()) { analysis ->
-                analysis?.let { cb(it) }
+            contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+                val startDate = DateTimeUtils.yyyy_MM_dd.format(from.toDate())
+                val endDate = DateTimeUtils.yyyy_MM_dd.format(to.toDate())
+                val analysis = anonymousRepository.getAnalysis(startDate, endDate)
+                withContext(Dispatchers.Main) {
+                    cb(analysis)
+                }
             }
         }
+    }
+
+    fun setAdvancedLearning(req: AnalysisAdvancedLearningRequest, cb: (Piece) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+
+            val res = analysisRepository.advancedLearningFromAnalysis(req)
+            withContext(Dispatchers.Main) {
+                cb(res)
+            }
+        }
+
     }
 }

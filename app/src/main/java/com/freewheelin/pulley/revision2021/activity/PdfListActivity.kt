@@ -35,7 +35,6 @@ import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2021.viewmodel.PdfListFilter
 import com.freewheelin.pulley.revision2021.viewmodel.PdfViewModel
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
@@ -80,7 +79,7 @@ class PdfListActivity : AppCompatActivity() {
             vm = viewModel
             val adapter = PdfAdapter(viewModel)
             recyclerPdf.adapter = adapter
-            val spanCount = if(isTablet) 5 else 4
+            val spanCount = if(isTablet) 5 else 3
             val manager = GridLayoutManager(baseContext, spanCount)
             manager.spanSizeLookup = object : SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -162,11 +161,16 @@ class PdfListActivity : AppCompatActivity() {
 
     private fun initUI() {
         with(binding) {
-            subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.subjectItems)
-            categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.categoryItems)
+            viewModel.fetchBookFilter()
         }
 
         with(viewModel) {
+            filterInitial.observe(this@PdfListActivity) {
+                val subjectItems = ArrayList(viewModel.subject.values.toList())
+                val categoryItems = ArrayList(viewModel.category.values.toList())
+                binding.subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, subjectItems)
+                binding.categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, categoryItems)
+            }
             stickyAppBarShow.observe(this@PdfListActivity) { isShow ->
                 if (!isShow) {
                     val adapter = (binding.recyclerPdf.adapter as PdfAdapter)
@@ -178,7 +182,7 @@ class PdfListActivity : AppCompatActivity() {
             subjectSelectedPosition.observe(this@PdfListActivity) { position ->
                 position?.let {
                     subjectFilter =
-                        if (position > 0) PdfListFilter.subject.keys.toList().get(it) else ""
+                        if (position > 0) viewModel.subject.keys.toList().get(it) else ""
                     LogUtils.logEvent(this@PdfListActivity, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "과목필터", subjectFilter)
                     filter()
                     ySum = 0
@@ -187,7 +191,7 @@ class PdfListActivity : AppCompatActivity() {
             categorySelectedPosition.observe(this@PdfListActivity) { position ->
                 position?.let {
                     categoryFilter =
-                        if (position > 0) PdfListFilter.category.keys.toList().get(it) else ""
+                        if (position > 0) viewModel.category.keys.toList().get(it) else ""
                     LogUtils.logEvent(this@PdfListActivity, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "학습유형필터", categoryFilter)
                     filter()
                     ySum = 0
@@ -208,7 +212,7 @@ class PdfListActivity : AppCompatActivity() {
                 with(binding) {
                     searchName.let { searchView ->
                         if (searchView.isIconified == isIconified) {
-                            searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
+                            searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round_5 else R.drawable.bg_white_round_5)
                         }
                     }
                 }
@@ -279,8 +283,8 @@ class PdfListActivity : AppCompatActivity() {
     inner class HeaderViewHolder(private val binding: HeaderPdfListBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             with(binding) {
-                subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.subjectItems)
-                categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.categoryItems)
+//                subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.subjectItems)
+//                categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, viewModel.categoryItems)
 
                 viewModel.run {
                     subjectSelectedPosition.observe(this@PdfListActivity) { position ->
@@ -313,12 +317,21 @@ class PdfListActivity : AppCompatActivity() {
                         with(binding) {
                             this.searchNameInHeader.let { searchView ->
                                 if (searchView.isIconified == isIconified) {
-                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_grey_f2f2f2_round_5 else R.drawable.bg_white_round_5)
+                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round_5 else R.drawable.bg_white_round_5)
                                 }
                             }
                         }
                     }
                 }
+            }
+            with(viewModel) {
+                filterInitial.observe(this@PdfListActivity) {
+                    val subjectItems = ArrayList(viewModel.subject.values.toList())
+                    val categoryItems = ArrayList(viewModel.category.values.toList())
+                    binding.subjectSpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, subjectItems)
+                    binding.categorySpinnerAdapter = ArrayAdapter<String>(this@PdfListActivity, R.layout.item_spinner_textview, categoryItems)
+                }
+
             }
         }
 
@@ -341,13 +354,13 @@ class PdfListActivity : AppCompatActivity() {
 
         init {
             binding.apply {
-                lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
+                lifecycleOwner = root.findViewTreeLifecycleOwner()
             }
         }
         fun bind(item: Pdf, position: Int) {
             /** 다운로드 체크 */
             item.downloaded.set(File(makeLocalPdfName(item)).exists())
-            item.subject = PdfListFilter.subject[item.subject_code] ?:""
+            item.subject = viewModel.subject[item.subject_code] ?:""
             if (item.subject == "과목 전체") {
                 item.subject = ""
             }

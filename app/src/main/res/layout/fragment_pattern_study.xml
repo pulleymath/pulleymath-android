@@ -76,7 +76,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 style="@style/b2r"
-                                android:text="유형별 학습부터 기출, 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
+                                android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
                                 android:layout_marginTop="@dimen/dp8"
                                 android:layout_marginStart="@dimen/dp24"
                                 android:textColor="@color/gray_600"
@@ -338,7 +338,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="@dimen/dp32"
-                            android:paddingBottom="@dimen/dp64"
+                            android:paddingBottom="@dimen/dp32"
                             visibleIf="@{ vm.showMyPlan }"
                             />
                     </LinearLayout>

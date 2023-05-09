@@ -118,7 +118,7 @@ class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val fa
 
 
     private fun startLoading() {
-        deleteBtn.startLoding()
+        deleteBtn.startLoading()
     }
 
     private fun stopLoading() {

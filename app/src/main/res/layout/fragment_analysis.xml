@@ -169,31 +169,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!--                    <com.freewheelin.pulley.views.buttons.PrimaryButton-->
-<!--                        android:id="@+id/mainAnalysisBtn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/dp56"-->
-<!--                        android:layout_marginStart="@dimen/dp48"-->
-<!--                        android:layout_marginTop="@dimen/dp64"-->
-<!--                        android:layout_marginEnd="@dimen/dp48"-->
-<!--                        android:layout_marginBottom="@dimen/dp48"-->
-<!--                        android:text="내 전체 분석 보기"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv" />-->
-
-                    <ImageButton
-                        android:id="@+id/shareBtn"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:layout_marginTop="@dimen/dp24"
-                        android:layout_marginEnd="@dimen/dp24"
-                        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
-                        android:src="@drawable/ic_share"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

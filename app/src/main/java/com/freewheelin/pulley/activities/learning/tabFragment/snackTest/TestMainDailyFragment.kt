@@ -16,6 +16,7 @@ import com.freewheelin.pulley.databinding.FragmentTestMainResultBinding
 import com.freewheelin.pulley.databinding.FragmentTestMainUnavailableTestBinding
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
 import com.freewheelin.pulley.utils.*
@@ -73,9 +74,32 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                     }
                 }
             }
+            recommendCommonSubjects.observe(viewLifecycleOwner) { subjects ->
+                (binding as? FragmentTestMainBinding)?.apply {
+                    subjectTv.text = getSubjectNames(subjects)
+                }
+            }
+//            recommendOptionalSubjects.observe(thisOwner) { subjects ->
+//
+//                binding.apply {
+//
+//                }
+//            }
         }
     }
+    private fun getSubjectNames(list: List<RecommendSubject>): String {
+        return list
+            .filter {
+                it.chapters
+                    .map { it.isSelected }
+                    .reduce { p1, p2 ->
+                        p1 || p2
+                    }
+            }
+            .map { it.subjectName }
+            .joinTo(StringBuilder(), ", ").toString()
 
+    }
     override fun showMainContents() {
 
         if(test == null) {
@@ -209,6 +233,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
         Log.d("테스트","===> TestMainDailyFragment")
         user?.log()
+//        viewModel.fetchRecommendSubject()
 
         if(test.scoringTestPieceCount == 0) {
             configureInitUI(test)
@@ -229,20 +254,15 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             contentTv.text = "데일리 테스트는 응시할 때마다 문항이 새로 출제됩니다.\n문항 추천 기준은 아래와 같습니다."
             headerTv.text = "${date.month()}월 ${date.day()}일"
             levelLabel.text = "난이도"
-            levelTv.text = user!!.getRecommendLevelText()
+            levelTv.text = viewModel.getRecommendLevelText(test.dailyInfo.testLevel)
+
             rangeLabel.text ="출제 범위"
-            rangeTv.text = user!!.getRecommendRangeText()
-            settingBtn.visibility = View.VISIBLE
+            rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
+            settingBtn.visibility = View.GONE
             titleTv.text = test.subject
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
 
-            subjectTv.text = if(user!!.recommendChapter == 0 && user!!.recentSubjectCode.isNotEmpty()) {
-                user!!.getRecentSubjectText()
-            } else if(user!!.recommendChapter == 1) {
-                "수학1, 수학2" + if(user!!.rawInitOptional.isNotEmpty()) ", "+user!!.getOptionalSubjectText() else ""
-            } else {
-                user!!.getAllSubjectText()
-            }
+            subjectTv.text = test.dailyInfo.subjectCode
 
             startBtn.setOnClickListener {
                 listener?.onSolveBtnClicked(test)
@@ -265,19 +285,14 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             scoreTv.text = test.score.toString()
             contentTv.text = "자세한 내용은 보고서에서 확인해주세요 :)\n문항 추천 기준은 아래와 같습니다."
             levelLabel.text = "난이도"
-            levelTv.text = user!!.getRecommendLevelText()
+            levelTv.text = viewModel.getRecommendLevelText(test.dailyInfo.testLevel)
             rangeLabel.text ="출제 범위"
-            rangeTv.text = user!!.getRecommendRangeText()
+            rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
             reportTv.extensionTouchArea(24.toPx())
+            settingBtn.visibility = View.GONE
 
-            subjectTv.text = if(user!!.recommendChapter == 0 && user!!.recentSubjectCode.isNotEmpty()) {
-                user!!.getRecentSubjectText()
-            } else if(user!!.recommendChapter == 1) {
-                "수학1, 수학2" + if(user!!.rawInitOptional.isNotEmpty()) ", "+user!!.getOptionalSubjectText() else ""
-            } else {
-                user!!.getAllSubjectText()
-            }
+            subjectTv.text = test.dailyInfo.subjectCode
 
             startBtn.setOnPaidUserClickListener(cb = {
                 listener?.onSolveBtnClicked(test)
@@ -309,6 +324,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                 giftContainerCl.visibility = View.INVISIBLE
                 settingContainerCl.visibility = View.INVISIBLE
                 startBtn.visibility = View.INVISIBLE
+                settingBtn.visibility = View.GONE
 
                 TestManager.getDailyTestReport(requireContext(), user!!) {
 

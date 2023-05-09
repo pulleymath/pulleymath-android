@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp64"
             android:layout_gravity="center"
-            android:background="@color/white_ffffff"
+            android:background="@{ vm.schoolType.isHigh? @color/black_200 : @color/white }"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,10 +42,11 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
+            imagebtn_tint="@{ vm.schoolType.isHigh ? @color/white : @color/gray_800 }"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintStart_toStartOf="@+id/tabLayout"
-            app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+            app:layout_constraintTop_toTopOf="@+id/tabLayout"
+            />
 
         <TextView
             android:id="@+id/sampleTv"
@@ -64,18 +65,25 @@
             />
 
         <Button
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/h5"
             android:id="@+id/myAnalysisGuideBtn"
             android:layout_width="153dp"
             android:layout_height="36dp"
-            android:textSize="@dimen/sp16"
             app:layout_constraintTop_toTopOf="@+id/tabLayout"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintEnd_toEndOf="@+id/tabLayout"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@drawable/bg_grey_f2f2f2_round"
+            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round }"
+            android:textColor="@color/gray_600"
             android:text="내 전체 분석이란?"/>
-
+        <View
+            android:id="@+id/mobileGuideDummyView"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/myAnalysisGuideBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
         <View
             android:id="@+id/horizontalBorder"
             style="@style/Border_Grey_e8e8e8_Horizontal"

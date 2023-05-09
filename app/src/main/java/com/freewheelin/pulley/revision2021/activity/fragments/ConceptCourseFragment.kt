@@ -59,7 +59,6 @@ class ConceptCourseFragment : LearningTabFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchAvailableSubjects()
         fetch()
     }
 
@@ -113,9 +112,13 @@ class ConceptCourseFragment : LearningTabFragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             studyRv.adapter = ChapterAdapter()
+            headerTab.apply {
+                setViewModel(viewModel)
+                setLifecycleOwner(viewLifecycleOwner)
+            }
         }
         viewModel.apply {
-            onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
+            initHeaderSubject()
             selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
                 if (subjectId > -1) {
                     val subject = SubjectIndicator.convertRawToSubject(subjectId)
@@ -138,6 +141,14 @@ class ConceptCourseFragment : LearningTabFragment() {
                     } else {
                         conceptFragProgressCl.hide(300)
                     }
+                }
+            }
+            schoolType.observe(viewLifecycleOwner) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    binding.headerTab.changeSchoolType(it)
+                    viewModel.fetchAvailableSubjects()
+                    delay(300)
+                    initHeaderSubject()
                 }
             }
             errorAction.observe(viewLifecycleOwner) { type ->
@@ -167,6 +178,9 @@ class ConceptCourseFragment : LearningTabFragment() {
         viewModel.selectedSubjectId.postValue(id)
     }
 
+    fun moveAvailableFirstSubject() {
+        viewModel.moveAvailableFirstSubject()
+    }
     fun fetch () {
         viewModel.selectedSubjectId.value?.let {
             if (it != -1) { viewModel.fetch(it) }

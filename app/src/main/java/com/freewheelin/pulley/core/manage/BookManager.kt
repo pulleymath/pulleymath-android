@@ -378,23 +378,26 @@ object BookManager {
     }
 
     fun getCommercialBook(context: Context, subject: CommercialSubject?, cb:(list: List<CommercialBook>?) -> Unit) {
-        API_V2.getCommercials(subject).enqueue(object: Callback<List<CommercialBook>> {
-            override fun onFailure(call: Call<List<CommercialBook>>, t: Throwable) {}
+        API_V3.getCommercials(subject).enqueue(object: Callback<ResponseBody<List<CommercialBook>>> {
+            override fun onFailure(call: Call<ResponseBody<List<CommercialBook>>>, t: Throwable) {
+                responseFailed(context, t)
+            }
 
-            override fun onResponse(call: Call<List<CommercialBook>>, response: Response<List<CommercialBook>>) {
-                cb(response.body())
+            override fun onResponse(call: Call<ResponseBody<List<CommercialBook>>>, response: Response<ResponseBody<List<CommercialBook>>>) {
+                cb(response.body()?.data)
             }
 
         })
     }
 
     fun getCommercialBookPage(context: Context, commercialBook: CommercialBook, cb:(pages: List<CommercialBookPage>?) -> Unit) {
-        API_V2.getCommercialBookPage(commercialBook.pieceID).enqueue(object: Callback<CommercialBookPageResponse> {
-            override fun onFailure(call: Call<CommercialBookPageResponse>, t: Throwable) {
+        API_V3.getCommercialBookPage(commercialBook.pieceID).enqueue(object: Callback<ResponseBody<CommercialBookPageResponse>> {
+            override fun onFailure(call: Call<ResponseBody<CommercialBookPageResponse>>, t: Throwable) {
+                responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<CommercialBookPageResponse>, response: Response<CommercialBookPageResponse>) {
-                cb(response.body()?.commercialPageList)
+            override fun onResponse(call: Call<ResponseBody<CommercialBookPageResponse>>, response: Response<ResponseBody<CommercialBookPageResponse>>) {
+                cb(response.body()?.data?.commercialPageList)
             }
 
         })
@@ -417,13 +420,15 @@ object BookManager {
                 "studentID" to user.studentID,
                 "problemDifficulty" to level.text
         )
-        API_V2.getCommercialSimilarCnt(
+        API_V3.getCommercialSimilarCnt(
                 pieceID,
-                param).enqueue(object: Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {}
+                param).enqueue(object: Callback<ResponseBody<Int>> {
+            override fun onFailure(call: Call<ResponseBody<Int>>, t: Throwable) {
+                responseFailed(context, t)
+            }
 
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                cb(response.body())
+            override fun onResponse(call: Call<ResponseBody<Int>>, response: Response<ResponseBody<Int>>) {
+                cb(response.body()?.data)
             }
 
         })
@@ -445,13 +450,13 @@ object BookManager {
                 "problemDifficulty" to level.text
         )
 
-        API_V2.makeCustomBook(commercialBook.pieceID, param).enqueue(object: Callback<Book> {
-            override fun onFailure(call: Call<Book>, t: Throwable) {
+        API_V3.makeCustomBook(commercialBook.pieceID, param).enqueue(object: Callback<ResponseBody<Book>> {
+            override fun onFailure(call: Call<ResponseBody<Book>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Book>, response: Response<Book>) {
-                val book = response.body()
+            override fun onResponse(call: Call<ResponseBody<Book>>, response: Response<ResponseBody<Book>>) {
+                val book = response.body()?.data
 
                 if(book != null)
                     cb(book)

@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialBook
@@ -29,7 +29,6 @@ import com.freewheelin.pulley.lib.ObservableHashSet
 import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
@@ -86,7 +85,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             field = value
             if(step == 1 && value != null) {
                 actionBtn.toEnableUI()
-                selectedBookTv.text = "선택한 문제집 : [${field?.subjectType?.text}] ${field?.bookName}"
+                selectedBookTv.text = "선택한 문제집 : [${field?.subject}] ${field?.bookName}"
                 selectGuideLabel.text = "'${value.bookName}' 문제집이 선택되었습니다."
             } else
                 actionBtn.toDisableUI()
@@ -118,6 +117,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initUI()
         this.listener = listener
+        step = 1
     }
 
     constructor(context: Context, listener: CustomizeBookDialogListener?, book: Book): super(context) {
@@ -128,23 +128,21 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         step1Container.visibility = View.INVISIBLE
         step2Container.visibility = View.VISIBLE
         initStep2()
-        step = 0
+        step = 1
         this.listener = listener
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
-        val subjects = CommercialSubject.values()
+        val subjects = CommercialSubject.arrayOnSchool
         val subject = if(index == 0) null else subjects[index - 1]
 
         LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-과목선택",  subject?.text ?: "전체")
-
         sync(subject)
     }
 
     override fun onOrderChanged(view: SortableTextView, order: SortableTextView.Order) {
         subjectSl.isSelected = false
         bookSl.isSelected = false
-        bookSeriesSl.isSelected = false
         publisherSl.isSelected = false
 
         view.isSelected = true
@@ -155,14 +153,18 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     private fun sort() {
         var list = commercialBooks
         if(subjectSl.isSelected) {
-            val subjectList = listOf("수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
+            val subjectList = if (schoolType.isHigh) {
+                listOf("수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
+            } else {
+                listOf("중1-1", "중1-2", "중2-1", "중2-2", "중3-1", "중3-2")
+            }
             val indexComparatorAscend =
                 Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
-                    subjectList.indexOf(cbook1.subjectType?.text) - subjectList.indexOf(cbook2.subjectType?.text)
+                    subjectList.indexOf(cbook1.subject) - subjectList.indexOf(cbook2.subject)
                 }
             val indexComparatorDescend =
                 Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
-                    subjectList.indexOf(cbook2.subjectType?.text) - subjectList.indexOf(cbook1.subjectType?.text)
+                    subjectList.indexOf(cbook2.subject) - subjectList.indexOf(cbook1.subject)
                 }
 
 
@@ -179,13 +181,6 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             }
         }
 
-        if(bookSeriesSl.isSelected) {
-            list = when(bookSeriesSl.order) {
-                SortableTextView.Order.ascend -> list?.sortedBy { it.bookTag }
-                SortableTextView.Order.descend -> list?.sortedByDescending { it.bookTag }
-            }
-        }
-
         if(publisherSl.isSelected) {
             list = when(publisherSl.order) {
                 SortableTextView.Order.ascend -> list?.sortedBy { it.publisher }
@@ -193,6 +188,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             }
         }
         commercialBooks = list
+
     }
 
     override fun onItemChanged(set: ObservableHashSet<CommercialBookPage>) {
@@ -210,7 +206,11 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 //        setCancelable(false)
         initComponents()
         step = 1
-        subjectTab.labels = listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
+        subjectTab.labels = if (schoolType.isHigh) {
+            listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
+        } else {
+            listOf("전체", "중 1-1", "중 1-2", "중 2-1", "중 2-2", "중 3-1", "중 3-2")
+        }
         subjectTab.listener = this
         step2Container.visibility = View.GONE
         nowCheckbox.visibility = View.GONE
@@ -258,14 +258,12 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
         bookSl.listener = this
         bookSl.isSelected = true
-        bookSeriesSl.listener = this
         publisherSl.listener = this
 
         sync(null)
     }
 
     private fun sync(subject: CommercialSubject?) {
-        //did
         BookManager.getCommercialBook(context, subject) {
             this.commercialBooks = it
             sort()
@@ -545,7 +543,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
     }
 
     fun syncProblemCnt() {
-        actionBtn.startLoding()
+        actionBtn.startLoading()
         delayHandler.removeCallbacksAndMessages(null)
         if(checkedPageProblem.isEmpty()) {
             setProblemCnt(0)
@@ -681,7 +679,6 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
     lateinit var subjectSl: SortableTextView
     lateinit var bookSl: SortableTextView
-    lateinit var bookSeriesSl: SortableTextView
     lateinit var publisherSl: SortableTextView
 
     lateinit var selectedBookTv: TextView
@@ -717,7 +714,6 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         cancelBtn = findViewById(R.id.cancelBtn)
         subjectSl = findViewById(R.id.subjectSl)
         bookSl = findViewById(R.id.bookSl)
-        bookSeriesSl = findViewById(R.id.bookSeriesSl)
         publisherSl = findViewById(R.id.publisherSl)
         selectedBookTv = findViewById(R.id.selectedBookTv)
         selectGuideLabel = findViewById(R.id.selectGuideLabel)
@@ -744,9 +740,9 @@ class CommercialBookHolder(val itemBinding: ItemCommercialListBinding): Recycler
 
     fun set(commercialBook: CommercialBook) {
         itemBinding.apply {
-            subjectTv.text = commercialBook.subjectType?.text
+            subjectTv.text = commercialBook.subject
             bookTv.text = commercialBook.bookName
-            bookSeriesTv.text = commercialBook.bookTag
+//            bookSeriesTv.text = commercialBook.bookTag
             publisherTv.text = commercialBook.publisher
             hasBestTag = commercialBook.tag == CommercialBook.Tag.Best
             hasNewTag = commercialBook.tag == CommercialBook.Tag.New

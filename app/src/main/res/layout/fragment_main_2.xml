@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/mainScroller"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -314,6 +314,7 @@
                             android:id="@+id/missionRv"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
+                            android:nestedScrollingEnabled="false"
                             app:layout_constraintTop_toBottomOf="@id/challengeHeaderListRv"
                             app:layout_constraintBottom_toTopOf="@id/challengeActionBtn"
                             app:layout_constraintStart_toStartOf="parent"
@@ -457,7 +458,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <com.freewheelin.pulley.revision2023.ui.view.StartChallengeGuideView
             android:id="@+id/startChallengeGuideView"

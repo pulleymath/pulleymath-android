@@ -53,7 +53,6 @@ class AnalysisTodayStudyListView: ConstraintLayout {
 
         setList()
         viewAllListBtn.setOnClickListener {
-            println("asoaso viewAllListBtn click!!! listener null? : ${listener == null}")
             listener?.onStudyHistoryBtnClicked(this)
         }
         studyBtn.setOnClickListener {

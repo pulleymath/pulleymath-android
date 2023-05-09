@@ -192,7 +192,7 @@
                     android:paddingVertical="8dp"
                     android:focusable="true"
                     android:clickable="true"
-                    android:visibility="@{ vm.remainingHintSize == 0 ? View.GONE : View.VISIBLE }"
+                    android:visibility="@{ vm.hintExist ? (vm.remainingHintSize == 0 ? View.GONE : View.VISIBLE) : View.GONE }"
                     android:layout_marginVertical="10dp"
                     android:orientation="horizontal"
                     >
@@ -228,7 +228,7 @@
                     android:paddingVertical="8dp"
                     android:focusable="true"
                     android:clickable="true"
-                    android:visibility="@{ vm.remainingHintSize == 0 ? View.VISIBLE : View.GONE }"
+                    android:visibility="@{ vm.hintExist ? (vm.remainingHintSize == 0 ? View.VISIBLE : View.GONE) : View.GONE }"
                     android:layout_marginVertical="10dp"
                     android:orientation="horizontal"
                     >

@@ -30,6 +30,7 @@ class LCWrongNoteFViewModel(application: Application): BaseAndroidViewModel(appl
     val noteCard by lazy { MutableLiveData<LCWrongNoteMapCard>() }
     val currQuizImage by lazy { MutableLiveData<String>("") }
     val btnText by lazy { MutableLiveData("채점하기") }
+    var hintExist: Boolean = true
 
     var tempConceptSolutionViewFlag: Boolean? = false
     val showConceptSolutionView by lazy { MutableLiveData<Boolean>(false) }
@@ -41,6 +42,7 @@ class LCWrongNoteFViewModel(application: Application): BaseAndroidViewModel(appl
         noteCard.postValue(item)
         currQuizImage.postValue(item.quizImageUrl)
         remainingHintSize.value = item.hints.size
+        hintExist = item.hints.isNotEmpty()
     }
 
     fun hasMoreHint(): Boolean {

@@ -19,6 +19,7 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
     val patternName by lazy { MutableLiveData<String>("") }
     val remainingHintSize by lazy { MutableLiveData(0) }
     val isHintBtnDisabled by lazy { MutableLiveData<Boolean>(false) }
+    val hintExist by lazy { MutableLiveData<Boolean>(true) }
     val isNoteSelectorScrollPositionEnd by lazy { MutableLiveData<Boolean>(false) }
 
 //    var currentCardIndex = 0

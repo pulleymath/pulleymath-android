@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityTestReportDailyBinding
@@ -27,7 +28,7 @@ import com.google.android.material.tabs.TabLayout
 
 class DailyTestReportActivity : AppCompatActivity() {
     private val binding: ActivityTestReportDailyBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(this),R.layout.activity_test_report_daily,null,false)
+        DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_test_report_daily,null,false)
     }
 
     var tests: List<Test>? = null
@@ -73,6 +74,9 @@ class DailyTestReportActivity : AppCompatActivity() {
                 scoringRv.adapter = ScoringAdapter()
                 scoringRv.layoutManager = LinearLayoutManager(this@DailyTestReportActivity)
                 sameCorrectRateLabel.text = "${test.studentRating}등급 정답률"
+
+                sameCorrectRateLabel.visibleIf(schoolType.isHigh)
+                sameCorrectRateBorder.visibleIf(schoolType.isHigh)
 
                 scoreTv.show()
                 scoreLabel.show()
@@ -161,6 +165,7 @@ class DailyScoringHolder(val itemBinding: ItemTestReportDailyScoringBinding): Re
     val resultIv = itemBinding.resultIv
     val totalCorrectRateTv = itemBinding.totalCorrectRateTv
     val sameCorrectRateTv = itemBinding.sameCorrectRateTv
+    val sameCorrectRateBorder = itemBinding.sameCorrectRateBorder
     val subjectTv = itemBinding.subjectTv
 //    val tagLl = view.tagLl
 
@@ -177,13 +182,12 @@ class DailyScoringHolder(val itemBinding: ItemTestReportDailyScoringBinding): Re
         else
             totalCorrectRateTv.text = TextUtils.percentFormat.format(correctRate)
 
-        if(problem.standardCorrectRate != null)
+        if(problem.standardCorrectRate != null) {
             sameCorrectRateTv.text = TextUtils.percentFormat.format(problem.standardCorrectRate!! * 0.01f)
+        }
 
-
-        else
-            LogUtils.assert(false, "problem standardCorrectRate is not exist")
-
+        sameCorrectRateTv.visibleIf(schoolType.isHigh)
+        sameCorrectRateBorder.visibleIf(schoolType.isHigh)
         subjectTv.text = problem.subject
 //        tagLl.removeAllViewsInLayout()
 //

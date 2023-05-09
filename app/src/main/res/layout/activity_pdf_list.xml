@@ -21,7 +21,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:background="@color/black_333333"
+            android:background="@{ vm.schoolTypeInRepo.isHigh? @color/black_200 : @color/white }"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,8 @@
                 android:background="@android:color/transparent"
                 android:padding="@dimen/dp16"
                 app:srcCompat="@drawable/ic_arrow_black_left"
-                app:tint="@color/color_white_ffffff" />
+                imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
 
             <TextView
                 android:id="@+id/headerTitle"
@@ -46,7 +47,8 @@
                 android:layout_weight="999"
                 android:gravity="center"
                 android:text="풀리북스"
-                android:textColor="@color/white"/>
+                android:textColor="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
             <View
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
@@ -61,6 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
+            android:paddingBottom="24dp"
             tools:addOnScrollListener="@{vm.onScrollListener}"
             android:paddingHorizontal="@dimen/dp35"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="150dp"
             android:orientation="vertical"
             android:visibility="@{vm.showEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerPdf"

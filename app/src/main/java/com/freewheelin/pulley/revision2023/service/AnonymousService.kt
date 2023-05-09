@@ -1,11 +1,14 @@
 package com.freewheelin.pulley.revision2023.service
 
+import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.request.GuestSignInRequest
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
 import com.freewheelin.pulley.revision2023.model.response.GuestSignInResponse
+import retrofit2.Call
 import retrofit2.http.*
 
 object AnonymousApi {
@@ -16,8 +19,21 @@ interface AnonymousService {
     @GET("anonymous/v2/commerce/plus/android")
     suspend fun getPurchaseGuide(): ResponseForceBody<PurchaseGuide>
 
+    @GET("v1/analysis/{studentId}")
+    suspend fun getAnalysis(
+        @Path("studentId") studentId: String = user?.studentID!!,
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String,
+        @Query("schoolType") school: String? = MyApplication.schoolType.name
+    ): ResponseForceBody<Analysis>
+
     @GET("/anonymous/v1/analysis/sample")
     suspend fun getAnalysisSample(): ResponseForceBody<Analysis>
+
+    @GET("/anonymous/v2/analysis/sample")
+    suspend fun getAnalysisSampleV2(
+        @Query("schoolType") school: String? = MyApplication.schoolType.name
+    ): ResponseForceBody<Analysis>
 
     @POST("/anonymous/v1/signin")
     suspend fun guestSignIn(

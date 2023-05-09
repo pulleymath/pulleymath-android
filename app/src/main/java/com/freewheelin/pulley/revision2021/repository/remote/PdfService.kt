@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.response.*
 //import dagger.Module
 //import dagger.Provides
@@ -26,11 +27,12 @@ interface PdfService {
 
     @GET("v2/pdf/list")
     fun listV2(@Query("title") title:String,
-             @Query("page") page:Int,
-             @Query("size") size:Int,
-             @Query("subject_code") subject_code:String = "",
-             @Query("category") category:String = "")
-            : Observable<PdfListResponse>
+        @Query("page") page:Int,
+        @Query("size") size:Int,
+        @Query("subject_code") subject_code:String = "",
+        @Query("category") category:String = "",
+        @Query("schoolType") school: String? = MyApplication.schoolType.name
+    ): Observable<PdfListResponse>
 
     @GET("v1/pdf/answers/{cm_book_id}")
     fun answer(@Path("cm_book_id") cm_book_id:Int) : Observable<PdfAnswerResponse>

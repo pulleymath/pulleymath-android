@@ -3,13 +3,12 @@ package com.freewheelin.pulley.core.manage
 import android.content.Context
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.ResponseBody
-import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.Test
 import com.freewheelin.pulley.utils.responseError
 import com.freewheelin.pulley.utils.responseFailed
@@ -30,21 +29,37 @@ object TestManager {
     var isNeedToFullDailyResultInTab = false
 
     fun getTestList(context: Context, user: User, cb: (tests: List<Test>) -> Unit) {
-        API_V3.getTestList(user.studentID).enqueue(object: Callback<ResponseBody<List<Test>>> {
-            override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
-                val test = response.body()
-                if(test?.data != null && response.isSuccessful) {
-                    cb(test.data)
-                } else {
-                    responseError(context, response)
+        if (BuildConfig.FLAVOR == "beta") {
+            API_V3.getAllTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
+                override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
+                    responseFailed(context, t)
                 }
-            }
 
-        })
+                override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
+                    val test = response.body()
+                    if(test?.data != null && response.isSuccessful) {
+                        cb(test.data)
+                    } else {
+                        responseError(context, response)
+                    }
+                }
+            })
+        } else {
+            API_V3.getTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
+                override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
+                    responseFailed(context, t)
+                }
+
+                override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
+                    val test = response.body()
+                    if(test?.data != null && response.isSuccessful) {
+                        cb(test.data)
+                    } else {
+                        responseError(context, response)
+                    }
+                }
+            })
+        }
     }
 
     fun getDailyTest(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
@@ -114,12 +129,12 @@ object TestManager {
                 "pieceSubCategory" to test.pieceSubCategory
         )
 
-        API_V3.getTestReport(param).enqueue(object: Callback<Template<Test>> {
-            override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
+        API_V3.getTestReportWithAssignId(test.assignID!!, test.pieceSubCategory).enqueue(object: Callback<ResponseForceBody<Test>> {
+            override fun onFailure(call: Call<ResponseForceBody<Test>>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<Template<Test>>, response: Response<Template<Test>>) {
+            override fun onResponse(call: Call<ResponseForceBody<Test>>, response: Response<ResponseForceBody<Test>>) {
                 val responseTest = response.body()?.data
                 if(response.isSuccessful && responseTest != null)
                     successCB(responseTest)
@@ -132,13 +147,13 @@ object TestManager {
 
     fun getDailyTestReport(context: Context, user: User, successCB: (tests: List<Test>) -> Unit) {
 
-        API_V2.getDailyTestReport(user.studentID).enqueue(object: Callback<List<Test>> {
-            override fun onFailure(call: Call<List<Test>>, t: Throwable) {
+        API_V3.getDailyTestReport().enqueue(object: Callback<ResponseListBody<Test>> {
+            override fun onFailure(call: Call<ResponseListBody<Test>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<List<Test>>, response: Response<List<Test>>) {
-                val tests = response.body()
+            override fun onResponse(call: Call<ResponseListBody<Test>>, response: Response<ResponseListBody<Test>>) {
+                val tests = response.body()?.data
                 if(tests != null && response.isSuccessful) {
                     successCB(tests)
                 } else {
@@ -159,12 +174,12 @@ object TestManager {
                 "studentID" to user.studentID,
                 "assignID" to test.assignID!!
         )
-        API_V1.getTestReviewInfo(param).enqueue(object: Callback<Template<Test>> {
-            override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
+        API_V1.getTestReviewInfoV1(param).enqueue(object: Callback<ResponseForceBody<Test>> {
+            override fun onFailure(call: Call<ResponseForceBody<Test>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Template<Test>>, response: Response<Template<Test>>) {
+            override fun onResponse(call: Call<ResponseForceBody<Test>>, response: Response<ResponseForceBody<Test>>) {
                 val resTest = response.body()?.data
                 resTest?.arrangeProblem()
                 if(response.isSuccessful && resTest != null) {

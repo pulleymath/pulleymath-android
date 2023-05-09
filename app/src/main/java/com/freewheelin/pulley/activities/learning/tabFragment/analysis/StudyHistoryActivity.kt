@@ -19,6 +19,7 @@ import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamF
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.StudyListViewHolder
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.core.manage.MockExamManager
@@ -38,13 +39,23 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
         binding.apply {
             var filteredList = contents
 
-            filteredList = when(categoryTab.selectedIndex) {
-                1 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK }
-                2 -> filteredList.filter { it.pieceCategoryTag == BookType.MO  }
-                3 -> filteredList.filter { it.pieceCategoryTag == BookType.NOTE }
-                4 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
-                5 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND }
-                else -> filteredList
+            filteredList = if (schoolType.isHigh) {
+                when (categoryTab.selectedIndex) {
+                    1 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK }
+                    2 -> filteredList.filter { it.pieceCategoryTag == BookType.MO }
+                    3 -> filteredList.filter { it.pieceCategoryTag == BookType.NOTE }
+                    4 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
+                    5 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND }
+                    else -> filteredList
+                }
+            } else {
+                when (categoryTab.selectedIndex) {
+                    1 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK || it.pieceCategoryTag == BookType.CUSTOM_BOOK }
+                    2 -> filteredList.filter { it.pieceCategoryTag == BookType.NOTE }
+                    3 -> filteredList.filter { it.pieceCategoryTag == BookType.TEST }
+                    4 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND }
+                    else -> filteredList
+                }
             }
 
             filteredList = when(ingTab.selectedIndex) {
@@ -118,7 +129,11 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
     fun setUpUI() {
         binding.apply {
             backBtn.setOnClickListener { finish() }
-            categoryTab.labels = listOf("전체", "유형학습", "모의고사", "오답학습", "테스트", "추천학습")
+            categoryTab.labels = if (schoolType.isHigh) {
+                listOf("전체", "유형학습", "모의고사", "오답학습", "테스트", "추천학습")
+            } else {
+                listOf("전체", "유형학습", "오답학습", "테스트", "추천학습")
+            }
             ingTab.labels = listOf("전체", "학습 중", "학습 완료")
 
             categoryTab.listener = this@StudyHistoryActivity
@@ -193,7 +208,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                             }
                         }
                         else -> {
-                            LogUtils.assert(false, "예상치 못한 카테고리 ${content.category}")
+                            LogUtils.assert(false, "예상치 못한 카테고리 ")
                         }
                     }
                 }

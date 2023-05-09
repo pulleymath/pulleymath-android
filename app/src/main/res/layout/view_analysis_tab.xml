@@ -16,13 +16,13 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/mo_h3"
             android:id="@+id/tabTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/sp18"
+            android:textColor="@color/gray_700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

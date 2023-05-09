@@ -321,7 +321,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
             dialog.setCancelable(false)
             dialog.showFor {
                 ContentManager.score(this, user!!, mockExam, problems.toSet(), time) {
-                    val intent = MockReportActivity.getIntent(this, mockExam, it)
+                    val intent = MockReportActivity.getIntent(this, mockExam)
                     startActivity(intent)
                     setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
                     finish()
@@ -412,7 +412,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
                     val time = timerView.elapsedTime
 
                     ContentManager.score(this, user!!, mockExam, problems.toSet(), time) {
-                        val intent = MockReportActivity.getIntent(this, mockExam, it)
+                        val intent = MockReportActivity.getIntent(this, mockExam)
                         startActivity(intent)
                         setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
                         finish()

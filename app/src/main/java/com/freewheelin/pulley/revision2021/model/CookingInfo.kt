@@ -127,7 +127,7 @@ class CookingQuiz: BaseDiffItem, Serializable {
     var quizFormat: String = "SINGLE_SELECT"
     var userQuizSolvingHistoryId: Int = 0
     var quizImageUrl: String = "https://pulley-cm-book-pdfs.s3.ap-northeast-2.amazonaws.com/test/cooking_only_quiz.png"
-    var hintImageUrl: String = ""
+    var hintImageUrl: String? = null
 
     var answerFormat: String = "SELECTIVE1"
     var answerOptions: List<ExerciseQuizAnswerOption> = listOf()
@@ -140,6 +140,9 @@ class CookingQuiz: BaseDiffItem, Serializable {
     var isAnswerEntered: ObservableBoolean = ObservableBoolean(false)
     var isCorrectAnswer: ObservableBoolean = ObservableBoolean(false)
     var selectedQuizAnswerImageUrl = ObservableField<String>("")
+
+    val hintExist: Boolean
+        get() = hintImageUrl != null
 
     val sortedAnswerOptions: List<ExerciseQuizAnswerOption>
         get() {

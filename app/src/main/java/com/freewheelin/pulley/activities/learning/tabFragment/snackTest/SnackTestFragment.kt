@@ -33,6 +33,7 @@ import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
 import com.freewheelin.pulley.utils.DialogUtils
 import com.freewheelin.pulley.utils.LogUtils
@@ -109,6 +110,13 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         init()
         syncTestList()
+        viewModel.apply {
+            schoolType.observe(viewLifecycleOwner) {
+                println("qwoqwo snacktest schoolType :${it}")
+                syncTestList()
+            }
+
+        }
     }
 
     override fun onDestroy() {
@@ -147,8 +155,10 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     override fun onSettingBtnClicked(test: Test) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "테스트", "추천설정")
 
-        val intent = MyRecommendSettingActivity.getIntent(requireContext())
-        startActivity(intent)
+//        val intent = MyRecommendSettingActivity.getIntent(requireContext(), test)
+//        startActivity(intent)
+        val dialog = SnackTestRecommendSettingDialog(test) {}
+        childFragmentManager.let { dialog.show(it, "SnackTestRecommendSettingDialog") }
     }
 
     override fun onReportBtnClicked(test: Test, fromGift: Boolean) {
@@ -331,9 +341,9 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
     }
 
     private fun setUserRecentSubject(test:Test?) {
-        test?.let {
-            user?.setRecentStudyCode(test.dailyInfo.recentSubjectCode, test.dailyInfo.excludeSubjectCode)
-        }
+//        test?.let {
+//            user?.setRecentStudyCode(test.dailyInfo.recentSubjectCode, test.dailyInfo.excludeSubjectCode)
+//        }
     }
 
     private fun setMainFragment(test: Test?, testType: Test.TestType) {

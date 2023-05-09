@@ -18,6 +18,7 @@ import com.freewheelin.pulley.views.FocusedDimView
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
 import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.visibleIf
 import kotlin.math.PI
 import kotlin.math.sin
 
@@ -140,6 +141,14 @@ class TutorWindow: BalloonWindow, BalloonWindowListener {
                 view.findViewById<TextView>(R.id.titleTv).text = "출력하고 싶나요?"
                 view.findViewById<LottieAnimationView>(R.id.lottieV).setAnimation("tooltip_mail.json")
                 view.findViewById<TextView>(R.id.contentsTv).text = "이메일로 학습지를\n" + "보낼 수 있어요!"
+                view
+            }
+            Tutor.TooltipType.middleIntroduceOpening -> {
+                val view = LayoutInflater.from(context).inflate(R.layout.tooltip_vertical, null)
+                view.findViewById<TextView>(R.id.titleTv).visibleIf(false)
+                view.findViewById<LottieAnimationView>(R.id.lottieV).visibleIf(false)
+                view.findViewById<TextView>(R.id.contentsTv).text = "중학생은 탭을\n" +
+                    "클릭해보세요!"
                 view
             }
             else -> {

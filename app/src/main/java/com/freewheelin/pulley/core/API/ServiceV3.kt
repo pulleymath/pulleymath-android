@@ -1,13 +1,16 @@
 package com.freewheelin.pulley.core.API
 
+import com.freewheelin.pulley.BuildConfig
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
-import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
+import com.freewheelin.pulley.core.API.ResponseModel.*
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.ResponseBookInfo2
 import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -58,8 +61,16 @@ interface  ServiceV3 {
         @Path("studentID") studentID: String,
         @Body params: Parameter): Call<Void>
 
+    //deprecated
     @POST("/test/report")
     fun getTestReport(@Body param: Parameter): Call<Template<Test>>
+
+    @GET("test/{assignID}/report")
+    fun getTestReportWithAssignId(
+        @Path("assignID") assignID: Int,
+        @Query("pieceSubCategory") pieceSubCategory: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseForceBody<Test>>
 
     @GET("v3/books/all")
     fun getBooksNew(@Query("filter") filter: String,
@@ -74,12 +85,73 @@ interface  ServiceV3 {
     fun getMyBookList(@Path("studentID") studentID: String): Call<ResponseBody<MyBookList>>
 
     @GET("daily-summary/{studentID}/pieces/all")
-    fun getStudyList(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
+    fun getStudyList(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseListBody<Content>>
 
     @GET("daily-summary/{studentID}/pieces")
-    fun getDailyPiece(@Path("studentID") studentID: String): Call<ResponseListBody<Content>>
+    fun getDailyPiece(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseListBody<Content>>
 
 //    @GET("test/{studentID}?now=2023-03-04 12:00:00")
-    @GET("test/{studentID}")
-    fun getTestList(@Path("studentID") studentID: String): Call<ResponseBody<List<Test>>>
+    @GET("test")
+    fun getTestList(
+        @Query("schoolType") school: String? = schoolType.name,
+    ): Call<ResponseBody<List<Test>>>
+
+    @GET("test/all")
+    fun getAllTestList(
+        @Query("schoolType") school: String? = schoolType.name,
+    ): Call<ResponseBody<List<Test>>>
+
+    @GET("commercials/{pieceID}/pages")
+    fun getCommercialBookPage(@Path("pieceID") pieceID: Int): Call<ResponseBody<CommercialBookPageResponse>>
+
+    @POST("commercials/{pieceID}/similar/problems")
+    fun getCommercialSimilarCnt(
+        @Path("pieceID") pieceID: Int,
+        @Body params: Parameter): Call<ResponseBody<Int>>
+
+
+    @POST("commercials/{pieceID}/custom")
+    fun makeCustomBook(@Path("pieceID") pieceID: Int,
+                       @Body params: Parameter): Call<ResponseBody<Book>>
+
+    @GET("commercials")
+    fun getCommercials(
+        @Query("subject") subject: CommercialSubject?,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseBody<List<CommercialBook>>>
+
+    @GET("daily-summary/{studentID}/recommend")
+    fun getDailyRecommend(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseBody<DailyRecommend>>
+
+    @POST("daily-summary/{studentID}/notes")
+    fun makeWrongNote(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseBody<Piece>>
+
+    @POST("daily-summary/{studentID}/weak")
+    fun makeRecommend(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseBody<Book>>
+
+    @GET("daily-summary/{studentID}/studies")
+    fun getDailyStudy(
+        @Path("studentID") studentID: String,
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseBody<DailyStudy>>
+
+    @GET("test/daily/report")
+    fun getDailyTestReport(
+        @Query("schoolType") school: String? = schoolType.name
+    ): Call<ResponseListBody<Test>>
 }

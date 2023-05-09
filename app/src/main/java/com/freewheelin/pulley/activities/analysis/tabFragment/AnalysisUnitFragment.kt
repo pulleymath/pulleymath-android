@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.activities.analysis.tabFragment
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +19,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.activities.analysis.AnanlysisTabActivityInterface
-import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindPwFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.IS_SAMPLE
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT_TARGET
@@ -25,7 +26,6 @@ import com.freewheelin.pulley.activities.learning.tabFragment.usertest.analysis.
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ContentManager
-import com.freewheelin.pulley.core.manage.PieceManager
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.FragmentAnalysisUnitBinding
 import com.freewheelin.pulley.databinding.ItemAnalysisUnitBinding
@@ -35,6 +35,8 @@ import com.freewheelin.pulley.lib.ObservableHashSetListener
 import com.freewheelin.pulley.model.Analysis
 import com.freewheelin.pulley.model.ChapterAnalysis
 import com.freewheelin.pulley.model.curation.MyCuration
+import com.freewheelin.pulley.revision2023.model.request.AnalysisAdvancedLearningRequest
+import com.freewheelin.pulley.revision2023.viewmodel.AnalysisTabActViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DabakTabRadioListener
 import com.freewheelin.pulley.views.DaebakTabRadio
@@ -96,6 +98,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
     }
 
     lateinit var binding: FragmentAnalysisUnitBinding
+    val viewModel: AnalysisTabActViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -119,6 +122,10 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
             (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
             (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+        }
+        viewModel.errorAction.observe(viewLifecycleOwner) {
+            dialog?.dismiss()
+            DaebakToast.showFailedMakePiece(requireContext())
         }
     }
 
@@ -150,6 +157,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
         }
     }
 
+    var dialog: Dialog? = null
     private fun initUI() {
         selectedChapter.listener = this
         selectedChapter.clear()
@@ -169,44 +177,47 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
                 if(learnBtn.isEnableUI()) {
                     LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "추가학습하기")
                     val dialog = WrongManagementDialog(requireContext(), WrongManagementDialog.Type.scrap)
+                    this@AnalysisUnitFragment.dialog = dialog
                     dialog.configureUIByChapter(selectedChapter)
                     dialog.show()
                     dialog.binding.makeBtn.setOnClickListener {
                         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "내분석보기", "단원 학습지 만들기")
-                        dialog.binding.makeBtn.startLoding()
-                        val cntPerProblem = dialog.cnt
-                        val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
-                        val level = dialog.level
+                        dialog.binding.makeBtn.startLoading()
 
+                        val similar = if (dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom) "SIMILAR" else "SAME"
+                        val chapterLittles = selectedChapter.toList().map { it.code }
+                        val startDate = DateTimeUtils.yyyy_MM_dd.format(from.toDate())
+                        val endDate = DateTimeUtils.yyyy_MM_dd.format(to.toDate())
+                        val difficulty = dialog.level?.text ?: ""
+                        val requestProblemNumber = dialog.cnt
                         val isIncludeClearProblem = dialog.isClearInclude
 
-                        PieceManager.makeWeakPieceUsingChapters(requireContext(), user!!, selectedChapter.toList(),
-                            isSimilar, level, cntPerProblem, isIncludeClearProblem,
-                            from.toDate(),
-                            to.toDate(),
-                            successCB = {
-                                dialog.dismiss()
-
-                                if (dialog.binding.checkbox.isChecked) {
-                                    val intent = SolveActivity.getIntent(requireContext(), it)
-                                    startActivity(intent)
-                                } else {
-                                    val text: String
-                                    if (selectedChapter.size == 1)
-                                        text = "'${selectedChapter.first().name}'의 오답관리 문제가 만들어졌습니다."
-                                    else
-                                        text = "'${selectedChapter.first().name}' 외 ${selectedChapter.size - 1}개의 오답관리 문제가 만들어졌습니다."
-
-                                    showSnackBar(text, "바로가기")
-                                }
-
-                                selectedChapter.clear()
-                            },
-                            failCB = {
-                                dialog.dismiss()
-                                DaebakToast.showFailedMakePiece(requireContext())
-                            }
+                        val req = AnalysisAdvancedLearningRequest(
+                            sameOrSimilar = similar,
+                            studentID = user?.studentID!!,
+                            requestProblemNumber = requestProblemNumber,
+                            difficulty = difficulty,
+                            noteType = null,
+                            includeClearProblem = isIncludeClearProblem,
+                            chapterLittles = chapterLittles,
+                            startDate = startDate,
+                            endDate = endDate
                         )
+                        viewModel.setAdvancedLearning(req) {
+                            dialog.dismiss()
+                            if (dialog.binding.checkbox.isChecked) {
+                                val intent = SolveActivity.getIntent(requireContext(), it)
+                                startActivity(intent)
+                            } else {
+                                val text = if (selectedChapter.size == 1)
+                                    "'${selectedChapter.first().name}'의 오답관리 문제가 만들어졌습니다."
+                                else
+                                    "'${selectedChapter.first().name}' 외 ${selectedChapter.size - 1}개의 오답관리 문제가 만들어졌습니다."
+                                showSnackBar(text, "바로가기")
+                            }
+
+                            selectedChapter.clear()
+                        }
                     }
                 }
             }
@@ -260,11 +271,14 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             subjectChart.setDetailBtnVisibility(View.GONE)
 
             val myRating = analysis?.myRating
-            if (myRating == 1)
-                subjectChart.setSelectedBarLabel("1등급\n평균", "나의\n정답률", null)
-            else if (myRating != null)
-                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${myRating - 1}등급\n평균")
+            val upperRatingByMe = analysis?.getUpperRatingByMe()
 
+            if (myRating == "1" || myRating == "S") {
+                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", null)
+
+            } else if (myRating != null) {
+                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${upperRatingByMe}등급\n평균")
+            }
             subjectChart.selectedBar = subjectChart.bars?.first()
             subjectChart.bars?.first()?.isSelectedDetailBtn = true
             subjectChart.requestLayout()
@@ -393,7 +407,6 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
                 override fun onActionBtnClicked(view: SnackBarView) {
                     activity?.finish()
-//                    snackBarWindow.dismiss()
                     val intent = Intent(TAB_SCROLL_EVENT)
                     intent.putExtra(TAB_SCROLL_EVENT_TARGET, "todayStudyView")
                     LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)

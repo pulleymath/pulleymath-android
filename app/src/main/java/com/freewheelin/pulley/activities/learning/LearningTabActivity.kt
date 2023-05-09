@@ -10,6 +10,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,6 +19,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -49,19 +53,21 @@ import com.freewheelin.pulley.activities.learning.tabFragment.main.component.Sna
 import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_WRONG
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.snackTest.SnackTestFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.usertest.StudentManagerDialog
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
 import com.freewheelin.pulley.activities.mypage.*
 import com.freewheelin.pulley.bases.*
 import com.freewheelin.pulley.core.manage.*
+import com.freewheelin.pulley.core.manage.UserManager.EVENT_SCHOOL_CHANGE
 import com.freewheelin.pulley.core.manage.UserManager.EVENT_USER_UPDATE
 import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.core.manage.UserManager.SCHOOL_TYPE
 import com.freewheelin.pulley.databinding.ActivityLearningBinding
 import com.freewheelin.pulley.dialogs.CompleteDialogConfirm
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager.IS_START_CHALLENGE_COMPLETED
@@ -84,6 +90,12 @@ import org.jsoup.Jsoup
 import java.lang.Runnable
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 
 
 abstract class LearningTabFragment : Fragment() {
@@ -129,6 +141,7 @@ class LearningTabActivity : PermissionActivity(),
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var purchaseReceiver: BroadcastReceiver
     lateinit var userUpdateReceiver: BroadcastReceiver
+    lateinit var middleHighChangeReceiver: BroadcastReceiver
 
     var currentPagePosition = 0
 
@@ -151,10 +164,15 @@ class LearningTabActivity : PermissionActivity(),
 
         // for Session expired dialog in Api.class
         var referActivity: Activity? = null
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, LearningTabActivity::class.java).apply {
+
+            }
+        }
     }
 
     var tabFragment: MutableList<LearningTabFragment> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,13 +181,14 @@ class LearningTabActivity : PermissionActivity(),
 
         // TODO 추후 푸시알람 실행시 어딘가로 보내야할수도 있다.
         val target = intent.getStringExtra("target_android")
+
         tabFragment = mutableListOf(
             MainFragment.newInstance(),
             ConceptCourseFragment.newInstance(),
             PatternStudyFragment.newInstance(),
             MockExamFragment.newInstance(),
             SnackTestFragment.newInstance(),
-            WrongNoteFragment.newInstance(),
+            WrongNoteStudyFragment.newInstance(),
             AnalysisFragment.newInstance()
         )
 
@@ -184,9 +203,8 @@ class LearningTabActivity : PermissionActivity(),
         with(binding) {
             vm = viewModel
             lifecycleOwner = this@LearningTabActivity
-
+            updateHeaderColors(schoolType.isMiddle)
             viewPager.adapter = TabAdapter(supportFragmentManager)
-
             viewPager.setPagingEnabled(false)
             viewPager.offscreenPageLimit = 5
 
@@ -194,7 +212,6 @@ class LearningTabActivity : PermissionActivity(),
 
             tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    println("asoaso onTabSelected ${tab?.position}")
                     tab?.position?.let { position ->
                         if (position == 0) { checkStartChallengeFinish() }
                         if (isTablet) {
@@ -217,7 +234,6 @@ class LearningTabActivity : PermissionActivity(),
 
 
             initUnivTab()
-
 
             // 핸드폰이면 과외 메뉴 숨기기
             if(!isTablet) {
@@ -278,19 +294,38 @@ class LearningTabActivity : PermissionActivity(),
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(this@LearningTabActivity)
 
-
-            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB))
-            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT))
-            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(purchaseReceiver, IntentFilter(PURCHASE_SUCCESS))
-            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(userUpdateReceiver, IntentFilter(EVENT_USER_UPDATE))
-// for Api.class
             if(referActivity == null) referActivity = this@LearningTabActivity
             registerReceiver(mainEventReceiver, IntentFilter(FILTER_SESSION_EXPIRED))
 //            registerReceiver(firebasePushEventReceiver, IntentFilter("FIREBASE-PUSH"))
 
-            userTest()
+//            userTest()
+
+
+            val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+            anim.duration = 250
+            schoolSwitch.startAnimation(anim)
+
+            showTooltipIfNeedOnAnim(Tutor.TooltipType.middleIntroduceOpening, anim)
         }
     }
+
+    fun showTooltipIfNeedOnAnim(type: Tutor.TooltipType, anim: ScaleAnimation) {
+        if(type.isNeedToShow()) {
+            anim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(p0: Animation?) {
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        Tutor.showToolTipIfNeed(binding.schoolSwitch.binding.middleWrapperCl, type)
+                    }, 500)
+                }
+
+                override fun onAnimationStart(p0: Animation?) {}
+            })
+        }
+    }
+
     fun initUnivTab() {
 //        if (user?.showMainUnivTab == true) {
 //            tabFragment.add(AffiliatedTestFragment.newInstance())
@@ -409,6 +444,27 @@ class LearningTabActivity : PermissionActivity(),
                 }
             }
         }
+        middleHighChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                intent?.let {
+                    val schoolTypeStr = it.getStringExtra(SCHOOL_TYPE) ?: SchoolType.HIGH.name
+                    val type = SchoolType.convertFromStr(schoolTypeStr)
+                    viewModel.updateSchoolType(type)
+                }
+            }
+        }
+
+        listOf(
+            Pair(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB)),
+            Pair(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT)),
+            Pair(purchaseReceiver, IntentFilter(PURCHASE_SUCCESS)),
+            Pair(userUpdateReceiver, IntentFilter(EVENT_USER_UPDATE)),
+            Pair(middleHighChangeReceiver, IntentFilter(EVENT_SCHOOL_CHANGE)),
+        ).forEach {
+            val receiver = it.first
+            val filter = it.second
+            LocalBroadcastManager.getInstance(this@LearningTabActivity).registerReceiver(receiver, filter)
+        }
     }
 
     private fun initObserve() {
@@ -424,8 +480,8 @@ class LearningTabActivity : PermissionActivity(),
                     MyApplication.user?.run {
                         it.noShowAddOptionalDate = noShowAddOptionalDate
                         it.noShowAddOptionalSubject = noShowAddOptionalSubject
-                        it.excludeSubjectCode = excludeSubjectCode
-                        it.recentSubjectCode = recentSubjectCode
+//                        it.excludeSubjectCode = excludeSubjectCode
+//                        it.recentSubjectCode = recentSubjectCode
                     }
                     if (it.token.isNotEmpty()) {
                         MyApplication.user = it
@@ -445,7 +501,48 @@ class LearningTabActivity : PermissionActivity(),
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
             }
+            schoolType.observe(this@LearningTabActivity) {
+                Preferences.schoolType.set(it.name)
+                MyApplication.schoolType = it
+                binding.schoolSwitch.changeSchoolType(it.isMiddle)
+                updateHeaderColors(it.isMiddle)
+                updateHeaderItems(it.isHigh)
+            }
         }
+    }
+    private fun updateHeaderItems(isHighSchool: Boolean) {
+        binding.apply {
+            if (viewPager.currentItem == 3 && !isHighSchool) {
+                tabLayout.selectTab(tabLayout.getTabAt(2))
+            }
+
+            tabLayout.getTabAt(3)?.let {
+                it.view.visibleIf(isHighSchool)
+            }
+        }
+    }
+    private fun updateHeaderColors(isMiddle: Boolean) {
+        val colors: Array<ColorDrawable> = if (isMiddle) arrayOf(
+            ColorDrawable(ContextCompat.getColor(this, R.color.black_200)),
+            ColorDrawable(ContextCompat.getColor(this, R.color.white))
+        ) else {
+            arrayOf(
+                ColorDrawable(ContextCompat.getColor(this, R.color.white)),
+                ColorDrawable(ContextCompat.getColor(this, R.color.black_200))
+            )
+        }
+        val transitionDrawable = TransitionDrawable(colors)
+        binding.apply {
+            toolbarBackgroundCl.background = transitionDrawable
+            transitionDrawable.startTransition(400)
+
+        }
+
+        binding.tabLayout.setTabTextColors(
+            ContextCompat.getColor(this, R.color.gray_700),
+            ContextCompat.getColor(this, if (isMiddle) R.color.gray_800 else R.color.white)
+        )
+
     }
     var spyCount = 0
 
@@ -471,31 +568,31 @@ class LearningTabActivity : PermissionActivity(),
         }
     }
 
-    private fun userTest() {
-        val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/mes/teachers.json"
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
-                if (data != null && data.isNotEmpty()) {
-                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java)
-                        .let { runOnUiThread { checkTeachers(it) } }
-                }
-            } catch (e: Exception) {
-                Log.d("마케팅에러", "error=${e.localizedMessage}")
-            }
-        }
-    }
+//    private fun userTest() {
+//        val url = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/mes/teachers.json"
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
+//                if (data != null && data.isNotEmpty()) {
+//                    Gson().fromJson(data, StudentManagerDialog.StudentManagerResponse::class.java)
+//                        .let { runOnUiThread { checkTeachers(it) } }
+//                }
+//            } catch (e: Exception) {
+//                Log.d("마케팅에러", "error=${e.localizedMessage}")
+//            }
+//        }
+//    }
 
-    private fun checkTeachers(response: StudentManagerDialog.StudentManagerResponse) {
-        val isRegisteredTeacherEmail = response.admins.contains(user?.email)
-
-        if(isRegisteredTeacherEmail) {
-            binding.loadStudentBtn.visibility = View.VISIBLE
-            binding.loadStudentBtn.setOnClickListener {
-                StudentManagerDialog(this, {},{}).show()
-            }
-        }
-    }
+//    private fun checkTeachers(response: StudentManagerDialog.StudentManagerResponse) {
+//        val isRegisteredTeacherEmail = response.admins.contains(user?.email)
+//
+//        if(isRegisteredTeacherEmail) {
+//            binding.loadStudentBtn.visibility = View.VISIBLE
+//            binding.loadStudentBtn.setOnClickListener {
+//                StudentManagerDialog(this, {},{}).show()
+//            }
+//        }
+//    }
 
     var mainEventReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -521,7 +618,6 @@ class LearningTabActivity : PermissionActivity(),
     }
     fun checkStartChallengeFinish() {
         val isStartChallengeCompleted = intent.getBooleanExtra(IS_START_CHALLENGE_COMPLETED, false)
-        println("asoaso  - - - - - iss cc ${isStartChallengeCompleted} , ${viewModel.showStartChallengeFinishEffect()}")
         if (isStartChallengeCompleted || viewModel.showStartChallengeFinishEffect()) {
 
             tabFragment.find { it.screenName == "메인" }?.let { frag ->
@@ -670,10 +766,8 @@ class LearningTabActivity : PermissionActivity(),
 
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(tabMoveReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(challengeReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(purchaseReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(userUpdateReceiver)
+        listOf(tabMoveReceiver, challengeReceiver, purchaseReceiver, userUpdateReceiver, middleHighChangeReceiver)
+            .forEach { LocalBroadcastManager.getInstance(this).unregisterReceiver(it) }
         AppUsageMonitor.finishAppUsage()
 
         referActivity = null
@@ -895,6 +989,12 @@ class LearningTabActivity : PermissionActivity(),
             it.viewModel.selectedSubjectId.postValue(index)
         }
     }
+    fun setConceptCourseAvailableFirstSubject() {
+        (tabFragment[1] as? ConceptCourseFragment)?.let {
+            it.moveAvailableFirstSubject()
+        }
+    }
+
     fun launchConceptCourseTutorial() {
         (tabFragment[1] as? ConceptCourseFragment)?.let {
             it.launchTutorialActivity()

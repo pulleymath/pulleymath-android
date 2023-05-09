@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.core.API
 
+import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.core.API.ResponseModel.WeeklyProblemCount
@@ -190,6 +191,7 @@ interface ServiceV1 {
     @POST("/book/review")
     fun reviewBook(@Body param: Parameter): Call<Template<ResponseBookInfo>>
 
+    // deprecated
     @POST("/notes/detail")
     fun getProblemDetail(@Body param: Parameter): Call<Template<ResponseProblemDetail>>
 
@@ -202,6 +204,7 @@ interface ServiceV1 {
     @POST("/weak/pieces")
     fun getWeakPieceWithPieces(@Body param: Parameter): Call<Template<Piece>>
 
+    //deprecated
     @POST("/weak/chapters")
     fun getWeakPieceWithChapters(@Body param: Parameter): Call<Template<Piece>>
 
@@ -211,6 +214,7 @@ interface ServiceV1 {
     @POST("/mark/deleteAllClear")
     fun clearAllClear(@Body studentID: RequestBody): Call<Void>
 
+    // deprecated
     @POST("/analysis/")
     fun getAnalysis(@Body param: Parameter): Call<Template<Analysis>>
 
@@ -229,8 +233,12 @@ interface ServiceV1 {
     @POST("/scoring/")
     fun scoringTest(@Body param: Parameter): Call<Template<Test>>
 
+    //deprecated
     @POST("/review/piece")
     fun getTestReviewInfo(@Body param: Parameter): Call<Template<Test>>
+
+    @POST("/v1/review/piece")
+    fun getTestReviewInfoV1(@Body param: Parameter): Call<ResponseForceBody<Test>>
 
     @POST("/test/weekly/count")
     fun getWeeklyProblemCount(@Body param: Parameter): Call<Template<WeeklyProblemCount>>
@@ -253,8 +261,15 @@ interface ServiceV1 {
     @HTTP(method = "DELETE", path = "/mark/", hasBody = true)
     fun deleteProblemsMark(@Body param: Parameter): Call<Void>
 
+    //deprecated
     @POST("/review/chapter")
     fun getReviewFromChapter(@Body param: Parameter): Call<Template<Piece>>
+
+    @POST("/v1/review/chapters")
+    fun getReviewFromChapterV1(
+        @Body param: Parameter,
+        @Query("schoolType") school: String? = MyApplication.schoolType.name
+    ): Call<ResponseForceBody<Piece>>
 
     @POST("/piece/mo/curation")
     fun getMockCuration(@Body param: Parameter): Call<Template<String>>

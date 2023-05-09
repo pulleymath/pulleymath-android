@@ -4,11 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -24,8 +25,12 @@ import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
 import com.freewheelin.pulley.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.dialogs.CustomizeBookDialogListener
 import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.revision2021.utils.getStatusBarHeight
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
+import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
@@ -33,6 +38,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
+import com.freewheelin.pulley.revision2023.utils.listeners.BookFilterItemListener
 import com.freewheelin.pulley.revision2023.viewmodel.WorkbookListViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.GridMarginDecoration
@@ -43,7 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2, BookFilterListener,
+class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2,
     CustomizeBookDialogListener {
     val binding: ActivityWorkbookListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_workbook_list, null, false)
@@ -52,6 +58,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 //    private val totalPlanAdapter = PatternStudyTotalPlanAdapter (this, null, null)
     lateinit var planAdapter: PatternStudyMyPlanAdapter
     lateinit var userUpdateReceiver: BroadcastReceiver
+    lateinit var filterAdapter: BookFilterAdapter
 
     companion object {
         @JvmStatic
@@ -102,7 +109,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 }
             }
             customBooks.observe(this@WorkbookListActivity) {
-                if (latestFilters == binding.filterView.selectedFilterTypes || latestFilters == binding.filterView.customBookInitFilterTypes) {
+                if (latestFilters == selectedFilterTypes) {
                     planAdapter.submitList(it)
                     if (it.isEmpty()) {
                         binding.totalEmptyContainer.show(300)
@@ -127,6 +134,9 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 val isWorkbookStartChallengeInProgress = it.find { it.startChallenge?.isWorkbooksInProgress == true } != null
                 showStartChallengeStamp.postValue(isWorkbookStartChallengeInProgress)
             }
+            filterElements.observe(this@WorkbookListActivity) {
+                this@WorkbookListActivity.filterAdapter.submitList(it)
+            }
             checkActionOfStartChallenge {
                 val guideDialog = ChallengeGuideManager.getStartGuideMission4()
                 supportFragmentManager.let { guideDialog.show(it, "getStartGuideMission3") }
@@ -150,7 +160,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     }
     fun initAdapter() {
         binding.apply {
-            val spanCount = if (isTablet) 4 else 3
+            val spanCount = if (isTablet) 4 else 2
             totalRv.layoutManager = GridLayoutManager(this@WorkbookListActivity, spanCount)
             planAdapter = PatternStudyMyPlanAdapter (this@WorkbookListActivity, listOf(ActionType.pin), PatternStudyMyPlanAdapter.OriginType.Workbook)
             totalRv.adapter = planAdapter
@@ -165,6 +175,40 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 }
             })
             viewModel.adapter = planAdapter
+
+            filterAdapter = BookFilterAdapter (object : BookFilterItemListener {
+                override fun onToggle(isChecked: Boolean) {
+                    viewModel.switchCheckedContainPin(isChecked)
+                }
+
+                override fun onFilterItemClick(item: BookFilterElement) {
+                    viewModel.showEmptyContainer.postValue(false)
+                    viewModel.showRecyclerView.postValue(false)
+                    viewModel.showTotalLoadingView.postValue(true)
+                    viewModel.playTotalLoadingView.postValue(true)
+                    viewModel.onFilterItemClick(item)
+                }
+
+                override fun onCalendar() {}
+            })
+            val filterSpanCount = if (isTablet) 2 else 3
+            filterRv.layoutManager = GridLayoutManager(this@WorkbookListActivity, filterSpanCount).also {
+                it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        viewModel.filterElements.value?.let { list ->
+                            return when (list[position].type) {
+                                BookFilterElement.Type.Item -> 1
+                                else -> filterSpanCount
+                            }
+                        }
+                        return 1
+                    }
+                }
+            }
+            val screenHeight = DisplayUtils.getScreenHeight(this@WorkbookListActivity)
+
+            filterRv.adapter = filterAdapter
+            filterRv.minimumHeight = screenHeight - 48.toPx() - getStatusBarHeight()
         }
     }
 
@@ -177,7 +221,6 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
             initFilterView()
             fetchCustomBook()
-            filterView.listener = this@WorkbookListActivity
         }
     }
 
@@ -188,13 +231,10 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
 
     private fun initFilterView() {
-        binding.apply {
-            filterView.selectedFilterTypes.clear()
-            filterView.selectedFilterTypes.addAll(filterView.customBookInitFilterTypes)
-        }
+        viewModel.fetchBookFilter()
     }
     private fun fetchCustomBook() {
-        val filters = binding.filterView.selectedFilterTypes.toSet()
+        val filters = viewModel.selectedFilterTypes.toSet()
         viewModel.fetchCustomBook(filters)
     }
 
@@ -220,9 +260,9 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         LogUtils.logEvent(this@WorkbookListActivity, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "스크롤", "전체문제집")
     }
 
-    override fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>) {
-        fetchCustomBook()
-    }
+//    override fun onFilterTypeChanged(view: BookFilterView, filters: Set<FilterType>) {
+//        fetchCustomBook()
+//    }
 
     override fun onMadeCustomBook(dialog: CustomizeBookDialog, book: Book) {
         fetchCustomBook()
@@ -296,10 +336,8 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     }
 
     override fun filterFromTagOnCard(filterType: String) {
-        val type = FilterType.convertTagAtFiltertType(filterType)
-        binding.filterView.selectedFilterTypes.add(type)
-        binding.filterView.selectedFilterTypes.removeAll(type.exclusiveSet)
-        binding.filterView.adapter?.notifyDataSetChanged()
+        val type = LearningFilterType.convertTagAtFilterType(filterType)
+        viewModel.updateFilterTypes(type)
     }
     override fun onDestroy() {
         super.onDestroy()

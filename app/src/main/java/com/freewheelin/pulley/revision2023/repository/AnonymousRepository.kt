@@ -20,8 +20,11 @@ class AnonymousRepository() {
     suspend fun getPurchaseGuide(): PurchaseGuide {
         return api.getPurchaseGuide().data
     }
+    suspend fun getAnalysis(startDate: String, endDate: String): Analysis {
+        return api.getAnalysis(startDate = startDate, endDate = endDate).data
+    }
     suspend fun getAnalysisSample(): Analysis {
-        return api.getAnalysisSample().data
+        return api.getAnalysisSampleV2().data
     }
     suspend fun guestSignIn(req: GuestSignInRequest): GuestSignInResponse {
         return api.guestSignIn(req).data

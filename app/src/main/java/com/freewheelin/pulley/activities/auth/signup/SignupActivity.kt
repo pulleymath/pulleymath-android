@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
-import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActivity
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.assets.Major
 import com.freewheelin.pulley.bases.BaseActivity
@@ -30,7 +29,6 @@ import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -67,9 +65,26 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         setContentView(binding.root)
         isGuestUser = intent.getBooleanExtra(IS_GUEST_USER, false)
         initUI()
+        initObserve()
+    }
+
+    private fun initObserve() {
+        viewModel.apply {
+            isLoading.observe(this@SignupActivity) { loading ->
+                binding.apply {
+                    if (loading) {
+                        loadingContainer.visibleIf(true)
+                        loadingLottie.playAnimation()
+                    } else {
+                        loadingContainer.hide(300)
+                    }
+                }
+            }
+        }
     }
 
     private fun initUI() {
+        binding.lifecycleOwner = this
         binding.rootView.setOnTouchListener { view, motionEvent ->
             currentFocus?.let { hideKeyboard(it) }
             false
@@ -109,6 +124,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     override fun regist(school:Int?, region:Int?, selectedGrade:Int, rate:Int, major:Int) {
+        viewModel.setLoading(true)
         signup.schoolInfo.apply {
             schoolID = school
             regionID = region
@@ -116,51 +132,53 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
-            // TODO  Signup 이후에 알림톡발송을 위한 API를 쏴야한다 4월13일
+            val isHighSchoolUser = grade < 5
             if (isGuestUser) {
                 signup.studentId = user?.studentID
                 viewModel.requestGuestSignUp(signup) {
-                    signupSuccess()
+                    signupSuccess(isHighSchoolUser)
                 }
             } else {
                 viewModel.requestUserSignUp(signup) {
-                    signupSuccess()
+                    signupSuccess(isHighSchoolUser)
                 }
             }
         }
     }
 
-    private fun signupSuccess() {
+    private fun signupSuccess(isHighSchoolUser: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
             LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
-            login(signup.email, signup.password)
+            login(signup.email, signup.password, isHighSchoolUser)
         }
     }
 
-    private fun login(email:String, pw:String) {
+    private fun login(email: String, pw: String, isHighSchoolUser: Boolean) {
         API_V3.loginApp(RequestLogin(email, pw)).enqueue(object: Callback<Template<User?>> {
             override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
+                viewModel.setLoading(false)
                 responseFailed(this@SignupActivity, t)
             }
 
             override fun onResponse(call: Call<Template<User?>>, response: Response<Template<User?>>) {
+                viewModel.setLoading(false)
                 Preferences.isAvailableRushDialog.set(true)
                 val user = response.body()?.data
                 user?.connectToCrashlytics()
 
                 when(response.code()) {
-                    200 -> loginSuccess(user)
+                    200 -> loginSuccess(user, isHighSchoolUser)
                     else -> loginFailed(response)
                 }
             }
         })
     }
 
-    private fun loginSuccess(user:User?) {
+    private fun loginSuccess(user: User?, isHighSchoolUser: Boolean) {
         viewModel.requestSignUpReward {
             MyApplication.user = user
             MyApplication.token = user?.token
-            startActivity(InitSettingCompleteActivity.getIntent(this, isGuestUser))
+            startActivity(InitSettingCompleteActivity.getIntent(this, isHighSchoolUser, isGuestUser))
             if (isGuestUser) {
                 finish()
             } else {

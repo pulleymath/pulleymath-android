@@ -8,15 +8,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyMiddleCommonUnitSettingFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
 import com.freewheelin.pulley.dialogs.CompleteDialog
 import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.DialogUtils
 
 class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
@@ -24,6 +27,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     companion object {
         const val RELOAD = "study_info_reload"
     }
+    private val viewModel: MyMainPageFragViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -40,7 +44,48 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
         setFragmentResultListener(RELOAD) { key, bundle ->
             reload()
+            viewModel.fetchRecommendSubject()
         }
+        initObserve()
+    }
+    fun initObserve() {
+        viewModel.apply {
+            schoolType.observe(viewLifecycleOwner) {
+                binding.apply {
+//                majorLabel.visibleIf(it.isHigh)
+
+                }
+            }
+            recommendCommonSubjects.observe(viewLifecycleOwner) { subjects ->
+                val subjectNames = subjects
+                    .filter {
+                        it.chapters
+                            .map { it.isSelected }
+                            .reduce { p1, p2 ->
+                            p1 || p2
+                        }
+                    }
+                    .map { it.subjectName }
+                    .joinTo(StringBuilder(), ", ").toString()
+
+                binding.commonSubjectTv.text = subjectNames
+                binding.middleSubjectTv.text = subjectNames
+            }
+            recommendOptionalSubjects.observe(viewLifecycleOwner) { subjects ->
+                val subjectNames = subjects
+                    .filter {
+                        it.chapters
+                            .map { it.isSelected }
+                            .reduce { p1, p2 ->
+                                p1 || p2
+                            }
+                    }
+                    .map { it.subjectName }
+                    .joinTo(StringBuilder(), ", ").toString()
+                binding.optionalSubjectTv.text = subjectNames
+            }
+        }
+
     }
 
     private fun reload() {
@@ -51,9 +96,13 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
     private fun initUI() {
         with(binding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+            viewModel.fetchRecommendSubject()
             modifyBtn.setOnClickListener { moveTo(MyStudyInfoSettingFragment()) }
             modifyCommonBtn.setOnClickListener { moveTo(StudyCommonUnitSettingFragment()) }
             modifySelectBtn.setOnClickListener { moveTo(StudyOptionalUnitSettingFragment()) }
+            middleSubjectModifyBtn.setOnClickListener { moveTo(StudyMiddleCommonUnitSettingFragment()) }
 //        deleteAllBtn.setOnClickListener { deleteAll() }
             backBtn.setOnClickListener { onBackBtnClicked() }
         }
@@ -80,7 +129,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
                 ratingTv.text = user.ratingText
             }
 
-            configureStudy(user)
+//            configureStudy(user)
         }
     }
 
@@ -100,6 +149,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         with(binding) {
             commonSubjectTv.text = user.getCommonSubjectText()
             optionalSubjectTv.text = calcNoneText(user.getOptionalSubjectText())
+            middleSubjectTv.text = user.getCommonSubjectText()
         }
     }
 

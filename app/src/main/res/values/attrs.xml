@@ -262,4 +262,15 @@
     <declare-styleable name="MainUserStatusChip">
         <attr name="status" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="MiddleSchoolUnitSelection">
+        <attr name="unitType" format="enum">
+            <enum name="m1-1" value="50" />
+            <enum name="m1-2" value="51" />
+            <enum name="m2-1" value="52" />
+            <enum name="m2-2" value="53" />
+            <enum name="m3-1" value="54" />
+            <enum name="m3-2" value="55" />
+        </attr>
+    </declare-styleable>
 </resources>

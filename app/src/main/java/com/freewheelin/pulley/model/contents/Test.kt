@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.model.contents
 
+import com.freewheelin.pulley.assets.BigUnitV3
 import com.freewheelin.pulley.model.ChapterAnalysis
 import com.freewheelin.pulley.utils.LogUtils
 import java.io.Serializable
@@ -10,6 +11,35 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 
 class Test: Content {
+    enum class TestLevel(val title: String) {
+        HIGH("고난도 위주로"),
+        LIKE_ME("내 성적에 맞게"),
+        EASY("쉬운 것부터");
+        companion object {
+            fun titleOfNonNull(title: String): TestLevel =
+                values()
+                    .firstOrNull { it.title == title } ?: LIKE_ME
+
+            fun ordinalOfNonNull(ordinal: Int): TestLevel =
+                values()
+                    .firstOrNull { it.ordinal == ordinal } ?: LIKE_ME
+
+        }
+    }
+    enum class TestRange(val title: String) {
+        RECENT_RANGE("최근 공부한 범위에 맞추어서"),
+        ALL_RANGE("수능 전범위에 맞추어서"),
+        SUBJECT_BY_GRADE("학년별 과목에 맞추어서");
+        companion object {
+            fun titleOfNonNull(title: String): TestRange =
+                values()
+                    .firstOrNull { it.title == title } ?: SUBJECT_BY_GRADE
+            fun ordinalOfNonNull(ordinal: Int): TestRange =
+                values()
+                    .firstOrNull { it.ordinal == ordinal } ?: SUBJECT_BY_GRADE
+
+        }
+    }
     enum class TestType(val rawText: String) {
         initial("INIT"),
         init_V2("INIT_V2"),
@@ -67,14 +97,10 @@ class Test: Content {
     // V2
     var scoringTestPieceCount: Int = 0
     var canSolveTestPiece: Boolean = true
-    var testInfo: Map<String, Any> = emptyMap<String, Any>()
 
-    val dailyInfo: DailyInfo
-        get() = DailyInfo(testInfo)
-    val weeklyInfo: WeeklyInfo
-        get() = WeeklyInfo(testInfo)
-    val wrongInfo: WrongInfo
-        get() = WrongInfo(testInfo)
+    var dailyInfo: DailyInfo = DailyInfo()
+    val weeklyInfo: WeeklyInfo = WeeklyInfo()
+    val wrongInfo: WrongInfo = WrongInfo()
 
 
     fun isPossibleToSolve(): Boolean {
@@ -119,37 +145,21 @@ class TestHistory:Serializable {
     val score: Int? = null
 }
 
-class DailyInfo {
-    val testLevel: String
-    val testRange: String
-    val recentSubjectCode : String
-    val excludeSubjectCode : String
-
-    constructor(values: Map<String, Any>) {
-        this.testLevel = if(values["testLevel"]!=null) values["testLevel"] as String else ""
-        this.testRange = if(values["testRange"]!=null) values["testRange"] as String else ""
-        this.recentSubjectCode = if(values["recentSubjectCode"]!=null) values["recentSubjectCode"] as String else ""
-        this.excludeSubjectCode = if(values["excludeSubjectCode"]!=null) values["excludeSubjectCode"] as String else ""
-    }
+class DailyInfo: Serializable {
+    val testLevel: Int = -1 // nullable int, null 이면 니드셋업이 true
+    val testRange: Int = -1 //nullable int, null 이면 니드셋업이 true
+    val subjectCode : String = ""
 
     fun isNeedSetup(): Boolean {
-        return testLevel.isEmpty() || testRange.isEmpty()
+        return testLevel == -1 || testRange == -1
     }
 }
 
-class WeeklyInfo {
-    val weekEndDate: Date
-    val weekStartDate: Date
-    val testRange: String
-    val weeklyProblemCount: Int
-
-    constructor(values: Map<String, Any>) {
-        val weeklyInfo = Gson().fromJson(JSONObject(values).toString(), WeeklyInfo::class.java)
-        weekEndDate = weeklyInfo.weekEndDate
-        weekStartDate = weeklyInfo.weekStartDate
-        testRange = weeklyInfo.testRange
-        weeklyProblemCount = weeklyInfo.weeklyProblemCount
-    }
+class WeeklyInfo : Serializable{
+    val weekEndDate: Date = Date()
+    val weekStartDate: Date = Date()
+    val testRange: String = ""
+    val weeklyProblemCount: Int = -1
 
     fun getDurationText(): String {
         return "${weekStartDate.month()}월 ${weekStartDate.day()}일" +
@@ -158,20 +168,12 @@ class WeeklyInfo {
     }
 }
 
-class WrongInfo {
-    val headline: String
-    val monthAndWeek: String
-    val totalProblemCount: Int
-    val wrongProblemCount: Int
-    val clearedProblemCount: Int
-
-    constructor(values: Map<String, Any>) {
-        this.headline = values["headline"] as String
-        this.monthAndWeek = values["monthAndWeek"] as String
-        this.totalProblemCount = (values["totalProblemCount"] as Double).toInt()
-        this.wrongProblemCount = (values["wrongProblemCount"] as Double).toInt()
-        this.clearedProblemCount = (values["clearedProblemCount"] as Double).toInt()
-    }
+class WrongInfo: Serializable {
+    val headline: String = ""
+    val monthAndWeek: String = ""
+    val totalProblemCount: Int = -1
+    val wrongProblemCount: Int = -1
+    val clearedProblemCount: Int = -1
 
     fun isNeedMoreProblem(): Boolean {
         return totalProblemCount == 0 || wrongProblemCount - clearedProblemCount <= 0

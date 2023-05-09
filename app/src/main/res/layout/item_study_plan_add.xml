@@ -166,7 +166,7 @@
             android:layout_marginTop="@dimen/dp24"
             android:gravity="center"
             android:textSize="@dimen/sp14"
-            android:background="@drawable/bg_grey_f2f2f2_round_18"
+            android:background="@drawable/bg_gray_200_round_18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toEndOf="parent"

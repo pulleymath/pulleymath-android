@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -23,5 +24,9 @@ class InitSettingCompletedViewModel(application: Application) : BaseAndroidViewM
     }
     private suspend fun getSignupMessage(): HighlightMessage {
         return userRepository.getSignupMessage()
+    }
+    fun updateSchoolType(isHighSchoolUser: Boolean) {
+        val schoolType = if (isHighSchoolUser) SchoolType.HIGH else SchoolType.MIDDLE
+        userRepository.updateSchoolType(schoolType)
     }
 }

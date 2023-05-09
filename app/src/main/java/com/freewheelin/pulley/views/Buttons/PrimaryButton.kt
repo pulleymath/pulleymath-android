@@ -42,7 +42,7 @@ enum class ButtonTheme {
             Primary_Black -> ContextCompat.getDrawable(context, R.drawable.bg_black_4c4c4c_round)!!
             Primary_Orange -> ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)!!
             Secondary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_100_round_ripple)!!
-            Secondary_Grey -> ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round)!!
+            Secondary_Grey -> ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)!!
         }
     }
 
@@ -300,7 +300,7 @@ open class PrimaryButton: ConstraintLayout {
         }
     }
 
-    fun startLoding() {
+    fun startLoading() {
         button.isEnabled = false
         buttonText.text = ""
         lottie.setAnimation(theme.getLoadingAnim())

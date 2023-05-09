@@ -1,9 +1,7 @@
 package com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.bases.user
@@ -12,7 +10,6 @@ import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
-import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
@@ -37,6 +34,7 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
     val showConceptSolutionView by lazy { MutableLiveData<Boolean>(false) }
 
     val remainingHintSize by lazy { MutableLiveData<Int>(0) }
+    var hintExist: Boolean = true
 
     val btnText by lazy { MutableLiveData("채점하기") }
     val currQuizFormat by lazy { MutableLiveData(QuizFormat.Single) }
@@ -53,6 +51,7 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
         currQuizImage.postValue(quiz.quizImageUrl)
 
         currBaseConceptImage.postValue(quiz.concepts[0].conceptImageUrl)
+        hintExist = quiz.hints.isNotEmpty()
         remainingHintSize.postValue(quiz.hints.size)
     }
 

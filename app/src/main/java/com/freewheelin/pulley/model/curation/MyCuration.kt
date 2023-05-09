@@ -49,9 +49,9 @@ class MyCuration(val context: Context) {
                     unitSummaryNoImprovementHigh
                 else
                     unitSummaryNoImprovementLow
-                        )
-                        .format(guideAnalysis.name)
-                        .partialFont(Theme.extraBold(context), 0, guideAnalysis.name.length)
+                )
+                    .format(guideAnalysis.name)
+                    .partialFont(Theme.extraBold(context), 0, guideAnalysis.name.length)
 
                 val color = if(guideAnalysis.myCorrectRate > guideAnalysis.averageCorrectRateSameGrade) positiveColor else negativeColor
 

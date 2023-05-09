@@ -23,8 +23,11 @@ interface DateRangePickerDialogListener {
 }
 
 class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, firstDate: LocalDate) : Dialog(context), View.OnClickListener, DaebakCalendarListener {
-    enum class Type {
-        RECENT7, RECENT14, RECENT30, CUSTOM
+    enum class Type (val text: String?) {
+        RECENT7("최근 7일"),
+        RECENT14("최근 14일"),
+        RECENT30("최근 30일"),
+        CUSTOM(null)
     }
     val binding: ViewDaebakDateRangePickerBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_daebak_date_range_picker, null, false)

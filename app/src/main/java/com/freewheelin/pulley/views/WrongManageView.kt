@@ -12,20 +12,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.ViewWrongManageBinding
-import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
-import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
-import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.buttons.*
 
 interface WrongManageViewListener {
     fun onTrashBtnClicked(view: WrongManageView) {}
@@ -34,6 +28,10 @@ interface WrongManageViewListener {
     fun onMailBtnClicked(view: WrongManageView) {}
     fun onStudyBtnClicked(view: WrongManageView)
     fun onReviewBtnClicked(view: WrongManageView) {}
+}
+interface NoteStudyViewListener {
+    fun onStudyBtnClicked(view: WrongManageView)
+    fun onReviewBtnClicked(view: WrongManageView)
 }
 class WrongManageView: ConstraintLayout {
     enum class BtnType {
@@ -57,6 +55,7 @@ class WrongManageView: ConstraintLayout {
 
     var isActive: Boolean = false
     var listener: WrongManageViewListener? = null
+    var studyListener: NoteStudyViewListener? = null
     var studyWrongBtn: TextView
 
 //    var containerCl: ConstraintLayout
@@ -77,7 +76,11 @@ class WrongManageView: ConstraintLayout {
 
             studyWrongBtn = studyWrongTv
             studyWrongCl.setOnBasicPOrHigherClickListener(cb = {
-                if(isActive) { listener?.onStudyBtnClicked(this@WrongManageView) }
+
+                if (isActive) {
+                    listener?.onStudyBtnClicked(this@WrongManageView)
+                    studyListener?.onStudyBtnClicked(this@WrongManageView)
+                }
                 else { showInactiveToast() }
             }, deniedCb = {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "학습지만들기")
@@ -89,6 +92,7 @@ class WrongManageView: ConstraintLayout {
             })
             reviewCl.setOnBasicPOrHigherClickListener(cb = {
                 listener?.onReviewBtnClicked(this@WrongManageView)
+                studyListener?.onReviewBtnClicked(this@WrongManageView)
             }, deniedCb = {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "리뷰하기")
                 val dialog = PurchaseGuideDialog()
@@ -162,7 +166,7 @@ class WrongManageView: ConstraintLayout {
             marginStart = 8.toPx()
         }
         btn.setImageResource(type.resId)
-        btn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round)
+        btn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)
         binding.btnContainerLl.addView(btn)
         btn.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
         btn.setOnClickListener {
@@ -218,7 +222,7 @@ class WrongManageView: ConstraintLayout {
 
     fun setViewModel(vm: BaseAndroidViewModel) {
 
-        (vm as WrongNoteFragViewModel).apply {
+        (vm as WrongNoteStudyViewModel).apply {
             binding.fragmentVM = this
         }
     }

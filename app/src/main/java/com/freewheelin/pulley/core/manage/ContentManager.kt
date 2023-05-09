@@ -6,13 +6,10 @@ import com.freewheelin.pulley.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.core.API.ResponseModel.StudentGoalInfo
 import com.freewheelin.pulley.core.API_V1
 import com.freewheelin.pulley.core.API_V2
+import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.core.manage.TestManager.COUNT_MAXIMUM_DAILY_TEST
-import com.freewheelin.pulley.model.ChapterAnalysis
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.Result
-import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.model.*
 import com.freewheelin.pulley.model.contents.*
 import com.freewheelin.pulley.utils.*
 import retrofit2.Call
@@ -90,12 +87,12 @@ object ContentManager {
                 "endDate" to DateTimeUtils.yyyy_MM_dd.format(endDate)
         )
 
-        API_V1.getReviewFromChapter(param).enqueue(object: Callback<Template<Piece>> {
-            override fun onFailure(call: Call<Template<Piece>>, t: Throwable) {
+        API_V1.getReviewFromChapterV1(param).enqueue(object: Callback<ResponseForceBody<Piece>> {
+            override fun onFailure(call: Call<ResponseForceBody<Piece>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Template<Piece>>, response: Response<Template<Piece>>) {
+            override fun onResponse(call: Call<ResponseForceBody<Piece>>, response: Response<ResponseForceBody<Piece>>) {
                 val piece = response.body()?.data
                 if(response.isSuccessful && piece != null) {
                     successCB(piece)
@@ -208,15 +205,15 @@ object ContentManager {
     }
 
     fun makeRecommendPiece(context: Context, user: User, successCB: (context: Book) -> Unit) {
-        API_V2.makeRecommend(user.studentID).enqueue(object: Callback<Book>{
-            override fun onFailure(call: Call<Book>, t: Throwable) {
+        API_V3.makeRecommend(user.studentID).enqueue(object: Callback<ResponseBody<Book>>{
+            override fun onFailure(call: Call<ResponseBody<Book>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Book>, response: Response<Book>) {
+            override fun onResponse(call: Call<ResponseBody<Book>>, response: Response<ResponseBody<Book>>) {
                 val piece = response.body()
                 if(response.isSuccessful && piece != null)
-                    successCB(piece)
+                    piece.data?.let { successCB(it) }
                 else
                     responseError(context, response)
             }
@@ -224,15 +221,17 @@ object ContentManager {
     }
 
     fun makeWrongPiece(context: Context, user: User, successCB: (context: Piece) -> Unit) {
-        API_V2.makeWrongNote(user.studentID).enqueue(object: Callback<Piece>{
-            override fun onFailure(call: Call<Piece>, t: Throwable) {
-
+        API_V3.makeWrongNote(user.studentID).enqueue(object: Callback<ResponseBody<Piece>>{
+            override fun onFailure(call: Call<ResponseBody<Piece>>, t: Throwable) {
+                responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<Piece>, response: Response<Piece>) {
-                val piece = response.body()
+            override fun onResponse(call: Call<ResponseBody<Piece>>, response: Response<ResponseBody<Piece>>) {
+                val piece = response.body()?.data
                 if(response.isSuccessful && piece != null)
                     successCB(piece)
+                else
+                    responseError(context, response)
             }
         })
     }

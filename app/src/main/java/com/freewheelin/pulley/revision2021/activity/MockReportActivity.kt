@@ -53,10 +53,10 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     val scoreTabIds = mutableListOf<Int>()
 
     companion object {
-        fun getIntent(context: Context, mockExam: MockExam, scoredStudentGoalInfo: ScoredStudentGoalInfo? = null): Intent {
+        fun getIntent(context: Context, mockExam: MockExam): Intent {
             val intent = Intent(context, MockReportActivity::class.java)
             intent.putExtra(MockExamManager.ARG_MOCK_EXAM, mockExam)
-            intent.putExtra(MockExamManager.ARG_SCORED_INFO, scoredStudentGoalInfo)
+//            intent.putExtra(MockExamManager.ARG_SCORED_INFO, scoredStudentGoalInfo)
             return intent
         }
     }
@@ -83,7 +83,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
         binding.backBtn.extensionTouchArea(40)
         binding.backBtn.setOnClickListener { finish() }
 
-        showSuccessToastIfNeed()
+//        showSuccessToastIfNeed()
     }
     private fun setUI() {
         filteredProblemList.clear()
@@ -100,12 +100,12 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
     private fun showSuccessToastIfNeed() {
         CoroutineScope(Dispatchers.Main).launch {
 //            val scoredInfo = getSerializable(this@MockReportActivity, MockExamManager.ARG_SCORED_INFO, ScoredStudentGoalInfo::class.java)
-            val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
+//            val scoredInfo = intent.getSerializableExtra(MockExamManager.ARG_SCORED_INFO) as? ScoredStudentGoalInfo
             delay(2000)
 
-            if (scoredInfo?.isNeedToShowCompletedToast() == true) {
-                SuccessToast.show(this@MockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
-            }
+//            if (scoredInfo?.isNeedToShowCompletedToast() == true) {
+//                SuccessToast.show(this@MockReportActivity, "목표달성 ${scoredInfo.continuousGoalCount}일째","하루 ${scoredInfo.goalProblemCount}문제 풀기 성공")
+//            }
         }
     }
 
@@ -375,23 +375,29 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
 
         fun setSubjectBarChart(idx: Int) {
             examAnalysis.subjectAnalysis?.report?.get(idx)?.let { subjectReport ->
-                val barChartList: List<MockReportBarChartView> = listOf(itemBinding.subjectBarChartView1, itemBinding.subjectBarChartView2, itemBinding.subjectBarChartView3)
-
+                val barChartList: List<MockReportBarChartView> = listOf(
+                    itemBinding.subjectBarChartView1,
+                    itemBinding.subjectBarChartView2,
+                    itemBinding.subjectBarChartView3,
+                    itemBinding.subjectBarChartView4
+                )
                 CoroutineScope(Dispatchers.Main).launch {
-                    barChartList.forEachIndexed { index, chartView ->
-                        chartView.visibility = if (index >= subjectReport.chapterList.size) View.INVISIBLE else View.VISIBLE
-                    }
+                    barChartList.forEach { it.visibility = View.GONE }
+
                     subjectReport.chapterList.forEachIndexed { idx, chapter ->
-                        val barChart = barChartList[idx]
-                        val leftTitle = chapter.chapterName
-                        val leftSub = "${chapter.totalNumber}문항"
-                        val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
-                        val rightSub =
-                            "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
-                        barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
-                        barChart.setMainColorWithPercent(chapter.myCorrectRate)
-                        barChart.setSubPercent(chapter.sameRatingCorrectRate)
-                        barChart.show(examAnalysis.showAllSummary)
+                        if (barChartList.size > idx) {
+                            val barChart = barChartList[idx]
+                            barChart.visibility = View.VISIBLE
+                            val leftTitle = chapter.chapterName
+                            val leftSub = "${chapter.totalNumber}문항"
+                            val rightTitle = "내 정답률 ${chapter.myCorrectRate}%"
+                            val rightSub =
+                                "${chapter.myRating}등급 평균 ${chapter.sameRatingCorrectRate}%"
+                            barChart.setTitles(leftTitle, leftSub, rightTitle, rightSub)
+                            barChart.setMainColorWithPercent(chapter.myCorrectRate)
+                            barChart.setSubPercent(chapter.sameRatingCorrectRate)
+                            barChart.show(examAnalysis.showAllSummary)
+                        }
                     }
                 }
             }

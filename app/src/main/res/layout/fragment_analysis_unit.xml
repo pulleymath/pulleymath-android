@@ -28,7 +28,7 @@
             android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/summaryLabel"></androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@+id/summaryLabel"/>
 
         <TextView
             android:id="@+id/summaryTv"

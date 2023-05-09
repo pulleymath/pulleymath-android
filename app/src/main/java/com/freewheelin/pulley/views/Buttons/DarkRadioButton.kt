@@ -26,7 +26,7 @@ class DarkRadioButton: Button {
     private fun configureUI() {
         if(isSelected) {
             setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_18)
+            background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_18)
             typeface = Theme.extraBold(context)
         } else {
             setTextColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))

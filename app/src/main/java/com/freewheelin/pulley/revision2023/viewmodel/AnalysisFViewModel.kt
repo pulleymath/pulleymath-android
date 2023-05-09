@@ -26,6 +26,7 @@ class AnalysisFViewModel(application: Application): BaseAndroidViewModel(applica
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
+    val schoolType = userRepository.schoolType
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)

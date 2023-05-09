@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +14,7 @@ class AppViewModel(application: Application) : BaseAndroidViewModel(application)
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
+    val schoolType = userRepository.schoolType
     val joinedChallengeList = challengeRepository.joinedChallengeList
 
 
@@ -28,5 +29,8 @@ class AppViewModel(application: Application) : BaseAndroidViewModel(application)
 
     fun updateUser(user: User) {
         userRepository.updateUser(user)
+    }
+    fun updateSchoolType(type: SchoolType) {
+        userRepository.updateSchoolType(type)
     }
 }

@@ -14,7 +14,7 @@ class HashTagTextView: TextView {
         val topBottomPadding = resources.getDimension(R.dimen.dp12).toInt()
         val textSize = resources.getDimension(R.dimen.sp16)
         setPadding(leftRightPadding, topBottomPadding, leftRightPadding, topBottomPadding)
-        background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_20)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_20)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
         typeface = ResourcesCompat.getFont(context, R.font.pretendard_semibold)

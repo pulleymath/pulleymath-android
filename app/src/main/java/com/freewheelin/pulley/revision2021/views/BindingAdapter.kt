@@ -85,6 +85,11 @@ object BindingAdapter {
             setColorFilter(it)
         }
     }
+    @JvmStatic
+    @BindingAdapter("commonBackgroundIf")
+    fun commonBackgroundIf(view: View, show: Boolean?) {
+        view.setBackgroundResource(if (show == true) R.drawable.bg_purple_300_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
+    }
 
     @JvmStatic
     @BindingAdapter("layout_margin_end_dimen_on_text_length")
@@ -279,6 +284,16 @@ object BindingAdapter {
     @BindingAdapter("visibleOrInvisibleIf")
     fun visibleOrInvisibleIf(view: View, show: Boolean?) {
         view.visibility = if (show == true) View.VISIBLE else View.INVISIBLE
+    }
+
+    @JvmStatic
+    @BindingAdapter("visibleAnimIf")
+    fun visibleAnimIf(view: View, show: Boolean?) {
+        if (show == true) {
+            view.show(600)
+        } else {
+            view.hide(200)
+        }
     }
     @JvmStatic
     @BindingAdapter("setUserServiceType")

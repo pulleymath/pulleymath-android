@@ -19,17 +19,17 @@ import com.freewheelin.pulley.activities.analysis.tabFragment.AnalysisStudyAmoun
 import com.freewheelin.pulley.activities.analysis.tabFragment.AnalysisUnitFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.IS_SAMPLE
 import com.freewheelin.pulley.bases.BaseNavActivity
+import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAnalysisTabBinding
 import com.freewheelin.pulley.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.model.Analysis
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.viewmodel.AnalysisTabActViewModel
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.extensionTouchArea
-import com.freewheelin.pulley.utils.showBalloon
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
 import com.google.android.material.tabs.TabLayout
 import org.joda.time.LocalDate
@@ -85,15 +85,27 @@ class AnalysisTabActivity : BaseNavActivity(),
         val isSample = intent.getBooleanExtra(IS_SAMPLE, false)
         viewModel.isSampleLiveData.postValue(isSample)
         viewModel.isSample = isSample
-        analysisTab = listOf(
-            AnalysisUnitFragment.newInstance(isSample),
-            AnalysisByLevelFragment.newInstance(),
-            AnalysisStudyAmountFragment.newInstance()
-        )
-        configTab(0)
-        configTab(1)
-        configTab(2)
-        replaceFragment(analysisTab[0])
+        viewModel.schoolType.observe(this) {
+            if (it.isHigh) {
+                analysisTab = listOf(
+                    AnalysisUnitFragment.newInstance(isSample),
+                    AnalysisByLevelFragment.newInstance(),
+                    AnalysisStudyAmountFragment.newInstance()
+                )
+                configTab(0)
+                configTab(1)
+                configTab(2)
+            } else {
+                analysisTab = listOf(
+                    AnalysisUnitFragment.newInstance(isSample),
+                    AnalysisStudyAmountFragment.newInstance()
+                )
+                configTab(0)
+                configTab(1)
+            }
+            replaceFragment(analysisTab[0])
+        }
+
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@AnalysisTabActivity
@@ -144,7 +156,14 @@ class AnalysisTabActivity : BaseNavActivity(),
             }
             ratingQuestionIV.extensionTouchArea(4.toPx())
             ratingQuestionIV.setOnClickListener {
-                it.showBalloon("내부 백분위 점수 바탕으로\n추출된 성적 지표입니다.")
+                if (schoolType.isHigh) {
+                    val text = "내부 백분위 점수 바탕으로\n추출된 성적 지표입니다."
+                    it.showBalloon(text)
+                } else {
+                    val text = "등급은 다음 표준 정답률을 기준으로 제공됩니다."
+                    it.showBalloon(text, R.drawable.middle_grade_table, 300.toPx(), 62.toPx())
+                }
+
             }
             myAnalysisGuideBtn.setOnClickListener {
                 showMyAnalysisGuide()
@@ -192,7 +211,7 @@ class AnalysisTabActivity : BaseNavActivity(),
             }
             1 -> {
                 startBorder.visibility = View.VISIBLE
-                endBorder.visibility = View.VISIBLE
+                endBorder.visibleIf(schoolType.isHigh)
             }
             2 -> {
                 startBorder.visibility = View.GONE
@@ -282,16 +301,23 @@ class AnalysisTabActivity : BaseNavActivity(),
     private fun showMyAnalysisGuide() {
         binding.apply {
             Tutor.TooltipType.analysisMain.addShowingCnt()
-            val window = BalloonWindow(this@AnalysisTabActivity, myAnalysisGuideBtn, BalloonWindow.Position.below, 16.toPx())
+            val targetView = if (isTablet) myAnalysisGuideBtn else mobileGuideDummyView
+            val window = BalloonWindow(this@AnalysisTabActivity, targetView, BalloonWindow.Position.below, 16.toPx())
             window.balloonColor = ContextCompat.getColor(this@AnalysisTabActivity, R.color.purple_ACACFF)
             window.offset = -100
-            window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx());
+            window.margin = -8
+            window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx())
             val view = LayoutInflater.from(this@AnalysisTabActivity).inflate(R.layout.tooltip_analysis, null)
             var chartContentTv: TextView = view.findViewById(R.id.chartContentTv)
-            chartContentTv.text = "같은 등급 친구들에 비해 내가 잘하는 부분 & 더 채워야 할 부분을\n" +
-                "보여주는 나만의 맞춤 학습 리포트입니다 :)\n" +
-                "내가 푼 문제 중에서도 신뢰도 있는 문항만 선별하여\n" +
-                "분석했으니 믿고 살펴보세요!"
+            chartContentTv.text = if (isTablet) {
+                "같은 등급 친구들에 비해 내가 잘하는 부분 & 더 채워야 할 부분을\n" +
+                    "보여주는 나만의 맞춤 학습 리포트입니다 :)\n" +
+                    "내가 푼 문제 중에서도 신뢰도 있는 문항만 선별하여\n" +
+                    "분석했으니 믿고 살펴보세요!"
+            } else {
+                "같은 등급 친구들에 비해 내가 잘하는 부분 & 더 채워야 할 부분을 보여주는 나만의 맞춤 학습 리포트입니다 :)\n" +
+                    "내가 푼 문제 중에서도 신뢰도 있는 문항만 선별하여 분석했으니 믿고 살펴보세요!"
+            }
             window.show(view)
         }
     }
@@ -308,15 +334,23 @@ class AnalysisTabView: ConstraintLayout {
         startBorder = findViewById(R.id.startBorder)
         tabTitleTv = findViewById(R.id.tabTitleTv)
         endBorder = findViewById(R.id.endBorder)
+
+        if (schoolType.isHigh) {
+            startBorder.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_700))
+            endBorder.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_700))
+        } else {
+            startBorder.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_300))
+            endBorder.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_300))
+        }
     }
 
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
 
         if(selected)
-            tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+            tabTitleTv.setTextColor(ContextCompat.getColor(context, if (schoolType.isHigh) R.color.white else R.color.purple_300))
         else
-            tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_700))
     }
 }
 

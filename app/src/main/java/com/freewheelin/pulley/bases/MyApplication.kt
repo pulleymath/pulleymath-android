@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.bases
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -12,7 +11,6 @@ import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleObserver
@@ -25,7 +23,7 @@ import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.core.manage.VersionInfo
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.utils.*
 import com.google.gson.Gson
@@ -41,6 +39,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 //        var user:User? = null
 
         var user:User? = null
+        var schoolType: SchoolType = SchoolType.HIGH
         var token: String? = null
         var isAppFirstLaunch: Boolean = true
     }
@@ -61,6 +60,14 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
         if (Preferences.userDataString.get().isNotEmpty()) {
             val user = Gson().fromJson(Preferences.userDataString.get(), User::class.java)
             viewModel.updateUser(user)
+        }
+        setSchoolType()
+    }
+    private fun setSchoolType() {
+        val savedSchoolType = Preferences.schoolType.get()
+        if (savedSchoolType.isNotEmpty()) {
+            schoolType = SchoolType.convertFromStr(savedSchoolType)
+            viewModel.updateSchoolType(schoolType)
         }
     }
 

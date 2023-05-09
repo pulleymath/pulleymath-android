@@ -16,7 +16,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.manage.UserManager
@@ -80,7 +79,7 @@ class MyChangeNameFragment : MyPageBaseFragment() {
     @SuppressLint("CheckResult")
     fun requestApi() {
 
-        binding.changeBtn.startLoding()
+        binding.changeBtn.startLoading()
         API_V2.rename(binding.name.text)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

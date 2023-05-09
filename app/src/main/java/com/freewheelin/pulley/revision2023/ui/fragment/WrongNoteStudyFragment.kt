@@ -1,0 +1,390 @@
+package com.freewheelin.pulley.revision2023.ui.fragment
+
+import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.freewheelin.pulley.R
+import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.OrderType
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
+import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
+import com.freewheelin.pulley.activities.solve.SolveActivity
+import com.freewheelin.pulley.bases.isTablet
+import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.core.manage.ProblemManager
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.dialogs.*
+import com.freewheelin.pulley.revision2023.model.LearningFilterType
+import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.ui.adapter.NoteStudyCardAdapter
+import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
+import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.views.NoteStudyViewListener
+import com.freewheelin.pulley.views.WrongManageView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
+
+class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
+    NoteStudyClickListener, NoteStudyViewListener {
+    private lateinit var binding: FragmentWrongNoteStudyBinding
+    private val viewModel: WrongNoteStudyViewModel by viewModels()
+
+    override var screenName = "오답노트"
+
+    lateinit var reConfigureReceiver: BroadcastReceiver
+    lateinit var noteCardAdapter: NoteStudyCardAdapter
+    private var tabFragments: MutableList<Fragment> = mutableListOf()
+
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            WrongNoteStudyFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+    }
+
+    override fun onFragmentSelected() {
+        super.onFragmentSelected()
+
+        if (binding.tabLayout.selectedTabPosition == 0) {
+            viewModel.fetchWrongNotes ()
+        } else {
+            viewModel.fetchScrapNotes ()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+
+        }
+        reConfigureReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    viewModel.initMyPlanAdapterItem()
+                }
+            }
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wrong_note_study, container, false)
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+
+            binding.apply {
+                lifecycleOwner = viewLifecycleOwner
+                vm = viewModel
+//                init()
+                initAdapter()
+                wrongManageView.studyListener = this@WrongNoteStudyFragment
+
+                tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                        val tabPosition = tab?.position ?: 0
+                        viewModel.tabPosition = tabPosition
+
+                        if (tabPosition == 0) {
+                            viewModel.fetchWrongNotes ()
+                        } else {
+                            viewModel.fetchScrapNotes ()
+                        }
+                    }
+                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+                })
+            }
+            viewModel.apply {
+                errorAction.observe(viewLifecycleOwner) {
+                    dialog?.let {
+                        it.dismiss()
+                        DaebakToast.showFailedMakePiece(requireContext())
+                    }
+                }
+                userInRepo.observe(viewLifecycleOwner) { user ->
+                    user?.let {
+                        val available = it.serviceType.isTypeEqualOrHigher(PaidServiceType.BASIC_P)
+                        showLockIcon.postValue(!available)
+                    }
+                }
+                schoolType.observe(viewLifecycleOwner) {
+                    tabFragments = mutableListOf(
+                        NoteFilterFragment.newWrongInstance().apply { changeListener = this@WrongNoteStudyFragment },
+                        NoteFilterFragment.newScrapInstance().apply { changeListener = this@WrongNoteStudyFragment },
+                    )
+                    binding.apply {
+                        pager.adapter =
+                            WrongNoteFilterPagerAdapter(tabFragments, childFragmentManager, lifecycle)
+                        val tabTitles = listOf<String>("오답노트", "즐겨찾기")
+                        TabLayoutMediator(tabLayout, pager) { tab, position ->
+                            tab.text = tabTitles[position]
+                        }.attach()
+                    }
+                    this@WrongNoteStudyFragment.init()
+                }
+                noteWrapper.observe(viewLifecycleOwner) {
+                    noteCardAdapter.submitList(it)
+                    noteCardAdapter.notifyItemChanged(0)
+                }
+                selectedProblem.observe(viewLifecycleOwner) {
+                    binding.apply {
+                        if (it.isEmpty()) {
+//                            wrongManageView.visibleIf(false)
+                            wrongManageView.inactive()
+                            wrongManageView.hide(true)
+                            pager.setPaddingBottom(0)
+                            notesRv.setPaddingBottom(24.toPx())
+                        } else {
+                            val isWrongNoteFragment = tabLayout.selectedTabPosition == 0
+//                            wrongManageView.visibleIf(true)
+                            wrongManageView.studyWrongBtn.text = if (isWrongNoteFragment) {
+                                "학습지 만들기"
+                            } else {
+                                "추가 학습하기"
+                            }
+                            wrongManageView.active("${it.size}문제가 선택되었습니다.")
+                            wrongManageView.show(true)
+                            pager.setPaddingBottom(64.toPx())
+                            notesRv.setPaddingBottom(76.toPx())
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+    private fun initAdapter () {
+        binding.apply {
+
+            noteCardAdapter = NoteStudyCardAdapter(viewModel, this@WrongNoteStudyFragment)
+            val spanCount = if (requireContext().isTablet) 4 else 2
+            notesRv.layoutManager =
+                GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
+                    it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            val type = noteCardAdapter.getItemViewType(position)
+                            val typeHeader = 0
+                            val typeGroupHeader = 1
+                            val typeItem = 2
+                            return when (type) {
+                                typeHeader -> spanCount
+                                typeGroupHeader -> spanCount
+                                else -> 1
+                            }
+                        }
+                    }
+                }
+            notesRv.adapter = noteCardAdapter
+        }
+    }
+
+    fun init() {
+        viewModel.init()
+        onOrderChanged(viewModel.selectedOrder)
+    }
+    fun setFilterTypes(selectedFilterTypes: Set<LearningFilterType>) {
+        viewModel.selectedFilterTypes = selectedFilterTypes
+    }
+    override fun initUI() {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        init()
+//        viewModel.initMyPlanAdapterItem()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reConfigureReceiver)
+    }
+
+    inner class WrongNoteFilterPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+        FragmentStateAdapter(fragmentManager, lifecycle) {
+        override fun getItemCount(): Int {
+            return fragments.size
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            return fragments[position]
+        }
+    }
+
+    override fun onFilterTypeChanged(
+        fragment: NoteFilterFragment,
+        filters: Set<LearningFilterType>
+    ) {
+        viewModel.selectedFilterTypes = filters
+        viewModel.setGroupedProblem() {
+            binding.notesRv.scrollToPosition(0)
+        }
+    }
+
+
+    override fun onDateChanged(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
+        viewModel.from = from
+        viewModel.to = to
+        viewModel.datePickerType = type
+        when (binding.tabLayout.selectedTabPosition == 0) {
+            true -> viewModel.fetchWrongNotes()
+            false -> viewModel.fetchScrapNotes()
+        }
+    }
+
+    override fun onAllSelectedClicked(isChecked: Boolean) {
+        viewModel.onAllSelectedClicked(isChecked)
+    }
+
+    override fun onCardCheckBoxClicked(isChecked: Boolean, item: NoteStudyProblemWrapper) {
+        viewModel.onCardCheckBoxClicked(isChecked, item) { position ->
+        }
+    }
+
+    override fun onCardItemDetail(item: NoteStudyProblemWrapper) {
+        val problem = item.problem ?: return
+        val dialog = NoteDetailDialog(requireContext(), problem, user!!)
+        dialog.nextProblem = viewModel.getNextProblem(problem)
+        dialog.prevProblem = viewModel.getPrevProblem(problem)
+        dialog.show()
+        dialog.binding.leftArrowIb.setOnClickListener {
+            dialog.nextProblem = dialog.problem
+            dialog.configureUI(dialog.prevProblem!!)
+            dialog.prevProblem = viewModel.getPrevProblem(dialog.problem)
+        }
+
+        dialog.binding.rightArrowIb.setOnClickListener {
+            dialog.prevProblem = dialog.problem
+            dialog.configureUI(dialog.nextProblem!!)
+            dialog.nextProblem = viewModel.getNextProblem(dialog.problem)
+        }
+
+        dialog.binding.clearBtn.setOnClickListener {
+            val isClear = !dialog.isClear
+            ProblemManager.clear(requireContext(), user!!, dialog.problem, isClear) {
+                dialog.problem.isClear = isClear
+                dialog.problem.rawClearDateTime = LocalDateTime().toString()
+                dialog.configureUI(dialog.problem)
+                viewModel.setGroupedProblem(false) {
+                    binding.notesRv.scrollToPosition(0)
+                }
+//                setGroupedProblem(binding.tabLayout.selectedTabPosition, false)
+//                val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
+//                if(problems.contains(dialog.problem) == false)
+//                    viewModel.selectedProblem.value?.minus(problem)
+            }
+        }
+
+        dialog.binding.scrapBtn.setOnClickListener {
+            val isScrap = !dialog.isScrap
+            ProblemManager.scrap(requireContext(), user!!, dialog.problem, isScrap) {
+                dialog.problem.isScrap = isScrap
+                dialog.problem.rawScrapDateTime = LocalDateTime().toString()
+                dialog.configureUI(dialog.problem)
+                viewModel.setGroupedProblem(false) {
+                    binding.notesRv.scrollToPosition(0)
+                }
+//                val problems = groupedProblemsByOrder.flatMap { it.second }.toSet()
+//                if(problems.contains(dialog.problem) == false)
+//                    viewModel.selectedProblem.value?.minus(problem)
+            }
+        }
+    }
+
+    override fun onOrderChanged(type: OrderType) {
+        viewModel.onOrderChanged(type) {
+            viewModel.setGroupedProblem() {
+                binding.notesRv.scrollToPosition(0)
+            }
+        }
+    }
+
+    var dialog: Dialog? = null
+    override fun onStudyBtnClicked(view: WrongManageView) {
+        val selectedProblem = viewModel.selectedProblem.value ?: return
+        if(binding.tabLayout.selectedTabPosition == 0)
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답학습하기")
+        else
+            LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "추가학습하기")
+
+        val dialogType = if(binding.tabLayout.selectedTabPosition == 0) WrongManagementDialog.Type.wrongProblem
+        else WrongManagementDialog.Type.scrap
+        val dialog = WrongManagementDialog(requireContext(), dialogType)
+        this.dialog = dialog
+        dialog.wrongCnt = selectedProblem.size
+        dialog.show()
+
+        dialog.binding.makeBtn.setOnClickListener {
+            if(binding.tabLayout.selectedTabPosition == 0)
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
+            else
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
+            dialog.binding.makeBtn.startLoading()
+            val problems = selectedProblem.toList()
+            val cntPerProblem = dialog.cnt
+            val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
+            val similarStr = if(isSimilar) "SIMILAR" else "SAME"
+            val level = dialog.level ?: WrongManagementDialog.Level.normal
+
+            val isIncludeClearProblem = dialog.isClearInclude
+            val noteType = if(dialogType == WrongManagementDialog.Type.wrongProblem) "WRONG_NOTE" else "SCRAP"
+            viewModel.makeAdvancedLearning(problems, similarStr, level.text, cntPerProblem, isIncludeClearProblem, noteType, cb = {
+                dialog.dismiss()
+                if(dialog.binding.checkbox.isChecked) {
+                    val intent = SolveActivity.getIntent(requireContext(), it)
+                    startActivity(intent)
+                } else {
+                    var text = if(dialogType == WrongManagementDialog.Type.wrongProblem) "오답문제" else "즐겨찾기 문제"
+                    text += " ${selectedProblem.size}개로 학습지를 만들었습니다."
+                    (activity as LearningTabActivity).showSnackBar(text, "바로가기")
+                }
+                viewModel.selectedProblem.postValue(listOf())
+
+            })
+
+        }
+    }
+
+    override fun onReviewBtnClicked(view: WrongManageView) {
+        val selectedProblem = viewModel.selectedProblem.value ?: return
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "리뷰하기")
+        val subject = if (binding.tabLayout.selectedTabPosition == 0) "오답노트 리뷰" else "즐겨찾기 리뷰"
+        val intent = SolveActivity.getReviewIntent(requireContext(), subject, selectedProblem.toList())
+        startActivity(intent)
+    }
+
+}

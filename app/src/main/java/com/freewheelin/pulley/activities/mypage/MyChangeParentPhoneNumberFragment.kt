@@ -1,37 +1,23 @@
 package com.freewheelin.pulley.activities.mypage
 
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API_V2
-import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentMyChangeParentPhoneNumberBinding
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
-import com.freewheelin.pulley.utils.isValidName
 import com.freewheelin.pulley.utils.isValidPhoneNum
 import com.freewheelin.pulley.views.editText.InputFieldV2
 import com.freewheelin.pulley.views.editText.InputFieldV2EnterListener
 import com.freewheelin.pulley.views.editText.InputFieldV2Listener
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class MyChangeParentPhoneNumberFragment : MyPageBaseFragment() {
     val user
@@ -111,7 +97,7 @@ class MyChangeParentPhoneNumberFragment : MyPageBaseFragment() {
     }
     fun requestApi() {
 
-        binding.changeBtn.startLoding()
+        binding.changeBtn.startLoading()
         // TODO 부모님 번호 변경 api
         val parentNumber = binding.parentPhoneNumField.text
         viewModel.changeParentPhoneNumber(parentNumber) {

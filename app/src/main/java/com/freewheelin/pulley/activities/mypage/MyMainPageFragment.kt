@@ -68,7 +68,7 @@ enum class SettingCategory(val title: String) {
                 SUPPORT -> listOf(Home, Guide, Notice, Customer, Version) // 고객지원 -> , FAQ, Contact, Policy
                 ETC -> listOf(Logout)
                 SPY -> {
-                    listOf(InitSetting, ClearMockExam, ClearBooks, ClearTests, Recommend,
+                    listOf(InitSetting, ClearMockExam, ClearBooks, ClearTests,
                             ClearAllClearHistory, ClearAllScrapHistory,
                             ClearAllStudy,
                             CrashlyticsCrash, CrashlyticsReport,
@@ -99,7 +99,7 @@ enum class Setting(val title: String) {
     CouponBox("쿠폰함"),
 //    PaymentMethod("결제정보"),
 
-    Recommend("추천 설정"),
+//    Recommend("추천 설정"),
     AppSetting("알림 설정"),
 
     Home("풀리수학 홈페이지 바로가기"),
@@ -197,7 +197,6 @@ class MyMainPageFragment : Fragment() {
 //                startActivity(intent)
 //            }
 
-            Recommend -> moveTo(MyRecommendFragement())
             AppSetting -> moveTo(MyAppSettingFragment())
             Home -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK,"마이페이지","홈페이지 바로 가기")

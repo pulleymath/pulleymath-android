@@ -10,11 +10,10 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
-import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
@@ -35,11 +34,14 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     private val userRepository by lazy { UserRepository.instance }
 
     val userInRepo = userRepository.user
+    val schoolType = userRepository.schoolType
     val subjectList by lazy { MutableLiveData<List<LCSubject>>() }
+    val availableSubjectIndicator by lazy { MutableLiveData<List<LCSubject.SubjectIndicator>>() }
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
 
     val selectedSubjectId = MutableLiveData<Int>(-1)
     val availableLastSubjectId = MutableLiveData<Int>(7)
+    var availableFirstSubjectId = 12
     val showMobileHeader = MutableLiveData<Boolean>(false)
     val showTabletHeader = MutableLiveData<Boolean>(false)
     val joinedChallengeList = challengeRepository.joinedChallengeList
@@ -53,8 +55,11 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                 response.data?.let {
                     it.sortedBy { it.subjectId }.let {
                         subjectList.postValue(it)
+                        availableSubjectIndicator.postValue(it.map { it.subjectIndicator })
+                        val firstId = it.first().subjectId
                         val lastId = it.last().subjectId
                         availableLastSubjectId.postValue(lastId)
+                        availableFirstSubjectId = firstId
                     }
                 }
             }, { error ->
@@ -133,9 +138,20 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             }.subscribe()
     }
 
+    fun initHeaderSubject() {
+        val subject = when (schoolType.value) {
+            SchoolType.MIDDLE -> {
+                availableFirstSubjectId
+                val indicator = LCSubject.SubjectIndicator.convertRawToSubject(availableFirstSubjectId)
+                indicator
+            }
+            else -> LCSubject.SubjectIndicator.MathSang
+        }
+        onHeaderSubjectBtnClick(subject.rawValue)
+
+    }
     fun onHeaderSubjectBtnClick(subjectId: Int) {
         if (this.selectedSubjectId.value == subjectId) return
-
         this.selectedSubjectId.postValue(subjectId)
     }
 
@@ -185,5 +201,9 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
+    }
+    fun moveAvailableFirstSubject() {
+        selectedSubjectId.postValue(availableFirstSubjectId)
+
     }
 }

@@ -61,7 +61,7 @@ class AnswerV2View : ConstraintLayout,
 
         val paddingStartEnd = resources.getDimension(R.dimen.dp16).toInt()
         setPadding(paddingStartEnd, 0, paddingStartEnd, 0)
-        background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_32)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_32)
 
         shortAnswerView.removeKeyboard()
         shortAnswerView.setTextSize( resources.getDimension(R.dimen.sp24), resources.getDimension(R.dimen.sp14))

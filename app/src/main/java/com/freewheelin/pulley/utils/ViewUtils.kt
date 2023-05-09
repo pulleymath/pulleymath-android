@@ -14,19 +14,15 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.core.view.marginTop
+import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.dialogs.PulleyPlusPriceDialog
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.views.TooltipWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
@@ -319,6 +315,51 @@ fun View.showBalloon(text: String) {
     balloon.setPadding(padding, padding, padding, padding)
     balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
     balloon.show(textView)
+}
+fun View.showBalloon(text: String, drawable: Int, width: Int, height: Int) {
+    val location = IntArray(2).apply {
+        getLocationOnScreen(this)
+    }
+
+    val position = if(location[1] + (measuredHeight * 0.5) < DisplayUtils.getScreenHeight(context) * 0.5)
+        BalloonWindow.Position.below
+    else
+        BalloonWindow.Position.above
+
+    val textView = TextView(context).apply {
+        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        gravity = Gravity.CENTER
+        setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
+        setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp8),  resources.displayMetrics),1f)
+        this.text = text
+        typeface = Theme.bold(context)
+    }
+
+
+    val imageView = ImageView(context).apply {
+        layoutParams = LinearLayout.LayoutParams(width, height).apply {
+            gravity = Gravity.CENTER
+            topMargin = 16.toPx()
+        }
+        Glide.with(this)
+            .load(drawable)
+            .into(this)
+    }
+
+    val linearLayout = LinearLayout(context).apply {
+        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        gravity = Gravity.CENTER
+        orientation = LinearLayout.VERTICAL
+        addView(textView)
+        addView(imageView)
+    }
+
+    val balloon = TooltipWindow(context, this, position)
+    val padding = resources.getDimension(R.dimen.dp24).toInt()
+    balloon.setPadding(padding, padding, padding, padding)
+    balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
+    balloon.show(linearLayout)
 }
 
 fun View.getBitmap(scaledWidth: Int? = null, scaledHeight: Int? = null): Bitmap {
@@ -645,4 +686,11 @@ fun View.setMarginEnd(dp: Int) {
 }
 fun View.visibleIf(isVisible: Boolean) {
     this.visibility = if(isVisible) View.VISIBLE else View.GONE
+}
+fun View.visibleAnimIf(isVisible: Boolean) {
+    if (isVisible) {
+        this.show()
+    } else {
+        this.hide()
+    }
 }

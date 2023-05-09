@@ -117,10 +117,11 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
             subjectChart.setDetailBtnVisibility(View.GONE)
 
             val myRating = analysis?.myRating
-            if (myRating == 1)
-                subjectChart.setSelectedBarLabel("1등급\n평균", "나의\n정답률", null)
+            val upperRatingByMe = analysis?.getUpperRatingByMe()
+            if (myRating == "1" || myRating == "S")
+                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", null)
             else if (myRating != null)
-                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${myRating - 1}등급\n평균")
+                subjectChart.setSelectedBarLabel("${myRating}등급\n평균", "나의\n정답률", "${upperRatingByMe}등급\n평균")
 
             subjectChart.selectedBar = subjectChart.bars?.first()
             subjectChart.bars?.first()?.isSelectedDetailBtn = true
@@ -143,6 +144,7 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
 
     private fun configurePracRatioUI(index: Int) {
         val myRating = analysis?.myRating
+        val upperRatingByMe = analysis?.getUpperRatingByMe()
         val selectedRatioAnalysis = levelRatioAnalysis.getOrNull(index)
         with(binding) {
             val legends = listOf(
@@ -215,9 +217,9 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
                 )
 
                 sameRatingStudyRatioTv.text = "${myRating}등급 평균"
-                upperRatingStudyRatioTv.text = "${myRating!! - 1}등급 평균"
+                upperRatingStudyRatioTv.text = "${upperRatingByMe}등급 평균"
 
-                if(myRating == 1) {
+                if(myRating == "1" || myRating == "S") {
                     sameRatingStudyRatioTv.visibility = View.VISIBLE
                     myStudyRatioTv.visibility = View.VISIBLE
                     upperRatingStudyRatioTv.visibility = View.INVISIBLE

@@ -65,17 +65,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-        <TextView
-            android:id="@+id/bookSeriesTv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:padding="@dimen/dp16"
-            android:textSize="@dimen/sp14"
-            android:text="판수"
-            app:layout_constraintStart_toEndOf="@+id/secondBorder"
-            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
+<!--        <TextView-->
+<!--            android:id="@+id/bookSeriesTv"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:padding="@dimen/dp16"-->
+<!--            android:textSize="@dimen/sp14"-->
+<!--            android:text="판수"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/secondBorder"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>-->
 
         <TextView
             android:id="@+id/publisherTv"
@@ -106,15 +106,15 @@
             app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
 
-        <View
-            android:id="@+id/secondBorder"
-            android:layout_width="1dp"
-            android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
-            android:layout_marginEnd="@dimen/dp80"
-            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
+<!--        <View-->
+<!--            android:id="@+id/secondBorder"-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="16dp"-->
+<!--            android:background="@color/grey_e8e8e8"-->
+<!--            android:layout_marginEnd="@dimen/dp80"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/thirdBorder"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>-->
 
 
         <View

@@ -13,6 +13,7 @@
         android:id="@+id/drawerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_200"
         android:fitsSystemWindows="true"
         tools:context=".activities.learning.LearningTabActivity"
         tools:openDrawer="start">
@@ -21,27 +22,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/toolbarBackgroundCl"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp56"
+                app:background="@color/black_200"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                style="@style/AppTheme.TabToolbar"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/dp56"
-                android:paddingEnd="0dp"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.freewheelin.pulley.revision2023.ui.view.SchoolSwitch
+                    android:id="@+id/schoolSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:animateLayoutChanges="true"
                     app:tabGravity="center"
                     app:tabPaddingStart="@dimen/dp24"
                     app:tabPaddingEnd="@dimen/dp24"
                     app:tabIndicatorHeight="0dp"
-                    app:tabBackground="@color/black_200"
-                    app:tabSelectedTextColor="@color/white_ffffff"
+                    app:tabBackground="@color/ch_transparent"
+                    app:tabSelectedTextColor="@color/gray_800"
                     app:tabTextAppearance="@style/AppTheme.TabBar.TabText"
-                    app:tabTextColor="@color/grey_818181" >
+                    app:tabTextColor="@color/gray_700" >
 
 <!--                    추후에 베타이미지 추가할 때 layout 줄 넣으면 됨-->
 <!--                    android:layout="@layout/item_tab_item_custom"-->
@@ -100,14 +119,14 @@
                     android:layout_width="40dp"
                     android:layout_height="36dp"
                     android:layout_gravity="end"
-                    android:layout_marginEnd="32dp">
+                    android:layout_marginEnd="24dp">
 
                     <ImageButton
                         android:id="@+id/mypageBtn"
-                        style="@style/TextBlack_333333.Bold"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_profile_default"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_profile"
+                        android:padding="4dp"
                         android:background="@null"
                         app:autoSizeStepGranularity="2sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -119,6 +138,8 @@
                         android:id="@+id/updateSignView"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:background="@drawable/bg_red_fe7b67_circle"
                         app:layout_constraintTop_toTopOf="@+id/mypageBtn"/>
@@ -135,7 +156,9 @@
                         android:id="@+id/alarmBtn"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:padding="4dp"
                         android:src="@drawable/ic_bell"
+                        imageview_tint="@{ vm.schoolType.isMiddle ? @color/gray_500 : @color/gray_700 , default=@color/gray_500 }"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -145,59 +168,43 @@
                         android:id="@+id/updateAlarmView"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
                         android:background="@drawable/bg_red_fe7b67_circle"
                         app:layout_constraintTop_toTopOf="@+id/alarmBtn"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:visibility="gone"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
                     android:id="@+id/spyBtn"
-                    style="@style/TextBlack_333333.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/bg_grey_9f9f9f_round"
-                    android:maxLines="1"
+                    android:background="@drawable/bg_btn_round_common"
                     android:text="SPY"
                     android:textSize="14sp"
-                    android:visibility="gone"
-                    app:autoSizeMaxTextSize="14sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    tools:layout_editor_absoluteX="563dp"
-                    tools:layout_editor_absoluteY="6dp" />
-
-                <Button
-                    android:id="@+id/loadStudentBtn"
-                    style="@style/TextBlack_333333.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_gravity="end"
-                    android:background="@drawable/bg_grey_9f9f9f_round"
-                    android:maxLines="1"
-                    android:paddingStart="@dimen/dp16"
-                    android:paddingEnd="@dimen/dp16"
-                    android:text="선생님"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    app:autoSizeMaxTextSize="14sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    tools:layout_editor_absoluteX="522dp"
-                    tools:layout_editor_absoluteY="6dp" />
+                    android:visibility="gone" />
 
             </androidx.appcompat.widget.Toolbar>
+
+            <View
+                android:id="@+id/toolbarBottomBorder"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray_300"
+                visibleIf="@{ vm.schoolType.isMiddle }"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <com.freewheelin.pulley.views.TabViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbarBottomBorder" />
 
     <!--        <androidx.viewpager2.widget.ViewPager2-->
     <!--            android:id="@+id/viewPager"-->

@@ -18,7 +18,6 @@ import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.utils.Preferences
 import com.freewheelin.pulley.views.AnswerSelectionListener
 import com.freewheelin.pulley.views.AnswerSelectionView
-import java.util.*
 
 interface FloatingAnswerDelegate {
     fun onAnswerChanged(view: View, answer: String?)
@@ -50,7 +49,7 @@ class FloatingAnswerSheet: CustomBaseView, AnswerSelectionListener {
 
         }
 
-        background = ContextCompat.getDrawable(context, R.drawable.bg_grey_f2f2f2_round_32)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_32)
         setToucnEvent()
     }
 

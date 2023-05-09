@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.utils
 
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
 import com.google.gson.Gson
 
@@ -40,6 +41,7 @@ object Preferences {
     val tooltipShowingCntMail = APPreference(0)
     val tooltipShowingCntAnalysisMain = APPreference(0)
     val tooltipShowingCntRecommendPlan = APPreference(0)
+    val tooltipShowingCntMiddleOpening = APPreference(0)
     val galleryClickCnt = APPreference(0)
     val univGalleryClickCnt = APPreference(0)
 
@@ -83,6 +85,7 @@ object Preferences {
         }
     val createdUUID = APPreference("")
     var signedEmail = APPreference("")
+    var schoolType = APPreference("")
 
 }
 

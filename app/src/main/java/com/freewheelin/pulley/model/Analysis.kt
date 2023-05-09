@@ -1,19 +1,6 @@
 package com.freewheelin.pulley.model
 
-import android.content.Context
-import android.text.SpannableStringBuilder
-import androidx.core.content.ContextCompat
-import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
-import com.freewheelin.pulley.model.contents.MockExam
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.NumberUtils
-import com.freewheelin.pulley.utils.partialFont
-import com.freewheelin.pulley.utils.partialFontAndColored
-import com.freewheelin.pulley.views.charts.OneBarChart
 import com.freewheelin.pulley.views.charts.VerticalBarView
-import java.text.DecimalFormat
-import org.joda.time.LocalDate
 import java.lang.Math.abs
 
 class Analysis {
@@ -21,7 +8,7 @@ class Analysis {
     var myScore: Int? = null
     var myPercent: Int = 0
     var improvement: Int? = null
-    var myRating: Int? = null
+    var myRating: String? = null
     var problemTotalCount: Int? = 0
 
     var summaryAnalysis: List<ChapterAnalysis> = listOf()
@@ -30,9 +17,24 @@ class Analysis {
     var levelRatioAnalysis: List<LevelRatioAnalysis> = listOf()
     var numberAnalysis: NumberAnalysis? = null
 
+    fun getUpperRatingByMe(): String {
+        val ratingToInt = myRating?.toIntOrNull()
+        return if (ratingToInt == null) {
+            when (myRating) {
+                "A","a" -> "S"
+                "B+","b+" -> "A"
+                "B","b" -> "B+"
+                "B-","b-" -> "B"
+                "C","c" -> "B-"
+                else -> "S"
+            }
+        } else {
+            "${ratingToInt - 1}"
+        }
+    }
     fun getUnitSummaryData(): List<VerticalBarView.BarData> {
         val subjectData = summaryAnalysis.map {
-            val data = if(myRating == 1) {
+            val data = if(myRating == "1" || myRating == "S") {
                 Pair(it.belowRate, it.myRate)
             } else {
                 Triple(it.belowRate, it.myRate, it.upperRate)
@@ -66,7 +68,7 @@ class Analysis {
         val selectedAnalysis = levelAnalysis.getOrNull(index)
         val data = selectedAnalysis?.let {
             it.chapters.map {
-                val data = if(myRating == 1) Pair(it.belowRate, it.myRate)
+                val data = if(myRating == "1" || myRating == "S") Pair(it.belowRate, it.myRate)
                 else
                     Triple(it.belowRate, it.myRate, it.upperRate)
 
