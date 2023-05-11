@@ -77,18 +77,10 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
     private fun setModifyBtnClickListener() {
         binding.apply {
             commonSubjectModifyBtn.setOnClickListener {
-                if (viewModel.isRecentStudiedRangeEmpty.value == true) {
-                    DaebakToast.show(requireContext(), "최근 공부내역이 부족합니다.")
-                } else {
-                    viewModel.setStep.let { it(ViewType.과목제외) }
-                }
+                viewModel.setStep.let { it(ViewType.과목제외) }
             }
             middleSubjectModifyBtn.setOnClickListener {
-                if (viewModel.isRecentStudiedRangeEmpty.value == true) {
-                    DaebakToast.show(requireContext(), "최근 공부내역이 부족합니다.")
-                } else {
-                    viewModel.setStep.let { it(ViewType.과목제외) }
-                }
+                viewModel.setStep.let { it(ViewType.과목제외) }
             }
 
             satOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등선택과목수정) } }

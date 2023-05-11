@@ -186,6 +186,15 @@
                     android:text="SPY"
                     android:textSize="14sp"
                     android:visibility="gone" />
+                <Button
+                    android:id="@+id/teacherBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/bg_btn_round_common"
+                    android:text="Teacher"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
             </androidx.appcompat.widget.Toolbar>
 

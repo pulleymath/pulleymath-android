@@ -53,6 +53,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
+    var teacherSpyModeCount = 0
 
     fun initUserInfo(user: User?) {
         user?.let {

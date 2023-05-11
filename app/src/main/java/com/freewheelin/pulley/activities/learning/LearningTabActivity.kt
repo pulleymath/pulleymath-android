@@ -95,6 +95,8 @@ import androidx.core.view.children
 import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
 import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.TeacherUtilityDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 
 
@@ -291,6 +293,10 @@ class LearningTabActivity : PermissionActivity(),
                 val intent = Intent(this@LearningTabActivity, AnalysisTabActivity::class.java)
                 startActivity(intent)
 //            onSpyBtnClicked()
+            }
+            teacherBtn.setOnClickListener {
+                val dialog = TeacherUtilityDialog()
+                supportFragmentManager.let { dialog.show(it, "TeacherUtilityDialog") }
             }
             ProcessLifecycleOwner.get().lifecycle.addObserver(this@LearningTabActivity)
 
@@ -554,6 +560,9 @@ class LearningTabActivity : PermissionActivity(),
             binding.spyBtn.show()
             spyCount = 0
         }
+    }
+    fun setTeacherSpyMode(isShow: Boolean) {
+        binding.teacherBtn.visibleIf(isShow)
     }
 
     private fun openLesson() {

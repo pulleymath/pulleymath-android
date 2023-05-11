@@ -223,6 +223,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/borderView"
                     android:layout_marginStart="4dp"/>
                 <TextView
+                    android:id="@+id/numberOfUserTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{ vm.mainProfile.numberOfUserText + `명` }"

@@ -160,6 +160,15 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             dDayTv.setOnClickListener { onDDayBtnClicked() }
             startStudyClBtn.setOnClickListener { onStartBtnClicked() }
             challengeActionBtn.setOnClickListener { onChallengeAction() }
+            numberOfUserTv.setOnClickListener {
+                viewModel.teacherSpyModeCount += 1
+                if (viewModel.teacherSpyModeCount > 10) {
+                    (activity as LearningTabActivity).setTeacherSpyMode(true)
+                }
+                if (viewModel.teacherSpyModeCount > 20) {
+                    (activity as LearningTabActivity).setTeacherSpyMode(false)
+                }
+            }
         }
         viewModel.apply {
             challengeHeaders.observe(viewLifecycleOwner) {
@@ -248,6 +257,11 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                 userPaidServiceType.postValue(it?.serviceType)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.teacherSpyModeCount = 0
     }
 
     override fun initUI() {}

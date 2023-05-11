@@ -195,8 +195,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
-                                    visibleIf="@{ vm.schoolType.isHigh }"
-                                    android:textColor="@{ vm.isRecentStudiedRangeEmpty ? @color/purple_200 : @color/purple_300 }"
+                                    visibleIf="@{ vm.schoolType.isHigh &amp;&amp; !vm.isRecentStudiedRangeEmpty }"
+                                    android:textColor="@color/purple_300"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/sameMyText" />
 
@@ -207,8 +207,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_do_edit_go"
                                     android:textSize="@dimen/sp14"
-                                    visibleIf="@{ vm.schoolType.isMiddle }"
-                                    android:textColor="@{ vm.isRecentStudiedRangeEmpty ? @color/purple_200 : @color/purple_300 }"
+                                    visibleIf="@{ vm.schoolType.isMiddle &amp;&amp; !vm.isRecentStudiedRangeEmpty }"
+                                    android:textColor="@color/purple_300"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/sameMyText" />
 
