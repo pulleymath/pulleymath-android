@@ -229,12 +229,6 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-        <activity
-            android:name=".activities.mypage.MyRecommendSettingActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
 
         <receiver
             android:name=".bases.UpdateReceiver"

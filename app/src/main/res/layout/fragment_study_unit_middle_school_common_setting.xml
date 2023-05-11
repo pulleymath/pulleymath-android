@@ -42,8 +42,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment">
+                android:clickable="true">
 
                 <TextView
                     android:id="@+id/titleLabel"

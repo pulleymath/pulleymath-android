@@ -39,6 +39,5 @@ open class MyPageBaseFragment: Fragment() {
 
         (activity as? LearningTabActivity)?.back(this)
         (activity as? MyPageActivity)?.back(this)
-        (activity as? MyRecommendSettingActivity)?.back(this)
     }
 }

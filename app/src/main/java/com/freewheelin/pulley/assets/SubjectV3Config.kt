@@ -134,41 +134,21 @@ enum class SubjectV3(val id: Int) {
             values()
                 .firstOrNull { it.id == id } ?: 기타
 
-        fun convertPdfFilterStrToSubject(value: String) :SubjectV3 {
+        fun convertStrToSubject(value: String): SubjectV3 {
             return when (value) {
                 교육과정외.name -> 교육과정외
                 중등.name -> 중등
-                중1_1.name -> 중1_1
-                중1_2.name -> 중1_2
-                중2_1.name -> 중2_1
-                중2_2.name -> 중2_2
-                중3_1.name -> 중3_1
-                중3_2.name -> 중3_2
+                중1_1.name, "중 1-1", "중1-1" -> 중1_1
+                중1_2.name, "중 1-2", "중1-2" -> 중1_2
+                중2_1.name, "중 2-1", "중2-1" -> 중2_1
+                중2_2.name, "중 2-2", "중2-2" -> 중2_2
+                중3_1.name, "중 3-1", "중3-1" -> 중3_1
+                중3_2.name, "중 3-2", "중3-2" -> 중3_2
                 수학_상.name, "수학(상)" -> 수학_상
                 수학_하.name, "수학(하)" -> 수학_하
                 수학I.name, "수학1" -> 수학I
                 수학II.name, "수학2" -> 수학II
                 확률과통계.name, "확률과 통계" -> 확률과통계
-                미적분.name -> 미적분
-                기하.name -> 기하
-                else -> { 수학_상 }
-            }
-        }
-        fun convertStrToSubject(value: String): SubjectV3 {
-            return when (value) {
-                교육과정외.name -> 교육과정외
-                중등.name -> 중등
-                중1_1.name -> 중1_1
-                중1_2.name -> 중1_2
-                중2_1.name -> 중2_1
-                중2_2.name -> 중2_2
-                중3_1.name -> 중3_1
-                중3_2.name -> 중3_2
-                수학_상.name -> 수학_상
-                수학_하.name -> 수학_하
-                수학I.name -> 수학I
-                수학II.name -> 수학II
-                확률과통계.name -> 확률과통계
                 미적분.name -> 미적분
                 기하.name -> 기하
                 else -> { 수학_상 }
@@ -255,14 +235,14 @@ enum class BigUnitV3(val subject: SubjectV3, val title: String, val id: Int) {
     벡터(SubjectV3.기하, "벡터", 394),
     공간도형(SubjectV3.기하, "공간도형", 392),
 //--------
-    중등_좌표평면과_그래프(SubjectV3.중1_1, "좌표평면과 그래프", 187),
-    중등_문자와_식(SubjectV3.중1_1, "문자와 식", 188),
-    중등_정수와_유리수(SubjectV3.중1_1, "정수와 유리수", 189),
     중등_소인수_분해(SubjectV3.중1_1, "소인수분해", 190),
+    중등_정수와_유리수(SubjectV3.중1_1, "정수와 유리수", 189),
+    중등_문자와_식(SubjectV3.중1_1, "문자와 식", 188),
+    중등_좌표평면과_그래프(SubjectV3.중1_1, "좌표평면과 그래프", 187),
 
-    중등_입체도형(SubjectV3.중1_2, "입체도형", 290),
-    중등_평면도형(SubjectV3.중1_2, "평면도형", 292),
     중등_기본도형(SubjectV3.중1_2, "기본 도형", 293),
+    중등_평면도형(SubjectV3.중1_2, "평면도형", 292),
+    중등_입체도형(SubjectV3.중1_2, "입체도형", 290),
     중등_통계(SubjectV3.중1_2, "통계", 294),
 
     중등_수와_식(SubjectV3.중2_1, "수와 식", 197),
@@ -274,13 +254,13 @@ enum class BigUnitV3(val subject: SubjectV3, val title: String, val id: Int) {
     중등_도형의_닮음(SubjectV3.중2_2, "도형의 닮음", 299),
     중등_확률(SubjectV3.중2_2, "확률", 300),
 
-    중등_이차함수(SubjectV3.중3_1, "이차함수", 206),
+    중등_실수와_그계산(SubjectV3.중3_1, "실수와 그 계산", 209),
     중등_다항식의_곱셈과_인수분해(SubjectV3.중3_1, "다항식의 곱셈과 인수분해", 207),
     중등_이차방정식(SubjectV3.중3_1, "이차방정식", 208),
-    중등_실수와_그계산(SubjectV3.중3_1, "실수와 그 계산", 209),
+    중등_이차함수(SubjectV3.중3_1, "이차함수", 206),
 
-    중등_원의_성질(SubjectV3.중3_2, "원의 성질", 305),
     중등_삼각비(SubjectV3.중3_2, "삼각비", 306),
+    중등_원의_성질(SubjectV3.중3_2, "원의 성질", 305),
     중등_통계2(SubjectV3.중3_2, "통계", 308);
 
 

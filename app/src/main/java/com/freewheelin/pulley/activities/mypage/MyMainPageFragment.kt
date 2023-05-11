@@ -33,6 +33,7 @@ import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.Theme
 import com.freewheelin.pulley.core.Version.v1
 import com.freewheelin.pulley.core.manage.*
+import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentMyMainPageBinding
 import com.freewheelin.pulley.databinding.ItemMypageListBinding
 import com.freewheelin.pulley.dialogs.UpdateDialog
@@ -148,17 +149,31 @@ class MyMainPageFragment : Fragment() {
     lateinit var typeReceiver: BroadcastReceiver
     lateinit var binding: FragmentMyMainPageBinding
     private val viewModel: MyMainPageFragViewModel by viewModels()
+    lateinit var reconfigureReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initReceiver()
+    }
+    private fun initReceiver() {
         typeReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {}
         }
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(typeReceiver, IntentFilter(User.EVENT_STUDENT_TYPE_SETTING))
+
+        reconfigureReceiver = object: BroadcastReceiver() {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
+                intent?.let {
+                    binding.rv.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
     }
 
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(typeReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
         super.onDestroy()
     }
 
@@ -169,7 +184,9 @@ class MyMainPageFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.rv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
         binding.rv.layoutManager = LinearLayoutManager(context)
 

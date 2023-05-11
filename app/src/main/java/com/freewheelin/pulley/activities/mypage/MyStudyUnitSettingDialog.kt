@@ -13,6 +13,7 @@ import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
 
+//deprecated
 class MyStudyUnitSettingDialog(context: Context, override val user: User, listener: MyPageSettingDialogListener): MyPageSettingBaseDialog(context, user, listener), DaebakInputSelectionListener {
     var binding: DialogMyStudyUnitSettingBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_my_study_unit_setting, null, false)
 

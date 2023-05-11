@@ -6,6 +6,10 @@ data class RecommendSubjectResponse (
 
 )
 
+data class DailyTestRecommendResponse (
+    val recentStudySubjects: List<RecommendSubject>,
+    val userSubjects: RecommendSubjectResponse,
+)
 
 data class RecommendSubject(
     val subjectId: Int,

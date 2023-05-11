@@ -92,11 +92,31 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     override fun onResume() {
         super.onResume()
+        showMarketingBanner()
+    }
+
+    private fun showMarketingBanner() {
+        val isGuestUser = user?.serviceType?.isGuestUser == true
+        val isAppFirstLaunch = MyApplication.isAppFirstLaunch
+
+        if (isGuestUser && isAppFirstLaunch) {
+            MarketingManager.setMarketingBanner(requireContext())
+            return
+        }
+
         val scInfo = Preferences.startChallengeAlreadyAppeared
         val appearedIds = scInfo.studentIds
+
         val isAlreadyStartChallengeAppeared = appearedIds.contains(user?.studentID)
-        if (isAlreadyStartChallengeAppeared && MyApplication.isAppFirstLaunch) {
+        if (isAlreadyStartChallengeAppeared && isAppFirstLaunch) {
             MarketingManager.setMarketingBanner(requireContext())
+            return
+        }
+
+        viewModel.isStartChallengeUserStatusNotYet { isNotYet ->
+            if (isNotYet && isAppFirstLaunch) {
+                MarketingManager.setMarketingBanner(requireContext())
+            }
         }
     }
 
@@ -178,31 +198,27 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             }
 
             currentMission.observe(viewLifecycleOwner) {
-                println("askask currentMission update 1")
+                println("currentMission update 1")
                 if (!it.isStartChallenge) return@observe
-                println("askask currentMission update 2")
+                println("currentMission update 2 ${user?.serviceType?.isGuestUser}")
                 blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
-                println("askask currentMission update 3")
                 if (user?.serviceType?.isGuestUser == true) return@observe
-                println("askask currentMission update 4")
+                println("currentMission update 3")
                 val scInfo = Preferences.startChallengeAlreadyAppeared
                 val appearedIds = scInfo.studentIds
+                println("currentMission update 4 ${appearedIds}, studentId : ${user?.studentID}")
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
 
-                println("askask currentMission update 5")
                 if (isAlreadyAppearedUser) return@observe
-                println("askask currentMission update 6")
+                println("currentMission update 5 it.userStatus : ${it.userStatus}")
                 if (it.userStatus == ChallengeUserStatus.YET) {
-                    println("askask currentMission update 7")
-                    joinChallenge(it.challengeId)
-//                    val dialog = StartChallengeInfoDialog(it.challengeId) { challengeId ->
-//                    }
-//                    childFragmentManager.let { dialog.show(it, "StartChallengeInfoDialog") }
-                    val studentId = user?.studentID ?: ""
-                    val newList = scInfo.studentIds + listOf(studentId)
-                    scInfo.studentIds = newList.toSet().toList()
-
-                    Preferences.startChallengeAlreadyAppeared = scInfo
+                    this@MainFragment.joinChallenge(it.challengeId) {
+                        println("currentMission update 6 after join")
+                        val studentId = user?.studentID ?: ""
+                        val newList = scInfo.studentIds + listOf(studentId)
+                        scInfo.studentIds = newList.toSet().toList()
+                        Preferences.startChallengeAlreadyAppeared = scInfo
+                    }
                 }
             }
             joinedChallengeList.observe(viewLifecycleOwner) {
@@ -328,15 +344,13 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         }
     }
 
-    private fun joinChallenge(challengeId: Int) {
+    private fun joinChallenge(challengeId: Int, cb: () -> Unit = {}) {
         val nextEvent = {
             (activity as LearningTabActivity).setSelectedTab(1)
             (activity as LearningTabActivity).setConceptCourseAvailableFirstSubject()
             (activity as LearningTabActivity).launchConceptCourseTutorial()
         }
-        println("askask currentMission update 8")
-        viewModel.joinChallenge(challengeId) {
-            println("askask currentMission update 9")
+        viewModel.joinChallengeById(challengeId) {
             val dialog = ChallengeGuideManager.getStartGuideMission1(
                 nextEvent = nextEvent,
                 exitEvent = {
@@ -350,6 +364,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
                 }
             )
             childFragmentManager.let { dialog.show(it, "StartGuide") }
+            cb()
         }
     }
     fun showStartChallengeCompletedGuide() {

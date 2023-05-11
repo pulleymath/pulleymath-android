@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootCl"
-        android:layout_width="640dp"
+        android:layout_width="600dp"
         android:layout_height="match_parent">
 
         <FrameLayout

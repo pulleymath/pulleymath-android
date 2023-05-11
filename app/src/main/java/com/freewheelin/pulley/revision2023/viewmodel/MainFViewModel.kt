@@ -10,10 +10,7 @@ import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.model.User
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
-import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
-import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderItem
+import com.freewheelin.pulley.revision2023.model.challenge.*
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.MainFRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
@@ -137,6 +134,15 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     suspend fun fetchAllChallengeDetailItem(challengeId: Int): Challenge? {
         return repository.fetchAllMainChallengeDetailItem(challengeId)
     }
+    fun isStartChallengeUserStatusNotYet(cb: (Boolean) -> Unit) {
+        CoroutineScope(Dispatchers.IO + contentExceptionHandler).launch {
+            val challenge = repository.fetchAllMainChallengeDetailItem(1)
+            val isNotYet = challenge?.userStatus != ChallengeUserStatus.YET
+            _errorAction.postValue(CoroutineExceptionType.NONE)
+            cb(isNotYet)
+        }
+    }
+
     suspend fun updateChallengeMissions(item: Challenge) {
         _challengeMissions.run {
             val missionHeader = item.courses[0].copy(userChallengeCourseId = -1, parentDetailItem = item)
@@ -153,7 +159,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         showStartChallengeGuide.postValue(false)
     }
 
-    fun joinChallenge(challengeId: Int, cb: () -> Unit) {
+    fun joinChallengeById(challengeId: Int, cb: () -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
 
             repository.joinChallenge(challengeId)?.let { detailItem ->
@@ -197,7 +203,6 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             return
         }
 
-        println("asoaso ")
         _challengeHeaders.postValue(challengeHeaders.value?.map { header ->
             header.copy(isSelected = header == item)
         })

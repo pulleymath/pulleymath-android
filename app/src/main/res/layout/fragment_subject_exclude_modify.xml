@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.fragment.SnackTestSubjectExcludeModifyFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_white_fafafa_round">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_toolbar_back"
+            android:paddingTop="@dimen/dp48"
+            android:paddingStart="@dimen/dp48"
+            android:paddingEnd="@dimen/dp48"
+            android:paddingBottom="@dimen/dp24"
+            android:background="@null"
+            app:tint="@color/black_4c4c4c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:id="@+id/titleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp24"
+            android:layout_marginStart="@dimen/dp48"
+            android:text="이대로 추천하면 될까요?"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
+
+        <TextView
+            android:id="@+id/guideTopLabel"
+            style="@style/TextBlack_4c4c4c.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="최근에 내가 공부한 대단원이에요.\n이 중에서 추천 받고 싶은 대단원을 선택해주세요."
+            android:textSize="@dimen/sp16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleLabel"
+            app:lineHeight="@dimen/sp24" />
+
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp12"
+            android:layout_marginEnd="@dimen/dp48"
+            android:layout_marginBottom="@dimen/dp16"
+            app:layout_constraintBottom_toTopOf="@+id/modifyBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideTopLabel">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/selectionWrapperLl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp36">
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/mathTopSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="수학(상)" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/mathBottomSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="수학(하)" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/math1Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="수학I" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/math2Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="수학II" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/probAnsStatSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="확률과 통계" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/calculusSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="미적분" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/geometrySelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:DaebakInputSelection_Label="기하" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m11Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="중 1-1" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m12Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="중 1-2" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m21Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="중 2-1" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m22Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="중 2-2" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m31Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp24"
+                        app:DaebakInputSelection_Label="중 3-1" />
+
+                    <com.freewheelin.pulley.views.PulleyInputSelection
+                        android:id="@+id/m32Selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:DaebakInputSelection_Label="중 3-2" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+
+        <com.freewheelin.pulley.views.buttons.PrimaryButton
+            android:id="@+id/modifyBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:layout_marginStart="@dimen/dp48"
+            android:layout_marginEnd="@dimen/dp48"
+            android:layout_marginBottom="@dimen/dp48"
+            android:text="@string/text_do_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
@@ -18,6 +19,7 @@ import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentStudyUnitOptionalSettingBinding
+import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.DaebakInputSelection
@@ -26,6 +28,7 @@ import com.freewheelin.pulley.views.DaebakInputSelectionListener
 class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
 
     lateinit var binding: FragmentStudyUnitOptionalSettingBinding
+    private val viewModel: MyMainPageFragViewModel by viewModels()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_study_unit_optional_setting, container, false)
@@ -117,18 +120,14 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
     }
 
     private fun onModifyBtnClicked() {
-        MyApplication.user?.let { user ->
-            LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "선택과목", "변경하기")
-            if (binding.modifyBtn.isEnableUI()) {
-                UserManager.setInitOptional(requireContext(), user, getSelectedUnit(), successCB = {
-                    val selected = getSelectedUnit().map { it.id }
-                    user.rawInitOptional = selected.joinToString(",")
-                    user.commit("update mypage Update [OPTIONAL] subject")
-                    setFragmentResult(MyStudyInfoFragment.RELOAD, bundleOf())
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        onBackBtnClicked()
-                    }, 0)
-                })
+        LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "선택과목", "변경하기")
+        if (binding.modifyBtn.isEnableUI()) {
+            val selectedIds = getSelectedUnit().map { it.id }
+            viewModel.updateOptionalSubject(selectedIds) {
+                setFragmentResult(MyStudyInfoFragment.RELOAD, bundleOf())
+                Handler(Looper.getMainLooper()).postDelayed({
+                    onBackBtnClicked()
+                }, 0)
             }
         }
     }

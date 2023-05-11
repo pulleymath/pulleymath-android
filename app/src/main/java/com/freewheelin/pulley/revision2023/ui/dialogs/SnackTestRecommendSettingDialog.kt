@@ -43,6 +43,7 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             setScreen()
+            viewModel.fetchDailyTestRecommend {}
             viewModel.setStep = { setChildFragment(it) }
             viewModel.replaceStep = { replaceChildFragment(it) }
             viewModel.removeStep = { removeFragment(it) }
@@ -51,9 +52,6 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
             viewModel.onExitClickCallback = {
                 dismiss()
             }
-
-
-
         }
     }
 
@@ -61,14 +59,14 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
         val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
         val lp = binding.rootCl.layoutParams
         lp.height = DisplayUtils.getScreenHeight(requireContext()) - topBottomMargin.toInt()
-        lp.width = 640.toPx()
-        println("zxpzxp ${lp.width}, ${lp.height}")
+        lp.width = 600.toPx()
         binding.rootCl.layoutParams = lp
     }
     fun setChildFragment(step: ViewType) {
         val frag = getFragment(step)
-        sendViewModel(frag)
+//        sendViewModel(frag)
         moveTo(frag)
+
     }
 
     fun moveTo(frag: Fragment) {
@@ -81,7 +79,7 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
     }
     fun replaceChildFragment(step: ViewType) {
         val frag = getFragment(step)
-        sendViewModel(frag)
+//        sendViewModel(frag)
         replaceTo(frag)
     }
     fun replaceTo(frag: Fragment) {
@@ -94,25 +92,30 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
         }
     }
     fun removeFragment(frag: Fragment) {
-        childFragmentManager.beginTransaction().apply {
-            setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
-            remove(frag)
-            commit()
+        viewModel.fetchDailyTestRecommend {
+
+            childFragmentManager.beginTransaction().apply {
+                setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right)
+                remove(frag)
+                commit()
+            }
         }
     }
 
     enum class ViewType {
         출제범위선택,
+        과목제외,
         고등공통과목수정,
         고등선택과목수정,
         중등과목수정;
     }
     fun getFragment(step: ViewType): Fragment {
         return when (step) {
-            ViewType.출제범위선택 -> SnackTestSelectExamRangeFragment.newInstance(test)
-            ViewType.고등공통과목수정 -> SnackTestHighCommonSubjectModifyFragment.newInstance()
-            ViewType.고등선택과목수정 -> SnackTestHighOptionalSubjectModifyFragment.newInstance()
-            ViewType.중등과목수정 -> SnackTestMiddleSubjectModifyFragment.newInstance()
+            ViewType.출제범위선택 -> SnackTestSelectExamRangeFragment.newInstance(viewModel, test)
+            ViewType.고등공통과목수정 -> SnackTestHighCommonSubjectModifyFragment.newInstance(viewModel)
+            ViewType.고등선택과목수정 -> SnackTestHighOptionalSubjectModifyFragment.newInstance(viewModel)
+            ViewType.중등과목수정 -> SnackTestMiddleSubjectModifyFragment.newInstance(viewModel)
+            ViewType.과목제외 -> SnackTestSubjectExcludeModifyFragment.newInstance(viewModel)
         }
     }
     fun sendViewModel(frag: Fragment) {
@@ -126,6 +129,9 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
             viewModel = this@SnackTestRecommendSettingDialog.viewModel
         }
         (frag as? SnackTestMiddleSubjectModifyFragment)?.apply {
+            viewModel = this@SnackTestRecommendSettingDialog.viewModel
+        }
+        (frag as? SnackTestSubjectExcludeModifyFragment)?.apply {
             viewModel = this@SnackTestRecommendSettingDialog.viewModel
         }
     }

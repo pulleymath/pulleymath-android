@@ -258,7 +258,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
             rangeLabel.text ="출제 범위"
             rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
-            settingBtn.visibility = View.GONE
+//            settingBtn.visibility = View.GONE
             titleTv.text = test.subject
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
 
@@ -290,7 +290,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
             reportTv.extensionTouchArea(24.toPx())
-            settingBtn.visibility = View.GONE
+//            settingBtn.visibility = View.GONE
 
             subjectTv.text = test.dailyInfo.subjectCode
 
@@ -324,7 +324,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                 giftContainerCl.visibility = View.INVISIBLE
                 settingContainerCl.visibility = View.INVISIBLE
                 startBtn.visibility = View.INVISIBLE
-                settingBtn.visibility = View.GONE
+//                settingBtn.visibility = View.GONE
 
                 TestManager.getDailyTestReport(requireContext(), user!!) {
 

@@ -123,7 +123,6 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
-                    android:visibility="gone"
                     android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
                     android:src="@drawable/ic_gear"
                     app:layout_constraintEnd_toEndOf="parent"

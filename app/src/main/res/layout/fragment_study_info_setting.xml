@@ -7,8 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:background="@drawable/bg_white_fafafa_round"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment">
+        android:background="@drawable/bg_white_fafafa_round">
 
         <ImageButton
             android:id="@+id/backBtn"

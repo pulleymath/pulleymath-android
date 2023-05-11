@@ -20,6 +20,7 @@ import com.freewheelin.pulley.views.DaebakInputSelection
 import com.freewheelin.pulley.views.DaebakInputSelectionListener
 
 
+//deprecated
 class StudyAllUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
 
     lateinit var binding: FragmentStudyUnitSettingBinding

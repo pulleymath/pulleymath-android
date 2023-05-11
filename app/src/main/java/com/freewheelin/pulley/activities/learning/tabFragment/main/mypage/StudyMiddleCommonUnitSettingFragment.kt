@@ -2,8 +2,6 @@ package com.freewheelin.pulley.activities.learning.tabFragment.main.mypage
 
 
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,20 +15,11 @@ import com.freewheelin.pulley.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
 import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.databinding.FragmentStudyUnitMiddleSchoolCommonSettingBinding
-import com.freewheelin.pulley.revision2023.model.request.UpdateCommonSubjectRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
-import com.freewheelin.pulley.revision2023.repository.MyPageRepository
 import com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
 import com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelectionListener
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.views.DaebakToast
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 class StudyMiddleCommonUnitSettingFragment : MyPageBaseFragment(),
     MiddleSchoolUnitSelectionListener {
@@ -121,7 +110,7 @@ class StudyMiddleCommonUnitSettingFragment : MyPageBaseFragment(),
         if (selectedIds != null) {
             viewModel.updateCommonSubject(selectedIds) {
                 setFragmentResult(MyStudyInfoFragment.RELOAD, bundleOf())
-                DaebakToast.show(requireContext(), "수정되었습니다")
+                DaebakToast.show(requireContext(), "수정되었습니다.")
                 onBackBtnClicked()
             }
         } else {

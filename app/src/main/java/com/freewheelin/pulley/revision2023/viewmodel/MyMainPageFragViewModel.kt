@@ -1,26 +1,17 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
-import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
-import com.freewheelin.pulley.revision2023.model.request.UpdateCommonSubjectRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.repository.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(application) {
 
@@ -76,14 +67,18 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
     }
     fun updateCommonSubject(selectedIds: List<Int>, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            println("zxozxo onModifyBtnClicked1-2 ")
             myPageRepository.updateCommonSubject(selectedIds)
-            println("zxozxo onModifyBtnClicked1-9 ")
             withContext(Dispatchers.Main) {
-                println("zxozxo onModifyBtnClicked1-10 ")
                 cb()
             }
-
+        }
+    }
+    fun updateOptionalSubject(selectedIds: List<Int>, cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            myPageRepository.updateOptionalSubject(selectedIds)
+            withContext(Dispatchers.Main) {
+                cb()
+            }
         }
     }
     fun excludeSubjects(selectedIds: List<Int>, cb: () -> Unit) {

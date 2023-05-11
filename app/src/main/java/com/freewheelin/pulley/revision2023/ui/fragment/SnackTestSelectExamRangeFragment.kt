@@ -7,31 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.signup.SignupActivity
+import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.databinding.FragmentGuestJoinIntroduceBinding
-import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
+import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.core.manage.TestManager
 import com.freewheelin.pulley.databinding.FragmentTestExamRangeBinding
 import com.freewheelin.pulley.model.contents.Test
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
-import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog.GuestJoinStep
-import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog.*
-import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 import com.freewheelin.pulley.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.min
+import com.freewheelin.pulley.views.DaebakToast
 
 class SnackTestSelectExamRangeFragment() : Fragment() {
     private lateinit var binding: FragmentTestExamRangeBinding
     private lateinit var test: Test
-    var viewModel: RecommendSettingViewModel? = null
+//    var viewModel: RecommendSettingViewModel? = null
+    lateinit var viewModel: RecommendSettingViewModel
 
 
     override fun onCreateView(
@@ -49,11 +42,26 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             setScreen()
             setRadioGroup()
-
             setModifyBtnClickListener()
-            cancelBtn.setOnClickListener { viewModel?.exitBtn() }
-            saveBtn.setOnClickListener {
-                //TODO save api
+        }
+        viewModel.apply {
+            userRecommendLiveData.observe(viewLifecycleOwner) {
+                val selectedCommonSubjects = viewModel.getUserSelectedCommonSubjects(it)
+                val selectedOptionalSubjects = viewModel.getUserSelectedOptionalSubjects(it)
+                val recentStudiedSubjects = viewModel.getRecentStudySubjects(it)
+
+                binding.apply {
+                    val filteredSubjects = getReducedFilterTextFromSubject(recentStudiedSubjects)
+                    sameMyText.text = filteredSubjects
+                    isRecentStudiedRangeEmpty.postValue(filteredSubjects == "없음")
+
+
+                    myChoiceCommonText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
+                    myChoiceMiddleSubjectText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
+
+                    satOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
+                    myChoiceOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
+                }
             }
         }
 
@@ -62,19 +70,59 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
         }
     }
 
+    private fun getReducedFilterTextFromSubject(list: List<SubjectV3>): String {
+        val result = list.map { it.filterText }.distinct().reduceOrNull { prev, next -> "$prev ,$next" }
+        return result ?: "없음"
+    }
     private fun setModifyBtnClickListener() {
         binding.apply {
-            commonSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등공통과목수정) } }
-            optionalSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등선택과목수정) } }
-            middleSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.중등과목수정) } }
-            over50HighSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등공통과목수정) } }
-            over50MiddleSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등공통과목수정) } }
+            commonSubjectModifyBtn.setOnClickListener {
+                if (viewModel.isRecentStudiedRangeEmpty.value == true) {
+                    DaebakToast.show(requireContext(), "최근 공부내역이 부족합니다.")
+                } else {
+                    viewModel.setStep.let { it(ViewType.과목제외) }
+                }
+            }
+            middleSubjectModifyBtn.setOnClickListener {
+                if (viewModel.isRecentStudiedRangeEmpty.value == true) {
+                    DaebakToast.show(requireContext(), "최근 공부내역이 부족합니다.")
+                } else {
+                    viewModel.setStep.let { it(ViewType.과목제외) }
+                }
+            }
 
-            satOptionalSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등선택과목수정) } }
-            myChoiceCommonSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등공통과목수정) } }
-            myChoiceOptionalSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.고등선택과목수정) } }
-            myChoiceMiddleSubjectModifyBtn.setOnClickListener { viewModel?.setStep?.let { it(ViewType.중등과목수정) } }
+            satOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등선택과목수정) } }
+            myChoiceCommonSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등공통과목수정) } }
+            myChoiceOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등선택과목수정) } }
+            myChoiceMiddleSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.중등과목수정) } }
 
+            cancelBtn.setOnClickListener { cancelConfigure() }
+            saveBtn.setOnClickListener { sendConfigure() }
+        }
+    }
+    fun cancelConfigure() {
+        val intent = Intent(TestManager.EVENT_TEST_SETTING)
+        LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+        viewModel.exitBtn()
+    }
+    fun sendConfigure() {
+        viewModel.apply {
+            val recommendLevel = selectedLevelIndex
+            val recommendChapter = selectedRangeIndex
+            val param: Parameter = Parameter(
+                "recommendLevel" to recommendLevel,
+                "recommendChapter" to recommendChapter
+            )
+
+            updateRecommends(param) {
+                user!!.update(
+                    recommendLevel = recommendLevel,
+                    recommendChapter = recommendChapter
+                )
+                val intent = Intent(TestManager.EVENT_TEST_SETTING)
+                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+                exitBtn()
+            }
         }
     }
 
@@ -86,23 +134,91 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
     }
     private fun setRadioGroup() {
         binding.apply {
+            initLevelRadioGroup()
+            initRangeRadioGroup()
+            showSubView()
+        }
+    }
+
+    private fun initLevelRadioGroup() {
+        binding.apply {
             val level = test.dailyInfo.testLevel
             val testLevel = Test.TestLevel.ordinalOfNonNull(level)
-            val levelRadioBtn = when(testLevel) {
+            val levelRadioBtn = when (testLevel) {
                 Test.TestLevel.HIGH -> R.id.highButton
                 Test.TestLevel.LIKE_ME -> R.id.middleButton
                 Test.TestLevel.EASY -> R.id.lowButton
             }
+            viewModel.selectedLevelIndex = level
             levelRg.check(levelRadioBtn)
+
+            levelRg.setOnCheckedChangeListener { _, checkedId ->
+                viewModel.selectedLevelIndex = getLevelIndex(checkedId)
+                showSubView()
+            }
         }
+    }
+    private fun getLevelIndex(id: Int): Int {
+        return when (id) {
+            R.id.lowButton -> 0
+            R.id.middleButton -> 1
+            R.id.highButton -> 2
+            else -> -1
+        }
+    }
+    private fun initRangeRadioGroup() {
+        binding.apply {
+            val range = test.dailyInfo.testRange
+            val testRange = Test.TestRange.ordinalOfNonNull(range)
+            val radioBtn = when (testRange) {
+                Test.TestRange.RECENT_RANGE -> R.id.recentStudiedButton
+                Test.TestRange.ALL_RANGE -> R.id.satAllRangeButton
+                Test.TestRange.SUBJECT_BY_GRADE -> R.id.myChoiceBtn
+            }
+            rangeRg.check(radioBtn)
+            viewModel.selectedRangeIndex = range
+            rangeRg.setOnCheckedChangeListener { _, checkedId ->
+                viewModel.selectedRangeIndex = getRangeIndex(checkedId)
+                showSubView()
+            }
+        }
+    }
+    private fun getRangeIndex(id: Int): Int {
+        return when (id) {
+            R.id.recentStudiedButton -> 0
+            R.id.satAllRangeButton -> 1
+            R.id.myChoiceBtn -> 2
+            else -> -1
+        }
+
+    }
+    private fun showSubView() {
+        binding.apply {
+            viewModel.isSelectedRecentStudiedRg.postValue(rangeRg.checkedRadioButtonId == R.id.recentStudiedButton)
+
+            when(rangeRg.checkedRadioButtonId) {
+                R.id.recentStudiedButton -> {
+                    viewModel.updateTestRangeType(TestRangeType.RecentStudied)
+                }
+                R.id.satAllRangeButton -> { viewModel.updateTestRangeType(TestRangeType.SAT) }
+                R.id.myChoiceBtn -> { viewModel.updateTestRangeType(TestRangeType.MyChoice) }
+            }
+        }
+    }
+
+    enum class TestRangeType {
+        RecentStudied,
+        SAT,
+        MyChoice
     }
 
     companion object {
         val DAILY_TEST_EXTRA = "DAILY_TEST_EXTRA"
         @JvmStatic
-        fun newInstance(test: Test) =
+        fun newInstance(viewModel: RecommendSettingViewModel, test: Test) =
             SnackTestSelectExamRangeFragment().apply {
                 this.test = test
+                this.viewModel = viewModel
                 arguments = Bundle().apply {
 
                 }

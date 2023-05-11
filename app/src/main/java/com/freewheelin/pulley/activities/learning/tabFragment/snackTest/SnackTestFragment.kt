@@ -22,13 +22,11 @@ import com.freewheelin.pulley.activities.WrongTestReportActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.learning.LearningTabFragment
 import com.freewheelin.pulley.activities.mypage.MyPageSettingDialogListener
-import com.freewheelin.pulley.activities.mypage.MyRecommendSettingActivity
 import com.freewheelin.pulley.activities.solve.SolveActivity
 import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.manage.ProblemManager
 import com.freewheelin.pulley.core.manage.TestManager
-import com.freewheelin.pulley.core.manage.UserManager.EVENT_USER_UPDATE
 import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
 import com.freewheelin.pulley.model.User
@@ -112,7 +110,6 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
         syncTestList()
         viewModel.apply {
             schoolType.observe(viewLifecycleOwner) {
-                println("qwoqwo snacktest schoolType :${it}")
                 syncTestList()
             }
 
