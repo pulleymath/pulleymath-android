@@ -6,27 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.BigUnitV3
 import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentSubjectExcludeModifyBinding
+import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
 import com.freewheelin.pulley.views.PulleyInputSelection
 import com.freewheelin.pulley.views.PulleyInputSelectionListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionListener {
     private lateinit var binding: FragmentSubjectExcludeModifyBinding
-//    var viewModel: RecommendSettingViewModel? = null
+
     lateinit var viewModel: RecommendSettingViewModel
 
     override fun onCreateView(
@@ -45,9 +41,10 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
             setScreen()
             initSelection()
 
-            val recentUnits = viewModel.getRecentStudyBigUnits(null)
-            initRecentUnit(recentUnits)
-            initExcludedUnit(recentUnits)
+            val recentSubjects = viewModel.getRecentStudyBigUnits(null)
+
+            initRecentUnit(recentSubjects)
+            initExcludedUnit(recentSubjects)
 
             modifyBtn.setOnClickListener { onModifyBtnClicked() }
             backBtn.setOnClickListener { onBackBtnClicked() }
@@ -69,21 +66,21 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
             }
         }
     }
-    private fun initRecentUnit(recentUnits: List<BigUnitV3>) {
+    private fun initRecentUnit(recentSubjects: List<SubjectChapter>) {
         with(binding) {
             selectionWrapperLl.children.forEach {
                 (it as? PulleyInputSelection)?.let {
-                    it.setBigUnit(recentUnits)
+                    it.setSubject(recentSubjects)
                 }
             }
         }
     }
 
-    private fun initExcludedUnit(includedUnits: List<BigUnitV3>) { // recentUnits
+    private fun initExcludedUnit(includedSubjects: List<SubjectChapter>) { // recentUnits
         with(binding) {
             selectionWrapperLl.children.forEach {
                 (it as? PulleyInputSelection)?.let {
-                    it.excludeBigUnit(includedUnits)
+                    it.excludeSubjects(includedSubjects)
                 }
             }
         }
@@ -126,7 +123,6 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
     }
 
     private fun getSelectedUnits(view: PulleyInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
-//        val selectionResult = view.result.subList(1, view.result.size)
         val unitMap = subject.bigUnits.toList().zip(view.result)
         return unitMap.filter { it.second }.map { it.first }
     }
@@ -153,7 +149,6 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "수정하기", "단원")
         if(binding.modifyBtn.isEnableUI()) {
             val units = getCalcExcludedUnits()
-            println("zxpzxp excluding units : ${units}")
             viewModel.excludeSubjects(units.map { it.id }) {
                 onBackBtnClicked()
             }

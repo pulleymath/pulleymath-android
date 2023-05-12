@@ -30,25 +30,10 @@ class SnackTestFragViewModel(application: Application): BaseAndroidViewModel(app
     val userInRepo = userRepository.user
     val schoolType = userRepository.schoolType
 
-    private val _recommendCommonSubjects = MutableLiveData<List<RecommendSubject>>()
-    val recommendCommonSubjects: LiveData<List<RecommendSubject>> = _recommendCommonSubjects
-
-    private val _recommendOptionalSubjects = MutableLiveData<List<RecommendSubject>>()
-    val recommendOptionalSubjects: LiveData<List<RecommendSubject>> = _recommendOptionalSubjects
-
-
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
     }
-    fun fetchRecommendSubject() {
-        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val res = myPageRepository.fetchRecommendSubject()
-            val commonSubjects = res.commonSubjects
-            _recommendCommonSubjects.postValue(commonSubjects)
-            val optionalSubjects = res.optionalSubjects
-            _recommendOptionalSubjects.postValue(optionalSubjects)
-        }
-    }
+
     fun getRecommendLevelText(level: Int): String {
         return when(level) {
             0 -> "더 쉽게"

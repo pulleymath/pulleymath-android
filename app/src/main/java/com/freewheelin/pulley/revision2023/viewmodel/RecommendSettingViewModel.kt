@@ -10,6 +10,7 @@ import com.freewheelin.pulley.assets.SubjectV3
 import com.freewheelin.pulley.core.Parameter
 import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
+import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 import com.freewheelin.pulley.revision2023.repository.MyPageRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
@@ -53,7 +54,11 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
     fun getRecentStudySubjects(info: DailyTestRecommendResponse? = null): List<SubjectV3> {
         val recommendInfo = info ?: userRecommendInfo
         val recentStudiedSubjects = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedSubject(it.recentStudySubjects)
+            return@let it.recentStudySubjects.map { it.chapters }
+                .reduceOrNull { prev, next ->
+                    prev + next
+                }
+                ?.map { BigUnitV3.idOfNonNull(it.chapterId).subject }
         }
         return recentStudiedSubjects ?: listOf()
     }
@@ -72,10 +77,14 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
         }
         return userSelectedSubjects ?: listOf()
     }
-    fun getRecentStudyBigUnits(info: DailyTestRecommendResponse? = null): List<BigUnitV3> {
+    fun getRecentStudyBigUnits(info: DailyTestRecommendResponse? = null): List<SubjectChapter> {
         val recommendInfo = info ?: userRecommendInfo
         val recentStudiedBigUnits = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedBigUnit(it.recentStudySubjects)
+            return@let it.recentStudySubjects
+                .map { it.chapters }
+                .reduceOrNull { prev, next ->
+                    prev + next
+                }
         }
         return recentStudiedBigUnits ?: listOf()
     }

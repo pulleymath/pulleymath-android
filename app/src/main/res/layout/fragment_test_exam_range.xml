@@ -183,7 +183,7 @@
                                     style="@style/TextBlack_4c4c4c.Bold"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="수학(상), 수학(하), 수학1, 수학2"
+                                    android:text=""
                                     android:textSize="@dimen/sp14"
                                     app:layout_constraintEnd_toStartOf="@+id/commonSubjectModifyBtn"
                                     app:layout_constraintStart_toEndOf="@+id/sameMyLabel"

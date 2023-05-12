@@ -34,12 +34,12 @@ enum class SubjectV3(val id: Int) {
                 미적분 -> listOf(BigUnitV3.수열의_극한, BigUnitV3.미분법, BigUnitV3.적분법)
                 기하 -> listOf(BigUnitV3.이차곡선, BigUnitV3.벡터, BigUnitV3.공간도형)
 
-                중1_1 -> listOf(BigUnitV3.중등_좌표평면과_그래프, BigUnitV3.중등_문자와_식, BigUnitV3.중등_정수와_유리수, BigUnitV3.중등_소인수_분해)
-                중1_2 -> listOf(BigUnitV3.중등_입체도형, BigUnitV3.중등_평면도형, BigUnitV3.중등_기본도형, BigUnitV3.중등_통계)
+                중1_1 -> listOf(BigUnitV3.중등_소인수_분해, BigUnitV3.중등_정수와_유리수, BigUnitV3.중등_문자와_식, BigUnitV3.중등_좌표평면과_그래프)
+                중1_2 -> listOf(BigUnitV3.중등_기본도형, BigUnitV3.중등_평면도형, BigUnitV3.중등_입체도형, BigUnitV3.중등_통계)
                 중2_1 -> listOf(BigUnitV3.중등_수와_식, BigUnitV3.중등_부등식, BigUnitV3.중등_방정식, BigUnitV3.중등_함수)
                 중2_2 -> listOf(BigUnitV3.중등_도형의_성질, BigUnitV3.중등_도형의_닮음, BigUnitV3.중등_확률)
-                중3_1 -> listOf(BigUnitV3.중등_이차함수, BigUnitV3.중등_다항식의_곱셈과_인수분해, BigUnitV3.중등_이차방정식, BigUnitV3.중등_실수와_그계산)
-                중3_2 -> listOf(BigUnitV3.중등_원의_성질, BigUnitV3.중등_삼각비, BigUnitV3.중등_통계2)
+                중3_1 -> listOf(BigUnitV3.중등_실수와_그계산, BigUnitV3.중등_다항식의_곱셈과_인수분해, BigUnitV3.중등_이차방정식, BigUnitV3.중등_이차함수)
+                중3_2 -> listOf(BigUnitV3.중등_삼각비, BigUnitV3.중등_원의_성질, BigUnitV3.중등_통계2)
                 else -> listOf()
             }
         }
@@ -200,12 +200,6 @@ enum class SubjectV3(val id: Int) {
 enum class BigUnitV3(val subject: SubjectV3, val title: String, val id: Int) {
     교육과정외(SubjectV3.교육과정외, "교육과정 외", -1),
     중등(SubjectV3.중등, "중등", 0),
-//    중1_1(SubjectV3.중1_1, "중1_1", 362),
-//    중1_2(SubjectV3.중1_2, "중1_2", 363),
-//    중2_1(SubjectV3.중2_1, "중2_1", 364),
-//    중2_2(SubjectV3.중2_2, "중2_2", 365),
-//    중3_1(SubjectV3.중3_1, "중3_1", 366),
-//    중3_2(SubjectV3.중3_2, "중3_2", 367),
 
     다항식(SubjectV3.수학_상, "다항식", 368),
     방정식과_부등식(SubjectV3.수학_상, "방정식과 부등식", 371),
@@ -234,7 +228,8 @@ enum class BigUnitV3(val subject: SubjectV3, val title: String, val id: Int) {
     이차곡선(SubjectV3.기하, "이차곡선", 395),
     벡터(SubjectV3.기하, "벡터", 394),
     공간도형(SubjectV3.기하, "공간도형", 392),
-//--------
+
+    //-------- 거지같지만 중등 대단원의 id는 교육과정 순서와 다르다
     중등_소인수_분해(SubjectV3.중1_1, "소인수분해", 190),
     중등_정수와_유리수(SubjectV3.중1_1, "정수와 유리수", 189),
     중등_문자와_식(SubjectV3.중1_1, "문자와 식", 188),

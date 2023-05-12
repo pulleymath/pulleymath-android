@@ -23,7 +23,7 @@ import com.freewheelin.pulley.views.DaebakToast
 class SnackTestSelectExamRangeFragment() : Fragment() {
     private lateinit var binding: FragmentTestExamRangeBinding
     private lateinit var test: Test
-//    var viewModel: RecommendSettingViewModel? = null
+
     lateinit var viewModel: RecommendSettingViewModel
 
 
@@ -77,16 +77,16 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
     private fun setModifyBtnClickListener() {
         binding.apply {
             commonSubjectModifyBtn.setOnClickListener {
-                viewModel.setStep.let { it(ViewType.과목제외) }
+                viewModel.setStep(ViewType.과목제외)
             }
             middleSubjectModifyBtn.setOnClickListener {
-                viewModel.setStep.let { it(ViewType.과목제외) }
+                viewModel.setStep(ViewType.과목제외)
             }
 
-            satOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등선택과목수정) } }
-            myChoiceCommonSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등공통과목수정) } }
-            myChoiceOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.고등선택과목수정) } }
-            myChoiceMiddleSubjectModifyBtn.setOnClickListener { viewModel.setStep.let { it(ViewType.중등과목수정) } }
+            satOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.고등선택과목수정) }
+            myChoiceCommonSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.고등공통과목수정) }
+            myChoiceOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.고등선택과목수정) }
+            myChoiceMiddleSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.중등과목수정) }
 
             cancelBtn.setOnClickListener { cancelConfigure() }
             saveBtn.setOnClickListener { sendConfigure() }

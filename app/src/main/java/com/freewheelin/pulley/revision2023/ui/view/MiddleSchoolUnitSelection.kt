@@ -96,7 +96,6 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
 
 
             val withoutUnSortedChapters = subject.chapters
-                .sortedBy { it.chapterId }
                 .filterNot { it.chapterName == "미분류" }
             withoutUnSortedChapters
                 .forEachIndexed { index, chapter ->

@@ -74,17 +74,6 @@ class TestMainDailyFragment : TestMainBaseFragment() {
                     }
                 }
             }
-            recommendCommonSubjects.observe(viewLifecycleOwner) { subjects ->
-                (binding as? FragmentTestMainBinding)?.apply {
-                    subjectTv.text = getSubjectNames(subjects)
-                }
-            }
-//            recommendOptionalSubjects.observe(thisOwner) { subjects ->
-//
-//                binding.apply {
-//
-//                }
-//            }
         }
     }
     private fun getSubjectNames(list: List<RecommendSubject>): String {
@@ -258,7 +247,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
 
             rangeLabel.text ="출제 범위"
             rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
-//            settingBtn.visibility = View.GONE
+            settingBtn.visibility = View.VISIBLE
             titleTv.text = test.subject
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
 
@@ -290,7 +279,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             rangeTv.text = viewModel.getRecommendRangeText(test.dailyInfo.testRange)
             startBtn.text = "${test.scoringTestPieceCount + 1}회차 테스트 시작하기"
             reportTv.extensionTouchArea(24.toPx())
-//            settingBtn.visibility = View.GONE
+            settingBtn.visibility = View.VISIBLE
 
             subjectTv.text = test.dailyInfo.subjectCode
 
