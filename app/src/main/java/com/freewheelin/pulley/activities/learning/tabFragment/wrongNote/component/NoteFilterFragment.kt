@@ -47,7 +47,7 @@ class NoteFilterFragment : Fragment() {
     }
 
     lateinit var filterAdapter: BookFilterAdapter
-    lateinit var noteType: NoteFilterType
+    var noteType: NoteFilterType = NoteFilterType.Wrong
 
     companion object {
         const val ARG_FILTERS = "FILTER_TYPES"
