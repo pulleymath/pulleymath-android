@@ -38,8 +38,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/arrowIconIv">
-    <!--        android:background="@drawable/bg_common_purple_stroke_purple">-->
-<!--            android:background="@{ item.progressRate > 0 ? @drawable/bg_common_white_stroke_purple_ripple : @drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_ripple }">-->
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

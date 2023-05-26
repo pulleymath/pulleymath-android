@@ -55,7 +55,7 @@
 
                     <TextView
                         android:id="@+id/greetingLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
@@ -105,7 +105,7 @@
 
                         <TextView
                             android:id="@+id/levelTv"
-                            style="@style/TextRed_fe7b67.Bold"
+                            style="@style/TextRed_300.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -206,7 +206,7 @@
 
                         <TextView
                             android:id="@+id/timerTv"
-                            style="@style/TextRed_fe7b67"
+                            style="@style/TextRed_300"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"

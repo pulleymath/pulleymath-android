@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-<!--            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"-->
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -41,7 +41,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        style="@style/TextGray_800.ExtraBold"
                         android:id="@+id/answerTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:id="@+id/lvTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:id="@+id/pointTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:id="@+id/referenceLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:id="@+id/intentionTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

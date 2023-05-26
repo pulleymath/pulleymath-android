@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:background="@color/black"
             android:orientation="vertical">
-<!--            android:background="@drawable/bg_blue_30a4ff_round"-->
 
         </LinearLayout>
 

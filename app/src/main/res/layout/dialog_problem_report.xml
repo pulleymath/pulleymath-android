@@ -6,7 +6,7 @@
         android:id="@+id/rootView"
         android:layout_width="536dp"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
@@ -14,10 +14,10 @@
             android:id="@+id/topContainerCl"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="@drawable/bg_white_ffffff_round_top_only">
+            android:background="@drawable/bg_white_round_top_only">
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="신고하기"
@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/typeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,14 +77,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/typeLabel">
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/problemRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp16"
                         android:text="문제"/>
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/answerRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                         android:textSize="@dimen/sp16"
                         android:text="정답"/>
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/solutionRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                         android:textSize="@dimen/sp16"
                         android:text="해설"/>
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/paintingRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 </RadioGroup>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/detailLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -135,21 +135,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/detailLabel">
 
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/detail1"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp36"
                         android:textSize="@dimen/sp16"
                         android:text="오타가 있어요."/>
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/detail2"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp36"
                         android:textSize="@dimen/sp16"
                         android:text="다른 과목/단원 문제인 것 같아요."/>
                     <RadioButton
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:id="@+id/detail3"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp36"
@@ -159,7 +159,7 @@
                 </RadioGroup>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/describeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,8 +178,8 @@
                     android:layout_marginStart="@dimen/dp32"
                     android:layout_marginEnd="@dimen/dp32"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
-                    android:textColorHint="@color/grey_c0c0c0"
+                    android:background="@drawable/bg_white_stroke_gray_500"
+                    android:textColorHint="@color/gray_500"
                     android:hint=""
                     android:textSize="@dimen/sp16"
                     android:gravity="top"
@@ -203,7 +203,7 @@
                         android:src="@drawable/ic_exclamation_red"/>
 
                     <TextView
-                        style="@style/TextRed_fe7b67.Bold"
+                        style="@style/TextRed_300.Bold"
                         android:id="@+id/errorTv"
                         android:textSize="@dimen/sp14"
                         android:text="설명을 입력해주세요"

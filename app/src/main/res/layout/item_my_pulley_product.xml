@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_ffffff"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,7 +20,7 @@
             android:gravity="center_vertical">
             <TextView
                 android:id="@+id/prodNameLabel"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -28,7 +28,7 @@
                 android:textSize="@dimen/sp16" />
             <TextView
                 android:id="@+id/prodNameTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="풀리수학+"
@@ -42,7 +42,7 @@
             android:gravity="center_vertical">
             <TextView
                 android:id="@+id/usePeriodLabel"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -50,7 +50,7 @@
                 android:textSize="@dimen/sp16" />
             <TextView
                 android:id="@+id/usePeriodTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2021.01.06 ~ 2021.02.05"
@@ -66,7 +66,7 @@
 
             <TextView
                 android:id="@+id/paymentLabel"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -74,7 +74,7 @@
                 android:textSize="@dimen/sp16" />
             <TextView
                 android:id="@+id/paymentTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="null"
@@ -85,14 +85,14 @@
             android:id="@+id/btnOpenRefund"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="24dp"
             android:paddingEnd="24dp">
 
             <TextView
-                style="@style/TextRed_fe7b67.ExtraBold"
+                style="@style/TextRed_300.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

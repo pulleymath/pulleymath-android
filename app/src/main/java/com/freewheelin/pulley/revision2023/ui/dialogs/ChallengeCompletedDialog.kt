@@ -15,12 +15,19 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogChallengeCompletedBinding
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.view.MissionStampView
 import com.freewheelin.pulley.revision2023.viewmodel.ChallengeCompletedViewModel
 import com.freewheelin.pulley.utils.AnimUtils
+import com.freewheelin.pulley.utils.visibleIf
+import com.freewheelin.pulley.utils.visibleOrInvisibleIf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: Int, val moveEvent: (course: ChallengeCourse?) -> Unit, val exitEvent: () -> Unit = {}): DialogFragment() {
+class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: Int, val moveEvent: (course: ChallengeCourse?) -> Unit, val exitEvent: () -> Unit = {}, val isDelayedShowNextBtn: Boolean = false): DialogFragment() {
 
     private val viewModel: ChallengeCompletedViewModel by viewModels()
 
@@ -51,9 +58,20 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             stampLottie.playAnimation()
             stampLottie.addAnimatorListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    viewModel.showStampAnim.postValue(false)
-                    viewModel.showStampGl.postValue(true)
-                    AnimUtils.smoothAppearAnim(stampGl)
+                    if (isDelayedShowNextBtn) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val intent = PurchaseInduceWebViewActivity.getIntent(requireContext())
+                            startActivity(intent)
+                            delay(200)
+                            viewModel.showStampAnim.postValue(false)
+                            viewModel.showStampGl.postValue(true)
+                            AnimUtils.smoothAppearAnim(stampGl)
+                        }
+                    } else {
+                        viewModel.showStampAnim.postValue(false)
+                        viewModel.showStampGl.postValue(true)
+                        AnimUtils.smoothAppearAnim(stampGl)
+                    }
                 }
             })
 

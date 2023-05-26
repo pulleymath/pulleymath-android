@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,16 +34,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
-import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 
 class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
@@ -333,9 +326,8 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "결제유도","풀리수학으로공부시작")
             FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
     //        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
-    //        val dialog = PurchaseGuideDialog(2)
-    //        childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
-            startActivity(PurchaseGuideActivity.getIntent(requireContext()))
+            val dialog = PurchaseGuideDialog(2)
+            childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
         }
     }
 
@@ -391,7 +383,8 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         viewModel.askForRedeemOfChallenge(challenge.userChallengeId) {
             if (user?.serviceType?.isNoneUser == true) {
                 val dialog = StartChallengeInfoDialog(challenge.challengeId, true) { _ ->
-                    startActivity(PurchaseGuideActivity.getIntent(requireContext()))
+                    val dialog = PurchaseGuideDialog(2)
+                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                 }
                 childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
             } else {

@@ -16,12 +16,12 @@
             app:layout_constraintTop_toTopOf="@+id/pageTv"
             app:layout_constraintBottom_toBottomOf="@+id/pageTv"/>
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/pageTv"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp14"
-            android:textColor="@color/black_4c4c4c"
+            android:textColor="@color/gray_800"
             android:gravity="center_horizontal"
             android:text="6p"
             app:layout_constraintTop_toTopOf="parent"

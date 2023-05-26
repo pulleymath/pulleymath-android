@@ -19,10 +19,10 @@ class RangeRadioButton: Button {
         super.setSelected(selected)
 
         if(selected) {
-            setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_black_4c4c4c_round_18)
+            setTextColor(ContextCompat.getColor(context, R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.bg_gray_800_round_18)
         } else {
-            setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            setTextColor(ContextCompat.getColor(context, R.color.gray_800))
             background = null
         }
     }

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <merge>
 
-        <View android:background="@drawable/bg_red_fe7b67_round_2"
+        <View android:background="@drawable/bg_red_300_round_2"
             android:id="@+id/negativeBar"
             android:layout_height="24dp"
             android:layout_width="140dp"
@@ -13,7 +13,7 @@
             app:layout_constraintEnd_toStartOf="@+id/centerLine"/>
 
         <TextView
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:id="@+id/negativeTv"
             android:textSize="@dimen/sp16"
             android:text="25%"
@@ -39,13 +39,13 @@
             android:id="@+id/centerLine"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <View android:background="@drawable/bg_blue_30a4ff_round_2"
+        <View android:background="@drawable/bg_blue_400_round_2"
             android:id="@+id/positiveBar"
             android:layout_height="24dp"
             android:layout_width="140dp"
@@ -54,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            style="@style/TextBlue_30a4ff.Bold"
+            style="@style/TextBlue_400.Bold"
             android:id="@+id/positiveTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,11 +76,11 @@
             app:layout_constraintStart_toEndOf="@+id/positiveBar"/>
 
         <TextView
-            style="@style/TextGrey_818181.Bold"
+            style="@style/TextGray_700.Bold"
             android:id="@+id/zeroLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             android:text="0%"
             android:textSize="@dimen/sp16"
             app:layout_constraintStart_toStartOf="parent"

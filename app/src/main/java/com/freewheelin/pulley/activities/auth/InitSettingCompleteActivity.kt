@@ -55,7 +55,7 @@ class InitSettingCompleteActivity : AppCompatActivity() {
             var message = it.message
             var changedMessage: CharSequence = message
             it.highlight?.forEach {
-                changedMessage = changedMessage.partialFontAndColored(Theme.extraBold(this), ContextCompat.getColor(this, R.color.purple_6D6DFF), it)
+                changedMessage = changedMessage.partialFontAndColored(Theme.extraBold(this), ContextCompat.getColor(this, R.color.purple_300), it)
             }
             binding.guideTv.text = changedMessage
         }

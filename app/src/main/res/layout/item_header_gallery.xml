@@ -9,18 +9,18 @@
         android:paddingStart="8dp">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:id="@+id/chapterMiddleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp18"
-            android:textColor="@color/black_4c4c4c"
+            android:textColor="@color/gray_800"
             android:layout_marginTop="4dp"
             android:text="두 원의 교점을 지나는 직선과 원의 방정식(중단원)"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/pageNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

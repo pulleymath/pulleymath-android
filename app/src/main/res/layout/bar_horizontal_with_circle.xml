@@ -9,7 +9,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/grey_e0e0e0"
+            android:background="@color/gray_400"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -17,7 +17,7 @@
             android:id="@+id/fillView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/purple_6e6cff"
+            android:background="@color/purple_300"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

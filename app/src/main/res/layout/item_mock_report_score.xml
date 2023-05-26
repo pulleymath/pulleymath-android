@@ -6,12 +6,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa"
+        android:background="@drawable/bg_gray_100_ripple"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/scoreAnalysisTv"
-            style="@style/TextGrey_9f9f9f"
+            style="@style/TextGray_600"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
@@ -28,14 +28,14 @@
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginTop="@dimen/dp12"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scoreAnalysisTv">
 
             <TextView
                 android:id="@+id/scoreAnalysisGuideTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp40"
@@ -47,7 +47,7 @@
 
             <TextView
                 android:id="@+id/scoreAnalysisGuideTv2"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp40"
@@ -72,7 +72,7 @@
 
             <TextView
                 android:id="@+id/lbSubjectScoreRate"
-                style="@style/TextGrey_c0c0c0.ExtraBold"
+                style="@style/TextGray_500.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

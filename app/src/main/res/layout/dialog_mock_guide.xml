@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="600dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -29,7 +29,7 @@
                 android:layout_marginTop="48dp"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:text="풀이방법을 선택해주세요"
-                android:textColor="@color/black_4c4c4c"
+                android:textColor="@color/gray_800"
                 android:textSize="24sp" />
 
 
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:lineSpacingExtra="8sp"
                 android:text="시험지를 프린트하여 풀이하신다면 [실전 OMR 모드]를\n태블릿에서 문제를 보며 풀고 싶다면\n[바로 풀기 모드]를 선택해주세요!"
-                android:textColor="@color/grey_818181"
+                android:textColor="@color/gray_700"
                 android:textSize="16sp" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_marginTop="40dp"
                 android:gravity="center"
                 android:text="아래 버튼을 누르면 바로 시험이 시작됩니다:)"
-                android:textColor="@color/purple_6D6DFF"
+                android:textColor="@color/purple_300"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -61,10 +61,10 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/bg_purple_6d6dff_round"
+                android:background="@drawable/bg_purple_300_round_ripple"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:text="실전 OMR 모드"
-                android:textColor="@color/white_ffffff" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/startWithoutPrintBtn"
@@ -74,10 +74,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_transparent_stroke_grey_9f9f9f_round"
+                android:background="@drawable/bg_transparent_stroke_gray_600_round"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:text="바로 풀기 모드"
-                android:textColor="@color/grey_9f9f9f" />
+                android:textColor="@color/gray_600" />
         </LinearLayout>
 
 

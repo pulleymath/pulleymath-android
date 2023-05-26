@@ -8,7 +8,7 @@
         android:layout_width="240dp"
         android:layout_height="400dp"
         android:padding="24dp"
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         android:clickable="true"
         android:focusable="false"
         >

@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="520dp"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         android:focusable="true"
         android:clickable="true"
         android:orientation="vertical"
@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:padding="8dp"
-                android:src="@drawable/icon_arrow_back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/gray_800"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +54,7 @@
 
         <View
             android:id="@+id/topBorder"
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             app:layout_constraintTop_toBottomOf="@id/headerCl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

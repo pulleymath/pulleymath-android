@@ -5,11 +5,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa"
+        android:background="@drawable/bg_gray_100_ripple"
         android:orientation="vertical">
         <TextView
             android:id="@+id/summaryTv"
-            style="@style/TextGrey_9f9f9f"
+            style="@style/TextGray_600"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
@@ -25,7 +25,7 @@
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             android:clipChildren="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,17 +37,17 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="40dp"
-                app:backgroundColor="@color/grey_f2f2f2"
+                app:backgroundColor="@color/gray_200"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/progressContainerCl"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="@color/blue_78beff"></com.freewheelin.pulley.views.LearningProgressView>
+                app:progressColor="@color/blue_300"></com.freewheelin.pulley.views.LearningProgressView>
 
             <View
                 android:id="@+id/progressBorder"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/ratingGuideTv"
-                    style="@style/TextBlack_4c4c4c"
+                    style="@style/TextGray_800"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
@@ -95,7 +95,7 @@
                     android:layout_marginTop="60dp"
                     android:layout_marginBottom="48dp"
                     android:src="@drawable/ic_triangle_below_blue"
-                    app:tint="@color/blue_78beff"
+                    app:tint="@color/blue_300"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/myScoreGuide"
                     app:layout_constraintStart_toStartOf="@+id/myScoreGuide"
@@ -103,7 +103,7 @@
 
                 <TextView
                     android:id="@+id/myScoreArrowTv"
-                    style="@style/TextBlue_30a4ff.Bold"
+                    style="@style/TextBlue_400.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -111,7 +111,7 @@
                     android:lineSpacingExtra="@dimen/sp7"
                     android:text="내 위치 0점"
                     android:textSize="@dimen/sp14"
-                    android:textColor="@color/blue_78beff"
+                    android:textColor="@color/blue_300"
                     app:layout_constraintBottom_toTopOf="@+id/myScoreArrowIv"
                     app:layout_constraintEnd_toEndOf="@+id/myScoreArrowIv"
                     app:layout_constraintStart_toStartOf="@+id/myScoreArrowIv" />
@@ -139,7 +139,7 @@
                     android:layout_width="1dp"
                     android:layout_height="16dp"
                     android:layout_marginTop="60dp"
-                    android:background="@color/blue_30a4ff"
+                    android:background="@color/blue_400"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/upperScoreGuide"
                     app:layout_constraintStart_toStartOf="@+id/upperScoreGuide"
@@ -150,7 +150,7 @@
                     android:layout_width="1dp"
                     android:layout_height="16dp"
                     android:layout_marginTop="60dp"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/belowScoreGuide"
                     app:layout_constraintStart_toStartOf="@+id/belowScoreGuide"
@@ -159,7 +159,7 @@
 
                 <TextView
                     android:id="@+id/upperScoreArrowTv"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -190,7 +190,7 @@
 
                 <TextView
                     android:id="@+id/belowScoreArrowTv"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -215,7 +215,7 @@
 
                 <TextView
                     android:id="@+id/lbScorePercent"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -227,7 +227,7 @@
 
                 <TextView
                     android:id="@+id/scorePercentTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="60dp"
@@ -240,7 +240,7 @@
 
                 <TextView
                     android:id="@+id/scoreCountTv"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -286,7 +286,7 @@
 
                 <TextView
                     android:id="@+id/lbCount"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -298,7 +298,7 @@
 
                 <TextView
                     android:id="@+id/lbPercent"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -310,7 +310,7 @@
 
                 <TextView
                     android:id="@+id/lbGrade"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -322,7 +322,7 @@
 
                 <TextView
                     android:id="@+id/ratingTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -334,7 +334,7 @@
 
                 <TextView
                     android:id="@+id/scoreTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0점"
@@ -346,7 +346,7 @@
 
                 <TextView
                     android:id="@+id/percentageTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0%"
@@ -358,7 +358,7 @@
 
                 <TextView
                     android:id="@+id/timeTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -378,7 +378,7 @@
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             android:clipChildren="false"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -391,17 +391,17 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="40dp"
-                app:backgroundColor="@color/grey_f2f2f2"
+                app:backgroundColor="@color/gray_200"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/oneProgressContainerCl"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="@color/blue_78beff"></com.freewheelin.pulley.views.LearningProgressView>
+                app:progressColor="@color/blue_300"></com.freewheelin.pulley.views.LearningProgressView>
 
             <View
                 android:id="@+id/progressBorder2"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
@@ -426,7 +426,7 @@
 
                 <TextView
                     android:id="@+id/ratingGuideTv2"
-                    style="@style/TextBlack_4c4c4c"
+                    style="@style/TextGray_800"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
@@ -449,7 +449,7 @@
                     android:layout_marginTop="60dp"
                     android:layout_marginBottom="48dp"
                     android:src="@drawable/ic_triangle_below_blue"
-                    app:tint="@color/blue_78beff"
+                    app:tint="@color/blue_300"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/myScoreGuide2"
@@ -458,7 +458,7 @@
 
                 <TextView
                     android:id="@+id/myScoreArrowTv2"
-                    style="@style/TextBlue_30a4ff.Bold"
+                    style="@style/TextBlue_400.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -466,7 +466,7 @@
                     android:lineSpacingExtra="7sp"
                     android:text="내 위치 0점"
                     android:textSize="@dimen/sp14"
-                    android:textColor="@color/blue_78beff"
+                    android:textColor="@color/blue_300"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toTopOf="@+id/myScoreArrowIv2"
                     app:layout_constraintEnd_toEndOf="@+id/myScoreArrowIv2"
@@ -487,7 +487,7 @@
 
                 <TextView
                     android:id="@+id/lbScorePercent2"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -499,7 +499,7 @@
 
                 <TextView
                     android:id="@+id/scorePercentTv2"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="60dp"
@@ -511,7 +511,7 @@
 
                 <TextView
                     android:id="@+id/scoreCountTv2"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -523,7 +523,7 @@
 
                 <TextView
                     android:id="@+id/timeTv2"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"

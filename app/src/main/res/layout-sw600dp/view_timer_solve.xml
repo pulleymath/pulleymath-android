@@ -8,7 +8,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/Textwhite_f2f2f2.Bold"
+            style="@style/TestGray_200.Bold"
             android:id="@+id/timerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:textStyle="bold"
             android:text="1:40"
             android:textSize="@dimen/sp36"
-            android:textColor="@color/white_ffffff"
+            android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/timerSwitch"
             app:layout_constraintEnd_toStartOf="@+id/secTv"
             app:layout_constraintTop_toTopOf="@+id/timerSwitch"
@@ -59,7 +59,7 @@
             android:textStyle="bold"
             android:text=":00"
             android:textSize="@dimen/sp36"
-            android:textColor="@color/grey_9f9f9f"
+            android:textColor="@color/gray_600"
             app:layout_constraintTop_toTopOf="@+id/hourMinTv"
             app:layout_constraintBottom_toBottomOf="@+id/hourMinTv"
             app:layout_constraintEnd_toStartOf="@+id/timerPlayBtn"
@@ -72,7 +72,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/timer_play"
-            android:background="@drawable/bg_grey_3d3d3d_round"
+            android:background="@drawable/bg_black_100_round"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/secTv"
             app:layout_constraintBottom_toBottomOf="@+id/secTv"
@@ -88,7 +88,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/secTv">
 
             <RadioButton
-                style="@style/TextPurple_6d6dff"
+                style="@style/TextPurple_300"
                 android:id="@+id/strictRb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/dp28"
                 android:text="시간 제한 없음"
-                android:textColor="@color/white_ffffff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp16"
                 android:button="@drawable/radio_timer_solve" />
         </RadioGroup>

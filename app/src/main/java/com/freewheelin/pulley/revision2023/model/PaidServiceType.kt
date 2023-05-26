@@ -52,7 +52,7 @@ enum class PaidServiceType(val rawValue: Int) {
     fun convertColorOnMainChip(context: Context): Int {
         return when (this) {
             NONE, GUEST -> ContextCompat.getColor(context, R.color.gray_700)
-            else -> ContextCompat.getColor(context, R.color.white_ffffff)
+            else -> ContextCompat.getColor(context, R.color.white)
         }
     }
     fun isTypeEqualOrHigher(target: PaidServiceType): Boolean {

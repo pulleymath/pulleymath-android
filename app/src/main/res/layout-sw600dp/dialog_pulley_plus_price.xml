@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,12 +32,12 @@
             android:background="@android:color/transparent"
             android:padding="16dp"
             android:src="@drawable/ic_close_white_24dp"
-            app:tint="@color/black_4c4c4c" />
+            app:tint="@color/gray_800" />
     </LinearLayout>
 
     <View
         android:id="@+id/lineView"
-        style="@style/Border_Grey_e8e8e8_Horizontal"
+        style="@style/Border_Gray_300_Horizontal"
         app:layout_constraintTop_toBottomOf="@id/headerLl"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,8 +68,8 @@
 
     <Button
         android:id="@+id/buyBtn"
-        style="@style/TextWhite_ffffff.ExtraBold"
-        android:background="@drawable/bg_purple_6d6dff_round"
+        style="@style/TextWhite.ExtraBold"
+        android:background="@drawable/bg_purple_300_round_ripple"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="24dp"

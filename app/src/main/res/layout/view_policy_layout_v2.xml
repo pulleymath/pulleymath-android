@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="전체 동의"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/essentialOptionalText"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
             android:layout_marginRight="@dimen/dp10"
             android:text="전문 보기"
 
-            android:textColor="@color/purple_6D6DFF"
+            android:textColor="@color/purple_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

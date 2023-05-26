@@ -1,12 +1,10 @@
 package com.freewheelin.pulley.revision2021.views
 
-import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.ColorInt
-import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
@@ -200,9 +198,9 @@ object BindingAdapter {
     fun setFloatingStepBtnBackground(sheet: FloatingAnswerSheet, isAnswerEntered: Boolean) {
         sheet.binding.apply {
             if (isAnswerEntered) {
-                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_6d6dff_round_40_disabled)
+                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40_disabled)
             } else {
-                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_6d6dff_round_40)
+                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40)
             }
         }
     }
@@ -339,6 +337,20 @@ object BindingAdapter {
                 else -> R.drawable.book_plan_v2_cover_8
             }
             view.setImageResource(imgRes)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("purchase_guide_badge_background")
+    fun setBadgeBackground(view: LinearLayout, type: PaidServiceType?) {
+        type?.let {
+            val imgRes = when (it) {
+                PaidServiceType.BASIC_C, PaidServiceType.BASIC_P -> R.drawable.bg_bronze_round_13
+                PaidServiceType.STANDARD -> R.drawable.bg_gray_600_round_13
+                PaidServiceType.PREMIUM -> R.drawable.bg_yellow_300_round_13
+                else -> R.drawable.bg_gray_600_round_13
+            }
+            view.setBackgroundResource(imgRes)
         }
     }
 

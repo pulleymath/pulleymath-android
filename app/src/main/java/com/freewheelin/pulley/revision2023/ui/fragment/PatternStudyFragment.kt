@@ -210,7 +210,7 @@ class PatternStudyFragment : LearningTabFragment(),
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "삭제기준보기")
                 val window =
                     BalloonWindow(requireContext(), it, BalloonWindow.Position.below, 16.toPx())
-                window.balloonColor = ContextCompat.getColor(requireContext(), R.color.purple_ACACFF)
+                window.balloonColor = ContextCompat.getColor(requireContext(), R.color.purple_200)
                 window.offset = if (context?.is10InchUI == true) -240 else -190
                 window.setPadding(if (context?.is10InchUI == true) 32.toPx() else 24.toPx())
                 val tooltipBinding: TooltipAnalysisBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.tooltip_analysis, null, false)

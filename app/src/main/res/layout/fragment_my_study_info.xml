@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:clickable="true"
         tools:context=".activities.mypage.MySignUpInfoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -28,13 +28,13 @@
                 android:layout_height="72dp"
                 android:background="@null"
                 android:src="@drawable/ic_toolbar_back"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="학습 정보"
@@ -47,7 +47,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"
@@ -70,12 +70,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     android:padding="@dimen/dp24">
 
                     <TextView
                         android:id="@+id/schoolLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="학교"
@@ -85,7 +85,7 @@
 
                     <TextView
                         android:id="@+id/gradeLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
@@ -96,7 +96,7 @@
 
                     <TextView
                         android:id="@+id/majorLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
@@ -108,7 +108,7 @@
 
                     <TextView
                         android:id="@+id/ratingLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
@@ -120,7 +120,7 @@
 
                     <TextView
                         android:id="@+id/schoolTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp56"
@@ -132,7 +132,7 @@
 
                     <TextView
                         android:id="@+id/gradeTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp56"
@@ -144,7 +144,7 @@
 
                     <TextView
                         android:id="@+id/majorTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp56"
@@ -157,7 +157,7 @@
 
                     <TextView
                         android:id="@+id/ratingTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp56"
@@ -182,7 +182,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"
@@ -194,14 +194,14 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     android:paddingStart="@dimen/dp24"
                     android:paddingBottom="@dimen/dp36"
                     >
 
                     <TextView
                         android:id="@+id/mathTopLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp36"
@@ -213,7 +213,7 @@
 
                     <TextView
                         android:id="@+id/mathBottomLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp36"
@@ -226,7 +226,7 @@
 
                     <TextView
                         android:id="@+id/commonSubjectTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -242,7 +242,7 @@
 
                     <TextView
                         android:id="@+id/optionalSubjectTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -284,7 +284,7 @@
 
                     <TextView
                         android:id="@+id/middleSubjectTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp36"
@@ -313,7 +313,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--            <TextView-->
-    <!--                style="@style/TextGrey_c0c0c0"-->
+    <!--                style="@style/TextGray_500"-->
     <!--                android:layout_width="wrap_content"-->
     <!--                android:layout_height="wrap_content"-->
     <!--                android:layout_marginStart="@dimen/dp24"-->
@@ -325,12 +325,12 @@
     <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--                android:layout_width="match_parent"-->
     <!--                android:layout_height="wrap_content"-->
-    <!--                android:background="@color/white_ffffff"-->
+    <!--                android:background="@color/white"-->
     <!--                android:padding="@dimen/dp24">-->
 
     <!--                <TextView-->
     <!--                    android:id="@+id/label"-->
-    <!--                    style="@style/TextGrey_c0c0c0"-->
+    <!--                    style="@style/TextGray_500"-->
     <!--                    android:layout_width="0dp"-->
     <!--                    android:layout_height="wrap_content"-->
     <!--                    android:text="학습내역을 전체 삭제하시겠습니까?"-->

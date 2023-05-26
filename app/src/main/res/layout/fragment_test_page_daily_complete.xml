@@ -41,7 +41,7 @@
 
 
         <TextView
-            style="@style/TextGreen_70d000.Bold"
+            style="@style/TextGreen_300.Bold"
             android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp16"
-            android:textColor="@color/grey_c0c0c0"
+            android:textColor="@color/gray_500"
             android:lineSpacingExtra="8sp"
             android:layout_marginTop="@dimen/dp24"
             android:text="다음 데일리 테스트가 공개되는\n내일 오전 6시에 또 만나요!"

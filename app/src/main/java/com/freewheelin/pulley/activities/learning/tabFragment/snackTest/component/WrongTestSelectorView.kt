@@ -29,12 +29,12 @@ class WrongTestSelectorView: TestSelectorView {
     override fun setTestUI(test: Test) {
         if(isNeedToFinishUI(test)) {
             titleTv.text = "오답 테스트"
-            titleTv.setTextColor(ContextCompat.getColor(context, R.color.green_70d000))
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.green_300))
             guideTv.text = "오답 테스트는\n무제한 응시 가능합니다 :)"
             checkIv.visibility = View.VISIBLE
         } else {
             titleTv.text = "오답 테스트"
-            titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
             guideTv.text = "완벽을 위한 무제한 응시!\n여러번 반복해서 빈틈없는 실력을 만들어요 :)"
             checkIv.visibility = View.INVISIBLE
         }
@@ -45,13 +45,13 @@ class WrongTestSelectorView: TestSelectorView {
     }
 
     override fun toEnableUI() {
-        titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-        guideTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
     }
 
     override fun toDisableUI() {
-        titleTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-        guideTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
     }
 
 }

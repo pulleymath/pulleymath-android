@@ -19,7 +19,7 @@
             android:id="@+id/rootView"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_ffffff_round">
+            android:background="@drawable/bg_white_round_ripple">
 
             <TextView
                 android:id="@+id/titleTv"

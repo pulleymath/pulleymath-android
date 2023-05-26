@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/timerLabel"
-            style="@style/Textwhite_f2f2f2.Bold"
+            style="@style/TestGray_200.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="타이머 표시"
@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/hideGuideLabel"
-            style="@style/TextGrey_818181.Bold"
+            style="@style/TextGray_700.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="27dp"
@@ -51,7 +51,7 @@
             android:includeFontPadding="false"
             android:lineSpacingExtra="0sp"
             android:text="1:40"
-            android:textColor="@color/white_ffffff"
+            android:textColor="@color/white"
             android:textSize="@dimen/sp36"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/secTv"
@@ -67,7 +67,7 @@
             android:includeFontPadding="false"
             android:lineSpacingExtra="0sp"
             android:text=":00"
-            android:textColor="@color/grey_9f9f9f"
+            android:textColor="@color/gray_600"
             android:textSize="@dimen/sp36"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/hourMinTv"
@@ -81,7 +81,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/bg_grey_3d3d3d_round"
+            android:background="@drawable/bg_black_100_round"
             android:src="@drawable/timer_play"
             app:layout_constraintBottom_toBottomOf="@+id/secTv"
             app:layout_constraintStart_toEndOf="@+id/secTv"
@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/overTimerTv"
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -118,7 +118,7 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="만료 시 자동제출"
-                android:textColor="@color/purple_ACACFF"
+                android:textColor="@color/purple_200"
                 android:textSize="@dimen/sp16"
                 android:theme="@style/OMR_radio_button" />
 
@@ -128,7 +128,7 @@
                 android:layout_height="@dimen/dp36"
                 android:layout_weight="1"
                 android:text="만료 후에도 풀기"
-                android:textColor="@color/white_ffffff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp16"
                 android:theme="@style/OMR_radio_button" />
         </RadioGroup>

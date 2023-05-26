@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide2Binding
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
@@ -24,11 +23,10 @@ import com.freewheelin.pulley.revision2023.ui.adapter.PurchaseGuideAdapter
 
 class PurchaseGuide2Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide2Binding
-    var viewModel: PurchaseGuideViewModel? = null
-    private val guideAdapter = PurchaseGuideAdapter (guideImageClickListener = { selected ->
-        viewModel?.updateGuides(selected)
-    },  compareTextClickListener = {
-        viewModel?.setStep?.let { it(3) }
+    lateinit var viewModel: PurchaseGuideViewModel
+    private val guideAdapter = PurchaseGuideAdapter (guideClickListener = { selected, position ->
+        binding.guideRv.smoothScrollToPosition(position)
+        viewModel.updateGuides(selected)
     })
     private lateinit var getResult: ActivityResultLauncher<Intent>
     val screenHeight by lazy { DisplayUtils.getScreenHeight(requireContext()) }
@@ -51,6 +49,7 @@ class PurchaseGuide2Fragment : Fragment() {
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
+            setScreen()
             initReceiver()
             guideRv.apply {
                 this.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -58,44 +57,55 @@ class PurchaseGuide2Fragment : Fragment() {
             }
 
             actionBtnWrapperCl.setOnClickListener { _ ->
-//                 TODO to webview 가능하면 웹뷰로 하고 안되면 크롬으로 넘기
 
-                viewModel?.selectedOfferId?.value?.let { offerId ->
+                viewModel.selectedOffer?.let { offer ->
+                    val offerId = offer.offerId
                     getResult.launch(PurchaseWebViewActivity.getIntent(requireContext(), offerId))
                 }
             }
+            fixedTermBtn.setOnClickListener { viewModel.step2TabIndex.postValue(0) }
+            subscriptionBtn.setOnClickListener { viewModel.step2TabIndex.postValue(1) }
+            compareCl.setOnClickListener {
+                viewModel.setStep(3)
+            }
         }
 
-        viewModel?.apply {
-            guideOffers.observe(viewLifecycleOwner) {
-                val tempHeader = it[0]
-                val listIncludeHeader = listOf(tempHeader) + it
-                guideAdapter.submitList(listIncludeHeader)
+        viewModel.apply {
+            originalGuides.observe(viewLifecycleOwner) {
+                step2TabIndex.value?.let { index ->
+                    if (index == 0) {
+                        guideAdapter.submitList(it.single)
+                    } else {
+                        guideAdapter.submitList(it.regular.sortedByDescending { it.offerId })
+                    }
+                }
+            }
+            step2TabIndex.observe(viewLifecycleOwner) { index ->
+                purchaseEnabled.postValue(false)
+                originalGuides.value?.let {
+                    it.single.forEach { it.isSelected.set(false) }
+                    it.regular.forEach { it.isSelected.set(false) }
+                    val list = if (index == 0) {
+                        it.single
+                    } else {
+                        it.regular.sortedByDescending { it.offerId }
+                    }
+                    guideAdapter.submitList(list)
+                }
             }
         }
     }
-    fun createOfferIv (offer: PurchaseGuideOffer, isSelectedImg: Boolean): GuideImageView = GuideImageView(requireContext()).also { view ->
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        view.offerId = offer.offerId
-        view.isSelectedImage = isSelectedImg
-        view.layoutParams = params
-        view.adjustViewBounds = true
-        view.setMarginBottom(dp = 10)
-//        Glide.with(requireContext())
-//            .load(if (isSelectedImg) offer.selectedImageUrl else offer.commonImageUrl)
-//            .into(view)
-        view.setOnClickListener { _ ->
-            viewModel?.updateGuides(offer)
-        }
+    private fun setScreen() {
+        val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
+        val lp = binding.rootCl.layoutParams
+        lp.height = DisplayUtils.getScreenHeight(requireContext()) - topBottomMargin.toInt()
+        binding.rootCl.layoutParams = lp
     }
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when(it.resultCode) {
                 purchaseSuccess -> {
-                    viewModel?.exitBtn()
+                    viewModel.exitBtn()
                 }
                 common -> {}
             }
@@ -105,17 +115,12 @@ class PurchaseGuide2Fragment : Fragment() {
         const val purchaseSuccess = 200
         const val common = 400
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(viewModel: PurchaseGuideViewModel) =
             PurchaseGuide2Fragment().apply {
+                this.viewModel = viewModel
                 arguments = Bundle().apply {
 
                 }
             }
-    }
-    inner class GuideImageView: androidx.appcompat.widget.AppCompatImageView {
-        constructor(context: Context): super(context)
-        constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-        var isSelectedImage = false
-        var offerId = 0
     }
 }

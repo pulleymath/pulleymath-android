@@ -120,7 +120,7 @@ object Network {
                 onResponse(response.body())
             }
             override fun onFailure(call: Call<PdfMemoResponse>, t: Throwable) {
-                onFailure(t.localizedMessage)
+                t.localizedMessage?.let { onFailure(it) }
             }
         })
     }

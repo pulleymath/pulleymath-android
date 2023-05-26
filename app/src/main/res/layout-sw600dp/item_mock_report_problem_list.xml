@@ -6,13 +6,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/white_ffffff"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvNum"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/tvSubject"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/tvBigUnit"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/tvType"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/tvPoint"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="62dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -70,7 +70,7 @@
                 android:id="@+id/ivKiller"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:background="@drawable/bg_red_fe7b67_circle" />
+                android:background="@drawable/bg_red_300_circle" />
         </LinearLayout>
 
 

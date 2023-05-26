@@ -28,7 +28,7 @@
 
 
         <TextView
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:id="@+id/myBarLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             app:layout_constraintBottom_toTopOf="@+id/intentionTv"/>
 
         <TextView
-            style="@style/TextGrey_9f9f9f.ExtraBold"
+            style="@style/TextGray_600.ExtraBold"
             android:id="@+id/averageBarLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
 
         <TextView
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:id="@+id/intentionTv"
             android:text="지수함수와 로그함수 백분위 비교"
             android:textSize="@dimen/sp14"
@@ -81,7 +81,7 @@
 
 
     <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:id="@+id/guideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:layout_constraintStart_toEndOf="@+id/barContainer" />
 
     <TextView
-        style="@style/TextGrey_9f9f9f.Bold"
+        style="@style/TextGray_600.Bold"
         android:id="@+id/recommendTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

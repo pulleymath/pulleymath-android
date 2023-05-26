@@ -3,22 +3,9 @@
 	<color name="page_indicator">#C0202020</color>
 	<color name="toolbar">#C0202020</color>
 
-	<color name="white_fafafa">#fafafa</color>
-
-	<color name="black_4c4c4c">#4c4c4c</color>
-
-	<color name="grey_e8e8e8">#e8e8e8</color>
-	<color name="grey_818181">#818181</color>
-	<color name="grey_9f9f9f">#9f9f9f</color>
-	<color name="grey_c0c0c0">#c0c0c0</color>
-	<color name="grey_e0e0e0">#e0e0e0</color>
+	<color name="Gray_700">#818181</color>
 
 	<color name="purple_6D6DFF">#6D6DFF</color>
-	<color name="purple_ECEBFF">#ECEBFF</color>
-
-	<color name="red_fe7b67">#fe7b67</color>
-
-	<color name="yellow_f79b00">#f79b00</color>
 
     <color name="gray_100">#fafafa</color>
     <color name="gray_150">#f6f6f6</color>

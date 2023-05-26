@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="960dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_fafafa_round"
+            android:background="@drawable/bg_gray_100_round_ripple"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -23,14 +23,14 @@
                 android:id="@+id/topContainerCl"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp64"
-                android:background="@drawable/bg_white_ffffff_round_top_only"
+                android:background="@drawable/bg_white_round_top_only"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/topTitleTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp32"
@@ -61,17 +61,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tabGravity="center"
-                    app:tabIndicatorColor="@color/purple_6D6DFF"
+                    app:tabIndicatorColor="@color/purple_300"
                     app:tabIndicatorHeight="3dp"
                     app:tabPaddingBottom="0dp"
                     app:tabPaddingEnd="@dimen/dp24"
                     app:tabPaddingStart="@dimen/dp24"
-                    app:tabSelectedTextColor="@color/purple_6D6DFF"
+                    app:tabSelectedTextColor="@color/purple_300"
                     app:tabTextAppearance="@style/AppTheme.TabBar.TabText.18"
-                    app:tabTextColor="@color/black_4c4c4c" />
+                    app:tabTextColor="@color/gray_800" />
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    style="@style/Border_Gray_300_Horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -96,7 +96,7 @@
 
                     <TextView
                         android:id="@+id/scoreResultLabel"
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="채점 결과"
@@ -110,14 +110,14 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp200"
                         android:layout_marginTop="@dimen/dp16"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
 
                         <TextView
                             android:id="@+id/scoreTv"
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp64"
@@ -131,7 +131,7 @@
 
                         <TextView
                             android:id="@+id/scoreLabel"
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
@@ -144,7 +144,7 @@
 
                         <TextView
                             android:id="@+id/scoreGuideTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp64"
@@ -174,7 +174,7 @@
 
                     <TextView
                         android:id="@+id/scoringResultLabel"
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp48"
@@ -186,7 +186,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:padding="@dimen/dp32"
                         android:layout_marginTop="@dimen/dp16"
                         android:layout_marginBottom="@dimen/dp64"
@@ -199,7 +199,7 @@
                             android:id="@+id/columnCl"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
-                            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                            android:background="@drawable/bg_white_stroke_gray_300"
                             android:padding="1dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -207,10 +207,10 @@
 
                             <TextView
                                 android:id="@+id/numberLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
-                                android:background="@color/white_fafafa"
+                                android:background="@color/gray_100"
                                 android:gravity="center"
                                 android:text="번호"
                                 android:textSize="@dimen/sp14"
@@ -219,12 +219,12 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="@color/grey_e8e8e8"
+                                android:background="@color/gray_300"
                                 app:layout_constraintStart_toEndOf="@+id/numberLabel" />
 
                             <TextView
                                 android:id="@+id/resultLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="72dp"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -235,14 +235,14 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
-                                android:background="@color/grey_e8e8e8"
+                                android:background="@color/gray_300"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/resultLabel"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/totalCorrectRateLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="120dp"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -253,14 +253,14 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
-                                android:background="@color/grey_e8e8e8"
+                                android:background="@color/gray_300"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/totalCorrectRateLabel"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/sameCorrectRateLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="120dp"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -272,14 +272,14 @@
                                 android:id="@+id/sameCorrectRateBorder"
                                 android:layout_width="1dp"
                                 android:layout_height="@dimen/dp16"
-                                android:background="@color/grey_e8e8e8"
+                                android:background="@color/gray_300"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/sameCorrectRateLabel"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/subjectLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="24dp"
@@ -306,7 +306,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/questionCl"
-                android:background="@color/white_fafafa"
+                android:background="@color/gray_100"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="invisible"
@@ -327,7 +327,7 @@
                     app:layout_constraintVertical_chainStyle="packed"/>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/questionTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

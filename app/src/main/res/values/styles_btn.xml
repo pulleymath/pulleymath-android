@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BtnBlue_30a4ff" >
-        <item name="android:background">@drawable/btn_purple_6d6dff_grey_e0e0e0_round</item>
-        <item name="android:textColor">@color/white_ffffff</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-    </style>
-
-    <style name="BtnBlue_e9f5ff">
-        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
-        <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-    </style>
-
-    <style name="BtnGrey_f2f2f2">
-        <item name="android:background">@drawable/bg_gray_200_round</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-    </style>
-
-    <style name="BtnGrey_f2f2f2_stroke_e8e8e8_round.Bold" parent="Bold">
-        <item name="android:background">@drawable/bg_gray_200_stroke_grey_e8e8e8_round</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
 
     <style name="L">
         <item name="android:layout_height">48dp</item>
@@ -34,112 +11,36 @@
         <item name="android:layout_width">120dp</item>
     </style>
 
-    <style name="S">
-        <item name="android:layout_height">36dp</item>
-        <item name="android:layout_width">96dp</item>
-    </style>
-
     <style name="Primary.L" parent="L">
         <item name="android:textSize">@dimen/sp16</item>
-        <item name="android:textColor">@color/white_ffffff</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Primary.M" parent="M">
         <item name="android:textSize">@dimen/sp16</item>
-        <item name="android:textColor">@color/white_ffffff</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
-
-    <style name="Primary.S" parent="S">
-        <item name="android:textSize">@dimen/sp16</item>
-        <item name="android:textColor">@color/white_ffffff</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-    </style>
-
 
 
     <style name="Btn_Blue.Primary.L" parent="Primary.L">
-        <item name="android:background">@drawable/bg_purple_6d6dff_round</item>
+        <item name="android:background">@drawable/bg_purple_300_round_ripple</item>
     </style>
 
-    <style name="Btn_Blue.Primary.M" parent="Primary.M">
-        <item name="android:background">@drawable/bg_purple_6d6dff_round</item>
-    </style>
-
-    <style name="Btn_Blue.Primary.S" parent="Primary.S">
-        <item name="android:background">@drawable/bg_purple_6d6dff_round</item>
-    </style>
-
-
-    <style name="Btn_Black.Primary.L" parent="Primary.L">
-        <item name="android:background">@drawable/bg_black_4c4c4c_round</item>
-    </style>
-
-    <style name="Btn_Black.Primary.M" parent="Primary.M">
-        <item name="android:background">@drawable/bg_black_4c4c4c_round</item>
-    </style>
-
-    <style name="Btn_Black.Primary.S" parent="Primary.L">
-        <item name="android:background">@drawable/bg_black_4c4c4c_round</item>
-    </style>
-
-
-    <style name="Btn_Orange.Primary.L" parent="Primary.L">
-        <item name="android:background">@drawable/bg_yellow_ffb300_round</item>
-    </style>
 
     <style name="Btn_Orange.Primary.M" parent="Primary.M">
-        <item name="android:background">@drawable/bg_yellow_ffb300_round</item>
-    </style>
-
-    <style name="Btn_Orange.Primary.S" parent="Primary.L">
-        <item name="android:background">@drawable/bg_yellow_ffb300_round</item>
+        <item name="android:background">@drawable/bg_yellow_300_round</item>
     </style>
 
 
     <style name="Secondary.L" parent="Primary.L"/>
 
-    <style name="Secondary.M" parent="Primary.M"/>
-
-    <style name="Secondary.S" parent="Primary.S"/>
-    
-    <style name="Btn_Blue.Secondary.L" parent="Secondary.L">
-        <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
-    </style>
-
-    <style name="Btn_Blue.Secondary.M" parent="Secondary.M">
-        <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
-    </style>
-
-    <style name="Btn_Blue.Secondary.S" parent="Secondary.S">
-        <item name="android:textColor">@color/purple_6D6DFF</item>
-        <item name="android:background">@drawable/bg_purple_100_round_ripple</item>
-    </style>
-
 
     <style name="Btn_Grey.Secondary.L" parent="Secondary.L">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
+        <item name="android:textColor">@color/gray_800</item>
         <item name="android:background">@drawable/bg_gray_200_round</item>
     </style>
 
-    <style name="Btn_Grey.Secondary.M" parent="Secondary.M">
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-        <item name="android:background">@drawable/bg_gray_200_round</item>
-    </style>
-
-    <style name="Btn_Grey.Secondary.S" parent="Secondary.S">
-        <item name="android:fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-        <item name="android:background">@drawable/bg_gray_200_round</item>
-    </style>
-
-    <style name="Btn_Radio_Dark">
-        <item name="android:textColor">@drawable/btn_text_grey_f2f2f2_black_4c4c4c</item>
-        <item name="android:background">@drawable/btn_bg_grey_f2f2f2_grey_3d3d3d_round_18</item>
-    </style>
 </resources>

@@ -9,7 +9,7 @@
         tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainWrongXFragment">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/headerTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
-            style="@style/TextGrey_9f9f9f"
+            style="@style/TextGray_600"
             android:id="@+id/contentsTv"
             android:layout_width="wrap_content"
             android:layout_height="78dp"
@@ -41,7 +41,7 @@
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:id="@+id/moveTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

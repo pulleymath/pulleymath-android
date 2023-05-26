@@ -5,6 +5,8 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer.SubType"/>
+        <import type="com.freewheelin.pulley.revision2023.model.PaidServiceType"/>
         <variable name="listener" type="com.freewheelin.pulley.revision2023.utils.listeners.PurchaseGuideClickListener" />
         <variable name="item" type="com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer"/>
     </data>
@@ -14,23 +16,359 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:onClick="@{ () -> listener.onGuideImageClick(item) }"
+        android:padding="16dp"
+        android:background="@{ item.isSelected ? @drawable/bg_white_round_10_stroke_purple_300 : item.offerType == SubType.PLUS_SINGLE ? @drawable/bg_white_round_10_stroke_yellow_300 : @drawable/bg_white_round_10_ripple_gray200, default=@drawable/bg_white_round_10_stroke_purple_300 }"
+        android:layout_marginBottom="12dp"
         >
+<!--        android:onClick="@{ () -> listener.onGuideClick(item) }"-->
 
-        <ImageView
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/subscriptionCl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="105dp"
-            android:adjustViewBounds="true"
+            visibleIf="@{ item.offerType == SubType.PLUS }"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="10dp"
-            />
-<!--            cookingImgRes="@{ item.isSelected ? item.selectedImageUrl : item.commonImageUrl }"-->
-<!--        android:scaleType="centerCrop"-->
+            app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout
+                android:id="@+id/headerLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+                <LinearLayout
+                    android:id="@+id/badgeLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_yellow_300_round_13"
+                    purchase_guide_badge_background="@{ item.productSubType }"
+                    >
+                    <ImageView
+                        android:id="@+id/badgeIv"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_crown"
+                        />
+                    <TextView
+                        android:id="@+id/badgeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.productSubType.convertTextOnMainChip(), default=Premium }"
+                        android:layout_marginStart="4dp"
+                        style="@style/h6"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/originPriceCl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center">
 
+                    <TextView
+                        android:id="@+id/originPriceTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.defaultPrice + ``, default=`25,000` }"
+                        android:textColor="@color/gray_600"
+                        style="@style/mo_b2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                    <TextView
+                        android:id="@+id/wonTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="원"
+                        android:textColor="@color/gray_600"
+                        style="@style/mo_b2"
+                        app:layout_constraintTop_toTopOf="@+id/originPriceTv"
+                        app:layout_constraintStart_toEndOf="@+id/originPriceTv"
+                        app:layout_constraintBottom_toBottomOf="@+id/originPriceTv"/>
+                    <View
+                        android:id="@+id/lineView"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_600"
+                        android:layout_marginBottom="6dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/salePercentageTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{ item.discountRate + `%`, default=`85%` }"
+                    android:textColor="@{ item.productSubType == PaidServiceType.PREMIUM ? @color/red_300 : @color/gray_700, default=@color/gray_700 }"
+                    style="@style/mo_h4"
+                    android:layout_marginStart="4dp"
+                    />
+                <TextView
+                    android:id="@+id/saledPriceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{ item.eventPrice + `원`, default=`96,000원` }"
+                    android:textColor="@color/gray_800"
+                    style="@style/mo_h4"
+                    android:layout_marginStart="2dp"
+                    />
+                <TextView
+                    android:id="@+id/monthTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="/월"
+                    android:textColor="@color/gray_600"
+                    style="@style/mo_b2"
+                    android:layout_marginStart="2dp"
+                    />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    />
+                <ImageView
+                    android:id="@+id/selectBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@{ item.isSelected ? @drawable/ic_check_purple_300_circle_24 : @drawable/ic_check_gray_300_circle_24, default=@drawable/ic_check_purple_300_circle_24 }" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bodyLl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/headerLl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/bodyIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    cookingImgResOnPicasso="@{ item.detailImageUrl }"
+                    />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/termCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            visibleIf="@{ item.offerType == SubType.PLUS_SINGLE }"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout
+                android:id="@+id/termHeaderLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+                <LinearLayout
+                    android:id="@+id/termBadgeLl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_yellow_300_round_13"
+                    purchase_guide_badge_background="@{ item.productSubType }"
+                    >
+                    <ImageView
+                        android:id="@+id/termBadgeIv"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_crown"
+                        />
+                    <TextView
+                        android:id="@+id/termBadgeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.productSubType.convertTextOnMainChip() + `12개월 이용권`, default=`Premium 12개월 이용권` }"
+                        android:layout_marginStart="4dp"
+                        style="@style/h6"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/termBadge2Ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_purple_300_round_13"
+                    >
+                    <TextView
+                        android:id="@+id/termBadge2Tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최대 할인 상품"
+                        style="@style/h6"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    />
+                <ImageView
+                    android:id="@+id/termSelectBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@{ item.isSelected ? @drawable/ic_check_purple_300_circle_24 : @drawable/ic_check_gray_300_circle_24, default=@drawable/ic_check_purple_300_circle_24 }" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/termSubheaderLl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/termHeaderLl"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+                <TextView
+                    android:id="@+id/termSalePriceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{ item.subPrice + `원`, default=`8,250원` }"
+                    android:textColor="@color/gray_800"
+                    style="@style/mo_h4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+                <TextView
+                    android:id="@+id/termMonthTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="/월"
+                    android:textColor="@color/gray_600"
+                    style="@style/mo_b2"
+                    android:layout_marginStart="2dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/termSalePriceTv"
+                    app:layout_constraintStart_toEndOf="@+id/termSalePriceTv"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/termOriginPriceCl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@+id/termSalePriceTv"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/termOriginPriceTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.defaultPrice + ``, default=`960,000` }"
+                        android:textColor="@color/gray_600"
+                        style="@style/mo_b2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                    <TextView
+                        android:id="@+id/termWonTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="원"
+                        android:textColor="@color/gray_600"
+                        style="@style/mo_b2"
+                        app:layout_constraintTop_toTopOf="@+id/termOriginPriceTv"
+                        app:layout_constraintStart_toEndOf="@+id/termOriginPriceTv"
+                        app:layout_constraintBottom_toBottomOf="@+id/termOriginPriceTv"/>
+                    <View
+                        android:id="@+id/termLineView"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_600"
+                        android:layout_marginBottom="6dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/termSalePercentageTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{ item.discountRate + `%`, default=`85%` }"
+                    android:textColor="@{ item.productSubType == PaidServiceType.PREMIUM ? @color/red_300 : @color/gray_700, default=@color/gray_700 }"
+                    style="@style/mo_h4"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintTop_toTopOf="@+id/termOriginPriceCl"
+                    app:layout_constraintBottom_toBottomOf="@+id/termOriginPriceCl"
+                    app:layout_constraintStart_toEndOf="@+id/termOriginPriceCl"
+                    />
+
+                <TextView
+                    android:id="@+id/termTotalPriceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ `총 ` + item.eventPrice + `원`, default=`총 99,000원` }"
+                    android:textColor="@color/gray_600"
+                    style="@style/mo_b2"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintStart_toEndOf="@+id/termSalePercentageTv"
+                    app:layout_constraintTop_toTopOf="@+id/termSalePercentageTv"
+                    app:layout_constraintBottom_toBottomOf="@+id/termSalePercentageTv"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/termBodyLl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/termSubheaderLl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/termBodyIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    cookingImgResOnPicasso="@{ item.detailImageUrl }"
+                    />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

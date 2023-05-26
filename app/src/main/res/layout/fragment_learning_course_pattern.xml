@@ -198,20 +198,6 @@
                     />
 
 
-<!--                <Button-->
-<!--                    android:id="@+id/appendHintBtn"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="@style/mo_h4"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:text="@{ vm.hintBtnText }"-->
-<!--                    android:visibility="@{ vm.selectedQuizIndex == 0  ? View.GONE : View.VISIBLE }"-->
-<!--                    android:layout_marginVertical="10dp"-->
-<!--                    android:paddingHorizontal="16dp"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:background="@{ vm.isHintBtnDisabled ? @drawable/bg_btn_round_common_disabled : @drawable/bg_btn_round_common }"-->
-<!--                    />-->
-
                 <LinearLayout
                     android:id="@+id/questionBtnLl"
                     android:layout_width="wrap_content"

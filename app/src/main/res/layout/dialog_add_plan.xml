@@ -3,14 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_white_fafafa_round"
+    android:background="@drawable/bg_gray_100_round_ripple"
     app:cardCornerRadius="5dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="@dimen/dialog_addPlan_width"
         android:layout_height="@dimen/dialog_addPlan_height"
-        android:background="@drawable/bg_white_fafafa"
+        android:background="@drawable/bg_gray_100_ripple"
         xmlns:app="http://schemas.android.com/apk/res-auto">
         <TextView
             android:id="@+id/titleTv"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="플랜 추가하기"
-            android:textColor="@color/black_4c4c4c"
+            android:textColor="@color/gray_800"
             android:textStyle="bold"
             android:textSize="@dimen/sp18"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             android:layout_width="match_parent"
             android:id="@+id/titleBorder"
             android:layout_marginTop="24dp"
@@ -62,7 +62,7 @@
             android:layout_height="0dp"
             android:paddingTop="16dp"
             android:clipToPadding="false"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay"
             android:scrollbarThumbVertical="@drawable/width_8_bg_grey_e0e0e0_round_padding_r_8"
@@ -73,7 +73,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintTop_toBottomOf="@+id/titleBorder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/leftRv"/>

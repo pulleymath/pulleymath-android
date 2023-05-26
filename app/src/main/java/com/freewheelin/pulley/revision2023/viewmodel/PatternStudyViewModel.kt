@@ -6,7 +6,6 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListener
 import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
 import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList

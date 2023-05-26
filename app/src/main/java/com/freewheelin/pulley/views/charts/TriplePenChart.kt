@@ -68,10 +68,10 @@ class TriplePenChart : ConstraintLayout {
 
     var focusedIndex: Int = 1
         set(value) {
-            val focusTextColor = ContextCompat.getColor(context, R.color.black_4c4c4c)
-            val unfocusTextColor = ContextCompat.getColor(context, R.color.grey_c0c0c0)
+            val focusTextColor = ContextCompat.getColor(context, R.color.gray_800)
+            val unfocusTextColor = ContextCompat.getColor(context, R.color.gray_500)
             val focusProgressColor = penbars[field].progressColor
-            val unfocusProgressColor = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+            val unfocusProgressColor = ContextCompat.getColor(context, R.color.gray_400)
 
             field = value
             labelTvs.forEach { it.setTextColor(unfocusTextColor) }
@@ -142,11 +142,11 @@ class TriplePenChart : ConstraintLayout {
 
     private fun getRangeColor(value: Float): Int {
         return if(value <= 0.5)
-            ContextCompat.getColor(context, R.color.red_fe7b67)
+            ContextCompat.getColor(context, R.color.red_300)
         else if(value >0.5 && value <=0.8)
-            ContextCompat.getColor(context, R.color.yellow_ffd545)
+            ContextCompat.getColor(context, R.color.yellow_200)
         else
-            ContextCompat.getColor(context, R.color.green_70d000)
+            ContextCompat.getColor(context, R.color.green_300)
     }
 
     fun setLabelTextSize(unit: Int, size: Float) {

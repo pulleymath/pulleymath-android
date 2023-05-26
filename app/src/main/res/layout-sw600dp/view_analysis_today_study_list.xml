@@ -7,12 +7,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:id="@+id/titleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp24"
-            android:textColor="@color/black_4c4c4c"
+            android:textColor="@color/gray_800"
             android:text="오늘의 학습 내역"
             android:layout_marginStart="@dimen/dp48"
             android:layout_marginTop="@dimen/dp48"
@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:id="@+id/viewAllListBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp16"
-            android:textColor="@color/grey_c0c0c0"
+            android:textColor="@color/gray_500"
             android:lineSpacingExtra="8sp"
             android:layout_marginTop="@dimen/dp48"
             android:text="공부한 내역이 없네요..!\n공부하고 돌아오면 딱 맞는 추천학습을 준비해둘게요 :)"

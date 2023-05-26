@@ -8,7 +8,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/Textwhite_f2f2f2.Bold"
+            style="@style/TestGray_200.Bold"
             android:id="@+id/timerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             app:layout_constraintStart_toEndOf="@+id/timerLabel"/>
 
         <TextView
-            style="@style/TextGrey_818181.Bold"
+            style="@style/TextGray_700.Bold"
             android:id="@+id/hideGuideLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:textStyle="bold"
             android:text="1:40"
             android:textSize="36sp"
-            android:textColor="@color/white_ffffff"
+            android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/timerSwitch"
             app:layout_constraintTop_toTopOf="@+id/timerSwitch"
             app:layout_constraintBottom_toBottomOf="@+id/timerSwitch"/>
@@ -64,13 +64,13 @@
             android:textStyle="bold"
             android:text=":00"
             android:textSize="36sp"
-            android:textColor="@color/grey_9f9f9f"
+            android:textColor="@color/gray_600"
             app:layout_constraintStart_toEndOf="@+id/hourMinTv"
             app:layout_constraintTop_toTopOf="@+id/hourMinTv"
             app:layout_constraintBottom_toBottomOf="@+id/hourMinTv"/>
 
         <TextView
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:id="@+id/overTimerTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/timer_play"
-            android:background="@drawable/bg_grey_3d3d3d_round"
+            android:background="@drawable/bg_black_100_round"
             app:layout_constraintStart_toEndOf="@+id/overTimerTv"
             app:layout_constraintTop_toTopOf="@+id/secTv"
             app:layout_constraintBottom_toBottomOf="@+id/secTv"/>
@@ -107,7 +107,7 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="100분 후 자동 제출"
-                android:textColor="@color/purple_ACACFF"
+                android:textColor="@color/purple_200"
                 android:textSize="16sp"
                 android:theme="@style/OMR_radio_button" />
 
@@ -118,7 +118,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="36dp"
                 android:text="시간 제한 없음"
-                android:textColor="@color/white_ffffff"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:theme="@style/OMR_radio_button" />
         </RadioGroup>

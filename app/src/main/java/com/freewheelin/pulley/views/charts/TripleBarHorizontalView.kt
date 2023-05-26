@@ -32,7 +32,7 @@ class TripleBarHorizontalView: ConstraintLayout {
     var binding: ViewTripleBarHorizontalBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_triple_bar_horizontal, this, true)
 
     init {
-        secondBarColor = ContextCompat.getColor(context, R.color.blue_30a4ff)
+        secondBarColor = ContextCompat.getColor(context, R.color.blue_400)
         title = null
     }
 
@@ -46,9 +46,9 @@ class TripleBarHorizontalView: ConstraintLayout {
         binding.thirdRateTv.text = TextUtils.percentFormat.format(thirdVal)
 
         if(firstVal >= secondVal)
-            secondBarColor = ContextCompat.getColor(context, R.color.red_fe7b67)
+            secondBarColor = ContextCompat.getColor(context, R.color.red_300)
         else
-            secondBarColor = ContextCompat.getColor(context, R.color.blue_30a4ff)
+            secondBarColor = ContextCompat.getColor(context, R.color.blue_400)
     }
 
     fun setLabel(firstVal: String, secondVal: String, thirdVal: String) {

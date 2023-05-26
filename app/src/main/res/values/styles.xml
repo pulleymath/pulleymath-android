@@ -51,7 +51,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/sp18</item>
     </style>
-<!--        <item name="android:textColor">@color/purple_6D6DFF</item>-->
+<!--        <item name="android:textColor">@color/purple_300</item>-->
 
     <style name="DefaultCheckBoxStyle" parent="android:Widget.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/pretendard_regular</item>
@@ -65,20 +65,14 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:background">@color/grey_e0e0e0</item>
+        <item name="android:background">@color/gray_400</item>
         <item name="android:elevation">15dp</item>
     </style>
 
     <style name="AppTheme.Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-    </style>
-
-    <style name="AppTheme.TabToolbar" parent="android:Theme.Holo">
-        <item name="android:layout_height">@dimen/dp56</item>
-        <item name="android:background">@color/black_200</item>
-        <item name="android:elevation">8dp</item>
+        <item name="android:textColor">@color/gray_800</item>
     </style>
 
     <style name="AppTheme.TabBar">
@@ -99,18 +93,18 @@
     <style name="OMR_horizontal_border">
         <item name="android:layout_height">@dimen/omr_answer_borderWidth</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@color/red_ffc6bc</item>
+        <item name="android:background">@color/red_200</item>
     </style>
 
     <style name="OMR_Vertical_border">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">@dimen/omr_answer_borderWidth</item>
-        <item name="android:background">@color/red_ffc6bc</item>
+        <item name="android:background">@color/red_200</item>
     </style>
 
     <style name="Keypad_btn" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/bg_gray_200_round</item>
-        <item name="android:textColor">@color/grey_818181</item>
+        <item name="android:textColor">@color/gray_700</item>
         <item name="android:textSize">@dimen/sp24</item>
     </style>
 
@@ -122,14 +116,14 @@
     </style>
 
     <style name="OMR_radio_button" parent="Widget.AppCompat.CompoundButton.RadioButton">
-        <item name="colorAccent">@color/purple_ACACFF</item>
+        <item name="colorAccent">@color/purple_200</item>
         <item name="android:colorControlNormal">#f8f8f8</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
     </style>
 
 
-    <style name="Border_Grey_e8e8e8_Horizontal">
-        <item name="android:background">@color/grey_e8e8e8</item>
+    <style name="Border_Gray_300_Horizontal">
+        <item name="android:background">@color/gray_300</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
     </style>
@@ -139,63 +133,10 @@
         <item name="android:layout_width">match_parent</item>
     </style>
 
-    <style name="Border_Grey_e8e8e8_Vertical">
-        <item name="android:background">@color/grey_e8e8e8</item>
+    <style name="Border_Gray_800_Vertical">
+        <item name="android:background">@color/gray_800</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">1dp</item>
-    </style>
-
-    <style name="Border_Grey_818181_Vertical">
-        <item name="android:background">@color/grey_818181</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-    </style>
-
-    <style name="Border_Purple_6e6cff_Vertical">
-        <item name="android:background">@color/purple_6e6cff</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-    </style>
-
-    <style name="Border_Grey_c0c0c0_Vertical">
-        <item name="android:background">@color/grey_c0c0c0</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-    </style>
-
-    <style name="Border_Grey_c0c0c0_Horizontal">
-        <item name="android:background">@color/grey_c0c0c0</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="Border_Black_4c4c4c_Vertical">
-        <item name="android:background">@color/black_4c4c4c</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-    </style>
-    <style name="Border_Black_4c4c4c_Horizontal">
-        <item name="android:background">@color/black_4c4c4c</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="Border_Grey_3d3d3d_Horizontal">
-        <item name="android:background">@color/grey_3d3d3d</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="Border_Grey_3d3d3d_Vertical">
-        <item name="android:background">@color/grey_3d3d3d</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-    </style>
-
-    <style name="Border_Blue_30a4ff_Horizontal">
-        <item name="android:background">@color/purple_6D6DFF</item>
-        <item name="android:layout_height">0.5dp</item>
-        <item name="android:layout_width">match_parent</item>
     </style>
 
     <style name="CustomBackgroundDialog" parent="android:Theme.Dialog">
@@ -250,17 +191,17 @@
 <!--                <item name="colorControlActivated">#6d6dff</item>-->
 
         <!--테두리 색상-->
-        <item name="colorPrimary">@color/purple_6D6DFF</item>
-<!--        <item name="boxStrokeColor">@color/purple_6D6DFF</item>-->
+        <item name="colorPrimary">@color/purple_300</item>
+<!--        <item name="boxStrokeColor">@color/purple_300</item>-->
         <!--cursor 색.-->
-        <item name="colorControlActivated">@color/purple_6D6DFF</item>
+        <item name="colorControlActivated">@color/purple_300</item>
 <!--        <item name="android:textCursorDrawable">@drawable/text_input_layout_cursor</item>-->
         <!--Counter-->
         <item name="counterTextAppearance">@style/CounterTextAppearance</item>
         <!--EditText에 있을때의 Hint-->
-        <item name="android:textColorHint">@color/grey_c0c0c0</item>
+        <item name="android:textColorHint">@color/gray_500</item>
         <!--상단에 있을때의 Hint-->
-        <item name="hintTextColor">@color/purple_6D6DFF</item>
+        <item name="hintTextColor">@color/purple_300</item>
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
         <!--Helper-->
         <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
@@ -302,13 +243,6 @@
         <item name="android:textStyle">normal</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextInputEditTextStyle">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/black_4c4c4c </item>
     </style>
 
     <style name="TransparentFragmentDialog">

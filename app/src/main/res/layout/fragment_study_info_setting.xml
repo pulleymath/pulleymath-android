@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
 
         <ImageButton
             android:id="@+id/backBtn"
@@ -19,12 +19,12 @@
             android:paddingEnd="@dimen/dp48"
             android:paddingBottom="@dimen/dp24"
             android:background="@null"
-            app:tint="@color/black_4c4c4c"
+            app:tint="@color/gray_800"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/titleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/backBtn"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/guideLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             app:layout_constraintTop_toBottomOf="@+id/titleLabel"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/gradeLabel"
             android:text="학년"
             android:textSize="@dimen/sp18"
@@ -70,7 +70,7 @@
             app:layout_constraintStart_toStartOf="@+id/gradeLabel"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/majorLabel"
             android:text="계열"
             android:textSize="@dimen/sp18"
@@ -90,7 +90,7 @@
             app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/ratingLabel"
             android:text="최근 수학 모의고사 등급"
             android:textSize="@dimen/sp18"

@@ -14,24 +14,24 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
 
         <ImageButton
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_toolbar_back"
+            android:src="@drawable/ic_arrow_l1_left"
             android:paddingTop="@dimen/dp48"
             android:paddingStart="@dimen/dp48"
             android:paddingEnd="@dimen/dp48"
             android:paddingBottom="@dimen/dp24"
             android:background="@null"
-            app:tint="@color/black_4c4c4c"
+            app:tint="@color/gray_800"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/titleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/guideTopLabel"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp48"

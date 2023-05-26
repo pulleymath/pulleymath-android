@@ -15,6 +15,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/bodyLl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -43,11 +44,12 @@
 
         <ImageView
             android:id="@+id/imageNextArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="-4dp"
             android:visibility="gone"
-            android:src="@drawable/ic_arrow_right_tail"/>
+            android:src="@drawable/ic_arrow_l1_right"
+            app:tint="@color/white"/>
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView

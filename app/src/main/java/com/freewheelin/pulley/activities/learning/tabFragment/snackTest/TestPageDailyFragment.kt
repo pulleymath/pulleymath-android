@@ -42,13 +42,13 @@ class TestPageDailyFragment : TestPageBaseFragment() {
                 when(test.scoringTestPieceCount) {
                     1 -> {
                         firstTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
-                        remainTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.green_70d000))
+                        remainTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.green_300))
                         remainTv.text = "오늘 남은 횟수 : 2회"
                     }
                     2 -> {
                         firstTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
                         secondTestIv.setImageResource(R.drawable.ic_check_green_circle_24)
-                        remainTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.green_70d000))
+                        remainTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.green_300))
                         remainTv.text = "오늘 남은 횟수 : 1회"
                     }
                 }

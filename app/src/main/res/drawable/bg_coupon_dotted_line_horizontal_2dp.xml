@@ -3,7 +3,7 @@
     <solid android:color="@android:color/transparent" />
     <stroke
         android:width="2dp"
-        android:color="@color/purple_6D6DFF"
+        android:color="@color/purple_300"
         android:dashGap="2dp"
         android:dashWidth="4dp" />
 </shape>

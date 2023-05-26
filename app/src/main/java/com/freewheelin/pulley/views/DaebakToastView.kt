@@ -56,7 +56,7 @@ class DaebakToast: PopupWindow() {
         fun show(context: Context, text: String,
                  leftOffset:Int = 24.toPx(),
                  bottomOffset: Int = 24.toPx(),
-                 bg: Int = R.drawable.bg_grey_e6818181_round,
+                 bg: Int = R.drawable.bg_gray_e6818181_round,
                  overDialog: Boolean = false) {
             startAnimator?.cancel()
             hideAnimator?.cancel()

@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:clickable="true"
         tools:context=".activities.mypage.MySignUpInfoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -22,13 +22,13 @@
                 android:layout_height="72dp"
                 android:background="@null"
                 android:src="@drawable/ic_toolbar_back"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="알림 설정"
@@ -41,7 +41,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp32"
                     android:orientation="vertical"
-                    android:background="@color/white_ffffff">
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/alimtalkLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/pushLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/emailLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -155,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp32"
                     android:orientation="vertical"
-                    android:background="@color/white_ffffff">
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/marketingLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
                     </LinearLayout>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"

@@ -4,14 +4,14 @@
     android:orientation="vertical"
     android:layout_width="@dimen/dp400"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_fafafa_round"
+    android:background="@drawable/bg_gray_100_round_ripple"
     android:paddingStart="@dimen/dp32"
     android:paddingEnd="@dimen/dp32"
     android:paddingTop="@dimen/dp64"
     android:paddingBottom="@dimen/dp32">
 
     <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/titleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,12 +22,12 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        style="@style/TextGrey_9f9f9f.Bold"
+        style="@style/TextGray_600.Bold"
         android:id="@+id/guideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp14"
-        android:textColor="@color/grey_9f9f9f"
+        android:textColor="@color/gray_600"
         android:lineSpacingExtra="6sp"
         android:gravity="center"
         android:layout_marginTop="@dimen/dp16"
@@ -48,7 +48,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c"
+        style="@style/TextGray_800"
         android:id="@+id/dailyLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c"
+        style="@style/TextGray_800"
         android:id="@+id/countLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

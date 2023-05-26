@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:clickable="true"
         tools:context=".activities.mypage.MySignUpInfoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -25,10 +25,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black_4c4c4c" />
+                app:tint="@color/gray_800" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_manage_devices"
@@ -41,7 +41,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
 
         <ScrollView
@@ -55,7 +55,7 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"
@@ -70,7 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp12"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/dp24"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView4">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="false"

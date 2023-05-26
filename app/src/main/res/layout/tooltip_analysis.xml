@@ -17,7 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:id="@+id/chartTopTv"
             android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextWhite_ffffff.Bold"
+            style="@style/TextWhite.Bold"
             android:id="@+id/chartContentTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

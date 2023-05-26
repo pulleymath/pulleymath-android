@@ -8,11 +8,11 @@
 
         <TextView
             android:id="@+id/numberTv"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_marginStart="1dp"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:background="@color/white_fafafa"
+            android:background="@color/gray_100"
             android:gravity="center"
             android:text="1"
             android:textSize="@dimen/sp14"
@@ -21,7 +21,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintStart_toEndOf="@+id/numberTv" />
 
         <ImageView
@@ -37,14 +37,14 @@
         <View
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/resultIv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/totalCorrectRateTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="120dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -55,14 +55,14 @@
         <View
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/totalCorrectRateTv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sameCorrectRateTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="120dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -74,14 +74,14 @@
             android:id="@+id/sameCorrectRateBorder"
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/sameCorrectRateTv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/subjectTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="24dp"
@@ -104,17 +104,17 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:layout_width="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -67,7 +67,7 @@ class SpeedAnswerView: ConstraintLayout {
         submitBtn = findViewById(R.id.submitBtn)
         emptyFilterContainer = findViewById(R.id.emptyFilterContainer)
 
-        setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))
+        setBackgroundColor(ContextCompat.getColor(context, R.color.gray_200))
     }
 
     fun set(content: Content) {
@@ -124,17 +124,17 @@ class SpeedAnswerView: ConstraintLayout {
         answeredCntTv.visibility = View.GONE
         markingBtn.isEnabled = false
         submitBtn.isEnabled = false
-        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round_20)
-        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round_20)
+        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_400_round_20)
+        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_400_round_20)
     }
 
     fun enableMarking(cnt: Int) {
         answeredCntTv.text = cnt.toString()
         answeredCntTv.visibility = View.VISIBLE
         markingBtn.isEnabled = true
-        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_20)
+        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_20)
         submitBtn.isEnabled = true
-        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_20)
+        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_20)
     }
 
     fun showMarkingBtn() {
@@ -213,7 +213,7 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         }
 
         shortAnswerView.run {
-            setHintTextColor(ContextCompat.getColor(viewContext, R.color.grey_c0c0c0))
+            setHintTextColor(ContextCompat.getColor(viewContext, R.color.gray_500))
             setTextSize(
                 viewContext.resources.getDimension(R.dimen.sp24),
                 viewContext.resources.getDimension(R.dimen.sp14)
@@ -353,7 +353,7 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         answerTv.visibility = View.GONE
         infoTv.visibility = View.GONE
         errorTv.visibility = View.VISIBLE
-        numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.grey_c0c0c0))
+        numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_500))
     }
 
     private fun setInfoUI() {
@@ -375,7 +375,7 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
 
                 errorTv.visibility = View.GONE
                 answerTv.visibility = View.VISIBLE
-                numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
+                numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_800))
                 answerTv.text = "정답 : ${getAnswerStr(problem.answerData)}"
                 if(problem.getResultByScoring() == Result.incorrect) {
                     infoTv.text = if(problem.userAnswer != null) "(내 입력 : ${getAnswerStr(problem.userAnswer!!)})"

@@ -24,8 +24,8 @@ class MockReportCuration(val context: Context) {
     val unitImperfectHigh = "%s 과목을 잘하고 있어요! 난이도를 조금 더 높여도 좋겠어요!"
 
     val extraBold = Theme.extraBold(context)
-    val positiveColor = ContextCompat.getColor(context, R.color.blue_30a4ff)
-    val negativeColor = ContextCompat.getColor(context, R.color.red_fe7b67)
+    val positiveColor = ContextCompat.getColor(context, R.color.blue_400)
+    val negativeColor = ContextCompat.getColor(context, R.color.red_300)
     val summary_A = "만점까지 %s 더 필요해요. 100점까지 거의 다 왔어요!"
     val summary_B = "대박!! 100점이에요!! 넘볼 수 없는 완벽함!!"
     val summary_C = "%d등급까지 %s 더 필요해요."

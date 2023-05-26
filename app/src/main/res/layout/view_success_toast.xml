@@ -12,7 +12,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_yellow_ffb300_round_20"
+            android:background="@drawable/bg_yellow_300_round_20"
             android:padding="@dimen/dp32">
 
             <LinearLayout
@@ -27,7 +27,7 @@
 
                 <TextView
                     android:id="@+id/titleTv"
-                    style="@style/TextBrown_8f5f00.ExtraBold"
+                    style="@style/TextYellow_500.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
@@ -37,12 +37,12 @@
 
                 <TextView
                     android:id="@+id/contentTv"
-                    style="@style/TextBrown_8f5f00.Bold"
+                    style="@style/TextYellow_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="하루 30문제 풀기 성공!"
-                    android:textColor="@color/brown_8f5f00"
+                    android:textColor="@color/yellow_500"
                     android:textSize="@dimen/sp14" />
             </LinearLayout>
 

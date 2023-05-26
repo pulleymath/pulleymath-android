@@ -17,7 +17,6 @@ import com.freewheelin.pulley.bases.hideKeyboard
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.API_V2
 import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.databinding.DialogConfirmPhoneBinding
 import com.freewheelin.pulley.databinding.DialogProblemReportBinding
 import com.freewheelin.pulley.model.Problem
 import com.freewheelin.pulley.utils.responseError
@@ -132,9 +131,9 @@ class ProblemReportDialog(context: Context, val problem: Problem) : Dialog(conte
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         if(hasFocus)
-            view.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            view.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
         else {
-            view.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+            view.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
         }
     }
 
@@ -220,7 +219,7 @@ class ProblemReportDialog(context: Context, val problem: Problem) : Dialog(conte
         val detailText = binding.describeEt.text.toString()
         if (detailText.isEmpty()) {
             binding.errorContainerLl.visibility = View.VISIBLE
-            binding.describeEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+            binding.describeEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_red_300)
             return
         }
 

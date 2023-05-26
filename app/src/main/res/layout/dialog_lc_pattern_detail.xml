@@ -15,7 +15,7 @@
         android:layout_width="400dp"
         android:layout_height="500dp"
         android:padding="16dp"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
 
         <TextView
             android:id="@+id/dummyTv"
@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text=" "
-            android:textColor="@color/white_fafafa"/>
+            android:textColor="@color/gray_100"/>
         <ImageView
             android:id="@+id/dialogIv"
             android:layout_width="400dp"

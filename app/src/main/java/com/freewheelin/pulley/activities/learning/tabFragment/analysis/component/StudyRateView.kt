@@ -35,7 +35,7 @@ class StudyRateView(context: Context, attrs: AttributeSet) : View(context, attrs
         penPaint.isDither = true
         penPaint.isAntiAlias = true
         penPaint.textSize = resources.getDimension(R.dimen.sp24)
-        penPaint.color = ContextCompat.getColor(context, R.color.grey_c0c0c0)
+        penPaint.color = ContextCompat.getColor(context, R.color.gray_500)
         penPaint.typeface = Theme.extraBold(context)
         penPaint.textAlign = Paint.Align.CENTER
     }
@@ -46,16 +46,16 @@ class StudyRateView(context: Context, attrs: AttributeSet) : View(context, attrs
         innerRect.set(width * 0.25f, height * 0.25f, width * 0.75f, height * 0.75f)
 
         if(values.size == 0 || sum == 0) {
-            ratePaint.color = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+            ratePaint.color = ContextCompat.getColor(context, R.color.gray_400)
             canvas.drawArc(outerRect, 180f, 180f, true, ratePaint)
         } else {
-            ratePaint.color = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+            ratePaint.color = ContextCompat.getColor(context, R.color.gray_400)
             canvas.drawArc(outerRect, 180f, 180f * values.first() / sum, true, ratePaint)
-            ratePaint.color = ContextCompat.getColor(context, R.color.yellow_ffb300)
+            ratePaint.color = ContextCompat.getColor(context, R.color.yellow_300)
             canvas.drawArc(outerRect, 180 + (180f * values.first() / sum), 180f - (180f * values.first()) / sum, true, ratePaint)
         }
 
-        ratePaint.color = ContextCompat.getColor(context, R.color.white_ffffff)
+        ratePaint.color = ContextCompat.getColor(context, R.color.white)
         canvas.drawArc(innerRect, 180f, 180f, true, ratePaint)
     }
 

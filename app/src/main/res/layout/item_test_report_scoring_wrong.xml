@@ -11,14 +11,14 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/numTv"
             android:layout_width="@dimen/dp40"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="번호"
             android:textSize="@dimen/sp14"
-            android:background="@color/white_fafafa"
+            android:background="@color/gray_100"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -27,7 +27,7 @@
             android:id="@+id/startBorder"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintTop_toTopOf="@+id/numTv"
             app:layout_constraintBottom_toBottomOf="@+id/numTv"
             app:layout_constraintStart_toStartOf="@+id/numTv"/>
@@ -36,13 +36,13 @@
             android:id="@+id/numberEndBorder"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintTop_toTopOf="@+id/numTv"
             app:layout_constraintBottom_toBottomOf="@+id/numTv"
             app:layout_constraintEnd_toEndOf="@+id/numTv"/>
 
         <ImageView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/resultIv"
             android:layout_width="@dimen/dp72"
             android:layout_height="0dp"
@@ -55,7 +55,7 @@
             app:layout_constraintStart_toEndOf="@+id/numTv"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/resultTv"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -71,13 +71,13 @@
             android:id="@+id/resultEndBorder"
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintStart_toEndOf="@+id/resultIv"
             app:layout_constraintBottom_toBottomOf="@+id/resultIv"
             app:layout_constraintTop_toTopOf="@+id/resultIv"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/correctRateTv"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -93,14 +93,14 @@
             android:id="@+id/leftCenterVerticalBorder"
             android:layout_width="1dp"
             android:layout_height="@dimen/dp16"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             app:layout_constraintStart_toEndOf="@+id/correctRateTv"
             app:layout_constraintEnd_toStartOf="@+id/wrongCntTv"
             app:layout_constraintBottom_toBottomOf="@+id/resultIv"
             app:layout_constraintTop_toTopOf="@+id/resultIv"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/wrongCntTv"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -135,7 +135,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/clearLabel"/>
 
             <TextView
-                style="@style/TextGreen_70d000.Bold"
+                style="@style/TextGreen_300.Bold"
                 android:id="@+id/clearLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,14 +148,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             android:id="@+id/bottomBorder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:id="@+id/endBorder"

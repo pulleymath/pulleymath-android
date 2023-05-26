@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/bg_white_ffffff_round"
+    android:background="@drawable/bg_white_round_ripple"
     android:layout_width="424dp"
     android:layout_height="wrap_content">
 
@@ -18,7 +18,7 @@
 
 
     <TextView
-        style="@style/TextPurple_6d6dff.ExtraBold"
+        style="@style/TextPurple_300.ExtraBold"
         android:id="@+id/scoreTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"/>
 
     <TextView
-        style="@style/TextPurple_6d6dff.ExtraBold"
+        style="@style/TextPurple_300.ExtraBold"
         android:id="@+id/scoreSuffixLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/completeGuideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scoreTv"/>
 
     <Button
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/confirmBtn"
         android:background="@drawable/bg_gray_200_round_18"
         android:layout_width="@dimen/dp120"

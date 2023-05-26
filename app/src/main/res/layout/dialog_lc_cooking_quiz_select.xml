@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/selectionImageRv"
             android:layout_width="415dp"

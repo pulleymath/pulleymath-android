@@ -38,7 +38,7 @@ class ChallengeDescriptionItemViewHolder(
                 challengeDescTv.text = challengeDescTv.text
                     .partialFontAndColored(
                         Theme.bold(binding.root.context),
-                        ContextCompat.getColor(binding.root.context, R.color.purple_6D6DFF),
+                        ContextCompat.getColor(binding.root.context, R.color.purple_300),
                         coloredText
                     )
             }

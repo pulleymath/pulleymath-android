@@ -10,7 +10,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="960dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_fafafa_round"
+            android:background="@drawable/bg_gray_100_round_ripple"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -19,11 +19,11 @@
                 android:id="@+id/topContainerCl"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp64"
-                android:background="@drawable/bg_white_ffffff_round_top_only"
+                android:background="@drawable/bg_white_round_top_only"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="오답 테스트 보고서"
@@ -45,7 +45,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    style="@style/Border_Gray_300_Horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -69,7 +69,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/scoreResultLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,11 +84,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp200"
                         android:layout_marginTop="@dimen/dp16"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:id="@+id/scoreTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:id="@+id/scoreLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
 
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/scoreGuideTv"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
 
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/problemResultLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp16"
                         android:padding="@dimen/dp32"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:layout_marginBottom="@dimen/dp64"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -185,14 +185,14 @@
 
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/leftNumTv"
                                     android:layout_width="@dimen/dp40"
                                     android:layout_height="0dp"
                                     android:gravity="center"
                                     android:text="번호"
                                     android:textSize="@dimen/sp14"
-                                    android:background="@color/white_fafafa"
+                                    android:background="@color/gray_100"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -200,7 +200,7 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="0dp"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintTop_toTopOf="@+id/leftNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
                                     app:layout_constraintStart_toStartOf="@+id/leftNumTv"/>
@@ -208,13 +208,13 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="0dp"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintTop_toTopOf="@+id/leftNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftNumTv"
                                     app:layout_constraintEnd_toEndOf="@+id/leftNumTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/leftResultTv"
                                     android:layout_width="@dimen/dp72"
                                     android:layout_height="0dp"
@@ -228,13 +228,13 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintStart_toEndOf="@+id/leftResultTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
                                     app:layout_constraintTop_toTopOf="@+id/leftResultTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/leftCorrectRateTv"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
@@ -250,14 +250,14 @@
                                     android:id="@+id/leftCenterVerticalBorder"
                                     android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintStart_toEndOf="@+id/leftCorrectRateTv"
                                     app:layout_constraintEnd_toStartOf="@+id/leftWrongCntTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/leftResultTv"
                                     app:layout_constraintTop_toTopOf="@+id/leftResultTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/leftWrongCntTv"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
@@ -279,14 +279,14 @@
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/rightNumTv"
                                     android:layout_width="@dimen/dp40"
                                     android:layout_height="0dp"
                                     android:gravity="center"
                                     android:text="번호"
                                     android:textSize="@dimen/sp14"
-                                    android:background="@color/white_fafafa"
+                                    android:background="@color/gray_100"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -294,7 +294,7 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="0dp"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintTop_toTopOf="@+id/rightNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
                                     app:layout_constraintStart_toStartOf="@+id/rightNumTv"/>
@@ -302,13 +302,13 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="0dp"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintTop_toTopOf="@+id/rightNumTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightNumTv"
                                     app:layout_constraintEnd_toEndOf="@+id/rightNumTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/rightResultTv"
                                     android:layout_width="@dimen/dp72"
                                     android:layout_height="0dp"
@@ -322,13 +322,13 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintStart_toEndOf="@+id/rightResultTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightResultTv"
                                     app:layout_constraintTop_toTopOf="@+id/rightResultTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/rightCorrectRateTv"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
@@ -344,14 +344,14 @@
                                     android:id="@+id/rightCenterVerticalBorder"
                                     android:layout_width="1dp"
                                     android:layout_height="@dimen/dp16"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintStart_toEndOf="@+id/rightCorrectRateTv"
                                     app:layout_constraintEnd_toStartOf="@+id/rightWrongCntTv"
                                     app:layout_constraintBottom_toBottomOf="@+id/rightCorrectRateTv"
                                     app:layout_constraintTop_toTopOf="@+id/rightResultTv"/>
 
                                 <TextView
-                                    style="@style/TextBlack_4c4c4c.Bold"
+                                    style="@style/TextGray_800.Bold"
                                     android:id="@+id/rightWrongCntTv"
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
@@ -366,19 +366,19 @@
                                 <View
                                     android:layout_width="1dp"
                                     android:layout_height="0dp"
-                                    android:background="@color/grey_e8e8e8"
+                                    android:background="@color/gray_300"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
-                            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+                            <View style="@style/Border_Gray_300_Horizontal"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"/>
 
-                            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+                            <View style="@style/Border_Gray_300_Horizontal"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -408,7 +408,7 @@
                         </androidx.recyclerview.widget.RecyclerView>
 
                         <CheckBox
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/clearCheckbox"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -421,7 +421,7 @@
 
 
                         <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
+                            style="@style/TextGray_500.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="36dp"

@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="@dimen/dp560"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
 
             <TextView
                 android:id="@+id/labelSelectSchool"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -52,7 +52,7 @@
             android:padding="@dimen/dp24">
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="가입하신 휴대폰 번호가 다른 계정에서 사용되었습니다.\n휴대폰 번호 변경 및 재 인증해 주시기 바랍니다."

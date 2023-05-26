@@ -46,7 +46,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@color/black_333333">
+                    android:background="@color/black_200">
 
                     <ImageButton
                         android:id="@+id/backBtn"
@@ -80,9 +80,9 @@
                         android:layout_marginEnd="@dimen/dp24"
                         android:paddingHorizontal="12dp"
                         android:visibility="@{ vm.isReview ? View.GONE : View.VISIBLE }"
-                        android:textColor="@{ vm.isSubmitBtnActive ? @color/white_ffffff : @color/white_4cffffff }"
+                        android:textColor="@{ vm.isSubmitBtnActive ? @color/white : @color/dim_white }"
                         android:enabled="@{vm.isSubmitBtnActive}"
-                        android:background="@{ vm.isSubmitBtnActive ? @drawable/bg_purple_6d6dff_round : @drawable/bg_purple_300_disable_round }"
+                        android:background="@{ vm.isSubmitBtnActive ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"
                         style="@style/h6"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -108,7 +108,7 @@
                     app:layout_constraintTop_toBottomOf="@id/firstHeaderCl"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@color/black_333333">
+                    android:background="@color/black_200">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/galleryBtn"
@@ -128,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp36"
                         android:layout_marginStart="@dimen/dp24"
-                        android:background="@drawable/bg_grey_3d3d3d_stroke_black_4c4c4c_round"
+                        android:background="@drawable/bg_black_100_stroke_gray_800_round"
                         android:orientation="horizontal"
                         app:layout_constraintStart_toEndOf="@+id/galleryBtn"
                         app:layout_constraintTop_toTopOf="parent"
@@ -144,7 +144,7 @@
                             android:focusable="false"/>
 
                         <View
-                            style="@style/Border_Black_4c4c4c_Vertical"
+                            style="@style/Border_Gray_800_Vertical"
                             android:layout_height="match_parent"/>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +154,7 @@
 
                             <TextView
                                 android:id="@+id/numTv"
-                                style="@style/TextWhite_ffffff.ExtraBold"
+                                style="@style/TextWhite.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/dp48"
@@ -169,7 +169,7 @@
 
                             <TextView
                                 android:id="@+id/numExtTv"
-                                style="@style/TextWhite_ffffff.ExtraBold"
+                                style="@style/TextWhite.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -182,7 +182,7 @@
 
                             <TextView
                                 android:id="@+id/totalCntTv"
-                                style="@style/TextGrey_818181.ExtraBold"
+                                style="@style/TextGray_700.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -196,7 +196,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            style="@style/Border_Black_4c4c4c_Vertical"
+                            style="@style/Border_Gray_800_Vertical"
                             android:layout_height="match_parent"/>
 
                         <ImageButton
@@ -264,7 +264,7 @@
                     android:id="@+id/solveCl"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     app:layout_constraintTop_toBottomOf="@id/secondHeaderCl"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -313,7 +313,7 @@
                         android:id="@+id/solutionContainer"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
+                        android:background="@drawable/bg_white_stroke_gray_300_left"
                         android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
                         app:layout_constraintWidth_percent="0.375"
                         app:layout_constraintStart_toEndOf="@+id/problemContainer"
@@ -323,7 +323,7 @@
                         >
 
                         <View
-                            style="@style/Border_Grey_e8e8e8_Horizontal"
+                            style="@style/Border_Gray_300_Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="2dp"
                             app:layout_constraintBottom_toBottomOf="@id/tabLayout"
@@ -394,7 +394,7 @@
                         android:id="@+id/dimDialog"
                         android:layout_width="308dp"
                         android:layout_height="134dp"
-                        android:background="@drawable/bg_white_ffffff_round"
+                        android:background="@drawable/bg_white_round_ripple"
                         android:padding="@dimen/dp24"
                         android:visibility="@{vm.showDimView ? View.VISIBLE : View.GONE }"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -414,10 +414,10 @@
 
                         <Button
                             android:id="@+id/dimDialogBtn"
-                            style="@style/TextWhite_ffffff.ExtraBold"
+                            style="@style/TextWhite.ExtraBold"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:background="@drawable/bg_purple_6d6dff_round"
+                            android:background="@drawable/bg_purple_300_round_ripple"
                             android:paddingStart="12dp"
                             android:paddingEnd="12dp"
                             android:text="뒤로가기"

@@ -39,7 +39,7 @@
 
                     <TextView
                         android:id="@+id/mainCurationTv"
-                        style="@style/TextBlack_4c4c4c.ExtraBold"
+                        style="@style/TextGray_800.ExtraBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp48"
@@ -192,7 +192,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp14"

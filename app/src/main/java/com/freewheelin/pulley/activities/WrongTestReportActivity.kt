@@ -182,12 +182,12 @@ class WrongReportScoringHolder(val itemBinding: ItemTestReportScoringWrongBindin
             numTv.text = "-"
             correctRateTv.text = "-"
             wrongCntTv.text = "-"
-            numTv.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_fafafa))
+            numTv.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.gray_100))
 
-            wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
+            wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_800))
             wrongCntTv.typeface = Theme.regular(viewContext)
 
-            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_ffffff))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white))
             resultTv.visibility = View.VISIBLE
             resultIv.visibility = View.INVISIBLE
             clearContainerCl.visibility = View.GONE
@@ -199,11 +199,11 @@ class WrongReportScoringHolder(val itemBinding: ItemTestReportScoringWrongBindin
             correctRateTv.text = "${problem.standardCorrectRate}%"
             if (problem.getResultByScoring() == Result.correct) {
                 resultIv.setImageResource(R.drawable.ic_result_correct)
-                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.black_4c4c4c))
+                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_800))
                 wrongCntTv.typeface = Theme.regular(viewContext)
             } else {
                 resultIv.setImageResource(R.drawable.ic_result_incorrect)
-                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.red_fe7b67))
+                wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.red_300))
                 wrongCntTv.typeface = Theme.extraBold(viewContext)
             }
 

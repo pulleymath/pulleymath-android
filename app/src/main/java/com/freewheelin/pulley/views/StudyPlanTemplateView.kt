@@ -71,30 +71,30 @@ class StudyPlanTemplateView : CardView {
             progressBar.set((book.markedNumber.toFloat() / book.totalNumber.toFloat()))
 
             if(book.isCompleted()) {
-                blackCl.setBackgroundColor(ContextCompat.getColor(context, R.color.white_fafafa))
-                bookNameTv.setTextColor(ContextCompat.getColor(context, R.color.grey_e0e0e0))
-                subjectTv.setTextColor(ContextCompat.getColor(context, R.color.grey_e0e0e0))
-                chapterTv.setTextColor(ContextCompat.getColor(context, R.color.grey_e0e0e0))
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.grey_e0e0e0))
+                blackCl.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_100))
+                bookNameTv.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
+                subjectTv.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
+                chapterTv.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
+                dateTv.setTextColor(ContextCompat.getColor(context, R.color.gray_400))
 
                 progressTitleTv.text = "학습 완료!"
-                progressTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                problemCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+                progressTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                problemCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                 mailBtn.setBackgroundResource(R.drawable.bg_gray_200_round)
                 completeIv.visibility = View.VISIBLE
                 reviewBtn.visibility = View.VISIBLE
                 solveBtn.visibility = View.INVISIBLE
             } else {
-                blackCl.setBackgroundColor(ContextCompat.getColor(context, R.color.black_333333))
-                bookNameTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
-                subjectTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
-                chapterTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
-                dateTv.setTextColor(ContextCompat.getColor(context, R.color.grey_9f9f9f))
+                blackCl.setBackgroundColor(ContextCompat.getColor(context, R.color.black_200))
+                bookNameTv.setTextColor(ContextCompat.getColor(context, R.color.white))
+                subjectTv.setTextColor(ContextCompat.getColor(context, R.color.white))
+                chapterTv.setTextColor(ContextCompat.getColor(context, R.color.white))
+                dateTv.setTextColor(ContextCompat.getColor(context, R.color.gray_600))
 
                 progressTitleTv.text = "학습량"
-                progressTitleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-                problemCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                mailBtn.setBackgroundResource(R.drawable.bg_grey_3d3d3d_round)
+                progressTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+                problemCntTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+                mailBtn.setBackgroundResource(R.drawable.bg_black_100_round)
                 completeIv.visibility = View.INVISIBLE
                 reviewBtn.visibility = View.INVISIBLE
                 solveBtn.visibility = View.VISIBLE
@@ -106,9 +106,9 @@ class StudyPlanTemplateView : CardView {
                 newTag.visibility = View.GONE
             }
             if(book.isCompleted()) {
-                newTag.setTextColor(ContextCompat.getColor(context, R.color.red_ffe8e8))
+                newTag.setTextColor(ContextCompat.getColor(context, R.color.red_100))
             } else {
-                newTag.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
+                newTag.setTextColor(ContextCompat.getColor(context, R.color.red_300))
             }
 
             if(book.updateDateTime == null) {

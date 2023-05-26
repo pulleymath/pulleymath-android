@@ -52,7 +52,7 @@ class MStartActivity : AppCompatActivity() {
         val startIndex = orgStr.indexOf(boldStr)
         val spannable = SpannableStringBuilder(orgStr)
         spannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(this@MStartActivity, R.color.purple_6D6DFF)),
+                ForegroundColorSpan(ContextCompat.getColor(this@MStartActivity, R.color.purple_300)),
                 startIndex,
                 startIndex + boldStr.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

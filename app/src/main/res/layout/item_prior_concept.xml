@@ -70,7 +70,7 @@
             android:id="@+id/goPriorConceptBtnCl"
             android:layout_width="0dp"
             android:layout_height="36dp"
-            android:background="@drawable/bg_purple_6d6dff_round"
+            android:background="@drawable/bg_purple_300_round_ripple"
             android:focusable="true"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"

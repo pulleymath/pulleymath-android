@@ -14,13 +14,13 @@
             android:id="@+id/tabContainerCl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_height="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="@color/purple_6D6DFF"
+                app:tabIndicatorColor="@color/purple_300"
                 app:tabIndicatorHeight="2dp"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed" />

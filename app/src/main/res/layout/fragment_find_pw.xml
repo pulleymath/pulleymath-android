@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:animateLayoutChanges="true"
         tools:context=".activities.auth.findEmailAndPw.FindEmailFragment">
 
@@ -41,7 +41,7 @@
 
                     <TextView
                         android:id="@+id/inputGuideLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="@dimen/dp12"
@@ -100,7 +100,7 @@
 
                         <TextView
                             android:id="@+id/labelTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/dp18"
@@ -114,7 +114,7 @@
                             android:layout_height="@dimen/dp56"
                             android:layout_marginTop="8dp"
                             android:paddingStart="@dimen/sp16"
-                            android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                            android:background="@drawable/bg_white_stroke_gray_500"
                             android:gravity="center_vertical"
                             android:inputType="number"
                             android:maxLength="4"
@@ -125,7 +125,7 @@
 
                         <TextView
                             android:id="@+id/timerTv"
-                            style="@style/TextRed_fe7b67"
+                            style="@style/TextRed_300"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/dp24"
@@ -166,7 +166,7 @@
 
                             <TextView
                                 android:id="@+id/codeDetError"
-                                style="@style/TextRed_fe7b67.Bold"
+                                style="@style/TextRed_300.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
@@ -190,7 +190,7 @@
 
                     <TextView
                         android:id="@+id/resultGuideLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="12sp"
@@ -239,7 +239,7 @@
                         android:src="@drawable/ic_check_green_circle"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"

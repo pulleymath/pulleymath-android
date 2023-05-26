@@ -201,8 +201,8 @@ class AnswerV2View : ConstraintLayout,
         when (problem.getResultByScoring()) {
             Result.yet -> {
                 selectionAnswerView.theme = NumberingButton.THEME_BLACK
-                shortAnswerView.setBackgroundResource(R.drawable.bg_white_ffffff_stroke_grey_e0e0e0_round_2)
-                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                shortAnswerView.setBackgroundResource(R.drawable.bg_white_stroke_gray_400_round_2)
+                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 shortAnswerView.isEnabled = true
                 selectionAnswerView.isEnabled = true
                 resultIv.visibility = View.GONE
@@ -211,8 +211,8 @@ class AnswerV2View : ConstraintLayout,
             }
             else -> {
                 selectionAnswerView.theme = NumberingButton.THEME_GREY
-                shortAnswerView.setBackgroundResource(R.drawable.bg_grey_e0e0e0_round_2)
-                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                shortAnswerView.setBackgroundResource(R.drawable.bg_gray_400_round_2)
+                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.white))
                 shortAnswerView.isEnabled = false
                 selectionAnswerView.isEnabled = false
                 resultIv.visibility = View.VISIBLE

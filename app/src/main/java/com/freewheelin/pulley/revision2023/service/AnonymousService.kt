@@ -16,8 +16,10 @@ object AnonymousApi {
 }
 interface AnonymousService {
 
-    @GET("anonymous/v2/commerce/plus/android")
-    suspend fun getPurchaseGuide(): ResponseForceBody<PurchaseGuide>
+    @GET("anonymous/v2/commerce/plus")
+    suspend fun getPurchaseGuide(
+        @Query("os") os: String = "ANDROID",
+    ): ResponseForceBody<PurchaseGuide>
 
     @GET("v1/analysis/{studentId}")
     suspend fun getAnalysis(

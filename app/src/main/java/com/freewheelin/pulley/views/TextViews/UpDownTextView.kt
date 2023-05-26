@@ -35,19 +35,19 @@ class UpDownTextView : ConstraintLayout {
             field = value
             when (value) {
                 Change.increase -> {
-                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.blue_30a4ff))
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.blue_400))
                     binding.arrowIv.visibility = View.VISIBLE
                     binding.arrowIv.setImageResource(R.drawable.ic_arrow_blue_top)
                 }
 
                 Change.decrease -> {
-                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                     binding.arrowIv.visibility = View.VISIBLE
                     binding.arrowIv.setImageResource(R.drawable.ic_arrow_red_bottom)
                 }
 
                 Change.noChange -> {
-                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    binding.tv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
                     binding.arrowIv.visibility = View.GONE
                 }
             }

@@ -201,7 +201,7 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                 secureLevelLl.visibility = View.VISIBLE
                 if (view.text.length < 6) {
                     levelIv.setImageResource(R.drawable.bar_red)
-                    levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_fe7b67))
+                    levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_300))
                     levelTv.text = "비밀번호 안정성 : 위험"
                 } else {
                     var score = 0
@@ -213,19 +213,19 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                         3 -> {
                             levelIv.setImageResource(R.drawable.bar_green)
                             levelTv.text = "비밀번호 안정성 : 강력"
-                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_70d000))
+                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_300))
                             view.isShownError = false
                         }
                         2 -> {
                             levelIv.setImageResource(R.drawable.bar_orange)
                             levelTv.text = "비밀번호 안정성 : 보통"
-                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow_ffb300))
+                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow_300))
                             view.isShownError = false
                         }
                         else -> {
                             levelIv.setImageResource(R.drawable.ic_x_red_circle)
                             levelTv.text = "비밀번호 안정성 : 위험"
-                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_fe7b67))
+                            levelTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_300))
                         }
                     }
                 }
@@ -343,7 +343,7 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                         }
                     }
                 }
-                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
+                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_300), "전문 보기")
 
             personalAgreeCb.binding.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
             personalAgreeCb.isClickable = true
@@ -360,7 +360,7 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                         }
                     }
                 }
-                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
+                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_300), "전문 보기")
 
             marketingAgreeCb.binding.allDocuTextTv.movementMethod = LinkMovementMethod.getInstance()
             marketingAgreeCb.isClickable = true
@@ -377,7 +377,7 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
                         }
                     }
                 }
-                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "전문 보기")
+                .partialFontAndColored(Theme.extraBold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_300), "전문 보기")
 
             backBtn.setOnClickListener {
                 signupInterface?.goBack()

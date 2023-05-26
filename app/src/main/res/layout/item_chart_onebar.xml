@@ -15,7 +15,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/horizontalBorder"/>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             android:id="@+id/horizontalBorder"
             android:layout_marginBottom="88dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

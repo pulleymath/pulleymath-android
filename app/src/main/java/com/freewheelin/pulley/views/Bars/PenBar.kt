@@ -26,16 +26,16 @@ class PenBar : ConstraintLayout {
         const val blue = 4
     }
 
-    var progressColor: Int = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+    var progressColor: Int = ContextCompat.getColor(context, R.color.gray_400)
         set(value) {
             field = value
             val drawableResource = when(value) {
-                grey -> R.drawable.bg_grey_e0e0e0_round_2
-                red -> R.drawable.bg_red_fe7b67_round_2
-                yellow -> R.drawable.bg_yellow_ffd545_round_2
-                green -> R.drawable.bg_green_70d000_round_2
-                blue -> R.drawable.bg_blue_30a4ff_round_2
-                else -> R.drawable.bg_grey_e0e0e0_round_2
+                grey -> R.drawable.bg_gray_400_round_2
+                red -> R.drawable.bg_red_300_round_2
+                yellow -> R.drawable.bg_yellow_200_round_2
+                green -> R.drawable.bg_green_300_round_2
+                blue -> R.drawable.bg_blue_400_round_2
+                else -> R.drawable.bg_gray_400_round_2
             }
             binding.progressBar.background = ContextCompat.getDrawable(context, drawableResource)
         }

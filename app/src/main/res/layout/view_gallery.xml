@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_f2f2f2"
+    android:background="@color/gray_200"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/galleryHeaderView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp64"
-        android:background="@color/white_ffffff"
+        android:background="@color/white"
         android:focusable="false"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:id="@+id/galleryHeaderTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:id="@+id/filterLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -83,7 +83,7 @@
         android:id="@+id/emptyFilterContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/grey_f2f2f2"
+        android:background="@color/gray_200"
         android:visibility="gone"
         android:focusable="false"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
@@ -95,7 +95,7 @@
             android:id="@+id/emptyIv"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/rect_grey_c0c0c0"
+            android:src="@drawable/rect_gray_500"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:id="@+id/emptyTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

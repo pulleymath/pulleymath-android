@@ -40,7 +40,7 @@
                     android:layout_height="@dimen/dp48"
                     android:paddingHorizontal="18dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
                     android:text="전체"
                     android:paddingVertical="8dp"/>
                 <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
                     android:paddingHorizontal="18dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
                     android:layout_marginEnd="8dp"
                     android:paddingVertical="8dp"
                     />
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
                     android:paddingHorizontal="18dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
                     android:layout_marginEnd="8dp"
                     android:paddingVertical="8dp"
                     />
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
                     android:paddingHorizontal="18dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
                     android:layout_marginEnd="8dp"
                     android:paddingVertical="8dp"
                     />
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp48"
                     android:paddingHorizontal="18dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
                     android:layout_marginEnd="8dp"
                     android:paddingVertical="8dp"
                     android:visibility="gone"

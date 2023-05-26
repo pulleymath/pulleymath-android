@@ -68,7 +68,7 @@ class HorizontalWithCircleBarClip : View {
 
         fillPaint = Paint()
         fillPaint!!.isAntiAlias = true
-        fillPaint!!.color = ContextCompat.getColor(context, R.color.purple_6e6cff)
+        fillPaint!!.color = ContextCompat.getColor(context, R.color.purple_300)
         eraser = Paint()
         eraser!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
         eraser!!.isAntiAlias = true

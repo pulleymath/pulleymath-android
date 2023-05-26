@@ -60,6 +60,7 @@ object Network {
         Server.live.toString() -> "${Preferences.shopUrl.get()}/ottway?token="
         else -> "${Preferences.devShopUrl.get()}/ottway?token="
     }
+    const val marketingUrl = "https://pulleymath.com/marketing"
     var token = ""
 
     enum class Type {

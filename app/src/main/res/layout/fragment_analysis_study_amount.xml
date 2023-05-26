@@ -12,7 +12,7 @@
         tools:context=".activities.analysis.tabFragment.AnalysisStudyAmountFragment">
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/summaryLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintWidth_percent="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/summaryLabel">
@@ -41,7 +41,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/periodLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/periodTotalCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/lastPeriodLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
 
 
                 <com.freewheelin.pulley.views.textViews.UpDownTextView
-                    style="@style/TextBlue_30a4ff.Bold"
+                    style="@style/TextBlue_400.Bold"
                     android:id="@+id/lastPeriodCompCntUtv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,13 +110,13 @@
                 android:id="@+id/verticalBorder"
                 android:layout_width="1dp"
                 android:layout_height="32dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginTop="@dimen/dp16"
                 app:layout_constraintTop_toBottomOf="@+id/lastCompareCl"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            <View style="@style/Border_Gray_300_Horizontal"
                 android:id="@+id/horizontalBorder"
                 android:layout_width="240dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +133,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/testCntLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/testCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/unitCntLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/unitCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/mockCntLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/mockCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -247,7 +247,7 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/wrongCntLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/wrongCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -277,14 +277,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintTop_toTopOf="@+id/summaryLeftContainerCl"
             app:layout_constraintBottom_toBottomOf="@+id/summaryLeftContainerCl"
             app:layout_constraintStart_toEndOf="@+id/summaryLeftContainerCl"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/subjectGuideTv"
                 android:textSize="@dimen/sp24"
                 android:text="확률과 통계를 집중해서 공부했네요."
@@ -326,12 +326,12 @@
                         android:id="@+id/firstLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/firstLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -344,7 +344,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/firstLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -366,12 +366,12 @@
                         android:id="@+id/secondLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/secondLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -384,7 +384,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/secondLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -406,12 +406,12 @@
                         android:id="@+id/thirdLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/thirdLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -424,7 +424,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/thirdLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -447,12 +447,12 @@
                         android:id="@+id/fourthLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/fourthLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -465,7 +465,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/fourthLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -487,12 +487,12 @@
                         android:id="@+id/fifthLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/fifthLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -505,7 +505,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/fifthLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -527,12 +527,12 @@
                         android:id="@+id/sixthLegend"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/bg_grey_9f9f9f_circle"
+                        android:background="@drawable/bg_gray_600_circle"
                         app:layout_constraintStart_toEndOf="@+id/ringChart"
                         app:layout_constraintTop_toTopOf="@+id/ringChart"/>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/sixthLegendTv"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -545,7 +545,7 @@
                         app:layout_constraintStart_toEndOf="@+id/firstLegend"/>
 
                     <TextView
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:id="@+id/sixthLegendCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -561,7 +561,7 @@
 
             <TextView
                 android:id="@+id/summaryEmptyGuideTv"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -577,7 +577,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/bigUnitAmountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -592,13 +592,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintTop_toBottomOf="@+id/bigUnitAmountLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/unitGuideTv"
                 android:textSize="@dimen/sp24"
                 android:text="지수 학습량이 많았어요."
@@ -610,7 +610,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp16"
@@ -633,7 +633,7 @@
 
             <TextView
                 android:id="@+id/bigUnitEmptyGuideTv"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -648,7 +648,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/dailyAmountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -663,14 +663,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintTop_toBottomOf="@+id/dailyAmountLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp40"

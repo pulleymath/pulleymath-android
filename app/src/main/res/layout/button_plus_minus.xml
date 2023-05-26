@@ -7,7 +7,7 @@
     <ImageButton
         android:id="@+id/minusBtn"
         android:src="@drawable/ic_minus"
-        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+        android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:id="@+id/cntTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
     <ImageButton
         android:id="@+id/plusBtn"
         android:src="@drawable/ic_plus_grey"
-        android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+        android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
         android:layout_marginStart="@dimen/dp48"

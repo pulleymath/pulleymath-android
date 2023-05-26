@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/mo_h4_sb"
-        android:textColor="@color/white_ffffff"
+        android:textColor="@color/white"
         android:text="내 점수에 해당하는 단계를 확인해보세요."
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/mo_h4_sb"
-        android:textColor="@color/white_ffffff"
+        android:textColor="@color/white"
         android:text="1,2 단계의 경우, 과목에 해당하는 연계 교과목 이수가 필요합니다."
         app:layout_constraintTop_toBottomOf="@id/content1Tv"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
         android:textSize="@dimen/sp14"
         app:layout_constraintTop_toBottomOf="@id/content2Tv"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/bg_white_ffffff_round_20"/>
+        android:background="@drawable/bg_white_round_20"/>
 
     <LinearLayout
         android:id="@+id/table1"
@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
 
             >
             <TextView
@@ -172,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             >
             <TextView
                 android:layout_width="80dp"
@@ -229,7 +229,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             >
             <TextView
                 android:layout_width="80dp"
@@ -298,7 +298,7 @@
         android:textSize="@dimen/sp14"
         app:layout_constraintTop_toBottomOf="@id/table1"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/bg_white_ffffff_round_20"/>
+        android:background="@drawable/bg_white_round_20"/>
 
     <LinearLayout
         android:id="@+id/table2"
@@ -371,7 +371,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
 
             >
             <TextView
@@ -429,7 +429,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             >
             <TextView
                 android:layout_width="80dp"

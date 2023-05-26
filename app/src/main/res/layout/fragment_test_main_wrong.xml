@@ -14,7 +14,7 @@
 
             <TextView
                 android:id="@+id/resultHeaderTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -26,7 +26,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:id="@+id/scoreTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/contentsCl"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:id="@+id/scoreLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/scoreTv"/>
 
             <TextView
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:id="@+id/reportTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 
             <TextView
                 android:id="@+id/dateTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="66dp"
                 android:layout_height="24dp"
                 android:lineSpacingExtra="@dimen/sp16"
@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/headerTv"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -89,7 +89,7 @@
 
             <TextView
                 android:id="@+id/guideTv"
-                style="@style/TextGrey_9f9f9f"
+                style="@style/TextGray_600"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -108,7 +108,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="@dimen/dp24"
                 android:layout_marginEnd="24dp"
-                android:background="@color/white_fafafa"
+                android:background="@color/gray_100"
                 android:padding="@dimen/dp32"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/startBtn"
@@ -119,7 +119,7 @@
 
                 <TextView
                     android:id="@+id/durationLabel"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="기간 :"
@@ -129,7 +129,7 @@
 
                 <TextView
                     android:id="@+id/numberOfTestLabel"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp32"
@@ -143,7 +143,7 @@
 
                 <TextView
                     android:id="@+id/wrongCntLabel"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="오답 문항 수(클리어 미포함) :"
@@ -154,7 +154,7 @@
 
                 <TextView
                     android:id="@+id/durationTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -166,7 +166,7 @@
 
                 <TextView
                     android:id="@+id/numberOfTestTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -178,7 +178,7 @@
 
                 <TextView
                     android:id="@+id/wrongCntTv"
-                    style="@style/TextRed_fe7b67.Bold"
+                    style="@style/TextRed_300.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"

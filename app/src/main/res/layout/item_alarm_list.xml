@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@{item.isReadObservable ? @drawable/bg_white_ffffff_plain : @drawable/bg_purple_100_plain }"
+        android:background="@{item.isReadObservable ? @drawable/bg_white_ripple : @drawable/bg_purple_100_plain }"
         android:onClick="@{()->listener.onItemClick(item)}">
 
         <TextView

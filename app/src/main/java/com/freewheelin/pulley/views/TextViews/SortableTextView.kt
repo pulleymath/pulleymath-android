@@ -84,12 +84,12 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
         super.setSelected(selected)
 
         if(selected) {
-            val selectedColor = ContextCompat.getColor(context, R.color.purple_6D6DFF)
+            val selectedColor = ContextCompat.getColor(context, R.color.purple_300)
             labelTv.setTextColor(selectedColor)
             arrowIv.setColorFilter(selectedColor)
         } else {
-            val unselectedTextColor = ContextCompat.getColor(context, R.color.grey_9f9f9f)
-            val unselectedImageColor = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+            val unselectedTextColor = ContextCompat.getColor(context, R.color.gray_600)
+            val unselectedImageColor = ContextCompat.getColor(context, R.color.gray_400)
             labelTv.setTextColor(unselectedTextColor)
             arrowIv.setColorFilter(unselectedImageColor)
         }

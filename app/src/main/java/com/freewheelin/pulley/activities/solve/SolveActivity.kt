@@ -58,6 +58,7 @@ import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
 
+
 class SolveActivity : BaseActivity(),
         AnswerDelegate,
         GalleryViewDelegate,
@@ -359,32 +360,6 @@ class SolveActivity : BaseActivity(),
                         answerView.showSubmitBtn()
                         speedAnswerView.showSubmitBtn()
                     }
-//                    when (content.getTestType()) {
-//                        Test.TestType.daily -> {
-//                            TestManager.getDailyTest(this@SolveActivity, user!!, content) {
-//                                it.scoringTestPieceCount = content.scoringTestPieceCount
-//                                this@SolveActivity.content = it
-//                                viewModel.selectedContent.postValue(it)
-//                                galleryView.set(it)
-//                                galleryView.hideFilter()
-//                                speedAnswerView.set(it)
-//                                answerView.showSubmitBtn()
-//                                speedAnswerView.showSubmitBtn()
-//                            }
-//                        }
-//                        else -> {
-//                            TestManager.getTest(this@SolveActivity, user!!, content) {
-//                                it.scoringTestPieceCount = content.scoringTestPieceCount
-//                                this@SolveActivity.content = it
-//                                viewModel.selectedContent.postValue(it)
-//                                galleryView.set(it)
-//                                galleryView.hideFilter()
-//                                speedAnswerView.set(it)
-//                                answerView.showSubmitBtn()
-//                                speedAnswerView.showSubmitBtn()
-//                            }
-//                        }
-//                    }
                 }
                 is MockExam -> {
                     itemValue = "모의고사"
@@ -497,8 +472,6 @@ class SolveActivity : BaseActivity(),
     }
 
     private fun initUI() {
-
-
         if (Build.VERSION.SDK_INT < 16) {
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -1396,10 +1369,10 @@ class SolveActivity : BaseActivity(),
             null
 
         if(btn.isSelected) {
-            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_purple_ecebff_round)
+            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_purple_100_round)
             btn.setImageDrawable(selectedImage)
         } else {
-            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_grey_3d3d3d_stroke_black_4c4c4c_round)
+            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_black_100_stroke_gray_800_round)
             btn.setImageDrawable(unselectedImage)
         }
     }

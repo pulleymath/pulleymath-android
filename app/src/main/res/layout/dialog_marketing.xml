@@ -50,7 +50,7 @@
 
             <Button
                 android:id="@+id/btnMarketingNoShow"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -60,7 +60,7 @@
 
             <Button
                 android:id="@+id/btnMarketingClose"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="1dp"

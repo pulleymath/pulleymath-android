@@ -13,7 +13,6 @@ import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity
 import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.core.manage.TestManager

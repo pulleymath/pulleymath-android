@@ -11,13 +11,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootCl"
-        android:layout_width="400dp"
+        android:layout_width="440dp"
         android:layout_height="match_parent">
 <!--        android:layout_height="@dimen/dp768">-->
 
         <FrameLayout
             android:id="@+id/containerFl"
-            android:layout_width="400dp"
+            android:layout_width="440dp"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"

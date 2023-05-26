@@ -288,7 +288,7 @@ class AnalysisTabActivity : BaseNavActivity(),
 
             if (dialog.from.plusDays(dialog.period) > LocalDate.now()) {
                 nextBtn.isEnabled = false
-                nextBtn.setColorFilter(ContextCompat.getColor(this@AnalysisTabActivity, R.color.grey_c0c0c0))
+                nextBtn.setColorFilter(ContextCompat.getColor(this@AnalysisTabActivity, R.color.gray_500))
             } else {
                 nextBtn.isEnabled = true
                 nextBtn.clearColorFilter()
@@ -303,7 +303,7 @@ class AnalysisTabActivity : BaseNavActivity(),
             Tutor.TooltipType.analysisMain.addShowingCnt()
             val targetView = if (isTablet) myAnalysisGuideBtn else mobileGuideDummyView
             val window = BalloonWindow(this@AnalysisTabActivity, targetView, BalloonWindow.Position.below, 16.toPx())
-            window.balloonColor = ContextCompat.getColor(this@AnalysisTabActivity, R.color.purple_ACACFF)
+            window.balloonColor = ContextCompat.getColor(this@AnalysisTabActivity, R.color.purple_200)
             window.offset = -100
             window.margin = -8
             window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx())

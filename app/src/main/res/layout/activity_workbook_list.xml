@@ -83,7 +83,7 @@
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp32"
                         android:text="워크북"
-                        android:textColor="@color/black_4c4c4c"
+                        android:textColor="@color/gray_800"
                         android:textSize="@dimen/sp36"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -165,7 +165,7 @@
                     app:layout_constraintTop_toBottomOf="@id/titleTv"/>
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    style="@style/Border_Gray_300_Horizontal"
                     android:id="@+id/topBorder"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -204,7 +204,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="0dp"
-                        android:background="@color/grey_e8e8e8"
+                        android:background="@color/gray_300"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/filterRv"/>
@@ -262,12 +262,12 @@
 
 
                         <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
+                            style="@style/TextGray_500.Bold"
                             android:id="@+id/emptyTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/sp16"
-                            android:textColor="@color/grey_c0c0c0"
+                            android:textColor="@color/gray_500"
                             android:lineSpacingExtra="8sp"
                             android:gravity="center_horizontal"
                             android:text="조건에 맞는 문제집이 없네요ㅠㅠ\n조건을 바꿔볼까요?"

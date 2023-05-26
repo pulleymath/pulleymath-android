@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/titleTv"
-        style="@style/TextWhite_ffffff.ExtraBold"
+        style="@style/TextWhite.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -25,7 +25,7 @@
         android:layout_marginBottom="8dp"/>
 
     <TextView
-        style="@style/TextWhite_ffffff.ExtraBold"
+        style="@style/TextWhite.ExtraBold"
         android:id="@+id/contentsTv"
         android:textSize="16sp"
         android:gravity="center"

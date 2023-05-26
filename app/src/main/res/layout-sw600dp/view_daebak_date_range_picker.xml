@@ -9,7 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         android:layout_width="792dp"
         android:layout_height="wrap_content">
 
@@ -17,7 +17,7 @@
             android:id="@+id/topContainerCl"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp80"
-            android:background="@drawable/bg_white_ffffff_round_top_only"
+            android:background="@drawable/bg_white_round_top_only"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -25,7 +25,7 @@
 
     <!--    <com.freewheelin.pulley.views.CalendarPickerViews.RangeRadioButton-->
     <!--        android:id="@+id/selectRangeBtn"-->
-    <!--        style="@style/TextBlack_4c4c4c.Bold"-->
+    <!--        style="@style/TextGray_800.Bold"-->
     <!--        android:layout_width="96dp"-->
     <!--        android:layout_height="36dp"-->
     <!--        android:layout_marginEnd="26dp"-->
@@ -40,7 +40,7 @@
 
         <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/aWeekRangeBtn"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
             android:layout_height="36dp"
             android:layout_marginEnd="26dp"
@@ -55,7 +55,7 @@
 
         <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/twoWeeksRangeBtn"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
             android:layout_height="36dp"
             android:layout_marginEnd="26dp"
@@ -70,7 +70,7 @@
 
         <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/aMonthBtn"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
             android:layout_height="36dp"
             android:layout_marginEnd="26dp"
@@ -85,7 +85,7 @@
 
         <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/selectRangeBtn"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
             android:layout_height="36dp"
             android:padding="0dp"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@+id/topContainerCl" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/topContainerCl"
             app:layout_constraintEnd_toEndOf="@+id/topContainerCl"
             app:layout_constraintStart_toStartOf="@+id/topContainerCl" />
@@ -114,7 +114,7 @@
 
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/fromCalendarHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,13 +133,13 @@
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintEnd_toStartOf="@+id/toCalendar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fromCalendarHeader"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
@@ -156,7 +156,7 @@
             android:layout_width="0dp"
             android:layout_height="280dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fromCalendar"
             app:layout_constraintTop_toTopOf="@+id/fromCalendar"/>
@@ -166,7 +166,7 @@
             android:id="@+id/bottomContainerCl"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp80"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             android:layout_marginTop="@dimen/dp32"
             app:layout_constraintTop_toBottomOf="@+id/toCalendar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -174,14 +174,14 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/rangeGuideTv"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

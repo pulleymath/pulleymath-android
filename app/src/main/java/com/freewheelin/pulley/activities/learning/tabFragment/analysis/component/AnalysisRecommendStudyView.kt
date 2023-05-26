@@ -67,7 +67,7 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         averageCorrectRateBar.value = 0.6f
         averageCorrectRateBar.barHeight = resources.getDimension(R.dimen.dp120)
         averageCorrectRateBar.barWidth = resources.getDimension(R.dimen.dp56)
-        averageCorrectRateBar.color = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+        averageCorrectRateBar.color = ContextCompat.getColor(context, R.color.gray_400)
         averageBarLabel.text = "등급\n평균"
         actionBtnWrapperCl.setOnBasicPOrHigherClickListener(cb = { listener?.onRecommendBtnClicked(this) },
             deniedCb = {
@@ -90,9 +90,9 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         averageCorrectRateBar.lowLabel = "${result.studentRating}등급\n평균"
 
         if(myPercent < sameGradePercent) {
-            myCorrectRateBar.color = ContextCompat.getColor(context!!, R.color.red_fe7b67)
+            myCorrectRateBar.color = ContextCompat.getColor(context!!, R.color.red_300)
         } else {
-            myCorrectRateBar.color = ContextCompat.getColor(context!!, R.color.blue_30a4ff)
+            myCorrectRateBar.color = ContextCompat.getColor(context!!, R.color.blue_400)
         }
 
         guideTv.text = "${result.bigChapterName} ${curation.guide["title"]}"
@@ -114,7 +114,7 @@ class AnalysisRecommendStudyView: ConstraintLayout {
         recommendTv.text = "$text1 $text2"
                 .partialFontAndColored(
                         Theme.extraBold(context),
-                        ContextCompat.getColor(context!!, R.color.purple_6D6DFF),
+                        ContextCompat.getColor(context!!, R.color.purple_300),
                         text2
                 )
     }

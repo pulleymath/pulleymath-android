@@ -1,7 +1,5 @@
 package com.freewheelin.pulley.activities.auth
 
-import android.animation.Animator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,20 +7,13 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.assets.DessertType
 import com.freewheelin.pulley.bases.user
@@ -655,21 +646,21 @@ class SelectorView : ConstraintLayout {
         binding.apply {
             if (isSelected) {
                 checkView.visibility = View.VISIBLE
-                setBackgroundResource(R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round)
-                onlyTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                bigTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                smallTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                guideLabel.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+                setBackgroundResource(R.drawable.bg_white_stroke_purple_300_round)
+                onlyTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                bigTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                smallTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                guideLabel.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
 
                 onlyTv.typeface = Theme.extraBold(context)
                 guideLabel.typeface = Theme.extraBold(context)
             } else {
                 checkView.visibility = View.GONE
-                setBackgroundResource(R.drawable.bg_white_ffffff_stroke_grey_c0c0c0_round)
-                onlyTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                bigTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                smallTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-                guideLabel.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                setBackgroundResource(R.drawable.bg_white_stroke_gray_500_round)
+                onlyTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+                bigTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+                smallTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+                guideLabel.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
 
                 onlyTv.typeface = Theme.bold(context)
                 guideLabel.typeface = Theme.bold(context)

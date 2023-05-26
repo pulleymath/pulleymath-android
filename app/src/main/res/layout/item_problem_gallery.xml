@@ -12,7 +12,7 @@
             android:id="@+id/bridgeView"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="@color/grey_c0c0c0"
+            android:background="@color/gray_500"
             android:focusable="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,7 @@
             android:id="@+id/bgView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             android:focusable="false"
             app:layout_constraintStart_toEndOf="@+id/bridgeView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
 
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:id="@+id/numberTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_transparent_stroke_grey_e8e8e8"
+                android:background="@drawable/bg_transparent_stroke_gray_300"
                 android:focusable="false"/>
 
             <ImageView
@@ -126,7 +126,7 @@
                 android:id="@+id/selectView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_transparent_stroke_purple_6d6dff_2dp"
+                android:background="@drawable/bg_transparent_stroke_purple_300_2dp"
                 android:padding="@dimen/dp16"
                 android:focusable="false">
 

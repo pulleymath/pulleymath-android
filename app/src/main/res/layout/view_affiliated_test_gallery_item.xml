@@ -12,7 +12,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_stroke_gray_300"
+        android:background="@drawable/bg_white_stroke_gray_300_ripple"
         android:onClick="@{ () -> listener.onGalleryViewClick(problem) }"
         >
 

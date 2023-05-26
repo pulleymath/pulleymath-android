@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/yearTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="@dimen/dp64"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/monthTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="@dimen/dp56"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/dp16"
@@ -37,7 +37,7 @@
 
     <TextView
         android:id="@+id/gradeTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="@dimen/dp56"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/dp16"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/typeTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="@dimen/dp56"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/dp16"
@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/titleTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp20"
@@ -78,17 +78,17 @@
 
     <TextView
         android:id="@+id/updateTag"
-        style="@style/TextWhite_ffffff.ExtraBold"
+        style="@style/TextWhite.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:background="@drawable/bg_red_fe7b67_capsule"
+        android:background="@drawable/bg_red_300_capsule"
         android:paddingStart="5dp"
         android:paddingTop="2dp"
         android:paddingEnd="5dp"
         android:paddingBottom="2dp"
         android:text="신규"
-        android:textColor="@color/color_white_ffffff"
+        android:textColor="@color/color_white"
         android:textSize="@dimen/sp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/titleTv"
@@ -96,7 +96,7 @@
 
     <View
         android:id="@+id/horizontalBorder"
-        style="@style/Border_Grey_e8e8e8_Horizontal"
+        style="@style/Border_Gray_300_Horizontal"
         android:layout_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

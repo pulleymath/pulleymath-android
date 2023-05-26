@@ -23,8 +23,8 @@
             app:tabMaxWidth="0dp"
             app:tabGravity="center"
             app:tabMode="fixed"
-            app:tabTextColor="@color/grey_818181"
-            app:tabSelectedTextColor="@color/white_ffffff"
+            app:tabTextColor="@color/gray_700"
+            app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@style/AppTheme.TabBar.TabText">
 
         </com.google.android.material.tabs.TabLayout>
@@ -54,7 +54,7 @@
 
         <Button
             android:id="@+id/myAnalysisGuideBtn"
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp32"
@@ -67,7 +67,7 @@
 
         <View
             android:id="@+id/horizontalBorder"
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -85,7 +85,7 @@
                 android:id="@+id/scrollContentsCl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white_fafafa">
+                android:background="@color/gray_100">
 
                 <ImageButton
                     android:id="@+id/prevBtn"
@@ -107,7 +107,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@drawable/bg_white_ffffff_stroke_black_4c4c4c_round_24">
+                    android:background="@drawable/bg_white_stroke_gray_800_round_24">
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <ImageView
@@ -123,7 +123,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/calendarRangeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                     android:id="@+id/leftVerticalBorder"
                     android:layout_width="1dp"
                     android:layout_height="32dp"
-                    android:background="@color/grey_e8e8e8"
+                    android:background="@color/gray_300"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintTop_toTopOf="@+id/correctRateContainer"
                     app:layout_constraintEnd_toStartOf="@+id/ratingContainer"
@@ -162,7 +162,7 @@
                     android:id="@+id/rightVerticalBorder"
                     android:layout_width="1dp"
                     android:layout_height="32dp"
-                    android:background="@color/grey_e8e8e8"
+                    android:background="@color/gray_300"
                     android:layout_marginStart="8dp"
                     app:layout_constraintTop_toTopOf="@+id/ratingContainer"
                     app:layout_constraintBottom_toBottomOf="@+id/ratingContainer"
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp">
                         <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
+                            style="@style/TextGray_500.Bold"
                             android:id="@+id/correctRateLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/correctRateTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -231,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp">
                         <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
+                            style="@style/TextGray_500.Bold"
                             android:id="@+id/ratingLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/ratingTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -277,14 +277,14 @@
 
                     <TextView
                         android:id="@+id/problemCntLabel"
-                        style="@style/TextGrey_c0c0c0.Bold"
+                        style="@style/TextGray_500.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="총 문제 수"
                         android:textSize="@dimen/sp18" />
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/problemCntTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -11,13 +11,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:padding="@dimen/dp32"
-            android:background="@color/black_333333"
+            android:background="@color/black_200"
             app:layout_constraintHeight_percent="@dimen/learning_unitStudy_black_area_percent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/bookNameTv"
-                style="@style/TextWhite_ffffff.Bold"
+                style="@style/TextWhite.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="고3"
@@ -26,7 +26,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextWhite_ffffff.Bold"
+                style="@style/TextWhite.Bold"
                 android:id="@+id/subjectTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/bookNameTv"/>
 
             <TextView
-                style="@style/TextRed_fe7b67.ExtraBold"
+                style="@style/TextRed_300.ExtraBold"
                 android:id="@+id/newTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
 
 
             <TextView
-                style="@style/TextWhite_ffffff.Bold"
+                style="@style/TextWhite.Bold"
                 android:id="@+id/chapterTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 
             <TextView
                 android:id="@+id/dateTv"
-                style="@style/TextGrey_818181.Bold"
+                style="@style/TextGray_700.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -78,7 +78,7 @@
 
         <TextView
             android:id="@+id/descTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
@@ -94,7 +94,7 @@
 
         <TextView
             android:id="@+id/progressTitleTv"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
@@ -106,7 +106,7 @@
 
         <TextView
             android:id="@+id/problemCntTv"
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp32"
@@ -123,13 +123,13 @@
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginEnd="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp32"
-            app:backgroundColor="@color/grey_f2f2f2"
+            app:backgroundColor="@color/gray_200"
             app:cardCornerRadius="3dp"
-            app:completeColor="@color/purple_6D6DFF"
+            app:completeColor="@color/purple_300"
             app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:progressColor="@color/grey_c0c0c0">
+            app:progressColor="@color/gray_500">
 
         </com.freewheelin.pulley.views.LearningProgressView>
 

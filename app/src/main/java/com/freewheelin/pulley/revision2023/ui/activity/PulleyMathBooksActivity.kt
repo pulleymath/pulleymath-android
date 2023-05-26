@@ -41,7 +41,6 @@ import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
-import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
@@ -305,18 +304,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                                 }
                                 val completedDialog = ChallengeCompletedDialog(startChallenge,
                                     ChallengeManager.CourseName.스타트챌린지_유형.id,
-                                    moveEvent = moveEvent,
-                                    exitEvent = {
-                                        val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_유형.id)
-                                        if (nextCourse != null) {
-                                            val induceDialog = ChallengeInduceDialog(
-                                                ChallengeInduceDialog.Type.OneMore,
-                                                course = nextCourse,
-                                                moveEvent = moveEvent
-                                            )
-                                            supportFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
-                                        }
-                                    }
+                                    moveEvent = moveEvent
                                 )
                                 supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog2") }
                             }

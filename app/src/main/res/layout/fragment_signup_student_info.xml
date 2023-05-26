@@ -68,7 +68,7 @@
 
                     <TextView
                         android:id="@+id/textLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp32"
@@ -85,7 +85,7 @@
 
                         <TextView
                             android:id="@+id/textToLogin"
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="현재 학교를 다니지 않습니다"
@@ -117,7 +117,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dp56"
                                 android:layout_weight="3"
-                                android:background="@drawable/bg_white_f2f2f2_stroke_grey_c0c0c0"
+                                android:background="@drawable/bg_gray_200_stroke_gray_500"
                                 android:gravity="center_vertical"
                                 android:paddingStart="@dimen/sp16"
                                 android:singleLine="true"

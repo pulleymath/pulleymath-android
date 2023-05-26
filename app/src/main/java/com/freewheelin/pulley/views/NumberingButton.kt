@@ -67,39 +67,39 @@ class NumberingButton: Button {
         return when(theme) {
             THEME_WHITE -> {
                 if (isSelected)
-                    ContextCompat.getColor(context, R.color.black_333333)
+                    ContextCompat.getColor(context, R.color.black_200)
                 else
-                    ContextCompat.getColor(context, R.color.grey_f2f2f2)
+                    ContextCompat.getColor(context, R.color.gray_200)
             }
             THEME_BLACK -> {
                 if(isSelected)
-                    ContextCompat.getColor(context, R.color.white_ffffff)
+                    ContextCompat.getColor(context, R.color.white)
                 else
-                    ContextCompat.getColor(context, R.color.black_4c4c4c)
+                    ContextCompat.getColor(context, R.color.gray_800)
             }
             THEME_OMR -> {
                 if(isSelected)
-                    ContextCompat.getColor(context, R.color.grey_818181)
+                    ContextCompat.getColor(context, R.color.gray_700)
                 else
-                    ContextCompat.getColor(context, R.color.red_ffc6bc)
+                    ContextCompat.getColor(context, R.color.red_200)
             }
             THEME_GREY -> {
                 if (isSelected)
-                    ContextCompat.getColor(context, R.color.white_ffffff)
+                    ContextCompat.getColor(context, R.color.white)
                 else
-                    ContextCompat.getColor(context, R.color.grey_e0e0e0)
+                    ContextCompat.getColor(context, R.color.gray_400)
             }
             THEME_RED -> {
                 if (isSelected)
-                    ContextCompat.getColor(context, R.color.red_fe7b67)
+                    ContextCompat.getColor(context, R.color.red_300)
                 else
-                    ContextCompat.getColor(context, R.color.red_fe7b67)
+                    ContextCompat.getColor(context, R.color.red_300)
             }
             else -> {
                 if (isSelected)
-                    ContextCompat.getColor(context, R.color.black_333333)
+                    ContextCompat.getColor(context, R.color.black_200)
                 else
-                    ContextCompat.getColor(context, R.color.grey_f2f2f2)
+                    ContextCompat.getColor(context, R.color.gray_200)
             }
 
         }
@@ -111,37 +111,37 @@ class NumberingButton: Button {
                 if (isSelected)
                     R.drawable.bg_gray_200_circle
                 else
-                    R.drawable.bg_transparent_stroke_grey_f2f2f2_circle
+                    R.drawable.bg_transparent_stroke_gray_200_circle
             }
             THEME_BLACK -> {
                 if(isSelected)
-                    R.drawable.bg_black_4c4c4c_circle
+                    R.drawable.bg_gray_800_circle
                 else
-                    R.drawable.bg_transparent_stroke_black_4c4c4c_circle
+                    R.drawable.bg_transparent_stroke_gray_800_circle
             }
             THEME_OMR -> {
                 if(isSelected)
-                    R.drawable.bg_grey_818181_round_8
+                    R.drawable.bg_gray_700_round_8
                 else
-                    R.drawable.bg_yellow_fffbef_stroke_2_red_ffc6bc_round_8
+                    R.drawable.bg_yellow_200_stroke_2_red_100_round_8
             }
             THEME_GREY -> {
                 if (isSelected)
-                    R.drawable.bg_grey_e0e0e0_circle
+                    R.drawable.bg_gray_400_circle
                 else
-                    R.drawable.bg_transparent_stroke_grey_e0e0e0_circle
+                    R.drawable.bg_transparent_stroke_gray_400_circle
             }
             THEME_RED -> {
                 if (isSelected)
-                    R.drawable.bg_transparent_stroke_red_fe7b67_circle
+                    R.drawable.bg_transparent_stroke_red_300_circle
                 else
-                    R.drawable.bg_transparent_stroke_red_fe7b67_circle
+                    R.drawable.bg_transparent_stroke_red_300_circle
             }
             else -> {
                 if (isSelected)
-                    ContextCompat.getColor(context, R.color.black_333333)
+                    ContextCompat.getColor(context, R.color.black_200)
                 else
-                    ContextCompat.getColor(context, R.color.white_ffffff)
+                    ContextCompat.getColor(context, R.color.white)
             }
         }
     }

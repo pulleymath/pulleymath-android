@@ -57,7 +57,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        android:background="@drawable/bg_white_stroke_gray_300"
         android:gravity="center_vertical"
         android:hint="정답 입력"
         android:inputType="number"

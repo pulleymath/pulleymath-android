@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:clickable="true"
         tools:context=".activities.mypage.MySignUpInfoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -26,12 +26,12 @@
                 android:paddingEnd="@dimen/dp32"
                 android:paddingBottom="@dimen/dp24"
                 android:background="@null"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -45,7 +45,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
 
                 <TextView
                     android:id="@+id/titleLabel"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/sp24"
@@ -74,7 +74,7 @@
 
                 <TextView
                     android:id="@+id/guideBottomLabel"
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -96,11 +96,11 @@
 
                     <com.freewheelin.pulley.views.SelectionButton
                         android:id="@+id/noneSelection"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp36"
-                        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+                        android:background="@drawable/bg_white_stroke_gray_300_round_24"
                         android:text="나중에 선택할게요"
                         android:textSize="@dimen/sp16" />
 

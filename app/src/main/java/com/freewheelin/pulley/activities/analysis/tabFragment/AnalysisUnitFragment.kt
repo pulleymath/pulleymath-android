@@ -484,9 +484,9 @@ class UnitHolder(val itemBinding: ItemAnalysisUnitBinding): RecyclerView.ViewHol
         layoutParams.leftMargin = (23 + 14 * depth).toPx()
 
         if(depth == 0)
-            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_ffffff))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white))
         else
-            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.white_fafafa))
+            itemView.setBackgroundColor(ContextCompat.getColor(viewContext, R.color.gray_100))
     }
 
     fun set(analysis: ChapterAnalysis) {
@@ -496,11 +496,11 @@ class UnitHolder(val itemBinding: ItemAnalysisUnitBinding): RecyclerView.ViewHol
         correctRateTv.text = TextUtils.percentFormat.format(analysis.myRate)
 
         if(analysis.myRate < 0.3)
-            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.red_fe7b67)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.red_300)
         else if(analysis.myRate >= 0.3 && analysis.myRate < 0.7)
-            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.yellow_ffd545)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.yellow_200)
         else
-            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.green_70d000)
+            correctRateHb.progressColor = ContextCompat.getColor(viewContext, R.color.green_300)
     }
 }
 

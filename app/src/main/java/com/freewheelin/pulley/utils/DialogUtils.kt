@@ -548,8 +548,8 @@ class DialogUtils {
             set(value) {
                 field = value
                 when(type) {
-                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                    DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
+                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                    DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                 }
             }
 
@@ -583,8 +583,8 @@ class DialogUtils {
             set(value) {
                 field = value
                 when(type) {
-                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
-                    DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_fe7b67))
+                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                    DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                 }
             }
 

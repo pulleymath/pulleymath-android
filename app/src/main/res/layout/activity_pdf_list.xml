@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/textDescr"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp24"
@@ -106,7 +106,7 @@
             android:id="@+id/stickyAppBarLayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp68"
-            android:background="@color/grey_f0f0f0"
+            android:background="@color/gray_200"
             app:stickyAppBarAnim="@{vm.stickyAppBarShow}"
             android:clickable="true"
             android:gravity="center_vertical"

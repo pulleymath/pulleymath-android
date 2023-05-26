@@ -48,7 +48,7 @@ class SnackBarView : ConstraintLayout {
         snackContentTv = findViewById(R.id.snackContentTv)
 
 
-        this.background = ContextCompat.getDrawable(context, R.drawable.bg_black_333333_round)
+        this.background = ContextCompat.getDrawable(context, R.drawable.bg_black_200_round)
         val lParams = ViewGroup.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, snackBarViewHeight.toPx())
         this.layoutParams = lParams
         xBtn.setOnClickListener {

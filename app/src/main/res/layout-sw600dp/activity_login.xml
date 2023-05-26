@@ -37,7 +37,7 @@
 
                     <TextView
                         android:id="@+id/greetingLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="12sp"
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center">
                         <TextView
-                            style="@style/TextPurple_6d6dff.Bold"
+                            style="@style/TextPurple_300.Bold"
                             android:gravity="center"
                             android:id="@+id/findIdPwTv"
                             android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/findIdPwTv"/>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/signupGuideTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/findIdPwTv" />
 
                         <TextView
-                            style="@style/TextPurple_6d6dff.Bold"
+                            style="@style/TextPurple_300.Bold"
                             android:gravity="center"
                             android:id="@+id/signupTv"
                             android:padding="8dp"

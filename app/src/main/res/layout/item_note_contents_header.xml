@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/clearGuideTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/problemCntTv"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round"
+            android:background="@drawable/bg_gray_200_stroke_gray_300_round"
             app:layout_constraintTop_toBottomOf="@+id/problemCntTv">
 
             <CheckBox
@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -60,7 +60,7 @@
 
             <Button
                 android:id="@+id/levelOrder"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="72dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="12dp"
@@ -73,7 +73,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/levelOrder"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -90,7 +90,7 @@
 
             <Button
                 android:id="@+id/subjectOrder"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="82dp"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -102,14 +102,14 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/oldOrder"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="72dp"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -121,14 +121,14 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/oldOrder"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/recentOrder"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="72dp"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -162,7 +162,7 @@
 
             <TextView
                 android:id="@+id/guideTv"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp24"

@@ -20,41 +20,23 @@ import com.freewheelin.pulley.activities.auth.findEmailAndPw.FindEmailAndPwActiv
 import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.core.API_V2
-import com.freewheelin.pulley.core.API_V3
 import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.databinding.FragmentGuestJoinIntroduceBinding
 import com.freewheelin.pulley.databinding.FragmentGuestLoginBinding
-import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
 import com.freewheelin.pulley.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.model.ResponseBody
 import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
-import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.editText.*
-import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.HttpException
 import retrofit2.Response
-import java.util.concurrent.TimeUnit
-import kotlin.math.min
 
 class GuestLoginFragment : Fragment(),
     InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener,

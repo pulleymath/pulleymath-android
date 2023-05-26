@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/textTitle"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_phone_number"
@@ -24,11 +24,11 @@
                 android:id="@+id/editValue"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp56"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                android:background="@drawable/bg_white_stroke_gray_500"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="@dimen/sp16"
-                android:textColorHint="@color/grey_c0c0c0"
+                android:textColorHint="@color/gray_500"
                 android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
                 android:textSize="@dimen/sp16"
                 android:layout_weight="1"
@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/textValueError"
-                style="@style/TextRed_fe7b67.Bold"
+                style="@style/TextRed_300.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -76,13 +76,13 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                android:background="@drawable/bg_white_stroke_gray_500"
                 android:hint="인증번호 입력"
                 android:inputType="phone"
                 android:maxLength="4"
                 android:maxLines="1"
                 android:paddingStart="@dimen/sp16"
-                android:textColorHint="@color/grey_c0c0c0"
+                android:textColorHint="@color/gray_500"
                 android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
                 android:textSize="@dimen/sp16"
                 app:layout_constraintEnd_toStartOf="@+id/btnCodeConfirm"
@@ -91,7 +91,7 @@
 
             <TextView
                 android:id="@+id/timerTv"
-                style="@style/TextRed_fe7b67"
+                style="@style/TextRed_300"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp24"
@@ -127,7 +127,7 @@
 
             <TextView
                 android:id="@+id/textCodeConfirmError"
-                style="@style/TextRed_fe7b67.Bold"
+                style="@style/TextRed_300.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"

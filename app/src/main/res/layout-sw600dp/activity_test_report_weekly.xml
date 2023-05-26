@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="960dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_white_fafafa_round"
+            android:background="@drawable/bg_gray_100_round_ripple"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -24,11 +24,11 @@
                 android:id="@+id/topContainerCl"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp64"
-                android:background="@drawable/bg_white_ffffff_round_top_only"
+                android:background="@drawable/bg_white_round_top_only"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="주간테스트 분석 보고서"
@@ -50,7 +50,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <View
-                    style="@style/Border_Grey_e8e8e8_Horizontal"
+                    style="@style/Border_Gray_300_Horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -74,7 +74,7 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/scoreResultLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -89,11 +89,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp200"
                         android:layout_marginTop="@dimen/dp16"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/scoreResultLabel">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:id="@+id/scoreTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:id="@+id/scoreLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
 
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/scoreGuideTv"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
 
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/historyChartLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -165,14 +165,14 @@
                         android:id="@+id/historyChart"
                         android:layout_width="352dp"
                         android:layout_height="214dp"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:layout_marginTop="@dimen/dp16"
                         app:layout_constraintTop_toBottomOf="@+id/historyChartLabel"
                         app:layout_constraintStart_toStartOf="parent">
                     </com.github.mikephil.charting.charts.BarChart>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/lowestLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -187,12 +187,12 @@
                         android:layout_width="245dp"
                         android:layout_height="214dp"
                         android:layout_marginStart="@dimen/dp16"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintStart_toEndOf="@+id/historyChart"
                         app:layout_constraintTop_toTopOf="@+id/historyChart">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/lowestSubjectTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:id="@+id/lowestUnitTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -228,7 +228,7 @@
                         </com.freewheelin.pulley.views.charts.TriplePenChart>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/lowestNothingGuideTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -241,7 +241,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/highestLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,12 +256,12 @@
                         android:layout_width="245dp"
                         android:layout_height="214dp"
                         android:layout_marginStart="@dimen/dp16"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintStart_toEndOf="@+id/lowestContainerCl"
                         app:layout_constraintTop_toTopOf="@+id/historyChart">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/highestSubjectTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:id="@+id/highestUnitTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -297,7 +297,7 @@
                         </com.freewheelin.pulley.views.charts.TriplePenChart>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:id="@+id/highestNothingGuideTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
 
 
                     <TextView
-                        style="@style/TextGrey_9f9f9f"
+                        style="@style/TextGray_600"
                         android:id="@+id/problemResultLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -326,12 +326,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp16"
                         android:layout_marginBottom="@dimen/dp64"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/problemResultLabel"
                         app:layout_constraintBottom_toBottomOf="parent">
 
                         <TextView
-                            style="@style/TextGrey_c0c0c0.Bold"
+                            style="@style/TextGray_500.Bold"
                             android:id="@+id/correctRateGuideTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -350,7 +350,7 @@
                             android:layout_marginStart="@dimen/dp32"
                             android:layout_marginBottom="@dimen/dp32"
                             android:padding="1dp"
-                            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                            android:background="@drawable/bg_white_stroke_gray_300"
                             app:layout_constraintTop_toBottomOf="@+id/correctRateGuideTv"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent">

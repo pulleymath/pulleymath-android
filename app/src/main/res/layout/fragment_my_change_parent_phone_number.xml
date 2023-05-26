@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -22,7 +22,7 @@
                 android:layout_height="72dp"
                 android:background="@null"
                 android:src="@drawable/ic_toolbar_back"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +40,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

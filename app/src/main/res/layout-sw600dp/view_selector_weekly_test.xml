@@ -7,11 +7,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        style="@style/TextWhite_ffffff.ExtraBold"
+        style="@style/TextWhite.ExtraBold"
         android:id="@+id/tagTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_grey_e0e0e0_round"
+        android:background="@drawable/bg_gray_400_round"
         android:textSize="@dimen/sp12"
         android:text="주말한정"
         android:paddingStart="8dp"
@@ -24,12 +24,12 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        style="@style/TextGrey_c0c0c0.ExtraBold"
+        style="@style/TextGray_500.ExtraBold"
         android:id="@+id/titleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp24"
-        android:textColor="@color/grey_c0c0c0"
+        android:textColor="@color/gray_500"
         android:text="주간 테스트"
         android:layout_marginTop="@dimen/dp12"
         app:layout_constraintBottom_toTopOf="@+id/guideTv"
@@ -39,12 +39,12 @@
 
 
     <TextView
-        style="@style/TextGrey_c0c0c0.Bold"
+        style="@style/TextGray_500.Bold"
         android:id="@+id/guideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp14"
-        android:textColor="@color/grey_c0c0c0"
+        android:textColor="@color/gray_500"
         android:lineSpacingExtra="6sp"
         android:layout_marginTop="@dimen/dp16"
         android:text="이번 주 공부한 내용을 점검할 시간!\n토-일, 주말에만 응시가능합니다."
@@ -54,7 +54,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        style="@style/TextRed_fe7b67.Bold"
+        style="@style/TextRed_300.Bold"
         android:id="@+id/needMoreTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

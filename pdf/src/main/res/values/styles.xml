@@ -5,19 +5,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextGrey_c0c0c0.Bold" parent="Bold">
-        <item name="android:textColor">@color/grey_c0c0c0</item>
+    <style name="TextGray_500.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_500</item>
     </style>
 
-    <style name="TextGrey_818181.Bold" parent="Bold">
-        <item name="android:textColor">@color/grey_818181</item>
+    <style name="TextGray_700.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_700</item>
     </style>
 
-    <style name="TextGrey_9f9f9f.Bold" parent="Bold">
-        <item name="android:textColor">@color/grey_9f9f9f</item>
+    <style name="TextGray_600.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_600</item>
     </style>
 
-    <style name="Border_Grey_e8e8e8_Horizontal">
+    <style name="Border_Gray_300_Horizontal">
         <item name="android:background">@color/gray_300</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>

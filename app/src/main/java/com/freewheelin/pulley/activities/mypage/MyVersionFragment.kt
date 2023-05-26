@@ -38,7 +38,7 @@ class MyVersionFragment : MyPageBaseFragment() {
             backBtn.setOnClickListener { onBackBtnClicked() }
             if(VersionManager.isNeedToUpdate() == true) {
                 currentVersionTv.typeface = Theme.bold(requireContext())
-                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
+                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_800))
                 updateBtn.text = "업데이트하기"
                 updateBtn.toEnableUI()
                 updateBtn.setOnClickListener {
@@ -46,7 +46,7 @@ class MyVersionFragment : MyPageBaseFragment() {
                 }
             } else {
                 currentVersionTv.typeface = Theme.regular(requireContext())
-                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0))
+                currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
                 updateBtn.text = "최신 버전 사용 중"
                 updateBtn.toDisableUI()
                 updateBtn.setOnClickListener {

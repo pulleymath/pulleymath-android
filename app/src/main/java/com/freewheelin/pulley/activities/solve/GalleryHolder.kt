@@ -52,12 +52,12 @@ class GalleryHolder(val itemBinding: ItemProblemGalleryBinding): RecyclerView.Vi
     }
 
     fun select() {
-        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.purple_6D6DFF))
+        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.purple_300))
         selectView.visibility = View.VISIBLE
     }
 
     fun unselect() {
-        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.grey_c0c0c0))
+        triangleView.setColorFilter(ContextCompat.getColor(itemBinding.root.context, R.color.gray_500))
         selectView.visibility = View.INVISIBLE
     }
 

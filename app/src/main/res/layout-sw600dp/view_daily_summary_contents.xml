@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="@+id/summaryTitleLabel">
 
             <TextView
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:id="@+id/dateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,12 +30,12 @@
                 app:layout_constraintVertical_chainStyle="packed"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:id="@+id/guideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:textColor="@color/black_4c4c4c"
+                android:textColor="@color/gray_800"
                 android:lineSpacingExtra="6sp"
                 android:gravity="center"
                 android:layout_marginTop="8dp"
@@ -59,7 +59,7 @@
                 app:layout_constraintVertical_chainStyle="packed">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:id="@+id/studyTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/studyTimeTv"/>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:id="@+id/percentageLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/percentageTv"/>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:id="@+id/problemCntLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/problemCntTv"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:id="@+id/studyTimeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:id="@+id/percentageTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/studyTimeTv"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:id="@+id/problemCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:id="@+id/summaryTitleLabel"
             android:layout_width="79dp"
             android:layout_height="24dp"
@@ -143,13 +143,13 @@
             android:textSize="12sp"
             android:text="오늘의 공부"
             android:gravity="center"
-            android:background="@drawable/bg_purple_6d6dff_round_40"
+            android:background="@drawable/bg_purple_300_round_40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="8sp"

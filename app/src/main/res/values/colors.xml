@@ -1,68 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Daebak STYLE GUIDE-->
-    <color name="grey_9f9f9f">#9f9f9f</color>
-    <color name="grey_cccccc">#cccccc</color>
-    <color name="grey_c0c0c0">#c0c0c0</color>
-    <color name="white_fafafa">#fafafa</color>
-    <color name="grey_f2f2f2">#F2F2F2</color>
-    <color name="grey_f0f0f0">#F0F0F0</color>
-    <color name="grey_818181">#818181</color>
-    <color name="grey_e0e0e0">#e0e0e0</color>
-    <color name="black_333333">#333333</color>
-    <color name="black_4c4c4c">#4c4c4c</color>
-
-    <color name="purple_ACACFF">#ACACFF</color>
-    <color name="purple_6D6DFF">#6D6DFF</color>
-    <color name="purple_ECEBFF">#ECEBFF</color>
-    <color name="purple_8D8Db3">#8D8Db3</color>
-    <color name="purple_6e6cff">#6E6CFF</color>
-
-    <color name="blue_ccf5ff">#ccf5ff</color>
-    <color name="blue_b9defe">#b9defe</color>
-    <color name="blue_2287ef">#2287ef</color>
-    <color name="blue_78beff">#78beff</color>
-    <color name="blue_30a4ff">#30a4ff</color>
-
-    <color name="grey_e8e8e8">#e8e8e8</color>
-    <color name="grey_3d3d3d">#3d3d3d</color>
-    <color name="yellow_ffd545">#ffd545</color>
-    <color name="yellow_fffbef">#fffbef</color>
-    <color name="yellow_f79b00">#f79b00</color>
-    <color name="yellow_fff0bc">#fff0bc</color>
-    <color name="red_ffe8e8">#ffe8e8</color>
-    <color name="yellow_ffb300">#ffb300</color>
-    <color name="red_fe7b67">#fe7b67</color>
-    <color name="red_dd2c00">#dd2c00</color>
-    <color name="red_ffc6bc">#ffc6bc</color>
-    <color name="white_ffffff">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="white_4cffffff">#4cffffff</color>
-    <color name="white_f2f2f2">#f2f2f2</color>
+    <color name="dim_white">#4cffffff</color>
     <color name="white_ccffffff">#ccffffff</color>
     <color name="white_c0ffffff">#c0ffffff</color>
     <color name="black3c_000000">#3c000000</color>
-    <color name="black4c_000000">#4c000000</color>
     <color name="black50_000000">#80000000</color>
-    <color name="blackc0_000000">#c0000000</color>
-    <color name="green_70d000">#70d000</color>
-    <color name="brown_8f5f00">#8f5f00</color>
-
 
     <color name="colorPrimary">#6E6CFF</color>
     <color name="controlHighlight">#6E6CFF</color>
-    <color name="colorPrimaryDark">@color/black_4c4c4c</color>
+    <color name="colorPrimaryDark">@color/gray_800</color>
     <color name="colorAccent">#ff766b</color>
-
-    <color name="brown_grey">#9f9f9f</color>
-    <color name="very_light_pink">#ffe8e8</color>
-    <color name="light_peach">#ffc6bc</color>
 
     <color name="dim_black_333333">#4c333333</color>
     <color name="dim_black_333333_70a">#B3333333</color>
     <color name="dim_white_ffffff">#4cffffff</color>
     <color name="dim_white_26ffffff">#B2FFFFFF</color>
 
+    <color name="gray_50">#FCFCFC</color>
     <color name="gray_100">#fafafa</color>
     <color name="gray_150">#f6f6f6</color>
     <color name="gray_150_opa_30">#4DF6F6F6</color>
@@ -72,17 +28,21 @@
     <color name="gray_500">#c0c0c0</color>
     <color name="gray_600">#9f9f9f</color>
     <color name="gray_700">#818181</color>
+    <color name="gray_750">#5E5E5E</color>
     <color name="gray_700_opa_30">#4D818181</color>
     <color name="gray_800">#4c4c4c</color>
 
     <color name="purple_100">#ecebff</color>
+    <color name="purple_150">#F0EFFF</color>
     <color name="purple_200">#acacff</color>
+    <color name="purple_250">#7E7EFF</color>
     <color name="purple_300">#6d6dff</color>
     <color name="purple_300_disable">#4c6d6dff</color>
     <color name="purple_300_disable_20">#336D6DFF</color>
 
     <color name="red_100">#ffe8e8</color>
     <color name="red_200">#ffc6bc</color>
+    <color name="red_250">#FF9B8C</color>
     <color name="red_300">#fe7b67</color>
 
     <color name="yellow_100">#fffbef</color>
@@ -95,6 +55,9 @@
     <color name="blue_200">#b9defe</color>
     <color name="blue_300">#78beff</color>
     <color name="blue_400">#30a4ff</color>
+    <color name="blue_500">#2287ef</color>
+
+    <color name="green_100">#EAF8D9</color>
     <color name="green_300">#70d000</color>
 
     <color name="black_100">#3d3d3d</color>
@@ -105,18 +68,7 @@
 
 
     <!--    주혜쌤 커스텀 컬러 -->
-    <color name="gray_750">#5E5E5E</color>
-    <color name="gray_50">#FCFCFC</color>
-
-    <color name="red_250">#FF9B8C</color>
-
-    <color name="green_100">#EAF8D9</color>
-
-    <color name="purple_250">#7E7EFF</color>
-    <color name="purple_150">#F0EFFF</color>
-
     <color name="gray_blue_100">#FAFAFE</color>
-
     <color name="blue_black_200">#4A4A66</color>
 
     <color name="purple_gray_100">#FAFAFE</color>

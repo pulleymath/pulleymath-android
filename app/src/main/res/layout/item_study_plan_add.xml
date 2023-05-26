@@ -10,7 +10,7 @@
         android:padding="2dp">
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:id="@+id/activeTag"
             android:textSize="@dimen/sp14"
             android:paddingBottom="4dp"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/cardUpdateTag"
-            style="@style/TextRed_fe7b67.ExtraBold"
+            style="@style/TextRed_300.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UPDATE"
@@ -55,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="88dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:background="@color/black_4c4c4c"
+                    android:background="@color/gray_800"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -66,14 +66,14 @@
                         android:layout_marginStart="@dimen/dp20"
                         android:layout_marginEnd="@dimen/dp20"
                         android:text="2점문항 efefefafeaefaewf"
-                        android:textColor="@color/white_ffffff"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/sp16"
                         android:lineSpacingExtra="@dimen/sp8"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/subjectTagTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/blackCl"/>
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:id="@+id/chapterTv"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -107,7 +107,7 @@
                     android:layout_marginStart="@dimen/dp24"
                     android:layout_marginEnd="@dimen/dp24"
                     android:layout_marginTop="@dimen/dp32"
-                    android:textColor="@color/grey_818181"
+                    android:textColor="@color/gray_700"
                     android:textSize="@dimen/sp14"
                     android:text="150개"
                     app:layout_constraintTop_toBottomOf="@+id/chapterTv"
@@ -142,12 +142,12 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:id="@+id/addBtn"
             android:layout_width="120dp"
             android:layout_height="36dp"
             android:layout_marginTop="@dimen/dp24"
-            android:background="@drawable/bg_yellow_ffb300_round_18"
+            android:background="@drawable/bg_yellow_300_round_18"
             android:text="추가하기"
             android:drawableLeft="@drawable/ic_plus_small"
             android:paddingStart="27dp"
@@ -159,7 +159,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/addedDateTv"
             android:layout_width="152dp"
             android:layout_height="36dp"

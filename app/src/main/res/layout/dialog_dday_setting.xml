@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_white_fafafa_round">
+    android:background="@drawable/bg_gray_100_round_ripple">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/titleLabel"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/guideLabel"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -73,7 +73,7 @@
                 android:layout_width="356dp"
                 android:layout_height="280dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                android:background="@drawable/bg_white_stroke_gray_300"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/guideLabel" />
@@ -95,7 +95,7 @@
 
                 <TextView
                     android:id="@+id/errorTv"
-                    style="@style/TextRed_fe7b67.Bold"
+                    style="@style/TextRed_300.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -106,7 +106,7 @@
 
             <TextView
                 android:id="@+id/dDayLabelPrefix"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2020년 8월 9일까지"
@@ -118,7 +118,7 @@
 
             <TextView
                 android:id="@+id/dDayTv"
-                style="@style/TextRed_fe7b67.ExtraBold"
+                style="@style/TextRed_300.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -133,7 +133,7 @@
 
             <TextView
                 android:id="@+id/dDayLabelSuffix"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="남았습니다."
@@ -146,7 +146,7 @@
 
             <!--            <TextView-->
             <!--                android:id="@+id/selectInfoTv"-->
-            <!--                style="@style/TextGrey_9f9f9f.Bold"-->
+            <!--                style="@style/TextGray_600.Bold"-->
             <!--                android:layout_width="wrap_content"-->
             <!--                android:layout_height="wrap_content"-->
             <!--                android:text="날짜를 선택해주세요."-->

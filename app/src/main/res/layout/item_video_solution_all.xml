@@ -86,9 +86,7 @@
                 android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="1dp"
                 android:onClick="@{()->listener.onItemClick(item)}"
-                android:background="@{item.isSelected ? @drawable/bg_white_ffffff_stroke_grey_e8e8e8_top_corner_ripple : @drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_ripple}">
-
-                <!--            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_ripple">-->
+                android:background="@{item.isSelected ? @drawable/bg_white_stroke_gray_300_top_corner_ripple : @drawable/bg_white_stroke_gray_300_round_ripple}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -151,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/bg_transparent_only_horizontal_stroke_grey_e8e8e8"
+                android:background="@drawable/bg_transparent_only_horizontal_stroke_gray_300"
                 android:onClick="@{()->listener.onItemClick(item)}"
                 android:clickable="true"
                 android:focusable="true"
@@ -211,7 +209,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:background="@drawable/bg_white_stroke_grey_e8e8e8_bottom_corner_ripple"/>
+                android:background="@drawable/bg_white_stroke_gray_300_bottom_corner_ripple"/>
         </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/emptyContainer"

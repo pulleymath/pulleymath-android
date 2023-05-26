@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootView"
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         android:layout_width="@dimen/dialog_note_width"
         android:layout_height="@dimen/dialog_note_height">
 
@@ -24,11 +24,11 @@
                 android:paddingTop="@dimen/dp48"
                 android:paddingStart="@dimen/dp48">
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp24"
-                    android:textColor="@color/black_4c4c4c"
+                    android:textColor="@color/gray_800"
                     android:text="과목과 문제집을 선택해주세요."
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -55,7 +55,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp328"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                    android:background="@drawable/bg_white_stroke_gray_300"
                     android:layout_marginTop="@dimen/dp24"
                     android:layout_marginBottom="@dimen/dp32"
                     app:layout_constraintTop_toBottomOf="@+id/subjectTab">
@@ -74,7 +74,7 @@
                         android:id="@+id/firstBorder"
                         android:layout_width="1dp"
                         android:layout_height="16dp"
-                        android:background="@color/grey_e8e8e8"
+                        android:background="@color/gray_300"
                         android:layout_marginStart="@dimen/dp104"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -95,7 +95,7 @@
                         android:id="@+id/thirdBorder"
                         android:layout_width="1dp"
                         android:layout_height="16dp"
-                        android:background="@color/grey_e8e8e8"
+                        android:background="@color/gray_300"
                         android:layout_marginEnd="@dimen/dp168"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -112,7 +112,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
                     <View
-                        style="@style/Border_Grey_e8e8e8_Horizontal"
+                        style="@style/Border_Gray_300_Horizontal"
                         android:id="@+id/horizontalBorder"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp14"
-                        android:textColor="@color/grey_c0c0c0"
+                        android:textColor="@color/gray_500"
                         android:lineSpacingExtra="6sp"
                         android:gravity="center_horizontal"
                         android:text="열심히 만드는 중 :)\n조금만 기다려주세요!"
@@ -174,16 +174,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/grey_c0c0c0"
+                    android:textColor="@color/gray_500"
                     android:text="선택한 문제집 : [확률과통계] 개념플러스유형-개념편"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp24"
-                    android:textColor="@color/black_4c4c4c"
+                    android:textColor="@color/gray_800"
                     android:text="더 공부하고 싶은 문제 번호를 선택해주세요. "
                     android:layout_marginTop="@dimen/dp12"
                     app:layout_constraintStart_toStartOf="parent"
@@ -207,14 +207,14 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8">
+                    android:background="@drawable/bg_white_stroke_gray_300">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp14"
-                        android:textColor="@color/black_4c4c4c"
+                        android:textColor="@color/gray_800"
                         android:text="페이지"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/pageVerticalBorder"
@@ -222,7 +222,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/pageHorizontalBorder"/>
 
                     <CheckBox
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:id="@+id/allCheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -234,7 +234,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/pageHorizontalBorder"/>
 
                     <View
-                        style="@style/Border_Grey_e8e8e8_Horizontal"
+                        style="@style/Border_Gray_300_Horizontal"
                         android:id="@+id/pageHorizontalBorder"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -247,7 +247,7 @@
                         android:id="@+id/pageVerticalBorder"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grey_e8e8e8"
+                        android:background="@color/gray_300"
                         android:layout_marginStart="@dimen/dp96"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -279,7 +279,7 @@
                     android:id="@+id/configCl"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round"
+                    android:background="@drawable/bg_gray_200_stroke_gray_300_round"
                     android:layout_marginStart="@dimen/dp24"
                     android:orientation="vertical"
                     android:layout_marginBottom="@dimen/dp40"
@@ -296,7 +296,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/typeSection">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:id="@+id/problemCntTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -309,7 +309,7 @@
 
                         <TextView
                             android:id="@+id/cntGuideTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="32dp"
@@ -324,7 +324,7 @@
                         <ImageButton
                             android:id="@+id/minusBtn"
                             android:src="@drawable/ic_minus"
-                            android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                            android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
                             android:layout_width="@dimen/dp40"
                             android:layout_height="@dimen/dp40"
                             android:layout_marginStart="12dp"
@@ -333,7 +333,7 @@
                             app:layout_constraintStart_toEndOf="@+id/cntGuideTv"/>
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.ExtraBold"
+                            style="@style/TextGray_800.ExtraBold"
                             android:id="@+id/cntTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -348,7 +348,7 @@
                         <ImageButton
                             android:id="@+id/plusBtn"
                             android:src="@drawable/ic_plus_grey"
-                            android:background="@drawable/bg_white_fafafa_grey_stroke_grey_e8e8e8_circle"
+                            android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
                             android:layout_width="@dimen/dp40"
                             android:layout_height="@dimen/dp40"
                             android:layout_marginStart="40dp"
@@ -362,7 +362,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:textSize="@dimen/sp16"
-                            android:textColor="@color/black_4c4c4c"
+                            android:textColor="@color/gray_800"
                             android:text="개씩 만들기"
                             app:layout_constraintStart_toEndOf="@+id/plusBtn"
                             app:layout_constraintTop_toTopOf="@+id/cntGuideTv"
@@ -388,7 +388,7 @@
                         android:id="@+id/firstEditBorder"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/configCl"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -396,7 +396,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1">
                         <TextView
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:id="@+id/levelTitleTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -436,7 +436,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="더 쉽게"
-                                android:textColor="@color/black_4c4c4c"
+                                android:textColor="@color/gray_800"
                                 android:textSize="@dimen/sp16" />
 
                             <RadioButton
@@ -446,7 +446,7 @@
                                 android:layout_marginStart="30dp"
                                 android:checked="true"
                                 android:text="그대로"
-                                android:textColor="@color/black_4c4c4c"
+                                android:textColor="@color/gray_800"
                                 android:textSize="@dimen/sp16" />
 
                             <RadioButton
@@ -455,7 +455,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="26dp"
                                 android:text="더 어렵게"
-                                android:textColor="@color/black_4c4c4c"
+                                android:textColor="@color/gray_800"
                                 android:textSize="@dimen/sp16" />
                         </RadioGroup>
 
@@ -479,7 +479,7 @@
                         android:id="@+id/secondEditBorder"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         app:layout_constraintTop_toBottomOf="@+id/configCl"/>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -487,7 +487,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:id="@+id/clearIncludeLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -514,7 +514,7 @@
                                 android:layout_height="wrap_content"
                                 android:checked="true"
                                 android:text="포함"
-                                android:textColor="@color/black_4c4c4c"
+                                android:textColor="@color/gray_800"
                                 android:textSize="@dimen/sp16" />
 
                             <RadioButton
@@ -523,7 +523,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="48dp"
                                 android:text="미포함"
-                                android:textColor="@color/black_4c4c4c"
+                                android:textColor="@color/gray_800"
                                 android:textSize="@dimen/sp16" />
 
                         </RadioGroup>
@@ -531,12 +531,12 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/cntPrefixLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp18"
-                    android:textColor="@color/black_4c4c4c"
+                    android:textColor="@color/gray_800"
                     android:gravity="center_horizontal"
                     android:text="해당 조건에"
                     app:layout_constraintStart_toStartOf="@+id/configCl"
@@ -546,7 +546,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 
                 <TextView
-                    style="@style/TextPurple_6d6dff.ExtraBold"
+                    style="@style/TextPurple_300.ExtraBold"
                     android:id="@+id/totalCntTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -580,14 +580,14 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        style="@style/TextRed_fe7b67.Bold"
+                        style="@style/TextRed_300.Bold"
                         android:id="@+id/cntImpossibleTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="최대 100문제까지 만들 수 있습니다."
                         android:gravity="center"
-                        android:textColor="@color/red_fe7b67"
+                        android:textColor="@color/red_300"
                         android:textSize="@dimen/sp14"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -598,12 +598,12 @@
 
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/cntSuffixLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp18"
-                    android:textColor="@color/black_4c4c4c"
+                    android:textColor="@color/gray_800"
                     android:gravity="center_horizontal"
                     android:text="개의 문제가 있습니다."
                     app:layout_constraintStart_toEndOf="@+id/totalCntTv"
@@ -623,11 +623,11 @@
             android:layout_height="@dimen/dp80"
             android:paddingStart="@dimen/dp48"
             android:paddingEnd="@dimen/dp48"
-            android:background="@drawable/bg_white_ffffff_round_bottom_only"
+            android:background="@drawable/bg_white_round_bottom_only"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/selectGuideLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -649,7 +649,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <CheckBox
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/nowCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

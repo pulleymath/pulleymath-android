@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal"
-                    android:background="@drawable/bg_white_fafafa_round"
+                    android:background="@drawable/bg_gray_100_round_ripple"
                     android:layout_marginEnd="56dp"
                     bind_cooking_selection_image="@{ vm.selectionImageUrlList }"
                     app:layout_constraintTop_toTopOf="parent"

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/clearGuideTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/problemCntTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="@dimen/dp32"
-            android:background="@drawable/bg_gray_200_stroke_grey_e8e8e8_round"
+            android:background="@drawable/bg_gray_200_stroke_gray_300_round"
             app:layout_constraintTop_toBottomOf="@+id/problemCntTv">
 
             <CheckBox
@@ -55,7 +55,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -66,7 +66,7 @@
                 app:layout_constraintStart_toEndOf="@+id/checkBox"/>
 
             <Button
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/levelOrder"
                 android:layout_width="@dimen/dp80"
                 android:layout_height="match_parent"
@@ -79,7 +79,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/levelOrder"/>
@@ -96,7 +96,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/columnView"/>
 
             <Button
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/subjectOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -113,13 +113,13 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/subjectOrder"/>
 
             <Button
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/oldOrder"
                 android:layout_width="@dimen/dp80"
                 android:layout_height="match_parent"
@@ -132,13 +132,13 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/oldOrder"/>
 
             <Button
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/recentOrder"
                 android:layout_width="@dimen/dp80"
                 android:layout_height="match_parent"
@@ -173,7 +173,7 @@
                 app:layout_constraintVertical_chainStyle="packed"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/guideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -14,14 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         android:clickable="true"
         tools:context=".activities.mypage.MySignUpInfoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -29,13 +29,13 @@
                 android:layout_height="72dp"
                 android:background="@null"
                 android:src="@drawable/ic_toolbar_back"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="개인 정보"
@@ -48,7 +48,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextGrey_c0c0c0"
+                    style="@style/TextGray_500"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"
@@ -71,13 +71,13 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     android:paddingStart="@dimen/dp24"
                     android:paddingBottom="@dimen/dp32">
 
                     <TextView
                         android:id="@+id/nameLabel"
-                        style="@style/TextGrey_c0c0c0"
+                        style="@style/TextGray_500"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp32"
@@ -88,7 +88,7 @@
 
                     <TextView
                         android:id="@+id/nameTv"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="50dp"
@@ -120,7 +120,7 @@
 
                         <TextView
                             android:id="@+id/emailLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp40"
@@ -131,7 +131,7 @@
 
                         <TextView
                             android:id="@+id/emailTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="50dp"
@@ -156,7 +156,7 @@
 
                         <TextView
                             android:id="@+id/phoneLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp40"
@@ -167,7 +167,7 @@
 
                         <TextView
                             android:id="@+id/phoneTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="50dp"
@@ -190,7 +190,7 @@
 
                         <TextView
                             android:id="@+id/parentPhoneLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp40"
@@ -201,7 +201,7 @@
 
                         <TextView
                             android:id="@+id/parentPhoneTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="90dp"
@@ -224,7 +224,7 @@
 
                         <TextView
                             android:id="@+id/resetPasswordLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp40"
@@ -235,7 +235,7 @@
 
                         <TextView
                             android:id="@+id/studentIdTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="100dp"

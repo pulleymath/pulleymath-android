@@ -12,14 +12,14 @@
             android:id="@+id/titleContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp64"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/titleTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sp18"
@@ -40,10 +40,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black_4c4c4c" />
+                app:tint="@color/gray_800" />
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

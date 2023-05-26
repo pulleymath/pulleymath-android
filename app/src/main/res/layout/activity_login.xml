@@ -48,7 +48,7 @@
 
                     <TextView
                         android:id="@+id/greetingLabel"
-                        style="@style/TextBlack_4c4c4c.Bold"
+                        style="@style/TextGray_800.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="4sp"
@@ -88,7 +88,7 @@
 
                         <TextView
                             android:id="@+id/findIdPwTv"
-                            style="@style/TextPurple_6d6dff.Bold"
+                            style="@style/TextPurple_300.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp48"
@@ -107,7 +107,7 @@
 
                         <TextView
                             android:id="@+id/signupGuideTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -118,7 +118,7 @@
 
                         <TextView
                             android:id="@+id/signupTv"
-                            style="@style/TextPurple_6d6dff.Bold"
+                            style="@style/TextPurple_300.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"

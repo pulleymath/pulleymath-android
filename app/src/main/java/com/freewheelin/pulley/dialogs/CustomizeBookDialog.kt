@@ -439,9 +439,9 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             val page = pages!!.toList()[position]
             holder.set(page.first)
             if(selectedPage == page.first) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_fafafa))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_100))
             } else {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             }
 
             val problems = page.second
@@ -455,7 +455,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
 
             holder.itemView.setOnClickListener {
                 selectedPage = page.first
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_fafafa))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_100))
                 notifyDataSetChanged()
                 problemRv.scrollTo(0,0)
                 problemRv.adapter?.notifyDataSetChanged()
@@ -515,9 +515,9 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             holder.checkbox.isChecked = checkedPageProblem.contains(problem)
 
             if(holder.checkbox.isChecked) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_fafafa))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_100))
             } else {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             }
 
             holder.checkbox.setOnCheckedChangeListener { compoundButton, isChecked ->
@@ -575,19 +575,19 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
         if (isWorkbookStartChallengeInProgress && !isUserServiceTypePremium) {
             when (cnt) {
                 0 -> {
-                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
                     cntImpossibleCl.visibility = View.INVISIBLE
                     blockCheck = false
                     actionBtn.toDisableUI()
                 }
                 in 1 .. 5 -> {
-                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                     cntImpossibleCl.visibility = View.INVISIBLE
                     blockCheck = false
                     actionBtn.toEnableUI()
                 }
                 else -> {
-                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
                     cntImpossibleCl.visibility = View.VISIBLE
                     cntImpossibleTv.text = "스타트 챌린지에서는 최대 5문제까지 만들 수 있습니다.\n범위를 다시 선택해주세요."
                     actionBtn.toDisableUI()
@@ -595,12 +595,12 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
                 }
             }
         } else if(cnt in 1 .. 100) {
-            totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+            totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
             cntImpossibleCl.visibility = View.INVISIBLE
             blockCheck = false
             actionBtn.toEnableUI()
         } else {
-            totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+            totalCntTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
             cntImpossibleTv.text = "최대 100문제까지 만들 수 있습니다."
             if(cnt == 0) {
                 cntImpossibleCl.visibility = View.INVISIBLE
@@ -629,9 +629,9 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener, Obs
             holder.set(book)
 
             if(book == selectedBook) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_fafafa))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_100))
             } else {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
             }
             holder.itemView.setOnClickListener {
                 selectedBook = book

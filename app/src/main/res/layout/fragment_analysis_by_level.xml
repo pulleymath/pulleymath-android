@@ -13,7 +13,7 @@
 
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/summaryLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintTop_toBottomOf="@+id/summaryLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -44,7 +44,7 @@
             </com.freewheelin.pulley.views.DaebakTabRadio>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/summaryGuideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:id="@+id/summaryLevelQuestionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
 
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/studyRatioByLeveLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintTop_toBottomOf="@+id/studyRatioByLeveLabel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
                 app:tabWidth="@dimen/Report_level_subject_tab_width"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/studyRatioGuideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:id="@+id/levelQuestionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                 android:layout_marginStart="8dp"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/sameRatingStudyRatioTv"
                 android:layout_width="@dimen/dp96"
                 android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/myStudyRatioTv"
                 android:layout_width="@dimen/dp96"
                 android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/upperRatingStudyRatioTv"
                 android:layout_width="@dimen/dp96"
                 android:layout_height="wrap_content"
@@ -200,14 +200,14 @@
                 android:id="@+id/highestLegend"
                 android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:background="@drawable/bg_blue_2287ef_circle"
+                android:background="@drawable/bg_blue_500_circle"
                 android:layout_marginEnd="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/sameRatingPb"
                 app:layout_constraintBottom_toBottomOf="@+id/sameRatingPb"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/highestLegendTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -222,14 +222,14 @@
                 android:id="@+id/highLegend"
                 android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:background="@drawable/bg_blue_30a4ff_circle"
+                android:background="@drawable/bg_blue_400_circle"
                 android:layout_marginEnd="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sameRatingPb"
                 app:layout_constraintBottom_toTopOf="@+id/myPb"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/highLegendTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -244,14 +244,14 @@
                 android:id="@+id/middleLegend"
                 android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:background="@drawable/bg_blue_78beff_circle"
+                android:background="@drawable/bg_blue_300_circle"
                 android:layout_marginEnd="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/myPb"
                 app:layout_constraintBottom_toBottomOf="@+id/myPb"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/middleLegendTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -266,14 +266,14 @@
                 android:id="@+id/middleLowLegend"
                 android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:background="@drawable/bg_blue_b9defe_circle"
+                android:background="@drawable/bg_blue_200_circle"
                 android:layout_marginEnd="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myPb"
                 app:layout_constraintBottom_toTopOf="@+id/upperPb"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/middleLowLegendTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -288,14 +288,14 @@
                 android:id="@+id/lowLegend"
                 android:layout_height="16dp"
                 android:layout_width="16dp"
-                android:background="@drawable/bg_blue_e1f1fe_circle"
+                android:background="@drawable/bg_blue_100_circle"
                 android:layout_marginEnd="96dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/upperPb"
                 app:layout_constraintTop_toTopOf="@+id/upperPb"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:id="@+id/lowLegendTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -347,7 +347,7 @@
 
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:id="@+id/levelEmptyGuideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

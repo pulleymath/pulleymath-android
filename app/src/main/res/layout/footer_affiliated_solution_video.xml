@@ -16,6 +16,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@drawable/bg_white_stroke_grey_e8e8e8_bottom_corner_ripple"/>
+            android:background="@drawable/bg_white_stroke_gray_300_bottom_corner_ripple"/>
     </LinearLayout>
 </layout>

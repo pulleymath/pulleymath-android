@@ -156,6 +156,6 @@ class StudyListViewHolder(val listBinding: ItemStudyListBinding): RecyclerView.V
     }
 
     fun setHighlight() {
-        listBinding.root.setBackgroundResource(R.color.yellow_fffbef)
+        listBinding.root.setBackgroundResource(R.color.yellow_100)
     }
 }

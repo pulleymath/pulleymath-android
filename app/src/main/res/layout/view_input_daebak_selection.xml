@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        style="@style/TextBlack_4c4c4c"
+        style="@style/TextGray_800"
         android:id="@+id/labelTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,20 +16,20 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <com.freewheelin.pulley.views.SelectionButton
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/btn0"
         android:layout_width="@dimen/dp96"
         android:layout_height="@dimen/dp48"
         android:layout_marginTop="8dp"
         android:textSize="@dimen/sp16"
         android:text="전체"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+        android:background="@drawable/bg_white_stroke_gray_300_round_24"
         app:layout_constraintTop_toBottomOf="@+id/labelTv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn1"/>
 
     <com.freewheelin.pulley.views.SelectionButton
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/btn1"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"
@@ -37,13 +37,13 @@
         android:layout_marginStart="8dp"
         android:textSize="@dimen/sp16"
         android:text="이차곡선"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+        android:background="@drawable/bg_white_stroke_gray_300_round_24"
         app:layout_constraintTop_toBottomOf="@+id/labelTv"
         app:layout_constraintStart_toEndOf="@+id/btn0"
         app:layout_constraintEnd_toStartOf="@+id/btn2"/>
 
     <com.freewheelin.pulley.views.SelectionButton
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/btn2"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"
@@ -52,20 +52,20 @@
         android:layout_marginEnd="8dp"
         android:textSize="@dimen/sp16"
         android:text="이차곡선"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+        android:background="@drawable/bg_white_stroke_gray_300_round_24"
         app:layout_constraintTop_toBottomOf="@+id/labelTv"
         app:layout_constraintStart_toEndOf="@+id/btn1"
         app:layout_constraintEnd_toStartOf="@+id/btn3"/>
 
     <com.freewheelin.pulley.views.SelectionButton
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/btn3"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp48"
         android:layout_marginTop="8dp"
         android:textSize="@dimen/sp16"
         android:text="이차곡선"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round_24"
+        android:background="@drawable/bg_white_stroke_gray_300_round_24"
         app:layout_constraintTop_toBottomOf="@+id/labelTv"
         app:layout_constraintStart_toEndOf="@+id/btn2"
         app:layout_constraintEnd_toEndOf="parent" />

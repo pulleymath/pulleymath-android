@@ -30,17 +30,17 @@ enum class ButtonTheme {
 
     fun getTextColor(context: Context): Int {
         return when(this) {
-            Primary_Black, Primary_Orange, Primary_Blue -> ContextCompat.getColor(context, R.color.white_ffffff)
-            Secondary_Grey -> ContextCompat.getColor(context, R.color.black_4c4c4c)
-            Secondary_Blue -> ContextCompat.getColor(context, R.color.purple_6D6DFF)
+            Primary_Black, Primary_Orange, Primary_Blue -> ContextCompat.getColor(context, R.color.white)
+            Secondary_Grey -> ContextCompat.getColor(context, R.color.gray_800)
+            Secondary_Blue -> ContextCompat.getColor(context, R.color.purple_300)
         }
     }
 
     fun getBgDrawable(context: Context): Drawable {
         return when(this) {
-            Primary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round)!!
-            Primary_Black -> ContextCompat.getDrawable(context, R.drawable.bg_black_4c4c4c_round)!!
-            Primary_Orange -> ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)!!
+            Primary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_ripple)!!
+            Primary_Black -> ContextCompat.getDrawable(context, R.drawable.bg_gray_800_round)!!
+            Primary_Orange -> ContextCompat.getDrawable(context, R.drawable.bg_yellow_300_round)!!
             Secondary_Blue -> ContextCompat.getDrawable(context, R.drawable.bg_purple_100_round_ripple)!!
             Secondary_Grey -> ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)!!
         }
@@ -197,18 +197,18 @@ open class PrimaryButton: ConstraintLayout {
         when(screenTheme) {
             ScreenTheme.Bright -> {
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.white))
-                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_non_ripple)
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_non_ripple)
             }
 
             ScreenTheme.BrightOutside -> {
-                buttonText.setTextColor(ContextCompat.getColor(context, R.color.white_4cffffff))
-                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_non_ripple)
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.dim_white))
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_non_ripple)
             }
 
             ScreenTheme.Dark -> {
-//                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-                buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-                button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
+//                button.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_black_100_round)
             }
         }
     }
@@ -218,15 +218,15 @@ open class PrimaryButton: ConstraintLayout {
 //        button.typeface = Theme.bold(context)
         when(screenTheme) {
             ScreenTheme.Bright, ScreenTheme.BrightOutside -> {
-//                button.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+//                button.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                 buttonText.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                 button.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_100_round_ripple)!!
             }
 
             ScreenTheme.Dark -> {
-//                button.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-                buttonText.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-                button.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_round)
+//                button.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+                buttonText.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+                button.background = ContextCompat.getDrawable(context, R.drawable.bg_black_100_round)
             }
         }
     }

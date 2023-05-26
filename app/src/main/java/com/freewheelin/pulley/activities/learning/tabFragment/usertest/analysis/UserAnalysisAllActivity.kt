@@ -255,7 +255,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
 
             if (dialog.from.plusDays(dialog.period) > LocalDate.now()) {
                 nextBtn.isEnabled = false
-                nextBtn.setColorFilter(ContextCompat.getColor(this@UserAnalysisAllActivity, R.color.grey_c0c0c0))
+                nextBtn.setColorFilter(ContextCompat.getColor(this@UserAnalysisAllActivity, R.color.gray_500))
             } else {
                 nextBtn.isEnabled = true
                 nextBtn.clearColorFilter()
@@ -269,7 +269,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
         Tutor.TooltipType.analysisMain.addShowingCnt()
 
         val window = BalloonWindow(this, binding.myAnalysisGuideBtn, BalloonWindow.Position.below, 16.toPx())
-        window.balloonColor = ContextCompat.getColor(this, R.color.purple_ACACFF)
+        window.balloonColor = ContextCompat.getColor(this, R.color.purple_200)
         window.offset = -100
         window.setPadding(32.toPx(), 32.toPx(), 32.toPx(), 32.toPx());
         val tooltipBinding: TooltipAnalysisBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.tooltip_analysis, null, false)
@@ -292,9 +292,9 @@ class AnalysisTabView: ConstraintLayout {
         super.setSelected(selected)
 
         if(selected)
-            binding.tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+            binding.tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
         else
-            binding.tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            binding.tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
     }
 }
 

@@ -235,14 +235,14 @@ class AnalysisFragment : LearningTabFragment(),
                     timeCompareTv.setDiffTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.grey_9f9f9f
+                            R.color.gray_600
                         )
                     )
                 } else {
                     timeCompareTv.setDiffTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.blue_2287ef
+                            R.color.blue_500
                         )
                     )
                 }
@@ -322,14 +322,14 @@ class AnalysisFragment : LearningTabFragment(),
         chart.axisLeft.setDrawGridLines(true)
         chart.axisLeft.labelCount = 3
         chart.axisLeft.axisMinimum = 0f
-        chart.axisLeft.gridColor = ContextCompat.getColor(requireContext(), R.color.grey_e8e8e8)
-        chart.axisLeft.textColor = ContextCompat.getColor(requireContext(), R.color.grey_c0c0c0)
+        chart.axisLeft.gridColor = ContextCompat.getColor(requireContext(), R.color.gray_300)
+        chart.axisLeft.textColor = ContextCompat.getColor(requireContext(), R.color.gray_500)
         chart.axisLeft.textSize = 14f
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.axisLineColor = Color.TRANSPARENT
         chart.xAxis.textSize = resources.getDimension(R.dimen.sp14).pxToSp()
         chart.xAxis.typeface = Theme.bold(requireContext())
-        chart.xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.grey_9f9f9f)
+        chart.xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.gray_600)
         chart.xAxis.setDrawAxisLine(true)
         chart.xAxis.setDrawGridLines(false)
         chart.xAxis.setValueFormatter { value, axis ->
@@ -360,7 +360,7 @@ class AnalysisFragment : LearningTabFragment(),
             isHighlightEnabled = false
             setDrawValues(false)
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
-            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_ACACFF))
+            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
             setValueTypeface(Theme.bold(requireContext()))
         }
         binding.apply {
@@ -390,22 +390,22 @@ class AnalysisFragment : LearningTabFragment(),
         binding.timeCountChart.axisLeft.axisMinimum = 0f
         binding.timeCountChart.axisLeft.axisMaximum = maxOf(100f, barDataSet.yMax)
         val colors = mutableListOf(
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0),
-                ContextCompat.getColor(requireContext(), R.color.grey_e0e0e0)
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400),
+                ContextCompat.getColor(requireContext(), R.color.gray_400)
         )
         when(Date().dayOfWeek()) {
-            Calendar.MONDAY -> colors[0] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.TUESDAY -> colors[1] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.WEDNESDAY -> colors[2] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.THURSDAY -> colors[3] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.FRIDAY -> colors[4] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.SATURDAY -> colors[5] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
-            Calendar.SUNDAY -> colors[6] = ContextCompat.getColor(requireContext(), R.color.blue_b9defe)
+            Calendar.MONDAY -> colors[0] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.TUESDAY -> colors[1] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.WEDNESDAY -> colors[2] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.THURSDAY -> colors[3] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.FRIDAY -> colors[4] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.SATURDAY -> colors[5] = ContextCompat.getColor(requireContext(), R.color.blue_200)
+            Calendar.SUNDAY -> colors[6] = ContextCompat.getColor(requireContext(), R.color.blue_200)
         }
 
         barDataSet.colors = colors
@@ -415,7 +415,7 @@ class AnalysisFragment : LearningTabFragment(),
             isHighlightEnabled = false
             setDrawValues(false)
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
-            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_ACACFF))
+            setValueTextColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
             setValueTypeface(Theme.bold(requireContext()))
         }
 

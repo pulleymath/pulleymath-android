@@ -15,31 +15,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         android:clickable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff">
-
+            android:background="@color/white">
             <ImageButton
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_toolbar_back"
-                android:paddingTop="@dimen/dp32"
-                android:paddingStart="@dimen/dp32"
+                android:src="@drawable/ic_arrow_l1_left"
+                android:paddingStart="20dp"
                 android:paddingEnd="@dimen/dp32"
-                android:paddingBottom="@dimen/dp24"
+                android:paddingTop="20dp"
+                android:paddingBottom="18dp"
                 android:background="@null"
-                app:tint="@color/black_4c4c4c"
+                app:tint="@color/gray_800"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -53,7 +52,7 @@
 
                 <TextView
                     android:id="@+id/titleLabel"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"

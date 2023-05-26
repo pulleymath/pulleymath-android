@@ -20,7 +20,7 @@ class DarkImageButton: ImageButton {
        }
 
     init {
-        this.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_stroke_black_4c4c4c_round_18)
+        this.background = ContextCompat.getDrawable(context, R.drawable.bg_black_100_stroke_gray_800_round_18)
     }
 
     override fun setSelected(selected: Boolean) {
@@ -32,16 +32,16 @@ class DarkImageButton: ImageButton {
         when(theme) {
             ScreenTheme.Bright, ScreenTheme.BrightOutside-> {
                 if(isSelected) {
-                    return ContextCompat.getDrawable(context, R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_18)
+                    return ContextCompat.getDrawable(context, R.drawable.bg_purple_100_stroke_purple_200_round_18)
                 } else  {
-                    return ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_18)
+                    return ContextCompat.getDrawable(context, R.drawable.bg_gray_100_stroke_gray_300_round_18)
                 }
             }
             ScreenTheme.Dark -> {
                 if(isSelected) {
-                    return ContextCompat.getDrawable(context, R.drawable.bg_purple_acacff_round_18)
+                    return ContextCompat.getDrawable(context, R.drawable.bg_purple_200_round_18)
                 } else  {
-                    return ContextCompat.getDrawable(context, R.drawable.bg_grey_3d3d3d_stroke_black_4c4c4c_round_18)
+                    return ContextCompat.getDrawable(context, R.drawable.bg_black_100_stroke_gray_800_round_18)
                 }
             }
         }

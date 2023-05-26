@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/leftTitle"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/leftSubTitle"
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/rightTitle"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/rightSubTitle"
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1등급 평균 70%"
@@ -59,7 +59,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            app:backgroundColor="@color/grey_f2f2f2"
+            app:backgroundColor="@color/gray_200"
             app:cardCornerRadius="2dp"
             app:layout_constraintBottom_toTopOf="@+id/subBar"
             app:layout_constraintEnd_toStartOf="@+id/rightTitle"
@@ -75,14 +75,14 @@
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
-            app:backgroundColor="@color/grey_f2f2f2"
+            app:backgroundColor="@color/gray_200"
             app:cardCornerRadius="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/mainBar"
             app:layout_constraintStart_toStartOf="@+id/mainBar"
             app:layout_constraintTop_toBottomOf="@+id/mainBar"
-            app:progressColor="@color/grey_e0e0e0"
-            app:completeColor="@color/grey_e0e0e0"
+            app:progressColor="@color/gray_400"
+            app:completeColor="@color/gray_400"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

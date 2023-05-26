@@ -19,7 +19,7 @@
         android:id="@+id/pencilOptionLl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round"
+        android:background="@drawable/bg_gray_100_stroke_gray_300_round"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
@@ -82,7 +82,7 @@
                 android:scaleType="center"/>
 
         </LinearLayout>
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -153,7 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"
-                    android:background="@drawable/bg_grey_818181_circle">
+                    android:background="@drawable/bg_gray_700_circle">
 
                     <ImageView
                         android:id="@+id/blackCheck"
@@ -184,7 +184,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"
-                    android:background="@drawable/bg_red_fe7b67_circle">
+                    android:background="@drawable/bg_red_300_circle">
 
                     <ImageView
                         android:id="@+id/redCheck"
@@ -216,7 +216,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"
-                    android:background="@drawable/bg_yellow_f79b00_circle">
+                    android:background="@drawable/bg_yellow_400_circle">
                     <ImageView
                         android:id="@+id/yellowCheck"
                         android:layout_width="wrap_content"
@@ -245,7 +245,7 @@
                     android:id="@+id/colorOption3Container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_green_70d000_circle"
+                    android:background="@drawable/bg_green_300_circle"
                     android:padding="2dp">
                     <ImageView
                         android:id="@+id/greenCheck"
@@ -262,7 +262,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"/>
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

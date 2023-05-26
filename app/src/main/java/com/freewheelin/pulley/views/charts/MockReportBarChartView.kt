@@ -31,9 +31,9 @@ class MockReportBarChartView: LinearLayout {
 
     fun setMainColorWithPercent(percent:Int) {
         val colorId = when {
-            percent <= 29 -> R.color.red_fe7b67
-            percent >= 70 -> R.color.blue_78beff
-            else -> R.color.yellow_ffd545
+            percent <= 29 -> R.color.red_300
+            percent >= 70 -> R.color.blue_300
+            else -> R.color.yellow_200
         }
         binding.mainBar.progressColor = ContextCompat.getColor(context, colorId)
         binding.mainBar.completeColor = ContextCompat.getColor(context, colorId)

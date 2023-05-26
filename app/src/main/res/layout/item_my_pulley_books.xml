@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_ffffff"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -18,7 +18,7 @@
 
             <TextView
                 android:id="@+id/prodNameLabel"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -26,7 +26,7 @@
                 android:textSize="@dimen/sp16" />
             <TextView
                 android:id="@+id/prodNameTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="풀리수학+"
@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/publisherLabel"
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -50,7 +50,7 @@
 
             <TextView
                 android:id="@+id/publisherTv"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="진학사"

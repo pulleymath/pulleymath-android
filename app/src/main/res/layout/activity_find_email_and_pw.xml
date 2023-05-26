@@ -11,11 +11,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="@+id/tabLayout"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             android:layout_height="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,10 +32,10 @@
             app:tabGravity="center"
             app:tabMode="fixed"
             app:tabIndicatorHeight="2dp"
-            app:tabIndicatorColor="@color/purple_6D6DFF"
+            app:tabIndicatorColor="@color/purple_300"
             app:tabMaxWidth="0dp"
-            app:tabTextColor="@color/black_4c4c4c"
-            app:tabSelectedTextColor="@color/purple_6D6DFF"
+            app:tabTextColor="@color/gray_800"
+            app:tabSelectedTextColor="@color/purple_300"
             app:tabTextAppearance="@style/tab_text">
 
         </com.google.android.material.tabs.TabLayout>
@@ -47,7 +47,7 @@
             android:layout_height="0dp"
             android:background="@null"
             android:src="@drawable/ic_toolbar_back"
-            app:tint="@color/black_4c4c4c"
+            app:tint="@color/gray_800"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tabLayout" />

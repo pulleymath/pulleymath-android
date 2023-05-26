@@ -29,13 +29,13 @@ class WeeklyTestSelectorView : TestSelectorView {
     override fun setTestUI(test: Test) {
         if (test.isCompleted()) {
             titleTv.text = "주간 테스트 완료"
-            titleTv.setTextColor(ContextCompat.getColor(context, R.color.green_70d000))
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.green_300))
             guideTv.text = "다음 주간 테스트는\n" +
                     "토요일 오전 6시에 공개됩니다 :)"
             needMoreTv.visibility = View.INVISIBLE
         } else {
             titleTv.text = "주간 테스트"
-            titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
             guideTv.text = "이번 주 공부한 내용을 점검할 시간!\n" +
                     "토-일, 주말에만 응시가능합니다."
             needMoreTv.visibility = View.INVISIBLE
@@ -47,15 +47,15 @@ class WeeklyTestSelectorView : TestSelectorView {
     }
 
     override fun toEnableUI() {
-        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_yellow_ffb300_round)
-        titleTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
-        guideTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_yellow_300_round)
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
     }
 
     override fun toDisableUI() {
-        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round)
-        titleTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
-        guideTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+        tagTv.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_400_round)
+        titleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
+        guideTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
         guideTv.text = "다음 주간 테스트는\n토요일 오전 6시에 공개됩니다 :)"
     }
 }

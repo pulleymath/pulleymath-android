@@ -59,7 +59,7 @@
 
             <TextView
                 android:id="@+id/errorTv"
-                style="@style/TextRed_fe7b67.Bold"
+                style="@style/TextRed_300.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"

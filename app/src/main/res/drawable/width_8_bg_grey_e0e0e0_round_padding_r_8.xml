@@ -1,5 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item  android:right="8dp"
-        android:width="8dp" android:drawable="@drawable/bg_grey_e0e0e0_round"></item>
+        android:width="8dp" android:drawable="@drawable/bg_gray_400_round"></item>
 </layer-list>

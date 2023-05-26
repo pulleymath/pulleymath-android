@@ -84,27 +84,27 @@ class OneBarChart(context: Context, attrs: AttributeSet) : RecyclerView(context,
 
         private fun getProperBarColor(value: Int): Int {
             return if(!isHighlightMaxAndMin)
-                ContextCompat.getColor(context, R.color.grey_e0e0e0)
+                ContextCompat.getColor(context, R.color.gray_400)
             else {
                 if(max == value && itemCount > 1)
-                    ContextCompat.getColor(context, R.color.blue_30a4ff)
+                    ContextCompat.getColor(context, R.color.blue_400)
                 else if(min == value && itemCount > 1)
-                    ContextCompat.getColor(context, R.color.red_fe7b67)
+                    ContextCompat.getColor(context, R.color.red_300)
                 else
-                    ContextCompat.getColor(context, R.color.grey_e0e0e0)
+                    ContextCompat.getColor(context, R.color.gray_400)
             }
         }
 
         private fun getProperTextColor(value: Int): Int {
             return if(!isHighlightMaxAndMin)
-                ContextCompat.getColor(context, R.color.black_4c4c4c)
+                ContextCompat.getColor(context, R.color.gray_800)
             else {
                 if(max == value && itemCount != 1)
-                    ContextCompat.getColor(context, R.color.blue_30a4ff)
+                    ContextCompat.getColor(context, R.color.blue_400)
                 else if(min == value && itemCount != 1)
-                    ContextCompat.getColor(context, R.color.red_fe7b67)
+                    ContextCompat.getColor(context, R.color.red_300)
                 else
-                    ContextCompat.getColor(context, R.color.black_4c4c4c)
+                    ContextCompat.getColor(context, R.color.gray_800)
             }
         }
 

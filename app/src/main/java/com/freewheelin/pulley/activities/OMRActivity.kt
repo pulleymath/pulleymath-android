@@ -58,7 +58,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
     }
 
     override val backTintColor: Int
-        get() = ContextCompat.getColor(this, R.color.black_4c4c4c)
+        get() = ContextCompat.getColor(this, R.color.gray_800)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

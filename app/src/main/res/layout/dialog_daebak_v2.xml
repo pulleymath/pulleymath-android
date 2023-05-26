@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         android:minWidth="330dp"
         android:padding="24dp">
 
@@ -48,7 +48,7 @@
 
             <Button
                 android:id="@+id/leftBtn"
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
@@ -60,8 +60,8 @@
 
             <Button
                 android:id="@+id/rightBtn"
-                style="@style/TextWhite_ffffff.ExtraBold"
-                android:background="@drawable/bg_purple_6d6dff_round"
+                style="@style/TextWhite.ExtraBold"
+                android:background="@drawable/bg_purple_300_round_ripple"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:paddingStart="12dp"

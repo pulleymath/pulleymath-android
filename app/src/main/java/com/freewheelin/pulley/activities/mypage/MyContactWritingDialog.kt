@@ -41,9 +41,9 @@ class MyContactWritingDialog(context: Context, val user: User): Dialog(context),
 
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         if(hasFocus)
-            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
         else {
-            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+            binding.contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
         }
     }
 
@@ -104,17 +104,17 @@ class MyContactWritingDialog(context: Context, val user: User): Dialog(context),
                 if(contentsEt.text.trim().isEmpty()) {
                     contentsErrorLl.visibility = View.VISIBLE
                     contentsErrorTv.text = "내용을 입력해주세요."
-                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_red_300)
                 } else if (contentsEt.text.trim().length < 10) {
                     contentsErrorLl.visibility = View.VISIBLE
                     contentsErrorTv.text = "내용을 10자 이상 입력해주세요."
-                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                    contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_red_300)
                 } else {
                     contentsErrorLl.visibility = View.GONE
                     if(contentsEt.isFocused)
-                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
                     else
-                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                        contentsEt.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
 
                 }
             } else {

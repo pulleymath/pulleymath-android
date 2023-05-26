@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        style="@style/TextGrey_c0c0c0"
+        style="@style/TextGray_500"
         android:id="@+id/firstLabelTv"
         android:layout_width="@dimen/dp90"
         android:layout_height="24dp"
@@ -19,17 +19,17 @@
         android:id="@+id/firstPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
-        app:progressColor="@color/grey_e0e0e0"
-        app:valueLabelColor="@color/grey_c0c0c0"
+        app:progressColor="@color/gray_400"
+        app:valueLabelColor="@color/gray_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/firstLabelTv"
         app:layout_constraintBottom_toBottomOf="@+id/firstLabelTv"
         app:layout_constraintStart_toEndOf="@+id/firstLabelTv">
-<!--        app:valueLabelColor="@color/grey_c0c0c0"-->
+<!--        app:valueLabelColor="@color/gray_500"-->
     </com.freewheelin.pulley.views.bars.PenBar_R>
 
     <TextView
-        style="@style/TextBlack_4c4c4c"
+        style="@style/TextGray_800"
         android:id="@+id/secondLabelTv"
         android:layout_width="@dimen/dp90"
         android:layout_height="24dp"
@@ -44,7 +44,7 @@
         android:id="@+id/secondPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
-        app:progressColor="@color/grey_e0e0e0"
+        app:progressColor="@color/gray_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/secondLabelTv"
         app:layout_constraintBottom_toBottomOf="@+id/secondLabelTv"
@@ -53,7 +53,7 @@
     </com.freewheelin.pulley.views.bars.PenBar_R>
 
     <TextView
-        style="@style/TextGrey_c0c0c0"
+        style="@style/TextGray_500"
         android:id="@+id/thirdLabelTv"
         android:layout_width="@dimen/dp90"
         android:layout_height="24dp"
@@ -68,14 +68,14 @@
         android:id="@+id/thirdPen"
         android:layout_width="0dp"
         android:layout_height="24dp"
-        app:progressColor="@color/grey_e0e0e0"
+        app:progressColor="@color/gray_400"
         app:layout_constraintEnd_toEndOf="parent"
-        app:valueLabelColor="@color/grey_c0c0c0"
+        app:valueLabelColor="@color/gray_500"
         app:layout_constraintTop_toTopOf="@+id/thirdLabelTv"
         app:layout_constraintBottom_toBottomOf="@+id/thirdLabelTv"
         app:layout_constraintStart_toEndOf="@+id/thirdLabelTv">
 
-<!--        app:valueLabelColor="@color/grey_c0c0c0"-->
+<!--        app:valueLabelColor="@color/gray_500"-->
     </com.freewheelin.pulley.views.bars.PenBar_R>
 
 </merge>

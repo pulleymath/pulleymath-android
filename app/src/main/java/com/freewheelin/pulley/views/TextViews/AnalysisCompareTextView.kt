@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.TextviewAnalysisCompareBinding
+import io.channel.plugin.android.extension.setTint
 
 class AnalysisCompareTextView: LinearLayout {
     constructor(context: Context): super(context)
@@ -21,15 +22,16 @@ class AnalysisCompareTextView: LinearLayout {
             field = value
             when(field) {
                 UpDownTextView.Change.increase -> {
-                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.blue_2287ef))
+                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.blue_500))
                     binding.changeIv.setImageResource(R.drawable.ic_up_blue)
                 }
                 UpDownTextView.Change.decrease -> {
-                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.red_fe7b67))
-                    binding.changeIv.setImageResource(R.drawable.ic_down_red)
+                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.red_300))
+                    binding.changeIv.setImageResource(R.drawable.ic_arrow_sortable_bottom)
+                    binding.changeIv.setTint(ContextCompat.getColor(context!!, R.color.red_300))
                 }
                 UpDownTextView.Change.noChange -> {
-                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.grey_9f9f9f))
+                    setDiffTextColor(ContextCompat.getColor(context!!, R.color.gray_600))
                     binding.changeIv.setImageDrawable(null)
                 }
             }

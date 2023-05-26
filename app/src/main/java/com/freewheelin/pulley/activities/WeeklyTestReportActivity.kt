@@ -147,7 +147,7 @@ class WeeklyTestReportActivity : AppCompatActivity() {
         chart.xAxis.axisLineColor = Color.TRANSPARENT
         chart.xAxis.textSize = resources.getDimension(R.dimen.sp14).pxToSp()
         chart.xAxis.typeface = Theme.bold(this)
-        chart.xAxis.textColor = ContextCompat.getColor(this, R.color.grey_9f9f9f)
+        chart.xAxis.textColor = ContextCompat.getColor(this, R.color.gray_600)
         chart.xAxis.setDrawAxisLine(false)
         chart.xAxis.setDrawGridLines(false)
         chart.xAxis.setValueFormatter { value, axis ->
@@ -180,18 +180,18 @@ class WeeklyTestReportActivity : AppCompatActivity() {
 
         val barDataSet = BarDataSet(entry, "점수")
         barDataSet.colors = listOf(
-                ContextCompat.getColor(this, R.color.purple_ECEBFF),
-                ContextCompat.getColor(this, R.color.purple_ECEBFF),
-                ContextCompat.getColor(this, R.color.purple_ECEBFF),
-                ContextCompat.getColor(this, R.color.purple_ECEBFF),
-                ContextCompat.getColor(this, R.color.purple_ACACFF)
+                ContextCompat.getColor(this, R.color.purple_100),
+                ContextCompat.getColor(this, R.color.purple_100),
+                ContextCompat.getColor(this, R.color.purple_100),
+                ContextCompat.getColor(this, R.color.purple_100),
+                ContextCompat.getColor(this, R.color.purple_200)
         )
 
         binding.historyChart.data = BarData(barDataSet).apply {
             barWidth = 0.5f
             isHighlightEnabled = false
             setValueTextSize(resources.getDimension(R.dimen.sp14).pxToSp())
-            setValueTextColor(ContextCompat.getColor(this@WeeklyTestReportActivity, R.color.purple_ACACFF))
+            setValueTextColor(ContextCompat.getColor(this@WeeklyTestReportActivity, R.color.purple_200))
             setValueTypeface(Theme.bold(this@WeeklyTestReportActivity))
             setValueFormatter{ value, entry, index, handler ->
                 val value = test.testHistory.reversed()[entry.x.toInt()].score

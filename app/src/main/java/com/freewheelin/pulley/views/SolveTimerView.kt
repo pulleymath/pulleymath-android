@@ -59,7 +59,7 @@ class SolveTimerView : ConstraintLayout {
     var listenerSolve: SolveTimerViewListener? = null
     val checkedTextColor: Int
         get() {
-            return ContextCompat.getColor(context, R.color.purple_6D6DFF)
+            return ContextCompat.getColor(context, R.color.purple_300)
         }
 
     var submitType = SubmitType.strict

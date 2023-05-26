@@ -6,11 +6,11 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0_round">
+        android:background="@drawable/bg_white_stroke_gray_500_round">
 
         <TextView
             android:id="@+id/bigTv"
-            style="@style/TextGrey_c0c0c0.ExtraBold"
+            style="@style/TextGray_500.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/smallTv"
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/guideLabel"
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -61,7 +61,7 @@
 
         <TextView
             android:id="@+id/onlyTv"
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

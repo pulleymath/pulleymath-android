@@ -7,19 +7,19 @@
         android:layout_width="960dp"
         android:layout_height="600dp"
         android:focusableInTouchMode="true"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topContainerCl"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="@drawable/bg_white_ffffff_round_top_only"
+            android:background="@drawable/bg_white_round_top_only"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -39,7 +39,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            <View style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,7 +88,7 @@
                         app:layout_constraintStart_toEndOf="@+id/categorySpinner"/>
 
                     <TextView
-                        style="@style/TextRed_fe7b67.Bold"
+                        style="@style/TextRed_300.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
@@ -107,7 +107,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/categorySpinner"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c"
+                    style="@style/TextGray_800"
                     android:id="@+id/contentsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
 
 
                 <EditText
-                    style="@style/TextBlack_4c4c4c"
+                    style="@style/TextGray_800"
                     android:id="@+id/contentsEt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -131,9 +131,9 @@
                     android:padding="16dp"
                     android:gravity="top"
                     android:textSize="16sp"
-                    android:textColorHint="@color/grey_c0c0c0"
+                    android:textColorHint="@color/gray_500"
                     android:hint="문의 내역을 입력해주세요.(10자 이상)\n최대한 빠르게 답변드릴게요 :)"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                    android:background="@drawable/bg_white_stroke_gray_500"
                     app:layout_constraintTop_toBottomOf="@+id/contentsLabel"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -159,7 +159,7 @@
                         app:layout_constraintStart_toEndOf="@+id/categorySpinner"/>
 
                     <TextView
-                        style="@style/TextRed_fe7b67.Bold"
+                        style="@style/TextRed_300.Bold"
                         android:id="@+id/contentsErrorTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

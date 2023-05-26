@@ -44,7 +44,7 @@ class PolicyLayoutV2: ConstraintLayout, View.OnClickListener {
                 }
                 Optional -> {
                     binding.essentialOptionalText.text = "[선택]"
-                    binding.essentialOptionalText.setTextColor(ContextCompat.getColor(context, R.color.grey_9f9f9f))
+                    binding.essentialOptionalText.setTextColor(ContextCompat.getColor(context, R.color.gray_600))
                 }
             }
 

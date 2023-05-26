@@ -6,14 +6,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_fafafa"
+        android:background="@color/gray_100"
         tools:context=".activities.learning.tabFragment.MyLogFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bgView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             android:layout_margin="@dimen/dp32"
             android:padding="@dimen/dp32"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +76,7 @@
                 android:id="@+id/firstBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginStart="@dimen/dp104"
                 app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
                 app:layout_constraintStart_toEndOf="@+id/allCheckBox"
@@ -96,7 +96,7 @@
                 android:id="@+id/secondBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginStart="@dimen/dp80"
                 app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
                 app:layout_constraintStart_toEndOf="@+id/firstBorder"
@@ -116,7 +116,7 @@
                 android:id="@+id/titleBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginEnd="@dimen/dp80"
                 app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
                 app:layout_constraintTop_toTopOf="@+id/allCheckBox"
@@ -136,7 +136,7 @@
                 android:id="@+id/thirdBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginEnd="@dimen/dp80"
                 app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
                 app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
@@ -156,7 +156,7 @@
                 android:id="@+id/fourthBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginEnd="@dimen/dp80"
                 app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
                 app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
@@ -176,14 +176,14 @@
                 android:id="@+id/fifthBorder"
                 android:layout_width="1dp"
                 android:layout_height="16dp"
-                android:background="@color/grey_e8e8e8"
+                android:background="@color/gray_300"
                 android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
                 app:layout_constraintBottom_toBottomOf="@+id/allCheckBox"
                 app:layout_constraintEnd_toEndOf="@+id/bgView"
                 app:layout_constraintTop_toTopOf="@+id/allCheckBox" />
             <View
                 android:id="@+id/horizontalBorder"
-                android:background="@color/grey_f2f2f2"
+                android:background="@color/gray_200"
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"
@@ -204,7 +204,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/emptyGuideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

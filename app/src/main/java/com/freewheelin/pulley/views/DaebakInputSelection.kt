@@ -111,12 +111,12 @@ class SelectionButton: androidx.appcompat.widget.AppCompatButton {
         super.setSelected(selected)
         if(isSelected) {
             typeface = Theme.extraBold(context)
-            setTextColor(ContextCompat.getColor(context,R.color.purple_6D6DFF))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_24)
+            setTextColor(ContextCompat.getColor(context,R.color.purple_300))
+            background = ContextCompat.getDrawable(context, R.drawable.bg_purple_100_stroke_purple_200_round_24)
         } else {
             typeface = Theme.bold(context)
-            setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_24)
+            setTextColor(ContextCompat.getColor(context,R.color.gray_800))
+            background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_300_round_24)
         }
     }
 }

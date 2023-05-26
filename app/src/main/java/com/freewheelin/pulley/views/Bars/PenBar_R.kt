@@ -13,14 +13,14 @@ import com.freewheelin.pulley.utils.toPx
 class PenBar_R(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
 
-    var progressColor: Int = ContextCompat.getColor(context, R.color.grey_e0e0e0)
+    var progressColor: Int = ContextCompat.getColor(context, R.color.gray_400)
         set(value) {
             field = value
             invalidate()
         }
 
 
-    var bgColor: Int = ContextCompat.getColor(context, R.color.grey_f2f2f2)
+    var bgColor: Int = ContextCompat.getColor(context, R.color.gray_200)
         set(value) {
             field = value
             invalidate()
@@ -33,7 +33,7 @@ class PenBar_R(context: Context, attrs: AttributeSet) : View(context, attrs) {
             invalidate()
         }
 
-    var textColor: Int = ContextCompat.getColor(context, R.color.black_4c4c4c)
+    var textColor: Int = ContextCompat.getColor(context, R.color.gray_800)
         set(value) {
             field = value
             invalidate()

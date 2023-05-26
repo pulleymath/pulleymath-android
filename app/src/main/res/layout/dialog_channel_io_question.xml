@@ -16,7 +16,7 @@
             android:id="@+id/topContainerCl"
             android:layout_width="500dp"
             android:layout_height="64dp"
-            android:background="@drawable/bg_white_ffffff_round_top_only">
+            android:background="@drawable/bg_white_round_top_only">
 
             <TextView
                 style="@style/h3"
@@ -39,7 +39,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -52,7 +52,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_white_ffffff_round_bottom_only">
+                android:background="@drawable/bg_white_round_bottom_only">
 
 
                 <LinearLayout

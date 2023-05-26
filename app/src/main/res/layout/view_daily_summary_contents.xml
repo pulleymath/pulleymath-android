@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/dateTv"
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2020.07.21"
@@ -34,7 +34,7 @@
 
             <TextView
                 android:id="@+id/guideTv"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -42,7 +42,7 @@
                 android:lineSpacingExtra="6sp"
                 android:maxLines="2"
                 android:text="나란 녀석... (코쓱)"
-                android:textColor="@color/black_4c4c4c"
+                android:textColor="@color/gray_800"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/mainContainerCl"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
 
                 <TextView
                     android:id="@+id/studyTimeLabel"
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -75,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/percentageLabel"
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -87,7 +87,7 @@
 
                 <TextView
                     android:id="@+id/problemCntLabel"
-                    style="@style/TextGrey_c0c0c0.ExtraBold"
+                    style="@style/TextGray_500.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
@@ -99,7 +99,7 @@
 
                 <TextView
                     android:id="@+id/studyTimeTv"
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="01:01"
@@ -111,7 +111,7 @@
 
                 <TextView
                     android:id="@+id/percentageTv"
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
@@ -124,7 +124,7 @@
 
                 <TextView
                     android:id="@+id/problemCntTv"
-                    style="@style/TextBlack_4c4c4c.ExtraBold"
+                    style="@style/TextGray_800.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
@@ -138,7 +138,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:id="@+id/summaryTitleLabel"
             android:layout_width="79dp"
             android:layout_height="24dp"
@@ -146,14 +146,14 @@
             android:textSize="12sp"
             android:text="오늘의 공부"
             android:gravity="center"
-            android:background="@drawable/bg_purple_6d6dff_round_40"
+            android:background="@drawable/bg_purple_300_round_40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/textView5"
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

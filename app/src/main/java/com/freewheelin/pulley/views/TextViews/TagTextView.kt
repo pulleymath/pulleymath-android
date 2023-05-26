@@ -14,7 +14,7 @@ class TagTextView: TextView {
         setPadding(8.toPx(), 4.toPx(), 8.toPx(), 4.toPx())
         background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        setTextColor(ContextCompat.getColor(context, R.color.grey_9f9f9f))
+        setTextColor(ContextCompat.getColor(context, R.color.gray_600))
         text = title
     }
 }

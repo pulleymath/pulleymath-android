@@ -14,7 +14,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.tutorial.Tutor
-import com.freewheelin.pulley.views.FocusedDimView
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.views.balloonWindow.BalloonWindowListener
 import com.freewheelin.pulley.utils.toPx
@@ -24,13 +23,13 @@ import kotlin.math.sin
 
 class TutorWindow: BalloonWindow, BalloonWindowListener {
     constructor(context: Context, targetView: View, position: Position, offset: Int = 0) : super(context, targetView, position, offset) {
-        balloonColor = ContextCompat.getColor(context, R.color.purple_6D6DFF)
+        balloonColor = ContextCompat.getColor(context, R.color.purple_300)
         paddingBottom = 0
         paddingLeft = 0
         paddingRight = 0
         paddingTop = 0
         elevation = 8f.toPx()
-        balloonDrawable = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_20)
+        balloonDrawable = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_20)
     }
 
     fun startFloatAnim() {

@@ -8,5 +8,4 @@
     <string name="default_notification_channel_id">noti_channel_id</string>
     <string name="default_notification_channel_name" translatable="true">풀리수학알림</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

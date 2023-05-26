@@ -262,7 +262,7 @@ class MockExamGuideDialog(
                         val subTitle = "  ${subject.count}문항"
                         var text = "${subject.title}" + subTitle
 
-                        checkBoxes[idx].text = text.partialFontAndColoredWithSize(Theme.bold(context), ContextCompat.getColor(context, R.color.grey_c0c0c0), 0.9f, subject.title.length, text.length)
+                        checkBoxes[idx].text = text.partialFontAndColoredWithSize(Theme.bold(context), ContextCompat.getColor(context, R.color.gray_500), 0.9f, subject.title.length, text.length)
                         checkBoxes[idx].visibility = View.VISIBLE
                         if(subject.isSelected) {
                             // 체크박스 체크 처리
@@ -329,10 +329,10 @@ class MockExamGuideDialog(
         if(mockSummary?.isIng == true && !remain) {
             val remainCount = mockSummary?.let{it.getTotalNumber(selectedOptions) - it.markedNumber}
             val text = "$remainCount 문항 "
-            binding.solveOnTabletBtn.text = "$text 이어 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
+            binding.solveOnTabletBtn.text = "$text 이어 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_200), 0, text.length)
         } else {
             val text = "총 ${mockSummary?.getTotalNumber(selectedOptions)}문항 "
-            binding.solveOnTabletBtn.text = "$text 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_ACACFF), 0, text.length)
+            binding.solveOnTabletBtn.text = "$text 풀기".partialFontAndColored(Theme.extraBold(context), ContextCompat.getColor(context, R.color.purple_200), 0, text.length)
         }
     }
 

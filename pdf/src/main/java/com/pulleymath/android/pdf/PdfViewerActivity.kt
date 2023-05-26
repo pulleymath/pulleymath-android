@@ -127,7 +127,11 @@ open class PdfViewerActivity : Activity() {
     private fun openBuffer(buffer: ByteArray?, magic: String?): MuPDFCore? {
         println("Trying to open byte buffer")
         try {
-            mFileKey = toHex(MessageDigest.getInstance("MD5").digest(buffer))
+            mFileKey = buffer?.let {
+                MessageDigest.getInstance("MD5").digest(it)
+            }?.let {
+                toHex(it)
+            }
             core = MuPDFCore(buffer, magic)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -281,7 +285,7 @@ open class PdfViewerActivity : Activity() {
             alert.setButton(
                 AlertDialog.BUTTON_POSITIVE,
                 getString(R.string.dismiss)
-            ) { dialog, which -> finish() }
+            ) { _, _ -> finish() }
             alert.setOnCancelListener { finish() }
             alert.show()
         }
@@ -293,7 +297,7 @@ open class PdfViewerActivity : Activity() {
         var len: Int
         val buffer = ByteArrayOutputStream().use { stream ->
             val data = ByteArray(16384)
-            while (isr!!.read(data, 0, data.size).also { len = it } != -1) {
+            while (isr.read(data, 0, data.size).also { len = it } != -1) {
                 stream.write(data, 0, len)
             }
             stream.flush()
@@ -307,8 +311,7 @@ open class PdfViewerActivity : Activity() {
         if (core == null) {
             val alert = mAlertBuilder!!.create()
             alert.setTitle(R.string.cannot_open_document)
-            alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dismiss)) { dialog, which -> finish()
-            }
+            alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dismiss)) { _, _ -> finish() }
             alert.setOnCancelListener { finish() }
             alert.show()
         } else {
@@ -324,14 +327,14 @@ open class PdfViewerActivity : Activity() {
         alert.setTitle(R.string.enter_password)
         alert.setView(mPasswordView)
         alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay)
-        ) { dialog, which ->
+        ) { _, _ ->
             if (core!!.authenticatePassword(mPasswordView!!.text.toString())) {
                 createUI(savedInstanceState)
             } else {
                 requestPassword(savedInstanceState)
             }
         }
-        alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { dialog, which -> finish() }
+        alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { _, _ -> finish() }
         alert.show()
     }
 
@@ -450,11 +453,11 @@ open class PdfViewerActivity : Activity() {
         })
 
         //React to Done button on keyboard
-        mSearchText!!.setOnEditorActionListener { v, actionId, event ->
+        mSearchText!!.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) search(1)
             false
         }
-        mSearchText!!.setOnKeyListener { v, keyCode, event ->
+        mSearchText!!.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) search(1)
             false
         }
@@ -711,8 +714,8 @@ open class PdfViewerActivity : Activity() {
     }
     /** 페이지 변경 시 해설 버튼 showing */
     private fun showAnswerButton() { //
-        mAnswerButton?.visibility = if (answerPageLink.keys.contains(pageNo)) View.VISIBLE else View.GONE
-        mAnswerButton?.requestLayout()
+        mAnswerButton.visibility = if (answerPageLink.keys.contains(pageNo)) View.VISIBLE else View.GONE
+        mAnswerButton.requestLayout()
     }
 
     private fun makeButtonsView() {
@@ -738,12 +741,12 @@ open class PdfViewerActivity : Activity() {
 
     private fun showKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm?.showSoftInput(mSearchText, 0)
+        imm.showSoftInput(mSearchText, 0)
     }
 
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm?.hideSoftInputFromWindow(mSearchText!!.windowToken, 0)
+        imm.hideSoftInputFromWindow(mSearchText!!.windowToken, 0)
     }
 
     private fun search(direction: Int) {

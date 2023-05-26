@@ -11,7 +11,6 @@ import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.isTablet
 import com.freewheelin.pulley.utils.toPx
 import java.lang.ref.WeakReference
 
@@ -77,7 +76,7 @@ class PlusMinusKeypadView : ConstraintLayout {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_plus_minus_keypad, this)
-        background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_100_round_ripple)
         isClickable = true
 
         number0Btn = findViewById(R.id.number0Btn)
@@ -196,7 +195,7 @@ class NumberKeypadView : ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.view_number_keypad, this)
         val paddingVal = resources.getDimension(R.dimen.dp32)
         setPadding(paddingVal.toInt())
-        background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_100_round_ripple)
         isClickable = true
 
         number0Btn = findViewById(R.id.number0Btn)

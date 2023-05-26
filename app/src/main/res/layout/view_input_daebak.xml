@@ -7,7 +7,7 @@
     
     <TextView
         android:id="@+id/labelTv"
-        style="@style/TextBlack_4c4c4c"
+        style="@style/TextGray_800"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dp18"
@@ -22,14 +22,14 @@
 
         <EditText
             android:id="@+id/editText"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp56"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+            android:background="@drawable/bg_white_stroke_gray_500"
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="@dimen/sp16"
-            android:textColorHint="@color/grey_c0c0c0"
+            android:textColorHint="@color/gray_500"
             android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
             android:textSize="@dimen/dp16" />
 
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/errorTv"
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"

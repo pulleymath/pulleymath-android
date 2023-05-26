@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
@@ -46,9 +45,9 @@ class DaebakTabRadio: LinearLayout, View.OnClickListener {
         set(value) {
             field = value
             if(value == 2f)
-                this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round_2)
+                this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round_2)
             else
-                this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
+                this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round)
         }
 
     constructor(context: Context): super(context)
@@ -56,9 +55,9 @@ class DaebakTabRadio: LinearLayout, View.OnClickListener {
         setTypedArray(attrs)
     }
 
-    var selectedTextColor: Int = ContextCompat.getColor(context, R.color.white_ffffff)
-    var unSelectedTextColor: Int = ContextCompat.getColor(context, R.color.black_4c4c4c)
-    var selectedBackgrounColor: Int = ContextCompat.getColor(context, R.color.black_4c4c4c)
+    var selectedTextColor: Int = ContextCompat.getColor(context, R.color.white)
+    var unSelectedTextColor: Int = ContextCompat.getColor(context, R.color.gray_800)
+    var selectedBackgrounColor: Int = ContextCompat.getColor(context, R.color.gray_800)
     var unselectedBackgroundColor: Int = Color.TRANSPARENT
     var defaultTypeface = Theme.bold(context)
     var selectedTypeface = Theme.bold(context)
@@ -67,7 +66,7 @@ class DaebakTabRadio: LinearLayout, View.OnClickListener {
 
     init {
         this.orientation = HORIZONTAL
-        this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
+        this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round)
     }
 
     private fun setTypedArray(attrs: AttributeSet) {
@@ -119,7 +118,7 @@ class DaebakTabRadio: LinearLayout, View.OnClickListener {
         addView(view)
         view.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         view.layoutParams.width = 1.toPx()
-        view.background = ContextCompat.getDrawable(context, R.color.black_4c4c4c)
+        view.background = ContextCompat.getDrawable(context, R.color.gray_800)
     }
 
 

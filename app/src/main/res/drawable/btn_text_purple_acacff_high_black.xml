@@ -3,19 +3,19 @@
     <!-- Focused and not pressed -->
     <item android:state_focused="true"
         android:state_pressed="false"
-        android:color="@color/purple_ACACFF" />
+        android:color="@color/purple_200" />
 
     <!-- Focused and pressed -->
     <item android:state_focused="true"
         android:state_pressed="true"
-        android:color="@color/purple_ACACFF" />
+        android:color="@color/purple_200" />
 
     <!-- Unfocused and pressed -->
     <item android:state_focused="false"
         android:state_pressed="true"
-        android:color="@color/purple_ACACFF" />
+        android:color="@color/purple_200" />
 
     <!-- Default color -->
-    <item android:color="@color/purple_ACACFF" />
+    <item android:color="@color/purple_200" />
 
 </selector>

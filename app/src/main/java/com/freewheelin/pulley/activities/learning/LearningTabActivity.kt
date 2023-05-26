@@ -46,11 +46,6 @@ import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.Aff
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.analysis.StudyHistoryActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_ANALYSIS
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_MOCK
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_TEST
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_UNIT
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.SnackReportActivity.Companion.RESULT_SNACK_WRONG
 import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.snackTest.SnackTestFragment
 import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.WrongNoteFragment
@@ -95,6 +90,7 @@ import androidx.core.view.children
 import com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity
 import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.TeacherUtilityDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
@@ -290,9 +286,8 @@ class LearningTabActivity : PermissionActivity(),
             }
 
             spyBtn.setOnClickListener {
-                val intent = Intent(this@LearningTabActivity, AnalysisTabActivity::class.java)
+                val intent = PurchaseInduceWebViewActivity.getIntent(this@LearningTabActivity)
                 startActivity(intent)
-//            onSpyBtnClicked()
             }
             teacherBtn.setOnClickListener {
                 val dialog = TeacherUtilityDialog()
@@ -751,22 +746,6 @@ class LearningTabActivity : PermissionActivity(),
         super.onActivityResult(requestCode, resultCode, data)
 
         when(resultCode) {
-            RESULT_SNACK_TEST -> {
-                setSelectedTab(4)
-            }
-            RESULT_SNACK_UNIT -> {
-                setSelectedTab(2)
-            }
-            RESULT_SNACK_MOCK -> {
-                setSelectedTab(3)
-            }
-            RESULT_SNACK_WRONG -> {
-                setSelectedTab(5)
-            }
-            RESULT_SNACK_ANALYSIS -> {
-                val intent = Intent(this, AnalysisTabActivity::class.java)
-                startActivity(intent)
-            }
             COMPLETED_SNACK_TEST -> {
 
             }

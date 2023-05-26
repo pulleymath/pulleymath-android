@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="48dp">
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -40,7 +40,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/intentionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,14 +55,14 @@
             android:id="@+id/firstColumnBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/dp96"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
             app:layout_constraintEnd_toStartOf="@+id/secondColumnBorder"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/problemCntTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             android:id="@+id/secondColumnBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/Report_Unit_list_correctRate_width"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
@@ -95,7 +95,7 @@
         </com.freewheelin.pulley.views.bars.HorizontalBar>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/correctRateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
             app:layout_constraintStart_toEndOf="@+id/correctRateHb" />
 
-        <View style="@style/Border_Grey_e8e8e8_Horizontal"
+        <View style="@style/Border_Gray_300_Horizontal"
             android:id="@+id/columnHorizontalBorder"
             android:layout_marginTop="48dp"
             app:layout_constraintStart_toStartOf="parent"

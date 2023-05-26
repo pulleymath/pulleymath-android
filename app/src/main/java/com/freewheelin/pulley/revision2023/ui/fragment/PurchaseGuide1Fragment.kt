@@ -9,21 +9,15 @@ import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
+import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.toPx
 import com.freewheelin.pulley.utils.visibleIf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class PurchaseGuide1Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide1Binding
-    var viewModel: PurchaseGuideViewModel? = null
+    lateinit var viewModel: PurchaseGuideViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,39 +29,36 @@ class PurchaseGuide1Fragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.apply {
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(200)
-                val titleMarginTop = 24.toPx()
-                val titleHeight = titleTv.height
-                val imageHeight = guideIv.height
-                val totalHeight = titleMarginTop + titleHeight + imageHeight
-                scrollRoot.layoutParams.height = min(totalHeight, 450.toPx())
-            }
-        }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
+            setScreen()
             actionBtnWrapperCl.setOnClickListener { _ ->
                 LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "그랜드오픈2023", "구독제상품설명")
-                // TODO new page
-                viewModel?.exitBtn()
-                startActivity(PurchaseGuideActivity.getIntent(requireContext()))
+                viewModel.setStep(2)
             }
+
         }
         arguments?.let {
             val withPdfDesc = it.getBoolean("PDF_PURCHASE_DESC")
             binding.pdfDescTv.visibleIf(withPdfDesc)
         }
     }
+    private fun setScreen() {
+        val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
+        val lp = binding.rootCl.layoutParams
+        lp.height = DisplayUtils.getScreenHeight(requireContext()) - topBottomMargin.toInt()
+        binding.rootCl.layoutParams = lp
+    }
 
     companion object {
         @JvmStatic
-        fun newInstance(withPdfDesc: Boolean) =
+        fun newInstance(viewModel: PurchaseGuideViewModel, withPdfDesc: Boolean) =
             PurchaseGuide1Fragment().apply {
+                this.viewModel = viewModel
                 arguments = Bundle().apply {
                     putBoolean("PDF_PURCHASE_DESC", withPdfDesc)
                 }

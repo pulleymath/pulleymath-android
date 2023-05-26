@@ -32,12 +32,13 @@ import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
+import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
-import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -248,17 +249,7 @@ class ConceptCourseFragment : LearningTabFragment() {
                             val completedDialog = ChallengeCompletedDialog(startChallenge,
                                 ChallengeManager.CourseName.스타트챌린지_개념.id,
                                 moveEvent = moveEvent,
-                                exitEvent = {
-                                    val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_개념.id)
-                                    if (nextCourse != null) {
-                                        val induceDialog = ChallengeInduceDialog(
-                                            ChallengeInduceDialog.Type.OneMore,
-                                            course = nextCourse,
-                                            moveEvent = moveEvent
-                                        )
-                                        childFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
-                                    }
-                                }
+                                isDelayedShowNextBtn = true
                             )
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }

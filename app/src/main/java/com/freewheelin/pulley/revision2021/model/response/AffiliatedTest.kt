@@ -3,7 +3,6 @@ package com.freewheelin.pulley.revision2021.model.response
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.user
 import com.freewheelin.pulley.core.ScreenTheme
 import com.freewheelin.pulley.model.ProblemType
 import com.freewheelin.pulley.model.Result
@@ -221,8 +220,8 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
             2 -> secondWorkbook
             else -> thirdWorkbook
         }
-        if (wb.isFinished()) return R.drawable.bg_purple_6d6dff_round
-        return R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round
+        if (wb.isFinished()) return R.drawable.bg_purple_300_round_ripple
+        return R.drawable.bg_white_stroke_purple_300_round
     }
 
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA) }

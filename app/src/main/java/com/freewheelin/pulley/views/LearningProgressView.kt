@@ -14,8 +14,8 @@ import com.freewheelin.pulley.databinding.ViewLearningProgressBinding
 
 
 class LearningProgressView: CardView {
-    var completeColor: Int = ContextCompat.getColor(context, R.color.purple_6D6DFF)
-    var progressColor: Int =  ContextCompat.getColor(context, R.color.purple_6D6DFF)
+    var completeColor: Int = ContextCompat.getColor(context, R.color.purple_300)
+    var progressColor: Int =  ContextCompat.getColor(context, R.color.purple_300)
     set(value) {
         field = value
         binding.progressView.setBackgroundColor(value)
@@ -39,9 +39,9 @@ class LearningProgressView: CardView {
     private fun setTypedArray(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.LearningProgressView)
 
-        progressColor = array.getColor(R.styleable.LearningProgressView_progressColor, ContextCompat.getColor(context, R.color.purple_6D6DFF))
-        val backgroundColor = array.getColor(R.styleable.LearningProgressView_backgroundColor, ContextCompat.getColor(context, R.color.white_ffffff))
-        completeColor = array.getColor(R.styleable.LearningProgressView_completeColor, ContextCompat.getColor(context, R.color.purple_6D6DFF))
+        progressColor = array.getColor(R.styleable.LearningProgressView_progressColor, ContextCompat.getColor(context, R.color.purple_300))
+        val backgroundColor = array.getColor(R.styleable.LearningProgressView_backgroundColor, ContextCompat.getColor(context, R.color.white))
+        completeColor = array.getColor(R.styleable.LearningProgressView_completeColor, ContextCompat.getColor(context, R.color.purple_300))
 
         binding.backgroundLl.setBackgroundColor(backgroundColor)
         array.recycle()

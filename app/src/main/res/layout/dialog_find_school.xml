@@ -18,7 +18,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:minHeight="@dimen/dp560"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/labelSelectSchool"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -67,7 +67,7 @@
 
             <TextView
                 android:id="@+id/labelFindSchool"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp24"
@@ -79,15 +79,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textSchoolName"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginTop="@dimen/dp24"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+                android:background="@drawable/bg_white_stroke_gray_500"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="@dimen/sp16"
-                android:textColorHint="@color/grey_c0c0c0"
+                android:textColorHint="@color/gray_500"
                 android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
                 android:onTextChanged="@{vm::textChanged}"
                 android:hint="학교명을 2글자 이상 입력하세요."

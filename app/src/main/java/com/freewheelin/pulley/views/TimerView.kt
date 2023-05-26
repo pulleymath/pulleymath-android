@@ -72,9 +72,9 @@ class TimerView : ConstraintLayout {
     val checkedTextColor: Int
         get() {
             if(orientation == SOLVE)
-                return ContextCompat.getColor(context, R.color.purple_6D6DFF)
+                return ContextCompat.getColor(context, R.color.purple_300)
             else
-                return ContextCompat.getColor(context, R.color.purple_ACACFF)
+                return ContextCompat.getColor(context, R.color.purple_200)
         }
 
     var submitType = SubmitType.strict

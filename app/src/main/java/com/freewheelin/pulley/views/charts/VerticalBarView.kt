@@ -59,13 +59,13 @@ class VerticalBarView : ConstraintLayout {
         set(value) {
             field = value
             if(value) {
-                detailBtn.setBackgroundResource(R.drawable.bg_black_4c4c4c_round_18)
-                detailBtn.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                detailBtn.setBackgroundResource(R.drawable.bg_gray_800_round_18)
+                detailBtn.setTextColor(ContextCompat.getColor(context, R.color.white))
                 detailBtn.typeface = Theme.extraBold(context)
                 showLabel(true)
             } else {
-                detailBtn.setBackgroundResource(R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round_18)
-                detailBtn.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                detailBtn.setBackgroundResource(R.drawable.bg_white_stroke_gray_800_round_18)
+                detailBtn.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 detailBtn.typeface = Theme.bold(context)
                 hideLabel(true)
             }
@@ -104,7 +104,7 @@ class VerticalBarView : ConstraintLayout {
 
             firstBarLabelTv = makeBarLabel()
             secondBarLabelTv = makeBarLabel()
-            secondBarLabelTv?.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+            secondBarLabelTv?.setTextColor(ContextCompat.getColor(context, R.color.white))
             thirdBarLabelTv = makeBarLabel()
 
             if (firstBar != null)
@@ -163,9 +163,9 @@ class VerticalBarView : ConstraintLayout {
 
                 if(firstValue <= secondValue) {
 
-                    secondBar?.color = ContextCompat.getColor(context, R.color.blue_30a4ff)
+                    secondBar?.color = ContextCompat.getColor(context, R.color.blue_400)
                 } else {
-                    secondBar?.color = ContextCompat.getColor(context, R.color.red_fe7b67)
+                    secondBar?.color = ContextCompat.getColor(context, R.color.red_300)
                 }
             }
             data.value is Pair<*, *> -> {
@@ -175,9 +175,9 @@ class VerticalBarView : ConstraintLayout {
                 val secondValue = data.value.second as Float
 
                 if(firstValue <= secondValue) {
-                    secondBar?.color = ContextCompat.getColor(context, R.color.blue_30a4ff)
+                    secondBar?.color = ContextCompat.getColor(context, R.color.blue_400)
                 } else {
-                    secondBar?.color = ContextCompat.getColor(context, R.color.red_fe7b67)
+                    secondBar?.color = ContextCompat.getColor(context, R.color.red_300)
                 }
             }
             data.value is Float -> configureOnlyOneUI(set)
@@ -211,7 +211,7 @@ class VerticalBarView : ConstraintLayout {
         firstBar?.value = value
     }
 
-    private fun makeBar(color: Int = ContextCompat.getColor(context, R.color.grey_e0e0e0)): VerticalBar {
+    private fun makeBar(color: Int = ContextCompat.getColor(context, R.color.gray_400)): VerticalBar {
         val view = VerticalBar(context)
         view.id = View.generateViewId()
         view.color = color
@@ -224,7 +224,7 @@ class VerticalBarView : ConstraintLayout {
         textView.typeface = Theme.bold(context)
         textView.id = View.generateViewId()
         textView.gravity = Gravity.CENTER
-        textView.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+        textView.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
         return textView
     }
 
@@ -251,7 +251,7 @@ class VerticalBarView : ConstraintLayout {
     private fun configureTripleUI(set: ConstraintSet) {
         val firstBar = makeBar()
         val secondBar = makeBar()
-        val thirdBar = makeBar(ContextCompat.getColor(context, R.color.blue_b9defe))
+        val thirdBar = makeBar(ContextCompat.getColor(context, R.color.blue_200))
 
         val barWidth = resources.getDimension(R.dimen.triple_vertical_bar_width).toInt()
         val barSpace = resources.getDimension(R.dimen.triple_vertical_bar_space).toInt()

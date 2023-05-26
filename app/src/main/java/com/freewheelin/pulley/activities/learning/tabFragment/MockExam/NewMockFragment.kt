@@ -407,17 +407,17 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
 
         if (exam.getMakringState() == MarkingState.ING) {
-            typeTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
-            gradeTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
-            yearTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
-            monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
-            titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.grey_c0c0c0))
+            typeTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_500))
+            gradeTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_500))
+            yearTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_500))
+            monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_500))
+            titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_500))
         } else {
-            typeTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-            gradeTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-            yearTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-            monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
-            titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.black_4c4c4c))
+            typeTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_800))
+            gradeTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_800))
+            yearTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_800))
+            monthTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_800))
+            titleTv.setTextColor(ContextCompat.getColor(view.context, R.color.gray_800))
         }
     }
 

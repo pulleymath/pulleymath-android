@@ -7,24 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.databinding.FragmentGuestJoinIntroduceBinding
-import com.freewheelin.pulley.databinding.FragmentGuestLoginBinding
 import com.freewheelin.pulley.databinding.FragmentGuestSignUpBinding
-import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseGuideActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog.GuestJoinStep
 import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.utils.visibleIf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.math.min
 
 class GuestSignUpFragment : Fragment() {
     private lateinit var binding: FragmentGuestSignUpBinding

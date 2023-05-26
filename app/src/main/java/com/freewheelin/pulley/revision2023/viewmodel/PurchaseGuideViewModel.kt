@@ -25,21 +25,22 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
 
     lateinit var goLoginActCallback: () -> Unit
     lateinit var setStep: (Int) -> Unit
-    lateinit var replaceStep: (Int) -> Unit
+//    lateinit var replaceStep: (Int) -> Unit
     lateinit var removeStep: (Fragment) -> Unit
 
-    private val _guideOffers = MutableLiveData<List<PurchaseGuideOffer>>()
-    val guideOffers: LiveData<List<PurchaseGuideOffer>> = _guideOffers
-    val backgroundColor = MutableLiveData<String>()
+    private val _originalGuides = MutableLiveData<PurchaseGuide>()
+    val originalGuides: LiveData<PurchaseGuide> = _originalGuides
+//    val backgroundColor = MutableLiveData<String>()
     val selectedOfferId = MutableLiveData<Int>()
 
     val step = MutableLiveData(0)
+    val step2TabIndex = MutableLiveData<Int>(0)
+    val purchaseEnabled = MutableLiveData(false)
 
     fun fetchGuides(cb: (User) -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val newGuides = anonymousRepository.getPurchaseGuide()
-            _guideOffers.postValue(newGuides.offers.sortedByDescending { it.offerId })
-            backgroundColor.postValue(newGuides.backgroundColor)
+            _originalGuides.postValue(newGuides)
         }
     }
     fun getTempToken(cb: (String) -> Unit = {}) {
@@ -51,12 +52,28 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
 
 
     fun updateGuides(selected: PurchaseGuideOffer) {
-//        guideOffers.value?.map {
-//            it.copy(isSelected = it.offerId == selected.offerId)
-//        }?.let {
-//            selectedOfferId.postValue(selected.offerId)
-//            _guideOffers.postValue(it)
-//        }
+        _originalGuides.value?.let {
+            if (step2TabIndex.value == 0) {
+                it.single.forEach {
+                    it.isSelected.set(false)
+                }
+            } else {
+                it.regular.forEach {
+                    it.isSelected.set(false)
+                }
+            }
+        }
+        selected.isSelected.set(true)
+        purchaseEnabled.postValue(true)
+        setSelectedItem(selected)
+    }
+    var selectedOffer: PurchaseGuideOffer? = null
+    fun setSelectedItem(list: List<PurchaseGuideOffer>) {
+        val item = list.find { it.isSelected.get() }
+        selectedOffer = item
+    }
+    fun setSelectedItem(item: PurchaseGuideOffer) {
+        selectedOffer = item
     }
 
     lateinit var onExitClickCallback: (() -> Unit)

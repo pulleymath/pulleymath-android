@@ -124,7 +124,6 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
             ?.map { BigUnitV3.idOfNonNull(it.chapterId) }
     }
     fun fetchDailyTestRecommend(cb: () -> Unit) {
-        println("zxpzxp - fetchDailyTestRecommend ")
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val res = myPageRepository.fetchDailyTestRecommend()
             userRecommendInfo = res

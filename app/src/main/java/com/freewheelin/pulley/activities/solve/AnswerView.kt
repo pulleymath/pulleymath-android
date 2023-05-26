@@ -213,8 +213,8 @@ class AnswerView : ConstraintLayout,
         when (problem.getResultByScoring()) {
             Result.yet -> {
                 selectionAnswerView.theme = NumberingButton.THEME_BLACK
-                shortAnswerView.setBackgroundResource(R.drawable.bg_white_ffffff_stroke_grey_e0e0e0_round_2)
-                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                shortAnswerView.setBackgroundResource(R.drawable.bg_white_stroke_gray_400_round_2)
+                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 shortAnswerView.isEnabled = true
                 selectionAnswerView.isEnabled = true
                 resultIv.visibility = View.GONE
@@ -227,8 +227,8 @@ class AnswerView : ConstraintLayout,
             }
             else -> {
                 selectionAnswerView.theme = NumberingButton.THEME_GREY
-                shortAnswerView.setBackgroundResource(R.drawable.bg_grey_e0e0e0_round_2)
-                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                shortAnswerView.setBackgroundResource(R.drawable.bg_gray_400_round_2)
+                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.white))
                 shortAnswerView.isEnabled = false
                 selectionAnswerView.isEnabled = false
                 resultIv.visibility = View.VISIBLE
@@ -250,17 +250,17 @@ class AnswerView : ConstraintLayout,
         answeredCntTv.visibility = View.GONE
         markingBtn.isEnabled = false
         submitBtn.isEnabled = false
-        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round_20)
-        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_grey_e0e0e0_round_20)
+        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_400_round_20)
+        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_400_round_20)
     }
 
     fun enableMarking(cnt: Int) {
         answeredCntTv.text = cnt.toString()
         answeredCntTv.visibility = View.VISIBLE
         markingBtn.isEnabled = true
-        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_20)
+        markingBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_20)
         submitBtn.isEnabled = true
-        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_6d6dff_round_20)
+        submitBtn.background = ContextCompat.getDrawable(context, R.drawable.bg_purple_300_round_20)
     }
 
     fun requestFocusOnShortAnswer() {

@@ -11,7 +11,7 @@
         android:paddingBottom="1dp"
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8">
+        android:background="@drawable/bg_white_stroke_gray_300">
 
         <ImageView
             android:id="@+id/problemSdv"

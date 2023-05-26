@@ -3,17 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/white_ffffff"
+        android:background="@color/white"
         android:orientation="vertical"
         android:layout_width="160dp"
         android:layout_height="@dimen/dp48">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/numTv"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:background="@color/white_fafafa"
+            android:background="@color/gray_100"
             android:gravity="center"
             android:text="1"
             android:textSize="@dimen/sp14"
@@ -22,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <View
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             app:layout_constraintStart_toEndOf="@+id/numTv"/>
@@ -38,7 +38,7 @@
             app:layout_constraintStart_toEndOf="@+id/numTv"/>
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:id="@+id/correctRateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,14 +50,14 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:id="@+id/bottomBorder"
             android:layout_width="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         <View
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_width="1dp"
             android:id="@+id/endBorder"
             android:layout_height="match_parent"

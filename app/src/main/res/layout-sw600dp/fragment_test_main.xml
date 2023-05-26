@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/headerTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp120"
@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/titleTv"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp12"
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/contentTv"
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp40"
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"
-            android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_gray_100_stroke_gray_300_ripple"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
 
             <TextView
                 android:id="@+id/levelLabel"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -80,7 +80,7 @@
 
             <TextView
                 android:id="@+id/levelTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/rangeLabel"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -104,7 +104,7 @@
 
             <TextView
                 android:id="@+id/rangeTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -121,7 +121,7 @@
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginEnd="@dimen/dp16"
                 android:visibility="visible"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+                android:background="@drawable/bg_white_stroke_gray_300_round"
                 android:src="@drawable/ic_gear"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +129,7 @@
 
             <TextView
                 android:id="@+id/subjectTv"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -144,7 +144,7 @@
 
         <TextView
             android:id="@+id/timerGuideTv"
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"

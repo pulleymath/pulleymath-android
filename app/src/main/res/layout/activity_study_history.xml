@@ -12,7 +12,7 @@
             android:id="@+id/navBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
-            android:background="@color/white_ffffff"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -29,7 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="학습 내역"
@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +89,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ingTab">
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="@dimen/dp72"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center"
@@ -97,7 +97,7 @@
                     android:textSize="@dimen/sp16" />
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="@dimen/dp24"
                     android:layout_marginStart="@dimen/dp16"
@@ -106,7 +106,7 @@
                     android:textSize="@dimen/sp16" />
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -123,7 +123,7 @@
 
                     <TextView
                         android:id="@+id/problemCntLabel"
-                        style="@style/TextGrey_9f9f9f.Bold"
+                        style="@style/TextGray_600.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="푼 문제/전체 문제"
@@ -137,7 +137,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    style="@style/TextGrey_9f9f9f.Bold"
+                    style="@style/TextGray_600.Bold"
                     android:layout_width="@dimen/dp64"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -157,7 +157,7 @@
 
             <View
                 android:id="@+id/view3"
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 app:layout_constraintEnd_toEndOf="@+id/topHeaderView"
@@ -178,7 +178,7 @@
 
             <TextView
                 android:id="@+id/emptyGuideTv"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -7,17 +7,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/yellow_fffbef"
+        android:background="@color/yellow_100"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:id="@+id/numberTv"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:textSize="16sp"
-            android:background="@color/red_ffe8e8"
+            android:background="@color/red_100"
             android:gravity="center"
             android:text="1"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
             android:id="@+id/topHorizontalBorder"
             android:layout_width="0dp"
             android:layout_height="@dimen/omr_answer_borderWidth"
-            android:background="@color/red_ffe8e8"
+            android:background="@color/red_100"
             android:visibility="visible"
             app:layout_constraintTop_toTopOf="@id/verticalBorder"
             app:layout_constraintStart_toEndOf="@id/verticalBorder"
@@ -44,7 +44,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="@dimen/omr_answer_borderWidth"
-            android:background="@color/red_ffe8e8"
+            android:background="@color/red_100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/verticalBorder"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -68,7 +68,7 @@
             android:maxLength="3"
             android:paddingStart="16dp"
             android:hint="@string/text_hint_please_input_answer"
-            android:textColorHint="@color/red_ffc6bc"
+            android:textColorHint="@color/red_200"
             android:singleLine="true"
             android:textSelectHandle="@drawable/bg_empty"
             android:textCursorDrawable="@drawable/cursor_omr_short_answer"

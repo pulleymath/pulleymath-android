@@ -1,19 +1,15 @@
 package com.freewheelin.pulley.revision2021.views
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ViewPlusMinusEnterKeypadBinding
-import com.freewheelin.pulley.views.DaebakToast
-import java.lang.ref.WeakReference
 
 interface PlusMinusEnterKeypadListener {
     fun onEnterBtnClicked(button: Button, answer: String)
@@ -31,7 +27,7 @@ class CookingCustomNumberKeyboard : ConstraintLayout, View.OnClickListener {
     val initialValue = "정답 입력"
 
     init {
-        background = ContextCompat.getDrawable(context, R.drawable.bg_white_fafafa_round)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_gray_100_round_ripple)
         isClickable = true
 
         binding.apply {

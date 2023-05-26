@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class PurchaseGuide3Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide3Binding
-    var viewModel: PurchaseGuideViewModel? = null
+    lateinit var viewModel: PurchaseGuideViewModel
 //    var setStep: ((Int) -> Unit)? = null
 
     override fun onResume() {
@@ -46,15 +46,16 @@ class PurchaseGuide3Fragment : Fragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             backBtn.setOnClickListener {
-                viewModel?.removeStep?.let { it(this@PurchaseGuide3Fragment) }
+                viewModel.removeStep.let { it(this@PurchaseGuide3Fragment) }
             }
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(viewModel: PurchaseGuideViewModel) =
             PurchaseGuide3Fragment().apply {
+                this.viewModel = viewModel
                 arguments = Bundle().apply {
 
                 }

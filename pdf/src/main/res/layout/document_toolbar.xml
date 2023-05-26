@@ -83,7 +83,7 @@
 				android:layout_marginTop="10dp"
 				android:layout_marginEnd="24dp"
 				android:layout_marginBottom="10dp"
-				android:background="@drawable/bg_purple_6d6dff_round"
+				android:background="@drawable/bg_purple_300_round_ripple"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
 				android:text="해설보기"

@@ -28,11 +28,11 @@ class NoteDetailDialog: Dialog {
 
             if(value) {
                 binding.clearHiderCl.visibility = View.VISIBLE
-                binding.clearBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_18)
-                binding.clearBtn.setImageResource(R.drawable.ic_check_purple_engrave)
+                binding.clearBtn.setBackgroundResource(R.drawable.bg_purple_100_stroke_purple_200_round_18)
+                binding.clearBtn.setImageResource(R.drawable.ic_check_purple_300_circle_24)
             } else {
                 binding.clearHiderCl.visibility = View.GONE
-                binding.clearBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_18)
+                binding.clearBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18)
                 binding.clearBtn.setImageResource(R.drawable.ic_check_grey_circle)
             }
         }
@@ -42,11 +42,11 @@ class NoteDetailDialog: Dialog {
             field = value
 
             if(value) {
-                binding.scrapBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_acacff_round_18)
+                binding.scrapBtn.setBackgroundResource(R.drawable.bg_purple_100_stroke_purple_200_round_18)
                 binding.scrapBtn.setImageResource(R.drawable.ic_tag_purple)
                 binding.tagIv.visibility = View.VISIBLE
             } else {
-                binding.scrapBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_18)
+                binding.scrapBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18)
                 binding.scrapBtn.setImageResource(R.drawable.ic_tag_grey)
                 binding.tagIv.visibility = View.GONE
             }
@@ -65,7 +65,7 @@ class NoteDetailDialog: Dialog {
             field = value
 
             if(value != null)
-                binding.rightArrowIb.setColorFilter(ContextCompat.getColor(context, R.color.white_ffffff))
+                binding.rightArrowIb.setColorFilter(ContextCompat.getColor(context, R.color.white))
             else
                 binding.rightArrowIb.setColorFilter(Color.parseColor("#40ffffff"))
 
@@ -76,7 +76,7 @@ class NoteDetailDialog: Dialog {
             field = value
 
             if(value != null)
-                binding.leftArrowIb.setColorFilter(ContextCompat.getColor(context, R.color.white_ffffff))
+                binding.leftArrowIb.setColorFilter(ContextCompat.getColor(context, R.color.white))
             else
                 binding.leftArrowIb.setColorFilter(Color.parseColor("#40ffffff"))
 

@@ -5,7 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/problemBottom"
-        android:background="@drawable/bg_white_fafafa"
+        android:background="@drawable/bg_gray_100_ripple"
         android:layout_width="match_parent"
         android:layout_height="88dp">
         <androidx.constraintlayout.widget.ConstraintLayout

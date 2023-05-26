@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/titleTv"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="주간 테스트 결과"
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/scoreTv"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/scoreLabel"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -47,7 +47,7 @@
             app:layout_constraintStart_toEndOf="@+id/scoreTv" />
 
         <TextView
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:id="@+id/reportTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/scoreLabel"/>
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/contentTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -78,14 +78,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp90"
-            android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_gray_100_stroke_gray_300_ripple"
             android:visibility="invisible"
             app:layout_constraintTop_toBottomOf="@+id/scoreTv"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
             app:layout_constraintVertical_chainStyle="packed">
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/levelLabel"
                 android:layout_marginTop="@dimen/dp32"
                 android:layout_marginStart="@dimen/dp32"
@@ -97,7 +97,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/levelTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/levelLabel"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/rangeLabel"
                 android:layout_marginStart="@dimen/dp32"
                 android:layout_marginBottom="@dimen/dp32"
@@ -123,7 +123,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/rangeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 android:src="@drawable/ic_gear"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginEnd="@dimen/dp16"
-                android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+                android:background="@drawable/bg_white_stroke_gray_300_round"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -167,7 +167,7 @@
             android:id="@+id/fullClearCl"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white_fafafa"
+            android:background="@color/gray_100"
             android:visibility="invisible"
             app:layout_constraintTop_toTopOf="@+id/settingContainerCl"
             app:layout_constraintStart_toStartOf="parent"
@@ -176,7 +176,7 @@
 
 
             <TextView
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:id="@+id/finishLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                 app:layout_constraintVertical_chainStyle="packed"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/durationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/finishLabel"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/durationTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/durationLabel"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/coverLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -226,7 +226,7 @@
                 app:layout_constraintStart_toStartOf="@+id/durationLabel"/>
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/coverTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -18,8 +18,10 @@ import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2Fragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2MobileFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide3Fragment
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
+import com.freewheelin.pulley.utils.DisplayUtils
 import com.freewheelin.pulley.utils.LogUtils
 import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.utils.toPx
 
 class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, val startCallback: () -> Unit = {}): DialogFragment() {
 
@@ -42,10 +44,9 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-
+            setScreen()
             viewModel.fetchGuides()
             viewModel.setStep = { setChildFragment(it) }
-            viewModel.replaceStep = { replaceChildFragment(it) }
             viewModel.removeStep = { removeFragment(it) }
             setChildFragment(step)
 
@@ -55,10 +56,15 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
 
         }
     }
-
+    private fun setScreen() {
+        val topBottomMargin = resources.getDimension(R.dimen.dp32) * 2
+        val lp = binding.rootCl.layoutParams
+        lp.height = DisplayUtils.getScreenHeight(requireContext()) - topBottomMargin.toInt()
+        lp.width = 440.toPx()
+        binding.rootCl.layoutParams = lp
+    }
     fun setChildFragment(step: Int) {
         val frag = getFragment(step)
-        sendViewModel(frag)
         moveTo(frag)
     }
 
@@ -70,21 +76,6 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
             commit()
         }
     }
-    fun replaceChildFragment(step: Int) {
-        val frag = getFragment(step)
-        sendViewModel(frag)
-        replaceTo(frag)
-    }
-    fun replaceTo(frag: Fragment) {
-        childFragmentManager.beginTransaction().apply {
-//            setCustomAnimations(R.anim.enter_to_left, R.anim.exit_to_right, R.anim.enter_to_right, R.anim.exit_to_left)
-            setCustomAnimations(R.anim.enter_to_left, 0)
-            replace(R.id.containerFl, frag)
-            addToBackStack(null)
-            commit()
-        }
-    }
-
 
     fun sendViewModel(frag: Fragment) {
         (frag as? PurchaseGuide1Fragment)?.apply {
@@ -111,16 +102,16 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
 
     fun getFragment(step: Int): Fragment {
         return when (step) {
-            1 -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
+            1 -> { PurchaseGuide1Fragment.newInstance(viewModel, withPdfDesc) }
             2 -> {
                 if (requireContext().isTablet) {
-                    PurchaseGuide2Fragment.newInstance()
+                    PurchaseGuide2Fragment.newInstance(viewModel)
                 } else {
-                    PurchaseGuide2MobileFragment.newInstance()
+                    PurchaseGuide2MobileFragment.newInstance(viewModel)
                 }
             }
-            3 -> { PurchaseGuide3Fragment.newInstance() }
-            else -> { PurchaseGuide1Fragment.newInstance(withPdfDesc) }
+            3 -> { PurchaseGuide3Fragment.newInstance(viewModel) }
+            else -> { PurchaseGuide1Fragment.newInstance(viewModel, withPdfDesc) }
         }
     }
 

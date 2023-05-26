@@ -12,7 +12,7 @@
             android:id="@+id/mainContainerCl"
             android:layout_width="560dp"
             android:layout_height="350dp"
-            android:background="@drawable/bg_white_fafafa_round"
+            android:background="@drawable/bg_gray_100_round_ripple"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
                 android:id="@+id/topContainerCl"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@drawable/bg_white_ffffff_round_top_only"
+                android:background="@drawable/bg_white_round_top_only"
                 app:layout_constraintTop_toTopOf="parent">
 
 
@@ -31,7 +31,7 @@
                     android:layout_width="64dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_check_grey_circle"
-                    android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round_20"
+                    android:background="@drawable/bg_gray_100_stroke_gray_300_round_20"
                     android:layout_marginStart="@dimen/dp32"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +43,7 @@
                     android:layout_width="64dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_tag_grey"
-                    android:background="@drawable/bg_white_fafafa_stroke_grey_e8e8e8_round_20"
+                    android:background="@drawable/bg_gray_100_stroke_gray_300_round_20"
                     android:layout_marginStart="8dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +59,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <View style="@style/Border_Grey_e8e8e8_Horizontal"
+                <View style="@style/Border_Gray_300_Horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -73,7 +73,7 @@
     <!--            android:layout_marginStart="@dimen/dp32"-->
     <!--            android:layout_marginTop="@dimen/dp24"-->
     <!--            android:layout_marginBottom="@dimen/dp24"-->
-    <!--            android:background="@color/white_ffffff"-->
+    <!--            android:background="@color/white"-->
     <!--            android:padding="@dimen/dp24"-->
     <!--            android:scaleType="matrix"-->
     <!--            app:layout_constraintBottom_toBottomOf="parent"-->
@@ -97,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:background="@color/white_ffffff"
+                    android:background="@color/white"
                     android:scaleType="fitStart"
                     android:padding="@dimen/dp12"/>
 
@@ -156,14 +156,14 @@
                     android:id="@+id/firstVerticalBorder"
                     android:layout_width="1dp"
                     android:layout_height="16dp"
-                    android:background="@color/grey_e8e8e8"
+                    android:background="@color/gray_300"
                     android:layout_marginStart="12dp"
                     app:layout_constraintStart_toEndOf="@+id/resultIv"
                     app:layout_constraintTop_toTopOf="@+id/resultIv"
                     app:layout_constraintBottom_toBottomOf="@+id/resultIv"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/levelTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,14 +178,14 @@
                     android:id="@+id/secondVerticalBorder"
                     android:layout_width="1dp"
                     android:layout_height="16dp"
-                    android:background="@color/grey_e8e8e8"
+                    android:background="@color/gray_300"
                     android:layout_marginStart="12dp"
                     app:layout_constraintStart_toEndOf="@+id/levelTv"
                     app:layout_constraintTop_toTopOf="@+id/resultIv"
                     app:layout_constraintBottom_toBottomOf="@+id/resultIv"/>
 
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:id="@+id/categoryTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
 
                         <TextView
                             android:id="@+id/intentionTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -224,7 +224,7 @@
 
                         <View
                             android:id="@+id/horizontalBorder"
-                            style="@style/Border_Grey_e8e8e8_Horizontal"
+                            style="@style/Border_Gray_300_Horizontal"
                             android:layout_marginTop="8dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

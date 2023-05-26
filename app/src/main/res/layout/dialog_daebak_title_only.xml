@@ -6,11 +6,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="424dp"
-        android:background="@drawable/bg_white_ffffff_round">
+        android:background="@drawable/bg_white_round_ripple">
 
     <TextView
         android:id="@+id/titleTv"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:background="@color/grey_f2f2f2"
+            android:background="@color/gray_200"
             android:layout_height="1dp"
             android:id="@+id/horizontalBorder"
             android:layout_width="0dp"
@@ -50,7 +50,7 @@
 
             <Button
                 android:id="@+id/leftBtn"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:background="@null"
@@ -60,7 +60,7 @@
 
             <Button
                 android:id="@+id/rightBtn"
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:background="@null"

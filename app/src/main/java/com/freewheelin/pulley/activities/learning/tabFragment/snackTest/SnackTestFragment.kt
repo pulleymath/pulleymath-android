@@ -278,7 +278,7 @@ class SnackTestFragment : LearningTabFragment(),TestMainBaseListener, MyPageSett
 
                 view.background = ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.bg_white_ffffff_stroke_purple_6d6dff_round
+                    R.drawable.bg_white_stroke_purple_300_round
                 )
             }
             val set = ConstraintSet()

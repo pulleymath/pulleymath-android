@@ -8,7 +8,7 @@
 
         <View
             android:id="@+id/horizontalBorder"
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:layout_marginBottom="82dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
             android:text="조금 더 학습을 진행하시면,\n 각 과목별로 '나의 정답률'과 '같은 등급 정답률'을 비교해 볼 수 있습니다."
             android:layout_marginBottom="80dp"
             android:lineSpacingExtra="@dimen/sp8"
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:textSize="@dimen/sp16"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

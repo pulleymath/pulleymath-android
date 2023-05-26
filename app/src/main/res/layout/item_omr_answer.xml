@@ -7,16 +7,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/yellow_fffbef">
+        android:background="@color/yellow_100">
         <View
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:background="@color/red_ffe8e8"
+            android:background="@color/red_100"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/verticalStartBorder" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:id="@+id/numberTv"
             android:layout_width="32dp"
             android:layout_height="wrap_content"

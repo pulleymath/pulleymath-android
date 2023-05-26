@@ -529,12 +529,12 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
     }
 
     fun setNone(textView:TextView) {
-        textView.setTextColor( ContextCompat.getColor(textView.context, R.color.grey_c0c0c0))
+        textView.setTextColor( ContextCompat.getColor(textView.context, R.color.gray_500))
         textView.text = "-"
     }
 
     fun setString(textView:TextView, string:String) {
-        textView.setTextColor( ContextCompat.getColor(textView.context, R.color.black_4c4c4c))
+        textView.setTextColor( ContextCompat.getColor(textView.context, R.color.gray_800))
         textView.text = string
     }
 

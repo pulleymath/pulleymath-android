@@ -10,7 +10,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp96"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_round"
+            android:background="@drawable/bg_white_stroke_gray_300_round"
             android:visibility="visible">
 
             <ImageButton
@@ -26,11 +26,11 @@
 
             <TextView
                 android:id="@+id/currentDevice"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp24"
-                android:background="@drawable/bg_grey_e0e0e0_round_20"
+                android:background="@drawable/bg_gray_400_round_20"
                 android:gravity="center"
                 android:paddingStart="6dp"
                 android:paddingTop="2dp"
@@ -45,7 +45,7 @@
 
             <TextView
                 android:id="@+id/textName"
-                style="@style/TextBlack_4c4c4c.ExtraBold"
+                style="@style/TextGray_800.ExtraBold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -60,7 +60,7 @@
 
             <TextView
                 android:id="@+id/lastAccess"
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -78,10 +78,10 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp96"
             android:visibility="visible"
-            android:background="@drawable/bg_grey_e8e8e8_round">
+            android:background="@drawable/bg_gray_300_round">
 
             <TextView
-                style="@style/TextGrey_9f9f9f.ExtraBold"
+                style="@style/TextGray_600.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

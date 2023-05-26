@@ -56,15 +56,4 @@ class NoteStudyCardViewHolder(val binding: ItemNoteStudyCardBinding, val viewMod
         }
     }
 
-//    var checkBoxChecked: Boolean = false
-//        set(value) {
-//            field = value
-//            val view = binding.root
-//            if(value) {
-//                view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
-//            } else {
-//                view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_grey_e8e8e8)
-//            }
-////            binding.checkBox.isChecked = value
-//        }
 }

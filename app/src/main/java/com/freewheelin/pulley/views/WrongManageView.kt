@@ -168,7 +168,7 @@ class WrongManageView: ConstraintLayout {
         btn.setImageResource(type.resId)
         btn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)
         binding.btnContainerLl.addView(btn)
-        btn.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
+        btn.setColorFilter(ContextCompat.getColor(context!!, R.color.gray_400))
         btn.setOnClickListener {
             if(!isActive)
                 showInactiveToast()
@@ -204,7 +204,7 @@ class WrongManageView: ConstraintLayout {
             guideTv.visibility = View.GONE
 
             buttons.forEach {
-                it.setColorFilter(ContextCompat.getColor(context!!, R.color.grey_e0e0e0))
+                it.setColorFilter(ContextCompat.getColor(context!!, R.color.gray_400))
             }
 
             isActive = false

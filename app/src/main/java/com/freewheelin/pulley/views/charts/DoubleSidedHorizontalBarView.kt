@@ -23,8 +23,8 @@ class DoubleSidedHorizontalBarView: ConstraintLayout {
 
     init {
 //        LayoutInflater.from(context).inflate(R.layout.view_bar_doublesided_horizontal, this)
-        binding.positiveArrowIv.setColorFilter(ContextCompat.getColor(context, R.color.blue_30a4ff))
-        binding.negativeArrowIv.setColorFilter(ContextCompat.getColor(context, R.color.red_fe7b67))
+        binding.positiveArrowIv.setColorFilter(ContextCompat.getColor(context, R.color.blue_400))
+        binding.negativeArrowIv.setColorFilter(ContextCompat.getColor(context, R.color.red_300))
     }
 
     fun setValue(value: Float?, withAnim: Boolean = false) {

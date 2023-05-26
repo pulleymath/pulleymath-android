@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootCl"
-        android:layout_width="400dp"
+        android:layout_width="440dp"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
@@ -48,7 +48,7 @@
                 android:gravity="center"
                 android:paddingVertical="16dp"
                 style="@style/h5"
-                android:text="구독제 비교"
+                android:text="멤버십 비교"
                 />
             <View
                 android:layout_width="0dp"
@@ -71,7 +71,7 @@
 
         <ScrollView
             android:id="@+id/scrollRoot"
-            android:layout_width="400dp"
+            android:layout_width="440dp"
             android:layout_height="wrap_content"
 
             app:layout_constraintTop_toBottomOf="@id/headerLl"
@@ -82,7 +82,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/scrollRootCl"
-                android:layout_width="400dp"
+                android:layout_width="440dp"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_200"
                 android:padding="24dp">

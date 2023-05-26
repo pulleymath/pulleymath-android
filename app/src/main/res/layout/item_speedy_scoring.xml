@@ -18,7 +18,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:id="@+id/numberTv"
             android:layout_width="@dimen/speed_answer_number_dp56"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             android:gravity="center_vertical"
             android:hint="정답 입력"
             android:inputType="numberSigned"
@@ -84,7 +84,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/shortAnswerView">
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:id="@+id/answerTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
 
 
             <TextView
-                style="@style/TextRed_fe7b67.Bold"
+                style="@style/TextRed_300.Bold"
                 android:id="@+id/infoTv"
                 android:textSize="@dimen/sp16"
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
 
             <TextView
                 android:id="@+id/errorTv"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

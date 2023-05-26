@@ -23,7 +23,7 @@
             android:id="@+id/containerCl"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="@drawable/bg_white_ffffff_round_top_only_10"
+            android:background="@drawable/bg_white_round_top_only_10"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,7 +103,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                style="@style/TextGrey_c0c0c0"
+                style="@style/TextGray_500"
                 android:id="@+id/guideTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

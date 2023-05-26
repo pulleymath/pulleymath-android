@@ -137,10 +137,10 @@ class UnitPlanAddDialog(context: Context, val user: User) : Dialog(context) {
                 val scheduleCategories = bookCategories.filter { it.scheduled }
 
                 if(scheduleCategories.isEmpty() && bookCategories.isNotEmpty()) {
-                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 } else {
                     itemBinding.headerTv.text = "${categories!![indexPath.section].first}(예정)"
-                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    itemBinding.headerTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
                 }
             }
 
@@ -150,15 +150,15 @@ class UnitPlanAddDialog(context: Context, val user: User) : Dialog(context) {
                 itemBinding.itemTv.text = bookCategory.bookCategory
 
                 if (indexPath == selectedIndexPath)
-                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f2f2f2))
+                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_200))
                 else
-                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                    itemBinding.containerCl.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
 
                 if(bookCategory.scheduled) {
-                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.gray_500))
                     itemBinding.itemTv.text = "${bookCategory.bookCategory}(예정)"
                 } else {
-                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+                    itemBinding.itemTv.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 }
 
                 if(bookCategory.containUploadNewPlan) {

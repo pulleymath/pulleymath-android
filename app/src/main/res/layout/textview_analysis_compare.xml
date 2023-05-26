@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:gravity="center">
         <TextView
-            style="@style/TextGrey_c0c0c0.ExtraBold"
+            style="@style/TextGray_500.ExtraBold"
             android:id="@+id/topLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/valueTv"
-            style="@style/TextBlack_4c4c4c.ExtraBold"
+            style="@style/TextGray_800.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -33,7 +33,7 @@
 
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:id="@+id/bottomLabel"
                 android:text="하단문구"
                 android:layout_marginEnd="4dp"
@@ -49,7 +49,7 @@
                 android:layout_marginBottom="3dp"/>
 
             <TextView
-                style="@style/TextBlue_2287ef.ExtraBold"
+                style="@style/TextBlue_500.ExtraBold"
                 android:id="@+id/diffTv"
                 android:text="12"
                 android:textSize="@dimen/sp14"

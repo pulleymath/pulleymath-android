@@ -1,38 +1,23 @@
 package com.freewheelin.pulley.revision2021.activity.learningcourse.fragments
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.FacebookSdk.getApplicationContext
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.MyApplication
 import com.freewheelin.pulley.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
-import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
-import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCCookingViewModel
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
@@ -40,10 +25,8 @@ import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.utils.*
 import com.freewheelin.pulley.views.DaebakToast
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import java.util.*
 
 class LCCookingFragment() : Fragment(),
     CookingPencilcaseListener,
@@ -455,7 +438,7 @@ class LCCookingFragment() : Fragment(),
 
                 detailBinding.apply {
                     quizSingleAnswer.text = ""
-                    quizSingleAnswer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_ffffff_stroke_grey_e8e8e8_round_5)
+                    quizSingleAnswer.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_white_stroke_gray_300_round_5)
                     quizSingleAnswer.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_300))
                     quizSingleAnswer.isEnabled = false
 

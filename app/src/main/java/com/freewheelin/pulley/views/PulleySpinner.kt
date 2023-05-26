@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.views.adapters.HintableSpinnerAdapter
-import com.freewheelin.pulley.views.bars.PenBar
 
 class PulleySpinner : ConstraintLayout {
 
@@ -65,7 +62,7 @@ class PulleySpinner : ConstraintLayout {
         spinner.setBackgroundResource(R.drawable.bg_white_stroke_gray_500_round)
     }
     private fun setSpinnerCornerFlat() {
-        spinner.setBackgroundResource(R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+        spinner.setBackgroundResource(R.drawable.bg_white_stroke_gray_500)
     }
     fun set(data:List<String>, hint:String?=null, errorMsg:String?=null,callback:(position:Int)->Unit) {
 //        adapter = HintableSpinnerAdapter.setSpinner(spinner, data, hint)

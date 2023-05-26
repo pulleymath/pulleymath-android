@@ -7,7 +7,7 @@
         android:id="@+id/rootView"
         android:layout_width="@dimen/dp640"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_white_fafafa_round"
+        android:background="@drawable/bg_gray_100_round_ripple"
         tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.MyPageActivity">
 
         <LinearLayout
@@ -22,7 +22,7 @@
 
             <TextView
                 android:id="@+id/greetingLabel"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp48"
@@ -45,14 +45,14 @@
                         android:id="@+id/payUserContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:paddingStart="@dimen/dp48"
                         android:paddingTop="@dimen/dp32"
                         android:paddingBottom="@dimen/dp32">
 
                         <TextView
                             android:id="@+id/serviceNameLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/text_service_name"
@@ -62,7 +62,7 @@
 
                         <TextView
                             android:id="@+id/availableDurationLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -74,7 +74,7 @@
 
                         <TextView
                             android:id="@+id/serviceTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp104"
@@ -86,7 +86,7 @@
 
                         <TextView
                             android:id="@+id/availableDurationTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp104"
@@ -104,14 +104,14 @@
                         android:id="@+id/freeUserContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:paddingStart="@dimen/dp48"
                         android:paddingTop="@dimen/dp32"
                         android:paddingBottom="@dimen/dp32">
 
                         <TextView
                             android:id="@+id/membershipGuideLabel"
-                            style="@style/TextBlack_4c4c4c.Bold"
+                            style="@style/TextGray_800.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:lineSpacingExtra="8sp"
@@ -137,14 +137,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
-                        android:background="@color/white_ffffff"
+                        android:background="@color/white"
                         android:paddingStart="@dimen/dp48"
                         android:paddingTop="@dimen/dp32"
                         android:paddingBottom="@dimen/dp32">
 
                         <TextView
                             android:id="@+id/nameLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/text_name"
@@ -154,7 +154,7 @@
 
                         <TextView
                             android:id="@+id/emailLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -165,7 +165,7 @@
 
                         <TextView
                             android:id="@+id/phoneLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -177,7 +177,7 @@
 
                         <TextView
                             android:id="@+id/nameTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="72dp"
@@ -189,7 +189,7 @@
 
                         <TextView
                             android:id="@+id/emailTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/sp16"
@@ -200,7 +200,7 @@
 
                         <TextView
                             android:id="@+id/phoneTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/sp16"
@@ -223,7 +223,7 @@
 
                         <TextView
                             android:id="@+id/pwLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="32dp"
@@ -245,7 +245,7 @@
 
                         <TextView
                             android:id="@+id/pwdModifyGuideTv"
-                            style="@style/TextPurple_6d6dff.Bold"
+                            style="@style/TextPurple_300.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
@@ -256,7 +256,7 @@
 
                         <TextView
                             android:id="@+id/phoneModifyGuideTv"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -273,7 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
-                        android:background="@drawable/bg_white_ffffff_round_bottom_only"
+                        android:background="@drawable/bg_white_round_bottom_only"
                         android:paddingStart="@dimen/dp48"
                         android:paddingTop="@dimen/dp16"
                         android:paddingEnd="@dimen/dp48"
@@ -281,7 +281,7 @@
 
                         <TextView
                             android:id="@+id/gradeLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -292,7 +292,7 @@
 
                         <TextView
                             android:id="@+id/gradeTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp16"
@@ -317,7 +317,7 @@
 
                         <TextView
                             android:id="@+id/recommendLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -328,7 +328,7 @@
 
                         <TextView
                             android:id="@+id/studiedUnitTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:lineSpacingExtra="@dimen/sp8"
@@ -351,7 +351,7 @@
 
                         <TextView
                             android:id="@+id/optionalLabel"
-                            style="@style/TextGrey_c0c0c0"
+                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp24"
@@ -362,7 +362,7 @@
 
                         <TextView
                             android:id="@+id/optionalUnitTv"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:lineSpacingExtra="@dimen/sp8"

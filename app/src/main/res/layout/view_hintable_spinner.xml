@@ -9,7 +9,7 @@
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp56"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_c0c0c0"
+        android:background="@drawable/bg_white_stroke_gray_500"
         android:paddingStart="@dimen/dp8"
         android:textSize="@dimen/dp16"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_arrow_sortable_bottom"
-        app:tint="@color/black_4c4c4c"
+        app:tint="@color/gray_800"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
         app:layout_constraintTop_toTopOf="@+id/spinner" />
@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/errorText"
-            style="@style/TextRed_fe7b67.Bold"
+            style="@style/TextRed_300.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"

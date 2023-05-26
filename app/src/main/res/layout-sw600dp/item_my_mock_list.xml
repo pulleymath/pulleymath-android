@@ -19,7 +19,7 @@
 
             <TextView
                 android:id="@+id/dateTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/gradeTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp16"
@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/typeTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp16"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/titleTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp16"
@@ -103,7 +103,7 @@
 
                 <TextView
                     android:id="@+id/correctPercentTv"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
@@ -113,7 +113,7 @@
 
                 <TextView
                     android:id="@+id/correctCountTv"
-                    style="@style/TextGrey_c0c0c0.Bold"
+                    style="@style/TextGray_500.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
@@ -124,7 +124,7 @@
 
             <TextView
                 android:id="@+id/scoreTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp16"
@@ -137,7 +137,7 @@
 
             <TextView
                 android:id="@+id/percentageTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp16"
@@ -150,7 +150,7 @@
 
             <TextView
                 android:id="@+id/ratingTv"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp16"
@@ -249,7 +249,7 @@
                 android:id="@+id/remainBtn"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:background="@drawable/btn_purple_6d6dff_grey_e0e0e0_round"
+                android:background="@drawable/btn_purple_300_gray_400_round"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -259,7 +259,7 @@
 
                 <TextView
                     android:id="@+id/remainCountText"
-                    style="@style/TextPurple_acacff.ExtraBold"
+                    style="@style/TextPurple_200.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
@@ -269,7 +269,7 @@
                     android:textSize="@dimen/sp12" />
 
                 <TextView
-                    style="@style/TextWhite_ffffff.ExtraBold"
+                    style="@style/TextWhite.ExtraBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -283,7 +283,7 @@
 
         <View
             android:id="@+id/horizontalBorder"
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginEnd="@dimen/dp32"

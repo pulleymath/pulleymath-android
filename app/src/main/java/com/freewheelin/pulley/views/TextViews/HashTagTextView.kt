@@ -16,7 +16,7 @@ class HashTagTextView: TextView {
         setPadding(leftRightPadding, topBottomPadding, leftRightPadding, topBottomPadding)
         background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_20)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+        setTextColor(ContextCompat.getColor(context, R.color.gray_800))
         typeface = ResourcesCompat.getFont(context, R.font.pretendard_semibold)
         text = title
     }

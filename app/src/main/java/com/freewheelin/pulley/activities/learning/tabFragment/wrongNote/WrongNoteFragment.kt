@@ -724,7 +724,7 @@ class WrongNoteFragment : LearningTabFragment(),
                 return holder
             } else if (viewType == 1) {
                 val textView = TextView(context)
-                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_4c4c4c))
+                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_800))
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
                 textView.typeface = Theme.regular(requireContext())
                 return GroupHeaderHolder(textView)
@@ -823,7 +823,7 @@ class WrongNoteFragment : LearningTabFragment(),
                     val context = itemBinding.root.context
 
                     val balloonWindow = BalloonWindow(context, questionBalloonBtn, BalloonWindow.Position.below, 8.toPx())
-                    balloonWindow.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
+                    balloonWindow.balloonColor = ContextCompat.getColor(context, R.color.purple_200)
                     balloonWindow.offset = -120
                     balloonWindow.setPadding(16.toPx())
 
@@ -837,7 +837,7 @@ class WrongNoteFragment : LearningTabFragment(),
                     titleTv.text = "학습과정순이란?"
                     titleTv.setTextAppearance(R.style.h5)
                     titleTv.typeface = Theme.extraBold(context)
-                    titleTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                    titleTv.setTextColor(ContextCompat.getColor(context, R.color.white))
 
                     val contentTvParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                     contentTvParams.topMargin = 12.toPx()
@@ -848,7 +848,7 @@ class WrongNoteFragment : LearningTabFragment(),
                         "2. 과목 내 단원: 현행 교육 단원순을 반영하여 표시"
                     contentTv.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f,  Resources.getSystem().getDisplayMetrics()), 1.0f);
                     contentTv.setTextAppearance(R.style.mo_h4_sb)
-                    contentTv.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+                    contentTv.setTextColor(ContextCompat.getColor(context, R.color.white))
 
                     linearLayout.addView(titleTv)
                     linearLayout.addView(contentTv)
@@ -903,9 +903,9 @@ class WrongNoteFragment : LearningTabFragment(),
                 field = value
                 val view = itemBinding.root
                 if(value) {
-                    view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                    view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_stroke_purple_300)
                 } else {
-                    view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_ffffff_stroke_grey_e8e8e8)
+                    view.background = ContextCompat.getDrawable(view.context, R.drawable.bg_white_stroke_gray_300)
                 }
                 itemBinding.checkBox.isChecked = value
             }
@@ -957,10 +957,10 @@ private class TabTextView: androidx.appcompat.widget.AppCompatTextView {
 
         if(selected) {
             typeface = Theme.extraBold(context)
-            setTextColor(ContextCompat.getColor(context, R.color.purple_6D6DFF))
+            setTextColor(ContextCompat.getColor(context, R.color.purple_300))
         } else {
             typeface = Theme.bold(context)
-            setTextColor(ContextCompat.getColor(context, R.color.black_4c4c4c))
+            setTextColor(ContextCompat.getColor(context, R.color.gray_800))
         }
     }
 }

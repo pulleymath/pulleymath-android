@@ -132,7 +132,7 @@ class AffiliatedTestFragment: LearningTabFragment() {
                     // 동작 안해서 걍 setOnClickListener 달아놓음
                     // 이거 왜 동작을 안하지?
                 }
-                .partialFontAndColored(Theme.bold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_6D6DFF), "웹으로 시험 응시하기")
+                .partialFontAndColored(Theme.bold(requireContext()), ContextCompat.getColor(requireContext(), R.color.purple_300), "웹으로 시험 응시하기")
 
             testStartBtn.setOnClickListener { view ->
                 viewModel.selectedUnivTestCard.value?.let {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/optionLabel"
-    style="@style/TextGrey_9f9f9f.Bold"
+    style="@style/TextGray_600.Bold"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="4dp"
-    android:background="@drawable/bg_grey_e0e0e0_round_20"
+    android:background="@drawable/bg_gray_400_round_20"
     android:gravity="center"
     android:paddingStart="6dp"
     android:paddingTop="2dp"

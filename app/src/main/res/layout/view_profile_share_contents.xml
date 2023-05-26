@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        style="@style/TextGrey_c0c0c0"
+        style="@style/TextGray_500"
         android:id="@+id/dateTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,12 +27,12 @@
 
     <TextView
         android:id="@+id/nameTv"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="김풀리"
-        android:textColor="@color/black_4c4c4c"
+        android:textColor="@color/gray_800"
         android:textSize="@dimen/sp24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/typeLabel"
-        style="@style/TextPurple_6d6dff.ExtraBold"
+        style="@style/TextPurple_300.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -73,13 +73,13 @@
 
     <TextView
         android:id="@+id/cntLabel"
-        style="@style/TextGrey_c0c0c0.ExtraBold"
+        style="@style/TextGray_500.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:text="푼 문제 수(오답학습 수)"
-        android:textColor="@color/grey_c0c0c0"
+        android:textColor="@color/gray_500"
         android:textSize="@dimen/sp12"
         app:layout_constraintBottom_toTopOf="@+id/problemCntTv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,12 +89,12 @@
 
     <TextView
         android:id="@+id/problemCntTv"
-        style="@style/TextGrey_818181.ExtraBold"
+        style="@style/TextGray_700.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="1230(245)"
-        android:textColor="@color/grey_818181"
+        android:textColor="@color/gray_700"
         android:textSize="@dimen/sp18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

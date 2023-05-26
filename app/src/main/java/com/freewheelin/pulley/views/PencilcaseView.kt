@@ -227,23 +227,23 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
                 pencilBtn.isSelected = true
                 eraserBtn.isSelected = false
                 pencilOptionLl.visibility = View.VISIBLE
-                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
-                pencilBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_6d6dff_round)
+                eraserBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_ripple)
+                pencilBtn.setBackgroundResource(R.drawable.bg_purple_100_stroke_purple_300_round)
             }
             Pencilcase.EditType.eraser -> {
                 pencilBtn.isSelected = false
                 eraserBtn.isSelected = true
                 pencilOptionLl.visibility = View.GONE
-                eraserBtn.setBackgroundResource(R.drawable.bg_purple_ecebff_stroke_purple_6d6dff_round)
-                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
+                eraserBtn.setBackgroundResource(R.drawable.bg_purple_100_stroke_purple_300_round)
+                pencilBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_ripple)
             }
             else -> {
                 pencilBtn.isSelected = false
                 eraserBtn.isSelected = false
                 pencilOptionLl.visibility = View.GONE
 
-                eraserBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
-                pencilBtn.setBackgroundResource(R.drawable.bg_white_fafafa_stroke_grey_e8e8e8_round_ripple)
+                eraserBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_ripple)
+                pencilBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_ripple)
             }
         }
 
@@ -251,7 +251,7 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
         thinBtn.clearColorFilter()
         mediumBtn.clearColorFilter()
         thickBtn.clearColorFilter()
-        val selectedColor = ContextCompat.getColor(context, R.color.grey_9f9f9f)
+        val selectedColor = ContextCompat.getColor(context, R.color.gray_600)
         when(thickness) {
             Pencilcase.Thickness.line -> lineBtn.setColorFilter(selectedColor)
             Pencilcase.Thickness.thin -> thinBtn.setColorFilter(selectedColor)

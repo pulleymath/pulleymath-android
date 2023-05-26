@@ -32,11 +32,11 @@ class DaebakDialogV2(context: Context, val successCallback: () -> Unit = {}, val
     var isConfirmBtnRed: Boolean = false
         set(value) {
             if (value) {
-                binding.rightBtn.setBackgroundResource(R.drawable.bg_red_fe7b67_round_ripple)
+                binding.rightBtn.setBackgroundResource(R.drawable.bg_red_300_round_ripple)
                 binding.leftBtn.setTextColor(context.getColor(R.color.gray_800))
 
             } else {
-                binding.rightBtn.setBackgroundResource(R.drawable.bg_purple_6d6dff_round)
+                binding.rightBtn.setBackgroundResource(R.drawable.bg_purple_300_round_ripple)
                 binding.leftBtn.setTextColor(context.getColor(R.color.purple_300))
             }
             field = value

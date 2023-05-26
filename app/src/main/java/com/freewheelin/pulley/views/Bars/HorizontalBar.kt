@@ -17,25 +17,25 @@ class HorizontalBar: View {
             field = value
             invalidate()
         }
-    var color: Int = ContextCompat.getColor(context, R.color.grey_e8e8e8)
+    var color: Int = ContextCompat.getColor(context, R.color.gray_300)
         set(value) {
             field = value
             invalidate()
         }
 
-    var bgColor: Int = ContextCompat.getColor(context, R.color.grey_f2f2f2)
+    var bgColor: Int = ContextCompat.getColor(context, R.color.gray_200)
         set(value) {
             field = value
             invalidate()
         }
 
-    var progressColor: Int = ContextCompat.getColor(context, R.color.green_70d000)
+    var progressColor: Int = ContextCompat.getColor(context, R.color.green_300)
         set(value) {
             field = value
             invalidate()
         }
 
-    var borderColor: Int = ContextCompat.getColor(context, R.color.grey_e8e8e8)
+    var borderColor: Int = ContextCompat.getColor(context, R.color.gray_300)
         set(value) {
             field = value
             invalidate()

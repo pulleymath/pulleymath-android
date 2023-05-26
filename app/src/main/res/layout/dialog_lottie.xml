@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/bg_white_ffffff_round"
+    android:background="@drawable/bg_white_round_ripple"
     android:layout_width="424dp"
     android:paddingBottom="@dimen/dp32"
     android:paddingTop="8dp"
@@ -20,12 +20,12 @@
         app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/guideTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp24"
-        android:textColor="@color/black_4c4c4c"
+        android:textColor="@color/gray_800"
         android:lineSpacingExtra="12sp"
         android:gravity="center_horizontal"
         android:layout_marginTop="24dp"

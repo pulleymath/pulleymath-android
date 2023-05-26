@@ -70,15 +70,15 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
         super.setEnabled(enabled)
 
         if(enabled) {
-            mainBtn.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            mainBtn.setTextColor(ContextCompat.getColor(context,R.color.gray_800))
             mainBtn.setOnClickListener(this)
-            arrowIv.setColorFilter(ContextCompat.getColor(context, R.color.black_4c4c4c))
-            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
+            arrowIv.setColorFilter(ContextCompat.getColor(context, R.color.gray_800))
+            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round)
         } else {
-            mainBtn.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            mainBtn.setTextColor(ContextCompat.getColor(context,R.color.gray_400))
             mainBtn.setOnClickListener(null)
-            arrowIv.setColorFilter(ContextCompat.getColor(context, R.color.grey_e0e0e0))
-            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0_round)
+            arrowIv.setColorFilter(ContextCompat.getColor(context, R.color.gray_400))
+            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_400_round)
         }
     }
 
@@ -91,7 +91,7 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.spinner_arduous, this, true)
-        this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
+        this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round)
         isFocusableInTouchMode = true
 
         mainBtn = findViewById(R.id.mainBtn)
@@ -139,7 +139,7 @@ class ArduousSpinner : ConstraintLayout, View.OnClickListener {
 
         init {
             LayoutInflater.from(context).inflate(R.layout.view_arduous_list, this, true)
-            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_black_4c4c4c_round)
+            this.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_800_round)
             orientation = VERTICAL
 
             listRv = findViewById(R.id.listRv)

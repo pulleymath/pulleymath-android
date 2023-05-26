@@ -268,7 +268,7 @@
             android:id="@+id/solutionContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8_left"
+            android:background="@drawable/bg_white_stroke_gray_300_left"
 
             app:layout_constraintWidth_percent="0.375"
             app:layout_constraintTop_toTopOf="parent"
@@ -277,7 +277,7 @@
             android:visibility="@{ vm.isQuizMainConcept ? View.GONE : vm.showConceptSolutionView ? View.VISIBLE : View.GONE }"
             >
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
                 app:layout_constraintBottom_toBottomOf="@id/tabLayout"

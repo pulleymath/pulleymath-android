@@ -378,7 +378,7 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
         thinBtn.clearColorFilter()
         mediumBtn.clearColorFilter()
         thickBtn.clearColorFilter()
-        val selectedColor = ContextCompat.getColor(context, R.color.grey_9f9f9f)
+        val selectedColor = ContextCompat.getColor(context, R.color.gray_600)
         when(thickness) {
             CookingPencilcase.Thickness.line -> lineBtn
             CookingPencilcase.Thickness.thin -> thinBtn

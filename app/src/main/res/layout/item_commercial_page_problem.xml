@@ -7,7 +7,7 @@
         android:layout_height="@dimen/dp48">
 
         <CheckBox
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp12"
-            android:textColor="@color/grey_c0c0c0"
+            android:textColor="@color/gray_500"
             android:gravity="end"
             android:text="개념연산내신유형블라"
             android:layout_marginEnd="@dimen/dp16"

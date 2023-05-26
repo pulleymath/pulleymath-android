@@ -7,19 +7,19 @@
         android:layout_width="640dp"
         android:layout_height="640dp"
         android:focusableInTouchMode="true"
-        android:background="@drawable/bg_white_fafafa_round">
+        android:background="@drawable/bg_gray_100_round_ripple">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topContainerCl"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="@drawable/bg_white_ffffff_round_top_only"
+            android:background="@drawable/bg_white_round_top_only"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -38,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            <View style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -54,7 +54,7 @@
 
                 <TextView
                     android:id="@+id/guideLabel"
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -73,7 +73,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="32dp"
-                    android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+                    android:background="@drawable/bg_white_stroke_gray_300"
                     android:orientation="vertical"
                     android:paddingStart="32dp"
                     android:paddingTop="24dp"
@@ -83,7 +83,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/guideLabel">
 
                     <TextView
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -94,7 +94,7 @@
 
                     <TextView
                         android:id="@+id/textView2"
-                        style="@style/TextBlack_4c4c4c"
+                        style="@style/TextGray_800"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -115,7 +115,7 @@
 
                         <RadioButton
                             android:id="@+id/lowButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:text="더 쉽게"
@@ -123,7 +123,7 @@
 
                         <RadioButton
                             android:id="@+id/middleButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:layout_marginStart="@dimen/dp32"
@@ -132,7 +132,7 @@
 
                         <RadioButton
                             android:id="@+id/highButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:layout_marginStart="@dimen/dp32"
@@ -157,7 +157,7 @@
 
                         <RadioButton
                             android:id="@+id/sameButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:text="최근 공부한 범위"
@@ -168,14 +168,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="26dp"
-                            android:background="@color/grey_f2f2f2"
+                            android:background="@color/gray_200"
                             android:orientation="vertical"
                             android:padding="24dp"
                             android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/sameBelow50Label"
-                                style="@style/TextGrey_9f9f9f.Bold"
+                                style="@style/TextGray_600.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="문제를 더 풀어야 추천이 가능해요. 우선 처음 선택한 단원대로 추천할게요!"
@@ -185,7 +185,7 @@
 
                             <TextView
                                 android:id="@+id/sameCommonLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -196,7 +196,7 @@
 
                             <TextView
                                 android:id="@+id/sameCommonText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="수학(상), 수학(하), 수학1, 수학2"
@@ -207,7 +207,7 @@
 
                             <TextView
                                 android:id="@+id/sameCommonButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"
@@ -218,7 +218,7 @@
 
                             <TextView
                                 android:id="@+id/sameOptionalLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
@@ -229,7 +229,7 @@
 
                             <TextView
                                 android:id="@+id/sameOptionalText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="확률과 통계"
@@ -242,7 +242,7 @@
 
                             <TextView
                                 android:id="@+id/sameOptionalButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"
@@ -258,14 +258,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="26dp"
-                            android:background="@color/grey_f2f2f2"
+                            android:background="@color/gray_200"
                             android:orientation="vertical"
                             android:padding="24dp"
                             android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/sameOver50Label"
-                                style="@style/TextGrey_9f9f9f.Bold"
+                                style="@style/TextGray_600.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="아래의 과목/단원에서 5문제를 선별해 출제합니다."
@@ -275,7 +275,7 @@
 
                             <TextView
                                 android:id="@+id/sameMyLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -286,7 +286,7 @@
 
                             <TextView
                                 android:id="@+id/sameMyText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="수학(상), 수학(하), 수학1, 수학2"
@@ -297,7 +297,7 @@
 
                             <TextView
                                 android:id="@+id/sameMyButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"
@@ -309,7 +309,7 @@
 
                         <RadioButton
                             android:id="@+id/aheadButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:text="수능 전범위"
@@ -320,14 +320,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="26dp"
-                            android:background="@color/grey_f2f2f2"
+                            android:background="@color/gray_200"
                             android:orientation="vertical"
                             android:padding="24dp"
                             android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/aheadLabel"
-                                style="@style/TextGrey_9f9f9f.Bold"
+                                style="@style/TextGray_600.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -338,7 +338,7 @@
 
                             <TextView
                                 android:id="@+id/aheadOptionalLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="선택과목 : "
@@ -348,7 +348,7 @@
 
                             <TextView
                                 android:id="@+id/aheadOptionalText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="수학(상), 수학(하), 수학1, 수학2"
@@ -359,7 +359,7 @@
 
                             <TextView
                                 android:id="@+id/aheadOptionalButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"
@@ -371,7 +371,7 @@
 
                         <RadioButton
                             android:id="@+id/tailButton"
-                            style="@style/TextBlack_4c4c4c"
+                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:text="내가 선택한 과목"
@@ -382,14 +382,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="26dp"
-                            android:background="@color/grey_f2f2f2"
+                            android:background="@color/gray_200"
                             android:orientation="vertical"
                             android:padding="24dp"
                             android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/myChoiceLabel"
-                                style="@style/TextGrey_9f9f9f.Bold"
+                                style="@style/TextGray_600.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="수정하기에서 대단원 선택이 가능합니다."
@@ -399,7 +399,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceCommonLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
@@ -410,7 +410,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceCommonText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="수학(상), 수학(하), 수학1, 수학2"
@@ -421,7 +421,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceCommonButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"
@@ -431,7 +431,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceOptionalLabel"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
@@ -442,7 +442,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceOptionalText"
-                                style="@style/TextBlack_4c4c4c.Bold"
+                                style="@style/TextGray_800.Bold"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text="확률과 통계"
@@ -455,7 +455,7 @@
 
                             <TextView
                                 android:id="@+id/myChoiceOptionalButton"
-                                style="@style/TextPurple_6d6dff.ExtraBold"
+                                style="@style/TextPurple_300.ExtraBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/text_do_edit_go"

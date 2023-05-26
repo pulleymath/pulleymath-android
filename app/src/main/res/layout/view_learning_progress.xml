@@ -12,14 +12,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="1"
-            android:background="@color/white_ffffff">
+            android:background="@color/white">
 
             <View
                 android:id="@+id/progressView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
-                android:background="@color/purple_6D6DFF"></View>
+                android:background="@color/purple_300"></View>
         </LinearLayout>
 
 

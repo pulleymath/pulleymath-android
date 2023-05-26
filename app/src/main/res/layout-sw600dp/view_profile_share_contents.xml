@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        style="@style/TextGrey_c0c0c0"
+        style="@style/TextGray_500"
         android:id="@+id/dateTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,12 +26,12 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:id="@+id/nameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp24"
-        android:textColor="@color/black_4c4c4c"
+        android:textColor="@color/gray_800"
         android:text="김풀리"
         android:layout_marginTop="@dimen/dp16"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profileIv"/>
 
     <TextView
-        style="@style/TextPurple_6d6dff.ExtraBold"
+        style="@style/TextPurple_300.ExtraBold"
         android:id="@+id/typeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,12 +69,12 @@
 
 
     <TextView
-        style="@style/TextGrey_c0c0c0.ExtraBold"
+        style="@style/TextGray_500.ExtraBold"
         android:id="@+id/cntLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp12"
-        android:textColor="@color/grey_c0c0c0"
+        android:textColor="@color/gray_500"
         android:text="푼 문제 수(오답학습 수)"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,12 +83,12 @@
 
 
     <TextView
-        style="@style/TextGrey_818181.ExtraBold"
+        style="@style/TextGray_700.ExtraBold"
         android:id="@+id/problemCntTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp18"
-        android:textColor="@color/grey_818181"
+        android:textColor="@color/gray_700"
         android:text="1230(245)"
         android:layout_marginBottom="@dimen/dp48"
         app:layout_constraintStart_toStartOf="parent"

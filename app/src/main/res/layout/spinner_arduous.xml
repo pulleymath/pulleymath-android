@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Button
         android:id="@+id/mainBtn"
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:textSize="@dimen/sp16"
@@ -25,7 +25,7 @@
         android:layout_height="7dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/arrow_bottom_arduous_spinner"
-        app:tint="@color/black_4c4c4c"
+        app:tint="@color/gray_800"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

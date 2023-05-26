@@ -33,7 +33,6 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
-import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
@@ -275,18 +274,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
             }
             val completedDialog = ChallengeCompletedDialog(startChallenge,
                 ChallengeManager.CourseName.스타트챌린지_워크북.id,
-                moveEvent = moveEvent,
-                exitEvent = {
-                    val nextCourse = startChallenge.getNextCourse(ChallengeManager.CourseName.스타트챌린지_워크북.id)
-                    if (nextCourse != null) {
-                        val induceDialog = ChallengeInduceDialog(
-                            ChallengeInduceDialog.Type.OneMore,
-                            course = nextCourse,
-                            moveEvent = moveEvent
-                        )
-                        supportFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
-                    }
-                }
+                moveEvent = moveEvent
             )
 
             supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog4") }

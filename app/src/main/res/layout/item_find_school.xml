@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/schoolName"
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/address"
-            style="@style/TextGrey_9f9f9f.Bold"
+            style="@style/TextGray_600.Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

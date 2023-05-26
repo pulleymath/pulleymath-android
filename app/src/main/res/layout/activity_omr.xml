@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_4c4c4c"
+        android:background="@color/gray_800"
         tools:context=".activities.OMRActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -23,7 +23,7 @@
 
             <TextView
                 android:id="@+id/tvTitle"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -31,12 +31,12 @@
 
             <Button
                 android:id="@+id/spyBtn"
-                style="@style/TextBlack_333333.Bold"
+                style="@style/TextBlack_200.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/bg_grey_9f9f9f_round"
+                android:background="@drawable/bg_gray_600_round_ripple"
                 android:maxLines="1"
                 android:text="SPY"
                 android:textSize="14sp"
@@ -85,11 +85,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_weight="3"
-            android:background="@drawable/bg_red_ffe8e8_round_8">
+            android:background="@drawable/bg_red_100_round_8">
 
             <TextView
                 android:id="@+id/lbCommonSubject"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
                 android:gravity="center"
@@ -113,7 +113,7 @@
                 android:id="@+id/dividerFirstOmrLeft"
                 android:layout_width="@dimen/omr_answer_borderWidth"
                 android:layout_height="0dp"
-                android:background="@color/red_ffc6bc"
+                android:background="@color/red_200"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.3333333334"
@@ -124,7 +124,7 @@
                 android:id="@+id/dividerCommonSubject"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/omr_answer_borderWidth"
-                android:background="@color/red_ffc6bc"
+                android:background="@color/red_200"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lbCommonSubject" />
@@ -136,7 +136,7 @@
             android:id="@+id/dividerSecondOmrLeft"
             android:layout_width="@dimen/omr_answer_borderWidth"
             android:layout_height="0dp"
-            android:background="@color/red_ffc6bc"
+            android:background="@color/red_200"
             app:layout_constraintBottom_toBottomOf="@id/omrViewLeftContainer"
             app:layout_constraintEnd_toEndOf="@id/omrViewLeftContainer"
             app:layout_constraintHorizontal_bias="0.666666666"
@@ -165,7 +165,7 @@
             android:layout_marginTop="@dimen/omr_margin_top"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/omrViewLeftContainer"
-            android:background="@drawable/bg_red_ffe8e8_round_8"
+            android:background="@drawable/bg_red_100_round_8"
             android:clipChildren="true"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -174,7 +174,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="32dp"
-                style="@style/TextBlack_4c4c4c.Bold"
+                style="@style/TextGray_800.Bold"
                 android:text="선 택 과 목"
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/lbSelectedSubject"
@@ -189,7 +189,7 @@
                 app:layout_constraintTop_toBottomOf="@id/lbSelectedSubject"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/red_ffc6bc" />
+                android:background="@color/red_200" />
 
             <com.freewheelin.pulley.views.OMRView
                 android:id="@+id/omrViewRight"

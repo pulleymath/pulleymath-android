@@ -34,10 +34,10 @@ class MyCuration(val context: Context) {
     val level_ratio_B = "같은 등급 친구들 대비 %s 난이도의 연습량이 가장 많아요!"
 
     val positiveColor: Int
-        get() = ContextCompat.getColor(context, R.color.blue_30a4ff)
+        get() = ContextCompat.getColor(context, R.color.blue_400)
 
     val negativeColor: Int
-        get() = ContextCompat.getColor(context, R.color.red_fe7b67)
+        get() = ContextCompat.getColor(context, R.color.red_300)
 
     fun getUnitSummaryQ(period: Int, improvement: Int?, summaryAnalysis: List<ChapterAnalysis>): CharSequence {
         if(improvement == null) {

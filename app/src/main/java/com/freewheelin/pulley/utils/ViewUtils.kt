@@ -303,7 +303,7 @@ fun View.showBalloon(text: String) {
         BalloonWindow.Position.above
     
     val textView = TextView(context)
-    textView.setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+    textView.setTextColor(ContextCompat.getColor(context, R.color.white))
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
     textView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp8),  resources.displayMetrics),1f)
     textView.text = text
@@ -313,7 +313,7 @@ fun View.showBalloon(text: String) {
     val balloon = TooltipWindow(context, this, position)
     val padding = resources.getDimension(R.dimen.dp24).toInt()
     balloon.setPadding(padding, padding, padding, padding)
-    balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
+    balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_200)
     balloon.show(textView)
 }
 fun View.showBalloon(text: String, drawable: Int, width: Int, height: Int) {
@@ -329,7 +329,7 @@ fun View.showBalloon(text: String, drawable: Int, width: Int, height: Int) {
     val textView = TextView(context).apply {
         layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         gravity = Gravity.CENTER
-        setTextColor(ContextCompat.getColor(context, R.color.white_ffffff))
+        setTextColor(ContextCompat.getColor(context, R.color.white))
         setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp16))
         setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.sp8),  resources.displayMetrics),1f)
         this.text = text
@@ -358,7 +358,7 @@ fun View.showBalloon(text: String, drawable: Int, width: Int, height: Int) {
     val balloon = TooltipWindow(context, this, position)
     val padding = resources.getDimension(R.dimen.dp24).toInt()
     balloon.setPadding(padding, padding, padding, padding)
-    balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_ACACFF)
+    balloon.balloonColor = ContextCompat.getColor(context, R.color.purple_200)
     balloon.show(linearLayout)
 }
 
@@ -686,6 +686,9 @@ fun View.setMarginEnd(dp: Int) {
 }
 fun View.visibleIf(isVisible: Boolean) {
     this.visibility = if(isVisible) View.VISIBLE else View.GONE
+}
+fun View.visibleOrInvisibleIf(isVisible: Boolean) {
+    this.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
 }
 fun View.visibleAnimIf(isVisible: Boolean) {
     if (isVisible) {

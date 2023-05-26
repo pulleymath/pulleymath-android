@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_fafafa"
+    android:background="@color/gray_100"
     tools:context="com.freewheelin.pulley.activities.StartActivity">
 
 
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/topLabel"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/freeStartGuideTv"
-        style="@style/TextPurple_6d6dff.ExtraBold"
+        style="@style/TextPurple_300.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

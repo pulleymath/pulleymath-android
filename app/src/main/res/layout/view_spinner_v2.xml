@@ -12,7 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/dp8"
-        android:background="@drawable/bg_white_stroke_gray_333333_round">
+        android:background="@drawable/bg_white_stroke_gray_700_round">
 
         <Spinner
             android:id="@+id/spinner"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_arrow_sortable_bottom"
-            app:tint="@color/black_4c4c4c"
+            app:tint="@color/gray_800"
             app:layout_constraintBottom_toBottomOf="@+id/spinner"
             app:layout_constraintEnd_toEndOf="@+id/spinner"
             app:layout_constraintTop_toTopOf="@+id/spinner" />
@@ -48,6 +48,6 @@
         android:fontFamily="@font/font_pretendard_semibold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/bg_ffffff_c0c0c0_two_color"/>
+        android:background="@drawable/bg_white_gray_100_two_color"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

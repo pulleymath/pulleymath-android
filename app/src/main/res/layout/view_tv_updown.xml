@@ -19,7 +19,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <TextView
-            style="@style/TextBlue_30a4ff.Bold"
+            style="@style/TextBlue_400.Bold"
             android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

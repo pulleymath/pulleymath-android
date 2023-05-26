@@ -11,13 +11,13 @@
             android:layout_width="464dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_white_fafafa_round">
+            android:background="@drawable/bg_gray_100_round_ripple">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:background="@drawable/bg_white_ffffff_round_top_only"
+                android:background="@drawable/bg_white_round_top_only"
                 android:layout_height="@dimen/dp64">
                 <TextView
-                    style="@style/TextBlack_4c4c4c.Bold"
+                    style="@style/TextGray_800.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="학습자료 메일로 보내기"
@@ -41,12 +41,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
             <TextView
-                style="@style/TextBlack_4c4c4c"
+                style="@style/TextGray_800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"

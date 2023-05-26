@@ -6,14 +6,6 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="MFRadioButton.Normal">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:button">@drawable/bg_radio_normal</item>
-        <item name="android:textColor">@color/black_4c4c4c</item>
-        <item name="android:paddingStart">8dp</item>
-    </style>
-
     <style name="MFRadioButton.Box">
         <item name="android:layout_height">146dp</item>
         <item name="android:background">@drawable/bg_common_box_check_white_purple</item>
@@ -26,14 +18,10 @@
         <item name="android:textSize">@dimen/sp14</item>
     </style>
 
-    <style name="MFRadioButton.Box.Top">
-        <item name="android:drawableTop">@drawable/bg_radio_normal</item>
-    </style>
-
     <style name="MFRadioButton.MockTab">
         <item name="android:background">@drawable/bg_mock_analysis_tab</item>
         <item name="android:button">@null</item>
-        <item name="android:textColor">@drawable/color_check_grey_white</item>
+        <item name="android:textColor">@drawable/color_check_gray_white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/sp16</item>
     </style>

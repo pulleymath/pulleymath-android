@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp16"
                 app:label="등급"
-                android:textColor="@color/grey_818181"
+                android:textColor="@color/gray_700"
                 app:layout_constraintTop_toTopOf="@+id/dateSl"
                 app:layout_constraintBottom_toBottomOf="@+id/dateSl"
                 app:layout_constraintEnd_toStartOf="@+id/reportContainer"/>
@@ -118,7 +118,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginEnd="@dimen/dp32"
             app:layout_constraintStart_toStartOf="parent"

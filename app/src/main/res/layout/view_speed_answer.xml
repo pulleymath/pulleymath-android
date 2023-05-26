@@ -19,7 +19,7 @@
         android:id="@+id/emptyFilterContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/grey_f2f2f2"
+        android:background="@color/gray_200"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toTopOf="@+id/recyclerView"
@@ -30,7 +30,7 @@
             android:id="@+id/emptyIv"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/rect_grey_c0c0c0"
+            android:src="@drawable/rect_gray_500"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
-            style="@style/TextGrey_c0c0c0.Bold"
+            style="@style/TextGray_500.Bold"
             android:id="@+id/emptyTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,13 +57,13 @@
         android:id="@+id/markingContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/grey_f2f2f2"
+        android:background="@color/gray_200"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/Border_Grey_e8e8e8_Horizontal"
+            style="@style/Border_Gray_300_Horizontal"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -72,7 +72,7 @@
             android:id="@+id/markingBtn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp40"
-            android:background="@drawable/bg_grey_e0e0e0_round_20"
+            android:background="@drawable/bg_gray_400_round_20"
             android:layout_marginTop="@dimen/dp24"
             android:layout_marginBottom="@dimen/dp24"
             android:layout_marginStart="@dimen/dp32"
@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                style="@style/TextWhite_ffffff.ExtraBold"
+                style="@style/TextWhite.ExtraBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sp16"
@@ -97,14 +97,14 @@
                 app:layout_constraintHorizontal_chainStyle="packed"/>
 
             <TextView
-                style="@style/TextPurple_6d6dff.ExtraBold"
+                style="@style/TextPurple_300.ExtraBold"
                 android:id="@+id/answeredCntTv"
                 android:layout_width="@dimen/dp20"
                 android:layout_height="@dimen/dp20"
                 android:visibility="gone"
                 android:textSize="@dimen/sp12"
                 android:gravity="center"
-                android:background="@drawable/bg_white_ffffff_circle"
+                android:background="@drawable/bg_white_circle"
                 app:layout_constraintTop_toTopOf="@+id/markingLabel"
                 app:layout_constraintBottom_toBottomOf="@+id/markingLabel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,10 +115,10 @@
 
         <Button
             android:id="@+id/submitBtn"
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp40"
-            android:background="@drawable/bg_grey_e0e0e0_round_20"
+            android:background="@drawable/bg_gray_400_round_20"
             android:text="제출하기"
             android:textSize="@dimen/sp16"
             android:layout_marginTop="@dimen/dp24"

@@ -63,7 +63,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/yearSl"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="16dp"
@@ -77,7 +77,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/monthSl"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="@dimen/dp20"
@@ -92,7 +92,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/gradeSl"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="@dimen/dp16"
@@ -108,7 +108,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/typeSl"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="@dimen/dp20"
@@ -124,7 +124,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/titleSl"
-                style="@style/TextGrey_9f9f9f.Bold"
+                style="@style/TextGray_600.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="@dimen/dp16"
@@ -139,7 +139,7 @@
 
             <View
                 android:id="@+id/view2"
-                style="@style/Border_Grey_e8e8e8_Horizontal"
+                style="@style/Border_Gray_300_Horizontal"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +189,7 @@
                 android:src="@drawable/ic_empty" />
 
             <TextView
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

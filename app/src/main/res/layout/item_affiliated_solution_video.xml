@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
-            android:background="@drawable/bg_transparent_only_horizontal_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_transparent_only_horizontal_stroke_gray_300"
             android:onClick="@{()->listener.onItemClick(item)}"
             android:clickable="true"
             android:focusable="true"

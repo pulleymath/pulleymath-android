@@ -17,10 +17,10 @@
             android:id="@+id/tabContainerCl"
             android:layout_width="@dimen/learning_wrongNote_filter_width"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintStart_toStartOf="parent">
 
-            <View style="@style/Border_Grey_e8e8e8_Horizontal"
+            <View style="@style/Border_Gray_300_Horizontal"
                 android:layout_height="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,7 @@
                 android:layout_height="@dimen/dp56"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabIndicatorHeight="2dp"
-                app:tabIndicatorColor="@color/purple_6D6DFF"
+                app:tabIndicatorColor="@color/purple_300"
                 app:tabMaxWidth="0dp"
                 app:tabGravity="fill"
                 app:tabMode="fixed">

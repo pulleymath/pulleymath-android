@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/guideTv"
-        style="@style/TextBlack_4c4c4c.ExtraBold"
+        style="@style/TextGray_800.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp80"
@@ -30,12 +30,12 @@
 
     <TextView
         android:id="@+id/chartGuideLabel"
-        style="@style/TextGrey_9f9f9f.Bold"
+        style="@style/TextGray_600.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="6sp"
         android:text="전체 공부량 중 오답학습 비중"
-        android:textColor="@color/grey_9f9f9f"
+        android:textColor="@color/gray_600"
         android:textSize="@dimen/sp14"
         app:layout_constraintBottom_toBottomOf="@+id/actionBtnWrapperCl"
         app:layout_constraintEnd_toEndOf="@+id/studyRateChart"
@@ -45,7 +45,7 @@
 
 
     <TextView
-        style="@style/TextGrey_9f9f9f.Bold"
+        style="@style/TextGray_600.Bold"
         android:id="@+id/summaryTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
 <!--        app:layout_constraintTop_toBottomOf="@+id/summaryTv" />-->
 
     <TextView
-        style="@style/TextGrey_c0c0c0.ExtraBold"
+        style="@style/TextGray_500.ExtraBold"
         android:id="@+id/chartNormalTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
 
     <TextView
         android:id="@+id/versus"
-        style="@style/TextGrey_c0c0c0.ExtraBold"
+        style="@style/TextGray_500.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp100"
@@ -133,7 +133,7 @@
         app:layout_constraintEnd_toStartOf="@+id/chartNoteTv" />
 
     <TextView
-        style="@style/TextYellow_ffb300.ExtraBold"
+        style="@style/TextYellow_300.ExtraBold"
         android:id="@+id/chartNoteTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
 
 
     <TextView
-        style="@style/TextGrey_9f9f9f.ExtraBold"
+        style="@style/TextGray_600.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -159,7 +159,7 @@
         app:layout_constraintTop_toBottomOf="@+id/versus" />
 
     <TextView
-        style="@style/TextYellow_ffb300.ExtraBold"
+        style="@style/TextYellow_300.ExtraBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

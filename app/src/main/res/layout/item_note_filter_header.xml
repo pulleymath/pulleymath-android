@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/TextGrey_c0c0c0"
+            style="@style/TextGray_500"
             android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

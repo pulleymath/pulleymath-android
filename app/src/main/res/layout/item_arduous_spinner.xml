@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="48dp">
     <Button
-        style="@style/TextBlack_4c4c4c.Bold"
+        style="@style/TextGray_800.Bold"
         android:id="@+id/listItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

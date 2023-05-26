@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.activities.learning.tabFragment.book.*
-import com.freewheelin.pulley.databinding.ItemBookMyPlanBinding
 import com.freewheelin.pulley.databinding.ItemBookPlanV2Binding
 import com.freewheelin.pulley.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback

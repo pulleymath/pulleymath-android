@@ -8,7 +8,7 @@
         android:layout_height="56dp"
         android:id="@+id/containerCl">
 
-        <View android:background="@color/grey_f2f2f2"
+        <View android:background="@color/gray_200"
             android:layout_height="1dp"
             android:layout_width="0dp"
             android:id="@+id/horizontalBorder"
@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/studyTypeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,14 +44,14 @@
             android:id="@+id/firstBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginStart="@dimen/dp104"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/checkBox"
             app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/problemCntTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,14 +66,14 @@
             android:id="@+id/secondBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginStart="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/firstBorder"
             app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
 
 
         <TextView
-            style="@style/TextRed_fe7b67.ExtraBold"
+            style="@style/TextRed_300.ExtraBold"
             android:id="@+id/newTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,14 +109,14 @@
             android:id="@+id/titleBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintTop_toTopOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/thirdBorder"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:id="@+id/scoreTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
             android:id="@+id/thirdBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/fourthBorder"
@@ -140,7 +140,7 @@
 
         <TextView
             android:id="@+id/createDateTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="03-29"
@@ -154,7 +154,7 @@
             android:id="@+id/fourthBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/dp80"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toStartOf="@+id/fifthBorder"
@@ -162,7 +162,7 @@
 
         <TextView
             android:id="@+id/studyDateTv"
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="03-29"
@@ -176,14 +176,14 @@
             android:id="@+id/fifthBorder"
             android:layout_width="1dp"
             android:layout_height="16dp"
-            android:background="@color/grey_e8e8e8"
+            android:background="@color/gray_300"
             android:layout_marginEnd="@dimen/learning_myExam_list_end_margin"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
@@ -206,7 +206,7 @@
 
 
         <com.freewheelin.pulley.views.buttons.SecondaryButton
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/primaryBtn_width_96dp"
             android:layout_height="36dp"
@@ -218,7 +218,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/solveBtn"/>
 
         <TextView
-            style="@style/TextBlack_4c4c4c"
+            style="@style/TextGray_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"

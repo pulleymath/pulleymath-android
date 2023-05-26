@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/guideTv"
-                style="@style/TextGrey_c0c0c0.Bold"
+                style="@style/TextGray_500.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="나의 모의고사 분석 데이터가 없습니다."

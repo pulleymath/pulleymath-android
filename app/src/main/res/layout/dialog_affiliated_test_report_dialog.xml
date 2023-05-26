@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/bg_white_ffffff_round"
+        android:background="@drawable/bg_white_round_ripple"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -58,7 +58,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+        android:background="@drawable/bg_white_stroke_gray_300"
         android:gravity="center_vertical"
         android:hint="정답 입력"
         android:inputType="numberSigned"
@@ -77,14 +77,14 @@
         android:layout_width="@dimen/primaryBtn_width_132dp"
         android:layout_height="@dimen/dp40"
         android:layout_marginStart="@dimen/dp24"
-        android:background="@drawable/bg_purple_6d6dff_round_20"
+        android:background="@drawable/bg_purple_300_round_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/selectionAnswerView"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/markingLabel"
-            style="@style/TextWhite_ffffff.ExtraBold"
+            style="@style/TextWhite.ExtraBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -98,10 +98,10 @@
 
         <TextView
             android:id="@+id/answeredCntTv"
-            style="@style/TextPurple_6d6dff.ExtraBold"
+            style="@style/TextPurple_300.ExtraBold"
             android:layout_width="@dimen/dp20"
             android:layout_height="@dimen/dp20"
-            android:background="@drawable/bg_white_ffffff_circle"
+            android:background="@drawable/bg_white_circle"
             android:gravity="center"
             android:textSize="@dimen/sp12"
             android:visibility="gone"
@@ -115,11 +115,11 @@
 
     <Button
         android:id="@+id/submitBtn"
-        style="@style/TextWhite_ffffff.ExtraBold"
+        style="@style/TextWhite.ExtraBold"
         android:layout_width="@dimen/primaryBtn_width_132dp"
         android:layout_height="@dimen/dp40"
         android:layout_marginStart="@dimen/dp24"
-        android:background="@drawable/bg_purple_6d6dff_round_40"
+        android:background="@drawable/bg_purple_300_round_40"
         android:text="제출하기"
         android:textSize="@dimen/sp16"
         app:layout_constraintBottom_toBottomOf="parent"

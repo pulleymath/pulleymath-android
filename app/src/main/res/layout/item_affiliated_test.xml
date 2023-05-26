@@ -28,7 +28,7 @@
             android:paddingVertical="4dp"
             android:text="@{item.firstWorkbook.test_source + `학교 제휴`}"
             style="@style/mo_h6"
-            android:textColor="@color/white_ffffff"
+            android:textColor="@color/white"
             android:background="@drawable/bg_green_046b08_round"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

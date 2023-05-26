@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="704dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_fafafa_round"
+    android:background="@drawable/bg_gray_100_round_ripple"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp64"
-        android:background="@drawable/bg_white_ffffff_round_top_only"
+        android:background="@drawable/bg_white_round_top_only"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/TextBlack_4c4c4c.Bold"
+            style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp32"
@@ -48,7 +48,7 @@
             android:id="@+id/shareContents"
             android:layout_width="368dp"
             android:layout_height="368dp"
-            android:background="@drawable/bg_white_ffffff_stroke_grey_e8e8e8"
+            android:background="@drawable/bg_white_stroke_gray_300"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -58,7 +58,7 @@
             android:id="@+id/downloadBtn"
             android:layout_width="@dimen/dp56"
             android:layout_height="@dimen/dp56"
-            android:background="@drawable/bg_purple_ecebff_round"
+            android:background="@drawable/bg_purple_100_round"
             android:src="@drawable/ic_download"
             android:layout_marginStart="@dimen/dp32"
             app:layout_constraintBottom_toBottomOf="parent"

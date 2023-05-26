@@ -76,13 +76,13 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
             val edit = findViewById<EditText>(R.id.editText)
             if (value) {
                 container.visibility = View.VISIBLE
-                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_red_fe7b67)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_red_300)
             } else {
                 container.visibility = View.GONE
                 if(edit.isFocused)
-                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
                 else
-                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                    edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
             }
         }
 
@@ -127,20 +127,20 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
         val spin = findViewById<ArduousSpinner>(R.id.spinner)
 
         if(enabled) {
-            label.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
+            label.setTextColor(ContextCompat.getColor(context,R.color.gray_800))
 
-            edit.setTextColor(ContextCompat.getColor(context,R.color.black_4c4c4c))
-            edit.setHintTextColor(ContextCompat.getColor(context, R.color.grey_c0c0c0))
+            edit.setTextColor(ContextCompat.getColor(context,R.color.gray_800))
+            edit.setHintTextColor(ContextCompat.getColor(context, R.color.gray_500))
             if(edit.isFocused)
-                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
             else
-                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+                edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
         } else {
-            label.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
+            label.setTextColor(ContextCompat.getColor(context,R.color.gray_400))
 
-            edit.setTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            edit.setHintTextColor(ContextCompat.getColor(context,R.color.grey_e0e0e0))
-            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_e0e0e0)
+            edit.setTextColor(ContextCompat.getColor(context,R.color.gray_400))
+            edit.setHintTextColor(ContextCompat.getColor(context,R.color.gray_400))
+            edit.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_400)
         }
 
         edit.isEnabled = enabled
@@ -188,9 +188,9 @@ class DaebakInputField: LinearLayout, View.OnFocusChangeListener, ArduousSpinner
     override fun onFocusChange(view: View, hasFocus: Boolean) {
 
         if(hasFocus)
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_purple_6d6dff)
+            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_purple_300)
         else
-            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_ffffff_stroke_grey_c0c0c0)
+            editText.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500)
 
         listener?.onFieldFocusChanged(this, hasFocus)
 
