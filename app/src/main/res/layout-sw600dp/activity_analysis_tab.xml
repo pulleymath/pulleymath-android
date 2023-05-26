@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:padding="@dimen/dp16"
                     android:background="@null"
-                    android:src="@drawable/ic_calendar_arrow_prev"
+                    android:src="@drawable/ic_tailless_arrow_left_10_16"
                     app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
                     app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
                     app:layout_constraintEnd_toStartOf="@+id/monthContainerCl">
@@ -160,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:padding="@dimen/dp16"
                     android:background="@null"
-                    android:src="@drawable/ic_calendar_arrow_next"
+                    android:src="@drawable/ic_tailless_arrow_right_10_16"
                     app:layout_constraintTop_toTopOf="@+id/monthContainerCl"
                     app:layout_constraintBottom_toBottomOf="@+id/monthContainerCl"
                     app:layout_constraintStart_toEndOf="@+id/monthContainerCl">

@@ -58,7 +58,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:srcCompat="@drawable/ic_arrow_black_left"
+                        app:srcCompat="@drawable/ic_arrow_left_18_14"
                         />
                     <TextView
                         android:id="@+id/titleTv"
@@ -139,7 +139,7 @@
                             android:id="@+id/prevBtn"
                             android:layout_width="@dimen/dp36"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_arrow_left_8"
+                            android:src="@drawable/ic_tailless_arrow_left_8_18"
                             android:background="@null"
                             android:focusable="false"/>
 
@@ -203,7 +203,7 @@
                             android:id="@+id/nextBtn"
                             android:layout_width="@dimen/dp36"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_arrow_right_8"
+                            android:src="@drawable/ic_tailless_arrow_right_8_18"
                             android:background="@null"
                             android:focusable="false"/>
 

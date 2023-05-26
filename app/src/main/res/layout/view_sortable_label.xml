@@ -19,7 +19,7 @@
         android:id="@+id/arrowIv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_sortable_top"
+        android:src="@drawable/ic_blunt_triangle_top_8_6_gray_400"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

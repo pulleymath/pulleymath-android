@@ -331,7 +331,7 @@
             android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:padding="10dp"
-            android:src="@drawable/ic_arrow_black_left"
+            android:src="@drawable/ic_arrow_left_18_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

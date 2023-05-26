@@ -208,7 +208,7 @@
                         android:id="@+id/termBadgeTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.productSubType.convertTextOnMainChip() + `12개월 이용권`, default=`Premium 12개월 이용권` }"
+                        android:text="@{ item.productSubType.convertTextOnMainChip() + ` 12개월 이용권`, default=`Premium 12개월 이용권` }"
                         android:layout_marginStart="4dp"
                         style="@style/h6"
                         android:textColor="@color/white"

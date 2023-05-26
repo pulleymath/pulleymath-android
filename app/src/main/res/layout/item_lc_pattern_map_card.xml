@@ -214,7 +214,7 @@
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginStart="4dp"
-            android:src="@drawable/ic_study_arrow_right"
+            android:src="@drawable/ic_blunt_triangle_8_gray_400"
             app:tint="@color/purple_200"
             android:visibility="@{ isFinalCard ? View.GONE : View.VISIBLE }"
             app:layout_constraintTop_toTopOf="@+id/cardRootCl"

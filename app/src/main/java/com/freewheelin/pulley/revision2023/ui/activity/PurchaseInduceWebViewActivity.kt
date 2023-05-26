@@ -33,6 +33,7 @@ import com.freewheelin.pulley.utils.hide
 import java.io.File
 import java.lang.Exception
 import java.net.URISyntaxException
+import java.util.Date
 
 class PurchaseInduceWebViewActivity : AppCompatActivity() {
 
@@ -63,6 +64,8 @@ class PurchaseInduceWebViewActivity : AppCompatActivity() {
             finish()
         }
         binding.loadingLottie.playAnimation()
+
+        WebView.setWebContentsDebuggingEnabled(true);
         binding.webView.apply {
             webViewClient = object: WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
@@ -168,7 +171,7 @@ class PurchaseInduceWebViewActivity : AppCompatActivity() {
 
             viewModel.getTempToken { shortToken ->
                 binding.loadingLottie.hide(300)
-                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=marketing"
+                val targetUrl = "${Network.webRedirectUrlOnShortToken}${shortToken}&uri=marketing?time=${Date().time}"
                 println("WebView :: PurchaseInduceUrl :${targetUrl}")
                 loadUrl(targetUrl)
             }

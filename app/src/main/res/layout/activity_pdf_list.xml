@@ -35,7 +35,7 @@
                 android:layout_marginLeft="@dimen/dp12"
                 android:background="@android:color/transparent"
                 android:padding="@dimen/dp16"
-                app:srcCompat="@drawable/ic_arrow_black_left"
+                app:srcCompat="@drawable/ic_arrow_left_18_14"
                 imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
                 />
 

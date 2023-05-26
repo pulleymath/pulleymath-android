@@ -37,13 +37,13 @@ class UpDownTextView : ConstraintLayout {
                 Change.increase -> {
                     binding.tv.setTextColor(ContextCompat.getColor(context, R.color.blue_400))
                     binding.arrowIv.visibility = View.VISIBLE
-                    binding.arrowIv.setImageResource(R.drawable.ic_arrow_blue_top)
+                    binding.arrowIv.setImageResource(R.drawable.ic_pointed_triangle_top_10_8_blue_400)
                 }
 
                 Change.decrease -> {
                     binding.tv.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                     binding.arrowIv.visibility = View.VISIBLE
-                    binding.arrowIv.setImageResource(R.drawable.ic_arrow_red_bottom)
+                    binding.arrowIv.setImageResource(R.drawable.ic_pointed_triangle_bottom_10_8_red_300)
                 }
 
                 Change.noChange -> {

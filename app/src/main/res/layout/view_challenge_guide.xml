@@ -88,7 +88,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_arrow_l1_right"
+                android:src="@drawable/ic_tailless_arrow_right_24"
                 app:tint="@color/white"
                 app:layout_constraintStart_toEndOf="@+id/moveTargetChallengePlaceTv"
                 app:layout_constraintTop_toTopOf="@+id/moveTargetChallengePlaceTv"

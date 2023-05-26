@@ -279,7 +279,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_arrow_right_8"
+                    android:src="@drawable/ic_tailless_arrow_right_8_18"
                     android:layout_marginStart="4dp"
                     app:layout_constraintTop_toTopOf="@id/dDayTv"
                     app:layout_constraintStart_toEndOf="@id/dDayTv"

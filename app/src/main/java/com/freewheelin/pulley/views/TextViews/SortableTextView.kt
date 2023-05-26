@@ -32,10 +32,10 @@ class SortableTextView: ConstraintLayout, View.OnClickListener {
             field = value
             when(value) {
                 Order.ascend -> {
-                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_top)
+                    arrowIv.setImageResource(R.drawable.ic_blunt_triangle_top_8_6_gray_400)
                 }
                 Order.descend -> {
-                    arrowIv.setImageResource(R.drawable.ic_arrow_sortable_bottom)
+                    arrowIv.setImageResource(R.drawable.ic_blunt_triangle_bottom_8_6_gray_400)
                 }
             }
             isSelected = isSelected

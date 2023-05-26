@@ -27,7 +27,7 @@ class AnalysisCompareTextView: LinearLayout {
                 }
                 UpDownTextView.Change.decrease -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.red_300))
-                    binding.changeIv.setImageResource(R.drawable.ic_arrow_sortable_bottom)
+                    binding.changeIv.setImageResource(R.drawable.ic_blunt_triangle_bottom_8_6_gray_400)
                     binding.changeIv.setTint(ContextCompat.getColor(context!!, R.color.red_300))
                 }
                 UpDownTextView.Change.noChange -> {

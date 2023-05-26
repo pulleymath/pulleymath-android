@@ -21,7 +21,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.activities.SplashActivity
 import com.freewheelin.pulley.activities.StartActivity
 import com.freewheelin.pulley.activities.auth.InitSettingActivity
-import com.freewheelin.pulley.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.activities.mypage.Setting.*
 import com.freewheelin.pulley.activities.solve.SolveActivity
@@ -715,7 +714,7 @@ class ListHolder(val binding: ItemMypageListBinding) : RecyclerView.ViewHolder(b
                 textDescription.text = "결제수단 변경 및 주문 취소는 풀리수학 홈페이지에서 가능합니다."
                 clampIv.setImageResource(R.drawable.ic_new_window)
             }
-            else -> clampIv.setImageResource(R.drawable.ic_clamp)
+            else -> clampIv.setImageResource(R.drawable.ic_tailless_arrow_right_8_14)
         }
 
         clampIv.visibility = if(setting != Logout) View.VISIBLE else View.GONE

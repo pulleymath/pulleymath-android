@@ -245,7 +245,7 @@
             android:id="@+id/rightArrowIv"
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:src="@drawable/ic_study_arrow_right"
+            android:src="@drawable/ic_blunt_triangle_8_gray_400"
             app:tint="@color/purple_gray_400"
             app:layout_constraintStart_toEndOf="@+id/smallChapterRootCl"
             app:layout_constraintTop_toTopOf="parent"

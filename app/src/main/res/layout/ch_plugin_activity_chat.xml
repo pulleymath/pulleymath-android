@@ -29,7 +29,7 @@
                             android:id="@+id/backBtn"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
-                            android:src="@drawable/ic_nav_arrow_left"
+                            android:src="@drawable/ic_tailless_arrow_left_24_gray_600"
                             android:background="@null"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"

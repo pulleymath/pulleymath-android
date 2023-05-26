@@ -79,7 +79,7 @@
 
         <ImageView
             android:id="@+id/arrowIv"
-            android:src="@drawable/ic_arrow_left_white"
+            android:src="@drawable/ic_pointed_triangle_left_18_22_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="13dp"

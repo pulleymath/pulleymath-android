@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:padding="@dimen/dp32"
-                android:src="@drawable/ic_arrow_black_left"
+                android:src="@drawable/ic_arrow_left_18_14"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -145,7 +145,7 @@
                         android:background="@android:color/transparent"
                         android:padding="15dp"
                         android:onClick="@{()->vm.onPrevClick()}"
-                        app:srcCompat="@drawable/ic_calendar_arrow_prev" />
+                        app:srcCompat="@drawable/ic_tailless_arrow_left_10_16" />
 
                     <TextView
                         android:id="@+id/textPaging"
@@ -170,7 +170,7 @@
                         android:background="@android:color/transparent"
                         android:padding="15dp"
                         android:onClick="@{()->vm.onNextClick()}"
-                        app:srcCompat="@drawable/ic_calendar_arrow_next" />
+                        app:srcCompat="@drawable/ic_tailless_arrow_right_10_16" />
                 </LinearLayout>
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

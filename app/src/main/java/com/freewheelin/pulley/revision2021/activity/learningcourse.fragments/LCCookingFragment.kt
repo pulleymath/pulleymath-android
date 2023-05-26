@@ -247,7 +247,7 @@ class LCCookingFragment() : Fragment(),
                         layoutParams = LinearLayout.LayoutParams(8.toPx(), 8.toPx()).apply {
                             gravity = Gravity.CENTER_VERTICAL
                         }
-                        setImageResource(R.drawable.ic_filled_arrow_right)
+                        setImageResource(R.drawable.ic_blunt_triangle_5_6_right_purple_200)
                     }
                     itemBinding.quizTabHeader.addView(arrowView)
                 }

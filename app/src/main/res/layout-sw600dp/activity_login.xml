@@ -181,7 +181,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@null"
-            android:src="@drawable/ic_arrow_back"
+            android:src="@drawable/ic_arrow_left_24"
             app:tint="@color/gray_800"/>
         <FrameLayout
             android:id="@+id/loadingContainer"

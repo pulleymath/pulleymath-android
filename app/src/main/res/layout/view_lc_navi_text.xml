@@ -33,7 +33,7 @@
             android:layout_height="20dp"
             app:tint="@color/gray_800"
 
-            android:src="@drawable/ic_arrow_l1_right"
+            android:src="@drawable/ic_tailless_arrow_right_24"
             app:layout_constraintStart_toEndOf="@+id/contentTv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

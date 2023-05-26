@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_arrow_sortable_bottom"
+        android:src="@drawable/ic_blunt_triangle_bottom_8_6_gray_400"
         app:tint="@color/gray_800"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
