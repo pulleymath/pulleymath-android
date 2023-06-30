@@ -116,7 +116,7 @@ class ConceptCourseFragment : MainTabFragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             studyRv.adapter = ChapterAdapter()
-            headerTab.apply {
+            courseHeader.apply {
                 setViewModel(viewModel)
                 setLifecycleOwner(viewLifecycleOwner)
             }
@@ -149,10 +149,10 @@ class ConceptCourseFragment : MainTabFragment() {
             }
             schoolType.observe(viewLifecycleOwner) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    binding.headerTab.changeSchoolType(it)
-                    viewModel.fetchAvailableSubjects()
-                    delay(300)
-                    initHeaderSubject()
+                    binding.courseHeader.changeSchoolType(it)
+                    viewModel.fetchAvailableSubjects() {
+                        initHeaderSubject()
+                    }
                 }
             }
             errorAction.observe(viewLifecycleOwner) { type ->
@@ -232,7 +232,6 @@ class ConceptCourseFragment : MainTabFragment() {
             when (it.resultCode) {
                 RESULT_OK -> ConceptLearningUsageMonitor.finishConceptLearning()
                 CHALLENGE_TUTORIAL_FINISH -> {
-                    println("asoaso completed [[completedTutorial]] ")
                     viewModel.completedTutorial { startChallenge ->
                         // TODO 챌린지 완료 후
                         viewModel.updateChallenge(startChallenge)
@@ -251,7 +250,6 @@ class ConceptCourseFragment : MainTabFragment() {
                             )
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }
-                        println("asoaso completed [[finishGuideDialog]] ")
 
                         val finishGuideDialog = ChallengeGuideManager
                             .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)

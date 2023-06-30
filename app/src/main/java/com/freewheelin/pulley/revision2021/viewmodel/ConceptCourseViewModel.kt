@@ -46,7 +46,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     val showTabletHeader = MutableLiveData<Boolean>(false)
     val joinedChallengeList = challengeRepository.joinedChallengeList
 
-    fun fetchAvailableSubjects() {
+    fun fetchAvailableSubjects(cb: () -> Unit) {
         compositeDisposable += studyRepository.getAvailableSubject()
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
@@ -60,6 +60,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                         val lastId = it.last().subjectId
                         availableLastSubjectId.postValue(lastId)
                         availableFirstSubjectId = firstId
+                        cb()
                     }
                 }
             }, { error ->
@@ -68,7 +69,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     }
 
     fun fetch(subjectId: Int) {
-        println("aspasp fetch 1 subjectId=$subjectId ")
         _isLoading.postValue(true)
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
@@ -84,7 +84,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 response.data?.let {
-                    println("aspasp fetch 2")
                     val cList = mutableListOf<StudyChapter>()
 
                     it.forEachIndexed { largeIndex, largeChapter ->
@@ -119,7 +118,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
 //                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + cList + listOf(studyChapterFooter!!)
 //                    val listWithHeaderAndFooter = cList
-                    println("aspasp fetch 3 ${cList.size}")
 
                     chapterList.postValue(cList)
                 }

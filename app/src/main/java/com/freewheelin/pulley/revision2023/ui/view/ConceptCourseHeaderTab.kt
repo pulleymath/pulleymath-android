@@ -21,11 +21,13 @@ class ConceptCourseHeaderTab : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
 
-    lateinit var binding: ViewLayoutConceptCourseHeaderTabBinding
+    var binding: ViewLayoutConceptCourseHeaderTabBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_layout_concept_course_header_tab, this, true)
 
     var selectedSubjectId: Int = 1
+
     init {
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_layout_concept_course_header_tab, this, true)
+//        LayoutInflater.from(context).inflate(R.layout.view_layout_concept_course_header_tab, this)
+
         binding.apply {
             isTablet = context.isTablet
             isHighSchool = schoolType == SchoolType.HIGH

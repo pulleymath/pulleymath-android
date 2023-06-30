@@ -129,6 +129,7 @@ object BindingAdapter {
         Log.d("bind_study_chapter", "list=$item")
         item?.let { chapterList ->
             val adapter = recyclerView.adapter as? ConceptCourseFragment.ChapterAdapter
+            println("bind_study_chapter size : ${chapterList.size} , adapter :${adapter == null}")
             adapter?.submitList(chapterList)
         }
     }

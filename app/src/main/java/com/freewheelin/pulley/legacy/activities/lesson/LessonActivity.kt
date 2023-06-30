@@ -10,6 +10,8 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.*
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -79,6 +81,7 @@ class LessonActivity : BaseActivity() {
 
     private fun setWebView() {
         with(binding.webView) {
+            addBackBtnCallback()
             webViewClient = LessonClient()
             settings.apply {
                 javaScriptEnabled = true
@@ -132,30 +135,51 @@ class LessonActivity : BaseActivity() {
 
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
             loadUrl(lessonLink) // android 와 ios 일 경우만 웹뷰에서 헤더가 제거된다.
+
+
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    var backBtnTime: Long = 0
+    fun addBackBtnCallback() {
+        onBackPressedDispatcher.addCallback(this) {
+            val webView = binding.webView
+            val curTime = System.currentTimeMillis()
+            val gapTime: Long = curTime - backBtnTime
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else if (gapTime in 0..2500) {
+                setResult(lessonFinished, intent)
+                finish()
+            } else {
+                backBtnTime = curTime
+                Toast.makeText(this@LessonActivity, "나가려면 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-        Log.d(javaClass.simpleName, "host check =========> ${binding.webView.url}")
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//
+//        Log.d(javaClass.simpleName, "host check =========> ${binding.webView.url}")
 
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            return super.onKeyDown(keyCode, event)
+//        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+//            return super.onKeyDown(keyCode, event)
 //            audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND)
 //        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 //            audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND)
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(lessonPath) == true) {
+//        }
+//        else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(lessonPath) == true) {
 //            setResult(lessonFinished, intent)
-            finish()
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.contains("pagecall.net") == true){
-            binding.webView.loadUrl(lessonLink)
-        } else if (keyCode == KeyEvent.KEYCODE_BACK)  {
-            binding.webView.goBack()
-        }
+//            finish()
+//        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.contains("pagecall.net") == true){
+//            binding.webView.loadUrl(lessonLink)
+//        } else if (keyCode == KeyEvent.KEYCODE_BACK)  {
+//            binding.webView.goBack()
+//        }
 
-        return true
+//        return true
 //        return super.onKeyDown(keyCode, event)
-    }
+//    }
 
     inner class LessonClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
