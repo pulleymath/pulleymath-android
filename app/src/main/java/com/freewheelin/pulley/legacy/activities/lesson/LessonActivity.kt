@@ -145,7 +145,7 @@ class LessonActivity : BaseActivity() {
 //        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 //            audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND)
         } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(lessonPath) == true) {
-            setResult(lessonFinished, intent)
+//            setResult(lessonFinished, intent)
             finish()
         } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.contains("pagecall.net") == true){
             binding.webView.loadUrl(lessonLink)
