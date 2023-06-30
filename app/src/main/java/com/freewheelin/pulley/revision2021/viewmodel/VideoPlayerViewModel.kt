@@ -8,12 +8,12 @@ import android.util.Log
 import android.widget.CompoundButton
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.lib.ObservableHashSet
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
-import com.freewheelin.pulley.utils.DialogUtils
+import com.freewheelin.pulley.legacy.utils.DialogUtils
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*

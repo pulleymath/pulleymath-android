@@ -5,10 +5,10 @@ package com.freewheelin.pulley.revision2021.cookingmemo
 //import android.view.MotionEvent
 //import android.view.MotionEvent.BUTTON_STYLUS_PRIMARY
 //import android.view.View
-//import com.freewheelin.pulley.views.Pencilcase
-//import com.freewheelin.pulley.views.Pencilcase.EditType.eraser
-//import com.freewheelin.pulley.views.Pencilcase.EditType.pencil
-//import com.freewheelin.pulley.views.PencilcaseView
+//import com.freewheelin.pulley.legacy.views.Pencilcase
+//import com.freewheelin.pulley.legacy.views.Pencilcase.EditType.eraser
+//import com.freewheelin.pulley.legacy.views.Pencilcase.EditType.pencil
+//import com.freewheelin.pulley.legacy.views.PencilcaseView
 //
 //
 //interface MemoViewListener {

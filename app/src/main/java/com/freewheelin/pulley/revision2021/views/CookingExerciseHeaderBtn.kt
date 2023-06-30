@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class CookingExerciseHeaderBtn: androidx.appcompat.widget.AppCompatButton {
 

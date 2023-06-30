@@ -6,7 +6,7 @@ import com.freewheelin.pulley.databinding.ItemPatternMapHeaderBinding
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.utils.listeners.LCPatternMapClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.PatternMapViewModel
-import com.freewheelin.pulley.utils.BoongthEffect
+import com.freewheelin.pulley.legacy.utils.BoongthEffect
 
 class LCPatternMapCardHeaderViewHolder(
     private val binding: ItemPatternMapHeaderBinding

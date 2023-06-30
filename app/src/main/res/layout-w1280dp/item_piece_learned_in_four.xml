@@ -11,7 +11,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
-        <com.freewheelin.pulley.views.StudyPlanTemplateView
+        <com.freewheelin.pulley.legacy.views.StudyPlanTemplateView
             android:id="@+id/template1"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -23,7 +23,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.freewheelin.pulley.views.StudyPlanTemplateView
+        <com.freewheelin.pulley.legacy.views.StudyPlanTemplateView
             android:id="@+id/template2"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -35,7 +35,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/template1" />
 
-        <com.freewheelin.pulley.views.StudyPlanTemplateView
+        <com.freewheelin.pulley.legacy.views.StudyPlanTemplateView
             android:id="@+id/template3"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -47,7 +47,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/template2" />
 
-        <com.freewheelin.pulley.views.StudyPlanTemplateView
+        <com.freewheelin.pulley.legacy.views.StudyPlanTemplateView
             android:id="@+id/template4"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -61,7 +61,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/template3">
 
-        </com.freewheelin.pulley.views.StudyPlanTemplateView>
+        </com.freewheelin.pulley.legacy.views.StudyPlanTemplateView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

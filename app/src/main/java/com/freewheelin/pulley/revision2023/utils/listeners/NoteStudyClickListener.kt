@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2023.utils.listeners
 
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.OrderType
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.OrderType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 

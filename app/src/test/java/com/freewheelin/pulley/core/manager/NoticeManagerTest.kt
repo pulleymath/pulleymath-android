@@ -1,7 +1,7 @@
-package com.freewheelin.pulley.core.manager
+package com.freewheelin.pulley.legacy.core.manager
 
-import com.freewheelin.pulley.core.manage.NoticeManager
-import com.freewheelin.pulley.model.Notice
+import com.freewheelin.pulley.legacy.core.manage.NoticeManager
+import com.freewheelin.pulley.legacy.model.Notice
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

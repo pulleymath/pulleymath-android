@@ -6,18 +6,22 @@ import android.util.Log
 import android.widget.CompoundButton
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.lib.ObservableHashSet
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedStudentWorkbook
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.revision2021.utils.replace
 import com.freewheelin.pulley.revision2021.views.adapters.AffiliatedTestGalleryAdapter
-import com.freewheelin.pulley.utils.DialogUtils
+import com.freewheelin.pulley.legacy.utils.DialogUtils
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -146,7 +150,9 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
                 .subscribeOn(Schedulers.io())
                 .timeout(3, TimeUnit.SECONDS)
                 .subscribe({ res ->
-                    callback()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        callback()
+                    }
                 }, { error ->
                     Log.e(javaClass.simpleName, "finishTest error=${error.localizedMessage}")
                 })
@@ -234,7 +240,7 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
         } else {
             val cal = Calendar.getInstance()
             val startedAt = studentWorkbook?.started_at ?: return null
-            val startedDate = sdf.parse(startedAt)
+            val startedDate = sdf.parse(startedAt) ?: return null
             cal.time = startedDate
             cal.add(Calendar.MINUTE, testPeriodMinutes)
             sdf.format(cal.time)
@@ -252,13 +258,14 @@ class AffiliatedTestSolveViewModel : BaseViewModel(), LifecycleObserver {
     fun get5MinBeforeFinishedTimeEnds(): String? {
         val cal = Calendar.getInstance()
         return if (isFixedStartTime.value == true) {
-            val finishedDate = sdf.parse(testFinishedAt)
+            if (testFinishedAt == null) return null
+            val finishedDate = sdf.parse(testFinishedAt!!) ?: return null
             cal.time = finishedDate
             cal.add(Calendar.MINUTE, -5)
             sdf.format(cal.time)
         } else {
-            val startedAt = studentWorkbook?.started_at
-            val startedDate = sdf.parse(startedAt)
+            val startedAt = studentWorkbook?.started_at ?: return null
+            val startedDate = sdf.parse(startedAt) ?: return null
             cal.time = startedDate
             cal.add(Calendar.MINUTE, testPeriodMinutes - 5)
             sdf.format(cal.time)

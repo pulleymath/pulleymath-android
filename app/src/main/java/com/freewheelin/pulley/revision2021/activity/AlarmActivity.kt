@@ -21,9 +21,9 @@ import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.fragments.AlarmDetailFragment
 import com.freewheelin.pulley.revision2021.model.response.Alarm
 import com.freewheelin.pulley.revision2021.viewmodel.AlarmViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.hide
-import com.freewheelin.pulley.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.hide
+import com.freewheelin.pulley.legacy.utils.visibleIf
 
 
 class AlarmActivity : AppCompatActivity() {

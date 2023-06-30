@@ -17,7 +17,7 @@
             android:paddingEnd="@dimen/dp16"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/dateSl"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/gradeSl"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:layout_constraintStart_toEndOf="@+id/dateSl"
                 app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/typeSl"
                 android:layout_width="@dimen/dp56"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 app:layout_constraintStart_toEndOf="@+id/gradeSl"
                 app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/examTitleSl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toEndOf="@+id/typeSl"
                 app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/percentSl"
                 android:layout_width="@dimen/dp80"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/scoreSl"
                 app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/scoreSl"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/percentageSl"
                 app:layout_constraintTop_toTopOf="@+id/dateSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/percentageSl"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/ratingSl"
                 app:layout_constraintTop_toTopOf="@+id/ratingSl" />
 
-            <com.freewheelin.pulley.views.textViews.SortableTextView
+            <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                 android:id="@+id/ratingSl"
                 android:layout_width="@dimen/dp64"
                 android:layout_height="wrap_content"

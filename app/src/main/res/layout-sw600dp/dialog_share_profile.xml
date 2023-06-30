@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleContainer"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.freewheelin.pulley.activities.learning.tabFragment.main.component.ProfileShareContentsView
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.component.ProfileShareContentsView
             android:id="@+id/shareContents"
             android:layout_width="368dp"
             android:layout_height="368dp"
@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/shareContents"/>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/shareBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

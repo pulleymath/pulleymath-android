@@ -21,9 +21,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.BaseActivity
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
+import com.freewheelin.pulley.legacy.bases.BaseActivity
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
@@ -41,7 +41,7 @@ import com.freewheelin.pulley.revision2021.views.CookingPencilcaseListener
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData

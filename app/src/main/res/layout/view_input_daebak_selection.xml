@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.freewheelin.pulley.views.SelectionButton
+    <com.freewheelin.pulley.legacy.views.SelectionButton
         style="@style/TextGray_800.Bold"
         android:id="@+id/btn0"
         android:layout_width="@dimen/dp96"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn1"/>
 
-    <com.freewheelin.pulley.views.SelectionButton
+    <com.freewheelin.pulley.legacy.views.SelectionButton
         style="@style/TextGray_800.Bold"
         android:id="@+id/btn1"
         android:layout_width="0dp"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn0"
         app:layout_constraintEnd_toStartOf="@+id/btn2"/>
 
-    <com.freewheelin.pulley.views.SelectionButton
+    <com.freewheelin.pulley.legacy.views.SelectionButton
         style="@style/TextGray_800.Bold"
         android:id="@+id/btn2"
         android:layout_width="0dp"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn1"
         app:layout_constraintEnd_toStartOf="@+id/btn3"/>
 
-    <com.freewheelin.pulley.views.SelectionButton
+    <com.freewheelin.pulley.legacy.views.SelectionButton
         style="@style/TextGray_800.Bold"
         android:id="@+id/btn3"
         android:layout_width="0dp"

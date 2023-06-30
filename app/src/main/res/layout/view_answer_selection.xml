@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:focusable="false">
 
-        <com.freewheelin.pulley.views.NumberingButton
+        <com.freewheelin.pulley.legacy.views.NumberingButton
             android:id="@+id/number1Btn"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:focusable="false">
 
-        <com.freewheelin.pulley.views.NumberingButton
+        <com.freewheelin.pulley.legacy.views.NumberingButton
             android:id="@+id/number2Btn"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:focusable="false">
 
-        <com.freewheelin.pulley.views.NumberingButton
+        <com.freewheelin.pulley.legacy.views.NumberingButton
             android:id="@+id/number3Btn"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:focusable="false">
 
-        <com.freewheelin.pulley.views.NumberingButton
+        <com.freewheelin.pulley.legacy.views.NumberingButton
             android:id="@+id/number4Btn"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -73,7 +73,7 @@
         android:focusable="false"
         android:layout_gravity="center">
 
-        <com.freewheelin.pulley.views.NumberingButton
+        <com.freewheelin.pulley.legacy.views.NumberingButton
             android:id="@+id/number5Btn"
             android:layout_width="28dp"
             android:layout_height="28dp"

@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <!--    <com.freewheelin.pulley.views.CalendarPickerViews.RangeRadioButton-->
+    <!--    <com.freewheelin.pulley.legacy.views.CalendarPickerViews.RangeRadioButton-->
     <!--        android:id="@+id/selectRangeBtn"-->
     <!--        style="@style/TextGray_800.Bold"-->
     <!--        android:layout_width="96dp"-->
@@ -38,7 +38,7 @@
     <!--        app:layout_constraintStart_toStartOf="@+id/topContainerCl"-->
     <!--        app:layout_constraintTop_toTopOf="@+id/topContainerCl" />-->
 
-        <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/aWeekRangeBtn"
             style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
@@ -53,7 +53,7 @@
             app:layout_constraintStart_toStartOf="@+id/topContainerCl"
             app:layout_constraintTop_toTopOf="@+id/topContainerCl" />
 
-        <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/twoWeeksRangeBtn"
             style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
@@ -68,7 +68,7 @@
             app:layout_constraintStart_toEndOf="@+id/aWeekRangeBtn"
             app:layout_constraintTop_toTopOf="@+id/topContainerCl" />
 
-        <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/aMonthBtn"
             style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
@@ -83,7 +83,7 @@
             app:layout_constraintStart_toEndOf="@+id/twoWeeksRangeBtn"
             app:layout_constraintTop_toTopOf="@+id/topContainerCl" />
 
-        <com.freewheelin.pulley.views.calendarPickerViews.RangeRadioButton
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.RangeRadioButton
             android:id="@+id/selectRangeBtn"
             style="@style/TextGray_800.Bold"
             android:layout_width="96dp"
@@ -126,7 +126,7 @@
             app:layout_constraintEnd_toEndOf="@+id/fromCalendar"
             app:layout_constraintStart_toStartOf="@+id/fromCalendar" />
 
-        <com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendar
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendar
             android:id="@+id/fromCalendar"
             android:layout_width="0dp"
             android:layout_height="280dp"
@@ -151,7 +151,7 @@
             app:layout_constraintEnd_toEndOf="@+id/toCalendar"
             app:layout_constraintStart_toStartOf="@+id/toCalendar" />
 
-        <com.freewheelin.pulley.views.calendarPickerViews.DaebakCalendar
+        <com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendar
             android:id="@+id/toCalendar"
             android:layout_width="0dp"
             android:layout_height="280dp"
@@ -191,28 +191,24 @@
                 app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/updateBtn"
-                style="@style/Btn_Blue.Primary.L"
                 android:layout_width="160dp"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginEnd="32dp"
                 android:text="업데이트"
                 android:textSize="16sp"
-                app:buttonTheme="blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                 android:id="@+id/cancelBtn"
-                style="@style/Btn_Grey.Secondary.L"
                 android:layout_width="104dp"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginEnd="8dp"
                 android:text="취소"
-                android:textSize="16sp"
-                app:buttonTheme="grey"
+                style="@style/b1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/updateBtn"
                 app:layout_constraintTop_toTopOf="parent" />'
@@ -220,7 +216,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <com.freewheelin.pulley.views.DaebakToastView
+        <com.freewheelin.pulley.legacy.views.DaebakToastView
             android:id="@+id/toastView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

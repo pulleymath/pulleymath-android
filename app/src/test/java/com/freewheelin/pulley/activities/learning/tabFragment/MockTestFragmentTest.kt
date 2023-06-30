@@ -3,9 +3,9 @@ package com.freewheelin.pulley.activities.learning.tabFragment
 import android.view.LayoutInflater
 import android.view.View
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.tabFragment.mockExam.MyMockHolder
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MyMockHolder
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.model.contents.MockExam
+import com.freewheelin.pulley.legacy.model.contents.MockExam
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +17,7 @@ class MockTestFragmentTest : ContextTest() {
     @Before
     fun prepare() {
         val view = LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, null)
-        lastHolder = MyMockHolder(view)
+//        lastHolder = MyMockHolder(view)
     }
 
     @Test
@@ -29,28 +29,28 @@ class MockTestFragmentTest : ContextTest() {
         mockTest.score = 35
 
         lastHolder.set(mockTest)
-        assertEquals("가형", lastHolder.typeTv.text)
-        assertEquals("35점", lastHolder.scoreTv.text)
-        assertEquals("85", lastHolder.percentageTv.text)
-        assertEquals("3", lastHolder.ratingTv.text)
-        assertEquals(View.VISIBLE, lastHolder.ratingTv.visibility)
-        assertEquals(View.GONE, lastHolder.ratingIv.visibility)
+        assertEquals("가형", lastHolder.binding.typeTv.text)
+        assertEquals("35점", lastHolder.binding.scoreTv.text)
+        assertEquals("85", lastHolder.binding.percentageTv.text)
+        assertEquals("3", lastHolder.binding.ratingTv.text)
+        assertEquals(View.VISIBLE, lastHolder.binding.ratingTv.visibility)
+        assertEquals(View.GONE, lastHolder.binding.ratingIv.visibility)
 
         mockTest.score = 35
         mockTest.percent = 99
 
         lastHolder.set(mockTest)
-        assertEquals(View.GONE, lastHolder.ratingTv.visibility)
-        assertEquals(View.VISIBLE, lastHolder.ratingIv.visibility)
+        assertEquals(View.GONE, lastHolder.binding.ratingTv.visibility)
+        assertEquals(View.VISIBLE, lastHolder.binding.ratingIv.visibility)
 
         mockTest = MockExam()
         mockTest.markingState = "YET"
 
         lastHolder.set(mockTest)
-        assertEquals("-", lastHolder.scoreTv.text)
-        assertEquals("-", lastHolder.percentageTv.text)
-        assertEquals("-", lastHolder.ratingTv.text)
-        assertEquals(View.VISIBLE, lastHolder.ratingTv.visibility)
-        assertEquals(View.GONE, lastHolder.ratingIv.visibility)
+        assertEquals("-", lastHolder.binding.scoreTv.text)
+        assertEquals("-", lastHolder.binding.percentageTv.text)
+        assertEquals("-", lastHolder.binding.ratingTv.text)
+        assertEquals(View.VISIBLE, lastHolder.binding.ratingTv.visibility)
+        assertEquals(View.GONE, lastHolder.binding.ratingIv.visibility)
     }
 }

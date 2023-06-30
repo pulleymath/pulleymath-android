@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -32,6 +33,19 @@ fun <T> LiveData<List<T>>.observeListOnce(lifecycleOwner: LifecycleOwner, observ
     })
 }
 
+fun <T> LiveData<T>.observeThrottle(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    var throttleJob: Job? = null
+    var latestParam: T
+    observe(lifecycleOwner) { t ->
+        latestParam = t
+        if (throttleJob?.isCompleted != false) {
+            throttleJob = lifecycleOwner.lifecycle.coroutineScope.launch {
+                delay(500L)
+                observer.onChanged(latestParam)
+            }
+        }
+    }
+}
 fun <T> throttleLatest(
     intervalMs: Long = 300L,
     coroutineScope: CoroutineScope,

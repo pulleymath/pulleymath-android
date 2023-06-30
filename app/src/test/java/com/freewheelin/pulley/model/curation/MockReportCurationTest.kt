@@ -1,10 +1,10 @@
-package com.freewheelin.pulley.model.curation
+package com.freewheelin.pulley.legacy.model.curation
 
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.model.ChapterAnalysis
-import com.freewheelin.pulley.model.MockExamAnalysis
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.ScoreAnalysis
+import com.freewheelin.pulley.legacy.model.ChapterAnalysis
+import com.freewheelin.pulley.legacy.model.MockExamAnalysis
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.ScoreAnalysis
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test

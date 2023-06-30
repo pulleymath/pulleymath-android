@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="vm" type="com.freewheelin.pulley.viewmodel.LearningTabViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.legacy.viewmodel.LearningTabViewModel"/>
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -208,7 +208,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <com.freewheelin.pulley.views.TabViewPager
+            <com.freewheelin.pulley.legacy.views.TabViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

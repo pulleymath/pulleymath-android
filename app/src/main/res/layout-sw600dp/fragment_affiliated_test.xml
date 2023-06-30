@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel"/>
+        <variable name="univ" type="com.freewheelin.pulley.revision2023.model.AffiliatedUniv"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,8 +51,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
             <View
                 android:id="@+id/centerDivider"
@@ -149,153 +148,162 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rightCl"
+            <ScrollView
+                android:id="@+id/rightSv"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:paddingStart="@dimen/dp60"
-                android:paddingEnd="@dimen/dp40"
-                android:paddingTop="@dimen/dp24"
-                android:paddingBottom="@dimen/dp50"
+                android:paddingEnd="@dimen/dp20"
                 android:visibility="@{ vm.showNothingDataView ? View.GONE : View.VISIBLE }"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/leftCl"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/shadow_left_only"
-                >
+                android:background="@drawable/shadow_left_only">
 
-                <LinearLayout
-                    android:id="@+id/stepContainer"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/rightCl"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_white_stroke_gray_300_round_50"
+                    android:layout_height="match_parent"
+                    android:paddingEnd="4dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
-                    <TextView
-                        android:id="@+id/step1Btn"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/stepContainer"
+                        android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="기초학습 사전진단"
-                        android:background="@{ vm.selectedUnivTestCard.firstWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
-                        android:onClick="@{(view) -> vm.onStep(view, 1)}"
-                        android:textColor="@{ vm.selectedUnivTestCard.firstWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.firstWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
-                        android:paddingHorizontal="8dp"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_white_stroke_gray_300_round_50"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-                    <TextView
-                        android:id="@+id/step2Btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:text="최종 자가진단 1차"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:background="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
-                        android:textColor="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.firstWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
-                        android:onClick="@{(view) -> vm.onStep(view, 2)}"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/step1Btn"
-                        app:layout_constraintEnd_toStartOf="@+id/step3Btn"/>
-                    <TextView
-                        android:id="@+id/step3Btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingHorizontal="8dp"
-                        android:background="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
-                        android:textColor="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.secondWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
-                        android:onClick="@{(view) -> vm.onStep(view, 3)}"
-                        android:text="최종 자가진단 2차"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/step2Btn"
-                        />
-                </LinearLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/reportBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_purple_100_round_ripple"
-                    android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.VISIBLE : View.GONE }"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:paddingHorizontal="@dimen/dp12"
-                    android:paddingVertical="@dimen/dp8"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stepContainer">
-
-                    <ImageView
-                        android:id="@+id/reportIv"
-                        android:layout_width="18dp"
-                        android:layout_height="19dp"
-                        android:src="@drawable/ic_paper"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/purple_300" />
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                    <TextView
-                        style="@style/h6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="보고서 보기"
-                        android:textColor="@color/purple_300"
-                        app:layout_constraintBottom_toBottomOf="@+id/reportIv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/reportIv"
-                        app:layout_constraintTop_toTopOf="@+id/reportIv" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/rightTitleTv"
-                    style="@style/h3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:text="@{vm.selectedUnivTestCard.selectedWorkbook.title}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stepContainer" />
-
-                <TextView
-                    android:id="@+id/rightBodyTv"
-                    style="@style/b2r"
-                    android:textColor="@color/gray_600"
-                    android:layout_width="554dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:maxLines="2"
-                    android:text="@{vm.selectedUnivTestCard.selectedWorkbook.sub_title}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rightTitleTv" />
-
-                <ScrollView
-                    android:id="@+id/rightScrollView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:layout_constraintTop_toBottomOf="@+id/rightBodyTv"
-                    app:layout_constraintBottom_toTopOf="@+id/testStartBtn">
+                        <TextView
+                            android:id="@+id/step1Btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@{ univ.firstTabName }"
+                            tools:text="1차 진단평가"
+                            android:background="@{ vm.selectedUnivTestCard.firstWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
+                            android:onClick="@{(view) -> vm.onStep(view, 1)}"
+                            android:textColor="@{ vm.selectedUnivTestCard.firstWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.firstWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
+                            android:paddingHorizontal="8dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+                        <TextView
+                            android:id="@+id/step2Btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="@{ univ.secondTabName }"
+                            tools:text="2차 진단평가"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:paddingHorizontal="8dp"
+                            android:background="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
+                            android:textColor="@{ vm.selectedUnivTestCard.secondWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.firstWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
+                            android:onClick="@{(view) -> vm.onStep(view, 2)}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/step1Btn"
+                            app:layout_constraintEnd_toStartOf="@+id/step3Btn"/>
+                        <TextView
+                            android:id="@+id/step3Btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:paddingHorizontal="8dp"
+                            android:background="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @drawable/bg_purple100_stroke_purple300_round_50 : @drawable/bg_transparent }"
+                            android:textColor="@{ vm.selectedUnivTestCard.thirdWorkbook.isSelected ? @color/purple_300 : vm.selectedUnivTestCard.secondWorkbook.isFinished() ? @color/gray_800 : @color/gray_600 }"
+                            android:onClick="@{(view) -> vm.onStep(view, 3)}"
+                            android:text="@{ univ.thirdTabName }"
+                            tools:text="2차 진단평가"
+                            visibleIf="@{ univ.isThirdTestExist }"
+                            tools:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/step2Btn"
+                            />
+                    </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/reportBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_purple_100_round_ripple"
+                        android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.VISIBLE : View.GONE }"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:paddingHorizontal="@dimen/dp12"
+                        android:paddingVertical="@dimen/dp8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/stepContainer">
+
+                        <ImageView
+                            android:id="@+id/reportIv"
+                            android:layout_width="18dp"
+                            android:layout_height="19dp"
+                            android:src="@drawable/ic_paper"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/purple_300" />
+
+                        <TextView
+                            style="@style/h6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="보고서 보기"
+                            android:textColor="@color/purple_300"
+                            app:layout_constraintBottom_toBottomOf="@+id/reportIv"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/reportIv"
+                            app:layout_constraintTop_toTopOf="@+id/reportIv" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/rightTitleTv"
+                        style="@style/h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:text="@{vm.selectedUnivTestCard.selectedWorkbook.title}"
+                        tools:text="2023 사전진단"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/stepContainer" />
+
+                    <TextView
+                        android:id="@+id/rightBodyTv"
+                        style="@style/b2r"
+                        android:textColor="@color/gray_600"
+                        android:layout_width="554dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp8"
+                        android:maxLines="2"
+                        android:text="@{vm.selectedUnivTestCard.selectedWorkbook.sub_title}"
+                        tools:text="서울대 학생을 위한 수학 과목의 사전진단 시험입니다."
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rightTitleTv" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rightInnerCl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        >
+                        app:layout_constraintTop_toBottomOf="@+id/rightBodyTv"
+                        app:layout_constraintBottom_toTopOf="@+id/testStartBtn">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/testInfoCl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            tools:visibility="gone"
                             android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -308,6 +316,7 @@
                                 android:textColor="@color/gray_500"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp24"
                                 android:text="상세 정보"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -357,8 +366,8 @@
                                         app:layout_constraintTop_toTopOf="@+id/fromTv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                                <Space
-                                    android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     />
@@ -396,8 +405,8 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="@+id/subjectTv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
-                                <Space
-                                    android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     />
@@ -435,8 +444,8 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="@+id/maxScoreTv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
-                                <Space
-                                    android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     />
@@ -474,8 +483,8 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="@+id/totalProblemCountTv" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
-                                <Space
-                                    android:layout_width="wrap_content"
+                                <View
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     />
@@ -624,106 +633,115 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </ScrollView>
-
-                <Button
-                    android:id="@+id/testStartBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp56"
-                    android:layout_marginTop="@dimen/dp32"
-                    android:text="@{vm.selectedUnivTestCard.selectedWorkbook.getWorkbookStartBtnText()}"
-                    android:textColor="@color/gray_100"
-                    style="@style/h4"
-                    android:enabled="@{vm.selectedUnivTestCard.isTestEnable(vm.currentTimeString)}"
-                    android:background="@{ vm.selectedUnivTestCard.isTestEnable(vm.currentTimeString) ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"
-                    android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rightScrollView"/>
-
-                <ScrollView
-                    android:id="@+id/testCompletedScrollView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.VISIBLE : View.GONE }"
-                    android:layout_marginTop="@dimen/dp24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rightBodyTv">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-
-                        <ImageView
-                            android:id="@+id/testCompletedIv"
-                            android:layout_width="@dimen/dp200"
-                            android:layout_height="@dimen/dp160"
-                            android:layout_marginTop="@dimen/dp48"
-                            android:layout_gravity="center"
-                            android:src="@drawable/box_colorful_ku" />
-
-                        <TextView
-                            android:id="@+id/testCompletedTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            style="@style/b1r"
-                            android:lineSpacingExtra="@dimen/dp8"
-                            android:layout_marginTop="@dimen/dp16"
-                            android:text="테스트를 완료했습니다. 점수를 확인해보세요!\n결과에 대한 자세한 내용은 상단 보고서 보기에서 확인할 수 있습니다 :)"
-                            />
-
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/testCompletedScoreCl"
-                            android:layout_width="@dimen/dp248"
-                            android:layout_height="@dimen/dp100"
-                            android:layout_marginTop="@dimen/dp16"
-                            android:layout_gravity="center"
-                            android:background="@drawable/bg_gray_300_round_10">
+                            android:id="@+id/testCompletedCl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.VISIBLE : View.GONE }"
+                            tools:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="spread">
 
-                            <!--                    app:layout_constraintTop_toBottomOf="@id/testCompletedTv"-->
-                            <TextView
-                                android:id="@+id/testScoreTv"
+                            <ImageView
+                                android:id="@+id/testCompletedIv"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/font_pretendard_bold"
-                                android:text="@{String.valueOf(vm.selectedUnivTestCard.selectedWorkbook.score)}"
-                                android:textColor="@color/gray_800"
-                                android:textSize="52sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintHorizontal_bias="0.45"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_height="@dimen/dp248"
+                                android:layout_marginTop="12dp"
+                                android:layout_gravity="center"
+                                android:adjustViewBounds="true"
+                                affiliated_test_completed_character="@{ univ }"
+                                tools:src="@drawable/soongsoong_wink"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/testScoreJumTv"
-                                style="@style/h3"
+                                android:id="@+id/testCompletedTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp12"
-                                android:text="점"
-                                app:layout_constraintBottom_toBottomOf="@id/testScoreTv"
-                                app:layout_constraintLeft_toRightOf="@id/testScoreTv"
-                                app:layout_constraintTop_toTopOf="@id/testScoreTv"
-                                app:layout_constraintVertical_bias="0.7" />
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                style="@style/b1r"
+                                android:lineSpacingExtra="@dimen/dp8"
+                                android:layout_marginTop="@dimen/dp24"
+                                android:text="테스트를 완료했습니다. 점수를 확인해보세요!\n결과에 대한 자세한 내용은 상단 보고서 보기에서 확인할 수 있습니다 :)"
+                                app:layout_constraintBottom_toTopOf="@id/testCompletedScoreCl"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/testCompletedIv" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/testCompletedScoreCl"
+                                android:layout_width="195dp"
+                                android:layout_height="72dp"
+                                android:layout_marginTop="@dimen/dp24"
+                                android:layout_gravity="center"
+                                android:background="@drawable/bg_gray_300_round_10"
+                                app:layout_constraintTop_toBottomOf="@id/testCompletedTv"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <!--                    app:layout_constraintTop_toBottomOf="@id/testCompletedTv"-->
+                                <TextView
+                                    android:id="@+id/testScoreTv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/font_pretendard_bold"
+                                    android:text="@{String.valueOf(vm.selectedUnivTestCard.selectedWorkbook.score)}"
+                                    tools:text="20"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="42sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.45"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintRight_toRightOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/testScoreJumTv"
+                                    style="@style/h3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dp8"
+                                    android:text="점"
+                                    app:layout_constraintBottom_toBottomOf="@id/testScoreTv"
+                                    app:layout_constraintLeft_toRightOf="@id/testScoreTv"
+                                    app:layout_constraintTop_toTopOf="@id/testScoreTv"
+                                    app:layout_constraintVertical_bias="0.7" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </LinearLayout>
 
-                </ScrollView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/testStartBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginBottom="@dimen/dp24"
+                        android:text="@{vm.selectedUnivTestCard.selectedWorkbook.getWorkbookStartBtnText()}"
+                        android:textColor="@color/gray_100"
+                        style="@style/h4"
+                        android:enabled="@{vm.selectedUnivTestCard.isTestEnable(vm.currentTimeString)}"
+                        android:background="@{ vm.selectedUnivTestCard.isTestEnable(vm.currentTimeString) ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"
+                        android:visibility="@{vm.selectedUnivTestCard.selectedWorkbook.finished ? View.GONE : View.VISIBLE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rightInnerCl"/>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/nothingRootCl"
@@ -734,6 +752,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:visibility="@{ vm.showNothingDataView ? View.VISIBLE : View.GONE }"
+                tools:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -775,6 +794,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="@{ vm.selectedTabIndex == 1 ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/headerCl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -792,65 +812,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/additionalLearningCl"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:visibility="@{ vm.showAdditionalLearning ? View.VISIBLE : View.GONE }"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent">-->
-<!--&lt;!&ndash;            android:visibility="gone"&ndash;&gt;-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/additionalWebViewHeaderCl"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@color/white"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent">-->
-
-<!--                <ImageButton-->
-<!--                    android:id="@+id/additionalLearningBackBtn"-->
-<!--                    android:layout_width="56dp"-->
-<!--                    android:layout_height="56dp"-->
-<!--                    android:background="@null"-->
-<!--                    android:src="@drawable/ic_toolbar_back"-->
-<!--                    app:tint="@color/gray_800"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/additionalLearningTitleTv"-->
-<!--                    style="@style/TextGray_800.Bold"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text=""-->
-<!--                    android:textSize="@dimen/sp24"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--            <WebView-->
-<!--                android:id="@+id/additionalLearningWebView"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/additionalWebViewHeaderCl"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

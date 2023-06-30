@@ -2,15 +2,15 @@ package com.freewheelin.pulley.revision2023.repository
 
 import android.content.Context
 import android.os.Build
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.revision2023.model.V2LogUser
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.service.LegacyV2Api
 import com.freewheelin.pulley.revision2023.service.LegacyV2Service
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import kotlinx.coroutines.CoroutineScope
 
 class LegacyV2Repository(val context: Context, private val applicationScope: CoroutineScope) {

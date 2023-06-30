@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.utils
+package com.freewheelin.pulley.legacy.utils
 
 import android.view.View
 import com.freewheelin.pulley.lib.ContextTest

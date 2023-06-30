@@ -15,8 +15,8 @@ import com.freewheelin.pulley.databinding.DialogCourseRoadViewBinding
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.views.LCNaviTextView
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.dpToPx
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.dpToPx
 
 class CourseRoadViewDialog(context: Context,
                            private val courseList: List<SingleCourseDesc>,

@@ -55,7 +55,7 @@
                         android:text="안녕하세요.\n풀리수학에 오신 것을 환영합니다 :)"
                         android:textSize="16sp" />
 
-                    <com.freewheelin.pulley.views.editText.InputFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                         android:id="@+id/emailField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                         app:InputFieldV2_Hint="아이디(이메일)"
                         />
 
-                    <com.freewheelin.pulley.views.editText.PasswordFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.PasswordFieldV2
                         android:id="@+id/pwField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,14 +72,13 @@
                         app:PasswordFieldV2_Hint="비밀번호"
                         />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/loginBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_height="@dimen/dp56"
+                        android:layout_marginTop="@dimen/dp32"
                         android:text="로그인하기"
-                        app:ButtonTextSize="18sp"
-                        app:buttonTheme="blue" />
+                        />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -178,7 +177,6 @@
                             android:paddingHorizontal="8dp"
                             android:layout_marginStart="16dp"
                             android:textColor="@color/white"/>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>

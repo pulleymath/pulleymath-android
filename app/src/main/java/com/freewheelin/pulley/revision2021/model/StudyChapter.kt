@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2021.model
 
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
-import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.Preferences
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,8 +76,8 @@ class StudyChapter: BaseDiffItem, Serializable {
         get() {
             if (lastStudiedAt == null) return "학습을 시작해보세요!"
             val sdf by lazy { SimpleDateFormat("yyyy-MM-dd", Locale.KOREA) }
-            val studiedDate = sdf.parse(lastStudiedAt)
-            val dateStringWithYear = sdf.format(studiedDate.time)
+            val studiedDate = sdf.parse(lastStudiedAt!!) ?: return ""
+            val dateStringWithYear = sdf.format(studiedDate.time) ?: return ""
             val dateStringWithoutYear = dateStringWithYear.substring(5)
             return dateStringWithoutYear
         }

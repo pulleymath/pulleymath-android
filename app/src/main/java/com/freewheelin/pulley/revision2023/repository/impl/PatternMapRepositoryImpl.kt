@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.repository.impl
 
 import android.content.Context
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.repository.PatternMapRepository
 import com.freewheelin.pulley.revision2023.room.patternmap.PatternMapDao

@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2023.model
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.util.*
 

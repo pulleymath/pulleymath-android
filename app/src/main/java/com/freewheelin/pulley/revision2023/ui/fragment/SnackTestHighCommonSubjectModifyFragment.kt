@@ -7,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.BigUnitV3
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.assets.BigUnitV3
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentHighCommonSubjectModifyBinding
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.DaebakInputSelection
-import com.freewheelin.pulley.views.DaebakInputSelectionListener
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.views.DaebakInputSelection
+import com.freewheelin.pulley.legacy.views.DaebakInputSelectionListener
 
 class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectionListener {
     private lateinit var binding: FragmentHighCommonSubjectModifyBinding
@@ -108,7 +108,7 @@ class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectio
 
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "공통과목", "변경하기")
-        if (binding.modifyBtn.isEnableUI()) {
+        if (binding.modifyBtn.isEnabled) {
             val selectedIds = getSelectedUnit().map { it.id }
             viewModel.updateCommonSubject(selectedIds) {
                 onBackBtnClicked()
@@ -148,9 +148,9 @@ class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectio
 
     override fun onSelectionChanged(view: DaebakInputSelection) {
         if(getSelectedUnit().isEmpty()) {
-            binding.modifyBtn.toDisableUI()
+            binding.modifyBtn.isEnabled = false
         } else {
-            binding.modifyBtn.toEnableUI()
+            binding.modifyBtn.isEnabled = true
         }
     }
 }

@@ -63,7 +63,7 @@
                         android:text="기본 정보를 입력해주세요 :)"
                         android:textSize="@dimen/sp24" />
 
-                    <com.freewheelin.pulley.views.editText.InputFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                         android:id="@+id/fullNameDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,14 +72,14 @@
                         app:InputFieldV2_Hint="이름"
                         app:InputFieldV2_maxLength="15"/>
 
-                    <com.freewheelin.pulley.views.editText.InputFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                         android:id="@+id/emailDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:InputFieldV2_Hint="이메일"
                         app:InputFieldV2_maxLength="350"/>
 
-                    <com.freewheelin.pulley.views.editText.PasswordFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.PasswordFieldV2
                         android:id="@+id/pwDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
 
                     </LinearLayout>
 
-                    <com.freewheelin.pulley.views.editText.PasswordFieldV2
+                    <com.freewheelin.pulley.legacy.views.editText.PasswordFieldV2
                         android:id="@+id/pwConfirmDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.freewheelin.pulley.views.v2.SpinnerV2
+                    <com.freewheelin.pulley.legacy.views.v2.SpinnerV2
                         android:id="@+id/countrySpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
 
     <!--                    android:layout_width="232dp"-->
 
-                        <com.freewheelin.pulley.views.editText.InputFieldV2
+                        <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                             android:id="@+id/phoneNumDet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -172,19 +172,17 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                             android:id="@+id/requestCodeBtn"
                             android:layout_width="@dimen/dp90"
                             android:layout_height="@dimen/dp40"
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="16dp"
-                            app:ButtonTextSize="@dimen/sp14"
+                            android:textSize="@dimen/sp14"
                             android:text="인증하기"
-                            app:buttonTheme="blue"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"/>
 
-                        </com.freewheelin.pulley.views.buttons.PrimaryButton>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,7 +192,7 @@
                         android:layout_height="wrap_content">
 
     <!--                        app:InputFieldV2_ShowErrorIcon="false"-->
-                        <com.freewheelin.pulley.views.editText.InputFieldV2
+                        <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                             android:id="@+id/codeDet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -226,19 +224,16 @@
                             app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                             android:id="@+id/codeConfirmBtn"
                             android:layout_width="@dimen/dp90"
                             android:layout_height="@dimen/dp40"
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="16dp"
+                            android:textSize="@dimen/sp14"
                             android:text="확인하기"
-                            app:ButtonTextSize="@dimen/sp14"
-                            app:buttonTheme="blue"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                        </com.freewheelin.pulley.views.buttons.PrimaryButton>
+                            app:layout_constraintTop_toTopOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -274,7 +269,7 @@
                         android:orientation="vertical"
                         android:background="@drawable/bg_white_stroke_e8e8e8_round">
 
-                        <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        <com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
                             android:id="@+id/allCb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -290,26 +285,26 @@
                             android:layout_marginRight="16dp"
                             android:background="@color/gray_300" />
 
-                        <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        <com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
                             android:id="@+id/order14Cb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:PolicyLayoutV2_ShowAllDocuText="GONE"
                             android:text="만 14세 이상의 회원입니다."/>
 
-                        <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        <com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
                             android:id="@+id/serviceAgreeCb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="서비스 이용약관에 동의합니다."/>
 
-                        <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        <com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
                             android:id="@+id/personalAgreeCb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="개인정보 처리방침에 동의합니다."/>
 
-                        <com.freewheelin.pulley.views.v2.PolicyLayoutV2
+                        <com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
                             android:id="@+id/marketingAgreeCb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -352,14 +347,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                 android:id="@+id/nextBtn"
                 android:layout_width="400dp"
                 android:layout_height="@dimen/dp56"
                 android:layout_gravity="center"
                 android:text="다음"
-                app:ButtonTextSize="@dimen/sp18"
-                app:buttonTheme="blue" />
+                android:textSize="@dimen/sp18" />
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -28,9 +28,9 @@ import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteFViewModel
 import com.freewheelin.pulley.revision2021.views.*
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.Preferences
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.toPx
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LCWrongNoteFragment : Fragment(),

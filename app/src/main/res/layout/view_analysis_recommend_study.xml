@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.freewheelin.pulley.views.bars.VerticalBar
+        <com.freewheelin.pulley.legacy.views.bars.VerticalBar
             android:id="@+id/myCorrectRateBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="@+id/myCorrectRateBar"
             app:layout_constraintBottom_toBottomOf="@+id/myCorrectRateBar"/>
 
-        <com.freewheelin.pulley.views.bars.VerticalBar
+        <com.freewheelin.pulley.legacy.views.bars.VerticalBar
             android:id="@+id/averageCorrectRateBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,54 +103,18 @@
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/guideTv"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/actionBtnWrapperCl"
-        android:layout_width="@dimen/primaryBtn_width_200dp"
+    <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
+        android:id="@+id/actionBtn"
+        android:layout_width="180dp"
         android:layout_height="@dimen/dp56"
         android:layout_marginTop="@dimen/dp32"
-        android:clickable="true"
-        android:background="@drawable/bg_purple_100_round_ripple"
+        android:layout_marginBottom="@dimen/dp64"
+        android:text="추천 유형학습 풀기"
+        app:showStartIcon="true"
+        app:startIcon="lock"
         app:layout_constraintStart_toStartOf="@+id/guideTv"
         app:layout_constraintTop_toBottomOf="@+id/recommendTv"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/actionLockIv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_lock_20_white"
-            app:tint="@color/purple_300"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/actionTv"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
-
-        <TextView
-            android:id="@+id/actionTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/h5"
-            android:textColor="@color/purple_300"
-            android:text="추천 유형학습 풀기"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/actionLockIv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-<!--    <com.freewheelin.pulley.views.buttons.SecondaryButton-->
-<!--        android:id="@+id/actionBtn"-->
-<!--        android:layout_width="@dimen/primaryBtn_width_200dp"-->
-<!--        android:layout_height="@dimen/dp56"-->
-<!--        android:text="추천 유형학습 풀기"-->
-<!--        android:layout_marginTop="@dimen/dp32"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideTv"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/recommendTv"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
-
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

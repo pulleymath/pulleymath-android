@@ -1,7 +1,7 @@
-package com.freewheelin.pulley.core.manager
+package com.freewheelin.pulley.legacy.core.manager
 
-import com.freewheelin.pulley.core.manage.ProblemManager
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.core.manage.ProblemManager
+import com.freewheelin.pulley.legacy.model.Problem
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

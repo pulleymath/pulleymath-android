@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.freewheelin.pulley.databinding.ViewAffiliatedTestGalleryBinding
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
@@ -16,8 +16,8 @@ import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2021.views.adapters.AffiliatedTestGalleryAdapter
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.views.GridMarginDecoration
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.views.GridMarginDecoration
 
 interface AffiliatedGalleryViewDelegate {
     fun onFoldBtnClicked()

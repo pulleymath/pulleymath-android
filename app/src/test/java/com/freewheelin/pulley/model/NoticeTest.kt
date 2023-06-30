@@ -1,9 +1,9 @@
-package com.freewheelin.pulley.model
+package com.freewheelin.pulley.legacy.model
 
 import com.google.gson.Gson
-import com.freewheelin.pulley.utils.year
-import com.freewheelin.pulley.utils.month
-import com.freewheelin.pulley.utils.day
+import com.freewheelin.pulley.legacy.utils.year
+import com.freewheelin.pulley.legacy.utils.month
+import com.freewheelin.pulley.legacy.utils.day
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

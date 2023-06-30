@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.lifecycleScope
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase

@@ -17,8 +17,8 @@ import com.freewheelin.pulley.databinding.DialogTeacherUtilityBinding
 import com.freewheelin.pulley.revision2023.ui.fragment.*
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.TeacherUtilityViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class TeacherUtilityDialog(): DialogFragment() {
 

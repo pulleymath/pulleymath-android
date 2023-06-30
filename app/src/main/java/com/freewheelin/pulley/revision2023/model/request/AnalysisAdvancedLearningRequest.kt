@@ -1,8 +1,8 @@
 package com.freewheelin.pulley.revision2023.model.request
 
-import com.freewheelin.pulley.model.History
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.ProblemDetailInfo
+import com.freewheelin.pulley.legacy.model.History
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.ProblemDetailInfo
 
 data class AnalysisAdvancedLearningRequest(
     val sameOrSimilar: String?,

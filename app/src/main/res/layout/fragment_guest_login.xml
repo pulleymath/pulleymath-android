@@ -121,7 +121,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
-                        <com.freewheelin.pulley.views.editText.InputFieldV2
+                        <com.freewheelin.pulley.legacy.views.editText.InputFieldV2
                             android:id="@+id/emailField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                             app:InputFieldV2_Hint="아이디(이메일)"
                             />
 
-                        <com.freewheelin.pulley.views.editText.PasswordFieldV2
+                        <com.freewheelin.pulley.legacy.views.editText.PasswordFieldV2
                             android:id="@+id/pwField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

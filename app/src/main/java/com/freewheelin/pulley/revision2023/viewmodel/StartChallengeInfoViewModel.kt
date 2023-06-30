@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 
 class StartChallengeInfoViewModel(application: Application): BaseAndroidViewModel(application) {

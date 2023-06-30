@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogSnackTestRecommendSettingBinding
-import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.ui.fragment.*
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () -> Unit): DialogFragment() {
 

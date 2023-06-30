@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository

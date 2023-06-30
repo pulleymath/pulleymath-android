@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:paddingStart="@dimen/dp64"
         android:paddingEnd="@dimen/dp64"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainDailyFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.TestMainDailyFragment">
 
         <TextView
             android:id="@+id/headerTv"
@@ -157,15 +157,14 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
             android:layout_marginTop="@dimen/dp24"
             android:text="시작하기"
             android:visibility="invisible"
-            app:ButtonTextSize="@dimen/sp18"
-            app:buttonTheme="blue"
+            android:textSize="@dimen/sp18"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timerGuideTv"

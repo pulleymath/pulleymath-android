@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.OnboardingActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.OnboardingActivity">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
@@ -19,13 +19,12 @@
 
         </androidx.viewpager.widget.ViewPager>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
             android:text="시작하기"
-            app:ButtonTextSize="@dimen/sp20"
-            app:buttonTheme="blue"
+            android:textSize="@dimen/sp20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

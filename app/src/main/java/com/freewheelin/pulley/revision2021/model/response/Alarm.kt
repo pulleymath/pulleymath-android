@@ -29,9 +29,9 @@ class Alarm : BaseDiffItem, Serializable {
         if (currentTime == null) {
             return ""
         }
-        val createdDate = sdf.parse(createdAt)
+        val createdDate = sdf.parse(createdAt) ?: return ""
         val createdDateLong = createdDate.time
-        val parsedCurrentServerDate = sdf.parse(currentTime)
+        val parsedCurrentServerDate = sdf.parse(currentTime) ?: return ""
         val serverDateLong = parsedCurrentServerDate.time
         val timeDiff: Int = ((serverDateLong - createdDateLong) / 1000).toInt()
 
@@ -67,7 +67,7 @@ class Alarm : BaseDiffItem, Serializable {
     }
 
     fun getDetailMessageTime(): String {
-        val createdDate = sdf.parse(createdAt)
+        val createdDate = sdf.parse(createdAt) ?: return ""
         val newFormat by lazy { SimpleDateFormat("yyyy-MM-dd a HH:mm", Locale.KOREA) }
 
         val messageTime = newFormat.format(createdDate)

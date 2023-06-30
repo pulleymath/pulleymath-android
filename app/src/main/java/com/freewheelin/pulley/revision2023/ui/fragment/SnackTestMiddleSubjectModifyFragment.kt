@@ -10,9 +10,9 @@ import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.signup.SignupActivity
-import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
-import com.freewheelin.pulley.assets.SubjectV3
+import com.freewheelin.pulley.legacy.activities.auth.signup.SignupActivity
+import com.freewheelin.pulley.legacy.activities.mypage.MyStudyInfoFragment
+import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.databinding.FragmentHighCommonSubjectModifyBinding
 import com.freewheelin.pulley.databinding.FragmentMiddleSubjectModifyBinding
 import com.freewheelin.pulley.databinding.FragmentTestExamRangeBinding
@@ -20,8 +20,8 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingD
 import com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
 import com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelectionListener
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.views.DaebakToast
 
 class SnackTestMiddleSubjectModifyFragment : Fragment(), MiddleSchoolUnitSelectionListener {
     private lateinit var binding: FragmentMiddleSubjectModifyBinding
@@ -82,9 +82,9 @@ class SnackTestMiddleSubjectModifyFragment : Fragment(), MiddleSchoolUnitSelecti
                     selection.initSelected(it)
 
                     if (getUnitClicked()) {
-                        modifyBtn.toEnableUI()
+                        modifyBtn.isEnabled = true
                     } else {
-                        modifyBtn.toDisableUI()
+                        modifyBtn.isEnabled = false
                     }
                 }
             }
@@ -160,9 +160,9 @@ class SnackTestMiddleSubjectModifyFragment : Fragment(), MiddleSchoolUnitSelecti
 
     override fun onSelectionChanged(view: View) {
         if (getUnitClicked()) {
-            binding.modifyBtn.toEnableUI()
+            binding.modifyBtn.isEnabled = true
         } else {
-            binding.modifyBtn.toDisableUI()
+            binding.modifyBtn.isEnabled = false
         }
     }
 }

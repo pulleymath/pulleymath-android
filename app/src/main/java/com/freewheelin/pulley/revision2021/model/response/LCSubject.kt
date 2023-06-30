@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2021.model.response
 
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.revision2023.SchoolType
 import java.io.Serializable
 

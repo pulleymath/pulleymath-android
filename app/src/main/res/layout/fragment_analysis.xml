@@ -51,7 +51,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
 
-                    <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.AnalysisCompareTextView
                         android:id="@+id/percentCompareTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                         app:layout_constraintStart_toEndOf="@+id/cntCompareTv"
                         app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                    <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.AnalysisCompareTextView
                         android:id="@+id/cntCompareTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/percentCompareTv"
                         app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                    <com.freewheelin.pulley.views.textViews.AnalysisCompareTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.AnalysisCompareTextView
                         android:id="@+id/timeCompareTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -89,45 +89,19 @@
                         app:layout_constraintStart_toEndOf="@+id/percentCompareTv"
                         app:layout_constraintTop_toBottomOf="@+id/mainCurationTv" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/mainAnalysisWarpperCl"
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
+                        android:id="@+id/totalAnalysisBtn"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp56"
                         android:layout_marginStart="@dimen/dp48"
                         android:layout_marginTop="@dimen/dp64"
                         android:layout_marginEnd="@dimen/dp16"
-                        android:background="@drawable/bg_btn_round_common"
                         android:layout_marginBottom="@dimen/dp48"
+                        android:text="전체 분석 보러가기"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/sampleWrapperCl"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv">
-
-                        <ImageView
-                            android:id="@+id/analysisLockIv"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_lock_20_white"
-                            app:tint="@color/white"
-                            android:layout_marginEnd="8dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/mainAnalysisTv"
-                            app:layout_constraintHorizontal_chainStyle="packed"/>
-
-                        <TextView
-                            android:id="@+id/mainAnalysisTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/h4"
-                            android:textColor="@color/white"
-                            android:text="전체 분석 보러가기"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/analysisLockIv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/percentCompareTv"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/sampleWrapperCl"
@@ -206,21 +180,21 @@
             </LinearLayout>
 
 
-            <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.AnalysisRecommendStudyView
+            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisRecommendStudyView
                 android:id="@+id/recommendStudyView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:background="@drawable/shadow_clear" />
 
-            <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.AnalysisStudyRateView
+            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisStudyRateView
                 android:id="@+id/studyRateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:background="@drawable/shadow_clear" />
 
-            <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListView
+            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListView
                 android:id="@+id/todayStudyView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

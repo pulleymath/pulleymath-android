@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.QuizFormat
@@ -13,7 +13,7 @@ import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*

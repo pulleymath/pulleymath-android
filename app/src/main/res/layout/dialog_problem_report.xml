@@ -212,7 +212,7 @@
                         android:layout_marginStart="4dp" />
                 </LinearLayout>
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/submitBtn"
                     android:layout_width="@dimen/primaryBtn_width_200dp"
                     android:layout_height="@dimen/dp56"
@@ -223,7 +223,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/errorContainerLl"
-                    app:buttonTheme="blue" />
+                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

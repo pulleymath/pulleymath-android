@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
-import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
+import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -35,14 +35,17 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
+import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ConceptCourseFragment : LearningTabFragment() {
+class ConceptCourseFragment : MainTabFragment() {
     companion object {
         val RESULT_OK = 301
         val CHALLENGE_TUTORIAL_FINISH = 302
@@ -56,7 +59,7 @@ class ConceptCourseFragment : LearningTabFragment() {
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var reconfigureReceiver: BroadcastReceiver
 
-    override var screenName = "개념"
+    override var type: MainTab = MainTab.개념
 
     override fun onResume() {
         super.onResume()
@@ -162,7 +165,7 @@ class ConceptCourseFragment : LearningTabFragment() {
     }
     private fun showGuestJoinInduceDialog() {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.INDUCE, "개념", "가입유도")
-        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+        (activity as? MainActivity)?.showGuestJoinInduceDialog {
             viewModel.errorStatusReset()
         }
     }
@@ -170,11 +173,6 @@ class ConceptCourseFragment : LearningTabFragment() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "개념학습유도", "${seq}")
     }
 
-    override fun initUI() {
-//        viewModel.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)
-//        setHeaderSubject()
-
-    }
     fun moveSubjectId(id : Int) { // SubjectIndicator
         viewModel.selectedSubjectId.postValue(id)
     }

@@ -8,7 +8,7 @@ import com.freewheelin.pulley.revision2023.repository.AuthRepository
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

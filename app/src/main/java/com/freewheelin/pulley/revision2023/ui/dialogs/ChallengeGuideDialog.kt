@@ -12,12 +12,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ViewChallengeGuideBinding
 import com.freewheelin.pulley.revision2023.viewmodel.ChallengeGuideDialogViewModel
-import com.freewheelin.pulley.utils.partialFontAndColored
-import com.freewheelin.pulley.utils.toPx
-import com.freewheelin.pulley.utils.underline
+import com.freewheelin.pulley.legacy.utils.partialFontAndColored
+import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.utils.underline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

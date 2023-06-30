@@ -3,9 +3,9 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.dialogs.DateRangePickerDialog
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
@@ -16,7 +16,7 @@ import com.freewheelin.pulley.revision2023.repository.PriorConceptRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.repository.impl.PriorConceptRepositoryImpl
 import com.freewheelin.pulley.revision2023.ui.adapter.PriorConceptAdapter
-import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -82,10 +82,7 @@ class WrongNoteFragViewModel(application: Application): BaseAndroidViewModel(app
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val dateText = datePickerType.text ?: (DateTimeUtils.yyyyMMddFormat.format(from.toDate()) + " - " + DateTimeUtils.yyyyMMddFormat.format(to.toDate()))
             val elements = patternStudyRepository.fetchBookFilter(bookFilterParent, BookFilterElement.getCalendar(dateText))
-            elements.forEach { println("asoaso ${it.name}, value: ${it.value} ${it.filterType}") }
             val syncedElements = syncSelectedFilterType(elements)
-            syncedElements.forEach { println("asoaso - ${it.name}, ${it.filterType}, - ${it.isSelected.get()}") }
-            println("asoaso - - - selectedFilterTypes : ${selectedFilterTypes}")
             _filterElements.postValue(syncedElements)
         }
     }

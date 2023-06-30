@@ -1,9 +1,9 @@
-package com.freewheelin.pulley.model.curation
+package com.freewheelin.pulley.legacy.model.curation
 
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.model.ChapterAmountAnalysis
-import com.freewheelin.pulley.model.ChapterAnalysis
-import com.freewheelin.pulley.model.LevelRatioAnalysis
+import com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis
+import com.freewheelin.pulley.legacy.model.ChapterAnalysis
+import com.freewheelin.pulley.legacy.model.LevelRatioAnalysis
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test
@@ -89,7 +89,7 @@ class MyCurationTest: ContextTest() {
 
     @Test
     fun `난이도별 분석 - 난이도별 연습 비율 분석 큐레이션이 적절하게 나와야한다`() {
-        val levelRatioAnalysis0 = Mockito.mock(LevelRatioAnalysis::class.java)
+        val levelRatioAnalysis0 = Mockito.mock(com.freewheelin.pulley.legacy.model.LevelRatioAnalysis::class.java)
 
         Mockito.`when`(levelRatioAnalysis0.getMaxValOnComparing()).thenReturn(Pair("상", false))
         assertEquals("같은 등급 친구들 대비 상 난이도의 연습량이 가장 부족해요!", curation.getLevelStudyRatioQ(levelRatioAnalysis0).toString())
@@ -101,15 +101,15 @@ class MyCurationTest: ContextTest() {
 
     @Test
     fun `학습량 분석 - 요약 큐레이션이 적절하게 나와야한다`() {
-        val chapterAmountAnalysis1 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis1 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "첫번째"
             problemTotalNumber = 340
         }
-        val chapterAmountAnalysis2 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis2 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "두번째"
             problemTotalNumber = 310
         }
-        val chapterAmountAnalysis3 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis3 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "세째"
             problemTotalNumber = 300
         }
@@ -127,15 +127,15 @@ class MyCurationTest: ContextTest() {
 
     @Test
     fun `학습량 분석 - 대단원별 학습량 비교 그래프 큐레이션이 적절하게 나와야한다`() {
-        val chapterAmountAnalysis1 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis1 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "첫번째"
             problemTotalNumber = 340
         }
-        val chapterAmountAnalysis2 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis2 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "두번째"
             problemTotalNumber = 310
         }
-        val chapterAmountAnalysis3 = ChapterAmountAnalysis().apply {
+        val chapterAmountAnalysis3 = com.freewheelin.pulley.legacy.model.ChapterAmountAnalysis().apply {
             chapterName = "세째"
             problemTotalNumber = 300
         }

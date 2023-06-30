@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.model
+package com.freewheelin.pulley.legacy.model
 
 import org.junit.Test
 

@@ -1,9 +1,9 @@
 package com.freewheelin.pulley.revision2021.channelio
 
 import android.app.Application
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
-import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.Preferences
 import com.zoyi.channel.plugin.android.ChannelIO
 import com.zoyi.channel.plugin.android.global.PrefSupervisor
 import com.zoyi.channel.plugin.android.open.config.BootConfig

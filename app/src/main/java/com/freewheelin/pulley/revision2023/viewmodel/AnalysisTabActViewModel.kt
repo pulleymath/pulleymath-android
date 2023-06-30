@@ -3,19 +3,19 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.model.Analysis
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.contents.Content
-import com.freewheelin.pulley.model.contents.Piece
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.model.Analysis
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.request.AnalysisAdvancedLearningRequest
 import com.freewheelin.pulley.revision2023.repository.*
-import com.freewheelin.pulley.utils.DateTimeUtils
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,7 +33,7 @@ class AnalysisTabActViewModel(application: Application): BaseAndroidViewModel(ap
 
     var isSample = false
 
-    fun fetchAnalysis(from: LocalDate, to: LocalDate, formerDate: LocalDate, cb: (Analysis) -> Unit) {
+    fun fetchAnalysis(from: LocalDate, to: LocalDate, formerDate: LocalDate, cb: (com.freewheelin.pulley.legacy.model.Analysis) -> Unit) {
         if (isSample) {
             contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
                 val analysis = anonymousRepository.getAnalysisSample()

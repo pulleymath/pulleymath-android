@@ -9,16 +9,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.core.manage.TestManager
 import com.freewheelin.pulley.databinding.FragmentTestExamRangeBinding
-import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog.*
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 
 class SnackTestSelectExamRangeFragment() : Fragment() {
     private lateinit var binding: FragmentTestExamRangeBinding

@@ -18,9 +18,9 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.view.MissionStampView
 import com.freewheelin.pulley.revision2023.viewmodel.ChallengeCompletedViewModel
-import com.freewheelin.pulley.utils.AnimUtils
-import com.freewheelin.pulley.utils.visibleIf
-import com.freewheelin.pulley.utils.visibleOrInvisibleIf
+import com.freewheelin.pulley.legacy.utils.AnimUtils
+import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.visibleOrInvisibleIf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

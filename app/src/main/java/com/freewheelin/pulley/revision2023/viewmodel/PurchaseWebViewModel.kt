@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2023.repository.AuthRepository
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository

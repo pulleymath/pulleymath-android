@@ -13,7 +13,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ViewBalloonCourseRoadBinding
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
-import com.freewheelin.pulley.utils.dpToPx
+import com.freewheelin.pulley.legacy.utils.dpToPx
 
 class BalloonCourseRoadView: ConstraintLayout {
 

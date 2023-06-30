@@ -78,90 +78,90 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/dp36">
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/mathTopSelection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="수학(상)" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/mathBottomSelection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="수학(하)" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/math1Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="수학I" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/math2Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="수학II" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/probAnsStatSelection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="확률과 통계" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/calculusSelection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="미적분" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/geometrySelection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:DaebakInputSelection_Label="기하" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m11Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="중 1-1" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m12Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="중 1-2" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m21Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="중 2-1" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m22Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="중 2-2" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m31Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp24"
                         app:DaebakInputSelection_Label="중 3-1" />
 
-                    <com.freewheelin.pulley.views.PulleyInputSelection
+                    <com.freewheelin.pulley.legacy.views.PulleyInputSelection
                         android:id="@+id/m32Selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
 
 
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/modifyBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

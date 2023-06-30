@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.WrongTestReportActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.WrongTestReportActivity">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="600dp"
             android:layout_height="wrap_content"
@@ -131,13 +131,12 @@
                             app:layout_constraintBottom_toTopOf="@+id/reviewBtn"
                             app:layout_constraintVertical_chainStyle="packed"/>
 
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                             android:id="@+id/reviewBtn"
                             android:layout_width="@dimen/primaryBtn_width_160dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_marginTop="@dimen/dp16"
                             android:text="리뷰하기"
-                            app:buttonTheme="blue"
                             app:layout_constraintStart_toStartOf="@id/scoreGuideTv"
                             app:layout_constraintTop_toBottomOf="@+id/scoreGuideTv"
                             app:layout_constraintBottom_toBottomOf="parent"/>

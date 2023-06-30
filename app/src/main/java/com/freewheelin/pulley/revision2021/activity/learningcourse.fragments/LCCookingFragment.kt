@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -23,8 +23,8 @@ import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
 import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 

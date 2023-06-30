@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/summaryTv">
 
-            <com.freewheelin.pulley.views.LearningProgressView
+            <com.freewheelin.pulley.legacy.views.LearningProgressView
                 android:id="@+id/scoreBarView"
                 android:layout_width="0dp"
                 android:layout_height="16dp"
@@ -43,7 +43,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/progressContainerCl"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="@color/blue_300"></com.freewheelin.pulley.views.LearningProgressView>
+                app:progressColor="@color/blue_300"></com.freewheelin.pulley.legacy.views.LearningProgressView>
 
             <View
                 android:id="@+id/progressBorder"
@@ -385,7 +385,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/summaryTv">
 
-            <com.freewheelin.pulley.views.LearningProgressView
+            <com.freewheelin.pulley.legacy.views.LearningProgressView
                 android:id="@+id/scoreBarView2"
                 android:layout_width="0dp"
                 android:layout_height="16dp"
@@ -397,7 +397,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/oneProgressContainerCl"
                 app:layout_constraintTop_toTopOf="parent"
-                app:progressColor="@color/blue_300"></com.freewheelin.pulley.views.LearningProgressView>
+                app:progressColor="@color/blue_300"></com.freewheelin.pulley.legacy.views.LearningProgressView>
 
             <View
                 android:id="@+id/progressBorder2"

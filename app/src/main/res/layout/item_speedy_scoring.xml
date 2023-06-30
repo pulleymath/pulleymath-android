@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.freewheelin.pulley.views.AnswerSelectionView
+        <com.freewheelin.pulley.legacy.views.AnswerSelectionView
             android:id="@+id/selectionAnswerView"
             android:layout_width="wrap_content"
             android:layout_height="48dp"

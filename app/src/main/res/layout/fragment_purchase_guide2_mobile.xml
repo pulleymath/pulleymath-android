@@ -210,32 +210,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/actionBtnWrapperCl"/>
+                        app:layout_constraintBottom_toTopOf="@+id/actionBtn"/>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/actionBtnWrapperCl"
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
+                        android:id="@+id/actionBtn"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp56"
-                        android:clickable="true"
-                        android:background="@{ vm.purchaseEnabled ? @drawable/bg_btn_round_common : @drawable/bg_purple_300_disable_round, default=@drawable/bg_btn_round_common }"
+                        android:text="구매하러 가기"
+                        style="@style/h5"
+                        android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:focusable="true">
-                        <!--            app:layout_constraintTop_toBottomOf="@+id/scrollRoot"-->
-
-                        <TextView
-                            android:id="@+id/actionTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/h5"
-                            android:textColor="@color/white"
-                            android:text="구매하러 가기"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

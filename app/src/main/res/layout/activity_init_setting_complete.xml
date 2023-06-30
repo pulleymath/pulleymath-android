@@ -6,7 +6,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.auth.InitSettingCompleteActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.auth.InitSettingCompleteActivity">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,13 +39,13 @@
 <!--                android:text="P.S. 겁먹지 마세요! 아주 쉬워요 :)"-->
 <!--                android:layout_marginTop="@dimen/dp24"/>-->
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/startBtn"
                 android:layout_width="@dimen/primaryBtn_width_200dp"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginTop="@dimen/dp48"
                 android:text="시작하기"
-                app:buttonTheme="blue" />
+                 />
 
         </LinearLayout>
 

@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 import com.freewheelin.pulley.revision2023.model.ServerTimeNow

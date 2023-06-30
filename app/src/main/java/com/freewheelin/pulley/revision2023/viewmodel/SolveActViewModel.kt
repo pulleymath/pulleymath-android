@@ -3,10 +3,10 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.User
-import com.freewheelin.pulley.model.contents.Content
-import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
@@ -15,7 +15,7 @@ import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

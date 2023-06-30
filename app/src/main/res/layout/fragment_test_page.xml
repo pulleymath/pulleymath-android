@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestPageFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.TestPageFragment">
 
         <TextView
             style="@style/TextGray_800.ExtraBold"

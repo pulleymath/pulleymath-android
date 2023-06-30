@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository
 
-import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2021.model.request.PdfReadPost
 import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.repository.local.PdfDao

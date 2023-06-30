@@ -26,16 +26,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment
-import com.freewheelin.pulley.activities.solve.*
-import com.freewheelin.pulley.bases.DensityLevel.*
-import com.freewheelin.pulley.bases.densityLevel
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.tutorial.Tutor
+import com.freewheelin.pulley.revision2023.ui.fragment.AffiliatedTestFragment
+import com.freewheelin.pulley.legacy.activities.solve.*
+import com.freewheelin.pulley.legacy.bases.DensityLevel.*
+import com.freewheelin.pulley.legacy.bases.densityLevel
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAffiliatedTestSolveBinding
-import com.freewheelin.pulley.model.ProblemType
-import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.legacy.core.manage.UserManager
+import com.freewheelin.pulley.legacy.model.ProblemType
+import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveConceptFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard
@@ -46,12 +46,10 @@ import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionView
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
 import com.freewheelin.pulley.revision2021.views.AffiliatedGalleryViewDelegate
 import com.freewheelin.pulley.revision2021.views.AffiliatedTestGalleryView
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.*
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
@@ -104,13 +102,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             return intent
         }
 
-        fun getIntent(context: Context, workbook: AffiliatedTestWorkbook): Intent {
+        fun getIntent(context: Context, workbook: AffiliatedTestWorkbook?): Intent {
             val intent = Intent(context, AffiliatedTestSolveActivity::class.java)
             intent.putExtra(SELECTED_WORKBOOK, workbook)
             return intent
         }
 
-        fun getReviewIntent(context: Context, workbook: AffiliatedTestWorkbook): Intent {
+        fun getReviewIntent(context: Context, workbook: AffiliatedTestWorkbook?): Intent {
             val intent = getIntent(context)
             intent.putExtra(IS_REVIEW, true)
             intent.putExtra(SELECTED_WORKBOOK, workbook)
@@ -153,8 +151,12 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         finishReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 DialogUtils.v2FinishTestDialog(this@AffiliatedTestSolveActivity) {
-                    val intent = Intent(getActivity(), LearningTabActivity::class.java)
+                    val reConfigureReceiverIntent = Intent(UserManager.RE_CONFIGURE_UI)
+                    LocalBroadcastManager.getInstance(this@AffiliatedTestSolveActivity).sendBroadcast(reConfigureReceiverIntent)
+
+                    val intent = Intent(getActivity(), MainActivity::class.java)
                     intent.putExtra(SELECTED_WORKBOOK, viewModel.selectedWorkbook)
+
                     setResult(AffiliatedTestFragment.SHOW_REPORT_INT, intent)
                     if (!isFinishing) finish()
                 }
@@ -260,14 +262,15 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                     viewModel.onSubmit(this@AffiliatedTestSolveActivity) {
                         saveMemo()
                         viewModel.finishTest {
-                            this@AffiliatedTestSolveActivity.runOnUiThread {
-                                DialogUtils.v2FinishTestDialog(this@AffiliatedTestSolveActivity) {
-                                    val intent =
-                                        Intent(getActivity(), LearningTabActivity::class.java)
-                                    intent.putExtra(SELECTED_WORKBOOK, viewModel.selectedWorkbook)
-                                    setResult(AffiliatedTestFragment.SHOW_REPORT_INT, intent)
-                                    if (!isFinishing) finish()
-                                }
+                            DialogUtils.v2FinishTestDialog(this@AffiliatedTestSolveActivity) {
+                                val reConfigureReceiverIntent = Intent(UserManager.RE_CONFIGURE_UI)
+                                LocalBroadcastManager.getInstance(this@AffiliatedTestSolveActivity).sendBroadcast(reConfigureReceiverIntent)
+
+                                val intent = Intent(getActivity(), MainActivity::class.java)
+                                intent.putExtra(SELECTED_WORKBOOK, viewModel.selectedWorkbook)
+
+                                setResult(AffiliatedTestFragment.SHOW_REPORT_INT, intent)
+                                if (!isFinishing) finish()
                             }
                         }
                     }
@@ -464,8 +467,9 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     override fun onProblemSelected(problem: AffiliatedTestProblem?, autoFocus: Boolean) {
 
-//        conceptViewModel.currentProblem.postValue(problem)
         viewModel.currentProblem.postValue(problem)
+        val problemIndex = viewModel.problemList.value?.indexOf(problem) ?: 0
+        viewModel.problemIndex.postValue(problemIndex)
 
         saveMemo()
         onSetProblem(problem)
@@ -520,8 +524,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun set5MinTimer(serverTimeNow: String) {
         val before5MinItEnds = viewModel.get5MinBeforeFinishedTimeEnds() ?: return
-        val paredDate = sdf.parse(before5MinItEnds)
-        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
+        val paredDate = sdf.parse(before5MinItEnds) ?: return
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow) ?: return
         val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
         lastFiveMinTimer = object : CountDownTimer(timeDiffMilli, 1000) {
@@ -540,8 +544,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
     private fun setScreenDimComeInBeforeTestStart(serverTimeNow: String) {
         val startedAt = viewModel.getStartedTime() ?: return
-        val paredDate = sdf.parse(startedAt)
-        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
+        val paredDate = sdf.parse(startedAt) ?: return
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow) ?: return
         val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
 
         dimScreenTimer = object : CountDownTimer(timeDiffMilli, 1000) {
@@ -569,11 +573,10 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     private fun setRemainingTimer(serverTimeNow: String) {
-        if (!viewModel.showTimer) return
         val finishedAt = viewModel.getFinishedTime() ?: return
-        val paredDate = sdf.parse(finishedAt)
+        val paredDate = sdf.parse(finishedAt) ?: return
 
-        val parsedCurrentServerDate = sdf.parse(serverTimeNow)
+        val parsedCurrentServerDate = sdf.parse(serverTimeNow) ?: return
         val timeDiffMilli = paredDate.time - parsedCurrentServerDate.time
         remainingTimer = object : CountDownTimer(timeDiffMilli, 1000) {
             override fun onTick(diff: Long) {
@@ -584,6 +587,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 val hourStr = if (hour.toString().length < 2) "0$hour" else hour.toString()
                 val minStr = if (min.toString().length < 2) "0$min" else min.toString()
                 val secStr = if (sec.toString().length < 2) "0$sec" else sec.toString()
+                println("aspasp remain ${hourStr}:${minStr}:${secStr}")
                 binding.remainingTime.text = "${hourStr}:${minStr}:${secStr}"
             }
 

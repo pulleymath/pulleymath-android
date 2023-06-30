@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
@@ -18,7 +18,7 @@ import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -68,6 +68,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     }
 
     fun fetch(subjectId: Int) {
+        println("aspasp fetch 1 subjectId=$subjectId ")
         _isLoading.postValue(true)
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
@@ -83,7 +84,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 response.data?.let {
-
+                    println("aspasp fetch 2")
                     val cList = mutableListOf<StudyChapter>()
 
                     it.forEachIndexed { largeIndex, largeChapter ->
@@ -118,6 +119,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
 //                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + cList + listOf(studyChapterFooter!!)
 //                    val listWithHeaderAndFooter = cList
+                    println("aspasp fetch 3 ${cList.size}")
 
                     chapterList.postValue(cList)
                 }

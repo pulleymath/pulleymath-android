@@ -37,7 +37,7 @@
                     android:textCursorDrawable="@drawable/text_input_layout_cursor"
                     android:hint="이름" />
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp56"

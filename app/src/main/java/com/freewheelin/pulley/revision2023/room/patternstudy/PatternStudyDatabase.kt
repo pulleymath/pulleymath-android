@@ -2,7 +2,7 @@ package com.freewheelin.pulley.revision2023.room.patternstudy
 //
 //import android.content.Context
 //import androidx.room.*
-//import com.freewheelin.pulley.model.contents.Book
+//import com.freewheelin.pulley.legacy.model.contents.Book
 //import com.freewheelin.pulley.revision2023.model.PriorConcept
 //import com.freewheelin.pulley.revision2023.utils.converters.*
 //import kotlinx.coroutines.CoroutineScope

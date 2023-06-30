@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.databinding.ViewSchoolSwitchBinding
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.repository.UserRepository

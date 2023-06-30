@@ -1,9 +1,9 @@
 package com.freewheelin.pulley.revision2023.service
 
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
-import com.freewheelin.pulley.model.*
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
+import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.request.GuestSignInRequest
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
@@ -27,15 +27,15 @@ interface AnonymousService {
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String,
         @Query("schoolType") school: String? = MyApplication.schoolType.name
-    ): ResponseForceBody<Analysis>
+    ): ResponseForceBody<com.freewheelin.pulley.legacy.model.Analysis>
 
     @GET("/anonymous/v1/analysis/sample")
-    suspend fun getAnalysisSample(): ResponseForceBody<Analysis>
+    suspend fun getAnalysisSample(): ResponseForceBody<com.freewheelin.pulley.legacy.model.Analysis>
 
     @GET("/anonymous/v2/analysis/sample")
     suspend fun getAnalysisSampleV2(
         @Query("schoolType") school: String? = MyApplication.schoolType.name
-    ): ResponseForceBody<Analysis>
+    ): ResponseForceBody<com.freewheelin.pulley.legacy.model.Analysis>
 
     @POST("/anonymous/v1/signin")
     suspend fun guestSignIn(

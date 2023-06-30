@@ -7,7 +7,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.auth.InitTestActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.auth.InitTestActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <com.freewheelin.pulley.views.LearningProgressView
+            <com.freewheelin.pulley.legacy.views.LearningProgressView
                 android:id="@+id/pageBar"
                 android:layout_width="96dp"
                 android:layout_height="8dp"
@@ -79,7 +79,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.freewheelin.pulley.activities.auth.SelectorView
+                <com.freewheelin.pulley.legacy.activities.auth.SelectorView
                     android:id="@+id/firstSelector"
                     android:layout_width="0dp"
                     android:layout_height="144dp"
@@ -90,7 +90,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 
-                <com.freewheelin.pulley.activities.auth.SelectorView
+                <com.freewheelin.pulley.legacy.activities.auth.SelectorView
                     android:id="@+id/secondSelector"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -102,7 +102,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/firstSelector"
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 
-                <com.freewheelin.pulley.activities.auth.SelectorView
+                <com.freewheelin.pulley.legacy.activities.auth.SelectorView
                     android:id="@+id/thirdSelector"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -154,7 +154,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/contentLl"
                 app:layout_constraintTop_toBottomOf="@+id/contentLl">
 
-                <com.freewheelin.pulley.views.buttons.SecondaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                     android:id="@+id/prevBtn"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
@@ -164,11 +164,9 @@
                     app:layout_constraintStart_toStartOf="@+id/contentLl"
                     app:layout_constraintTop_toBottomOf="@+id/contentLl"
                     app:layout_constraintEnd_toStartOf="@+id/nextBtn"
-                    app:ButtonTextSize="18sp"
-                    app:buttonTheme="grey">
-                </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                    android:textSize="18sp"/>
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/nextBtn"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
@@ -177,9 +175,8 @@
                     app:layout_constraintTop_toTopOf="@+id/prevBtn"
                     app:layout_constraintEnd_toEndOf="@+id/contentLl"
                     app:layout_constraintStart_toEndOf="@+id/prevBtn"
-                    app:ButtonTextSize="18sp"
-                    app:buttonTheme="blue" >
-                </com.freewheelin.pulley.views.buttons.PrimaryButton>
+                    android:textSize="18sp"
+                     />
             </LinearLayout>
 
 

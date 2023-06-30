@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.databinding.ViewLayoutConceptCourseHeaderTabBinding
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator

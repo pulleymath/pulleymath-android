@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2023.service
 
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.LCPatternMapWrapper

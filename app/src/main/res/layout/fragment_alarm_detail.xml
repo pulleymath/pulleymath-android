@@ -117,7 +117,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/detailBtn"
             android:layout_width="0dp"
             android:layout_height="56dp"

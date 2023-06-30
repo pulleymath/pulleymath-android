@@ -14,8 +14,8 @@ import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.CourseType
-import com.freewheelin.pulley.utils.DelayDebounce
-import com.freewheelin.pulley.utils.setMarginStart
+import com.freewheelin.pulley.legacy.utils.DelayDebounce
+import com.freewheelin.pulley.legacy.utils.setMarginStart
 
 interface CookingPencilcase {
     val ERASE_THICK: Float

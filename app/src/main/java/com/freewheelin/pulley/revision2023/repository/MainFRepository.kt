@@ -1,8 +1,8 @@
 package com.freewheelin.pulley.revision2023.repository
 
 import android.content.Context
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
-import com.freewheelin.pulley.model.ResponseBody
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderItem
 import com.freewheelin.pulley.revision2023.room.challenge.*
@@ -10,7 +10,7 @@ import com.freewheelin.pulley.revision2023.service.ChallengeApi
 import com.freewheelin.pulley.revision2023.service.ChallengeService
 import com.freewheelin.pulley.revision2023.service.MainFApi
 import com.freewheelin.pulley.revision2023.service.MainFService
-import com.freewheelin.pulley.utils.checkErrorAndReturn
+import com.freewheelin.pulley.legacy.utils.checkErrorAndReturn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response

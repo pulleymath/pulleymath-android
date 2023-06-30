@@ -8,17 +8,17 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.BigUnitV3
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.assets.BigUnitV3
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentSubjectExcludeModifyBinding
 import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.PulleyInputSelection
-import com.freewheelin.pulley.views.PulleyInputSelectionListener
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.views.PulleyInputSelection
+import com.freewheelin.pulley.legacy.views.PulleyInputSelectionListener
 
 class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionListener {
     private lateinit var binding: FragmentSubjectExcludeModifyBinding
@@ -140,14 +140,14 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
 
     override fun onSelectionChanged(view: PulleyInputSelection) {
         if(getSelectedUnit().isEmpty()) {
-            binding.modifyBtn.toDisableUI()
+            binding.modifyBtn.isEnabled = false
         } else {
-            binding.modifyBtn.toEnableUI()
+            binding.modifyBtn.isEnabled = true
         }
     }
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "수정하기", "단원")
-        if(binding.modifyBtn.isEnableUI()) {
+        if(binding.modifyBtn.isEnabled) {
             val units = getCalcExcludedUnits()
             viewModel.excludeSubjects(units.map { it.id }) {
                 onBackBtnClicked()

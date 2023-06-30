@@ -16,11 +16,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -73,7 +73,7 @@ class PurchaseGuide2MobileFragment : Fragment() {
                 adapter = guideAdapter
             }
 
-            actionBtnWrapperCl.setOnClickListener { _ ->
+            actionBtn.setOnClickListener { _ ->
 
                 viewModel.selectedOffer?.let { offer ->
                     val offerId = offer.offerId

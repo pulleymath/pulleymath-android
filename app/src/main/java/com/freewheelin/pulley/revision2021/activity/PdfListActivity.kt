@@ -26,8 +26,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ActivityPdfListBinding
 import com.freewheelin.pulley.databinding.HeaderPdfListBinding
 import com.freewheelin.pulley.databinding.ItemPdfBinding
@@ -42,8 +42,8 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.pulleymath.android.pdf.PdfViewerActivity
 import java.io.ByteArrayOutputStream
 import java.io.File

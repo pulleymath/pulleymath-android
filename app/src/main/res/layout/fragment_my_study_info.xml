@@ -168,13 +168,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/ratingLabel" />
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/modifyBtn"
                         android:layout_width="96dp"
                         android:layout_height="36dp"
                         android:layout_marginTop="@dimen/dp32"
                         android:text="@string/text_change"
-                        app:buttonTheme="grey"
+                        style="@style/h5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ratingLabel" />
 
@@ -256,26 +256,26 @@
                         app:layout_constraintTop_toTopOf="@+id/mathBottomLabel" />
 
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/modifyCommonBtn"
                         android:layout_width="96dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="@dimen/dp24"
                         android:text="@string/text_change"
+                        style="@style/h5"
                         visibleIf="@{ vm.schoolType.isHigh }"
-                        app:buttonTheme="grey"
                         app:layout_constraintBottom_toBottomOf="@+id/mathTopLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/mathTopLabel" />
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/modifySelectBtn"
                         android:layout_width="96dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="@dimen/dp24"
                         android:text="@string/text_change"
+                        style="@style/h5"
                         visibleIf="@{ vm.schoolType.isHigh }"
-                        app:buttonTheme="grey"
                         app:layout_constraintBottom_toBottomOf="@+id/mathBottomLabel"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/mathBottomLabel" />
@@ -298,58 +298,19 @@
                         app:layout_constraintTop_toBottomOf="@+id/mathBottomLabel"  />
 
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/middleSubjectModifyBtn"
                         android:layout_width="96dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="@dimen/dp24"
                         android:text="@string/text_change"
+                        style="@style/h5"
                         visibleIf="@{ vm.schoolType.isMiddle }"
-                        app:buttonTheme="grey"
                         app:layout_constraintBottom_toBottomOf="@+id/middleSubjectTv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/middleSubjectTv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--            <TextView-->
-    <!--                style="@style/TextGray_500"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginStart="@dimen/dp24"-->
-    <!--                android:layout_marginTop="@dimen/dp24"-->
-    <!--                android:layout_marginBottom="@dimen/dp12"-->
-    <!--                android:text="학습 내역 삭제"-->
-    <!--                android:textSize="@dimen/sp16" />-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:background="@color/white"-->
-    <!--                android:padding="@dimen/dp24">-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/label"-->
-    <!--                    style="@style/TextGray_500"-->
-    <!--                    android:layout_width="0dp"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:text="학습내역을 전체 삭제하시겠습니까?"-->
-    <!--                    android:textSize="@dimen/sp16"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <com.freewheelin.pulley.views.Buttons.SecondaryButton-->
-    <!--                    android:id="@+id/deleteAllBtn"-->
-    <!--                    android:layout_width="96dp"-->
-    <!--                    android:layout_height="36dp"-->
-    <!--                    android:text="@string/text_to_delete"-->
-    <!--                    app:buttonTheme="grey"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="@+id/label"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="@+id/label" />-->
-
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             </LinearLayout>
         </ScrollView>

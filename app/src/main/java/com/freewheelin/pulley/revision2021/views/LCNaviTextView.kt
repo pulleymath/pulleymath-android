@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class LCNaviTextView: androidx.appcompat.widget.AppCompatTextView {
     constructor(context: Context) : super(context) {}

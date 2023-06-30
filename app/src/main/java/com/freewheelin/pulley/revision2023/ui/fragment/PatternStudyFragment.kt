@@ -18,17 +18,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.book.*
-import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.bases.is10InchUI
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.*
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.is10InchUI
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentPatternStudyBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
-import com.freewheelin.pulley.dialogs.*
-import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.legacy.dialogs.*
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
@@ -37,23 +35,26 @@ import com.freewheelin.pulley.revision2023.ui.activity.WorkbookListActivity
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter.OriginType
 import com.freewheelin.pulley.revision2023.viewmodel.PatternStudyViewModel
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.MarginDecoration
-import com.freewheelin.pulley.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.legacy.views.MarginDecoration
+import com.freewheelin.pulley.legacy.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.revision2021.utils.observeThrottle
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.pulleymath.android.pdf.utils.onThrottleClick
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PatternStudyFragment : LearningTabFragment(),
+class PatternStudyFragment : MainTabFragment(),
     PlanListenerV2,
     EmailInputDialogListener {
     private lateinit var binding: FragmentPatternStudyBinding
     private val viewModel: PatternStudyViewModel by viewModels()
 
-    override var screenName = "유형"
+    override var type: MainTab = MainTab.유형
 
     private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail, ActionType.delete), OriginType.MyPlan, isGridLayout = false)
     private lateinit var getResult: ActivityResultLauncher<Intent>
@@ -99,7 +100,7 @@ class PatternStudyFragment : LearningTabFragment(),
         reConfigureReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
-                    viewModel.initMyPlanAdapterItem()
+                    viewModel.myPlanAdapterItemListener.postValue(Unit)
                 }
             }
         }
@@ -108,7 +109,7 @@ class PatternStudyFragment : LearningTabFragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pattern_study, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.PATTERN_STUDY_MOVE_EVENT))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
@@ -167,15 +168,20 @@ class PatternStudyFragment : LearningTabFragment(),
                 schoolType.observe(viewLifecycleOwner) {
                     CoroutineScope(Dispatchers.IO).launch {
                         delay(300)
-                        viewModel.initMyPlanAdapterItem()
+                        myPlanAdapterItemListener.postValue(Unit)
                     }
+                }
+                myPlanAdapterItemListener.observeThrottle(viewLifecycleOwner) {
+                    // viewpager의 onresume이 최초 이후 동작 안할때가 있어서 동작을 확실하게 하기위해
+                    // onFragmentSelect와 thottle을통해 병행함.
+                    collectAllMyPlans()
                 }
             }
         }
     }
     private fun showGuestJoinInduceDialog() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "유형학습", "가입유도")
-        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+        (activity as? MainActivity)?.showGuestJoinInduceDialog {
             viewModel.errorStatusReset()
         }
     }
@@ -199,7 +205,7 @@ class PatternStudyFragment : LearningTabFragment(),
                 })
             }
             viewModel.myPlanAdapter = myPlanAdapter
-            viewModel.initMyPlanAdapterItem()
+            viewModel.myPlanAdapterItemListener.postValue(Unit)
         }
     }
 
@@ -220,13 +226,14 @@ class PatternStudyFragment : LearningTabFragment(),
             }
         }
     }
-    override fun initUI() {
 
+    override fun onFragmentSelected() {
+        viewModel.myPlanAdapterItemListener.postValue(Unit)
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.initMyPlanAdapterItem()
+        viewModel.myPlanAdapterItemListener.postValue(Unit)
     }
 
     fun goPulleyMathBooks(isFocus: Boolean = false) {
@@ -281,14 +288,14 @@ class PatternStudyFragment : LearningTabFragment(),
 
                 val id = if(book.assignID == null) book.pieceID else book.assignID!!
                 viewModel.togglePin(id, !book.isPinned) {
-                    viewModel.initMyPlanAdapterItem()
+                    viewModel.myPlanAdapterItemListener.postValue(Unit)
                 }
             }
             ActionType.delete -> {
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
 
                 viewModel.removeFromMyPlan(book) {
-                    viewModel.initMyPlanAdapterItem()
+                    viewModel.myPlanAdapterItemListener.postValue(Unit)
                 }
             }
         }

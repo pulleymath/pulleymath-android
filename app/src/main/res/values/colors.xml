@@ -31,13 +31,14 @@
     <color name="gray_750">#5E5E5E</color>
     <color name="gray_700_opa_30">#4D818181</color>
     <color name="gray_800">#4c4c4c</color>
+    <color name="gray_800_disabled">#4D4C4C4C</color>
 
     <color name="purple_100">#ecebff</color>
     <color name="purple_150">#F0EFFF</color>
     <color name="purple_200">#acacff</color>
     <color name="purple_250">#7E7EFF</color>
     <color name="purple_300">#6d6dff</color>
-    <color name="purple_300_disable">#4c6d6dff</color>
+    <color name="purple_300_disabled">#406D6DFF</color>
     <color name="purple_300_disable_20">#336D6DFF</color>
 
     <color name="red_100">#ffe8e8</color>
@@ -82,5 +83,8 @@
     <color name="purple_gray_300_opa_50">#DEDEEF</color>
 
     <color name="bronze">#D49358</color>
+
+    <color name="konkuk_primary">#046b08</color>
+    <color name="soongsil_primary">#5daccc</color>
 
 </resources>

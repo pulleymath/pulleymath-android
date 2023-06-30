@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.repository.*

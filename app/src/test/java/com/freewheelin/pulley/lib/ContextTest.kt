@@ -2,8 +2,8 @@ package com.freewheelin.pulley.lib
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.facebook.soloader.SoLoader
-import com.freewheelin.pulley.bases.MyApplication
+//import com.facebook.soloader.SoLoader
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,7 +15,7 @@ open class ContextTest {
         @BeforeClass
         @JvmStatic
         fun setUp() {
-            SoLoader.setInTestMode()
+//            SoLoader.setInTestMode()
             MyApplication.isTest = true
         }
     }

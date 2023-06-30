@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.TeacherUtilityViewModel"/>
+        <import type="android.view.View"/>
+        <import type="com.freewheelin.pulley.revision2023.ui.dialogs.SpyItem"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootCl"
+        android:layout_width="480dp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/headerCl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black_200"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="48dp"
+                android:layout_height="0dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/headerTitleTv"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:text=""/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/exitBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_x_grey_24dp"
+                app:tint="@color/white"
+                android:padding="16dp"/>
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/headerCl">
+
+<!--            SpyDialog에서 addview를 통해 뷰를 집어넣음-->
+            <LinearLayout
+                android:id="@+id/scrollRootLl"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

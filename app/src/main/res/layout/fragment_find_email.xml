@@ -46,7 +46,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
 
-                    <com.freewheelin.pulley.views.editText.DaebakInputField
+                    <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                         android:id="@+id/nameDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                         app:DaebakInputField_maxLength="15"
                         app:layout_constraintTop_toBottomOf="@+id/inputGuideLabel"/>
 
-                    <com.freewheelin.pulley.views.editText.DaebakInputField
+                    <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                         android:id="@+id/phoneDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -63,14 +63,13 @@
                         app:DaebakInputField_Label="휴대폰 번호"
                         app:layout_constraintTop_toBottomOf="@+id/nameDet"/>
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/findEmailBtn"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="48dp"
                         android:text="이메일 찾기"
-                        app:buttonTheme="blue"
-                        app:ButtonTextSize="@dimen/dp18"
+                        android:textSize="@dimen/dp18"
                         app:layout_constraintTop_toBottomOf="@+id/phoneDet"/>
 
                     <LinearLayout
@@ -181,14 +180,13 @@
                         app:layout_constraintStart_toEndOf="@+id/emailTv"
                         app:layout_constraintTop_toTopOf="@+id/emailTv" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/loginBtn"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="48dp"
                         android:text="로그인하기"
-                        app:ButtonTextSize="@dimen/dp18"
-                        app:buttonTheme="blue"
+                        android:textSize="@dimen/dp18"
                         app:layout_constraintTop_toBottomOf="@+id/emailContainer" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

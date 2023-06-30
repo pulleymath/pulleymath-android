@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
@@ -23,7 +24,9 @@ import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.view.MainUserStatusChip
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.ui.view.MainTab
 
 object BindingAdapter {
 
@@ -42,7 +45,6 @@ object BindingAdapter {
     fun setLayoutMarginTop(view: View, dimen: Float) {
         view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             this.topMargin = dimen.toInt()
-            println("layout_margin_top_dimen, dimen :${dimen.toInt()}")
         }
     }
     @JvmStatic
@@ -294,6 +296,15 @@ object BindingAdapter {
         }
     }
     @JvmStatic
+    @BindingAdapter("visibleGoneAnimIf")
+    fun visibleGoneAnimIf(view: View, show: Boolean?) {
+        if (show == true) {
+            view.show(400)
+        } else {
+            view.hideToGone(400)
+        }
+    }
+    @JvmStatic
     @BindingAdapter("setUserServiceType")
     fun makeUserStatusChip(view: MainUserStatusChip, type: PaidServiceType?) {
         view.type = type
@@ -355,6 +366,40 @@ object BindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("affiliated_card_background")
+    fun setAffiliatedCardBackground(view: View, univ: AffiliatedUniv?) {
+        univ?.let {
+            val imgRes = when (it) {
+                AffiliatedUniv.Konkuk -> R.drawable.bg_konkuk_primary_round
+                AffiliatedUniv.Soongsil -> R.drawable.bg_soongsil_primary_round
+            }
+            view.setBackgroundResource(imgRes)
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("affiliated_card_character")
+    fun setAffiliatedCardCharactor(view: ImageView, univ: AffiliatedUniv?) {
+        univ?.let {
+            val imgRes = when (it) {
+                AffiliatedUniv.Konkuk -> R.mipmap.kudoctor
+                AffiliatedUniv.Soongsil -> R.drawable.soongsoong_disabled
+            }
+            view.setImageResource(imgRes)
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("affiliated_test_completed_character")
+    fun setAffiliatedTestCompletedCharactor(view: ImageView, univ: AffiliatedUniv?) {
+        univ?.let {
+            val imgRes = when (it) {
+                AffiliatedUniv.Konkuk -> R.drawable.box_colorful_ku
+                AffiliatedUniv.Soongsil -> R.drawable.soongsoong_wink
+            }
+            view.setImageResource(imgRes)
+        }
+    }
+
+    @JvmStatic
     @BindingAdapter("searchview_hint_size")
     fun setSearchViewHindSize(v: SearchView, dimen: Float) {
         ((((v.getChildAt(0) as LinearLayout
@@ -362,5 +407,19 @@ object BindingAdapter {
             ).getChildAt(1) as LinearLayout
             ).getChildAt(0) as AutoCompleteTextView
             ).setTextSize(dimen, dimen)
+    }
+
+    @JvmStatic
+    @BindingAdapter("mainTabTextColor")
+    fun setMainTabTextColor(view: TextView, type: MainTab?) {
+        type?.let {
+            val tabName = view.text.toString()
+            val color = if (tabName in it.names) {
+                if (schoolType.isMiddle) R.color.gray_800 else R.color.white
+            } else {
+                R.color.gray_700
+            }
+            view.setTextColor(ContextCompat.getColor(view.context, color))
+        }
     }
 }

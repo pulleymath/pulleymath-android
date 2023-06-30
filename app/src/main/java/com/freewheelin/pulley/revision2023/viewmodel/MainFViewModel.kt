@@ -4,10 +4,10 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
-import com.freewheelin.pulley.core.API.ResponseModel.MainProfile
-import com.freewheelin.pulley.core.manage.UserManager
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
+import com.freewheelin.pulley.legacy.core.manage.UserManager
+import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.*
@@ -18,7 +18,7 @@ import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeMissionAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
-import com.freewheelin.pulley.utils.responseFailed
+import com.freewheelin.pulley.legacy.utils.responseFailed
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collect
@@ -55,18 +55,13 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     val userInRepo = userRepository.user
     var teacherSpyModeCount = 0
 
-    fun initUserInfo(user: User?) {
-        user?.let {
-            showPaidView.postValue(it.serviceType.isPaidUser)
-            userPaidServiceType.postValue(it.serviceType)
-        }
-    }
     fun initChallengeSetting() {
         challengeHeaders.value?.first()?.let { onChallengeHeaderClick(it) }
     }
     var challengeHeaderJob: Job? = null
     fun initChallenge() {
         repository.run {
+            if (user?.studentID == null) return
             challengeHeaderJob = flowAllChallengeHeader()
                 .cancellable()
                 .onEach { items ->

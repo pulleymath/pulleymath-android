@@ -11,9 +11,9 @@ import android.view.View
 import android.webkit.*
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.BaseActivity
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.BaseActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ActivityLessonBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.repository.remote.Network
@@ -22,9 +22,9 @@ import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.UnivAdditionalLearningWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.revision2023.utils.listeners.UnivAdditionalLearningWebClientClickEventListener
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.Preferences
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import java.lang.Exception
 
 class UnivAdditionalLearningActivity : BaseActivity() {

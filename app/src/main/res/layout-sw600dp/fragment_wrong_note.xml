@@ -50,7 +50,7 @@
                     android:text="즐겨찾기" />
             </com.google.android.material.tabs.TabLayout>
 
-            <com.freewheelin.pulley.views.TabViewPager
+            <com.freewheelin.pulley.legacy.views.TabViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tabContainerCl" />
 
-        <com.freewheelin.pulley.views.WrongManageView
+        <com.freewheelin.pulley.legacy.views.WrongManageView
             android:id="@+id/wrongManageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

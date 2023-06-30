@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import com.freewheelin.pulley.revision2023.utils.converters.*

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCardWrapper

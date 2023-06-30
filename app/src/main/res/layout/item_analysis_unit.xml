@@ -84,7 +84,7 @@
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.freewheelin.pulley.views.bars.HorizontalBar
+        <com.freewheelin.pulley.legacy.views.bars.HorizontalBar
             android:id="@+id/correctRateHb"
             android:layout_width="188dp"
             android:layout_height="24dp"
@@ -92,7 +92,7 @@
             app:layout_constraintStart_toEndOf="@+id/secondColumnBorder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-        </com.freewheelin.pulley.views.bars.HorizontalBar>
+        </com.freewheelin.pulley.legacy.views.bars.HorizontalBar>
 
         <TextView
             style="@style/TextGray_800.Bold"

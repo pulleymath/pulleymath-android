@@ -351,17 +351,27 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
-                <Button
+<!--                <Button-->
+<!--                    android:id="@+id/challengeActionBtn"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:text="@{ vm.currentMission.startBtnText }"-->
+<!--                    android:visibility="@{ vm.currentMission.reward != null ? View.VISIBLE : View.GONE }"-->
+<!--                    android:background="@{ vm.currentMission.userStatus == ChallengeUserStatus.YET ? @drawable/bg_purple_300_round_ripple : vm.currentMission.userStatus == ChallengeUserStatus.ING ? @drawable/bg_purple_300_disable_round : vm.currentMission.userStatus == ChallengeUserStatus.DONE &amp;&amp; vm.currentMission.remainRewardsCount != 0 ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/challengeActionBtn"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:text="@{ vm.currentMission.startBtnText }"
-                    android:visibility="@{ vm.currentMission.reward != null ? View.VISIBLE : View.GONE }"
-                    android:background="@{ vm.currentMission.userStatus == ChallengeUserStatus.YET ? @drawable/bg_purple_300_round_ripple : vm.currentMission.userStatus == ChallengeUserStatus.ING ? @drawable/bg_purple_300_disable_round : vm.currentMission.userStatus == ChallengeUserStatus.DONE &amp;&amp; vm.currentMission.remainRewardsCount != 0 ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"
+                    visibleIf="@{ vm.currentMission.reward != null }"
+                    tools:visibility="visible"
+                    commonButton_binding_text="@{ vm.currentMission.startBtnText }"
+                    commonButton_binding_enabled="@{ vm.currentMission.userStatus == ChallengeUserStatus.YET || (vm.currentMission.userStatus == ChallengeUserStatus.DONE &amp;&amp; vm.currentMission.remainRewardsCount != 0) }"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
-<!--                    android:background="@drawable/bg_purple_300_round_ripple"-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.activity.MainActivity">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel"/>
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/rootDl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rootCl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/toolbarBackgroundCl"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="@dimen/dp56"-->
+<!--                app:background="@color/black_200"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent">-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headerCl"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp56"
+                android:background="@color/black_200"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.freewheelin.pulley.revision2023.ui.view.SchoolSwitch
+                    android:id="@+id/schoolSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <com.freewheelin.pulley.revision2023.ui.view.MainTabLayout
+                    android:id="@+id/mainTl"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp56"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/schoolSwitch"
+                    app:layout_constraintEnd_toStartOf="@+id/alarmCl"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/alarmCl"
+                    android:layout_width="40dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/myPageCl"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageView
+                        android:id="@+id/alarmBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_bell"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <View
+                        android:id="@+id/updateAlarmView"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/bg_red_300_circle"
+                        app:layout_constraintTop_toTopOf="@+id/alarmBtn"
+                        android:visibility="gone"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/myPageCl"
+                    android:layout_width="40dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    >
+
+                    <ImageButton
+                        android:id="@+id/myPageBtn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_profile"
+                        android:background="@null"
+                        android:onClick="@{ () -> vm.toggleDrawer() }"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <View
+                        android:id="@+id/updateSignView"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/bg_red_300_circle"
+                        app:layout_constraintTop_toTopOf="@+id/myPageBtn"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/headerCl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/spyCl"
+                android:layout_width="@dimen/dp56"
+                android:layout_height="@dimen/dp56"
+                visibleIf="@{ vm.showSpy }"
+                app:layout_constraintTop_toBottomOf="@+id/headerCl"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/spyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:text="SPY"
+                    android:background="@drawable/bg_btn_round_common"
+                    android:layout_margin="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/drawerContainerFl"
+            android:layout_width="@dimen/MyPage_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fitsSystemWindows="true">
+
+        </FrameLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</layout>

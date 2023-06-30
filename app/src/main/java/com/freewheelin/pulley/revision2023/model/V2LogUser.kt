@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.model
 
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import java.io.Serializable
 
 data class V2LogUser(

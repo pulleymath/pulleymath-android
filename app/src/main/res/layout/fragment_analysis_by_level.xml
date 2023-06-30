@@ -32,7 +32,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.freewheelin.pulley.views.DaebakTabRadio
+            <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                 android:id="@+id/summaryDtr"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp48"
@@ -41,7 +41,7 @@
                 android:layout_marginStart="@dimen/dp40"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
-            </com.freewheelin.pulley.views.DaebakTabRadio>
+            </com.freewheelin.pulley.legacy.views.DaebakTabRadio>
 
             <TextView
                 style="@style/TextGray_800"
@@ -78,7 +78,7 @@
                 app:layout_constraintStart_toEndOf="@+id/summaryLevelQuestionLabel"
                 android:layout_marginStart="8dp"/>
 
-            <com.freewheelin.pulley.views.charts.BarVerticalChartView
+            <com.freewheelin.pulley.legacy.views.charts.BarVerticalChartView
                 android:id="@+id/subjectChart"
                 android:layout_width="0dp"
                 android:layout_height="280dp"
@@ -115,7 +115,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.freewheelin.pulley.views.DaebakTabRadio
+            <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                 android:id="@+id/studyRatioByLevelDtr"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp48"
@@ -307,7 +307,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/lowLegend"/>
 
 
-            <com.freewheelin.pulley.views.bars.PortionBar
+            <com.freewheelin.pulley.legacy.views.bars.PortionBar
                 android:id="@+id/sameRatingPb"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -317,9 +317,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/levelQuestionLabel"
                 app:layout_constraintEnd_toStartOf="@+id/highestLegend"
                 app:layout_constraintStart_toEndOf="@+id/sameRatingStudyRatioTv">
-            </com.freewheelin.pulley.views.bars.PortionBar>
+            </com.freewheelin.pulley.legacy.views.bars.PortionBar>
 
-            <com.freewheelin.pulley.views.bars.PortionBar
+            <com.freewheelin.pulley.legacy.views.bars.PortionBar
                 android:id="@+id/myPb"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -329,9 +329,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/sameRatingPb"
                 app:layout_constraintEnd_toStartOf="@+id/middleLegend"
                 app:layout_constraintStart_toEndOf="@+id/myStudyRatioTv">
-            </com.freewheelin.pulley.views.bars.PortionBar>
+            </com.freewheelin.pulley.legacy.views.bars.PortionBar>
 
-            <com.freewheelin.pulley.views.bars.PortionBar
+            <com.freewheelin.pulley.legacy.views.bars.PortionBar
                 android:id="@+id/upperPb"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -343,7 +343,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lowLegend"
                 app:layout_constraintStart_toEndOf="@+id/upperRatingStudyRatioTv">
-            </com.freewheelin.pulley.views.bars.PortionBar>
+            </com.freewheelin.pulley.legacy.views.bars.PortionBar>
 
 
             <TextView

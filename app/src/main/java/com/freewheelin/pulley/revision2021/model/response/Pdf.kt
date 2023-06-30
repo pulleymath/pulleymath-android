@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2021.model.response
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableFloat
 import androidx.databinding.ObservableInt
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponseNode

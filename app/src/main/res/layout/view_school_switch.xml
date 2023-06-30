@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="vm" type="com.freewheelin.pulley.viewmodel.LearningTabViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.legacy.viewmodel.LearningTabViewModel"/>
         <variable name="isMiddleSchool" type="Boolean"/>
     </data>
 
@@ -28,8 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@null"
             />
-        <!--            android:background="@null"-->
 
         <TextView
             android:layout_width="45dp"

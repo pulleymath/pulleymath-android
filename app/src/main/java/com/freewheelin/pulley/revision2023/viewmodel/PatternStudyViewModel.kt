@@ -2,29 +2,20 @@ package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
-import com.freewheelin.pulley.core.API.ResponseModel.MyBookList
-import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
-import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MyBookList
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
-import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.revision2023.service.PatternStudyApi
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
-import com.freewheelin.pulley.utils.show
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class PatternStudyViewModel(application: Application): BaseAndroidViewModel(application) {
@@ -43,6 +34,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val pinCount = MutableLiveData<String>("")
     val showMyPlanEmptyView = MutableLiveData<Boolean>(false)
     val showMyPlan = MutableLiveData<Boolean>(false)
+    val myPlanAdapterItemListener = MutableLiveData<Unit>()
 
     val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [나의문제집]에서 자동으로 빠집니다.\n" +
         "   그렇게 빠진 문제집은 [전체문제집]에서 다시 볼 수 있습니다.\n" +
@@ -56,17 +48,12 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val showCommercialBooksChallengeStamp = MutableLiveData<Boolean>(false)
     val showWorkbooksChallengeStamp = MutableLiveData<Boolean>(false)
 
-    fun initMyPlanAdapterItem() {
-        collectAllMyPlans()
-    }
-    private fun collectAllMyPlans() {
+    fun collectAllMyPlans() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
             val newMyPlans = fetchMyPlans() ?: return@launch
-//            val myHistory = fetchMyHistory()
             _isLoading.postValue(false)
             upsertMyPlans(newMyPlans.myPieceStorageList)
-//            upsertMyPlans(myHistory)
             _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }

@@ -3,12 +3,14 @@ package com.freewheelin.pulley.revision2021.model.response
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.ScreenTheme
-import com.freewheelin.pulley.model.ProblemType
-import com.freewheelin.pulley.model.Result
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.core.ScreenTheme
+import com.freewheelin.pulley.legacy.model.ProblemType
+import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
+import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
@@ -169,28 +171,48 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
     override fun getId() = "$groupId"
     lateinit var workbookList: List<AffiliatedTestWorkbook>
 
-    lateinit var firstWorkbook: AffiliatedTestWorkbook
-    lateinit var secondWorkbook: AffiliatedTestWorkbook
-    lateinit var thirdWorkbook: AffiliatedTestWorkbook
-    lateinit var selectedWorkbook: AffiliatedTestWorkbook
+    var firstWorkbook: AffiliatedTestWorkbook?
+    var secondWorkbook: AffiliatedTestWorkbook?
+    var thirdWorkbook: AffiliatedTestWorkbook?
+    var selectedWorkbook: AffiliatedTestWorkbook?
 
-    constructor(id: Int, list: List<AffiliatedTestWorkbook>) {
+    constructor(id: Int, list: List<AffiliatedTestWorkbook>, testSize: Int) {
         groupId = id
         workbookList = list
-        val filteredValue1 = workbookList.filter { it.seq == 1 }.get(0)
+        val filteredValue1 = workbookList.find { it.seq == 1 }
         firstWorkbook = filteredValue1
 //        firstWorkbook.setTimer()
-        val filteredValue2 = workbookList.filter { it.seq == 2 }.get(0)
+        val filteredValue2 = workbookList.find { it.seq == 2 }
         secondWorkbook = filteredValue2
-        val filteredValue3 = workbookList.filter { it.seq == 3 }.get(0)
+        val filteredValue3 = workbookList.find { it.seq == 3 }
         thirdWorkbook = filteredValue3
 
         selectedWorkbook =
             when {
-                thirdWorkbook.isFinished() -> filteredValue3.select()
-                secondWorkbook.isFinished() -> filteredValue3.select()
-                firstWorkbook.isFinished() -> filteredValue2.select()
-                else -> filteredValue1.select()
+                thirdWorkbook?.isFinished() == true -> {
+                    if (testSize == 3) {
+                        filteredValue3?.select()
+                    } else {
+                        // todo 만약 4번째 시험이 존재할 경우 value4
+                        filteredValue3?.select()
+                    }
+                }
+                secondWorkbook?.isFinished() == true -> {
+                    if (testSize == 2) {
+                        filteredValue2?.select()
+                    } else {
+                        filteredValue3?.select()
+                    }
+                }
+                firstWorkbook?.isFinished() == true -> {
+                    if (testSize == 2) {
+                        filteredValue1?.select()
+                    } else {
+                        filteredValue2?.select()
+
+                    }
+                }
+                else -> filteredValue1?.select()
             }
     }
 
@@ -205,8 +227,8 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
         }
         return getOrderDrawable(wb, num)
     }
-    fun getOrderDrawable (wb: AffiliatedTestWorkbook, num: Int): Int {
-        if (wb.isFinished()) return R.drawable.ic_check_green_circle_24
+    fun getOrderDrawable (wb: AffiliatedTestWorkbook?, num: Int): Int {
+        if (wb?.isFinished() == true) return R.drawable.ic_check_green_circle_24
         return when(num) { 
             1 ->  R.drawable.ic_1_grey_24
             2 -> R.drawable.ic_2_grey_24
@@ -220,25 +242,25 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
             2 -> secondWorkbook
             else -> thirdWorkbook
         }
-        if (wb.isFinished()) return R.drawable.bg_purple_300_round_ripple
+        if (wb?.isFinished() == true) return R.drawable.bg_purple_300_round_ripple
         return R.drawable.bg_white_stroke_purple_300_round
     }
 
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA) }
 
     fun isTestEnable(currentTimeString: String?): Boolean {
-        if (selectedWorkbook.test_started_at == null && selectedWorkbook.seq != 1) return true
-        val testStartTime = selectedWorkbook.test_started_at ?: return false
+        if (selectedWorkbook?.test_started_at == null && selectedWorkbook?.seq != 1) return true
+        val testStartTime = selectedWorkbook?.test_started_at ?: return false
         val currentServerTimeString = currentTimeString ?: return false
 
-        val paredDate = sdf.parse(testStartTime)
-        val parsedCurrentServerDate = sdf.parse(currentServerTimeString)
+        val paredDate = sdf.parse(testStartTime) ?: return false
+        val parsedCurrentServerDate = sdf.parse(currentServerTimeString) ?: return false
 
         val minDiff = (paredDate.time - parsedCurrentServerDate.time).toFloat() / (60 * 1000).toFloat()
 
         // endtime check
-        val testFinishTime = selectedWorkbook.test_finished_at
-        val finishDate = sdf.parse(testFinishTime)
+        val testFinishTime = selectedWorkbook?.test_finished_at ?: return false
+        val finishDate = sdf.parse(testFinishTime) ?: return false
         val finishDiff = (finishDate.time - parsedCurrentServerDate.time).toFloat() / (60 * 1000).toFloat()
 
 //        println("tpehf, minDiff ${minDiff}, finishDiff : ${finishDiff}")
@@ -246,16 +268,16 @@ class AffiliatedTestCard: BaseDiffItem, Serializable {
     }
 
     fun stepSelectRelease() {
-        firstWorkbook.isSelected.set(false)
-        secondWorkbook.isSelected.set(false)
-        thirdWorkbook.isSelected.set(false)
-        selectedWorkbook.isSelected.set(false)
+        firstWorkbook?.isSelected?.set(false)
+        secondWorkbook?.isSelected?.set(false)
+        thirdWorkbook?.isSelected?.set(false)
+        selectedWorkbook?.isSelected?.set(false)
     }
 
     var remainingTimeText = ObservableField("")
 
     fun areAllWorkbookFinished() : Boolean {
-        return firstWorkbook.isFinished() && secondWorkbook.isFinished() && thirdWorkbook.isFinished()
+        return firstWorkbook?.isFinished() == true && secondWorkbook?.isFinished() == true && thirdWorkbook?.isFinished() == true
     }
 }
 
@@ -313,52 +335,8 @@ class AffiliatedTestProblem: BaseDiffItem, Serializable {
             return Result.yet
     }
 
-    fun getStepOnScore(score: Int): Int {
-        // default는 2
-        val subject = subject ?: return 2
-        return when(subject) {
-            "확률과 통계" -> {
-                when (score) {
-                    in 0..50 -> 1
-                    in 51..85 -> 2
-                    in 86..100 -> 3
-                    else -> 2
-                }
-            }
-            "미적분" -> {
-                when (score) {
-                    in 0..45 -> 1
-                    in 46..85 -> 2
-                    in 86..100 -> 3
-                    else -> 2
-                }
-            }
-            "물리학" -> {
-                when (score) {
-                    in 0..40 -> 1
-                    in 41..70 -> 2
-                    in 71..100 -> 3
-                    else -> 2
-                }
-            }
-            "화학" -> {
-                when (score) {
-                    in 0..45 -> 1
-                    in 46..85 -> 2
-                    in 86..100 -> 3
-                    else -> 2
-                }
-            }
-            "생명과학" -> {
-                when (score) {
-                    in 0..40 -> 1
-                    in 41..85 -> 2
-                    in 86..100 -> 3
-                    else -> 2
-                }
-            }
-            else -> 2
-        }
+    fun getStepOnScore(score: Int, univ: AffiliatedUniv): Int {
+        return univ.stepOnScore(score, subject)
     }
     fun levelString() : String {
         return when (level) {

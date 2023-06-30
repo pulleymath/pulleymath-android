@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.repository
 
-import com.freewheelin.pulley.core.API.RequestModel.RequestSignup
-import com.freewheelin.pulley.model.Analysis
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
+import com.freewheelin.pulley.legacy.model.Analysis
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
 import com.freewheelin.pulley.revision2023.model.request.GuestSignInRequest
 import com.freewheelin.pulley.revision2023.model.response.GuestSignInResponse
@@ -20,10 +20,10 @@ class AnonymousRepository() {
     suspend fun getPurchaseGuide(): PurchaseGuide {
         return api.getPurchaseGuide().data
     }
-    suspend fun getAnalysis(startDate: String, endDate: String): Analysis {
+    suspend fun getAnalysis(startDate: String, endDate: String): com.freewheelin.pulley.legacy.model.Analysis {
         return api.getAnalysis(startDate = startDate, endDate = endDate).data
     }
-    suspend fun getAnalysisSample(): Analysis {
+    suspend fun getAnalysisSample(): com.freewheelin.pulley.legacy.model.Analysis {
         return api.getAnalysisSampleV2().data
     }
     suspend fun guestSignIn(req: GuestSignInRequest): GuestSignInResponse {

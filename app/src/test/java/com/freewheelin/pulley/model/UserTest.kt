@@ -1,8 +1,8 @@
-package com.freewheelin.pulley.model
+package com.freewheelin.pulley.legacy.model
 
-import com.freewheelin.pulley.assets.Major
+import com.freewheelin.pulley.legacy.assets.Major
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.google.gson.Gson
 import org.junit.Test
 import org.junit.Assert.assertEquals

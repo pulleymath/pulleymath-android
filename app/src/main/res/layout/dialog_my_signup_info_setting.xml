@@ -82,7 +82,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
 
-            <com.freewheelin.pulley.views.editText.DaebakInputField
+            <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                 android:id="@+id/phoneTv"
                 android:layout_marginTop="8dp"
                 android:layout_width="240dp"
@@ -90,9 +90,9 @@
                 app:DaebakInputField_Hint="본인 또는 부모님 휴대폰 번호"
                 app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
                 app:layout_constraintStart_toStartOf="parent">
-            </com.freewheelin.pulley.views.editText.DaebakInputField>
+            </com.freewheelin.pulley.legacy.views.editText.DaebakInputField>
 
-            <com.freewheelin.pulley.views.editText.DaebakInputField
+            <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                 android:id="@+id/codeTv"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
@@ -100,28 +100,26 @@
                 app:DaebakInputField_Hint="인증번호 입력"
                 app:layout_constraintTop_toBottomOf="@+id/phoneTv"
                 app:layout_constraintStart_toStartOf="parent">
-            </com.freewheelin.pulley.views.editText.DaebakInputField>
+            </com.freewheelin.pulley.legacy.views.editText.DaebakInputField>
 
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                 android:id="@+id/requestCodeBtn"
                 android:layout_width="160dp"
                 android:layout_height="56dp"
                 android:textSize="@dimen/sp18"
                 android:layout_marginStart="8dp"
                 android:text="인증번호 받기"
-                app:buttonTheme="blue"
                 app:layout_constraintStart_toEndOf="@+id/phoneTv"
                 app:layout_constraintTop_toTopOf="@+id/phoneTv" />
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                 android:id="@+id/codeConfirmBtn"
                 android:layout_width="160dp"
                 android:layout_height="56dp"
                 android:textSize="@dimen/sp18"
                 android:layout_marginStart="8dp"
                 android:text="인증 확인"
-                app:buttonTheme="grey"
                 app:layout_constraintStart_toEndOf="@+id/codeTv"
                 app:layout_constraintTop_toTopOf="@+id/codeTv" />
 
@@ -183,7 +181,7 @@
                 android:visibility="invisible"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/modifyBtn"
             android:layout_width="160dp"
             android:layout_height="@dimen/dp56"
@@ -192,7 +190,6 @@
             android:text="@string/text_do_edit"
             android:layout_marginTop="@dimen/dp24"
             android:layout_marginBottom="32dp"
-            app:buttonTheme="blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

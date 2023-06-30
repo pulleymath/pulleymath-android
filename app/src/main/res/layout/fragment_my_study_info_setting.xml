@@ -105,14 +105,14 @@
                                 android:gravity="center_vertical"
                                 android:layout_weight="3"/>
 
-                            <com.freewheelin.pulley.views.buttons.SecondaryButton
+                            <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                                 android:id="@+id/findSchoolBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dp56"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
                                 android:text="검색하기"
-                                app:buttonTheme="blue"/>
+                                />
 
                         </LinearLayout>
 
@@ -126,7 +126,7 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <com.freewheelin.pulley.views.PulleySpinner
+                        <com.freewheelin.pulley.legacy.views.PulleySpinner
                             android:id="@+id/selectCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
@@ -149,25 +149,25 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <com.freewheelin.pulley.views.PulleySpinner
+                            <com.freewheelin.pulley.legacy.views.PulleySpinner
                                 android:id="@+id/selectMiddleGrade"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 />
 
-                            <com.freewheelin.pulley.views.PulleySpinner
+                            <com.freewheelin.pulley.legacy.views.PulleySpinner
                                 android:id="@+id/selectHighGrade"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 />
-                            <com.freewheelin.pulley.views.PulleySpinner
+                            <com.freewheelin.pulley.legacy.views.PulleySpinner
                                 android:id="@+id/selectAllGrade"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 />
                         </LinearLayout>
 
-<!--                        <com.freewheelin.pulley.views.PulleySpinner-->
+<!--                        <com.freewheelin.pulley.legacy.views.PulleySpinner-->
 <!--                            android:id="@+id/selectGrade"-->
 <!--                            android:layout_width="match_parent"-->
 <!--                            android:layout_height="wrap_content"-->
@@ -176,7 +176,7 @@
 <!--                            app:layout_constraintStart_toStartOf="parent"-->
 <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <com.freewheelin.pulley.views.PulleySpinner
+                        <com.freewheelin.pulley.legacy.views.PulleySpinner
                             android:id="@+id/selectMajor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/selectGradeLl" />
 
-                        <com.freewheelin.pulley.views.PulleySpinner
+                        <com.freewheelin.pulley.legacy.views.PulleySpinner
                             android:id="@+id/selectRate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -203,15 +203,15 @@
                         android:orientation="horizontal">
 
 
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                             android:id="@+id/registBtn"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp56"
                             android:layout_weight="3"
                             android:layout_marginTop="@dimen/dp32"
                             android:text="변경하기"
-                            app:ButtonTextSize="@dimen/sp18"
-                            app:buttonTheme="blue" />
+                            android:textSize="@dimen/sp18"
+                             />
 
                     </LinearLayout>
 

@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView
+            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.DailySummaryContentsView
                 android:id="@+id/shareContents"
                 android:layout_width="368dp"
                 android:layout_height="368dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
-            </com.freewheelin.pulley.activities.learning.tabFragment.analysis.component.DailySummaryContentsView>
+            </com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.DailySummaryContentsView>
 
             <TextView
                 style="@style/TextGray_600.Bold"
@@ -118,7 +118,7 @@
                 app:layout_constraintStart_toEndOf="@+id/shareContents"
                 app:layout_constraintTop_toBottomOf="@id/todayLabel"/>
 
-            <com.freewheelin.pulley.views.editText.PulleyTextField
+            <com.freewheelin.pulley.legacy.views.editText.PulleyTextField
                 android:id="@+id/memoTv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/memoLabel"/>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/shareBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp56"

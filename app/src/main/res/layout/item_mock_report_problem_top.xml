@@ -57,20 +57,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/problemAnalysisGuideTv">
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/subjectFilter"
                     android:layout_width="120dp"
                     android:layout_height="36dp"
                     app:defaultStr="과목 전체" />
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/scoreFilter"
                     android:layout_width="120dp"
                     android:layout_height="36dp"
                     android:layout_marginStart="@dimen/dp16"
                     app:defaultStr="배점 전체" />
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/killerFilter"
                     android:layout_width="120dp"
                     android:layout_height="36dp"
@@ -79,7 +79,7 @@
                     app:defaultStr="킬러 전체" />
 
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/scoreResultFilter"
                     android:layout_width="160dp"
                     android:layout_height="36dp"

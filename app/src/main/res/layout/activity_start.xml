@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray_100"
-        tools:context="com.freewheelin.pulley.activities.StartActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.StartActivity">
 
         <TextView
             style="@style/TextGray_800.Bold"

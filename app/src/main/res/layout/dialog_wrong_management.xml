@@ -417,12 +417,11 @@
             </LinearLayout>
         </ScrollView>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/makeBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
             android:text="오답 학습지 만들기"
-            app:buttonTheme="blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

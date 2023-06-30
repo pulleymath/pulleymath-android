@@ -13,41 +13,44 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.main.component.*
-import com.freewheelin.pulley.activities.learning.tabFragment.main.marketing.MarketingManager
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.component.*
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.marketing.MarketingManager
 import com.freewheelin.pulley.revision2023.viewmodel.MainFViewModel
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.UserManager
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentMain2Binding
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeMissionAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.StartChallengeInfoDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
-import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.ui.view.MainTab
 
-class MainFragment : LearningTabFragment(), DDaySettingDialogListener, LifecycleObserver,
+class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
 
-    override var screenName: String = "메인"
+    override var type: MainTab = MainTab.메인
     lateinit var binding: FragmentMain2Binding
 
     lateinit var profileReceiver: BroadcastReceiver
     lateinit var userUpdateReceiver: BroadcastReceiver
 
+    var wasInitUI = false
     val viewModel: MainFViewModel by viewModels()
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
         viewModel.onChallengeHeaderClick(item)
@@ -71,7 +74,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         }
         userUpdateReceiver = object :BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
-                wasInitUI = false
                 syncProfile()
             }
         }
@@ -115,12 +117,11 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        if (!::binding.isInitialized) return
-        syncProfile()
-        if (challengeHeaderListAdapter.currentList.size > 0) {
-            val headerItem = challengeHeaderListAdapter.currentList[0]
-            viewModel.onChallengeHeaderClick(headerItem)
-        }
+//        syncProfile()
+//        if (challengeHeaderListAdapter.currentList.size > 0) {
+//            val headerItem = challengeHeaderListAdapter.currentList[0]
+//            viewModel.onChallengeHeaderClick(headerItem)
+//        }
     }
 
 
@@ -143,7 +144,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
     }
 
     fun init() {
-        if (!::binding.isInitialized) return
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -153,15 +153,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
             dDayTv.setOnClickListener { onDDayBtnClicked() }
             startStudyClBtn.setOnClickListener { onStartBtnClicked() }
             challengeActionBtn.setOnClickListener { onChallengeAction() }
-            numberOfUserTv.setOnClickListener {
-                viewModel.teacherSpyModeCount += 1
-                if (viewModel.teacherSpyModeCount > 10) {
-                    (activity as LearningTabActivity).setTeacherSpyMode(true)
-                }
-                if (viewModel.teacherSpyModeCount > 20) {
-                    (activity as LearningTabActivity).setTeacherSpyMode(false)
-                }
-            }
+
         }
         viewModel.apply {
             challengeHeaders.observe(viewLifecycleOwner) {
@@ -257,8 +249,6 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
         viewModel.teacherSpyModeCount = 0
     }
 
-    override fun initUI() {}
-
     private fun initRv() {
         binding.apply {
             challengeHeaderListRv.apply {
@@ -289,7 +279,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     private fun onDDayBtnClicked() {
 //        val spyCount = (activity as LearningTabActivity).spyCount
-        val setOnSpyMode = { (activity as LearningTabActivity).setOnSpyMode() }
+        val setOnSpyMode = { (activity as MainActivity).setOnSpyMode() }
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "디데이꺽쇠")
         val dialog = DDaySettingDialog(requireContext(), setOnSpyMode)
         dialog.listener = this
@@ -314,7 +304,7 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     private fun showGuestJoinInduceDialog() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "메인", "가입유도")
-        (activity as? LearningTabActivity)?.showGuestJoinInduceDialog {
+        (activity as? MainActivity)?.showGuestJoinInduceDialog {
             viewModel.errorStatusReset()
         }
     }
@@ -352,9 +342,9 @@ class MainFragment : LearningTabFragment(), DDaySettingDialogListener, Lifecycle
 
     private fun joinChallenge(challengeId: Int, cb: () -> Unit = {}) {
         val nextEvent = {
-            (activity as LearningTabActivity).setSelectedTab(1)
-            (activity as LearningTabActivity).setConceptCourseAvailableFirstSubject()
-            (activity as LearningTabActivity).launchConceptCourseTutorial()
+            (activity as MainActivity).tabMove(1)
+            (activity as MainActivity).setConceptCourseSubjectId(0)
+            (activity as MainActivity).launchConceptCourseTutorial()
         }
         viewModel.joinChallengeById(challengeId) {
             val dialog = ChallengeGuideManager.getStartGuideMission1(

@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.repository.AnonymousRepository

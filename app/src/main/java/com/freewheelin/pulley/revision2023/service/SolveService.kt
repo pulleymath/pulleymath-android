@@ -1,13 +1,13 @@
 package com.freewheelin.pulley.revision2023.service
 
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.Parameter
-import com.freewheelin.pulley.model.ResponseBody
-import com.freewheelin.pulley.model.ResponseForceBody
-import com.freewheelin.pulley.model.Template
-import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.model.ResponseForceBody
+import com.freewheelin.pulley.legacy.model.Template
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.PriorConceptWrapper
 import com.freewheelin.pulley.revision2023.model.V2LogUser

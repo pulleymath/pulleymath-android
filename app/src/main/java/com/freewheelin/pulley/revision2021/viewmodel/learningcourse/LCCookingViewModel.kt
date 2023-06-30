@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.databinding.ItemCookingRightViewBinding
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
@@ -20,7 +20,7 @@ import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import io.channel.plugin.android.extension.doOnElse
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

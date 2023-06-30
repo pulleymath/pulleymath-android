@@ -5,14 +5,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
 import com.freewheelin.pulley.revision2023.viewmodel.MainFViewModel
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ViewStartChallengeGuideBinding
 import com.freewheelin.pulley.revision2021.activity.base.CustomBaseView
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
-import com.freewheelin.pulley.utils.partialFontAndColored
-import com.freewheelin.pulley.utils.underline
+import com.freewheelin.pulley.legacy.utils.partialFontAndColored
+import com.freewheelin.pulley.legacy.utils.underline
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 
 class StartChallengeGuideView: CustomBaseView {
 
@@ -34,7 +35,7 @@ class StartChallengeGuideView: CustomBaseView {
         binding.apply {
 
             startChallengeBtn.setOnClickListener {
-                (context as LearningTabActivity).let {
+                (context as MainActivity).let {
                     it.tabMove(1)
                     it.moveConceptCourseSubject(LCSubject.SubjectIndicator.Tutorial.rawValue)
                     mainViewModel.disappearStartChallengeGuide()

@@ -74,7 +74,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/filterCl" />
 
-        <com.freewheelin.pulley.views.WrongManageView
+        <com.freewheelin.pulley.legacy.views.WrongManageView
             android:id="@+id/wrongManageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

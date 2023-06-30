@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2023.service
 
-import com.freewheelin.pulley.model.*
+import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.TempToken
 import retrofit2.http.Body

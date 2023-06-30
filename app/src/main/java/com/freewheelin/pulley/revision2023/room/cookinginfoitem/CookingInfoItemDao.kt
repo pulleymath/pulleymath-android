@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.cookinginfoitem
 
 import androidx.room.*
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import kotlinx.coroutines.flow.Flow

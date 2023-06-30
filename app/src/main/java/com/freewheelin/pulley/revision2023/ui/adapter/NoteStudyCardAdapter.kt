@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.databinding.*
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2023.model.*
 import com.freewheelin.pulley.revision2023.ui.viewholder.*

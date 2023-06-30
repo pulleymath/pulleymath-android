@@ -2,9 +2,9 @@ package com.freewheelin.pulley.revision2023.model.challenge
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
-import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import org.joda.time.LocalDateTime
 import java.io.Serializable
 

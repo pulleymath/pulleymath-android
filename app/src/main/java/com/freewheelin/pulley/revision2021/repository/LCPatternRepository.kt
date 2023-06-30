@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository
 
 import android.content.Context
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.remote.LCPatternApi

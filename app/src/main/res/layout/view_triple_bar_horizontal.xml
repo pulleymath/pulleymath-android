@@ -51,7 +51,7 @@
 
 
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/firstBar"
             android:layout_width="0dp"
             android:layout_height="16dp"
@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/firstLabelTv"
             app:layout_constraintStart_toEndOf="@+id/firstLabelTv"
             app:layout_constraintEnd_toStartOf="@+id/firstRateTv">
-        </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.legacy.views.LearningProgressView>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/firstBar"
             android:src="@drawable/ic_pencil_engrave"/>
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/secondBar"
             android:layout_width="0dp"
             android:layout_height="16dp"
@@ -86,7 +86,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/secondLabelTv"
             app:layout_constraintStart_toEndOf="@+id/secondLabelTv"
             app:layout_constraintEnd_toStartOf="@+id/secondRateTv">
-        </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.legacy.views.LearningProgressView>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/secondBar"
             android:src="@drawable/ic_pencil_engrave"/>
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/thirdBar"
             android:layout_width="0dp"
             android:layout_height="16dp"
@@ -108,7 +108,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/thirdLabelTv"
             app:layout_constraintStart_toEndOf="@+id/thirdLabelTv"
             app:layout_constraintEnd_toStartOf="@+id/thirdRateTv">
-        </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.legacy.views.LearningProgressView>
 
         <ImageView
             android:layout_width="wrap_content"

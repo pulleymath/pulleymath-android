@@ -11,7 +11,7 @@ import androidx.core.widget.NestedScrollView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.channelio.channel.PResUtils
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.zoyi.channel.plugin.android.activity.base.ActivityFrameView
 import com.zoyi.channel.plugin.android.activity.base.navigation.GlobalNavigation
 import com.zoyi.channel.plugin.android.activity.chat.utils.ChatUtils

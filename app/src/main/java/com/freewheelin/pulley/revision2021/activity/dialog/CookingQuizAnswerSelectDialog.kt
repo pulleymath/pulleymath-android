@@ -19,7 +19,7 @@ import com.freewheelin.pulley.databinding.ItemLcCookingSelectionBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.CookingQuizSelection
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.cooking.CookingQuizAnswerSelectViewModel
-import com.freewheelin.pulley.utils.dpToPx
+import com.freewheelin.pulley.legacy.utils.dpToPx
 
 
 class CookingQuizAnswerSelectDialog(

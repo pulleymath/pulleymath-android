@@ -12,16 +12,9 @@ class MainUserStatusChip: androidx.appcompat.widget.AppCompatTextView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-//        setTypedArray(attrs)
+
     }
 
-//    private fun setTypedArray(attrs: AttributeSet?) {
-//        val array = context.obtainStyledAttributes(attrs, R.styleable.MainUserStatusChip)
-//
-//        val paidServiceTypeRawValue = array.getInt(R.styleable.MainUserStatusChip_status, 0)
-//        type = PaidServiceType.ConvertToType(paidServiceTypeRawValue)
-//        array.recycle()
-//    }
 
     var type: PaidServiceType? = null
         set(value) {

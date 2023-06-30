@@ -15,8 +15,8 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPatternConceptBinding
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
-import com.freewheelin.pulley.utils.setImageUrlGlide
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.setImageUrlGlide
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class PatternConceptFragment : Fragment() {
 

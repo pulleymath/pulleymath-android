@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
-import com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
-import com.freewheelin.pulley.core.API.ResponseModel.RecommendBookList
-import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterType
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.PlanListenerV2
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.RecommendBookList as RecommendBookListView
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.RecommendBookList
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
@@ -20,7 +20,7 @@ import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
-import com.freewheelin.pulley.utils.show
+import com.freewheelin.pulley.legacy.utils.show
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers

@@ -19,39 +19,45 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.OrderType
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
-import com.freewheelin.pulley.activities.solve.SolveActivity
-import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.bases.user
-import com.freewheelin.pulley.core.manage.ProblemManager
-import com.freewheelin.pulley.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.OrderType
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.ProblemManager
+import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.*
-import com.freewheelin.pulley.dialogs.*
+import com.freewheelin.pulley.legacy.dialogs.*
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.adapter.NoteStudyCardAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
-import com.freewheelin.pulley.utils.*
-import com.freewheelin.pulley.views.DaebakToast
-import com.freewheelin.pulley.views.NoteStudyViewListener
-import com.freewheelin.pulley.views.WrongManageView
+import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.legacy.views.NoteStudyViewListener
+import com.freewheelin.pulley.legacy.views.WrongManageView
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 
-class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
+class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     NoteStudyClickListener, NoteStudyViewListener {
     private lateinit var binding: FragmentWrongNoteStudyBinding
     private val viewModel: WrongNoteStudyViewModel by viewModels()
 
-    override var screenName = "오답노트"
+    override var type: MainTab = MainTab.오답노트
 
     lateinit var reConfigureReceiver: BroadcastReceiver
     lateinit var noteCardAdapter: NoteStudyCardAdapter
@@ -67,14 +73,22 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
             }
     }
 
+    private fun changeFilterAndFetchNotes(tabIndex: Int) {
+        if (tabIndex == 0) {
+            if (tabFragments[0] is NoteFilterFragment) {
+                (tabFragments[0] as NoteFilterFragment).updateParentFilters()
+                viewModel.fetchWrongNotes()
+            }
+        } else {
+            if (tabFragments[1] is NoteFilterFragment) {
+                (tabFragments[1] as NoteFilterFragment).updateParentFilters()
+                viewModel.fetchScrapNotes()
+            }
+        }
+    }
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-
-        if (binding.tabLayout.selectedTabPosition == 0) {
-            viewModel.fetchWrongNotes ()
-        } else {
-            viewModel.fetchScrapNotes ()
-        }
+        changeFilterAndFetchNotes(binding.tabLayout.selectedTabPosition)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +108,7 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wrong_note_study, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         return binding.root
@@ -117,11 +131,7 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
                         val tabPosition = tab?.position ?: 0
                         viewModel.tabPosition = tabPosition
 
-                        if (tabPosition == 0) {
-                            viewModel.fetchWrongNotes ()
-                        } else {
-                            viewModel.fetchScrapNotes ()
-                        }
+                        changeFilterAndFetchNotes(tabPosition)
                     }
                     override fun onTabUnselected(tab: TabLayout.Tab?) {}
                     override fun onTabReselected(tab: TabLayout.Tab?) {}
@@ -156,8 +166,11 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
                     this@WrongNoteStudyFragment.init()
                 }
                 noteWrapper.observe(viewLifecycleOwner) {
-                    noteCardAdapter.submitList(it)
-                    noteCardAdapter.notifyItemChanged(0)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        noteCardAdapter.submitList(it)
+                        delay(300)
+                        noteCardAdapter.notifyItemChanged(0)
+                    }
                 }
                 selectedProblem.observe(viewLifecycleOwner) {
                     binding.apply {
@@ -215,17 +228,10 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
         viewModel.init()
         onOrderChanged(viewModel.selectedOrder)
     }
-    fun setFilterTypes(selectedFilterTypes: Set<LearningFilterType>) {
-        viewModel.selectedFilterTypes = selectedFilterTypes
-    }
-    override fun initUI() {
-
-    }
 
     override fun onResume() {
         super.onResume()
         init()
-//        viewModel.initMyPlanAdapterItem()
     }
 
 
@@ -244,7 +250,9 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
             return fragments[position]
         }
     }
-
+    fun updateFilter(filters: Set<LearningFilterType>) {
+        viewModel.selectedFilterTypes = filters
+    }
     override fun onFilterTypeChanged(
         fragment: NoteFilterFragment,
         filters: Set<LearningFilterType>
@@ -353,7 +361,7 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "오답 학습지 만들기")
             else
                 LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "즐겨찾기 학습지 만들기")
-            dialog.binding.makeBtn.startLoading()
+            dialog.binding.makeBtn.setLoading(true)
             val problems = selectedProblem.toList()
             val cntPerProblem = dialog.cnt
             val isSimilar = dialog.pieceProblemType == WrongManagementDialog.PieceProblemType.custom
@@ -370,7 +378,7 @@ class WrongNoteStudyFragment : LearningTabFragment(), NoteFilterChangeListener,
                 } else {
                     var text = if(dialogType == WrongManagementDialog.Type.wrongProblem) "오답문제" else "즐겨찾기 문제"
                     text += " ${selectedProblem.size}개로 학습지를 만들었습니다."
-                    (activity as LearningTabActivity).showSnackBar(text, "바로가기")
+                    (activity as MainActivity).showSnackBar(text, "바로가기")
                 }
                 viewModel.selectedProblem.postValue(listOf())
 

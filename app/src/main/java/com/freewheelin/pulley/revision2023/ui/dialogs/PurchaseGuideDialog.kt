@@ -10,18 +10,18 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.isTablet
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.DialogPurchaseGuideBinding
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide1Fragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2Fragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide2MobileFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PurchaseGuide3Fragment
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, val startCallback: () -> Unit = {}): DialogFragment() {
 

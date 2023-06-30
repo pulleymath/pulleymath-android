@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.solve.ProblemGestureListener
-import com.freewheelin.pulley.activities.solve.SolveGestures
-import com.freewheelin.pulley.bases.DensityLevel
-import com.freewheelin.pulley.bases.densityLevel
+import com.freewheelin.pulley.legacy.activities.solve.ProblemGestureListener
+import com.freewheelin.pulley.legacy.activities.solve.SolveGestures
+import com.freewheelin.pulley.legacy.bases.DensityLevel
+import com.freewheelin.pulley.legacy.bases.densityLevel
 import com.freewheelin.pulley.databinding.FragmentAffiliatedSolveConceptBinding
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveConceptViewModel
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.toPx
 
 class AffiliatedSolveConceptFragment : Fragment(), ProblemGestureListener {
 
@@ -55,6 +55,7 @@ class AffiliatedSolveConceptFragment : Fragment(), ProblemGestureListener {
 
             solutionGesture = SolveGestures(requireContext(), solutionIv, solutionMemoView, problemInfoContainer)
             solutionGesture?.listener = this@AffiliatedSolveConceptFragment
+            conceptContainer.setOnTouchListener(solutionGesture)
             gestureInit()
 
             solutionIv.maxWidth = imageWidth

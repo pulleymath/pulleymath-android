@@ -60,7 +60,7 @@
 
 
 
-        <com.freewheelin.pulley.views.DaebakTabRadio
+        <com.freewheelin.pulley.legacy.views.DaebakTabRadio
             android:id="@+id/gradeTab"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -80,7 +80,7 @@
             app:layout_constraintStart_toStartOf="@+id/gradeLabel"
             app:layout_constraintTop_toBottomOf="@+id/gradeTab"/>
 
-        <com.freewheelin.pulley.views.DaebakTabRadio
+        <com.freewheelin.pulley.legacy.views.DaebakTabRadio
             android:id="@+id/majorTab"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -100,7 +100,7 @@
             app:layout_constraintTop_toBottomOf="@+id/majorTab"
             app:layout_constraintStart_toStartOf="@+id/majorLabel"/>
 
-        <com.freewheelin.pulley.views.DaebakTabRadio
+        <com.freewheelin.pulley.legacy.views.DaebakTabRadio
             android:id="@+id/ratingTab"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ratingLabel"
             app:layout_constraintStart_toStartOf="@+id/ratingLabel"/>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/modifyBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

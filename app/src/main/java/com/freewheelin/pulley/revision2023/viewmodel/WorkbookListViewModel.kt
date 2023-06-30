@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterCategory
-import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterOrder
-import com.freewheelin.pulley.activities.learning.tabFragment.book.FilterType
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.model.contents.Book
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterCategory
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterOrder
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterType
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
@@ -21,7 +21,7 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.PatternStudyMyPlanAdapter
-import com.freewheelin.pulley.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers

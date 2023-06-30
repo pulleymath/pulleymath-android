@@ -41,7 +41,7 @@
                 android:paddingStart="@dimen/dp48"
                 android:paddingEnd="@dimen/dp48">
 
-                <com.freewheelin.pulley.views.DaebakTabRadio
+                <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                     android:id="@+id/subjectTab"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
@@ -58,7 +58,7 @@
                     android:layout_marginBottom="@dimen/dp32"
                     app:layout_constraintTop_toBottomOf="@+id/subjectTab">
 
-                    <com.freewheelin.pulley.views.textViews.SortableTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                         android:id="@+id/subjectSl"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
@@ -68,7 +68,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-                    <com.freewheelin.pulley.views.textViews.SortableTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                         android:id="@+id/bookSl"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
@@ -78,7 +78,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 
-                    <com.freewheelin.pulley.views.textViews.SortableTextView
+                    <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                         android:id="@+id/publisherSl"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
@@ -608,12 +608,11 @@
                 app:layout_constraintEnd_toStartOf="@+id/actionBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                 android:id="@+id/cancelBtn"
                 android:layout_width="@dimen/dp104"
                 android:layout_height="@dimen/dp48"
                 android:text="취소"
-                app:buttonTheme="grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -630,12 +629,11 @@
                 app:layout_constraintEnd_toStartOf="@+id/actionBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/actionBtn"
                 android:layout_width="@dimen/primaryBtn_width_160dp"
                 android:layout_height="@dimen/dp48"
                 android:text="다음"
-                app:buttonTheme="blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

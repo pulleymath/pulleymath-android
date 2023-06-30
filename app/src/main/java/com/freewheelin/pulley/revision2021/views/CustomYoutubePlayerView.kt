@@ -17,7 +17,7 @@ import android.view.WindowInsets
 import android.os.Build
 import android.util.TypedValue
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.toPx
 import kotlinx.coroutines.*
 
 

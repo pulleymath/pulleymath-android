@@ -14,8 +14,8 @@ import com.freewheelin.pulley.databinding.FragmentPatternSolutionBinding
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.PatternSolutionViewModel
-import com.freewheelin.pulley.utils.setImageUrlGlide
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.setImageUrlGlide
+import com.freewheelin.pulley.legacy.utils.toPx
 import kotlinx.coroutines.*
 
 class PatternSolutionFragment() : Fragment() {

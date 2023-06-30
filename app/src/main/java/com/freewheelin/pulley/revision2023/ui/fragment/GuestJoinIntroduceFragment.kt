@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.auth.signup.SignupActivity
+import com.freewheelin.pulley.legacy.activities.auth.signup.SignupActivity
 import com.freewheelin.pulley.databinding.FragmentGuestJoinIntroduceBinding
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog.GuestJoinStep
 import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel

@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2021.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.CookingInfoItem
 import com.freewheelin.pulley.revision2021.model.LCCookingWrapper

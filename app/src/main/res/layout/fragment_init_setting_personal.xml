@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.freewheelin.pulley.activities.auth.InitSettingPersonalFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.auth.InitSettingPersonalFragment">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                     android:textSize="@dimen/sp18"
                     android:layout_marginTop="@dimen/dp48" />
 
-                <com.freewheelin.pulley.views.DaebakTabRadio
+                <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                     android:id="@+id/gradeRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp36"
@@ -142,7 +142,7 @@
                     android:textSize="@dimen/sp18"
                     android:layout_marginTop="@dimen/dp48" />
 
-                <com.freewheelin.pulley.views.DaebakTabRadio
+                <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                     android:id="@+id/majorRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp36"
@@ -158,14 +158,14 @@
                     android:text="최근 수학 모의고사 등급"
                     android:textSize="@dimen/sp18" />
 
-                <com.freewheelin.pulley.views.DaebakTabRadio
+                <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                     android:id="@+id/ratingRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp36"
                     android:layout_marginTop="8dp"
                     app:tabWidth="58dp" />
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/nextBtn"
                     android:layout_width="@dimen/dp280"
                     android:layout_height="@dimen/dp56"
@@ -173,7 +173,7 @@
                     android:layout_marginTop="@dimen/dp64"
                     android:layout_marginBottom="@dimen/dp64"
                     android:text="다음"
-                    app:buttonTheme="blue" />
+                     />
 
             </LinearLayout>
         </ScrollView>

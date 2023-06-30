@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:background="@drawable/bg_gray_100_round_ripple"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.main.mypage.PhoneSettingFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.PhoneSettingFragment">
 
         <ImageButton
             android:id="@+id/backBtn"
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/titleLabel"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.freewheelin.pulley.views.editText.DaebakInputField
+        <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
             android:id="@+id/phoneTv"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -58,9 +58,9 @@
             app:layout_constraintEnd_toStartOf="@+id/requestCodeBtn"
             app:layout_constraintTop_toBottomOf="@+id/phoneLabel"
             app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-        </com.freewheelin.pulley.views.editText.DaebakInputField>
+        </com.freewheelin.pulley.legacy.views.editText.DaebakInputField>
 
-        <com.freewheelin.pulley.views.editText.DaebakInputField
+        <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
             android:id="@+id/codeTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -70,28 +70,27 @@
             app:layout_constraintEnd_toStartOf="@+id/codeConfirmBtn"
             app:layout_constraintTop_toBottomOf="@+id/phoneTv"
             app:layout_constraintStart_toStartOf="@+id/phoneLabel">
-        </com.freewheelin.pulley.views.editText.DaebakInputField>
+        </com.freewheelin.pulley.legacy.views.editText.DaebakInputField>
 
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
             android:id="@+id/requestCodeBtn"
             android:layout_width="@dimen/primaryBtn_width_160dp"
             android:layout_height="56dp"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             android:layout_marginEnd="@dimen/dp48"
             android:text="인증번호 받기"
-            app:buttonTheme="blue"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/phoneTv" />
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
             android:id="@+id/codeConfirmBtn"
             android:layout_width="@dimen/primaryBtn_width_160dp"
             android:layout_height="56dp"
             android:layout_marginEnd="@dimen/dp48"
             android:textSize="@dimen/sp18"
             android:text="인증 확인"
-            app:buttonTheme="grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/codeTv" />
 
@@ -152,7 +151,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/timerTv"
             android:visibility="invisible"/>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/modifyBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"

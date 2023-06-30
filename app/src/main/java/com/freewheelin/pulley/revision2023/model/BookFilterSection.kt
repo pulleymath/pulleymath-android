@@ -3,8 +3,8 @@ package com.freewheelin.pulley.revision2023.model
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.DiffUtil
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2023.SchoolType
 
@@ -147,7 +147,7 @@ enum class LearningFilterType(val title: String, val displayedName: String) {
                 추천_1등급.displayedName -> 추천_1등급
                 추천_2_3등급.displayedName -> 추천_2_3등급
                 추천_3_4등급.displayedName -> 추천_3_4등급
-                추천_4등급이하.displayedName -> 추천_4등급이하
+                추천_4등급이하.displayedName, "4등급 이하" -> 추천_4등급이하
                 추천레벨_전체.displayedName, "모든 레벨" -> 추천레벨_전체
                 추천레벨_상.displayedName -> 추천레벨_상
                 추천레벨_중.displayedName -> 추천레벨_중

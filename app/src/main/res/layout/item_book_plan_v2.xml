@@ -6,8 +6,8 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="listener" type="com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2" />
-        <variable name="item" type="com.freewheelin.pulley.model.contents.Book"/>
+        <variable name="listener" type="com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.PlanListenerV2" />
+        <variable name="item" type="com.freewheelin.pulley.legacy.model.contents.Book"/>
 
     </data>
 

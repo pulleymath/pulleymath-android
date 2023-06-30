@@ -26,14 +26,13 @@
                 android:text="테스트를 시작하려면\n추천 타입을 설정해주세요 :)"
                 android:textSize="@dimen/sp16" />
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/setupBtn"
                 android:layout_width="@dimen/primaryBtn_width_200dp"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginTop="@dimen/dp24"
                 android:text="추천 설정하기"
-                app:buttonTheme="blue"
-                app:ButtonTextSize="@dimen/sp18" />
+                android:textSize="@dimen/sp18" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

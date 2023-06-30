@@ -38,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/numberTv" />
 
-        <com.freewheelin.pulley.views.AnswerSelectionView
+        <com.freewheelin.pulley.legacy.views.AnswerSelectionView
             android:id="@+id/answerSelectionView"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -52,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="@+id/verticalEndBorder"
             app:layout_constraintTop_toTopOf="@+id/numberTv"
             app:layout_constraintBottom_toBottomOf="@+id/numberTv">
-        </com.freewheelin.pulley.views.AnswerSelectionView>
+        </com.freewheelin.pulley.legacy.views.AnswerSelectionView>
 
         <View
             android:layout_width="0dp"

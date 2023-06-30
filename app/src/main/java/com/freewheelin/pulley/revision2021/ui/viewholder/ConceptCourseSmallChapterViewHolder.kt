@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ItemSmallChapterBinding
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
@@ -18,7 +18,7 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 
 class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterBinding, private val viewModel: ConceptCourseViewModel, val getResult: ActivityResultLauncher<Intent>): RecyclerView.ViewHolder(binding.root) {
     val context: Context = binding.root.context

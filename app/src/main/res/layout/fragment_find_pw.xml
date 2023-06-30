@@ -73,7 +73,7 @@
                             android:text="문자로 받기" />
                     </RadioGroup>
 
-                    <com.freewheelin.pulley.views.editText.DaebakInputField
+                    <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                         android:id="@+id/emailDet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -82,14 +82,14 @@
                         app:DaebakInputField_maxLength="350"
                         app:DaebakInputField_Label="이메일" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/sendBtn"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="48dp"
                         android:text="발송하기"
-                        app:ButtonTextSize="@dimen/dp18"
-                        app:buttonTheme="blue" />
+                        android:textSize="@dimen/dp18"
+                         />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/codeContainer"
@@ -135,19 +135,17 @@
                             app:layout_constraintEnd_toEndOf="@+id/codeDet"
                             app:layout_constraintTop_toTopOf="@+id/codeDet" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                             android:id="@+id/codeConfirmBtn"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="8dp"
                             android:text="인증 확인"
-                            app:buttonTheme="blue"
+
                             app:layout_constraintTop_toTopOf="@+id/codeDet"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/codeDet"
-                            app:layout_constraintBottom_toBottomOf="@+id/codeDet">
-
-                        </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                            app:layout_constraintBottom_toBottomOf="@+id/codeDet"/>
 
                         <LinearLayout
                             android:id="@+id/codeDetErrorContainer"
@@ -197,7 +195,7 @@
                         android:text="새로운 비밀번호로 변경해 주세요."
                         android:textSize="@dimen/dp24" />
 
-                    <com.freewheelin.pulley.views.editText.DaebakPasswordField
+                    <com.freewheelin.pulley.legacy.views.editText.DaebakPasswordField
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -205,21 +203,21 @@
                         app:DaebakPasswordField_Hint="@string/text_please_input_6_between_15_eng_num_symbol"
                         app:DaebakPasswordField_Label="새 비밀번호" />
 
-                    <com.freewheelin.pulley.views.editText.DaebakPasswordField
+                    <com.freewheelin.pulley.legacy.views.editText.DaebakPasswordField
                         android:id="@+id/passwordConfirm"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="48dp"
                         app:DaebakPasswordField_Label="비밀번호 확인" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/sendResetBtn"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="48dp"
                         android:text="변경하기"
-                        app:ButtonTextSize="@dimen/dp18"
-                        app:buttonTheme="blue" />
+                        android:textSize="@dimen/dp18"
+                         />
 
                 </LinearLayout>
 
@@ -246,14 +244,14 @@
                         android:text="비밀번호가 변경되었습니다."
                         android:textSize="@dimen/dp24" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/toLoginBtn"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="32dp"
                         android:text="로그인하러 가기"
-                        app:ButtonTextSize="@dimen/dp18"
-                        app:buttonTheme="blue" />
+                        android:textSize="@dimen/dp18"
+                         />
 
                 </LinearLayout>
 

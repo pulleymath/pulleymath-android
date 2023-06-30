@@ -1,9 +1,9 @@
-package com.freewheelin.pulley.model
+package com.freewheelin.pulley.legacy.model
 
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 
 class FAQTest {
 

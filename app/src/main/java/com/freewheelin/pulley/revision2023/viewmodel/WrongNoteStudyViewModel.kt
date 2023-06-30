@@ -4,22 +4,22 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.OrderType
-import com.freewheelin.pulley.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
-import com.freewheelin.pulley.dialogs.DateRangePickerDialog
-import com.freewheelin.pulley.dialogs.WrongManagementDialog
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.Result
-import com.freewheelin.pulley.model.contents.Piece
-import com.freewheelin.pulley.model.contents.PieceCategory
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.OrderType
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
+import com.freewheelin.pulley.legacy.dialogs.WrongManagementDialog
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.Result
+import com.freewheelin.pulley.legacy.model.contents.Piece
+import com.freewheelin.pulley.legacy.model.contents.PieceCategory
 import com.freewheelin.pulley.revision2023.model.*
 import com.freewheelin.pulley.revision2023.model.request.AdvancedLearningProblemRequest
 import com.freewheelin.pulley.revision2023.model.request.NoteStudyAdvancedLearningRequest
 import com.freewheelin.pulley.revision2023.model.response.NoteStudyAdvancedLearningResponse
 import com.freewheelin.pulley.revision2023.repository.NotesRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -92,7 +92,7 @@ class WrongNoteStudyViewModel(application: Application): BaseAndroidViewModel(ap
         val startDate = DateTimeUtils.yyyy_MM_dd.format(from.toDate())
         val endDate = DateTimeUtils.yyyy_MM_dd.format(to.toDate())
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val scrapNotes = notesRepository.fetchNotes(startDate, endDate, "WRONG")
+            val scrapNotes = notesRepository.fetchNotes(startDate, endDate, "SCRAP")
             originalNoteProblem = scrapNotes
             setGroupedProblem() {
                 cb()

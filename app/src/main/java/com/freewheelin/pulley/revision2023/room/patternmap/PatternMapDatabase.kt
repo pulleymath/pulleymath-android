@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2023.utils.converters.PatternMapProgressTypeConverter
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import kotlinx.coroutines.CoroutineScope

@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="@+id/rightTitle"
             app:layout_constraintTop_toTopOf="@+id/subBar" />
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/mainBar"
             android:layout_width="0dp"
             android:layout_height="20dp"
@@ -68,9 +68,9 @@
             app:layout_constraintTop_toBottomOf="@+id/leftTitle"
             app:progressColor="#78beff">
 
-        </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.legacy.views.LearningProgressView>
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/subBar"
             android:layout_width="0dp"
             android:layout_height="20dp"

@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2023.model
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 
 data class LCPatternMapWrapper(

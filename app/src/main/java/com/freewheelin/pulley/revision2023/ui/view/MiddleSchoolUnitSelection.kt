@@ -9,12 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.BigUnitV3
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.legacy.assets.BigUnitV3
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ViewMiddleSchoolUnitSelectionBinding
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
-import com.freewheelin.pulley.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.visibleIf
 
 interface MiddleSchoolUnitSelectionListener {
     fun onSelectionChanged(view: View)

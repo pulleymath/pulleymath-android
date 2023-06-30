@@ -98,13 +98,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/nameLabel" />
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/nameModifyBtn"
                         android:layout_width="96dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="@dimen/dp24"
                         android:text="@string/text_change"
-                        app:buttonTheme="grey"
+                        style="@style/h5"
                         app:layout_constraintBottom_toBottomOf="@+id/nameTv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/nameTv" />
@@ -143,13 +143,13 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/emailLabel" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                             android:id="@+id/emailModifyBtn"
                             android:layout_width="96dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="@dimen/dp24"
                             android:text="@string/text_change"
-                            app:buttonTheme="grey"
+                            style="@style/h5"
                             app:layout_constraintBottom_toBottomOf="@+id/emailTv"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/emailTv" />
@@ -177,13 +177,13 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                             android:id="@+id/phoneModifyBtn"
                             android:layout_width="96dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="@dimen/dp24"
                             android:text="@string/text_change"
-                            app:buttonTheme="grey"
+                            style="@style/h5"
                             app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/phoneTv" />
@@ -211,13 +211,13 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/parentPhoneLabel" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                             android:id="@+id/parentPhoneModifyBtn"
                             android:layout_width="96dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="@dimen/dp24"
                             android:text="@string/text_change"
-                            app:buttonTheme="grey"
+                            style="@style/h5"
                             app:layout_constraintBottom_toBottomOf="@+id/parentPhoneTv"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/parentPhoneTv" />
@@ -246,13 +246,13 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />
 
-                        <com.freewheelin.pulley.views.buttons.SecondaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                             android:id="@+id/passwordModifyBtn"
                             android:layout_width="96dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="@dimen/dp24"
                             android:text="@string/text_change"
-                            app:buttonTheme="grey"
+                            style="@style/h5"
                             app:layout_constraintBottom_toBottomOf="@+id/resetPasswordLabel"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />

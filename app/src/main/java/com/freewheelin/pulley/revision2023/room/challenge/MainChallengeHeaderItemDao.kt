@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.challenge
 
 import androidx.room.*
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderItem
 import kotlinx.coroutines.flow.Flow
 

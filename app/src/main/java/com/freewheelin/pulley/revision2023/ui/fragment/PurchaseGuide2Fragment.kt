@@ -18,7 +18,7 @@ import com.freewheelin.pulley.databinding.FragmentPurchaseGuide2Binding
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.adapter.PurchaseGuideAdapter
 
 class PurchaseGuide2Fragment : Fragment() {
@@ -56,7 +56,7 @@ class PurchaseGuide2Fragment : Fragment() {
                 adapter = guideAdapter
             }
 
-            actionBtnWrapperCl.setOnClickListener { _ ->
+            actionBtn.setOnClickListener { _ ->
 
                 viewModel.selectedOffer?.let { offer ->
                     val offerId = offer.offerId

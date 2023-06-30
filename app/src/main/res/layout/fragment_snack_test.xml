@@ -27,7 +27,7 @@
             app:layout_constraintWidth_percent="0.575">
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView
             android:id="@+id/dailyContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -38,9 +38,9 @@
             app:layout_constraintBottom_toTopOf="@+id/weeklyContainer"
             app:layout_constraintEnd_toStartOf="@+id/mainContentsCl"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView>
+            app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView
             android:id="@+id/weeklyContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -52,9 +52,9 @@
             app:layout_constraintTop_toBottomOf="@+id/dailyContainer"
             app:layout_constraintBottom_toTopOf="@+id/wrongContainer"
             app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
-        </com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView>
+        </com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView>
 
-        <com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView
             android:id="@+id/wrongContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -67,7 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
-        </com.freewheelin.pulley.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView>
+        </com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView>
 
         <View
             android:id="@+id/arrowGuide"

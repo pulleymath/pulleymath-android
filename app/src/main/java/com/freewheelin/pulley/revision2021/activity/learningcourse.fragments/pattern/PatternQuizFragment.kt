@@ -25,7 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.lifecycleScope
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.ChannelIoQuestionDialog
@@ -36,7 +36,7 @@ import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 import kotlinx.coroutines.*
 import java.io.File
 

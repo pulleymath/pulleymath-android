@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.freewheelin.pulley.activities.OnboardingPageFragment">
+    tools:context="com.freewheelin.pulley.legacy.activities.OnboardingPageFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/onboardLottie"

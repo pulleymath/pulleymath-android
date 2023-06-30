@@ -59,7 +59,7 @@
 
 
 
-            <com.freewheelin.pulley.views.TabViewPager
+            <com.freewheelin.pulley.legacy.views.TabViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
@@ -85,7 +85,7 @@
             app:layout_constraintStart_toStartOf="parent"
              />
 
-        <com.freewheelin.pulley.views.WrongManageView
+        <com.freewheelin.pulley.legacy.views.WrongManageView
             android:id="@+id/wrongManageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

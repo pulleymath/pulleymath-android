@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide1Binding
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.visibleIf
 
 class PurchaseGuide1Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide1Binding
@@ -36,11 +36,10 @@ class PurchaseGuide1Fragment : Fragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             setScreen()
-            actionBtnWrapperCl.setOnClickListener { _ ->
+            actionBtn.setOnClickListener { _ ->
                 LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "그랜드오픈2023", "구독제상품설명")
                 viewModel.setStep(2)
             }
-
         }
         arguments?.let {
             val withPdfDesc = it.getBoolean("PDF_PURCHASE_DESC")

@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:paddingTop="@dimen/dialog_test_report_top_margin"
         android:paddingBottom="@dimen/dialog_test_report_bottom_margin"
-        tools:context="com.freewheelin.pulley.activities.DailyTestReportActivity">
+        tools:context="com.freewheelin.pulley.legacy.activities.DailyTestReportActivity">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="960dp"
             android:layout_height="wrap_content"
@@ -159,13 +159,12 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_chainStyle="packed" />
 
-                        <com.freewheelin.pulley.views.buttons.PrimaryButton
+                        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                             android:id="@+id/reviewBtn"
                             android:layout_width="@dimen/primaryBtn_width_160dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_marginTop="@dimen/dp16"
                             android:text="리뷰하기"
-                            app:buttonTheme="blue"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@id/scoreGuideTv"
                             app:layout_constraintTop_toBottomOf="@+id/scoreGuideTv" />

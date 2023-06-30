@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.lib
 
+import com.freewheelin.pulley.legacy.lib.ObservableHashSet
+import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock

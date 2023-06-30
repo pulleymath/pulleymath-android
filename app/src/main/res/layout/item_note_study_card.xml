@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.freewheelin.pulley.model.Result" />
+        <import type="com.freewheelin.pulley.legacy.model.Result" />
         <variable name="item" type="com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper"/>
     </data>
 

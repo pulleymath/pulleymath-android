@@ -51,7 +51,7 @@
             android:padding="@dimen/dp24"
             android:orientation="vertical">
 
-            <com.freewheelin.pulley.views.CodeConfirmView
+            <com.freewheelin.pulley.legacy.views.CodeConfirmView
                 android:id="@+id/codeConfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

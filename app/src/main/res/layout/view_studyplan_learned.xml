@@ -116,7 +116,7 @@
             app:layout_constraintBottom_toTopOf="@+id/progressBar"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.freewheelin.pulley.views.LearningProgressView
+        <com.freewheelin.pulley.legacy.views.LearningProgressView
             android:id="@+id/progressBar"
             android:layout_width="0dp"
             android:layout_height="6dp"
@@ -131,9 +131,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:progressColor="@color/gray_500">
 
-        </com.freewheelin.pulley.views.LearningProgressView>
+        </com.freewheelin.pulley.legacy.views.LearningProgressView>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/solveBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
@@ -141,12 +141,11 @@
             android:layout_marginEnd="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp32"
             android:text="풀기"
-            app:buttonTheme="blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
             android:id="@+id/reviewBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
@@ -154,7 +153,6 @@
             android:layout_marginEnd="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp32"
             android:text="문제 리뷰"
-            app:buttonTheme="blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

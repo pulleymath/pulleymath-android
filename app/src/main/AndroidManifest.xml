@@ -66,7 +66,7 @@
         android:required="false" />
 
     <application
-        android:name=".bases.MyApplication"
+        android:name=".legacy.bases.MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/pulley_launcher"
         android:label="@string/app_name"
@@ -78,9 +78,13 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2023.ui.activity.MainActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+        <activity
             android:name=".revision2023.ui.activity.PurchaseInduceWebViewActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape"  />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.PurchaseWebViewActivity"
             android:exported="false"
@@ -121,24 +125,24 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity"
+            android:name=".legacy.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.learning.tabFragment.usertest.StudentManagerActivity"
+            android:name=".legacy.activities.learning.tabFragment.usertest.StudentManagerActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.learning.tabFragment.usertest.StudentMockReportActivity"
+            android:name=".legacy.activities.learning.tabFragment.usertest.StudentMockReportActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.learning.tabFragment.analysis.StudyHistoryActivity"
+            android:name=".legacy.activities.learning.tabFragment.analysis.StudyHistoryActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.auth.InitSettingCompleteActivity"
+            android:name=".legacy.activities.auth.InitSettingCompleteActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.auth.InitSettingActivity"
+            android:name=".legacy.activities.auth.InitSettingActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
 
@@ -153,66 +157,62 @@
         </provider>
 
         <activity
-            android:name=".activities.auth.InitTestActivity"
+            android:name=".legacy.activities.auth.InitTestActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.auth.StudyReportActivity"
+            android:name=".legacy.activities.auth.StudyReportActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.StartActivity"
+            android:name=".legacy.activities.StartActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.mobile.MStartActivity"
-            android:exported="true"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.OnboardingActivity"
+            android:name=".legacy.activities.OnboardingActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.auth.signup.SignupActivity"
+            android:name=".legacy.activities.auth.signup.SignupActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.auth.findEmailAndPw.FindEmailAndPwActivity"
+            android:name=".legacy.activities.auth.findEmailAndPw.FindEmailAndPwActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateUnchanged" />
         <activity
-            android:name=".activities.auth.login.LoginActivity"
+            android:name=".legacy.activities.auth.login.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateHidden" /> <!-- android:launchMode="singleInstance" -->
         <activity
-            android:name=".activities.WrongTestReportActivity"
+            android:name=".legacy.activities.WrongTestReportActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".activities.DailyTestReportActivity"
+            android:name=".legacy.activities.DailyTestReportActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".activities.WeeklyTestReportActivity"
+            android:name=".legacy.activities.WeeklyTestReportActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".activities.analysis.AnalysisTabActivity"
+            android:name=".legacy.activities.analysis.AnalysisTabActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
@@ -221,7 +221,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".legacy.activities.SplashActivity"
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorLandscape">
@@ -232,34 +232,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.OMRActivity"
+            android:name=".legacy.activities.OMRActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity
-            android:name=".activities.learning.LearningTabActivity"
+            android:name=".legacy.activities.learning.LearningTabActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities.solve.SolveActivity"
+            android:name=".legacy.activities.solve.SolveActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-        <activity
-            android:name=".activities.learning.tabFragment.main.mypage.MyPageActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
 
         <receiver
-            android:name=".bases.UpdateReceiver"
+            android:name=".legacy.bases.UpdateReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -282,7 +276,7 @@
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activities.lesson.LessonActivity"
+            android:name=".legacy.activities.lesson.LessonActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
@@ -295,7 +289,7 @@
             android:screenOrientation="sensorLandscape" />
 
         <service
-            android:name=".service.PulleyFirebaseMessagingService"
+            android:name=".legacy.service.PulleyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

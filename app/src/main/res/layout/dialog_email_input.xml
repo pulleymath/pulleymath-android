@@ -55,7 +55,7 @@
                 android:textSize="@dimen/sp16"
                 android:text="선택한 학습자료를\n입력하신 메일로 보내드릴게요 :)" />
 
-            <com.freewheelin.pulley.views.editText.DaebakInputField
+            <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                 android:id="@+id/emailField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -65,9 +65,9 @@
                 app:DaebakInputField_Label="받는사람 이메일"
                 app:DaebakInputField_Hint="name@naver.com">
 
-            </com.freewheelin.pulley.views.editText.DaebakInputField>
+            </com.freewheelin.pulley.legacy.views.editText.DaebakInputField>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/sendBtn"
                 android:text="메일 보내기"
                 android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:layout_marginStart="@dimen/dp32"
                 android:layout_marginEnd="@dimen/dp32"
                 android:layout_marginBottom="@dimen/dp32"
-                app:ButtonTextSize="@dimen/sp18"/>
+                android:textSize="@dimen/sp18"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.manage.ConceptLearningUsageMonitor
+import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -30,7 +30,7 @@ import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
-import com.freewheelin.pulley.utils.getSerializable
+import com.freewheelin.pulley.legacy.utils.getSerializable
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*

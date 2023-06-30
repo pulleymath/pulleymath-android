@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2023.repository
 
-import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2023.model.request.UpdateSubjectRequest
 import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubjectResponse

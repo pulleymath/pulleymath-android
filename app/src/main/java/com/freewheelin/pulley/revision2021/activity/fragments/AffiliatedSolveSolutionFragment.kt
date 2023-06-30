@@ -14,14 +14,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.URL
+import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.databinding.*
 import com.freewheelin.pulley.revision2021.activity.VideoPlayerActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel
-import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.IntentUtils
+import com.freewheelin.pulley.legacy.views.DaebakToast
 
 class AffiliatedSolveSolutionFragment : Fragment() {
 

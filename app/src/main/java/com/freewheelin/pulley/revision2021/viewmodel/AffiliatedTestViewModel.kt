@@ -9,13 +9,15 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.revision2023.repository.AuthRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,7 @@ class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(a
     val selectedTabIndex by lazy { MutableLiveData<Int>(0) }
     val showNothingDataView by lazy { MutableLiveData(false) }
 //    val showAdditionalLearning by lazy { MutableLiveData(false) }
+    val univ: AffiliatedUniv by lazy { AffiliatedUniv.schoolIdOfNonNull(user?.schoolID) }
 
     fun fetchUnivTestGroup(callback: ((AffiliatedTestCard)->Unit)?) {
         val studentId = user?.studentID ?: return
@@ -41,7 +44,7 @@ class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(a
 
         compositeDisposable += affiliatedTestRepository.getGroupList2(studentId, schoolId)
             .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ res ->
                 Log.d(javaClass.simpleName, "group list=>${res.data}")
                 currentTimeString.postValue(res.current_time)
@@ -51,10 +54,11 @@ class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(a
                     val workbookList = it.workbook_list
                     val studentWorkbookList = it.student_workbook_list
 
+                    val testSize = AffiliatedUniv.schoolIdOfNonNull(user?.schoolID).testSize
                     val cardList = workbookList
                                     .map { it.setStudentWorkbook(studentWorkbookList) }
                                     .groupBy { it.group_id }
-                                    .map { AffiliatedTestCard(it.key, it.value.sortedBy { that -> that.seq }) }
+                                    .map { AffiliatedTestCard(it.key, it.value.sortedBy { that -> that.seq }, testSize) }
                                     .map { val filteredGroup = groupList.filter { that -> that.id == it.groupId }
                                         it.group_title = filteredGroup[0].group_title
                                         it.seq = filteredGroup[0].seq
@@ -76,42 +80,31 @@ class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(a
                 Log.e(javaClass.simpleName, "group error=${error.localizedMessage}")
             })
     }
-    private lateinit var solveResultLauncher: ActivityResultLauncher<Intent>
-
-    fun onTestStart(v: View) {
-        selectedUnivTestCard.value?.let {
-            if (it.isTestEnable(currentTimeString.value)) {
-                val intent = AffiliatedTestSolveActivity.getIntent(v.context, it.selectedWorkbook)
-                v.context.startActivity(intent)
-            } else {
-                DaebakToast.show(v.context, "시험시작 30분 전부터 입장할 수 있습니다.")
-            }
-        }
-    }
 
     fun onStep(v: View, num: Int) {
         selectedUnivTestCard.value?.let {
             it.selectedWorkbook = when (num) {
                 1 -> {
                     it.stepSelectRelease()
-                    it.firstWorkbook.select()
+                    it.firstWorkbook?.select()
                 }
                 2 -> {
-                    if (it.firstWorkbook.isFinished()) {
+                    if (it.firstWorkbook?.isFinished() == true) {
+
                         it.stepSelectRelease()
-                        it.secondWorkbook.select()
+                        it.secondWorkbook?.select()
                     } else {
                         DaebakToast.show(v.context, "이전 테스트를 완료하지 않았습니다.")
-                        it.selectedWorkbook.select()
+                        it.selectedWorkbook?.select()
                     }
                 }
                 else -> {
-                    if (it.secondWorkbook.isFinished()) {
+                    if (it.secondWorkbook?.isFinished() == true) {
                         it.stepSelectRelease()
-                        it.thirdWorkbook.select()
+                        it.thirdWorkbook?.select()
                     } else {
                         DaebakToast.show(v.context, "이전 테스트를 완료하지 않았습니다.")
-                        it.selectedWorkbook.select()
+                        it.selectedWorkbook?.select()
                     }
                 }
             }
@@ -125,18 +118,20 @@ class AffiliatedTestViewModel(application: Application) : BaseAndroidViewModel(a
             it.isSelected.set(it.getId() == ut.getId())
         }
         ut.stepSelectRelease()
-        when {
-            ut.thirdWorkbook.isFinished() -> ut.thirdWorkbook.select()
-            ut.secondWorkbook.isFinished() -> ut.thirdWorkbook.select()
-            ut.firstWorkbook.isFinished() -> ut.secondWorkbook.select()
-            else -> ut.firstWorkbook.select()
-        }
-
-        when {
-            ut.firstWorkbook.isNotFinished() -> ut.selectedWorkbook = ut.firstWorkbook
-            ut.secondWorkbook.isNotFinished() -> ut.selectedWorkbook = ut.secondWorkbook
-            ut.thirdWorkbook.isNotFinished() -> ut.selectedWorkbook = ut.thirdWorkbook
-            else -> ut.selectedWorkbook = ut.thirdWorkbook
+        ut.selectedWorkbook = when {
+            ut.thirdWorkbook?.isFinished() == true -> {
+                ut.thirdWorkbook?.select()
+            }
+            ut.secondWorkbook?.isFinished() == true -> {
+                val testSize = AffiliatedUniv.schoolIdOfNonNull(user?.schoolID).testSize
+                if (testSize == 2) {
+                    ut.secondWorkbook?.select()
+                } else {
+                    ut.thirdWorkbook?.select()
+                }
+            }
+            ut.firstWorkbook?.isFinished() == true -> ut.secondWorkbook?.select()
+            else -> ut.firstWorkbook?.select()
         }
 
         selectedUnivTestCard.postValue(ut)

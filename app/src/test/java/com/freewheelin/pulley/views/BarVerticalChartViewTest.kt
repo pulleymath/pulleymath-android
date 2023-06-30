@@ -1,7 +1,7 @@
-package com.freewheelin.pulley.views
+package com.freewheelin.pulley.legacy.views
 
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.views.charts.BarVerticalChartView
+import com.freewheelin.pulley.legacy.views.charts.BarVerticalChartView
 import org.junit.Test
 import org.junit.Assert.assertEquals
 

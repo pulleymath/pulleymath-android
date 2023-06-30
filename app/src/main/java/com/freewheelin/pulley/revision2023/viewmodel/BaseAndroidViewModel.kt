@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
-import com.freewheelin.pulley.utils.responseFailed
+import com.freewheelin.pulley.legacy.utils.responseFailed
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.net.UnknownHostException

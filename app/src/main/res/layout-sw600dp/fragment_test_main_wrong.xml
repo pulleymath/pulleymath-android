@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainWrongXFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.TestMainWrongXFragment">
 
         <TextView
             style="@style/TextGray_800.Bold"
@@ -189,14 +189,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
             android:layout_marginTop="@dimen/dp48"
             android:text="테스트 시작하기"
             android:visibility="invisible"
-            app:buttonTheme="blue"
             app:layout_constraintStart_toStartOf="@+id/contentsCl"
             app:layout_constraintEnd_toEndOf="@+id/contentsCl"
             app:layout_constraintTop_toBottomOf="@+id/contentsCl"

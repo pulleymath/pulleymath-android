@@ -33,7 +33,7 @@
             android:textCursorDrawable="@drawable/cursor_daebak_edit_text"
             android:textSize="@dimen/dp16" />
 
-        <com.freewheelin.pulley.views.ArduousSpinner
+        <com.freewheelin.pulley.legacy.views.ArduousSpinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp56"

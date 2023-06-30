@@ -34,15 +34,12 @@
                 android:layout_weight="1"
                 android:hint="010-0000-0000"/>
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                 android:id="@+id/btnRequestCode"
                 android:layout_width="150dp"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="8dp"
-                android:text="인증번호 받기"
-                app:buttonTheme="blue">
-
-            </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                android:text="인증번호 받기"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/containerValueError"
@@ -100,16 +97,13 @@
                 app:layout_constraintEnd_toEndOf="@+id/editCodeConfirm"
                 app:layout_constraintTop_toTopOf="@+id/editCodeConfirm" />
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                 android:id="@+id/btnCodeConfirm"
                 android:layout_width="150dp"
                 android:layout_height="@dimen/dp56"
                 android:text="인증 확인"
-                app:buttonTheme="blue"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

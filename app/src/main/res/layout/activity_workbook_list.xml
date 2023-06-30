@@ -209,7 +209,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/filterRv"/>
 
-                    <com.freewheelin.pulley.views.GridRecyclerView
+                    <com.freewheelin.pulley.legacy.views.GridRecyclerView
                         android:id="@+id/totalRv"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -224,7 +224,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintVertical_bias="0">
 
-                    </com.freewheelin.pulley.views.GridRecyclerView>
+                    </com.freewheelin.pulley.legacy.views.GridRecyclerView>
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/totalLoadingView"

@@ -47,7 +47,7 @@
                 app:autoSizeTextType="uniform" />
         </androidx.appcompat.widget.Toolbar>
 
-        <com.freewheelin.pulley.views.SolveTimerView
+        <com.freewheelin.pulley.legacy.views.SolveTimerView
             android:id="@+id/timerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,14 +59,13 @@
             app:layout_constraintEnd_toStartOf="@+id/submitBtn"
             app:orientation_subname="solve"
             >
-        </com.freewheelin.pulley.views.SolveTimerView>
+        </com.freewheelin.pulley.legacy.views.SolveTimerView>
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/submitBtn"
             android:layout_width="160dp"
             android:layout_height="40dp"
             android:text="제출하기"
-            app:buttonTheme="blue"
             app:screenTheme="dark"
             app:layout_constraintEnd_toEndOf="@+id/omrViewRightContainer"
             app:layout_constraintTop_toTopOf="@+id/timerView"
@@ -99,7 +98,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.freewheelin.pulley.views.OMRView
+            <com.freewheelin.pulley.legacy.views.OMRView
                 android:id="@+id/omrViewLeft"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -191,7 +190,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@color/red_200" />
 
-            <com.freewheelin.pulley.views.OMRView
+            <com.freewheelin.pulley.legacy.views.OMRView
                 android:id="@+id/omrViewRight"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -256,7 +255,7 @@
             app:constraint_referenced_ids="topDim, leftDim, rightDim, bottomDim"
             android:focusable="true" />
 
-        <com.freewheelin.pulley.views.NumberKeypadView
+        <com.freewheelin.pulley.legacy.views.NumberKeypadView
             android:id="@+id/keypadView"
             android:layout_width="@dimen/omrActivity_keypad_width"
             android:layout_height="@dimen/omrActivity_keypad_height"
@@ -264,7 +263,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/omrViewRightContainer"
             app:layout_constraintEnd_toEndOf="@+id/omrViewRightContainer">
 
-        </com.freewheelin.pulley.views.NumberKeypadView>
+        </com.freewheelin.pulley.legacy.views.NumberKeypadView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

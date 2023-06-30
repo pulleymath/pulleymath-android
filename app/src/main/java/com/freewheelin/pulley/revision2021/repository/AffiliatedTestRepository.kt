@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedMediaLog
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestApi

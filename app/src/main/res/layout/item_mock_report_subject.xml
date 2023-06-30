@@ -93,7 +93,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.freewheelin.pulley.views.charts.RingChartBinary
+                <com.freewheelin.pulley.legacy.views.charts.RingChartBinary
                     android:id="@+id/ringChart"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
@@ -189,7 +189,7 @@
                 app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+            <com.freewheelin.pulley.legacy.views.charts.MockReportBarChartView
                 android:id="@+id/subjectBarChartView1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                 app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+            <com.freewheelin.pulley.legacy.views.charts.MockReportBarChartView
                 android:id="@+id/subjectBarChartView2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                 app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
                 app:layout_constraintTop_toBottomOf="@id/subjectBarChartView1"
                 />
-            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+            <com.freewheelin.pulley.legacy.views.charts.MockReportBarChartView
                 android:id="@+id/subjectBarChartView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                 app:layout_constraintStart_toEndOf="@+id/subjectTabRingChartContainer"
                 app:layout_constraintTop_toBottomOf="@id/subjectBarChartView2"
                 />
-            <com.freewheelin.pulley.views.charts.MockReportBarChartView
+            <com.freewheelin.pulley.legacy.views.charts.MockReportBarChartView
                 android:id="@+id/subjectBarChartView4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

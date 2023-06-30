@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide3Binding
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
-import com.freewheelin.pulley.utils.toPx
+import com.freewheelin.pulley.legacy.utils.toPx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

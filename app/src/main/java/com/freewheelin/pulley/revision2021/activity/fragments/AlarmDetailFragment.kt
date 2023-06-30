@@ -16,8 +16,8 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentAlarmDetailBinding
 import com.freewheelin.pulley.revision2021.model.response.Alarm
 import com.freewheelin.pulley.revision2021.viewmodel.AlarmViewModel
-import com.freewheelin.pulley.utils.IntentUtils
-import com.freewheelin.pulley.views.DaebakToast
+import com.freewheelin.pulley.legacy.utils.IntentUtils
+import com.freewheelin.pulley.legacy.views.DaebakToast
 
 class AlarmDetailFragment : Fragment() {
     lateinit var binding: FragmentAlarmDetailBinding

@@ -16,8 +16,8 @@ import com.freewheelin.pulley.revision2023.ui.adapter.LCPatternMapListAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.PriorConceptAdapter
 import com.freewheelin.pulley.revision2023.viewmodel.PatternMapViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.PriorConceptViewModel
-import com.freewheelin.pulley.utils.hide
-import com.freewheelin.pulley.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.hide
+import com.freewheelin.pulley.legacy.utils.visibleIf
 
 class PatternMapFragment : Fragment() {
 

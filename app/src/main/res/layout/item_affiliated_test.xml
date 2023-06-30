@@ -4,10 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
-        <variable name="listener" type="com.freewheelin.pulley.activities.learning.tabFragment.affiliatedTest.AffiliatedTestFragment.AffiliatedTestItemClickListener"/>
+        <import type="com.freewheelin.pulley.revision2023.model.AffiliatedUniv"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2023.ui.fragment.AffiliatedTestFragment.AffiliatedTestItemClickListener"/>
         <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.AffiliatedTestCard"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestViewModel"/>
-        <variable name="isKU" type="Boolean"/>
+        <variable name="univ" type="com.freewheelin.pulley.revision2023.model.AffiliatedUniv"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +19,7 @@
         android:focusable="true"
         android:onClick="@{()->listener.onItemClick(item)}"
         android:orientation="vertical"
-        android:background="@{item.isSelected ? @drawable/shadow_border_purple : item.isCompleted ? @drawable/shadow_false_no_border : @drawable/shadow }"
+        android:background="@{item.isSelected ? @drawable/shadow_border_purple : item.isCompleted ? @drawable/shadow_false_no_border : @drawable/shadow , default=@drawable/shadow_border_purple }"
         >
         <TextView
             android:id="@+id/label"
@@ -26,10 +27,11 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/dp8"
             android:paddingVertical="4dp"
-            android:text="@{item.firstWorkbook.test_source + `학교 제휴`}"
+            android:text="@{item.firstWorkbook.test_source + `학교 제휴`, default=`제휴`}"
             style="@style/mo_h6"
             android:textColor="@color/white"
-            android:background="@drawable/bg_green_046b08_round"
+            tools:background="@drawable/bg_soongsil_primary_round"
+            affiliated_card_background="@{ univ }"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,6 +46,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="12dp"
+                tools:src="@drawable/ic_1_grey_24"
                 app:imageResource="@{item.workbookOrderResource(1)}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/test2Iv"
@@ -54,6 +57,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="12dp"
+                tools:src="@drawable/ic_2_grey_24"
                 app:imageResource="@{item.workbookOrderResource(2)}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/test3Iv"
@@ -62,6 +66,8 @@
                 android:id="@+id/test3Iv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                tools:src="@drawable/ic_3_grey_24"
+                visibleIf="@{ univ.isThirdTestExist }"
                 app:imageResource="@{item.workbookOrderResource(3)}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:maxLines="2"
-            android:text="@{item.group_title}"
+            android:text="@{item.group_title , default=`대학 진단평가`}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/label" />
@@ -86,7 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.remainingTimeText}"
+            android:text="@{item.remainingTimeText , default=`n차 진단평가 시작까지 hh시간 MM분 남음`}"
             android:textColor="@color/red_300"
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginBottom="@dimen/dp24"
@@ -97,10 +103,11 @@
 <!--        android:visibility="@{item.firstWorkbook.isFinished() ? View.INVISIBLE : View.VISIBLE }"-->
 
         <ImageView
-            android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:src="@mipmap/kudoctor"
-            android:visibility="@{ isKU ? View.VISIBLE : View.GONE }"
+            android:layout_width="55dp"
+            android:layout_height="75dp"
+            affiliated_card_character="@{ univ }"
+            android:scaleType="fitEnd"
+            tools:src="@drawable/soongsoong_disabled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

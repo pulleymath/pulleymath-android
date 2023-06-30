@@ -104,13 +104,12 @@
                         app:layout_constraintTop_toBottomOf="@+id/contactTv"
                         app:layout_constraintStart_toStartOf="parent"/>
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/contactBtn"
                         android:layout_width="160dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="@dimen/dp24"
                         android:text="문의 글 작성하기"
-                        app:buttonTheme="grey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/kakaoGuideTv" />
 

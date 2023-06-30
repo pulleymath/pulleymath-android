@@ -15,9 +15,9 @@ import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pat
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.QuizFormat
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
-import com.freewheelin.pulley.utils.Preferences
-import com.freewheelin.pulley.views.AnswerSelectionListener
-import com.freewheelin.pulley.views.AnswerSelectionView
+import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.legacy.views.AnswerSelectionListener
+import com.freewheelin.pulley.legacy.views.AnswerSelectionView
 
 interface FloatingAnswerDelegate {
     fun onAnswerChanged(view: View, answer: String?)

@@ -3,11 +3,11 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.model.User
+import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.utils.responseFailed
+import com.freewheelin.pulley.legacy.utils.responseFailed
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

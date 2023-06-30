@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.model.CookingInfo
 import com.freewheelin.pulley.revision2021.model.LCCookingWrapper
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq

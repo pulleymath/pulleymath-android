@@ -11,18 +11,18 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.mypage.MyStudyInfoFragment
-import com.freewheelin.pulley.assets.BigUnitV3
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.activities.mypage.MyStudyInfoFragment
+import com.freewheelin.pulley.legacy.assets.BigUnitV3
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentHighOptionalSubjectModifyBinding
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog.*
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.utils.DisplayUtils
-import com.freewheelin.pulley.utils.LogUtils
-import com.freewheelin.pulley.utils.PulleyEvent
-import com.freewheelin.pulley.views.DaebakInputSelection
-import com.freewheelin.pulley.views.DaebakInputSelectionListener
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.views.DaebakInputSelection
+import com.freewheelin.pulley.legacy.views.DaebakInputSelectionListener
 
 class SnackTestHighOptionalSubjectModifyFragment : Fragment(), DaebakInputSelectionListener {
     private lateinit var binding: FragmentHighOptionalSubjectModifyBinding
@@ -121,9 +121,9 @@ class SnackTestHighOptionalSubjectModifyFragment : Fragment(), DaebakInputSelect
             noneSelection.isSelected = getSelectedUnit().isEmpty()
 
             if(getSelectedUnit().isEmpty() && !noneSelection.isSelected) {
-                modifyBtn.toDisableUI()
+                modifyBtn.isEnabled = false
             } else {
-                modifyBtn.toEnableUI()
+                modifyBtn.isEnabled = true
             }
         }
     }
@@ -157,7 +157,7 @@ class SnackTestHighOptionalSubjectModifyFragment : Fragment(), DaebakInputSelect
     }
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "선택과목", "변경하기")
-        if (binding.modifyBtn.isEnableUI()) {
+        if (binding.modifyBtn.isEnabled) {
             val selectedIds = getSelectedUnit().map { it.id }
             viewModel.updateOptionalSubject(selectedIds) {
                 onBackBtnClicked()
@@ -172,9 +172,9 @@ class SnackTestHighOptionalSubjectModifyFragment : Fragment(), DaebakInputSelect
             noneSelection.isSelected = getSelectedUnit().isEmpty()
 
             if(getSelectedUnit().isEmpty() && !noneSelection.isSelected) {
-                modifyBtn.toDisableUI()
+                modifyBtn.isEnabled = false
             } else {
-                modifyBtn.toEnableUI()
+                modifyBtn.isEnabled = true
             }
         }
     }

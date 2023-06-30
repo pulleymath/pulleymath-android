@@ -1,6 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.response.*
 //import dagger.Module
 //import dagger.Provides

@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:paddingStart="@dimen/dp64"
         android:paddingEnd="@dimen/dp64"
-        tools:context="com.freewheelin.pulley.activities.learning.tabFragment.snackTest.TestMainWeeklyFragment">
+        tools:context="com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.TestMainWeeklyFragment">
 
         <TextView
             android:id="@+id/titleTv"
@@ -148,15 +148,14 @@
 
 
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/startBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
             android:layout_marginTop="@dimen/dp56"
             android:text="시작하기"
             android:visibility="invisible"
-            app:buttonTheme="blue"
-            app:ButtonTextSize="@dimen/sp18"
+            android:textSize="@dimen/sp18"
             app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

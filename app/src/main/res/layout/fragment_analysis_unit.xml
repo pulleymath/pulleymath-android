@@ -42,7 +42,7 @@
             app:layout_constraintStart_toStartOf="@+id/summaryContainerCl"
             app:layout_constraintTop_toTopOf="@+id/summaryContainerCl" />
 
-        <com.freewheelin.pulley.views.charts.BarVerticalChartView
+        <com.freewheelin.pulley.legacy.views.charts.BarVerticalChartView
             android:id="@+id/subjectChart"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -75,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/achieveLabel">
-            <com.freewheelin.pulley.views.DaebakTabRadio
+            <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                 android:id="@+id/achieveOrderRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp48"
@@ -168,7 +168,7 @@
                     app:layout_constraintTop_toTopOf="@+id/firstUnitTv" />
 
 
-                <com.freewheelin.pulley.views.charts.TriplePenChart
+                <com.freewheelin.pulley.legacy.views.charts.TriplePenChart
                     android:layout_width="0dp"
                     android:id="@+id/firstTPC"
                     android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                </com.freewheelin.pulley.views.charts.TriplePenChart>
+                </com.freewheelin.pulley.legacy.views.charts.TriplePenChart>
 
                 <TextView
                     style="@style/TextGray_500"
@@ -265,7 +265,7 @@
                     app:layout_constraintStart_toEndOf="@+id/secondUnitTv"
                     app:layout_constraintTop_toTopOf="@+id/secondUnitTv" />
 
-                <com.freewheelin.pulley.views.charts.TriplePenChart
+                <com.freewheelin.pulley.legacy.views.charts.TriplePenChart
                     android:layout_width="0dp"
                     android:id="@+id/secondTPC"
                     android:layout_height="wrap_content"
@@ -278,7 +278,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                </com.freewheelin.pulley.views.charts.TriplePenChart>
+                </com.freewheelin.pulley.legacy.views.charts.TriplePenChart>
 
                 <TextView
                     style="@style/TextGray_500"
@@ -360,7 +360,7 @@
                     app:layout_constraintStart_toEndOf="@+id/thirdUnitTv"
                     app:layout_constraintTop_toTopOf="@+id/thirdUnitTv" />
 
-                <com.freewheelin.pulley.views.charts.TriplePenChart
+                <com.freewheelin.pulley.legacy.views.charts.TriplePenChart
                     android:layout_width="0dp"
                     android:id="@+id/thirdTPC"
                     android:layout_height="wrap_content"
@@ -373,7 +373,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                </com.freewheelin.pulley.views.charts.TriplePenChart>
+                </com.freewheelin.pulley.legacy.views.charts.TriplePenChart>
 
 
                 <TextView
@@ -618,28 +618,27 @@
             app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
             app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
             android:id="@+id/reviewBtn"
-            style="@style/Btn_Orange.Primary.M"
             android:layout_width="160dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:text="문제 리뷰하기"
-            android:textSize="16sp"
-            app:buttonTheme="blue"
-            app:screenTheme="bright"
+            style="@style/h5"
+            android:textColor="@color/purple_300"
             app:layout_constraintBottom_toBottomOf="@+id/bottomContainerCl"
             app:layout_constraintEnd_toStartOf="@+id/learnBtn"
             app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/learnBtn"
-            style="@style/Btn_Orange.Primary.M"
             android:layout_width="160dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/dp40"
+            style="@style/h5"
+            android:textColor="@color/white"
             android:text="추가학습하기"
-            android:textSize="16sp"
-            app:buttonTheme="orange"
-            app:screenTheme="bright"
+            app:buttonType="orange"
             app:layout_constraintBottom_toBottomOf="@+id/bottomContainerCl"
             app:layout_constraintEnd_toEndOf="@+id/bottomContainerCl"
             app:layout_constraintTop_toTopOf="@+id/bottomContainerCl" />

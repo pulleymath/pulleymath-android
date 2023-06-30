@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.pattern
 
 import androidx.room.*
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import kotlinx.coroutines.flow.Flow

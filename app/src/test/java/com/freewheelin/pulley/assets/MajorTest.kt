@@ -1,9 +1,9 @@
-package com.freewheelin.pulley.assets
+package com.freewheelin.pulley.legacy.assets
 
-import com.freewheelin.pulley.model.Notice
-import com.freewheelin.pulley.utils.day
-import com.freewheelin.pulley.utils.month
-import com.freewheelin.pulley.utils.year
+import com.freewheelin.pulley.legacy.model.Notice
+import com.freewheelin.pulley.legacy.utils.day
+import com.freewheelin.pulley.legacy.utils.month
+import com.freewheelin.pulley.legacy.utils.year
 import com.google.gson.Gson
 import org.junit.Assert
 import org.junit.Test

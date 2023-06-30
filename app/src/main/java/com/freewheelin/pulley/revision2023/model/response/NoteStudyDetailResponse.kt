@@ -1,8 +1,8 @@
 package com.freewheelin.pulley.revision2023.model.response
 
-import com.freewheelin.pulley.model.History
-import com.freewheelin.pulley.model.Problem
-import com.freewheelin.pulley.model.ProblemDetailInfo
+import com.freewheelin.pulley.legacy.model.History
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.ProblemDetailInfo
 
 data class NoteStudyDetailResponse(
     val problem: NoteStudyProblem,

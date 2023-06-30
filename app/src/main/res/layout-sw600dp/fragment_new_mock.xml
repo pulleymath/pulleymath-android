@@ -4,6 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel"/>
+        <variable name="yearSpinnerAdapter" type="android.widget.ArrayAdapter" />
+        <variable name="monthSpinnerAdapter" type="android.widget.ArrayAdapter" />
+        <variable name="gradeSpinnerAdapter" type="android.widget.ArrayAdapter" />
+        <variable name="typeSpinnerAdapter" type="android.widget.ArrayAdapter" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,46 +29,92 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.freewheelin.pulley.views.ArduousSpinner
+            <com.freewheelin.pulley.revision2021.views.Spinner
                 android:id="@+id/yearFilter"
                 android:layout_width="160dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="@dimen/dp48"
                 android:layout_marginTop="50dp"
-                app:defaultStr="출제 연도 전체"
+                android:background="@drawable/bg_spinner_common"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:selectedItemPosition="@={vm.yearSelectedPosition}"
+                app:adapter="@{yearSpinnerAdapter}" />
 
-            <com.freewheelin.pulley.views.ArduousSpinner
+<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
+<!--                android:id="@+id/yearFilter"-->
+<!--                android:layout_width="160dp"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginStart="@dimen/dp48"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                app:defaultStr="출제 연도 전체"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <com.freewheelin.pulley.revision2021.views.Spinner
                 android:id="@+id/monthFilter"
                 android:layout_width="136dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="@dimen/dp16"
-                app:defaultStr="출제월 전체"
+                android:background="@drawable/bg_spinner_common"
                 app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
                 app:layout_constraintStart_toEndOf="@+id/yearFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter" />
+                app:layout_constraintTop_toTopOf="@+id/yearFilter"
+                android:selectedItemPosition="@={vm.monthSelectedPosition}"
+                app:adapter="@{monthSpinnerAdapter}" />
 
-            <com.freewheelin.pulley.views.ArduousSpinner
+<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
+<!--                android:id="@+id/monthFilter"-->
+<!--                android:layout_width="136dp"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginStart="@dimen/dp16"-->
+<!--                app:defaultStr="출제월 전체"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/yearFilter"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
+
+            <com.freewheelin.pulley.revision2021.views.Spinner
                 android:id="@+id/gradeFilter"
                 android:layout_width="120dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="@dimen/dp16"
-                app:defaultStr="학년 전체"
+                android:background="@drawable/bg_spinner_common"
                 app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
                 app:layout_constraintStart_toEndOf="@+id/monthFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter" />
+                app:layout_constraintTop_toTopOf="@+id/yearFilter"
+                android:selectedItemPosition="@={vm.gradeSelectedPosition}"
+                app:adapter="@{gradeSpinnerAdapter}" />
 
+<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
+<!--                android:id="@+id/gradeFilter"-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginStart="@dimen/dp16"-->
+<!--                app:defaultStr="학년 전체"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/monthFilter"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
 
-            <com.freewheelin.pulley.views.ArduousSpinner
+            <com.freewheelin.pulley.revision2021.views.Spinner
                 android:id="@+id/typeFilter"
                 android:layout_width="120dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="@dimen/dp16"
-                app:defaultStr="계열 전체"
+                android:background="@drawable/bg_spinner_common"
                 app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
                 app:layout_constraintStart_toEndOf="@+id/gradeFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter" />
+                app:layout_constraintTop_toTopOf="@+id/yearFilter"
+                android:selectedItemPosition="@={vm.typeSelectedPosition}"
+                app:adapter="@{typeSpinnerAdapter}" />
+<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
+<!--                android:id="@+id/typeFilter"-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_marginStart="@dimen/dp16"-->
+<!--                app:defaultStr="계열 전체"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/gradeFilter"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
 
 
             <androidx.appcompat.widget.AppCompatTextView

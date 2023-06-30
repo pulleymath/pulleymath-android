@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.model.ResponseBody
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject

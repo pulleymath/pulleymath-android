@@ -91,7 +91,7 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
 
-                <com.freewheelin.pulley.views.textViews.UpDownTextView
+                <com.freewheelin.pulley.legacy.views.textViews.UpDownTextView
                     style="@style/TextBlue_400.Bold"
                     android:id="@+id/lastPeriodCompCntUtv"
                     android:layout_width="wrap_content"
@@ -295,7 +295,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <com.freewheelin.pulley.views.charts.RingChart
+            <com.freewheelin.pulley.legacy.views.charts.RingChart
                 android:id="@+id/ringChart"
                 android:layout_width="@dimen/Report_StudyAmount_ringChart_width"
                 android:layout_height="@dimen/Report_StudyAmount_ringChart_width"
@@ -303,7 +303,7 @@
                 android:layout_marginTop="@dimen/dp120"
                 app:layout_constraintTop_toBottomOf="@+id/subjectGuideTv"
                 app:layout_constraintStart_toStartOf="parent">
-            </com.freewheelin.pulley.views.charts.RingChart>
+            </com.freewheelin.pulley.legacy.views.charts.RingChart>
 
             <LinearLayout
                 android:id="@+id/legendContainerLl"
@@ -618,7 +618,7 @@
                 app:layout_constraintStart_toStartOf="@+id/unitGuideTv"
                 app:layout_constraintTop_toBottomOf="@+id/unitGuideTv"/>
 
-            <com.freewheelin.pulley.views.charts.OneBarChart
+            <com.freewheelin.pulley.legacy.views.charts.OneBarChart
                 android:id="@+id/unitChart"
                 android:layout_width="0dp"
                 android:layout_height="300dp"
@@ -629,7 +629,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-            </com.freewheelin.pulley.views.charts.OneBarChart>
+            </com.freewheelin.pulley.legacy.views.charts.OneBarChart>
 
             <TextView
                 android:id="@+id/bigUnitEmptyGuideTv"
@@ -679,7 +679,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <com.freewheelin.pulley.views.charts.OneBarChart
+            <com.freewheelin.pulley.legacy.views.charts.OneBarChart
                 android:id="@+id/dailyChart"
                 android:layout_width="0dp"
                 android:layout_height="300dp"
@@ -688,7 +688,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
-            </com.freewheelin.pulley.views.charts.OneBarChart>
+            </com.freewheelin.pulley.legacy.views.charts.OneBarChart>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

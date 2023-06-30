@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.assets.Grade
-import com.freewheelin.pulley.assets.Major
-import com.freewheelin.pulley.bases.MyApplication
+import com.freewheelin.pulley.legacy.assets.Grade
+import com.freewheelin.pulley.legacy.assets.Major
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.databinding.DialogUpdateGradeBinding
 import com.freewheelin.pulley.databinding.ItemFindSchoolForUpdateGradeBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -95,11 +95,11 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
                 selectMajor.initSpinner()
                 selectRate.initSpinner()
                 selectCity.initSpinner()
-                submitBtn.toDisableUI()
+                submitBtn.isEnabled = false
             }
 
             submitBtn.setOnClickListener {
-                if (submitBtn.isEnableUI().not()) return@setOnClickListener
+                if (submitBtn.isEnabled.not()) return@setOnClickListener
                 val schoolId = viewModel.selectedSchoolID
                 val regionId = viewModel.selectedCityID
                 var grade: Int = if (viewModel.showSelectMiddleGrade.value == true) {
@@ -255,25 +255,25 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
         with(binding) {
             if(switchNoStudent.isChecked){
                 if(viewModel.selectedCityID == null) {
-                    submitBtn.toDisableUI()
+                    submitBtn.isEnabled = false
                     return
                 }
             } else {
                 if(viewModel.selectedSchoolID == null) {
-                    submitBtn.toDisableUI()
+                    submitBtn.isEnabled = false
                     return
                 }
             }
 
             if (viewModel.showSelectMiddleGrade.value == true) {
                 if (!selectMiddleGrade.isSelected) {
-                    submitBtn.toDisableUI()
+                    submitBtn.isEnabled = false
                     return
                 }
             }
             if (viewModel.showSelectHighGrade.value == true) {
                 if (!selectHighGrade.isSelected) {
-                    submitBtn.toDisableUI()
+                    submitBtn.isEnabled = false
                     return
                 }
             }
@@ -290,34 +290,34 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
                 if (viewModel.showSelectMiddleGrade.value == true) {
                     when (selectMiddleGrade.position) {
                         1, 2, 3 -> {
-                            if (mainChanged || middleGradeChanged) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = mainChanged || middleGradeChanged
                         }
-                        else -> submitBtn.toDisableUI()
+                        else -> submitBtn.isEnabled = false
                     }
                 }
                 if (viewModel.showSelectHighGrade.value == true) {
                     when (selectHighGrade.position) {
                         1 -> {
-                            if ((mainChanged || rateChanged) && selectHighGrade.isSelected) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = (mainChanged || rateChanged) && selectHighGrade.isSelected
                         }
                         2, 3, 4 -> {
-                            if ((mainChanged || majorChanged || rateChanged) && ( selectMajor.isSelected && selectRate.isSelected)) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = (mainChanged || majorChanged || rateChanged) && ( selectMajor.isSelected && selectRate.isSelected)
                         }
-                        else -> submitBtn.toDisableUI()
+                        else -> submitBtn.isEnabled = false
                     }
                 }
                 if (viewModel.showSelectAllGrade.value == true) {
                     when (selectAllGrade.position) {
                         1, 2, 3 -> {
-                            if (mainChanged || middleGradeChanged) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = mainChanged || middleGradeChanged
                         }
                         4 -> {
-                            if (mainChanged && rateChanged && selectAllGrade.isSelected) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = mainChanged && rateChanged && selectAllGrade.isSelected
                         }
                         5, 6, 7 -> {
-                            if ((mainChanged || majorChanged || rateChanged) && ( selectMajor.isSelected && selectRate.isSelected)) submitBtn.toEnableUI() else submitBtn.toDisableUI()
+                            submitBtn.isEnabled = (mainChanged || majorChanged || rateChanged) && ( selectMajor.isSelected && selectRate.isSelected)
                         }
-                        else -> submitBtn.toDisableUI()
+                        else -> submitBtn.isEnabled = false
                     }
                 }
             }
@@ -376,7 +376,7 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
                 selectRate.position = user.rating
                 selectMajor.position =  if(user.rawMajorType == "") 0 else Major.list.indexOf(user.major) + 1
             }
-            submitBtn.toDisableUI()
+            submitBtn.isEnabled = false
         }
     }
 

@@ -124,28 +124,28 @@
                     android:text="일정량의 학습 데이터가 쌓일 때까지 선택한대로 추천됩니다!"
                     android:textSize="@dimen/sp14" />
 
-                <com.freewheelin.pulley.views.DaebakInputSelection
+                <com.freewheelin.pulley.legacy.views.DaebakInputSelection
                     android:id="@+id/mathTopSelection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp24"
                     app:DaebakInputSelection_Label="수학(상)" />
 
-                <com.freewheelin.pulley.views.DaebakInputSelection
+                <com.freewheelin.pulley.legacy.views.DaebakInputSelection
                     android:id="@+id/mathBottomSelection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp24"
                     app:DaebakInputSelection_Label="수학(하)" />
 
-                <com.freewheelin.pulley.views.DaebakInputSelection
+                <com.freewheelin.pulley.legacy.views.DaebakInputSelection
                     android:id="@+id/math1Selection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp24"
                     app:DaebakInputSelection_Label="수학I" />
 
-                <com.freewheelin.pulley.views.DaebakInputSelection
+                <com.freewheelin.pulley.legacy.views.DaebakInputSelection
                     android:id="@+id/math2Selection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,24 +157,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp48">
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                         android:id="@+id/prevBtn"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp56"
                         android:text="이전"
-                        app:buttonTheme="grey"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/nextBtn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/nextBtn"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp56"
                         android:layout_marginStart="@dimen/dp24"
                         android:text="다음"
-                        app:buttonTheme="blue"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/prevBtn"

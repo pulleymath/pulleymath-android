@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.repository
 
 import android.content.Context
-import com.freewheelin.pulley.model.contents.Test
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.service.SolveApi
 import com.freewheelin.pulley.revision2023.service.SolveService
 import kotlinx.coroutines.CoroutineScope

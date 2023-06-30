@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="planListener" type="com.freewheelin.pulley.activities.learning.tabFragment.book.PlanListenerV2" />
+        <variable name="planListener" type="com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.PlanListenerV2" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PulleyMathBooksViewModel"/>
     </data>
 
@@ -133,7 +133,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent">
 
-                            <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/firstRecommendList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 />
 
-                            <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/secondRecommendList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/firstRecommendList"
                                 />
 
-                            <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/thirdRecommendList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/secondRecommendList"
                                 />
 
-                            <com.freewheelin.pulley.activities.learning.tabFragment.book.RecommendBookList
+                            <com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.RecommendBookList
                                 android:id="@+id/fourthRecommendList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -241,7 +241,7 @@
                             app:layout_constraintBottom_toBottomOf="@+id/filterRv"
                             app:layout_constraintStart_toEndOf="@+id/filterRv"/>
 
-                        <com.freewheelin.pulley.views.GridRecyclerView
+                        <com.freewheelin.pulley.legacy.views.GridRecyclerView
                             android:id="@+id/totalRv"
                             android:layout_width="0dp"
                             android:layout_height="0dp"

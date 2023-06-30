@@ -193,25 +193,23 @@
             app:layout_constraintStart_toStartOf="@+id/solveBtn"/>
 
 
-        <com.freewheelin.pulley.views.buttons.PrimaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.CommonButton
             android:id="@+id/solveBtn"
             android:layout_width="@dimen/primaryBtn_width_96dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp16"
             android:text="풀기"
-            app:buttonTheme="blue"
             app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
             style="@style/TextGray_800.Bold"
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/primaryBtn_width_96dp"
             android:layout_height="36dp"
             android:text="보고서"
-            app:buttonTheme="grey"
             app:layout_constraintTop_toTopOf="@+id/solveBtn"
             app:layout_constraintStart_toStartOf="@+id/solveBtn"
             app:layout_constraintEnd_toEndOf="@+id/solveBtn"
@@ -227,13 +225,12 @@
             app:layout_constraintStart_toStartOf="@+id/reviewBtn"
             app:layout_constraintEnd_toEndOf="@+id/reviewBtn"/>
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
             android:id="@+id/reviewBtn"
             android:layout_width="@dimen/primaryBtn_width_96dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp16"
             android:text="문제 리뷰"
-            app:buttonTheme="blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

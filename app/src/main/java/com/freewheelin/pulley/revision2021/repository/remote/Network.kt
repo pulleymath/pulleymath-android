@@ -1,11 +1,11 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.assets.URL
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.bases.user
+import com.freewheelin.pulley.legacy.assets.URL
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
-import com.freewheelin.pulley.utils.APHelper
-import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.APHelper
+import com.freewheelin.pulley.legacy.utils.Preferences
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.zoyi.channel.plugin.android.global.PrefSupervisor
@@ -30,8 +30,8 @@ object Network {
 
     val mockTestUrl = when (Preferences.onServerAPI.get()) {
         Server.live.toString() -> "https://mock-live.pulleymath.com"
-        Server.staging.toString() -> "https://mock-staging.pulleymath.com"
-        Server.dev.toString() -> "https://mock-dev.pulleymath.com"
+        Server.staging.toString() -> "http://mock-staging.pulleymath.com"
+        Server.dev.toString() -> "http://mock-dev.pulleymath.com"
         else -> "https://mock-live.pulleymath.com"
     }
 

@@ -25,8 +25,8 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.LCWrongNoteMapViewModel
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.core.manage.PieceManager
-import com.freewheelin.pulley.core.manage.ServerStatusManager
+import com.freewheelin.pulley.legacy.core.manage.PieceManager
+import com.freewheelin.pulley.legacy.core.manage.ServerStatusManager
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteBinding
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
@@ -34,8 +34,8 @@ import com.freewheelin.pulley.revision2021.activity.dialog.LCCourseEndDialog
 import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
-import com.freewheelin.pulley.utils.AnimUtils
-import com.freewheelin.pulley.utils.BoongthEffect
+import com.freewheelin.pulley.legacy.utils.AnimUtils
+import com.freewheelin.pulley.legacy.utils.BoongthEffect
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 

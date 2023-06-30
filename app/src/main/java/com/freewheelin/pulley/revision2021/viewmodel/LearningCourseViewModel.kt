@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 //import com.freewheelin.pulley.revision2021.model.CourseContentTable
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.StudyChapter
@@ -17,7 +17,7 @@ import com.freewheelin.pulley.revision2021.repository.ChannelTalkRepository
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
-import com.freewheelin.pulley.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.Preferences
 import com.zoyi.channel.plugin.android.store.ChannelStore
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers

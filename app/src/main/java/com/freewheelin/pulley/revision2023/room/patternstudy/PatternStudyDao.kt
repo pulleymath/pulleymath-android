@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.room.patternstudy
 
 //import androidx.room.*
-//import com.freewheelin.pulley.model.contents.Book
+//import com.freewheelin.pulley.legacy.model.contents.Book
 //import com.freewheelin.pulley.revision2023.model.PriorConcept
 //import kotlinx.coroutines.flow.Flow
 

@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -162,10 +163,10 @@
                 app:layout_constraintLeft_toRightOf="@id/stepScoreCl"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/reviewStartBtn"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp56"
                 android:text="리뷰하기"
                 android:layout_marginTop="@dimen/dp18"
                 android:layout_marginStart="48dp"
@@ -232,10 +233,10 @@
                 app:layout_constraintTop_toBottomOf="@id/supportLearnTitleTv"
                 app:layout_constraintStart_toEndOf="@id/supportLearnIv"/>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/additionalLearningBtn"
                 android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp56"
                 android:text="보완학습하기"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_marginStart="112dp"
@@ -264,8 +265,9 @@
             layout="@layout/tooltip_affilaited_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="56dp"
             android:visibility="gone"
+            tools:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"

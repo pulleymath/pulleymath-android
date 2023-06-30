@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelTv">
 
-        <com.freewheelin.pulley.views.SelectionButton
+        <com.freewheelin.pulley.legacy.views.SelectionButton
             android:id="@+id/btn1"
             style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
             android:text="이차곡선"
             android:textSize="@dimen/sp16" />
 
-        <com.freewheelin.pulley.views.SelectionButton
+        <com.freewheelin.pulley.legacy.views.SelectionButton
             android:id="@+id/btn2"
             style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:text="이차곡선"
             android:textSize="@dimen/sp16"/>
 
-        <com.freewheelin.pulley.views.SelectionButton
+        <com.freewheelin.pulley.legacy.views.SelectionButton
             android:id="@+id/btn3"
             style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
             android:text="이차곡선"
             android:textSize="@dimen/sp16" />
 
-        <com.freewheelin.pulley.views.SelectionButton
+        <com.freewheelin.pulley.legacy.views.SelectionButton
             android:id="@+id/btn4"
             style="@style/TextGray_800.Bold"
             android:layout_width="wrap_content"

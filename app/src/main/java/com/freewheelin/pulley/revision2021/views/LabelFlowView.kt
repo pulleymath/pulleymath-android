@@ -8,7 +8,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.utils.pxToSp
+import com.freewheelin.pulley.legacy.utils.pxToSp
 
 class LabelFlowView: androidx.appcompat.widget.AppCompatTextView {
     lateinit var title:String

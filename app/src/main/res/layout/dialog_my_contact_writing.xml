@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.freewheelin.pulley.views.ArduousSpinner
+                <com.freewheelin.pulley.legacy.views.ArduousSpinner
                     android:id="@+id/categorySpinner"
                     android:layout_width="160dp"
                     android:layout_height="36dp"
@@ -96,7 +96,7 @@
                         android:text="문의 유형을 선택해주세요."/>
                 </LinearLayout>
 
-                <com.freewheelin.pulley.views.editText.DaebakInputField
+                <com.freewheelin.pulley.legacy.views.editText.DaebakInputField
                     android:id="@+id/titleDif"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,15 +168,14 @@
                         android:text="내용을 입력해주세요"/>
                 </LinearLayout>
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/completeBtn"
                     android:layout_width="200dp"
                     android:layout_height="56dp"
                     android:layout_marginBottom="32dp"
                     android:layout_marginTop="25dp"
                     android:text="작성 완료"
-                    app:ButtonTextSize="18sp"
-                    app:buttonTheme="blue"
+                    android:textSize="18sp"
                     app:layout_constraintTop_toBottomOf="@+id/contentsErrorLl"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.core.Version
-import com.freewheelin.pulley.core.retrofit
+import com.freewheelin.pulley.legacy.core.Version
+import com.freewheelin.pulley.legacy.core.retrofit
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 //import dagger.Module
 //import dagger.Provides

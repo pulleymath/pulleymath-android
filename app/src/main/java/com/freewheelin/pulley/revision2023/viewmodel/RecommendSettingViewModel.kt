@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.assets.BigUnitV3
-import com.freewheelin.pulley.assets.SubjectV3
-import com.freewheelin.pulley.core.Parameter
+import com.freewheelin.pulley.legacy.assets.BigUnitV3
+import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
@@ -15,7 +15,7 @@ import com.freewheelin.pulley.revision2023.repository.MyPageRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.SnackTestSelectExamRangeFragment.*
-import com.freewheelin.pulley.views.DaebakInputSelection
+import com.freewheelin.pulley.legacy.views.DaebakInputSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

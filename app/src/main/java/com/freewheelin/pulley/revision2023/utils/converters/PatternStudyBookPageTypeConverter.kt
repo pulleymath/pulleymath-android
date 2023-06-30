@@ -1,7 +1,7 @@
 package com.freewheelin.pulley.revision2023.utils.converters
 
 import androidx.room.TypeConverter
-import com.freewheelin.pulley.model.contents.BookPage
+import com.freewheelin.pulley.legacy.model.contents.BookPage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken;
 

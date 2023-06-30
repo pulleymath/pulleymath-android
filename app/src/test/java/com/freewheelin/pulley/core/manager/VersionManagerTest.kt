@@ -1,7 +1,7 @@
-package com.freewheelin.pulley.core.manager
+package com.freewheelin.pulley.legacy.core.manager
 
-import com.freewheelin.pulley.core.manage.VersionInfo
-import com.freewheelin.pulley.core.manage.VersionManager
+import com.freewheelin.pulley.legacy.core.manage.VersionInfo
+import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.Test

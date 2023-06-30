@@ -12,14 +12,14 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.bases.MyApplication
-import com.freewheelin.pulley.core.manage.AppUsageMonitor
-import com.freewheelin.pulley.core.manage.TestManager
+import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.core.manage.AppUsageMonitor
+import com.freewheelin.pulley.legacy.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityLcTutorialBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel
-import com.freewheelin.pulley.utils.*
+import com.freewheelin.pulley.legacy.utils.*
 
 class LCTutorialActivity : AppCompatActivity() {
     companion object {

@@ -1,7 +1,7 @@
-package com.freewheelin.pulley.model.curation
+package com.freewheelin.pulley.legacy.model.curation
 
 import com.freewheelin.pulley.lib.ContextTest
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.model.Problem
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test

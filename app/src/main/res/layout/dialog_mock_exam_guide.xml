@@ -355,12 +355,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/solveOnTabletBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
                     android:text="풀기"
-                    app:buttonTheme="blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -377,24 +376,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.freewheelin.pulley.views.buttons.PrimaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/solveOnOMR"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:text="OMR에 정답 입력하기"
-                        app:buttonTheme="blue" />
+                         />
 
-                    <com.freewheelin.pulley.views.buttons.SecondaryButton
+                    <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
                         android:id="@+id/sendEmailBtn"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:text="시험지 메일 발송"
-                        app:buttonTheme="blue">
-
-                    </com.freewheelin.pulley.views.buttons.SecondaryButton>
+                        />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

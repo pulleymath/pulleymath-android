@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ViewAffiliatedTestGalleryItemBinding
-import com.freewheelin.pulley.model.Problem
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.utils.listener.AffiliatedGalleryViewClickListener

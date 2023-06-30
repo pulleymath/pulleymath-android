@@ -71,21 +71,19 @@
             android:layout_marginTop="@dimen/dp32"
             android:orientation="horizontal">
 
-            <com.freewheelin.pulley.views.buttons.SecondaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
                 android:id="@+id/cancelBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
                 android:layout_weight="1"
-                app:buttonTheme="grey"
                 android:text="@string/text_cancel"/>
 
-            <com.freewheelin.pulley.views.buttons.PrimaryButton
+            <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                 android:id="@+id/deleteBtn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
                 android:layout_weight="3"
                 android:layout_marginStart="8dp"
-                app:buttonTheme="blue"
                 android:text="@string/text_to_delete"/>
         </LinearLayout>
 

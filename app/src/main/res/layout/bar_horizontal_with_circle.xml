@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.freewheelin.pulley.views.bars.HorizontalWithCircleBarClip
+        <com.freewheelin.pulley.legacy.views.bars.HorizontalWithCircleBarClip
             android:id="@+id/clipView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

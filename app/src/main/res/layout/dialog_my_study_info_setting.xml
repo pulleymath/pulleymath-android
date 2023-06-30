@@ -118,7 +118,7 @@
 
 
 
-                    <com.freewheelin.pulley.views.DaebakTabRadio
+                    <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                         android:id="@+id/gradeTab"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
@@ -138,7 +138,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="parent"/>
 
-                    <com.freewheelin.pulley.views.DaebakTabRadio
+                    <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                         android:id="@+id/majorTab"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                    <com.freewheelin.pulley.views.DaebakTabRadio
+                    <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                         android:id="@+id/ratingTab"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
@@ -168,13 +168,13 @@
                 </LinearLayout>
 
 
-                <com.freewheelin.pulley.views.buttons.PrimaryButton
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/modifyBtn"
                     android:layout_width="200dp"
                     android:layout_height="56dp"
                     android:layout_marginBottom="50dp"
                     android:text="@string/text_do_edit"
-                    app:ButtonTextSize="18sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@+id/contentsLl"
                     app:layout_constraintStart_toStartOf="parent"

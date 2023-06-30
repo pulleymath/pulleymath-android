@@ -5,7 +5,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.freewheelin.pulley.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import java.io.Serializable

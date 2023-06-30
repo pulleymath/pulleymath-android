@@ -62,7 +62,7 @@
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@+id/studyBtn"/>
 
-        <com.freewheelin.pulley.views.buttons.SecondaryButton
+        <com.freewheelin.pulley.revision2023.ui.view.SecondaryButton
             android:id="@+id/studyBtn"
             android:layout_width="@dimen/primaryBtn_width_200dp"
             android:layout_height="@dimen/dp56"

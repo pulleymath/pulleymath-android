@@ -6,11 +6,11 @@ import androidx.core.view.doOnAttach
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.core.Theme
+import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ItemChallengeDescriptionBinding
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
-import com.freewheelin.pulley.utils.partialFontAndColored
+import com.freewheelin.pulley.legacy.utils.partialFontAndColored
 import com.pulleymath.android.pdf.utils.onDebounceClick
 import com.pulleymath.android.pdf.utils.onThrottleClick
 

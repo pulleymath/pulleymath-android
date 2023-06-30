@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="24sp"
+            android:paddingTop="12sp"
+            android:paddingEnd="24sp"
+            android:paddingBottom="11sp">
+
+            <TextView
+                android:id="@+id/titleTv"
+                style="@style/b1r"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="라이브 서버"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <Switch
+                android:id="@+id/onOffSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="0dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_tailless_arrow_right_24"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:background="@color/gray_200"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
+</layout>
