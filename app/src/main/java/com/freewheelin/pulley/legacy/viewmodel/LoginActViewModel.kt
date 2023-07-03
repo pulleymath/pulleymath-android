@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.challenge.StartChallenge
 import com.freewheelin.pulley.revision2023.repository.UserRepository

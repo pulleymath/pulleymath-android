@@ -15,7 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.CouponItem
 import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI

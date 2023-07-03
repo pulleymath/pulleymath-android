@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.ui.activity
 import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -45,7 +46,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityMainBinding
 import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.SnackTestFragment
@@ -99,6 +100,8 @@ class MainActivity : PermissionActivity(),
     val lessonRequest = 1001
     companion object {
         const val lessonFinished = 200
+
+        var referActivity: Activity? = null
     }
     private var tabFragments: MutableList<MainTabFragment> = mutableListOf()
 
@@ -147,6 +150,8 @@ class MainActivity : PermissionActivity(),
         initActivityResult()
         initTabFragment()
         addBackBtnCallback()
+        if(referActivity == null) referActivity = this@MainActivity
+
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@MainActivity
@@ -318,7 +323,7 @@ class MainActivity : PermissionActivity(),
     fun fetchUser() {
         viewModel.fetchUser { user ->
             if(!user.isValidPhone) { // 폰 변경, 기기중복 시 세션만료
-                sendBroadcast(Intent(LearningTabActivity.FILTER_SESSION_EXPIRED))
+                sendBroadcast(Intent(UserManager.FILTER_SESSION_EXPIRED))
             }
             else if(user.isNeedToUpdateGrade()) {
                 try {

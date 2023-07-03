@@ -12,7 +12,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.auth.signup.SignupActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
@@ -23,6 +23,7 @@ import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
 import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.InitSettingCompletedViewModel
 import com.freewheelin.pulley.legacy.utils.partialFontAndColored
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 
 class InitSettingCompleteActivity : AppCompatActivity() {
     companion object {
@@ -65,7 +66,7 @@ class InitSettingCompleteActivity : AppCompatActivity() {
     }
 
     private fun moveToMain() {
-        val intent = LearningTabActivity.getIntent(this)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
 
         if (isGuestUser) {

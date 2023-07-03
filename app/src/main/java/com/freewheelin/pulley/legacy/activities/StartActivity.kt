@@ -15,7 +15,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.legacy.activities.auth.signup.SignupActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.bases.BaseActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user

@@ -19,9 +19,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.OrderType
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
@@ -51,6 +48,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
+
+enum class OrderType(val rawValue: Int) {
+    recent(0),
+    old(1),
+    subject(2),
+    level(3)
+}
 
 class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     NoteStudyClickListener, NoteStudyViewListener {

@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.revision2023.viewmodel.MainFViewModel
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ViewStartChallengeGuideBinding

@@ -11,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
 import com.freewheelin.pulley.legacy.bases.*
 import com.freewheelin.pulley.legacy.core.API_APP

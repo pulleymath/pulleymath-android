@@ -31,8 +31,8 @@ import com.freewheelin.pulley.legacy.activities.OMRActivity
 import com.freewheelin.pulley.legacy.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.legacy.activities.WrongTestReportActivity
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+
+
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.*
 import com.freewheelin.pulley.legacy.activities.solve.CustomBarChartRender

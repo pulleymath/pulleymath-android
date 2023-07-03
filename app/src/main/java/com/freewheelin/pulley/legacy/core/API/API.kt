@@ -4,12 +4,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
 import com.freewheelin.pulley.BuildConfig
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.*
 import com.freewheelin.pulley.legacy.core.manage.*
+import com.freewheelin.pulley.legacy.core.manage.UserManager.FILTER_SESSION_EXPIRED
 import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.legacy.model.contents.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
@@ -17,6 +18,7 @@ import com.freewheelin.pulley.legacy.utils.APHelper
 import com.freewheelin.pulley.legacy.utils.APPreference
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
@@ -111,11 +113,11 @@ fun retrofit(apiVersion: Version): Retrofit {
                     if(response.code() == 401 && !exceptionUrl.contains(path)) {
 
                         Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code()}")
-                        Log.d(javaClass.simpleName, "Api path referActivity=${LearningTabActivity.referActivity}")
+                        Log.d(javaClass.simpleName, "Api path referActivity=${MainActivity.referActivity}")
 
-                        LearningTabActivity.referActivity?.run {
+                        MainActivity.referActivity?.run {
                             Log.d(javaClass.simpleName, "Api path called dialog")
-                            this.sendBroadcast(Intent(LearningTabActivity.FILTER_SESSION_EXPIRED))
+                            this.sendBroadcast(Intent(FILTER_SESSION_EXPIRED))
                         }
                     }
 

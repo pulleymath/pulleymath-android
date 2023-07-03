@@ -8,7 +8,7 @@ import androidx.core.view.doOnAttach
 import androidx.core.view.doOnDetach
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.OrderType
+import com.freewheelin.pulley.revision2023.ui.fragment.OrderType
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ItemNoteStudyHeaderBinding
 import com.freewheelin.pulley.legacy.model.Problem

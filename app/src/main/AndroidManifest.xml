@@ -77,9 +77,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+        <!--        <activity-->
+        <!--            android:name=".legacy.activities.learning.LearningTabActivity"-->
+        <!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
+        <!--            android:exported="true"-->
+        <!--            android:launchMode="singleTask"-->
+        <!--            android:screenOrientation="sensorLandscape"-->
+        <!--            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />-->
         <activity
             android:name=".revision2023.ui.activity.MainActivity"
             android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".revision2023.ui.activity.PurchaseInduceWebViewActivity"
@@ -237,13 +245,6 @@
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-        <activity
-            android:name=".legacy.activities.learning.LearningTabActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".legacy.activities.solve.SolveActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentMockTestBinding
 import com.freewheelin.pulley.legacy.utils.LogUtils

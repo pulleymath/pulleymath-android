@@ -13,8 +13,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+
+
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.component.*
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.marketing.MarketingManager
 import com.freewheelin.pulley.revision2023.viewmodel.MainFViewModel

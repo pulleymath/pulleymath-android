@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyMiddleCommonUnitSettingFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment

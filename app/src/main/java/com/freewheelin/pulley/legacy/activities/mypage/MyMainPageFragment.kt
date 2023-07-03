@@ -21,7 +21,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.SplashActivity
 import com.freewheelin.pulley.legacy.activities.StartActivity
 import com.freewheelin.pulley.legacy.activities.auth.InitSettingActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
+
 import com.freewheelin.pulley.legacy.activities.mypage.Setting.*
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.assets.DessertType

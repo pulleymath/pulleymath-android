@@ -19,8 +19,8 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.DailyTestReportActivity
 import com.freewheelin.pulley.legacy.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.legacy.activities.WrongTestReportActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabActivity
-import com.freewheelin.pulley.legacy.activities.learning.LearningTabFragment
+
+
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.isTablet
