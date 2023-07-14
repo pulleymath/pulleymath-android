@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@drawable/bg_gray_100_round_ripple"
@@ -12,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            tools:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/bottomContainer">
 
@@ -154,6 +156,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/bottomContainer">
 
@@ -270,317 +273,317 @@
                         app:layout_constraintBottom_toBottomOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <LinearLayout
-                    android:id="@+id/configCl"
+                <ScrollView
+                    android:id="@+id/configSv"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:layout_marginBottom="16dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@+id/totalCntTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/pageSelectorContainer"
                     app:layout_constraintTop_toTopOf="@+id/pageSelectorContainer">
 
-                    <TextView
-                        android:id="@+id/problemCntTv"
-                        style="@style/TextGray_800.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="문제 수"
-                        android:textSize="@dimen/sp16" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cntSection"
+                    <LinearLayout
+                        android:id="@+id/configCl"
                         android:layout_width="match_parent"
-                        android:layout_height="34dp"
-                        android:background="@drawable/bg_gray_200_stroke_gray_300_round"
-                        app:layout_constraintTop_toBottomOf="@+id/typeSection">
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/cntGuideTv"
-                            style="@style/TextGray_800"
+                            android:id="@+id/problemCntTv"
+                            style="@style/TextGray_800.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:text="문제 하나당"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginBottom="4dp"
+                            android:text="문제 수"
+                            android:textSize="@dimen/sp16" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cntSection"
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:background="@drawable/bg_gray_200_stroke_gray_300_round"
+                            app:layout_constraintTop_toBottomOf="@+id/typeSection">
+
+                            <TextView
+                                android:id="@+id/cntGuideTv"
+                                style="@style/TextGray_800"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:text="문제 하나당"
+                                android:textSize="@dimen/sp16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
-                        <ImageButton
-                            android:id="@+id/minusBtn"
-                            android:layout_width="@dimen/dp32"
-                            android:layout_height="@dimen/dp32"
-                            android:layout_marginStart="12dp"
-                            android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
-                            android:src="@drawable/ic_minus"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cntGuideTv"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            <ImageButton
+                                android:id="@+id/minusBtn"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                android:layout_marginStart="12dp"
+                                android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
+                                android:src="@drawable/ic_minus"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cntGuideTv"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/cntTv"
+                                style="@style/TextGray_800.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textSize="@dimen/sp18"
+                                app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+                                app:layout_constraintEnd_toEndOf="@+id/plusBtn"
+                                app:layout_constraintStart_toStartOf="@+id/minusBtn"
+                                app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+
+
+                            <ImageButton
+                                android:id="@+id/plusBtn"
+                                android:layout_width="@dimen/dp32"
+                                android:layout_height="@dimen/dp32"
+                                android:layout_marginStart="40dp"
+                                android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
+                                android:src="@drawable/ic_plus_grey"
+                                app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+                                app:layout_constraintStart_toEndOf="@+id/minusBtn"
+                                app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+
+                            <TextView
+                                android:id="@+id/cntGuide2Tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="개씩 만들기"
+                                android:textColor="@color/gray_800"
+                                android:textSize="@dimen/sp16"
+                                app:layout_constraintBottom_toBottomOf="@+id/cntGuideTv"
+                                app:layout_constraintStart_toEndOf="@+id/plusBtn"
+                                app:layout_constraintTop_toTopOf="@+id/cntGuideTv" />
+
+                            <LinearLayout
+                                android:id="@+id/firstHider"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:layout_marginBottom="3dp"
+                                android:background="#ccf5f5f5"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/cntTv"
-                            style="@style/TextGray_800.ExtraBold"
+                            android:id="@+id/levelTitleTv"
+                            style="@style/TextGray_800.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1"
-                            android:textSize="@dimen/sp18"
-                            app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
-                            app:layout_constraintEnd_toEndOf="@+id/plusBtn"
-                            app:layout_constraintStart_toStartOf="@+id/minusBtn"
-                            app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="난이도"
+                            android:textSize="@dimen/sp16" />
 
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:background="@drawable/bg_gray_200_stroke_gray_300_round">
 
-                        <ImageButton
-                            android:id="@+id/plusBtn"
-                            android:layout_width="@dimen/dp32"
-                            android:layout_height="@dimen/dp32"
-                            android:layout_marginStart="40dp"
-                            android:background="@drawable/bg_gray_100_stroke_gray_300_circle"
-                            android:src="@drawable/ic_plus_grey"
-                            app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
-                            app:layout_constraintStart_toEndOf="@+id/minusBtn"
-                            app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+                            <ImageButton
+                                android:id="@+id/levelQuestionIb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:background="@null"
+                                android:src="@drawable/ic_question"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <RadioGroup
+                                android:id="@+id/levelRg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <RadioButton
+                                    android:id="@+id/easyRb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="더 쉽게"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="@dimen/sp16" />
+
+                                <RadioButton
+                                    android:id="@+id/originRb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
+                                    android:checked="true"
+                                    android:text="그대로"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="@dimen/sp16" />
+
+                                <RadioButton
+                                    android:id="@+id/hardRb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="26dp"
+                                    android:text="더 어렵게"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="@dimen/sp16" />
+                            </RadioGroup>
+
+                            <LinearLayout
+                                android:id="@+id/secondHider"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:layout_marginBottom="3dp"
+                                android:background="#ccf5f5f5"
+                                android:clickable="true"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/cntGuide2Tv"
+                            android:id="@+id/clearIncludeLabel"
+                            style="@style/TextGray_800.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="개씩 만들기"
-                            android:textColor="@color/gray_800"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="@+id/cntGuideTv"
-                            app:layout_constraintStart_toEndOf="@+id/plusBtn"
-                            app:layout_constraintTop_toTopOf="@+id/cntGuideTv" />
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="클리어한 문제"
+                            android:textSize="@dimen/sp16" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="34dp"
+                            android:background="@drawable/bg_gray_200_stroke_gray_300_round">
+
+                            <RadioGroup
+                                android:id="@+id/clearRg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <RadioButton
+                                    android:id="@+id/includeRb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"
+                                    android:text="포함"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="@dimen/sp16" />
+
+                                <RadioButton
+                                    android:id="@+id/excludeRb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="48dp"
+                                    android:text="미포함"
+                                    android:textColor="@color/gray_800"
+                                    android:textSize="@dimen/sp16" />
+
+                            </RadioGroup>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <LinearLayout
-                            android:id="@+id/firstHider"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="1dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_marginBottom="3dp"
-                            android:background="#ccf5f5f5"
-                            android:clickable="true"
-                            android:orientation="vertical"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"></LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/levelTitleTv"
-                        style="@style/TextGray_800.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="난이도"
-                        android:textSize="@dimen/sp16" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="34dp"
-                        android:background="@drawable/bg_gray_200_stroke_gray_300_round">
-
-                        <ImageButton
-                            android:id="@+id/levelQuestionIb"
+                            android:id="@+id/countWrapperLl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:background="@null"
-                            android:src="@drawable/ic_question"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <RadioGroup
-                            android:id="@+id/levelRg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
                             android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:layout_gravity="center"
+                            android:layout_marginTop="12dp">
 
-                            <RadioButton
-                                android:id="@+id/easyRb"
+                            <TextView
+                                style="@style/TextGray_800.Bold"
+                                android:id="@+id/cntPrefixLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="더 쉽게"
+                                android:textSize="@dimen/sp18"
                                 android:textColor="@color/gray_800"
-                                android:textSize="@dimen/sp16" />
+                                android:gravity="center_horizontal"
+                                android:text="해당 조건에"/>
 
-                            <RadioButton
-                                android:id="@+id/originRb"
+                            <TextView
+                                style="@style/TextPurple_300.ExtraBold"
+                                android:id="@+id/totalCntTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:checked="true"
-                                android:text="그대로"
-                                android:textColor="@color/gray_800"
-                                android:textSize="@dimen/sp16" />
+                                android:textSize="@dimen/sp24"
+                                android:gravity="center_horizontal"
+                                android:text=""
+                                tools:text="24"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"/>
 
-                            <RadioButton
-                                android:id="@+id/hardRb"
+                            <TextView
+                                style="@style/TextGray_800.Bold"
+                                android:id="@+id/cntSuffixLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="26dp"
-                                android:text="더 어렵게"
+                                android:textSize="@dimen/sp18"
                                 android:textColor="@color/gray_800"
-                                android:textSize="@dimen/sp16" />
-                        </RadioGroup>
+                                android:gravity="center_horizontal"
+                                android:text="개의 문제가 있습니다."/>
 
-                        <LinearLayout
-                            android:id="@+id/secondHider"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="1dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_marginBottom="3dp"
-                            android:background="#ccf5f5f5"
-                            android:clickable="true"
-                            android:orientation="vertical"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"></LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/clearIncludeLabel"
-                        style="@style/TextGray_800.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="클리어한 문제"
-                        android:textSize="@dimen/sp16" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="34dp"
-                        android:background="@drawable/bg_gray_200_stroke_gray_300_round">
-
-                        <RadioGroup
-                            android:id="@+id/clearRg"
+                        </LinearLayout>
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cntImpossibleCl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:layout_marginTop="8dp"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="24dp">
 
-                            <RadioButton
-                                android:id="@+id/includeRb"
+                            <ImageView
+                                android:id="@+id/cntImpossibleIv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:checked="true"
-                                android:text="포함"
-                                android:textColor="@color/gray_800"
-                                android:textSize="@dimen/sp16" />
+                                android:src="@drawable/ic_exclamation_red"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
 
-                            <RadioButton
-                                android:id="@+id/excludeRb"
+                            <TextView
+                                style="@style/TextRed_300.Bold"
+                                android:id="@+id/cntImpossibleTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="48dp"
-                                android:text="미포함"
-                                android:textColor="@color/gray_800"
-                                android:textSize="@dimen/sp16" />
+                                android:layout_marginStart="8dp"
+                                android:text="최대 100문제까지 만들 수 있습니다."
+                                android:textColor="@color/red_300"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cntImpossibleIv"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        </RadioGroup>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                    </LinearLayout>
 
-                <TextView
-                    style="@style/TextGray_800.Bold"
-                    android:id="@+id/cntPrefixLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp18"
-                    android:textColor="@color/gray_800"
-                    android:gravity="center_horizontal"
-                    android:text="해당 조건에"
-                    app:layout_constraintStart_toStartOf="@+id/configCl"
-                    app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
-                    app:layout_constraintTop_toTopOf="@+id/totalCntTv"
-                    app:layout_constraintBottom_toBottomOf="@+id/totalCntTv"
-                    app:layout_constraintHorizontal_chainStyle="packed"/>
+                </ScrollView>
 
-                <TextView
-                    style="@style/TextPurple_300.ExtraBold"
-                    android:id="@+id/totalCntTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp24"
-                    android:gravity="center_horizontal"
-                    android:text="24"
-                    android:layout_marginBottom="@dimen/dp40"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintStart_toEndOf="@+id/cntPrefixLabel"
-                    app:layout_constraintEnd_toStartOf="@+id/cntSuffixLabel"
-                    app:layout_constraintBottom_toBottomOf="@+id/pageSelectorContainer"
-                    app:layout_constraintHorizontal_chainStyle="packed"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cntImpossibleCl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/totalCntTv"
-                    app:layout_constraintStart_toStartOf="@+id/cntPrefixLabel"
-                    app:layout_constraintEnd_toEndOf="@+id/cntSuffixLabel">
-
-                    <ImageView
-                        android:id="@+id/cntImpossibleIv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_exclamation_red"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        style="@style/TextRed_300.Bold"
-                        android:id="@+id/cntImpossibleTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="최대 100문제까지 만들 수 있습니다."
-                        android:textColor="@color/red_300"
-                        android:textSize="@dimen/sp14"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cntImpossibleIv"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-                <TextView
-                    style="@style/TextGray_800.Bold"
-                    android:id="@+id/cntSuffixLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp18"
-                    android:textColor="@color/gray_800"
-                    android:gravity="center_horizontal"
-                    android:text="개의 문제가 있습니다."
-                    app:layout_constraintStart_toEndOf="@+id/totalCntTv"
-                    app:layout_constraintEnd_toEndOf="@+id/configCl"
-                    app:layout_constraintTop_toTopOf="@+id/totalCntTv"
-                    app:layout_constraintBottom_toBottomOf="@+id/totalCntTv"
-                    app:layout_constraintHorizontal_chainStyle="packed"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,19 +6,20 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -68,18 +69,22 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             })
     }
 
+    fun showLoading(value: Boolean) {
+        _isLoading.postValue(value)
+    }
     fun fetch(subjectId: Int) {
-        _isLoading.postValue(true)
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .doOnError { _isLoading.postValue(false) }
             .doOnComplete {
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(300)
-                    _isLoading.postValue(false)
-                }
+                compositeDisposable += Observable
+                    .timer(200, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        _isLoading.postValue(false)
+                    }
             }
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
@@ -138,8 +143,8 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             }.subscribe()
     }
 
-    fun initHeaderSubject() {
-        val subject = when (schoolType.value) {
+    fun getInitHeaderBySchoolType(): LCSubject.SubjectIndicator {
+        return when (schoolType.value) {
             SchoolType.MIDDLE -> {
                 availableFirstSubjectId
                 val indicator = LCSubject.SubjectIndicator.convertRawToSubject(availableFirstSubjectId)
@@ -147,8 +152,10 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             }
             else -> LCSubject.SubjectIndicator.MathSang
         }
+    }
+    fun initHeaderSubject() {
+        val subject = getInitHeaderBySchoolType()
         onHeaderSubjectBtnClick(subject.rawValue)
-
     }
     fun onHeaderSubjectBtnClick(subjectId: Int) {
         if (this.selectedSubjectId.value == subjectId) return

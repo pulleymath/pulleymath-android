@@ -23,6 +23,7 @@ import java.util.*
 import android.text.InputFilter
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendar
 import com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendarListener
 import com.freewheelin.pulley.legacy.views.editText.DaebakInputField
@@ -145,7 +146,9 @@ class DDaySettingDialog(context: Context, setOnSpyMode: () -> Unit): Dialog(cont
         listTitles.add(customFieldText)
         targetSpinner.items = listTitles
         selectCalendar.listener = this
-
+        val padding = if (context.isMobile) 24.toPx() else 0
+        selectCalendar.setPaddingLeft(padding)
+        selectCalendar.setPaddingRight(padding)
         val existTarget = getTargetTitleAndDate()
 
         Log.d("테스트", "existTarget=$existTarget")

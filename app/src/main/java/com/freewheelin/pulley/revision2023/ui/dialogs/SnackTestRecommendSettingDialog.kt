@@ -17,7 +17,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.toPx
 
-class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () -> Unit): DialogFragment() {
+class SnackTestRecommendSettingDialog(): DialogFragment() {
 
     private val viewModel: RecommendSettingViewModel by viewModels()
 
@@ -25,11 +25,28 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_snack_test_recommend_setting, null, false)
     }
 
+    var dismissCallback: () -> Unit = {}
+
+    companion object {
+        const val DIALOG_TEST = "DIALOG_TEST"
+        fun newInstance(test: Test): SnackTestRecommendSettingDialog {
+            val args = Bundle().apply {
+                putSerializable(DIALOG_TEST, test)
+            }
+            val instance = SnackTestRecommendSettingDialog()
+            instance.arguments = args
+            return instance
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.apply {
+            viewModel.test = getSerializable(DIALOG_TEST) as Test
+        }
         return binding.root
     }
     override fun onDismiss(dialog: DialogInterface) {
@@ -111,7 +128,7 @@ class SnackTestRecommendSettingDialog(val test: Test, val dismissCallback: () ->
     }
     fun getFragment(step: ViewType): Fragment {
         return when (step) {
-            ViewType.출제범위선택 -> SnackTestSelectExamRangeFragment.newInstance(viewModel, test)
+            ViewType.출제범위선택 -> SnackTestSelectExamRangeFragment.newInstance(viewModel)
             ViewType.고등공통과목수정 -> SnackTestHighCommonSubjectModifyFragment.newInstance(viewModel)
             ViewType.고등선택과목수정 -> SnackTestHighOptionalSubjectModifyFragment.newInstance(viewModel)
             ViewType.중등과목수정 -> SnackTestMiddleSubjectModifyFragment.newInstance(viewModel)

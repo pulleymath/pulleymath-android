@@ -35,7 +35,8 @@ interface PatternStudyService {
 
     @GET("v2/study-history/{studentID}/pieces/all")
     suspend fun getPatternStudyHistory(
-        @Path("studentID") studentId: String = user?.studentID!!
+        @Path("studentID") studentId: String = user?.studentID!!,
+        @Query("schoolType") school: String? = schoolType.name
     ): ResponseListBody<Book>
 
     @GET("v3/books/recommend/{studentID}")

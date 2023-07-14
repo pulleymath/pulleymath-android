@@ -77,18 +77,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <!--        <activity-->
-        <!--            android:name=".legacy.activities.learning.LearningTabActivity"-->
-        <!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
-        <!--            android:exported="true"-->
-        <!--            android:launchMode="singleTask"-->
-        <!--            android:screenOrientation="sensorLandscape"-->
-        <!--            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />-->
+        <activity
+            android:name=".revision2023.ui.activity.WhaleSpaceLoginWebViewActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+        <!-- <activity -->
+        <!-- android:name=".legacy.activities.learning.LearningTabActivity" -->
+        <!-- android:configChanges="keyboard|keyboardHidden|orientation|screenSize" -->
+        <!-- android:exported="true" -->
+        <!-- android:launchMode="singleTask" -->
+        <!-- android:screenOrientation="sensorLandscape" -->
+        <!-- android:windowSoftInputMode="adjustResize|stateAlwaysHidden" /> -->
         <activity
             android:name=".revision2023.ui.activity.MainActivity"
             android:screenOrientation="sensorLandscape"
-            android:launchMode="singleTask"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".revision2023.ui.activity.PurchaseInduceWebViewActivity"
             android:exported="false"

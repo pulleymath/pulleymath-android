@@ -154,13 +154,15 @@ class AnalysisFragment : MainTabFragment(),
                 LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "전체분석보러가기")
                 if (user?.serviceType?.isGuestUser == true) {
                     LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "분석", "가입유도", "전체분석보러가기")
-                    val dialog = JoinInduceForGuestDialog {
-                        viewModel.errorStatusReset()
+                    val dialog = JoinInduceForGuestDialog().apply {
+                        updateDismissCallback {
+                            viewModel.errorStatusReset()
+                        }
                     }
                     childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
                 } else {
                     LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "전체분석보러가기")
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                DialogUtils.confirmDialog(requireContext(), "[테스트]구독중이 아닙니다.", "하하")
                 }

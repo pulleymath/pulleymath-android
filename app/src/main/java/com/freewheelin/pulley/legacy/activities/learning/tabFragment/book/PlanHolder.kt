@@ -58,7 +58,7 @@ class BookPlanV2Holder(
             }
             if (item.isLocked) {
                 LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "유형카드", "결제유도", "잠금버튼")
-                val dialog = PurchaseGuideDialog()
+                val dialog = PurchaseGuideDialog.newInstance()
                 val fm = (binding.root.context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
                 return@setOnClickListener
@@ -120,7 +120,7 @@ class BookPlanV2Holder(
             val action = actions[position]
 
             val message = when (action) {
-                ActionType.delete -> "나의 문제집에서 빼기"
+                ActionType.delete -> "최근 문제집에서 빼기"
                 ActionType.mail -> "메일 보내기"
                 ActionType.pin -> if (item.isPinned) "핀 해제하기" else "핀 설정하기"
             }

@@ -2,7 +2,6 @@ package com.freewheelin.pulley.revision2023.ui.dialogs
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,10 @@ import com.freewheelin.pulley.databinding.DialogGuestJoinInduceBinding
 import com.freewheelin.pulley.revision2023.ui.fragment.*
 import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
 
-class JoinInduceForGuestDialog(val dismissCallback: () -> Unit): DialogFragment() {
+class JoinInduceForGuestDialog : DialogFragment() {
 
     private val viewModel: GuestJoinViewModel by viewModels()
+    var dismissCallback: () -> Unit = {}
 
     private val binding: DialogGuestJoinInduceBinding by lazy {
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_guest_join_induce, null, false)
@@ -112,6 +112,9 @@ class JoinInduceForGuestDialog(val dismissCallback: () -> Unit): DialogFragment(
         (frag as? GuestSignUpFragment)?.apply {
             viewModel = this@JoinInduceForGuestDialog.viewModel
         }
+    }
+    fun updateDismissCallback(cb: () -> Unit) {
+        dismissCallback = cb
     }
 
 }

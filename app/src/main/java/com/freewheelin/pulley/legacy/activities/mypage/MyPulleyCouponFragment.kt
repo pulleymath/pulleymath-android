@@ -74,6 +74,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             couponEt.setText("")
                             load()
                             registBtn.isEnabled = true
+                            registBtn.setLoading(false)
                         }, { throwable ->
 
                             var msg = if (throwable is HttpException) {
@@ -85,7 +86,9 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             msg += "\n\n쿠폰 사용에 문제가 있으신 경우\n카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다."
                             DialogUtils.confirmDialog(requireContext(), "확인", msg)
                             registBtn.isEnabled = true
+                            registBtn.setLoading(false)
                         })
+
                 }
             }
         }
@@ -177,7 +180,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                             DialogUtils.confirmV2(requireContext(), "쿠폰 사용 오류", message, isOneBtn = true)
 
                         } else {
-                            DialogUtils.serverErrDialog(requireContext())
+                            DialogUtils.showServerErr(requireContext())
                         }
                         useBtnProgress.visibility = View.GONE
                     })

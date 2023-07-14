@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
+import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +17,9 @@ class ChallengeCompletedViewModel(application: Application): BaseAndroidViewMode
     val showStampAnim = MutableLiveData<Boolean>(true)
     val subtitle = MutableLiveData<String>()
     lateinit var onExitClickCallback: (() -> Unit)
+    lateinit var challenge: Challenge
+    var isDelayedShowNextBtn: Boolean = false
+    var completedCourseId: Int = 0
 
     fun exitBtn() {
         onExitClickCallback()

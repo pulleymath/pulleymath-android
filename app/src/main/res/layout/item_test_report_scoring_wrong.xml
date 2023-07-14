@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerCl"
         android:layout_width="match_parent"
@@ -60,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="-"
+            tools:text="결과"
             android:textSize="@dimen/sp14"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="@+id/resultIv"
@@ -117,7 +119,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#c0fafafa"
+            android:background="#E6FAFAFA"
             android:id="@+id/clearContainerCl"
             app:layout_constraintStart_toEndOf="@+id/numberEndBorder"
             app:layout_constraintTop_toTopOf="parent"

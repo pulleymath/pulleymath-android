@@ -21,6 +21,7 @@ import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivitySignupBinding
+import com.freewheelin.pulley.legacy.assets.Grade
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.legacy.model.User
@@ -93,7 +94,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     }
 
     private fun setViewPager() {
-        signupFragment = SignupFragment(isGuestUser)
+        signupFragment = SignupFragment.newInstance(isGuestUser)
         studentInfoFragment = StudentInfoFragment()
 
         val pagerAdapter = SignupViewPagerAdapter(listOf(signupFragment,studentInfoFragment), this)
@@ -132,7 +133,7 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
-            val isHighSchoolUser = grade < 5
+            val isHighSchoolUser = Grade.init(grade).isInitialSchoolTypeHigh
             if (isGuestUser) {
                 signup.studentId = user?.studentID
                 viewModel.requestGuestSignUp(signup) {

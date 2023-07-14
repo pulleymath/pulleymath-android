@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.Device
 import com.freewheelin.pulley.legacy.core.API_V2
@@ -80,7 +81,11 @@ class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val fa
                     val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
 
                 } else {
-                    DialogUtils.serverErrDialog(activity)
+                    val dialog = DialogUtils.serverErrDialog(activity)
+                    if (activity is AppCompatActivity && !activity.isFinishing) {
+                        val fm = (activity as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "showServerErr")}
+                    }
                 }
             })
     }
@@ -111,7 +116,11 @@ class DeviceManagerDialog(val activity: Activity, val successCB:()->Unit, val fa
                     val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
                     DaebakToast.show(activity, error.message?:"", overDialog = true)
                 } else {
-                    DialogUtils.serverErrDialog(activity)
+                    val dialog = DialogUtils.serverErrDialog(activity)
+                    if (activity is AppCompatActivity && !activity.isFinishing) {
+                        val fm = (activity as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "showServerErr")}
+                    }
                 }
             })
     }

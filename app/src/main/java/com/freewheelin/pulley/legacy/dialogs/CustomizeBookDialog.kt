@@ -25,6 +25,7 @@ import com.freewheelin.pulley.databinding.ItemCommercialListBinding
 import com.freewheelin.pulley.databinding.ItemCommercialPageBinding
 import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
 import com.freewheelin.pulley.legacy.model.contents.Book
@@ -504,12 +505,9 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
             val page = pages!!.get(selectedPage)!!
             val problem = page[position]
 
-            holder.set(problem)
+            holder.set(problem, position)
 
-            if(position == 0)
-                holder.pageTitleTv.visibility = View.VISIBLE
-            else
-                holder.pageTitleTv.visibility = View.INVISIBLE
+
 
             holder.checkbox.setOnCheckedChangeListener(null)
             holder.checkbox.isChecked = checkedPageProblem.contains(problem)
@@ -754,9 +752,10 @@ class ProblemHolder(val itemBinding: ItemCommercialPageProblemBinding): Recycler
     val checkbox = itemBinding.checkbox
     val pageTitleTv = itemBinding.pageTitleTv
 
-    fun set(problem: CommercialBookPage) {
+    fun set(problem: CommercialBookPage, position: Int) {
         checkbox.text = problem.problemNumber
         pageTitleTv.text = problem.title
+        pageTitleTv.visibleIf(itemBinding.root.context.isTablet && position == 0)
     }
 }
 

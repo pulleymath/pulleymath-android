@@ -103,7 +103,7 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         DialogUtils.showReluctanceDialog(this, leftBtnCB = {
             finish()
         }, rightBtnCB = {
-            startActivity(SignupActivity::class.java)
+            onStartBtnClicked()
         })
     }
 

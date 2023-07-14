@@ -25,6 +25,7 @@ import com.freewheelin.pulley.legacy.bases.BaseActivity
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
+import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
@@ -129,6 +130,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         binding.apply {
             lifecycleOwner = this@LearningCourseActivity
             vm = viewModel
+            isTablet = this@LearningCourseActivity.isTablet
             viewModel.setLessonHeaderTitle(selectedChapterName)
             viewModel.selectedSubjectId = subjectId
             viewModel.fetchCourseList(selectedChapterId) {
@@ -181,7 +183,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                             (tabFragments[pagerIndex] as LCPatternFragment).let { frag ->
                                 if (frag.viewModel.isPagerFirstIndex()) {
                                     binding.pager.currentItem = binding.pager.currentItem - 1
-                                    viewModel.currentCourseType.postValue(currCourse.courseType)
                                 } else {
                                     frag.setPatternPagerPrevPage()
                                 }
@@ -192,7 +193,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                                 Toast.makeText(this@LearningCourseActivity, "첫 페이지입니다.", Toast.LENGTH_SHORT).show()
                             } else {
                                 binding.pager.currentItem = binding.pager.currentItem - 1
-                                viewModel.currentCourseType.postValue(currCourse.courseType)
                             }
                         }
                     }
@@ -211,7 +211,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                             (tabFragments[pagerIndex] as LCPatternFragment).let { frag ->
                                 if (frag.viewModel.isPagerLastIndex()) {
                                     binding.pager.currentItem = binding.pager.currentItem + 1
-                                    viewModel.currentCourseType.postValue(currCourse.courseType)
                                 } else {
                                     frag.setPatternPagerNextPage()
                                 }
@@ -222,7 +221,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                                 Toast.makeText(this@LearningCourseActivity, "마지막 페이지입니다.", Toast.LENGTH_SHORT).show()
                             } else {
                                 binding.pager.currentItem = binding.pager.currentItem + 1
-                                viewModel.currentCourseType.postValue(currCourse.courseType)
                             }
                         }
                     }

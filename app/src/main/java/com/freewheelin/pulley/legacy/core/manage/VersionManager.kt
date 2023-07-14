@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.legacy.bases.isNetworkConnected
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.DialogType
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.google.gson.Gson
@@ -104,18 +107,34 @@ object VersionManager {
                                                       cb: (update: Required, info: VersionInfo?) -> Unit) {
         API_V2.getAndroidVersionInfo().enqueue(object : Callback<Template<VersionInfo>> {
             override fun onFailure(call: Call<Template<VersionInfo>>, t: Throwable) {
-                val dialog = if (!activity.isNetworkConnected) {
-                    DialogUtils.networkErrDialog(activity)
-                } else {
-                    DialogUtils.serverErrDialog(activity)
-                }
 
-                dialog.setCancelable(false)
-                dialog.binding.rightBtn.setOnClickListener {
+                val successCallback = {
                     activity.finishAndRemoveTask()
                 }
-                if(!activity.isFinishing) {
-                    dialog.show()
+                if (activity.isNetworkConnected) {
+                    DialogUtils.confirmV2(
+                        context = activity,
+                        title = "데이터를 가져올 수 없습니다",
+                        contents = "인터넷 연결을 확인하고 다시 시도해주세요.\n문제가 지속되면\n카카오톡(@풀리는수학)으로 문의 바랍니다.",
+                        isOneBtn = true,
+                        isCancelable = false,
+                        rightBtnText = "확인",
+                        successCb = successCallback
+                    )
+
+                } else {
+                    val title = "네트워크 연결이 필요합니다."
+                    val contents = "네트워크 연결에 실패했습니다.\n와이파이 설정을 확인해 주세요."
+
+                    DialogUtils.confirmV2(
+                        context = activity,
+                        title = title,
+                        contents = contents,
+                        isOneBtn = true,
+                        isCancelable = false,
+                        rightBtnText = "확인",
+                        successCb = successCallback
+                    )
                 }
             }
 
@@ -140,11 +159,12 @@ object VersionManager {
                             DialogUtils.serverErrDialog(activity)
                         }
 
-                        dialog.setCancelable(false)
-                        dialog.binding.rightBtn.setOnClickListener {
-                            activity.finishAndRemoveTask()
+                        dialog.isCancelable = false
+                        dialog.successCallback = { activity.finishAndRemoveTask() }
+                        if (activity is AppCompatActivity && !activity.isFinishing) {
+                            val fm = activity.supportFragmentManager
+                            fm.let { dialog.show(it, "errordialog") }
                         }
-                        dialog.show()
                     }
                 }
             }

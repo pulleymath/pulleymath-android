@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.freewheelin.pulley.R
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.facebook.internal.AppCall
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.Device
 import com.freewheelin.pulley.legacy.core.API_V2
@@ -59,7 +61,8 @@ class MyDeviceManagerFragment : MyPageBaseFragment() {
                         val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
                         DaebakToast.show(requireContext(), error.message?:"", overDialog = true)
                     } else {
-                        DialogUtils.serverErrDialog(requireContext())
+                        val dialog = DialogUtils.serverErrDialog(requireContext())
+                        childFragmentManager.let { dialog.show(it, "showServerErr")}
                     }
                 })
     }
@@ -82,7 +85,11 @@ class DeviceListAdapter(val activity: Activity, val parent:LinearLayout) {
                 if(it is HttpException) {
                     val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
                 } else {
-                    DialogUtils.serverErrDialog(activity)
+                    val dialog = DialogUtils.serverErrDialog(activity)
+                    if (activity is AppCompatActivity && !activity.isFinishing) {
+                        val fm = (activity as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "showServerErr")}
+                    }
                 }
             })
     }
@@ -132,7 +139,11 @@ class DeviceListAdapter(val activity: Activity, val parent:LinearLayout) {
                     val error = Gson().fromJson(it.response()?.errorBody()?.string(), ResponseBody::class.java)
                     DaebakToast.show(activity, error.message?:"", overDialog = true)
                 } else {
-                    DialogUtils.serverErrDialog(activity)
+                    val dialog = DialogUtils.serverErrDialog(activity)
+                    if (activity is AppCompatActivity && !activity.isFinishing) {
+                        val fm = (activity as AppCompatActivity).supportFragmentManager
+                        fm.let { dialog.show(it, "showServerErr")}
+                    }
                 }
             })
     }

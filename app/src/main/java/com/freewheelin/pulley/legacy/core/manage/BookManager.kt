@@ -15,6 +15,7 @@ import com.freewheelin.pulley.legacy.dialogs.WrongManagementDialog
 import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.legacy.model.contents.BookPage
+import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
@@ -109,6 +110,10 @@ object BookManager {
         })
     }
 
+    fun getBookFromContent(context: Context, content: Content, user: User, cb: ((book: Book) -> Unit)) {
+        val book = Book(content)
+        getBook(context, book, user, cb)
+    }
     fun getBook(context: Context, book: Book, user: User, cb: ((book: Book) -> Unit)) {
         API_V3.getBook(user.studentID, book.assignID ?: book.pieceID).enqueue(object: Callback<ResponseBody<ResponseBookInfo2>> {
             override fun onFailure(call: Call<ResponseBody<ResponseBookInfo2>>, t: Throwable) {

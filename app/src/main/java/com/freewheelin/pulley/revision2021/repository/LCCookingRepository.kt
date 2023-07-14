@@ -19,6 +19,7 @@ import com.freewheelin.pulley.revision2023.room.cookinginfoitem.CookingInfoItemD
 import io.channel.plugin.android.extension.orElse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class LCCookingRepository(val context: Context, private val applicationScope: CoroutineScope) {
     private val cookingService: LCCookingService by lazy { LCCookingApi.lcCookingService() }

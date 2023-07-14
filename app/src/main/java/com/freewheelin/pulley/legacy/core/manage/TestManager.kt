@@ -85,7 +85,7 @@ object TestManager {
     fun getTest(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID,
-                "pieceSubCategory" to test.pieceSubCategory
+                "pieceSubCategory" to test.pieceSubCategory!!
         )
 
         API_V1.getTest(param).enqueue(object: Callback<Template<Test>>{
@@ -126,10 +126,10 @@ object TestManager {
         val param: Parameter = Parameter(
                 "assignID" to test.assignID!!,
                 "studentID" to user.studentID,
-                "pieceSubCategory" to test.pieceSubCategory
+                "pieceSubCategory" to test.pieceSubCategory!!
         )
 
-        API_V3.getTestReportWithAssignId(test.assignID!!, test.pieceSubCategory).enqueue(object: Callback<ResponseForceBody<Test>> {
+        API_V3.getTestReportWithAssignId(test.assignID!!, test.pieceSubCategory!!).enqueue(object: Callback<ResponseForceBody<Test>> {
             override fun onFailure(call: Call<ResponseForceBody<Test>>, t: Throwable) {
 
             }

@@ -29,6 +29,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -63,13 +64,15 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
     lateinit var adapter: LCCookingFragment.CookingAdapter
 
     fun initAdapterItem(courseId: Int) {
-        cookingRepository.run {
-            flowAllCookingInfoItem(courseId)
-                .onEach { items ->
-                    _cookingInfoItems.value = items
-                }
-                .launchIn(viewModelScope)
-        }
+        // TODO flow 스펙엔 중복데이터를 stream하지않는데 중복된 자료를 반환함
+//        cookingRepository.run {
+//            flowAllCookingInfoItem(courseId)
+//                .onEach { items ->
+//                    println("aspasp flow all cookinginfoitem :${items.size}")
+//                    _cookingInfoItems.value = items
+//                }
+//                .launchIn(viewModelScope)
+//        }
         collectCookingInfoItems(courseId)
     }
     private fun collectCookingInfoItems(courseId: Int) {
@@ -77,14 +80,17 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
             _isLoading.postValue(true)
             val items = fetchCookingInfoItems(courseId)
             _isLoading.postValue(false)
-            upsertInfoItems(items)
+//            upsertInfoItems(items)
+            _cookingInfoItems.postValue(items)
+            delay(200)
+            selectedExerciseIndex.postValue(0)
+
         }
     }
 
     suspend fun fetchCookingInfoItems(courseId: Int): List<CookingInfoItem> {
         val res: Pair<List<CookingInfoItem>, String> = cookingRepository.fetchCookingInfoItems(courseId)
         cookingImageUrl.postValue(res.second)
-        selectedExerciseIndex.postValue(0)
         return res.first
     }
     suspend fun upsertInfoItems(items: List<CookingInfoItem>) {

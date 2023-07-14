@@ -66,7 +66,7 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
                 }
                 if (item.isLocked) {
                     LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "개념카드", "결제유도", "잠금버튼")
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     val fm = (context as AppCompatActivity).supportFragmentManager
                     fm.let { dialog.show(it, "purchaseGuideDialog")}
                     return@setOnClickListener

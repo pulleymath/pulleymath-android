@@ -41,6 +41,7 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
@@ -254,13 +255,14 @@ class MyMainPageFragment : Fragment() {
             Customer -> moveTo(MyCustomerFragment())
 
             Logout -> {
-                DialogUtils.DaebakTitleOnlyDialog(requireContext()).apply {
-                    title = "로그아웃하시겠습니까?"
-                    type = DialogType.alert
-                    binding.leftBtn.text = "아니요"
-                    binding.rightBtn.text = "로그아웃"
-                    binding.rightBtn.setOnClickListener {
-                        this.dismiss()
+                DialogUtils.confirmV2(
+                    requireContext(),
+                    "알림",
+                "로그아웃 하시겠습니까?",
+                    "아니요",
+                    "로그아웃",
+                    type = CommonDialog.DialogType.Alert,
+                    successCb = {
                         MyApplication.user?.logout {
                             viewModel.updateUser(MyApplication.user)
                             activity?.finishAffinity()
@@ -269,8 +271,7 @@ class MyMainPageFragment : Fragment() {
                             activity?.startActivity(intent)
                         }
                     }
-                }.show()
-
+                )
             }
 
 //            InitSetting -> {

@@ -16,4 +16,7 @@ abstract class MainTabFragment : Fragment() {
             LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, type.name)
         }
     }
+    open fun resetHeaderControlParams() {
+
+    }
 }

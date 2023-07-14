@@ -22,17 +22,38 @@ import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 import com.freewheelin.pulley.revision2021.viewmodel.FindSchoolViewModel
 
-class FindSchoolDialog(val callback: (school: School) -> Unit): DialogFragment() {
+class FindSchoolDialog(): DialogFragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FindSchoolViewModel::class.java)
     }
 
     private val binding: DialogFindSchoolBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_find_school, null, false)
+        DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_find_school, null, false)
+    }
+    var callback: (school: School) -> Unit = {}
+    companion object {
+        const val DIALOG_TEST = "DIALOG_TEST"
+        fun newInstance(): FindSchoolDialog {
+            val args = Bundle().apply {
+//                putSerializable(DIALOG_TEST, test)
+            }
+            val instance = FindSchoolDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = binding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        arguments?.apply {
+
+        }
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

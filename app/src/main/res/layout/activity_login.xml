@@ -177,6 +177,19 @@
                             android:paddingHorizontal="8dp"
                             android:layout_marginStart="16dp"
                             android:textColor="@color/white"/>
+                        <Button
+                            android:id="@+id/testBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="test"
+                            android:textAllCaps="false"
+                            android:background="@drawable/bg_btn_round_common"
+                            app:layout_constraintTop_toBottomOf="@id/signupGuideTv"
+                            app:layout_constraintStart_toEndOf="@id/stagingBtn"
+                            android:layout_marginTop="16dp"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginStart="16dp"
+                            android:textColor="@color/white"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>

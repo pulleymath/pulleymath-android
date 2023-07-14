@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
@@ -85,8 +84,10 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
                 if (user?.serviceType?.isGuestUser == true) {
                     LogUtils.logEvent(this@WorkbookListActivity, user, PulleyEvent.INDUCE,"워크북","가입유도")
-                    val dialog = JoinInduceForGuestDialog {
-                        viewModel.errorStatusReset()
+                    val dialog = JoinInduceForGuestDialog().apply {
+                        updateDismissCallback {
+                            viewModel.errorStatusReset()
+                        }
                     }
                     supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
                 } else {
@@ -238,7 +239,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
     }
 
     private fun setSnackBar() {
-        val snackBar = SnackBar(this, "핀 설정은 나의 문제집에서 확인할 수 있습니다.", "바로가기")
+        val snackBar = SnackBar(this, "핀 설정은 최근 문제집에서 확인할 수 있습니다.", "바로가기")
         snackBar.setSnackBarViewListener(object : SnackBarViewListener {
             override fun onXBtnClicked(view: SnackBarView) {
                 snackBar.dismiss()
@@ -272,25 +273,27 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                     finish()
                 }
             }
-            val completedDialog = ChallengeCompletedDialog(startChallenge,
+            val completedDialog = ChallengeCompletedDialog.newInstance(
+                challenge = startChallenge,
                 ChallengeManager.CourseName.스타트챌린지_워크북.id,
-                moveEvent = moveEvent
             )
-
+            completedDialog.moveEvent = moveEvent
             supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog4") }
         }
     }
 
     override fun onDeniedUser() {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "워크북", "결제유도", "다이얼로그-다음")
-        val dialog = PurchaseGuideDialog()
+        val dialog = PurchaseGuideDialog.newInstance()
         supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
     }
 
     override fun onGuestUser() {
         LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "워크북", "가입유도")
-        val dialog = JoinInduceForGuestDialog {
-            viewModel.errorStatusReset()
+        val dialog = JoinInduceForGuestDialog().apply {
+            updateDismissCallback {
+                viewModel.errorStatusReset()
+            }
         }
         supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }
@@ -312,7 +315,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 }
             }
             ActionType.delete -> {
-                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", "나의문제집빼기")
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습-워크북", "최근문제집빼기")
                 viewModel.removeFromMyPlan(book)
             }
         }

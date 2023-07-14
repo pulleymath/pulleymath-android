@@ -205,6 +205,14 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
         collectChallengeDetail(item.id)
     }
+    fun firstHeaderDetailForceMove() {
+        challengeHeaders.value?.first()?.let { item ->
+            _challengeHeaders.postValue(challengeHeaders.value?.map { header ->
+                header.copy(isSelected = header == item)
+            })
+            collectChallengeDetail(item.id)
+        }
+    }
 
     override fun onMissionClick(item: ChallengeCourse) {
         val context = getApplication<Application>().applicationContext

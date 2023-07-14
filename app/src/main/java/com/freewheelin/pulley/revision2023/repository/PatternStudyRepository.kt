@@ -9,6 +9,7 @@ import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.legacy.model.contents.Book
+import com.freewheelin.pulley.legacy.model.contents.BookType
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterElement.Type
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
@@ -38,7 +39,11 @@ class PatternStudyRepository(val context: Context, private val applicationScope:
         return patternStudyApi.getPatternStudyPlanList().data
     }
     suspend fun fetchHistory(): List<Book> {
+        // 모의고사와 테스트는 유형학습 최근문제집에서 표시하지 않는다.
         return patternStudyApi.getPatternStudyHistory().data
+            .filter {
+                it.pieceCategoryTag != BookType.MO && it.pieceCategoryTag != BookType.TEST
+            }
     }
 
     suspend fun fetchRecommendBooks(): List<RecommendBookList>? {

@@ -288,7 +288,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
             },
             deniedCb = {
                 LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리테스트", "결제유도", "${test.scoringTestPieceCount + 1}회차 테스트 시작하기")
-                val dialog = PurchaseGuideDialog()
+                val dialog = PurchaseGuideDialog.newInstance()
                 childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
             })
 

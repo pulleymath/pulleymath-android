@@ -27,12 +27,29 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: Int, val moveEvent: (course: ChallengeCourse?) -> Unit, val exitEvent: () -> Unit = {}, val isDelayedShowNextBtn: Boolean = false): DialogFragment() {
+class ChallengeCompletedDialog(): DialogFragment() {
 
     private val viewModel: ChallengeCompletedViewModel by viewModels()
 
     private val binding: DialogChallengeCompletedBinding by lazy {
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_challenge_completed, null, false)
+    }
+    var moveEvent: (course: ChallengeCourse?) -> Unit = {}
+    var exitEvent: () -> Unit = {}
+    companion object {
+        const val COMPLETED_COURSE_ID = "COMPLETED_COURSE_ID"
+        const val IS_DELAYED_SHOW_NEXT_BTN = "IS_DELAYED_SHOW_NEXT_BTN"
+        const val CHALLENGE = "CHALLENGE"
+        fun newInstance(challenge: Challenge, completedCourseId: Int, isDelayedShowNextBtn: Boolean = false): ChallengeCompletedDialog {
+            val args = Bundle().apply {
+                putInt(COMPLETED_COURSE_ID, completedCourseId)
+                putBoolean(IS_DELAYED_SHOW_NEXT_BTN, isDelayedShowNextBtn)
+                putSerializable(CHALLENGE, challenge)
+            }
+            val instance = ChallengeCompletedDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
     init {
@@ -44,6 +61,11 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
         savedInstanceState: Bundle?
     ): View {
         dialog?.setCanceledOnTouchOutside(false)
+        arguments?.apply {
+            viewModel.completedCourseId = getInt(COMPLETED_COURSE_ID)
+            viewModel.challenge = getSerializable(CHALLENGE) as Challenge
+            viewModel.isDelayedShowNextBtn = getBoolean(IS_DELAYED_SHOW_NEXT_BTN)
+        }
         return binding.root
     }
 
@@ -58,10 +80,10 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             stampLottie.playAnimation()
             stampLottie.addAnimatorListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    if (isDelayedShowNextBtn) {
+                    if (viewModel.isDelayedShowNextBtn) {
+                        val intent = PurchaseInduceWebViewActivity.getIntent(requireContext())
+                        startActivity(intent)
                         CoroutineScope(Dispatchers.Main).launch {
-                            val intent = PurchaseInduceWebViewActivity.getIntent(requireContext())
-                            startActivity(intent)
                             delay(200)
                             viewModel.showStampAnim.postValue(false)
                             viewModel.showStampGl.postValue(true)
@@ -78,7 +100,7 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
             stampGl.rowCount = 2
             stampGl.columnCount = 2
             stampGl.alignmentMode = GridLayout.ALIGN_BOUNDS
-            challenge.courses.forEachIndexed { index, course ->
+            viewModel.challenge.courses.forEachIndexed { index, course ->
                 val stampIv = getMissionStampView(index, course)
                 stampGl.addView(stampIv)
             }
@@ -88,7 +110,7 @@ class ChallengeCompletedDialog(val challenge: Challenge, val completedCourseId: 
                 dismiss()
             }
 
-            val nextCourse = challenge.getNextCourse(completedCourseId)
+            val nextCourse = viewModel.challenge.getNextCourse(viewModel.completedCourseId)
             val courseName = nextCourse?.courseName ?: "메인"
             subTitleTv.text = nextCourse?.completedSubTitle ?: "메인으로 이동해 현황을 확인해보세요 :)"
             val partText = if (nextCourse?.challengeCourseId == 3) "로" else "으로"

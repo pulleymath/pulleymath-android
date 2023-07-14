@@ -120,7 +120,7 @@ data class ChallengeReward (
     val isDeleted: Boolean,
     val createdAt: String?,
     val updatedAt: String?,
-) {
+):Serializable {
 
 }
 

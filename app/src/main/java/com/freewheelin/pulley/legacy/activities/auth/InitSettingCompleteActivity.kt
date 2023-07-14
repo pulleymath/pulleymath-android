@@ -71,6 +71,7 @@ class InitSettingCompleteActivity : AppCompatActivity() {
 
         if (isGuestUser) {
             val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
+            userUpdateIntent.putExtra(IS_GUEST_USER, true)
             LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
             finish()
         } else {

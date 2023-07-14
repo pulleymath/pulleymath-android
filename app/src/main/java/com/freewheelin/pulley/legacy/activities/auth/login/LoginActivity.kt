@@ -29,6 +29,7 @@ import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
+import com.freewheelin.pulley.legacy.activities.StartActivity
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
@@ -37,8 +38,10 @@ import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.viewmodel.LoginActViewModel
 import com.freewheelin.pulley.legacy.views.editText.*
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginWebViewActivity
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -155,6 +158,13 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             backBtn.setOnClickListener {
                 onBackBtnClicked()
             }
+            testBtn.apply {
+                visibleIf(BuildConfig.FLAVOR == "beta")
+                setOnClickListener {
+                    val intent = Intent(this@LoginActivity, WhaleSpaceLoginWebViewActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
         viewModel.apply {
             errorAction.observe(this@LoginActivity) { type ->
@@ -163,6 +173,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                         DialogUtils.confirmV2(this@LoginActivity,
                         "토큰 인증 에러", "문제가 계속되면 카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다.")
                     }
+                    NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
             }
@@ -288,7 +299,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 LOCK_ACCOUNT -> {
                     DialogUtils.lockAccountDialog(this@LoginActivity) {
                         openResetPassword()
-                    }.show()
+                    }
                 }
                 else -> {
                     DialogUtils.showServerErr(this@LoginActivity)

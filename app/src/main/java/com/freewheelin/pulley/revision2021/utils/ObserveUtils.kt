@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -33,14 +34,14 @@ fun <T> LiveData<List<T>>.observeListOnce(lifecycleOwner: LifecycleOwner, observ
     })
 }
 
-fun <T> LiveData<T>.observeThrottle(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+fun <T> LiveData<T>.observeThrottle(lifecycleOwner: LifecycleOwner, delayTime: Long = 200L, observer: Observer<T>) {
     var throttleJob: Job? = null
     var latestParam: T
     observe(lifecycleOwner) { t ->
         latestParam = t
         if (throttleJob?.isCompleted != false) {
-            throttleJob = lifecycleOwner.lifecycle.coroutineScope.launch {
-                delay(500L)
+            throttleJob = lifecycleOwner.lifecycle.coroutineScope.launch(Dispatchers.Default) {
+                delay(delayTime)
                 observer.onChanged(latestParam)
             }
         }

@@ -1,225 +1,452 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rootCl"
-        android:layout_width="240dp"
-        android:layout_height="400dp"
-        android:padding="24dp"
-        android:background="@drawable/bg_gray_100_round_ripple"
-        android:clickable="true"
-        android:focusable="false"
-        >
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/valueCl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_gray_200_round"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/number7Btn">
+            android:id="@+id/tabletRootCl"
+            android:layout_width="240dp"
+            android:layout_height="400dp"
+            android:padding="24dp"
+            tools:visibility="gone"
+            android:background="@drawable/bg_gray_100_round_ripple"
+            android:clickable="true"
+            android:focusable="false"
+            >
 
-            <TextView
-                android:id="@+id/valueTv"
-                style="@style/Cooking_Keypad_btn"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/valueCl"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="정답 입력"
-                android:gravity="center_vertical|right"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_gray_200_round"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/number7Btn">
+
+                <TextView
+                    android:id="@+id/valueTv"
+                    style="@style/Cooking_Keypad_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:text="정답 입력"
+                    android:gravity="center_vertical|right"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingRight="24dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number7Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="7"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number8Btn"
+                app:layout_constraintTop_toBottomOf="@+id/valueCl"
+                app:layout_constraintBottom_toTopOf="@+id/number4Btn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number8Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="8"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number7Btn"
+                app:layout_constraintEnd_toStartOf="@+id/number9Btn"
+                app:layout_constraintTop_toBottomOf="@+id/valueCl"
+                app:layout_constraintBottom_toTopOf="@+id/number5Btn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number9Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="9"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number8Btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/valueCl"
+                app:layout_constraintBottom_toTopOf="@+id/number6Btn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number4Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="4"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number5Btn"
+                app:layout_constraintTop_toBottomOf="@+id/number7Btn"
+                app:layout_constraintBottom_toTopOf="@+id/number1Btn"/>
+
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number5Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="5"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number4Btn"
+                app:layout_constraintEnd_toStartOf="@+id/number6Btn"
+                app:layout_constraintTop_toBottomOf="@id/number8Btn"
+                app:layout_constraintBottom_toTopOf="@+id/number2Btn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number6Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="6"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number5Btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/number9Btn"
+                app:layout_constraintBottom_toTopOf="@+id/number3Btn"/>
+
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number1Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="1"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number2Btn"
+                app:layout_constraintTop_toBottomOf="@+id/number4Btn"
+                app:layout_constraintBottom_toTopOf="@+id/plusMinusBtn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number2Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="2"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/number1Btn"
+                app:layout_constraintEnd_toStartOf="@id/number3Btn"
+                app:layout_constraintTop_toBottomOf="@+id/number5Btn"
+                app:layout_constraintBottom_toTopOf="@+id/number0Btn"/>
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number3Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="3"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/number2Btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/number6Btn"
+                app:layout_constraintBottom_toTopOf="@+id/deleteBtn"/>
+
+            <ImageButton
+                android:id="@+id/plusMinusBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                style="@style/Cooking_Keypad_btn"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_minus_plus"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/enterBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/number0Btn"
+                app:layout_constraintTop_toBottomOf="@+id/number1Btn" />
+
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number0Btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="0"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/plusMinusBtn"
+                app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number2Btn"
+                app:layout_constraintBottom_toTopOf="@+id/enterBtn"/>
+
+            <ImageButton
+                android:id="@+id/deleteBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                style="@style/Cooking_Keypad_btn"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_keypad_delete"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/enterBtn"
+                app:layout_constraintStart_toEndOf="@+id/number0Btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/number3Btn" />
+
+            <Button
+                android:id="@+id/enterBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="채점하기"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_btn_round_common_disabled_20"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingRight="24dp"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mobileRootCl"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:padding="24dp"
+            tools:visibility="visible"
+            android:background="@drawable/bg_gray_100_round_ripple"
+            android:clickable="true"
+            android:focusable="false"
+            >
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number7Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="7"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/number8Btn"
-            app:layout_constraintTop_toBottomOf="@+id/valueCl"
-            app:layout_constraintBottom_toTopOf="@+id/number4Btn"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/valueMobileCl"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_gray_200_round"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/number7MobileBtn">
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number8Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="8"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@+id/number7Btn"
-            app:layout_constraintEnd_toStartOf="@+id/number9Btn"
-            app:layout_constraintTop_toBottomOf="@+id/valueCl"
-            app:layout_constraintBottom_toTopOf="@+id/number5Btn"/>
+                <TextView
+                    android:id="@+id/valueMobileTv"
+                    style="@style/Cooking_Keypad_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:text="정답 입력"
+                    android:gravity="center_vertical|right"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:paddingRight="24dp"
+                    />
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number9Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="9"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@+id/number8Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/valueCl"
-            app:layout_constraintBottom_toTopOf="@+id/number6Btn"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number4Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="4"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/number5Btn"
-            app:layout_constraintTop_toBottomOf="@+id/number7Btn"
-            app:layout_constraintBottom_toTopOf="@+id/number1Btn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number7MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="7"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number8MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/valueMobileCl"
+                app:layout_constraintBottom_toTopOf="@+id/number4MobileBtn"/>
 
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number8MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="8"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number7MobileBtn"
+                app:layout_constraintEnd_toStartOf="@+id/number9MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/valueMobileCl"
+                app:layout_constraintBottom_toTopOf="@+id/number5MobileBtn"/>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number5Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="5"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@+id/number4Btn"
-            app:layout_constraintEnd_toStartOf="@+id/number6Btn"
-            app:layout_constraintTop_toBottomOf="@id/number8Btn"
-            app:layout_constraintBottom_toTopOf="@+id/number2Btn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number9MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="9"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number8MobileBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/valueMobileCl"
+                app:layout_constraintBottom_toTopOf="@+id/number6MobileBtn"/>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number6Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="6"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@+id/number5Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/number9Btn"
-            app:layout_constraintBottom_toTopOf="@+id/number3Btn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number4MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="4"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number5MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number7MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/number1MobileBtn"/>
 
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number1Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="1"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/number2Btn"
-            app:layout_constraintTop_toBottomOf="@+id/number4Btn"
-            app:layout_constraintBottom_toTopOf="@+id/plusMinusBtn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number5MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="5"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number4MobileBtn"
+                app:layout_constraintEnd_toStartOf="@+id/number6MobileBtn"
+                app:layout_constraintTop_toBottomOf="@id/number8MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/number2MobileBtn"/>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number2Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="2"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@id/number1Btn"
-            app:layout_constraintEnd_toStartOf="@id/number3Btn"
-            app:layout_constraintTop_toBottomOf="@+id/number5Btn"
-            app:layout_constraintBottom_toTopOf="@+id/number0Btn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number6MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="6"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@+id/number5MobileBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/number9MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/number3MobileBtn"/>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number3Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="3"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@id/number2Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/number6Btn"
-            app:layout_constraintBottom_toTopOf="@+id/deleteBtn"/>
 
-        <ImageButton
-            android:id="@+id/plusMinusBtn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            style="@style/Cooking_Keypad_btn"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_minus_plus"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/enterBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/number0Btn"
-            app:layout_constraintTop_toBottomOf="@+id/number1Btn" />
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number1MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="1"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/number2MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number4MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/plusMinusMobileBtn"/>
 
-        <Button
-            style="@style/Cooking_Keypad_btn"
-            android:id="@+id/number0Btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="0"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintStart_toEndOf="@id/plusMinusBtn"
-            app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-            app:layout_constraintTop_toBottomOf="@+id/number2Btn"
-            app:layout_constraintBottom_toTopOf="@+id/enterBtn"/>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number2MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="2"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/number1MobileBtn"
+                app:layout_constraintEnd_toStartOf="@id/number3MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number5MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/number0MobileBtn"/>
 
-        <ImageButton
-            android:id="@+id/deleteBtn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            style="@style/Cooking_Keypad_btn"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_keypad_delete"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/enterBtn"
-            app:layout_constraintStart_toEndOf="@+id/number0Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/number3Btn" />
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number3MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="3"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/number2MobileBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/number6MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/deleteMobileBtn"/>
 
-        <Button
-            android:id="@+id/enterBtn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="채점하기"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:background="@drawable/bg_btn_round_common_disabled_20"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/plusMinusBtn" />
+            <ImageButton
+                android:id="@+id/plusMinusMobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                style="@style/Cooking_Keypad_btn"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_minus_plus"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/enterMobileBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/number0MobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number1MobileBtn" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                style="@style/Cooking_Keypad_btn"
+                android:id="@+id/number0MobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="0"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintStart_toEndOf="@id/plusMinusMobileBtn"
+                app:layout_constraintEnd_toStartOf="@+id/deleteMobileBtn"
+                app:layout_constraintTop_toBottomOf="@+id/number2MobileBtn"
+                app:layout_constraintBottom_toTopOf="@+id/enterMobileBtn"/>
+
+            <ImageButton
+                android:id="@+id/deleteMobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                style="@style/Cooking_Keypad_btn"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_keypad_delete"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/enterMobileBtn"
+                app:layout_constraintStart_toEndOf="@+id/number0MobileBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/number3MobileBtn" />
+
+            <Button
+                android:id="@+id/enterMobileBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="채점하기"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_btn_round_common_disabled_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/plusMinusMobileBtn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

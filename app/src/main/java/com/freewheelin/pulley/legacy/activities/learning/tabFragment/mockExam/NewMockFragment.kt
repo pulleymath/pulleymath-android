@@ -26,6 +26,7 @@ import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.FragmentNewMockBinding
+import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
@@ -35,7 +36,6 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.legacy.utils.*
-import com.freewheelin.pulley.legacy.views.ArduousSpinnerListener
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
@@ -43,7 +43,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
 class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialogListener {
 
@@ -54,6 +53,7 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
     var listener: MockTabListener? = null
     lateinit var receiver: BroadcastReceiver
     lateinit var clearReceiver: BroadcastReceiver
+    lateinit var reconfigureReceiver: BroadcastReceiver
 
     val viewModel: MockFViewModel by viewModels()
 
@@ -90,8 +90,14 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
                 initUI()
             }
         }
+        reconfigureReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                mockAdapter.notifyDataSetChanged()
+            }
+        }
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_SCORING))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(clearReceiver, IntentFilter(MockExamManager.EVENT_MOCK_EXAM_CLEAR))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
     }
     fun setHidePending() {
         if (::viewModel.isLateinit) {
@@ -105,6 +111,7 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(clearReceiver)
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
         super.onDestroy()
     }
     lateinit var binding: FragmentNewMockBinding
@@ -242,13 +249,15 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
                         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "풀기-쌍둥이")
                         if (user?.serviceType?.isGuestUser == true) {
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "새모의고사", "가입유도", "풀기-쌍둥이")
-                            val dialog = JoinInduceForGuestDialog {
-                                viewModel.errorStatusReset()
+                            val dialog = JoinInduceForGuestDialog().apply {
+                                updateDismissCallback {
+                                    viewModel.errorStatusReset()
+                                }
                             }
                             childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
                         } else {
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "풀기 쌍둥이")
-                            val dialog = PurchaseGuideDialog()
+                            val dialog = PurchaseGuideDialog.newInstance()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         }
                     }
@@ -257,7 +266,7 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
                     cb = { MockExamGuideDialog(requireContext(), exam, false, this@NewMockFragment).show() },
                     deniedCb = {
                         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "결제유도", "푸는중 쌍둥이")
-                        val dialog = PurchaseGuideDialog()
+                        val dialog = PurchaseGuideDialog.newInstance()
                         childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }
                 )
@@ -266,8 +275,10 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
                     LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "새모의고사", "풀기")
                     if (user?.serviceType?.isGuestUser == true) {
                         LogUtils.logEvent(requireContext(), user, PulleyEvent.INDUCE, "새모의고사", "가입유도")
-                        val dialog = JoinInduceForGuestDialog {
-                            viewModel.errorStatusReset()
+                        val dialog = JoinInduceForGuestDialog().apply {
+                            updateDismissCallback {
+                                viewModel.errorStatusReset()
+                            }
                         }
                         childFragmentManager.let { dialog.show(it, "joinInduceDialog") }
                     } else {

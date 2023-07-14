@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.model.contents.Test
 

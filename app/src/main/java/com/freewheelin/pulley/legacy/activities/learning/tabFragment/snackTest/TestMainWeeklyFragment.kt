@@ -89,7 +89,7 @@ class TestMainWeeklyFragment : TestMainBaseFragment() {
                     listener?.onSolveBtnClicked(test!!)
                 }, deniedCb = {
                     LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "주간테스트", "결제유도", "시작")
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                 })
             }

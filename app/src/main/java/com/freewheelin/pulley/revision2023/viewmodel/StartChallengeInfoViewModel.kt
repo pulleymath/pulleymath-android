@@ -7,6 +7,7 @@ import com.freewheelin.pulley.revision2023.model.PaidServiceType
 class StartChallengeInfoViewModel(application: Application): BaseAndroidViewModel(application) {
 
     var isChallengeFinished: Boolean = false
+    var challengeId: Int = 0
 
     val couponImageUrl: String
         get() {

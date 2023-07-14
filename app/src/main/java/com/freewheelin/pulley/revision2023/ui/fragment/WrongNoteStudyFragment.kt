@@ -60,7 +60,7 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     NoteStudyClickListener, NoteStudyViewListener {
     private lateinit var binding: FragmentWrongNoteStudyBinding
     private val viewModel: WrongNoteStudyViewModel by viewModels()
-
+    private var isViewCreated = false
     override var type: MainTab = MainTab.오답노트
 
     lateinit var reConfigureReceiver: BroadcastReceiver
@@ -78,21 +78,24 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     }
 
     private fun changeFilterAndFetchNotes(tabIndex: Int) {
+        val vm: WrongNoteStudyViewModel by viewModels()
         if (tabIndex == 0) {
             if (tabFragments[0] is NoteFilterFragment) {
                 (tabFragments[0] as NoteFilterFragment).updateParentFilters()
-                viewModel.fetchWrongNotes()
+                vm.fetchWrongNotes()
             }
         } else {
             if (tabFragments[1] is NoteFilterFragment) {
                 (tabFragments[1] as NoteFilterFragment).updateParentFilters()
-                viewModel.fetchScrapNotes()
+                vm.fetchScrapNotes()
             }
         }
     }
     override fun onFragmentSelected() {
         super.onFragmentSelected()
-        changeFilterAndFetchNotes(binding.tabLayout.selectedTabPosition)
+        if (isViewCreated) {
+            changeFilterAndFetchNotes(binding.tabLayout.selectedTabPosition)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,6 +118,7 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wrong_note_study, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
+        isViewCreated = true
         return binding.root
     }
 

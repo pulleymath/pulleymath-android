@@ -37,7 +37,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
     var studyBtn: SecondaryButton
 
     var emptyGuideTv: TextView
-    var recyclerView: LinearLayout
+    var studyListLl: LinearLayout
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_analysis_today_study_list, this)
@@ -45,7 +45,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
         viewAllListBtn = findViewById(R.id.viewAllListBtn)
         studyBtn = findViewById(R.id.studyBtn)
         emptyGuideTv = findViewById(R.id.emptyGuideTv)
-        recyclerView = findViewById(R.id.recyclerView)
+        studyListLl = findViewById(R.id.studyListLl)
 
         setList()
         viewAllListBtn.setOnClickListener {
@@ -61,12 +61,12 @@ class AnalysisTodayStudyListView: ConstraintLayout {
         if(this.contents.isEmpty()) {
             emptyGuideTv.visibility = View.VISIBLE
             studyBtn.visibility = View.VISIBLE
-            recyclerView.visibility = View.INVISIBLE
+            studyListLl.visibility = View.INVISIBLE
         } else {
             emptyGuideTv.visibility = View.INVISIBLE
             studyBtn.visibility = View.INVISIBLE
-            recyclerView.visibility = View.VISIBLE
-//            recyclerView.adapter?.notifyDataSetChanged()
+            studyListLl.visibility = View.VISIBLE
+//            studyListLl.adapter?.notifyDataSetChanged()
             setList()
         }
     }
@@ -77,7 +77,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
 
     var newOne = false
     fun setList() {
-        recyclerView.removeAllViews()
+        studyListLl.removeAllViews()
         var holder:StudyListViewHolder? = null
 
         for((index, piece) in contents.withIndex()) {
@@ -91,7 +91,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
                 setOnClickListener {
                     if (piece.isLocked) {
                         LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "풀기/리뷰")
-                        val dialog = PurchaseGuideDialog()
+                        val dialog = PurchaseGuideDialog.newInstance()
                         val fm = (context as AppCompatActivity).supportFragmentManager
                         fm.let { dialog.show(it, "purchaseGuideDialog")}
                     }
@@ -104,7 +104,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
                 setOnClickListener {
                     if (piece.isLocked) {
                         LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "리포트")
-                        val dialog = PurchaseGuideDialog()
+                        val dialog = PurchaseGuideDialog.newInstance()
                         val fm = (context as AppCompatActivity).supportFragmentManager
                         fm.let { dialog.show(it, "purchaseGuideDialog")}
                     }
@@ -113,7 +113,7 @@ class AnalysisTodayStudyListView: ConstraintLayout {
             }
 
             if(index == 0 && newOne) holder.setHighlight()
-            recyclerView.addView(holder.listBinding.root)
+            studyListLl.addView(holder.listBinding.root)
         }
         if(newOne) newOne = false
         holder?.listBinding?.borderView?.visibility = View.INVISIBLE

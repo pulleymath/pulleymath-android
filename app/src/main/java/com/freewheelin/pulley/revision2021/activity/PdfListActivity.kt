@@ -136,10 +136,11 @@ class PdfListActivity : AppCompatActivity() {
                                 finish()
                             }
                         }
-                        val completedDialog = ChallengeCompletedDialog(startChallenge,
-                            ChallengeManager.CourseName.스타트챌린지_북스.id,
-                            moveEvent = moveEvent
+                        val completedDialog = ChallengeCompletedDialog.newInstance(
+                            challenge = startChallenge,
+                            completedCourseId = ChallengeManager.CourseName.스타트챌린지_북스.id
                         )
+                        completedDialog.moveEvent = moveEvent
                         supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog3") }
                     }
                 }
@@ -331,8 +332,10 @@ class PdfListActivity : AppCompatActivity() {
     }
     fun showGuestJoinInduceDialog() {
         LogUtils.logEvent(this, user, PulleyEvent.INDUCE, "풀리북스", "가입유도")
-        val dialog = JoinInduceForGuestDialog {
-            viewModel.errorStatusReset()
+        val dialog = JoinInduceForGuestDialog().apply {
+            updateDismissCallback {
+                viewModel.errorStatusReset()
+            }
         }
         supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }
@@ -419,7 +422,9 @@ class PdfListActivity : AppCompatActivity() {
 
         private fun openPurchasedGuideDialog(pdf: Pdf) {
             LogUtils.logEvent(itemView.context, user, PulleyEvent.BUTTON_CLICK, "풀리북스", "결제유도", "cmBookId=${pdf.cm_book_id}")
-            val dialog = PurchaseGuideDialog(withPdfDesc = true)
+            val dialog = PurchaseGuideDialog.newInstance(
+                withPdfDesc = true
+            )
             supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
         }
         private fun openShop(pdf: Pdf) {

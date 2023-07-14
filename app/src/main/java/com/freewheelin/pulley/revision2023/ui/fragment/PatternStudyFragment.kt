@@ -55,8 +55,8 @@ class PatternStudyFragment : MainTabFragment(),
     private val viewModel: PatternStudyViewModel by viewModels()
 
     override var type: MainTab = MainTab.유형
-
-    private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail, ActionType.delete), OriginType.MyPlan, isGridLayout = false)
+    var isViewCreated = false
+    private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail), OriginType.MyPlan, isGridLayout = false)
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var reConfigureReceiver: BroadcastReceiver
@@ -120,6 +120,7 @@ class PatternStudyFragment : MainTabFragment(),
                 }
             }
         }
+        isViewCreated = true
         return binding.root
     }
 
@@ -162,11 +163,12 @@ class PatternStudyFragment : MainTabFragment(),
                 errorAction.observe(viewLifecycleOwner) { type ->
                     when(type) {
                         CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
+                        CoroutineExceptionType.NONE -> {}
                         else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                     }
                 }
                 schoolType.observe(viewLifecycleOwner) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(Dispatchers.Default).launch {
                         delay(300)
                         myPlanAdapterItemListener.postValue(Unit)
                     }
@@ -228,7 +230,9 @@ class PatternStudyFragment : MainTabFragment(),
     }
 
     override fun onFragmentSelected() {
-        viewModel.myPlanAdapterItemListener.postValue(Unit)
+        if (isViewCreated) {
+            viewModel.myPlanAdapterItemListener.postValue(Unit)
+        }
     }
 
     override fun onResume() {
@@ -265,7 +269,7 @@ class PatternStudyFragment : MainTabFragment(),
             PulleyEvent.BUTTON_CLICK,
             "유형학습",
             "스와이프",
-            "나의문제집"
+            "최근문제집"
         )
     }
     override fun onDestroyView() {
@@ -292,7 +296,7 @@ class PatternStudyFragment : MainTabFragment(),
                 }
             }
             ActionType.delete -> {
-                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
+                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "최근문제집빼기")
 
                 viewModel.removeFromMyPlan(book) {
                     viewModel.myPlanAdapterItemListener.postValue(Unit)

@@ -180,7 +180,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
             holder.listBinding.reportBtn.setOnClickListener {
                 if (content.isLocked) {
                     LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "분석_전체학습내역", "결제유도", "리포트")
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                 } else {
                     LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보고서")
@@ -217,7 +217,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
             holder.listBinding.solveBtn.setOnClickListener {
                 if (content.isLocked) {
                     LogUtils.logEvent(this@StudyHistoryActivity, user, PulleyEvent.BUTTON_CLICK, "분석_전체학습내역", "결제유도", "풀기/리뷰")
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
 //                    DialogUtils.confirmDialog(this@StudyHistoryActivity, "[테스트]구독중이 아닙니다.", "열려라 참깨")
                 } else {

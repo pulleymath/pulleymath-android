@@ -135,8 +135,9 @@ class LCWrongNoteMapFragment : Fragment() {
 
                 val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId
                 nextStepBtnCl.setOnClickListener {
-                    val dialog =
-                        LCCourseEndDialog(requireContext(), chapterId, exitCallback, moreStudyCallback)
+                    val dialog = LCCourseEndDialog.newInstance(chapterId)
+                    dialog.exitBtnCallback = exitCallback
+                    dialog.moreStudyBtnCallback = moreStudyCallback
                     childFragmentManager.let { dialog.show(it, "LCPatternEndDialog") }
                 }
             }

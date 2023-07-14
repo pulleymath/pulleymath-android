@@ -25,6 +25,7 @@ import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -128,17 +129,22 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 dialogContents += "\n\n 문제가 있을 경우 앱 설정에서 '구글 플레이스토어' 캐시를 삭제하거나 \n카카오톡 @풀리는수학으로 문의주세요."
             }
 
-            val dialog = DialogUtils.makeDialog(this, dialogTitle, dialogContents, "종료", "확인")
-            dialog.binding.leftBtn.setOnClickListener { finishAndRemoveTask() }
-            dialog.setCancelable(false)
-            dialog.setOnCancelListener {
-                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "스플래쉬", "업데이트취소", "업데이트확인")
-            }
-            dialog.binding.rightBtn.setOnClickListener {
-                requestAppUpdate(AppUpdateType.IMMEDIATE)
-            }
+            DialogUtils.confirmV2(
+                context = this,
+                title = dialogTitle,
+                contents = dialogContents,
+                leftBtnText = "종료",
+                rightBtnText = "확인",
+                isCancelable = false,
+                successCb = {
+                    requestAppUpdate(AppUpdateType.IMMEDIATE)
+                },
+                cancelCb = {
+                    LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "스플래쉬", "업데이트취소", "업데이트확인")
+                    finishAndRemoveTask()
+                }
+            )
 
-            if(!isFinishing) dialog.show()
         }
     }
 

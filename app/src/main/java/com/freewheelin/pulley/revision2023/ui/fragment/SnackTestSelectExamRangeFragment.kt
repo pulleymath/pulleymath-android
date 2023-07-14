@@ -207,9 +207,9 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
     companion object {
         val DAILY_TEST_EXTRA = "DAILY_TEST_EXTRA"
         @JvmStatic
-        fun newInstance(viewModel: RecommendSettingViewModel, test: Test) =
+        fun newInstance(viewModel: RecommendSettingViewModel) =
             SnackTestSelectExamRangeFragment().apply {
-                this.test = test
+                this.test = viewModel.test!!
                 this.viewModel = viewModel
                 arguments = Bundle().apply {
 

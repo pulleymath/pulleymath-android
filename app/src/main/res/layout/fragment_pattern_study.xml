@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/h3"
-                        android:text="나의 문제집"
+                        android:text="최근 문제집"
                         android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp48"
                         app:layout_constraintTop_toTopOf="parent"

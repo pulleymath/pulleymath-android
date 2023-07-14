@@ -10,28 +10,36 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogChannelIoQuestionBinding
+import com.freewheelin.pulley.legacy.model.contents.Test
+import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 
-class ChannelIoQuestionDialog(context: Context, val bm: Bitmap, private val callback: (String, String) -> Unit
-): DialogFragment() {
+class ChannelIoQuestionDialog: DialogFragment() {
 
     private val binding: DialogChannelIoQuestionBinding by lazy {
-        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_channel_io_question, null, false)
+        DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_channel_io_question, null, false)
+    }
+    var callback: (String, String) -> Unit = { _,_ -> }
+    companion object {
+        const val DIALOG_BITMAP = "DIALOG_BITMAP"
+        fun newInstance(bm: Bitmap): ChannelIoQuestionDialog {
+            val args = Bundle().apply {
+                putParcelable(DIALOG_BITMAP, bm)
+            }
+            val instance = ChannelIoQuestionDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-//        dialog?.window?.let {
-//            val params = it.attributes
-//            params.dimAmount = 0.2f
-//            it.attributes = params.
-//        }
-    }
-
+    var bitmap: Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.apply {
+            bitmap = getParcelable(DIALOG_BITMAP)
+        }
         return binding.root
     }
 
@@ -45,7 +53,7 @@ class ChannelIoQuestionDialog(context: Context, val bm: Bitmap, private val call
 
             selectedRadioMsg = ""
             additionalMsg = ""
-            screenShotIv.setImageBitmap(bm)
+            screenShotIv.setImageBitmap(bitmap)
             setSubmitBtn(false)
 
             describeEt.addTextChangedListener(object: TextWatcher {

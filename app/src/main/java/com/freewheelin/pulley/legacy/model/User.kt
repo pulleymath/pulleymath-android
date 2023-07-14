@@ -64,8 +64,7 @@ class User {
     var schoolID: Int? = 0
     val isUnivUser: Boolean
         get () {
-            val sid = schoolID ?: 0
-            return sid >= 6000
+            return rawSchoolType == SchoolType.UNIVERSITY
         }
     var schoolName: String? = ""
 
@@ -112,11 +111,6 @@ class User {
     val showMainKUTab: Boolean
         get () {
             return schoolID == 6000
-        }
-    val showMainUnivTab: Boolean
-        get () {
-            val sid = schoolID ?: 0
-            return sid >= 6000
         }
 
     companion object {

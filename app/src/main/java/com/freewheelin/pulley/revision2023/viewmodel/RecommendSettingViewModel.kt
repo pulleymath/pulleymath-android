@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.assets.BigUnitV3
 import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
@@ -46,7 +47,7 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
 
     val isRecentStudiedRangeEmpty = MutableLiveData<Boolean>(false)
     val isSelectedRecentStudiedRg = MutableLiveData<Boolean>(false)
-
+    var test: Test? = null
     fun updateTestRangeType(type: TestRangeType) {
         testRangeType.postValue(type)
     }

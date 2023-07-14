@@ -36,7 +36,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     val showMyPlan = MutableLiveData<Boolean>(false)
     val myPlanAdapterItemListener = MutableLiveData<Unit>()
 
-    val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [나의문제집]에서 자동으로 빠집니다.\n" +
+    val tooltipText = "- 최근 30일 동안 학습하지 않은 문제집은 [최근 문제집]에서 자동으로 빠집니다.\n" +
         "   그렇게 빠진 문제집은 [전체문제집]에서 다시 볼 수 있습니다.\n" +
         "\n" +
         "- 워크북 문제집의 경우,\n" +
@@ -51,9 +51,9 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
     fun collectAllMyPlans() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
-            val newMyPlans = fetchMyPlans() ?: return@launch
+            val newMyPlans = fetchMyHistory()
             _isLoading.postValue(false)
-            upsertMyPlans(newMyPlans.myPieceStorageList)
+            upsertMyPlans(newMyPlans)
             _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }
@@ -62,6 +62,7 @@ class PatternStudyViewModel(application: Application): BaseAndroidViewModel(appl
         return patternStudyRepository.fetchMyPlans()
     }
 
+    // TODO 모의고사랑 테스트는 안보이게
     suspend fun fetchMyHistory(): List<Book> {
         return patternStudyRepository.fetchHistory()
     }

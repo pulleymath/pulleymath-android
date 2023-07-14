@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.ui.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,26 +19,53 @@ import com.freewheelin.pulley.revision2023.viewmodel.ChallengeGuideDialogViewMod
 import com.freewheelin.pulley.legacy.utils.partialFontAndColored
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.utils.underline
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChallengeGuideDialog(val guideText: String = "",
-                           val nextText: String = "",
-                           val exitText: String = "",
-                           val highlightText: String? = null,
-                           val pullingIvSrc: PullingImage = PullingImage.Normal,
-                           val showBottomButtons: Boolean = false,
-                           val showBottomDismissButtons: Boolean = false,
-                           val showSprinkle: Boolean = false,
-                           val canDismissOutSide: Boolean = true,
-                           val nextEvent: () -> Unit = {},
-                           val dismissEvent: () -> Unit = {},
-                           val exitEvent: () -> Unit = {}
-): DialogFragment() {
+class ChallengeGuideDialog(): DialogFragment() {
 
     private val viewModel: ChallengeGuideDialogViewModel by viewModels()
+    var nextEvent : () -> Unit = {}
+    var dismissEvent : () -> Unit = {}
+    var exitEvent : () -> Unit = {}
+    companion object {
+        const val GUIDE_TXT = "GUIDE_TXT"
+        const val NEXT_TXT = "NEXT_TXT"
+        const val EXIT_TXT = "EXIT_TXT"
+        const val HIGHLIGHT_TXT = "HIGHLIGHT_TXT"
+        const val SHOW_BOTTOM_BUTTONS = "SHOW_BOTTOM_BUTTONS"
+        const val SHOW_BOTTOM_DISMISS_BUTTONS = "SHOW_BOTTOM_DISMISS_BUTTONS"
+        const val SHOW_SPRINKLE = "SHOW_SPRINKLE"
+        const val CAN_DISMISS_OUTSIDE = "CAN_DISMISS_OUTSIDE"
+        const val PULLING_IV_SRC = "PULLING_IV_SRC"
+        fun newInstance (guideText: String = "",
+                         nextText: String = "",
+                         exitText: String = "",
+                         highlightText: String? = null,
+                         pullingIvSrc: PullingImage = PullingImage.Normal,
+                         showBottomButtons: Boolean = false,
+                         showBottomDismissButtons: Boolean = false,
+                         showSprinkle: Boolean = false,
+                         canDismissOutSide: Boolean = true): ChallengeGuideDialog {
+            val args = Bundle().apply {
+                putString(GUIDE_TXT, guideText)
+                putString(NEXT_TXT, nextText)
+                putString(EXIT_TXT, exitText)
+                putString(HIGHLIGHT_TXT, highlightText)
+                putBoolean(SHOW_BOTTOM_BUTTONS, showBottomButtons)
+                putBoolean(SHOW_BOTTOM_DISMISS_BUTTONS, showBottomDismissButtons)
+                putBoolean(SHOW_SPRINKLE, showSprinkle)
+                putBoolean(CAN_DISMISS_OUTSIDE, canDismissOutSide)
+                putSerializable(PULLING_IV_SRC, pullingIvSrc)
+            }
+            val instance = ChallengeGuideDialog()
+            instance.arguments = args
+            return instance
+        }
+    }
     val binding: ViewChallengeGuideBinding by lazy {
         DataBindingUtil.inflate(
             layoutInflater.cloneInContext(requireContext()),
@@ -57,7 +85,11 @@ class ChallengeGuideDialog(val guideText: String = "",
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog?.setCanceledOnTouchOutside(canDismissOutSide)
+        arguments?.apply {
+            viewModel.highlightText = getString(HIGHLIGHT_TXT)
+            viewModel.canDismissOutSide = getBoolean(CAN_DISMISS_OUTSIDE)
+        }
+        dialog?.setCanceledOnTouchOutside(viewModel.canDismissOutSide)
         return binding.root
     }
 
@@ -87,29 +119,28 @@ class ChallengeGuideDialog(val guideText: String = "",
             }
         }
 
-        setGuideText(guideText)
-        setNextText(nextText)
-        setExitText(exitText)
-        setSprinkleView(showSprinkle)
-        highlightText?.let { setHighlightText(it) }
-        setPullingIvSrc(pullingIvSrc)
-        setShowBottomButtons(showBottomButtons)
-        setShowBottomDismissButtons(showBottomDismissButtons)
+        setGuideText(arguments?.getString(GUIDE_TXT) ?: "")
+        setNextText(arguments?.getString(NEXT_TXT) ?: "")
+        setExitText(arguments?.getString(EXIT_TXT) ?: "")
+        setSprinkleView(arguments?.getBoolean(SHOW_SPRINKLE) ?: false)
+//        highlightText?.let { setHighlightText(it) }
+        setPullingIvSrc(arguments?.getSerializable(PULLING_IV_SRC) as PullingImage)
+        setShowBottomButtons(arguments?.getBoolean(SHOW_BOTTOM_BUTTONS) ?: false)
+        setShowBottomDismissButtons(arguments?.getBoolean(SHOW_BOTTOM_DISMISS_BUTTONS) ?: false)
 
         viewModel.apply {
-            highlightTxt.observe(viewLifecycleOwner) {
-                if (it.isEmpty()) return@observe
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (guideText.contains(it)) {
-                        binding.challengeGuideTv.text = binding.challengeGuideTv.text
-                            .partialFontAndColored(
-                                Theme.extraBold(requireContext()),
-                                ContextCompat.getColor(requireContext(), R.color.red_300),
-                                it
-                            )
-                    }
+            guideTxt.observe(viewLifecycleOwner) { guide ->
+                Log.w("ChallengeGuideDialog", "guideTxt:${guide} ")
+                if (highlightText == null) {
+                    binding.challengeGuideTv.text = guide
+                } else {
+                    Log.w("ChallengeGuideDialog", "highlightText:${highlightText} ")
+                    binding.challengeGuideTv.text = guide.partialFontAndColored(
+                        Theme.extraBold(requireContext()),
+                        ContextCompat.getColor(requireContext(), R.color.red_300),
+                        highlightText!!
+                    )
                 }
-
             }
             pullingImage.observe(viewLifecycleOwner) { image ->
                 val resource = when (image) {

@@ -30,7 +30,6 @@ import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialog
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.model.contents.Book
-import com.freewheelin.pulley.revision2021.utils.getStatusBarHeight
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
@@ -184,6 +183,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             errorAction.observe(this@PulleyMathBooksActivity) { type ->
                 when(type) {
                     HttpException403, GuestException -> showGuestJoinInduceDialog()
+                    NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : $type")}
                 }
             }
@@ -203,8 +203,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
 
     private fun showGuestJoinInduceDialog() {
-        val dialog = JoinInduceForGuestDialog {
-            viewModel.errorStatusReset()
+        val dialog = JoinInduceForGuestDialog().apply {
+            updateDismissCallback {
+                viewModel.errorStatusReset()
+            }
         }
         supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }
@@ -302,10 +304,11 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                                         finish()
                                     }
                                 }
-                                val completedDialog = ChallengeCompletedDialog(startChallenge,
+                                val completedDialog = ChallengeCompletedDialog.newInstance(
+                                    challenge = startChallenge,
                                     ChallengeManager.CourseName.스타트챌린지_유형.id,
-                                    moveEvent = moveEvent
                                 )
+                                completedDialog.moveEvent = moveEvent
                                 supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog2") }
                             }
 
@@ -323,7 +326,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
 
     private fun setSnackBar() {
-        val snackBar = SnackBar(this, "핀 설정은 나의 문제집에서 확인할 수 있습니다.", "바로가기")
+        val snackBar = SnackBar(this, "핀 설정은 최근 문제집에서 확인할 수 있습니다.", "바로가기")
         snackBar.setSnackBarViewListener(object : SnackBarViewListener {
             override fun onXBtnClicked(view: SnackBarView) {
                 snackBar.dismiss()
@@ -380,7 +383,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                 }
             }
             ActionType.delete -> {
-                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "나의문제집빼기")
+                LogUtils.logEvent(this, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "최근문제집빼기")
                 viewModel.removeFromMyPlan(book)
                 viewModel.collectRecommendList(false) {}
             }

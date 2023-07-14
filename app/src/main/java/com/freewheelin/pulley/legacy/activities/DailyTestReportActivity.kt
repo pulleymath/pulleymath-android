@@ -41,7 +41,7 @@ class DailyTestReportActivity : AppCompatActivity() {
 
     companion object {
         fun getIntent(context: Context, test: Test, isFromSolve: Boolean = false): Intent {
-            val intent = Intent(context, com.freewheelin.pulley.legacy.activities.DailyTestReportActivity::class.java)
+            val intent = Intent(context, DailyTestReportActivity::class.java)
             intent.putExtra(TestManager.ARG_TEST, test)
             intent.putExtra("FROM_SOLVE", isFromSolve)
             return intent

@@ -54,6 +54,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
@@ -200,15 +201,16 @@ class SolveActivity : BaseActivity(),
         Log.d("문제풀기", "onBackPressed()")
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
         if(answeredSet.isNotEmpty()) {
-            val canceListener = if(content is Test) DialogInterface.OnCancelListener {
-                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "뒤로가기취소", "문제풀이직후")
-            } else null
-
+            val cancelCallback = {
+                if (content is Test) {
+                    LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "뒤로가기취소", "문제풀이직후")
+                }
+            }
             DialogUtils.showProblemSolveExitDialog(this, answeredSet.size, onExitClicked = {
                 saveMemo()
                 viewModel.startChallengeCompletedCallback()
                 finish()
-            }, cancelListener = canceListener)
+            }, cancelCallback = cancelCallback)
         } else {
             saveMemo()
             viewModel.startChallengeCompletedCallback()
@@ -340,8 +342,22 @@ class SolveActivity : BaseActivity(),
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
                         answerView.selectedBook = it
-//                        answerView.showChallengeStampIv(it)
                         speedAnswerView.showMarkingBtn()
+//                        answerView.showChallengeStampIv(it)
+                    }
+                }
+                is Piece -> {
+                    itemValue = "2차학습"
+                    timerView.visibility = View.INVISIBLE
+                    mainFormatTool.visibility = View.VISIBLE
+                    BookManager.getBookFromContent(this@SolveActivity, content, user!!) {
+                        this@SolveActivity.content = it
+                        viewModel.selectedContent.postValue(it)
+                        galleryView.set(it)
+                        speedAnswerView.set(it)
+                        answerView.showMarkingBtn()
+                        speedAnswerView.showMarkingBtn()
+                        answerView.selectedBook = it
                     }
                 }
                 is Test -> {
@@ -444,20 +460,6 @@ class SolveActivity : BaseActivity(),
                         resetProblemResult(content)
                     }
                 }
-                is Piece -> {
-                    itemValue = "2차학습"
-                    timerView.visibility = View.INVISIBLE
-                    mainFormatTool.visibility = View.VISIBLE
-                    PieceManager.getProblems(this@SolveActivity, content, user!!) {
-                        content.problems = it
-                        this@SolveActivity.content = content
-//                        viewModel.selectedContent.postValue(content)
-                        galleryView.set(content)
-                        speedAnswerView.set(content)
-                        answerView.showMarkingBtn()
-                        speedAnswerView.showMarkingBtn()
-                    }
-                }
             }
 
             onItemChanged(answeredSet)
@@ -536,7 +538,7 @@ class SolveActivity : BaseActivity(),
                     onAddSimilarBtnClicked()
                 } else {
                     // TODO
-                    val dialog = PurchaseGuideDialog()
+                    val dialog = PurchaseGuideDialog.newInstance()
                     supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                 }
             })
@@ -547,7 +549,7 @@ class SolveActivity : BaseActivity(),
                         onChangeSimilarBtnClicked()
                     } else {
                         // TODO
-                        val dialog = PurchaseGuideDialog()
+                        val dialog = PurchaseGuideDialog.newInstance()
                         supportFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                     }
                 }
@@ -809,55 +811,50 @@ class SolveActivity : BaseActivity(),
                             "제출하시면 테스트가 종료됩니다."
                 }
 
-                val dialog = DialogUtils.makeDialog(
-                        this,
-                        dialogTitle,
-                        dialogContents,
-                        "취소", "제출하기")
-                dialog.binding.leftBtn.setOnClickListener {
-                    dialog.cancel()
-                }
-                dialog.setOnCancelListener {
-                    LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "제출취소", "문제풀이직후")
-                }
-
-                dialog.binding.rightBtn.setOnClickListener {
-                    if (content == null) {
-                        DaebakToast.show(this, "처리할 내용이 없습니다.")
-                    } else {
-                        answeredSet.addAll(content!!.problems)
-                        ContentManager.score(this, user!!, test, answeredSet) {
-                            val scoredCnt = answeredSet.size
-                            answeredSet.forEach { it.mark() }
-                            answeredSet.clear()
-                            binding.galleryView.updateAll()
-                            binding.speedAnswerView.updateAll()
-                            onProblemSelected(selectedProblem)
-                            binding.answerView.showMarkingBtn()
-                            binding.speedAnswerView.showMarkingBtn()
-                            binding.galleryView.showFilter()
-                            dialog.dismiss()
-                            binding.solutionSwitch.visibility = View.VISIBLE
+                DialogUtils.confirmV2(
+                    context = this,
+                    title = dialogTitle,
+                    contents = dialogContents,
+                    leftBtnText = "취소",
+                    rightBtnText = "제출하기",
+                    cancelCb = {
+                        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "제출취소", "문제풀이직후")
+                    },
+                    successCb = {
+                        if (content == null) {
+                            DaebakToast.show(this, "처리할 내용이 없습니다.")
+                        } else {
+                            answeredSet.addAll(content!!.problems)
+                            ContentManager.score(this, user!!, test, answeredSet) {
+                                val scoredCnt = answeredSet.size
+                                answeredSet.forEach { it.mark() }
+                                answeredSet.clear()
+                                binding.galleryView.updateAll()
+                                binding.speedAnswerView.updateAll()
+                                onProblemSelected(selectedProblem)
+                                binding.answerView.showMarkingBtn()
+                                binding.speedAnswerView.showMarkingBtn()
+                                binding.galleryView.showFilter()
+                                binding.solutionSwitch.visibility = View.VISIBLE
 
 
 //                            if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
 //                                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
 //                            } else {
-                            if (test.getTestType() == Test.TestType.daily || test.getTestType() == Test.TestType.weekly) {
-                                SubmitCompleteLottieDialog(this, test).show {
-                                    SuccessToast.showCompleteDialogIfNeed(this, it)
+                                if (test.getTestType() == Test.TestType.daily || test.getTestType() == Test.TestType.weekly) {
+                                    SubmitCompleteLottieDialog(this, test).show {
+                                        SuccessToast.showCompleteDialogIfNeed(this, it)
+                                    }
                                 }
-                            }
 
 //                            else {
 //                                SuccessToast.showCompleteDialogIfNeed(this, it)
 //                            }
 //                            }
+                            }
                         }
                     }
-                }
-                dialog.show()
-
+                )
             }
 
             is MockExam -> {
@@ -1634,9 +1631,15 @@ class SolveActivity : BaseActivity(),
         return when(content) {
             is Book -> {
                 val book = (content as Book)
-                var title = "${book.bookName}"
-                if (book.subject.trim().isNotEmpty()) { title += " / ${book.subject}" }
-                if (book.chapter.trim().isNotEmpty()) { title += " / ${book.chapter}" }
+                var title = if (book.bookName != null) "${book.bookName}" else ""
+                if (book.subject.trim().isNotEmpty()) {
+                    if (title.isNotEmpty()) { title += " / ${book.subject}" }
+                    title += book.subject
+                }
+                if (book.chapter.trim().isNotEmpty()) {
+                    if (title.isNotEmpty()) { title += " / " }
+                    title += book.subject
+                }
                 title
             }
             is Test, is Piece -> {

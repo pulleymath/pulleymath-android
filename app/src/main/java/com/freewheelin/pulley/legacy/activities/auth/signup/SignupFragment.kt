@@ -64,7 +64,7 @@ import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2Listener, PasswordFieldV2EnterListener, InputFieldV2Listener, InputFieldV2EnterListener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
+class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2EnterListener, InputFieldV2Listener, InputFieldV2EnterListener, PolicyLayoutV2Listener, CompoundButton.OnCheckedChangeListener {
 
     var signupInterface: StudentInfoInterface? = null
     private val viewModel: SignupFragViewModel by viewModels()
@@ -74,6 +74,19 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
     var countryType = "KOR"
     var purposeType = "SIGN_UP"
     lateinit var binding: FragmentSignupBinding
+    var isGuestUser = false
+
+    companion object {
+        const val FRAGMENT_IS_GUEST_USER = "FRAGMENT_IS_GUEST_USER"
+        fun newInstance(isGuestUser: Boolean): SignupFragment {
+            val args = Bundle().apply {
+                putBoolean(FRAGMENT_IS_GUEST_USER, isGuestUser)
+            }
+            val instance = SignupFragment()
+            instance.arguments = args
+            return instance
+        }
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -83,6 +96,9 @@ class SignupFragment(val isGuestUser: Boolean) : Fragment(), PasswordFieldV2List
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
+        arguments?.apply {
+            isGuestUser = getBoolean(FRAGMENT_IS_GUEST_USER)
+        }
         return binding.root
     }
 

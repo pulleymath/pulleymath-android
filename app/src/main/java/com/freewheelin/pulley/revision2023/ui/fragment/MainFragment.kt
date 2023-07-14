@@ -34,6 +34,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
@@ -49,8 +50,10 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
 
     lateinit var profileReceiver: BroadcastReceiver
     lateinit var userUpdateReceiver: BroadcastReceiver
+    lateinit var reconfigureReceiver: BroadcastReceiver
 
     var wasInitUI = false
+    private var isViewCreated = false
     val viewModel: MainFViewModel by viewModels()
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
         viewModel.onChallengeHeaderClick(item)
@@ -66,13 +69,18 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        isViewCreated = true
         profileReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
             }
         }
         userUpdateReceiver = object :BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                syncProfile()
+            }
+        }
+        reconfigureReceiver = object :BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
             }
@@ -137,6 +145,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(profileReceiver, IntentFilter(UserManager.EVENT_USER_MODIFYING))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(userUpdateReceiver, IntentFilter(UserManager.EVENT_USER_UPDATE))
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         viewModel.showWholeProgressBar.postValue(true)
         init()
 
@@ -194,7 +203,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             currentMission.observe(viewLifecycleOwner) {
                 println("currentMission update 1")
                 if (!it.isStartChallenge) return@observe
-                println("currentMission update 2 ${user?.serviceType?.isGuestUser}")
+                println("currentMission update 2 게스트입니까?=${user?.serviceType?.isGuestUser}")
                 blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
                 if (user?.serviceType?.isGuestUser == true) return@observe
                 println("currentMission update 3")
@@ -202,6 +211,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 val appearedIds = scInfo.studentIds
                 println("currentMission update 4 ${appearedIds}, studentId : ${user?.studentID}")
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
+                println("currentMission update 4-최초 접속시 startChallenge 권유가 이미 동작하였습니까?=${isAlreadyAppearedUser}")
 
                 if (isAlreadyAppearedUser) return@observe
                 println("currentMission update 5 it.userStatus : ${it.userStatus}")
@@ -234,6 +244,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             errorAction.observe(viewLifecycleOwner) { type ->
                 when(type) {
                     CoroutineExceptionType.HttpException403 -> showGuestJoinInduceDialog()
+                    CoroutineExceptionType.NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
             }
@@ -316,7 +327,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "결제유도","풀리수학으로공부시작")
             FacebookEvent.log(requireContext(), FacebookEvent.SUBSCRIBE_STARTED)
     //        IntentUtils.openWebLink(requireContext(), URL.구매촉구_메인, requireContext().packageManager)
-            val dialog = PurchaseGuideDialog(2)
+            val dialog = PurchaseGuideDialog.newInstance(2)
             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
         }
     }
@@ -350,12 +361,14 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             val dialog = ChallengeGuideManager.getStartGuideMission1(
                 nextEvent = nextEvent,
                 exitEvent = {
-                    val induceDialog = ChallengeInduceDialog(ChallengeInduceDialog.Type.Disappointed,
-                        nextEvent = nextEvent,
-                        exitEvent = {
-                            MarketingManager.setMarketingBanner(requireContext())
-                        }
+                    val induceDialog = ChallengeInduceDialog.newInstance(
+                        ChallengeInduceDialog.Type.Disappointed
                     )
+                    induceDialog.nextEvent = nextEvent
+                    induceDialog.exitEvent = {
+                        MarketingManager.setMarketingBanner(requireContext())
+                    }
+
                     childFragmentManager.let { induceDialog.show(it, "challengeInduceDialog") }
                 }
             )
@@ -372,9 +385,10 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         if (challenge.userChallengeId == null) return responseFailed(requireContext(), Throwable("userChallengeId cannot Null"))
         viewModel.askForRedeemOfChallenge(challenge.userChallengeId) {
             if (user?.serviceType?.isNoneUser == true) {
-                val dialog = StartChallengeInfoDialog(challenge.challengeId, true) { _ ->
-                    val dialog = PurchaseGuideDialog(2)
-                    childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
+                val dialog = StartChallengeInfoDialog.newInstance(challenge.challengeId, true)
+                dialog.startCallback = { _ ->
+                    val pgDialog = PurchaseGuideDialog.newInstance(2)
+                    childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
                 }
                 childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
             } else {
@@ -391,5 +405,11 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         super.onDestroy()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(profileReceiver)
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(userUpdateReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
+    }
+    fun firstHeaderMove() {
+        if (isViewCreated) {
+            viewModel.firstHeaderDetailForceMove()
+        }
     }
 }

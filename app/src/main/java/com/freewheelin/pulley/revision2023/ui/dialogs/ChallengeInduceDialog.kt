@@ -15,12 +15,29 @@ import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.ui.fragment.*
 import com.freewheelin.pulley.revision2023.viewmodel.ChallengeInduceViewModel
 
-class ChallengeInduceDialog(val type: Type, val course: ChallengeCourse? = null, val nextEvent: () -> Unit = {}, val moveEvent: (ChallengeCourse?) -> Unit = {}, val exitEvent: () -> Unit = {}): DialogFragment() {
+class ChallengeInduceDialog(): DialogFragment() {
 
     enum class Type {
         OneMore, Disappointed
     }
     private val viewModel: ChallengeInduceViewModel by viewModels()
+
+    var nextEvent: () -> Unit = {}
+//    var moveEvent: (ChallengeCourse?) -> Unit = {}
+    var exitEvent: () -> Unit = {}
+
+    companion object {
+        const val DIALOG_TYPE = "DIALOG_TYPE"
+        const val COURSE = "COURSE"
+        fun newInstance(type: Type): ChallengeInduceDialog {
+            val args = Bundle().apply {
+                putSerializable(DIALOG_TYPE, type)
+            }
+            val instance = ChallengeInduceDialog()
+            instance.arguments = args
+            return instance
+        }
+    }
 
     private val binding: DialogChallengeInduceBinding by lazy {
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_challenge_induce, null, false)
@@ -31,6 +48,10 @@ class ChallengeInduceDialog(val type: Type, val course: ChallengeCourse? = null,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.apply {
+            viewModel.type = getSerializable(DIALOG_TYPE) as Type
+//            viewModel.course = getSerializable(COURSE) as? ChallengeCourse
+        }
         return binding.root
     }
 
@@ -40,7 +61,7 @@ class ChallengeInduceDialog(val type: Type, val course: ChallengeCourse? = null,
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
 
-            viewModel.induceType.postValue(type)
+            viewModel.induceType.postValue(viewModel.type)
             viewModel.onExitClickCallback = {
                 exitEvent()
                 dismiss()
@@ -49,7 +70,7 @@ class ChallengeInduceDialog(val type: Type, val course: ChallengeCourse? = null,
             continueBtn.setOnClickListener {
                 dismiss()
                 nextEvent()
-                moveEvent(course)
+//                moveEvent(viewModel.course)
             }
 
             viewModel.induceType.observe(viewLifecycleOwner) { type ->

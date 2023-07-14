@@ -32,7 +32,6 @@
             android:id="@+id/challengeGuideTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{ vm.guideTxt }"
             android:background="@drawable/bg_gray_200_round_20"
             style="@style/h5"
             android:gravity="center"
@@ -43,6 +42,7 @@
             app:layout_constraintBottom_toTopOf="@id/pullingIv"
             app:layout_constraintStart_toStartOf="@id/pullingIv"
             app:layout_constraintEnd_toEndOf="@id/pullingIv"/>
+<!--            android:text="@{ vm.guideTxt }"-->
 
         <ImageView
             android:layout_width="22dp"

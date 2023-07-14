@@ -123,6 +123,16 @@ open class Content: Serializable {
     // NOTE: (hyuntae) Book에서만
     var bookName: String? = null
 
+    val itemBookPlanBookName: String
+        get() {
+            return bookName ?: subject
+        }
+    val itemBookPlanSubject: String
+        get() {
+            return if (bookName == null) ""
+            else subject
+        }
+
     @Expose @SerializedName("dateTime")
     var createDateTime: Date = Date()
     var updateDateTime: Date? = null
@@ -141,7 +151,7 @@ open class Content: Serializable {
             return solveDateTime != null
         }
 
-    var pieceSubCategory: String = ""
+    var pieceSubCategory: String? = ""
     fun isStartChallengePiece(): Boolean {
         return pieceSubCategory == "START"
     }
@@ -168,11 +178,7 @@ open class Content: Serializable {
         this.bookName = content.bookName
         this.pieceCategoryTag = content.pieceCategoryTag
 
-        // mockID 추가
         this.mockID = content.mockID
-        // book과 mock에서 사용함
-        this.chapter = content.chapter
-
         this.pieceSubCategory = content.pieceSubCategory
         this.isLocked = content.isLocked
         this.updateDateTime = content.updateDateTime

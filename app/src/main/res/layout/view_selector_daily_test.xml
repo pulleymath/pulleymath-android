@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingStart="@dimen/dp16"
+    android:paddingHorizontal="@dimen/dp16"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -41,16 +41,19 @@
     <TextView
         android:id="@+id/guideTv"
         style="@style/TextGray_500.Bold"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:lineSpacingExtra="6sp"
-        android:text="다음 데일리 테스트는\n월요일 오전 6시에 공개됩니다 :)"
+        android:text="다음 데일리 테스트는 월요일 오전 6시에 공개됩니다 :)"
+        android:maxLines="1"
         android:textColor="@color/gray_500"
         android:textSize="@dimen/sp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTv" />
+<!--        android:ellipsize="end"-->
 
     <ImageView
         android:id="@+id/firstTestIv"

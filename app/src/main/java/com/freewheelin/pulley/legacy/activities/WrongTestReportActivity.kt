@@ -24,6 +24,8 @@ import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
+import kotlin.math.roundToInt
 
 class WrongTestReportActivity : AppCompatActivity() {
     private val binding: ActivityTestReportWrongBinding by lazy {
@@ -62,8 +64,13 @@ class WrongTestReportActivity : AppCompatActivity() {
                 leftScoringRv.adapter = ScoringAdapter(this@WrongTestReportActivity,  true)
                 rightScoringRv.adapter = ScoringAdapter(this@WrongTestReportActivity, false)
 
-                leftCorrectRateTv.text = "${it.studentRating}등급 정답률"
-                rightCorrectRateTv.text = "${it.studentRating}등급 정답률"
+                val rateTvText = if(schoolType.isHigh) {
+                    "${it.studentRating}등급 정답률"
+                } else {
+                    "정답률"
+                }
+                leftCorrectRateTv.text = rateTvText
+                rightCorrectRateTv.text = rateTvText
 
                 scoreResultLabel.show()
                 scoreResultContainerCl.show()
@@ -196,7 +203,13 @@ class WrongReportScoringHolder(val itemBinding: ItemTestReportScoringWrongBindin
             resultIv.visibility = View.VISIBLE
             numTv.text = "${problem.problemNum}"
             wrongCntTv.text = "${problem.wrongCount!!}회"
-            correctRateTv.text = "${problem.standardCorrectRate}%"
+            correctRateTv.text = if(schoolType.isHigh) {
+                "${problem.standardCorrectRate}%"
+            } else {
+                val correctRate = problem.correctRate ?: 0.50f
+                val roundRate = (correctRate * 100).roundToInt()
+                "${roundRate}%"
+            }
             if (problem.getResultByScoring() == Result.correct) {
                 resultIv.setImageResource(R.drawable.ic_result_correct)
                 wrongCntTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_800))

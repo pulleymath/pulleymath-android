@@ -37,6 +37,7 @@ import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 import com.freewheelin.pulley.legacy.views.OMRView.OMRViewType
+import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import kotlin.collections.ArrayList
 
 
@@ -183,18 +184,17 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
             return
         }
 
-        val dialog = DialogUtils.makeDialog(this,
-                "종료하실 건가요?",
-                "제출하지 않고 종료 시\n시험기록이 삭제되며,\n보고서를 볼 수 없습니다.",
-                "취소",
-                "종료하기")
-        dialog.type = DialogType.alert
-        dialog.binding.rightBtn.setOnClickListener {
-            dialog.dismiss()
-            super.onBackPressed()
-        }
-        dialog.show()
-
+        DialogUtils.confirmV2(
+            context = this,
+            title = "종료하실 건가요?",
+            contents = "제출하지 않고 종료 시\n시험기록이 삭제되며,\n보고서를 볼 수 없습니다.",
+            leftBtnText = "취소",
+            rightBtnText = "종료하기",
+            type = CommonDialog.DialogType.Alert,
+            successCb = {
+                super.onBackPressed()
+            }
+        )
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

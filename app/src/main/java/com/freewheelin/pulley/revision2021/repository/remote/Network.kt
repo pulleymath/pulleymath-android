@@ -30,8 +30,8 @@ object Network {
 
     val mockTestUrl = when (Preferences.onServerAPI.get()) {
         Server.live.toString() -> "https://mock-live.pulleymath.com"
-        Server.staging.toString() -> "http://mock-staging.pulleymath.com"
-        Server.dev.toString() -> "http://mock-dev.pulleymath.com"
+        Server.staging.toString() -> "https://mock-staging.pulleymath.com"
+        Server.dev.toString() -> "https://mock-dev.pulleymath.com"
         else -> "https://mock-live.pulleymath.com"
     }
 

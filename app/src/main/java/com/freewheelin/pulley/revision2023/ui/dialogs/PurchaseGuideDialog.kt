@@ -23,7 +23,7 @@ import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.toPx
 
-class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, val startCallback: () -> Unit = {}): DialogFragment() {
+class PurchaseGuideDialog(): DialogFragment() {
 
     private val viewModel: PurchaseGuideViewModel by viewModels()
 
@@ -31,11 +31,34 @@ class PurchaseGuideDialog(val step: Int = 1, val withPdfDesc: Boolean = false, v
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_purchase_guide, null, false)
     }
 
+    companion object {
+        const val DIALOG_STEP = "DIALOG_STEP"
+        const val WITH_PDF_DESC = "WITH_PDF_DESC"
+        fun newInstance(
+            step: Int = 1,
+            withPdfDesc: Boolean = false
+        ): PurchaseGuideDialog {
+            val args = Bundle().apply {
+                putInt(DIALOG_STEP, step)
+                putBoolean(WITH_PDF_DESC, withPdfDesc)
+            }
+            val instance = PurchaseGuideDialog()
+            instance.arguments = args
+            return instance
+        }
+    }
+
+    var step = 0
+    var withPdfDesc = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.let { bd ->
+            step = bd.getInt(DIALOG_STEP)
+            withPdfDesc = bd.getBoolean(WITH_PDF_DESC)
+        }
         return binding.root
     }
 

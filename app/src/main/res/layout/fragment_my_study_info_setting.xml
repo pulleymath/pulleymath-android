@@ -145,6 +145,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -161,7 +162,12 @@
                                 android:layout_height="wrap_content"
                                 />
                             <com.freewheelin.pulley.legacy.views.PulleySpinner
-                                android:id="@+id/selectAllGrade"
+                                android:id="@+id/selectElementaryGrade"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+                            <com.freewheelin.pulley.legacy.views.PulleySpinner
+                                android:id="@+id/selectServicesGrade"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 />
@@ -193,6 +199,16 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/selectMajor"/>
+
+                        <com.freewheelin.pulley.legacy.views.PulleySpinner
+                            android:id="@+id/selectEtc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/selectRate" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

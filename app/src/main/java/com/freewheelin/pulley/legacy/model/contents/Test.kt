@@ -112,7 +112,7 @@ class Test: Content {
 
 
     fun getTestType(): TestType {
-        return TestType.init(pieceSubCategory)
+        return TestType.init(pieceSubCategory!!)
     }
 
 

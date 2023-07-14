@@ -15,7 +15,6 @@ import com.freewheelin.pulley.R
 
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.AppUsageMonitor
-import com.freewheelin.pulley.legacy.core.manage.TestManager
 import com.freewheelin.pulley.databinding.ActivityLcTutorialBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel
@@ -149,12 +148,12 @@ class LCTutorialActivity : AppCompatActivity() {
     }
 
     fun showTutorialEndDialog() {
-        DialogUtils.showTutorialEndDialog(this, leftBtnCB = {
+        DialogUtils.showTutorialEndDialog(this, leaveCallback = {
             val sequence = viewModel.sequence.value
             LogUtils.logEvent(this@LCTutorialActivity,
                 MyApplication.user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "튜토리얼종료", "${sequence}")
             goToMainActivity()
-        }, rightBtnCB = {
+        }, stayCallback = {
             LogUtils.logEvent(this@LCTutorialActivity,
                 MyApplication.user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "이어보기", "")
         })

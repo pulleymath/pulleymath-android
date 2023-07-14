@@ -65,7 +65,7 @@ class AnalysisRecommendStudyView: ConstraintLayout {
             deniedCb = {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "분석", "결제유도", "추천유형학습풀기")
 
-                val dialog = PurchaseGuideDialog()
+                val dialog = PurchaseGuideDialog.newInstance()
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
             })

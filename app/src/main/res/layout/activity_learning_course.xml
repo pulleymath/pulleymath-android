@@ -10,6 +10,7 @@
         <import type="android.view.View" />
         <import type="com.freewheelin.pulley.revision2021.model.CourseType"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel"/>
+        <variable name="isTablet" type="Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,6 +47,7 @@
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:visibility="@{ vm.isPriorConceptScene ? View.VISIBLE : View.GONE }"
+                tools:visibility="gone"
                 android:background="@drawable/bg_purple_250_round"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toEndOf="@+id/backBtn"
@@ -57,6 +59,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{ vm.headerTitle }"
+                visibleIf="@{ isTablet }"
+                tools:text="Part 1."
                 android:maxLines="1"
                 android:textColor="@color/gray_600"
                 android:ellipsize="end"
@@ -139,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="@{ vm.headerCookingBtnText }"
+                        tools:text="개념 익히기"
                         android:textColor="@{ vm.currentCourseType == CourseType.Cooking || vm.isCookingNaviSelected ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cookingDropdownIv"
@@ -186,6 +191,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="@{ vm.headerPatternBtnText }"
+                        tools:text="유형 학습"
                         android:textColor="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.PatternMap || vm.isPatternNaviSelected ? @color/white : @color/gray_600 }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/patternDropdownIv"
@@ -245,13 +251,15 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!--                android:background="@drawable/bg_gray_750_round"-->
             <View
                 android:id="@+id/barOnLeftNavBtn"
                 android:layout_width="2dp"
                 android:layout_height="12dp"
                 android:layout_marginEnd="12dp"
-                android:visibility="@{ vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.Cooking ? View.VISIBLE : View.GONE }"
+                android:visibility="@{ isTablet &amp;&amp; (vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.Cooking) ? View.VISIBLE : View.GONE }"
                 android:background="@drawable/bg_gray_750_round"
+                visibleIf="@{ isTablet }"
                 app:layout_constraintBottom_toBottomOf="@id/navPrevBtn"
                 app:layout_constraintEnd_toStartOf="@id/navPrevBtn"
                 app:layout_constraintTop_toTopOf="@id/navPrevBtn" />
@@ -265,6 +273,8 @@
                 android:focusable="false"
                 android:src="@drawable/ic_tailless_arrow_left_24_gray_600"
                 android:enabled="@{ vm.isPagerFirstIndex == false }"
+                tools:visibility="gone"
+                visibleIf="@{ isTablet }"
                 imageview_tint="@{ vm.isPagerFirstIndex ? @color/gray_800 : @color/gray_600 }"
                 app:layout_constraintBottom_toBottomOf="@+id/navNextBtn"
                 app:layout_constraintEnd_toStartOf="@+id/navNextBtn"
@@ -278,6 +288,8 @@
                 android:background="@drawable/bg_black_200_round_ripple"
                 android:src="@drawable/ic_tailless_arrow_right_24_gray_600"
                 android:enabled="@{ vm.isPagerLastIndex == false}"
+                tools:visibility="gone"
+                visibleIf="@{ isTablet }"
                 imageview_tint="@{ vm.isPagerLastIndex ? @color/gray_800 : @color/gray_600 }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -302,10 +314,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="122dp"
+                layout_margin_end_dimen="@{ isTablet ? @dimen/dp148 : @dimen/dp20 }"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-<!--            android:visibility="@{ vm.currentCourseType == CourseType.Cooking ? View.GONE : View.VISIBLE }"-->
+<!--                android:layout_marginEnd="122dp"-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -349,6 +361,7 @@
         <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView
             android:layout_width="700dp"
             android:layout_height="200dp"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
         <ProgressBar

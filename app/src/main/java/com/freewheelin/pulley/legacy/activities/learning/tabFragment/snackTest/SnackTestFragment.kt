@@ -37,6 +37,7 @@ import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import java.util.*
@@ -142,9 +143,17 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
             return
         }
         if(Date() > test.endDate && (test.getTestType() == Test.TestType.weekly || test.getTestType() == Test.TestType.daily)) {
-            val dialog = DialogUtils.makeDialog(requireContext(), "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
-            dialog.binding.rightBtn.visibility = View.GONE
-            dialog.show()
+//            val dialog = DialogUtils.makeDialog(requireContext(), "테스트를 볼 수 없습니다.", "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ", "확인", "")
+//            dialog.binding.rightBtn.visibility = View.GONE
+//            dialog.show()
+
+            DialogUtils.confirmV2(
+                context = requireContext(),
+                title = "테스트를 볼 수 없습니다.",
+                contents = "시간이 만료되어 테스트를 볼 수 없습니다.\n다음 테스트를 기대해주세요. ",
+                isOneBtn = true,
+                rightBtnText = "확인",
+            )
 
         } else {
             val intent = SolveActivity.getIntent(requireContext(), test)
@@ -157,7 +166,7 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
 
 //        val intent = MyRecommendSettingActivity.getIntent(requireContext(), test)
 //        startActivity(intent)
-        val dialog = SnackTestRecommendSettingDialog(test) {}
+        val dialog = SnackTestRecommendSettingDialog.newInstance(test)
         childFragmentManager.let { dialog.show(it, "SnackTestRecommendSettingDialog") }
     }
 
@@ -169,7 +178,7 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
 
         when(test.getTestType()) {
             Test.TestType.daily, Test.TestType.initial -> {
-                val intent = com.freewheelin.pulley.legacy.activities.DailyTestReportActivity.getIntent(requireContext(), test)
+                val intent = DailyTestReportActivity.getIntent(requireContext(), test)
                 startActivity(intent)
             }
             Test.TestType.weekly -> {

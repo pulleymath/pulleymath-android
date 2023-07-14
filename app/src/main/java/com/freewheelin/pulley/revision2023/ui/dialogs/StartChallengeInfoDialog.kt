@@ -13,12 +13,26 @@ import com.freewheelin.pulley.databinding.DialogStartChallengeInfoBinding
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.viewmodel.StartChallengeInfoViewModel
 
-class StartChallengeInfoDialog(val challengeId: Int, val isChallengeFinished: Boolean = false, val startCallback: (Int) -> Unit): DialogFragment() {
+class StartChallengeInfoDialog(): DialogFragment() {
 
     private val viewModel: StartChallengeInfoViewModel by viewModels()
 
     private val binding: DialogStartChallengeInfoBinding by lazy {
         DataBindingUtil.inflate(layoutInflater.cloneInContext(requireContext()), R.layout.dialog_start_challenge_info, null, false)
+    }
+    var startCallback: (Int) -> Unit = {}
+    companion object {
+        const val CHALLENGE_ID = "CHALLENGE_ID"
+        const val IS_CHALLENGE_FINISHED = "IS_CHALLENGE_FINISHED"
+        fun newInstance(challengeId: Int, isChallengeFinished: Boolean = false): StartChallengeInfoDialog {
+            val args = Bundle().apply {
+                putInt(CHALLENGE_ID, challengeId)
+                putBoolean(IS_CHALLENGE_FINISHED, isChallengeFinished)
+            }
+            val instance = StartChallengeInfoDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
     override fun onCreateView(
@@ -26,6 +40,10 @@ class StartChallengeInfoDialog(val challengeId: Int, val isChallengeFinished: Bo
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.apply {
+            viewModel.isChallengeFinished = getBoolean(IS_CHALLENGE_FINISHED)
+            viewModel.challengeId = getInt(CHALLENGE_ID)
+        }
         return binding.root
     }
 
@@ -34,8 +52,7 @@ class StartChallengeInfoDialog(val challengeId: Int, val isChallengeFinished: Bo
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-            showCompletedView = isChallengeFinished
-            viewModel.isChallengeFinished = isChallengeFinished
+            showCompletedView = viewModel.isChallengeFinished
             this.isPaidUser = user?.serviceType != PaidServiceType.NONE
             scrollRootView.isVerticalScrollBarEnabled = false
 
@@ -44,7 +61,7 @@ class StartChallengeInfoDialog(val challengeId: Int, val isChallengeFinished: Bo
             }
             startBtn.setOnClickListener {
                 dismiss()
-                startCallback(challengeId)
+                startCallback(viewModel.challengeId)
             }
         }
     }

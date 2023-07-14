@@ -24,14 +24,6 @@ class ChallengeRepository() {
 
     suspend fun getChallengesOnStatus(status: ChallengeUserStatus? = null) {
         api.getChallengesOnStatus(status = status).data.let {
-            println("asoaso update JoinedChallengeList : [getChallengesOnStatus]")
-            it.forEach {
-                println("asoaso --- update - ${it.challengeId} / ${it.challengeName} / ${it.userStatus}")
-                it.courses.forEach {
-                    println("asoaso --- update - ${it.courseName} / ${it.status}")
-                }
-                println("asoaso --------------")
-            }
             _joinedChallengeList.postValue(it)
         }
     }

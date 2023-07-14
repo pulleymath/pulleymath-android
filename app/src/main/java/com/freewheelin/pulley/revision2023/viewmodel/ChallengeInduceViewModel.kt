@@ -13,6 +13,7 @@ import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog.GuestJoinStep
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,6 +33,8 @@ class ChallengeInduceViewModel(application: Application): BaseAndroidViewModel(a
     val title = MutableLiveData<String>()
     val induceType = MutableLiveData<ChallengeInduceDialog.Type>()
 
+    lateinit var type: ChallengeInduceDialog.Type
+    var course: ChallengeCourse? = null
     fun exitBtn() {
         onExitClickCallback()
     }

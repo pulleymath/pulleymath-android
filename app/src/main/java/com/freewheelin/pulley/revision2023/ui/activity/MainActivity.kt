@@ -1,8 +1,6 @@
 package com.freewheelin.pulley.revision2023.ui.activity
 
 import android.Manifest
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -20,7 +18,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.view.inputmethod.InputMethodManager
@@ -45,6 +42,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityMainBinding
+import com.freewheelin.pulley.legacy.activities.auth.InitSettingCompleteActivity
 import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
 
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment
@@ -84,8 +82,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
-import java.lang.Exception
 
 
 class MainActivity : PermissionActivity(),
@@ -116,9 +112,10 @@ class MainActivity : PermissionActivity(),
     var snackBar: SnackBar? = null
 
     var doubleBackToExitPressedOnce = false
-
+    var exitDialogContinualShowCount = 0
     private fun addBackBtnCallback() {
         onBackPressedDispatcher.addCallback(this) {
+            tabFragments.forEach { it.resetHeaderControlParams() }
             binding.headerCl.showExpandVertical(true)
             val fragments = supportFragmentManager.fragments
             for (fragment in fragments) {
@@ -132,13 +129,23 @@ class MainActivity : PermissionActivity(),
                 return@addCallback
             }
 
-            if (doubleBackToExitPressedOnce) {
+//            if (doubleBackToExitPressedOnce) {
+//                finish()
+//                return@addCallback
+//            }
+//            doubleBackToExitPressedOnce = true
+//            DaebakToast.show(this@MainActivity, "뒤로 가기를 한번 더 누르면 종료됩니다.")
+//            Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            if (exitDialogContinualShowCount > 3) {
                 finish()
                 return@addCallback
             }
-            doubleBackToExitPressedOnce = true
-            DaebakToast.show(this@MainActivity, "뒤로 가기를 한번 더 누르면 종료됩니다.")
-            Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            exitDialogContinualShowCount ++
+            DialogUtils.showMainDontExitDialog(this@MainActivity, {
+                finish()
+            }, {
+                exitDialogContinualShowCount = 0
+            })
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -195,7 +202,8 @@ class MainActivity : PermissionActivity(),
             mainTl.addOnTabListener { position, newType, prevPosition, prevType ->
                 viewModel.prevTab = Pair(prevType, prevPosition)
                 when (newType) {
-                    MainTab.메인 -> { checkStartChallengeFinish()
+                    MainTab.메인 -> {
+                        checkStartChallengeFinish()
                         vp.setCurrentItem(position, 200)
                     }
                     MainTab.과외 -> openLesson()
@@ -211,6 +219,10 @@ class MainActivity : PermissionActivity(),
             mainTl.selectTap(0, MainTab.메인)
 
             alarmBtn.setOnClickListener {
+
+//                val intent = PurchaseInduceWebViewActivity.getIntent(this@MainActivity)
+//                startActivity(intent)
+
                 val intent = AlarmActivity.getIntent(this@MainActivity)
                 startActivity(intent)
 //                SpyDialog().apply {
@@ -327,11 +339,12 @@ class MainActivity : PermissionActivity(),
             }
             else if(user.isNeedToUpdateGrade()) {
                 try {
-                    UpdateGradeDialog {
+                    val dialog = UpdateGradeDialog.newInstance()
+                    dialog.callback = {
                         DaebakToast.show(this, "저장 완료! 업데이트 되었습니다.")
-                    }.apply {
-                        isCancelable = false
-                    }.show(supportFragmentManager, "updateSchool")
+                    }
+                    dialog.isCancelable = false
+                    dialog.show(supportFragmentManager, "updateSchool")
                 } catch (e: IllegalStateException) {
                     println("error : ${e}")
                 }
@@ -377,7 +390,7 @@ class MainActivity : PermissionActivity(),
                 AnalysisFragment.newInstance()
             )
         }
-        if (user?.showMainUnivTab == true) {
+        if (user?.isUnivUser == true) {
             tabFragments.add(AffiliatedTestFragment.newInstance())
         }
     }
@@ -454,7 +467,7 @@ class MainActivity : PermissionActivity(),
         }
         userUpdateReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
-                intent?.let {
+                intent?.let { intent ->
                     viewModel.setPageProgress(true)
                     viewModel.fetchUser {
                         MyApplication.user = it
@@ -474,10 +487,15 @@ class MainActivity : PermissionActivity(),
                             tabMove(0)
                             binding.mainTl.initOnDevice()
                         }
+                        val signupJustAMomentAgoFromGuestUser = intent.getBooleanExtra(InitSettingCompleteActivity.IS_GUEST_USER, false)
+                        if (signupJustAMomentAgoFromGuestUser) {
+                            (tabFragments.first() as MainFragment).firstHeaderMove()
+                        }
 
                     }
                     CoroutineScope(Dispatchers.Main).launch {
                         supportFragmentManager.findFragmentByTag("joinInduceDialog")?.let {
+
                             (it as? DialogFragment)?.dismiss()
                         }
                         if (binding.rootDl.isDrawerOpen(GravityCompat.END)) {
@@ -545,6 +563,7 @@ class MainActivity : PermissionActivity(),
                 }
             }
             showDrawer.observe(this@MainActivity) { show ->
+                println("aspasp showDrawer?  :show : ${show}")
                 binding.apply {
                     if (show) {
                         rootDl.openDrawer(GravityCompat.END)
@@ -565,6 +584,7 @@ class MainActivity : PermissionActivity(),
                             viewModel.errorStatusReset()
                         }
                     }
+                    CoroutineExceptionType.NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
             }
@@ -643,8 +663,12 @@ class MainActivity : PermissionActivity(),
         val isStartChallengeCompleted = intent.getBooleanExtra(ChallengeManager.IS_START_CHALLENGE_COMPLETED, false)
         if (isStartChallengeCompleted || viewModel.showStartChallengeFinishEffect()) {
             tabFragments.find { it.type == MainTab.메인 }?.let { frag ->
-                (frag as MainFragment).showStartChallengeCompletedGuide()
-                viewModel.updateChallengeFinishFlag()
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(500)
+                    (frag as MainFragment).showStartChallengeCompletedGuide()
+                    viewModel.updateChallengeFinishFlag()
+                }
+
             }
         }
     }
@@ -744,7 +768,7 @@ class MainActivity : PermissionActivity(),
     }
     fun setConceptCourseSubjectId(index: Int) {
         tabFragments.find { it.type == MainTab.개념 }?.let { frag ->
-            (frag as ConceptCourseFragment).viewModel.selectedSubjectId.postValue(index)
+            (frag as ConceptCourseFragment).moveSubjectId(index)
         }
     }
     fun spyOff() {
@@ -802,9 +826,11 @@ class MainActivity : PermissionActivity(),
         return super.dispatchTouchEvent(event)
     }
     fun showGuestJoinInduceDialog(dismissCallback: () -> Unit) {
-        val dialog = JoinInduceForGuestDialog {
-            dismissCallback()
-            viewModel.errorStatusReset()
+        val dialog = JoinInduceForGuestDialog().apply {
+            updateDismissCallback {
+                dismissCallback()
+                viewModel.errorStatusReset()
+            }
         }
         supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
     }

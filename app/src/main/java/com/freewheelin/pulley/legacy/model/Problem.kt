@@ -1,18 +1,11 @@
 package com.freewheelin.pulley.legacy.model
 
 import android.content.Context
-import android.os.Parcelable
-import android.util.Log
-import androidx.recyclerview.widget.DiffUtil
 import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.PieceCategory
-import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
-import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.NumberUtils
@@ -24,7 +17,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.Serializable
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -83,6 +75,7 @@ open class Problem: Serializable {
     var problemLevel: Int = 0
     var problemPoint: Int = 0
 
+    // category enum 으로 바꿔야할거같다. SIMILAR, REFERENCE,
     @Expose @SerializedName("category")
     var rawCategory: String = ""
 

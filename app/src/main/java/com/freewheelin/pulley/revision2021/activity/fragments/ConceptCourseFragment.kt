@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
-//import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import android.content.*
 import android.os.Bundle
 import android.util.Log
@@ -16,9 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-
-
 import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
@@ -32,18 +30,19 @@ import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
-import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2021.utils.observeThrottle
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.freewheelin.pulley.legacy.bases.isMobile
+import kotlinx.coroutines.withContext
 
 class ConceptCourseFragment : MainTabFragment() {
     companion object {
@@ -53,7 +52,7 @@ class ConceptCourseFragment : MainTabFragment() {
     }
 
     lateinit var binding: FragmentConceptCourseBinding
-
+    private var isViewCreated = false
     val viewModel: ConceptCourseViewModel by viewModels()
     private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
@@ -63,7 +62,7 @@ class ConceptCourseFragment : MainTabFragment() {
 
     override fun onResume() {
         super.onResume()
-        fetch()
+        viewModel.selectedSubjectId.value?.let { moveSubjectId(it) }
     }
 
     override fun onStop() {
@@ -75,11 +74,11 @@ class ConceptCourseFragment : MainTabFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isViewCreated = true
         challengeReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
                     val challengeCourseId = it.getIntExtra(ChallengeManager.COURSE_ID, -1)
-                    println("asoaso CCF challengeReceiver courseId : ${challengeCourseId}")
                     when (challengeCourseId) {
                         ChallengeManager.CourseName.스타트챌린지_개념.id -> {
                             actionOnStartChallenge()
@@ -108,7 +107,12 @@ class ConceptCourseFragment : MainTabFragment() {
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         return binding.root
     }
-
+    var isShowMainTab = true
+    var isSubjectHeaderChangedWhenMainTabIsNotShow = false
+    override fun resetHeaderControlParams() {
+        isShowMainTab = true
+        isSubjectHeaderChangedWhenMainTabIsNotShow = false
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -120,14 +124,46 @@ class ConceptCourseFragment : MainTabFragment() {
                 setViewModel(viewModel)
                 setLifecycleOwner(viewLifecycleOwner)
             }
+
+            if (requireContext().isMobile) {
+                studyRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val scrollY = studyRv.computeVerticalScrollOffset()
+                        if (scrollY > 180 && isSubjectHeaderChangedWhenMainTabIsNotShow) {
+                            isSubjectHeaderChangedWhenMainTabIsNotShow = false
+                        }
+                        if (isSubjectHeaderChangedWhenMainTabIsNotShow) return
+
+                        if (scrollY > 180 && isShowMainTab) {
+                            isShowMainTab = false
+                            (activity as? MainActivity)?.showTabHeader(false)
+                        } else if (scrollY < 10 && !isShowMainTab) {
+                            isShowMainTab = true
+                            (activity as? MainActivity)?.showTabHeader(true)
+                        }
+                    }
+                })
+            }
         }
         viewModel.apply {
             initHeaderSubject()
-            selectedSubjectId.observe(viewLifecycleOwner) { subjectId ->
+            selectedSubjectId.observe(viewLifecycleOwner) {
+                showLoading(true)
+                if (!isShowMainTab) {
+                    binding.studyRv.scrollToPosition(0)
+                    isSubjectHeaderChangedWhenMainTabIsNotShow = true
+                }
+            }
+            selectedSubjectId.observeThrottle(viewLifecycleOwner) { subjectId ->
                 if (subjectId > -1) {
                     val subject = SubjectIndicator.convertRawToSubject(subjectId)
-                    LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.inKorean)
+
                     fetch(subjectId)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.inKorean)
+                    }
                 }
             }
 
@@ -158,6 +194,7 @@ class ConceptCourseFragment : MainTabFragment() {
             errorAction.observe(viewLifecycleOwner) { type ->
                 when(type) {
                     HttpException403, GuestException -> showGuestJoinInduceDialog()
+                    NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
                 }
             }
@@ -174,13 +211,19 @@ class ConceptCourseFragment : MainTabFragment() {
     }
 
     fun moveSubjectId(id : Int) { // SubjectIndicator
-        viewModel.selectedSubjectId.postValue(id)
+        if (isViewCreated) {
+            viewModel.selectedSubjectId.postValue(id)
+        }
     }
 
     fun moveAvailableFirstSubject() {
         viewModel.moveAvailableFirstSubject()
     }
-    fun fetch () {
+    fun fetch (subjectId: Int? = null) {
+        if (subjectId != null) {
+            viewModel.fetch(subjectId)
+            return
+        }
         viewModel.selectedSubjectId.value?.let {
             if (it != -1) { viewModel.fetch(it) }
         }
@@ -219,7 +262,8 @@ class ConceptCourseFragment : MainTabFragment() {
                 smallChapterRv.adapter = adapter
                 smallChapterRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 smallChapterRv.setHasFixedSize(true)
-                largeChapterTitleTv.setMarginTop(if (position == 0) 48 else 32)
+                val titleTvTopMargin = if(position == 0 && requireContext().isMobile) 24 else 32
+                largeChapterTitleTv.setMarginTop(titleTvTopMargin)
                 val isLastItem = position == viewModel.chapterList.value?.size?.minus(1)
                 footerCl.visibleIf(isLastItem)
                 largeChapterBorder.visibleIf(isLastItem)
@@ -234,8 +278,9 @@ class ConceptCourseFragment : MainTabFragment() {
                 CHALLENGE_TUTORIAL_FINISH -> {
                     viewModel.completedTutorial { startChallenge ->
                         // TODO 챌린지 완료 후
+                        viewModel.initHeaderSubject()
                         viewModel.updateChallenge(startChallenge)
-                        fetch()
+//                        fetch(viewModel.getInitHeaderBySchoolType().rawValue)
                         val turnOnCompletedDialog = {
                             val moveEvent: (ChallengeCourse?) -> Unit = { it ->
                                 ChallengeManager.getMainTabMoveIntent(it).let {
@@ -243,11 +288,12 @@ class ConceptCourseFragment : MainTabFragment() {
                                 }
                             }
 
-                            val completedDialog = ChallengeCompletedDialog(startChallenge,
-                                ChallengeManager.CourseName.스타트챌린지_개념.id,
-                                moveEvent = moveEvent,
+                            val completedDialog = ChallengeCompletedDialog.newInstance(
+                                challenge = startChallenge,
+                                completedCourseId = ChallengeManager.CourseName.스타트챌린지_개념.id,
                                 isDelayedShowNextBtn = true
                             )
+                            completedDialog.moveEvent = moveEvent
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }
 

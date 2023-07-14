@@ -95,6 +95,7 @@
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/planLoadingView"
                         android:layout_width="400dp"
+                        tools:layout_height="400dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/titleTv"
                         app:layout_constraintStart_toStartOf="parent"

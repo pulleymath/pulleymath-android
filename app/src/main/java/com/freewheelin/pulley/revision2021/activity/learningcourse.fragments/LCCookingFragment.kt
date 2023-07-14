@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.*
@@ -25,6 +27,7 @@ import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.revision2021.utils.observeThrottle
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 
@@ -61,6 +64,24 @@ class LCCookingFragment() : Fragment(),
         return binding.root
     }
 
+    private fun initCustomKeyboardClParams(): FrameLayout.LayoutParams {
+        return if (requireContext().isTablet) {
+            FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        } else {
+            FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        }.apply {
+            gravity = Gravity.END or Gravity.CENTER
+        }
+    }
+    private fun initNumberKeyboardParams(): LinearLayout.LayoutParams {
+        return if (requireContext().isTablet) {
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        } else {
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        }.apply {
+            marginEnd = 48.toPx()
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,6 +89,10 @@ class LCCookingFragment() : Fragment(),
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             rightRv.adapter = cookingAdapter
+
+            customKeyboardCl.layoutParams = initCustomKeyboardClParams()
+            numberKeyboard.layoutParams = initNumberKeyboardParams()
+
             cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // observe 안에 이 코드가 있지만 상단에서 선언되어야 작동한다ㅠㅠ
 
 //                viewModel.fetchCookingGroceries(courseId)
@@ -116,6 +141,15 @@ class LCCookingFragment() : Fragment(),
                         }
                     }
                 }
+                selectedExerciseIndex.observe(viewLifecycleOwner) {index ->
+                    val selectedExercise =
+                        cookingInfoItems.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
+                            ?.first()
+                            ?.exerciseList
+                            ?.get(index)
+                    currentCookingExercise.postValue(selectedExercise)
+
+                }
             }
         }
     }
@@ -162,18 +196,6 @@ class LCCookingFragment() : Fragment(),
                         addVideo(item)
                         item.exerciseList?.let {
                             addExerciseBtn(it)
-                        }
-
-                        viewModel.apply {
-                            selectedExerciseIndex.observe(viewLifecycleOwner) {
-                                val selectedExercise =
-                                    cookingInfoItems.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
-                                        ?.first()
-                                        ?.exerciseList
-                                        ?.get(it)
-                                viewModel.currentCookingExercise.postValue(selectedExercise)
-
-                            }
                         }
                     }
                     CookingInfoItem.ItemType.Exercise -> {

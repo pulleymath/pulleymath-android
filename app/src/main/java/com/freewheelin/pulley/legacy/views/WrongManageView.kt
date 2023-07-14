@@ -86,7 +86,7 @@ class WrongManageView: ConstraintLayout {
             }, deniedCb = {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "학습지만들기")
 
-                val dialog = PurchaseGuideDialog()
+                val dialog = PurchaseGuideDialog.newInstance()
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
 
@@ -96,7 +96,7 @@ class WrongManageView: ConstraintLayout {
                 studyListener?.onReviewBtnClicked(this@WrongManageView)
             }, deniedCb = {
                 LogUtils.logEvent(context, user, PulleyEvent.BUTTON_CLICK, "오답노트", "결제유도", "리뷰하기")
-                val dialog = PurchaseGuideDialog()
+                val dialog = PurchaseGuideDialog.newInstance()
                 val fm = (context as AppCompatActivity).supportFragmentManager
                 fm.let { dialog.show(it, "purchaseGuideDialog")}
             })

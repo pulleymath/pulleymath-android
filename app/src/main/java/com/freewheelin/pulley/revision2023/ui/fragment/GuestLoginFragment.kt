@@ -57,7 +57,6 @@ class GuestLoginFragment : Fragment(),
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
@@ -101,7 +100,7 @@ class GuestLoginFragment : Fragment(),
                 val intent = SignupActivity.getIntent(requireContext(), true)
                 startActivity(intent)
             }
-            scrollRootView.setOnTouchListener { view, motionEvent ->
+            updateGradeCl.setOnTouchListener { view, motionEvent ->
                 val imm: InputMethodManager = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 view.clearFocus()
@@ -110,7 +109,7 @@ class GuestLoginFragment : Fragment(),
 
         }
         arguments?.let {
-            val withPdfDesc = it.getBoolean("PDF_PURCHASE_DESC")
+
         }
     }
 
@@ -198,7 +197,7 @@ class GuestLoginFragment : Fragment(),
                 LoginActivity.LOCK_ACCOUNT -> {
                     DialogUtils.lockAccountDialog(requireContext()) {
                         openResetPassword()
-                    }.show()
+                    }
                 }
                 else -> {
                     DialogUtils.showServerErr(requireContext())
@@ -218,7 +217,7 @@ class GuestLoginFragment : Fragment(),
         fun newInstance() =
             GuestLoginFragment().apply {
                 arguments = Bundle().apply {
-//                    putBoolean("PDF_PURCHASE_DESC", withPdfDesc)
+
                 }
             }
     }

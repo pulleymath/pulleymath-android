@@ -23,6 +23,7 @@ import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 import com.freewheelin.pulley.revision2021.utils.listener.UpdateGradeSchoolSelectListener
 import com.freewheelin.pulley.revision2021.viewmodel.UpdateGradeDialogViewModel
+import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlinx.coroutines.*
 
-class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
+class UpdateGradeDialog(): DialogFragment() {
     private val viewModel by lazy {
         ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
             UpdateGradeDialogViewModel::class.java
@@ -39,11 +40,22 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
 
     private val binding: DialogUpdateGradeBinding by lazy {
         DataBindingUtil.inflate(
-            LayoutInflater.from(context),
+            layoutInflater.cloneInContext(requireContext()),
             R.layout.dialog_update_grade,
             null,
             false
         )
+    }
+    var callback: () -> Unit = {}
+    companion object {
+        fun newInstance(): UpdateGradeDialog {
+            val args = Bundle().apply {
+
+            }
+            val instance = UpdateGradeDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
     override fun onCreateView(
@@ -211,7 +223,7 @@ class UpdateGradeDialog(private val callback: () -> Unit): DialogFragment() {
     }
     private fun setAllGrades() {
         with(binding) {
-            var data = Grade.list.map { it.tabTitle }
+            var data = Grade.serviceGradeList.map { it.tabTitle }
             val hint = "학년을 선택해주세요"
             selectAllGrade.set(data, hint) { position ->
                 when(position) {

@@ -112,11 +112,12 @@ class Book: Content, BaseDiffItem {
                 val category = it.bookCategory
                 return "$series $category"
             }
-            return if (pieceCategoryTag == BookType.CUSTOM_BOOK) {
-                "워크북"
-            } else
-                ""
-
+            return when (pieceCategoryTag) {
+                BookType.CUSTOM_BOOK -> "워크북"
+                BookType.NOTE -> "오답학습"
+                BookType.RECOMMEND -> "추천학습"
+                else -> ""
+            }
         }
 
     val originProblems: List<Problem>

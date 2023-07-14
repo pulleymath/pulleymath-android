@@ -353,19 +353,19 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                     remainBtn.setOnPaidUserClickListener(cb = { onSolveBtnClicked(exam) },
                         deniedCb = {
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "이어풀기 쌍둥이")
-                            val dialog = PurchaseGuideDialog()
+                            val dialog = PurchaseGuideDialog.newInstance()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
                     reportBtn.setOnPaidUserClickListener(cb = { onReportBtnClicked(exam) },
                         deniedCb = {
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "리포트 쌍둥이")
-                            val dialog = PurchaseGuideDialog()
+                            val dialog = PurchaseGuideDialog.newInstance()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
                     reviewBtn.setOnPaidUserClickListener(cb = { onReviewBtnClicked(exam) },
                         deniedCb = {
                             LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "나의모의고사", "결제유도", "리뷰 쌍둥이")
-                            val dialog = PurchaseGuideDialog()
+                            val dialog = PurchaseGuideDialog.newInstance()
                             childFragmentManager.let { dialog.show(it, "purchaseGuideDialog") }
                         })
                 } else {

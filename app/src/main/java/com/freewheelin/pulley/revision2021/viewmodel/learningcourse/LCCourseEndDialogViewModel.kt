@@ -19,9 +19,12 @@ class LCCourseEndDialogViewModel: BaseViewModel(), LifecycleObserver {
     val courseSummary by lazy { MutableLiveData<CourseSummary>() }
 
     val showSprinkleView by lazy { MutableLiveData<Boolean>(false) }
-
-    fun fetchCourseSummary(cid: Int?) {
-        val chapterId = cid ?: return
+    var chapterId = -1
+    fun fetchCourseSummary() {
+        if (chapterId == -1) {
+            Log.e("LCCourseEndDialog", "chapterId Error:: chapterId is ${chapterId}, maybe not initialized")
+            return
+        }
         val studentId = user?.studentID ?: return
         compositeDisposable += repository.fetchCourseSummary(chapterId ,studentId)
             .subscribeOn(Schedulers.io())
