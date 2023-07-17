@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -30,6 +32,7 @@ import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.editText.*
+import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -43,11 +46,13 @@ class GuestLoginFragment : Fragment(),
     PasswordFieldV2EnterListener {
     private lateinit var binding: FragmentGuestLoginBinding
     var viewModel: GuestJoinViewModel? = null
+    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        initActivityResult()
         // appTheme에서 MaterialComponent인 TextInputLayout 을 사용할 수 있으나
         // 하위 fragment에서는 apptheme가 적용되어 있지 않기 때문에 activity context를 통해 테마 및 layout inflater를 가져온 뒤
         // inflate 해줘야한다.
@@ -83,6 +88,10 @@ class GuestLoginFragment : Fragment(),
             loginBtn.setOnClickListener {
                 if (isValid()) onLoginBtnClicked()
             }
+            whaleLoginBtn.setOnClickListener {
+                val intent = Intent(requireContext(), WhaleSpaceLoginActivity::class.java)
+                getResult.launch(intent)
+            }
 
             dummyLoginBtn.setOnClickListener {
                 pwField.text = "vmfl515!dnlf"
@@ -112,7 +121,20 @@ class GuestLoginFragment : Fragment(),
 
         }
     }
-
+    private fun initActivityResult() {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                LoginActivity.socialLoginFinished -> {
+                    it.data?.let {
+                        println("aspasp 토큰이 있어야함 : ${it.getStringExtra(LoginActivity.USER_TOKEN)}")
+                        val token = it.getStringExtra(LoginActivity.USER_TOKEN) ?: return@registerForActivityResult
+                        MyApplication.token = token
+                        renewMainUser()
+                    }
+                }
+            }
+        }
+    }
     private fun onLoginBtnClicked() {
         binding.apply {
             val email = emailField.text.trim()

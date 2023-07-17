@@ -83,6 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="또는"
+                        android:visibility="gone"
                         style="@style/mo_b1r"
                         android:textColor="@color/gray_600"
                         android:layout_gravity="center"
@@ -91,6 +92,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp56"
+                        android:visibility="gone"
                         app:cardCornerRadius="5dp"
                         android:elevation="0dp">
 
@@ -257,6 +259,7 @@
             android:layout_height="match_parent"
             android:background="#33000000"
             android:visibility="gone"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

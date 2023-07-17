@@ -136,6 +136,7 @@ class MainActivity : PermissionActivity(),
             }
             doubleBackToExitPressedOnce = true
 
+            println("aspasp exitDialogContinualShowCount : ${exitDialogContinualShowCount}")
             if (exitDialogContinualShowCount > 3) {
                 finish()
                 return@addCallback

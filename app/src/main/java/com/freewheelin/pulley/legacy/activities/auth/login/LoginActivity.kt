@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -29,6 +31,7 @@ import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
+import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
@@ -73,11 +76,15 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         const val WRONG_LOGINPW = "WRONG_LOGINPW"
         const val WRONG_LOGINID = "WRONG_LOGINID"
 
+        const val socialLoginFinished = 200
+        const val USER_TOKEN = "USER_TOKEN"
+
         fun getIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java)
         }
     }
     val viewModel: LoginActViewModel by viewModels()
+    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     private val binding: ActivityLoginBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_login, null, false)
@@ -86,6 +93,8 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initActivityResult()
+
         onBackPressedDispatcher.addCallback(this) {
             onBackBtnClicked()
         }
@@ -98,7 +107,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }
             whaleLoginBtn.setOnClickListener {
                 val intent = Intent(this@LoginActivity, WhaleSpaceLoginActivity::class.java)
-                startActivity(intent)
+                getResult.launch(intent)
             }
             findIdPwTv.setOnClickListener {
                 this@LoginActivity.onFindIdPwTvClicked()
@@ -177,6 +186,20 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     }
                     NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
+                }
+            }
+        }
+    }
+    private fun initActivityResult() {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                socialLoginFinished -> {
+                    it.data?.let {
+                        println("aspasp 토큰이 있어야함 : ${it.getStringExtra(USER_TOKEN)}")
+                        val token = it.getStringExtra(USER_TOKEN) ?: return@registerForActivityResult
+                        MyApplication.token = token
+                        goLearningTab()
+                    }
                 }
             }
         }

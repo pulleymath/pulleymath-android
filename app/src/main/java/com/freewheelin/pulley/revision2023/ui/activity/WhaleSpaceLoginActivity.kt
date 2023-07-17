@@ -11,6 +11,8 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityWhaleSpaceLoginBinding
+import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity.Companion.USER_TOKEN
+import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity.Companion.socialLoginFinished
 import com.freewheelin.pulley.revision2023.viewmodel.WhaleSpaceLoginViewModel
 import java.util.UUID
 
@@ -27,7 +29,7 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
     val clientId = "HGooZch3UpTdhnKgH_5o"
 //    val clientSecret = "5mRPQ6WASG"
     val redirectUri = "https://dev.pulleymath.com/redirect"
-
+    var isCustomTabInit = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -45,7 +47,9 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
     private fun handleAuthCallback(uri: Uri) {
         uri.getQueryParameter("code")?.let { code ->
             viewModel.sendCode(code) {
-                // TODO move main activity
+                // TODO token setting
+                intent.putExtra(USER_TOKEN, "userToken")
+                setResult(socialLoginFinished, intent)
             }
         }
     }
@@ -70,4 +74,14 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         customTabsIntent.launchUrl(this, uri)
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (isCustomTabInit) {
+            setResult(socialLoginFinished, intent)
+            finish()
+        }
+        isCustomTabInit = true
+    }
+
 }
