@@ -78,16 +78,19 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".revision2023.ui.activity.WhaleSpaceLoginWebViewActivity"
+            android:name=".revision2023.ui.activity.WhaleSpaceLoginActivity"
             android:screenOrientation="sensorLandscape"
-            android:exported="false" />
-        <!-- <activity -->
-        <!-- android:name=".legacy.activities.learning.LearningTabActivity" -->
-        <!-- android:configChanges="keyboard|keyboardHidden|orientation|screenSize" -->
-        <!-- android:exported="true" -->
-        <!-- android:launchMode="singleTask" -->
-        <!-- android:screenOrientation="sensorLandscape" -->
-        <!-- android:windowSoftInputMode="adjustResize|stateAlwaysHidden" /> -->
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="pulleymath"/>
+                <data android:host="redirectcallback"/>
+                <data android:pathPattern="/whalespace"/>
+
+            </intent-filter>
+        </activity>
         <activity
             android:name=".revision2023.ui.activity.MainActivity"
             android:screenOrientation="sensorLandscape"

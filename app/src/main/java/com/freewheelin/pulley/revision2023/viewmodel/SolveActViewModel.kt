@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
@@ -16,6 +17,7 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.revision2023.model.response.NoteReviewResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -97,6 +99,14 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
             val user = solveActRepository.getDailyTest(type.rawText)
             withContext(Dispatchers.Main) {
                 cb(user)
+            }
+        }
+    }
+    fun getReviewProblems(type: String, studyIDs: List<Int>, cb: (Piece) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val piece = solveActRepository.getReviewProblems(type, studyIDs)
+            withContext(Dispatchers.Main) {
+                cb(piece)
             }
         }
     }

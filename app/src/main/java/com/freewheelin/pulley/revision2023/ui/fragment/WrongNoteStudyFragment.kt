@@ -391,14 +391,13 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
                 viewModel.selectedProblem.postValue(listOf())
 
             })
-
         }
     }
 
     override fun onReviewBtnClicked(view: WrongManageView) {
         val selectedProblem = viewModel.selectedProblem.value ?: return
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.BUTTON_CLICK, "오답노트", "리뷰하기")
-        val subject = if (binding.tabLayout.selectedTabPosition == 0) "오답노트 리뷰" else "즐겨찾기 리뷰"
+        val subject = if (binding.tabLayout.selectedTabPosition == 0) "오답노트" else "즐겨찾기"
         val intent = SolveActivity.getReviewIntent(requireContext(), subject, selectedProblem.toList())
         startActivity(intent)
     }

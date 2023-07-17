@@ -23,8 +23,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 407
-        versionName '1.5.56'
+        versionCode 408
+        versionName '1.5.57'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -210,6 +210,7 @@ dependencies {
     implementation 'io.channel:plugin-android:10.0.7'
     implementation 'io.channel:plugin-android-fcm:10.0.7'
 
+    implementation 'androidx.browser:browser:1.5.0'
 //    implementation 'androidx.core:core-splashscreen:1.1.0-alpha01'
     // lesson pagecall
     // host 처리 문제로 사용안함

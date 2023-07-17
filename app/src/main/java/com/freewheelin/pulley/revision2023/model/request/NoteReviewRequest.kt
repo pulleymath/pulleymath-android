@@ -1,4 +1,8 @@
 package com.freewheelin.pulley.revision2023.model.request
 
-class NoteReviewRequest {
+data class NoteReviewRequest(
+    val studentID: String,
+    val type: String,
+    val studyIDs: List<Int>
+) {
 }

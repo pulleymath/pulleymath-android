@@ -113,7 +113,9 @@ class DialogUtils {
         fun showCommonDialog(context: Context, dialog: CommonDialog, tag: String) {
             if (context is AppCompatActivity && !context.isFinishing) {
                 val fm = context.supportFragmentManager
-                fm.let { dialog.show(it, tag) }
+                if (!fm.isDestroyed) {
+                    fm.let { dialog.show(it, tag) }
+                }
             }
         }
         fun showExamSubmitDialog(context: Context, notSolvedProblemCnt: Int, onSubmitClicked:(() -> Unit)) {
@@ -247,7 +249,6 @@ class DialogUtils {
         }
 
         fun showMainDontExitDialog(context: Context, leftBtnCB: () -> Unit, rightBtnCB: (() -> Unit) = {}) {
-//            val title = "잠깐만요?\uD83C\uDFFB"
             val unicode = 0x270B
             val uniStr = String(Character.toChars(unicode))
             val title = "잠깐만요? ${uniStr}"

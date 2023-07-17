@@ -26,6 +26,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.browser.customtabs.CustomTabsCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -129,23 +130,27 @@ class MainActivity : PermissionActivity(),
                 return@addCallback
             }
 
-//            if (doubleBackToExitPressedOnce) {
-//                finish()
-//                return@addCallback
-//            }
-//            doubleBackToExitPressedOnce = true
-//            DaebakToast.show(this@MainActivity, "뒤로 가기를 한번 더 누르면 종료됩니다.")
-//            Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            if (doubleBackToExitPressedOnce) {
+                finish()
+                return@addCallback
+            }
+            doubleBackToExitPressedOnce = true
+
             if (exitDialogContinualShowCount > 3) {
                 finish()
                 return@addCallback
             }
             exitDialogContinualShowCount ++
-            DialogUtils.showMainDontExitDialog(this@MainActivity, {
-                finish()
-            }, {
-                exitDialogContinualShowCount = 0
-            })
+            if (user?.serviceType?.isGuestUser == true) {
+                DialogUtils.showMainDontExitDialog(this@MainActivity, {
+                    finish()
+                }, {
+                    exitDialogContinualShowCount = 0
+                })
+            } else {
+                DaebakToast.show(this@MainActivity, "뒤로 가기를 한번 더 누르면 종료됩니다.")
+                Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            }
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -219,8 +224,7 @@ class MainActivity : PermissionActivity(),
             mainTl.selectTap(0, MainTab.메인)
 
             alarmBtn.setOnClickListener {
-
-//                val intent = PurchaseInduceWebViewActivity.getIntent(this@MainActivity)
+//                val intent = Intent(this@MainActivity, WhaleSpaceLoginActivity::class.java)
 //                startActivity(intent)
 
                 val intent = AlarmActivity.getIntent(this@MainActivity)
@@ -563,7 +567,6 @@ class MainActivity : PermissionActivity(),
                 }
             }
             showDrawer.observe(this@MainActivity) { show ->
-                println("aspasp showDrawer?  :show : ${show}")
                 binding.apply {
                     if (show) {
                         rootDl.openDrawer(GravityCompat.END)

@@ -7,6 +7,8 @@ import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.revision2023.SchoolType
+import com.freewheelin.pulley.revision2023.model.StudyCategoryEnum
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -96,6 +98,7 @@ open class Content: Serializable {
     var chapter: String = ""
 
     var isLocked: Boolean = true
+    var schoolType: SchoolType? = null
 
     val category: PieceCategory
         get() {
@@ -267,6 +270,6 @@ open class Content: Serializable {
 
     var similarCount:Int = 0
         get() {
-            return problems.filter { it.rawCategory == "SIMILAR" }.size
+            return problems.filter { it.rawCategory == StudyCategoryEnum.SIMILAR }.size
         }
 }

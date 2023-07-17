@@ -54,7 +54,6 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
-import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
@@ -310,8 +309,10 @@ class SolveActivity : BaseActivity(),
                     itemValue = "2차학습-리뷰"
 //                val problems = intent.getSerializableExtra(PieceManager.ARG_PIECE_PROBLEMS) as? List<Problem>
                     arg_piece_problems?.let {
-                        val subject = intent.getStringExtra(PieceManager.ARG_PIECE_SUBJECT)?:""
-                        PieceManager.getReviewInfo(this@SolveActivity, subject, it, user!!) {
+                        val type = intent.getStringExtra(PieceManager.ARG_PIECE_SUBJECT) ?: ""
+                        val studyIds = it.map { it.studyID }
+
+                        viewModel.getReviewProblems(type, studyIds) {
                             this@SolveActivity.content = it
                             viewModel.selectedContent.postValue(it)
                             galleryView.set(it)
@@ -1638,7 +1639,7 @@ class SolveActivity : BaseActivity(),
                 }
                 if (book.chapter.trim().isNotEmpty()) {
                     if (title.isNotEmpty()) { title += " / " }
-                    title += book.subject
+                    title += book.chapter
                 }
                 title
             }

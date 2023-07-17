@@ -13,7 +13,9 @@ import com.freewheelin.pulley.revision2023.model.PriorConceptWrapper
 import com.freewheelin.pulley.revision2023.model.V2LogUser
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponseWrapper
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.request.NoteReviewRequest
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
+import com.freewheelin.pulley.revision2023.model.response.NoteReviewResponse
 import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.Call
@@ -31,4 +33,8 @@ interface SolveService {
         @Query("schoolType") school: String? = schoolType.name,
     ): ResponseForceBody<Test>
 
+    @POST("v1/review/problems")
+    suspend fun getReviewProblems(
+        @Body params: NoteReviewRequest
+    ): ResponseForceBody<NoteReviewResponse>
 }

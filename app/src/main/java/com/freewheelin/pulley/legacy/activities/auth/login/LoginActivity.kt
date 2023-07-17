@@ -29,7 +29,6 @@ import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
-import com.freewheelin.pulley.legacy.activities.StartActivity
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
@@ -38,10 +37,9 @@ import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.viewmodel.LoginActViewModel
 import com.freewheelin.pulley.legacy.views.editText.*
-import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
-import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginWebViewActivity
+import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -97,6 +95,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             content.setSpan(UnderlineSpan(), 0, content.length, 0)
             loginBtn.setOnClickListener {
                 if (loginBtn.isEnabled) this@LoginActivity.onLoginBtnClicked()
+            }
+            whaleLoginBtn.setOnClickListener {
+                val intent = Intent(this@LoginActivity, WhaleSpaceLoginActivity::class.java)
+                startActivity(intent)
             }
             findIdPwTv.setOnClickListener {
                 this@LoginActivity.onFindIdPwTvClicked()
@@ -161,7 +163,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             testBtn.apply {
                 visibleIf(BuildConfig.FLAVOR == "beta")
                 setOnClickListener {
-                    val intent = Intent(this@LoginActivity, WhaleSpaceLoginWebViewActivity::class.java)
+                    val intent = Intent(this@LoginActivity, WhaleSpaceLoginActivity::class.java)
                     startActivity(intent)
                 }
             }

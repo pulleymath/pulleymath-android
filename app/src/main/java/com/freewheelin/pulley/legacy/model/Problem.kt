@@ -8,8 +8,9 @@ import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.PieceCategory
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
-import com.freewheelin.pulley.legacy.utils.NumberUtils
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2023.model.StudyCategoryEnum
+import com.freewheelin.pulley.revision2023.model.response.NoteReviewProblem
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import org.joda.time.LocalDateTime
@@ -77,7 +78,7 @@ open class Problem: Serializable {
 
     // category enum 으로 바꿔야할거같다. SIMILAR, REFERENCE,
     @Expose @SerializedName("category")
-    var rawCategory: String = ""
+    var rawCategory: StudyCategoryEnum = StudyCategoryEnum.ORIGIN
 
     @Expose @SerializedName("problemType")
     private var rawProblemType: String = ""
@@ -87,7 +88,7 @@ open class Problem: Serializable {
     @Expose @SerializedName("pieceCategory")
     val rawPieceCategory: Set<String> = HashSet()
 
-    val unit: String = ""
+    var unit: String = ""
 
     val correctRate: Float?
         get() {
@@ -190,7 +191,7 @@ open class Problem: Serializable {
     }
 
     fun isSimilarProblem(): Boolean {
-        return rawCategory == "SIMILAR"
+        return rawCategory == StudyCategoryEnum.SIMILAR
     }
 
     fun isFamily(problem: Problem): Boolean {
@@ -252,7 +253,7 @@ open class Problem: Serializable {
             override fun onResponse(call: Call<Template<Problem>>, response: Response<Template<Problem>>) {
                 if(response.isSuccessful) {
                     val problem = response.body()?.data
-                    problem?.rawCategory = "SIMILAR"
+                    problem?.rawCategory = StudyCategoryEnum.SIMILAR
                     cb(problem)
                 }
             }
@@ -274,73 +275,29 @@ open class Problem: Serializable {
     }
 
     companion object {
-        val results = arrayOf(0, 1, -2)
 
-        fun dummy(isSolved: Boolean? = false): Problem {
-            val problem = Problem()
-            problem.problemLevel = NumberUtils.rand(1,6)
-
-            if (isSolved == true)
-                problem.rawResult = results[NumberUtils.rand(1,3)]
-            else if (isSolved == false)
-                problem.rawResult = results[NumberUtils.rand(0,1)]
-            else
-                problem.rawResult = results[NumberUtils.rand(0,3)]
-
-            problem.problemURL = ProblemDummyDB.dummyProblemUrls[NumberUtils.rand(0, ProblemDummyDB.dummyProblemUrls.size)]
-
-            problem.isClear = when(NumberUtils.rand(0,5)) {
-                0 -> true
-                else -> false
+        fun convertFromNoteReviewProblem(nrProblem: NoteReviewProblem): Problem {
+            return Problem().apply {
+                studyID = nrProblem.studyID
+                unitCode = nrProblem.unitCode
+                answerData = nrProblem.answerData ?: ""
+                userAnswer = nrProblem.userAnswer
+                id = nrProblem.problemID
+                problemLevel = nrProblem.problemLevel
+                rawProblemType = nrProblem.problemType
+                problemURL = nrProblem.problemURL ?: ""
+                unit = nrProblem.unit ?: ""
+                problemNum = nrProblem.problemNum
+                rawCategory = nrProblem.category
+                totalTimes = nrProblem.totalTimes
+                correctTimes = nrProblem.correctTimes
+                rawResult = nrProblem.result
+                isClear = nrProblem.clear
+                isScrap = nrProblem.scrap
+                rawUpdateDateTime = nrProblem.updateDateTime
+                problemErrorStatus = nrProblem.problemErrorStatus
             }
-            problem.isScrap = when(NumberUtils.rand(0,5)) {
-                0 -> true
-                else -> false
-            }
-
-            when(NumberUtils.rand(0,2)) {
-                0 -> {
-                    problem.rawProblemType = "객관식"
-                    problem.answerData = NumberUtils.rand(1,6).toString()
-                }
-                1 -> {
-                    problem.rawProblemType = "주관식"
-                    problem.answerData = NumberUtils.rand(0,130).toString()
-                }
-            }
-
-            if(problem.getResultByScoring() == Result.correct)
-                problem.userAnswer = problem.answerData
-            else if(problem.getResultByScoring() == Result.incorrect) {
-                if(problem.rawProblemType == "객관식") {
-                    problem.userAnswer = "4"
-                } else {
-                    problem.userAnswer = NumberUtils.rand(130,200).toString()
-                }
-            }
-
-
-
-            when(NumberUtils.rand(1,100)) {
-                in 0..9 -> problem.problemErrorStatus = ProblemErrorStatus.ERROR
-                in 10..19 -> problem.problemErrorStatus = ProblemErrorStatus.REPORT
-                else -> problem.problemErrorStatus = ProblemErrorStatus.NONE
-            }
-            return problem
         }
-
-        fun dummies(cnt: Int, isSolved: Boolean? = false): ArrayList<Problem> {
-            var problems = ArrayList<Problem>()
-            var rand = NumberUtils.rand(1, 200)
-            for (i in 0 until cnt) {
-                val problem = dummy(isSolved)
-                problem.problemNum = rand + i
-                problems.add(problem)
-            }
-
-            return problems
-        }
-
         fun arrangeProblem(problems:List<Problem>) : List<Problem>{
             val problemIdDictionary = HashMap<Int, Problem>()
             for (problem in problems) {
