@@ -77,9 +77,31 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         if (isCustomTabInit) {
-            setResult(socialLoginFinished, intent)
-            finish()
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+//            }
+//            val forward = intent.resolveActivity(packageManager)
+//            println("aspasp packageName : ${forward.packageName}, calssName: ${forward.className}, ${forward.shortClassName}")
+//            println("aspasp this packageName : ${BuildConfig.APPLICATION_ID}, className: ${this.localClassName}")
+//
+//            if (forward.packageName == BuildConfig.APPLICATION_ID && forward.className == this.localClassName) {
+//                setResult(socialLoginFinished, intent)
+//                finish()
+//            }
+
+//            (intent.getParcelableExtra<Parcelable>(BuildConfig.APPLICATION_ID) as? Intent)?.let { forward ->
+//                println("aspasp 들어옴? ")
+//                val name: ComponentName = forward.resolveActivity(packageManager)
+//                println("aspasp packageName : ${name.packageName}, calssName: ${name.className}, ${name.shortClassName}")
+//
+//                if (name.packageName == "safe_package" && name.className == "safe_class") {
+//                    startActivity(forward)
+//                }
+//            }
+
         }
         isCustomTabInit = true
     }

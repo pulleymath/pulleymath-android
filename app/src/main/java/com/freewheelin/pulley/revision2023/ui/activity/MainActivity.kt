@@ -130,25 +130,25 @@ class MainActivity : PermissionActivity(),
                 return@addCallback
             }
 
-            if (doubleBackToExitPressedOnce) {
-                finish()
-                return@addCallback
-            }
-            doubleBackToExitPressedOnce = true
-
-            println("aspasp exitDialogContinualShowCount : ${exitDialogContinualShowCount}")
-            if (exitDialogContinualShowCount > 3) {
-                finish()
-                return@addCallback
-            }
-            exitDialogContinualShowCount ++
             if (user?.serviceType?.isGuestUser == true) {
+                if (exitDialogContinualShowCount > 2) {
+                    finish()
+                    return@addCallback
+                }
+                exitDialogContinualShowCount ++
+
                 DialogUtils.showMainDontExitDialog(this@MainActivity, {
                     finish()
                 }, {
                     exitDialogContinualShowCount = 0
                 })
             } else {
+                if (doubleBackToExitPressedOnce) {
+                    finish()
+                    return@addCallback
+                }
+                doubleBackToExitPressedOnce = true
+
                 DaebakToast.show(this@MainActivity, "뒤로 가기를 한번 더 누르면 종료됩니다.")
                 Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
             }
