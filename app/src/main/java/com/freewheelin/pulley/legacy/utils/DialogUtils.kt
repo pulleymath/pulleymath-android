@@ -114,7 +114,11 @@ class DialogUtils {
             if (context is AppCompatActivity && !context.isFinishing) {
                 val fm = context.supportFragmentManager
                 if (!fm.isDestroyed) {
-                    fm.let { dialog.show(it, tag) }
+                    try {
+                        fm.let { dialog.show(it, tag) }
+                    } catch (e: IllegalStateException) {
+                        fm.beginTransaction().add(dialog, tag).commitAllowingStateLoss()
+                    }
                 }
             }
         }
