@@ -119,13 +119,11 @@ class MainActivity : PermissionActivity(),
             tabFragments.forEach { it.resetHeaderControlParams() }
             binding.headerCl.showExpandVertical(true)
             val fragments = supportFragmentManager.fragments
-            for (fragment in fragments) {
-                if(fragment is MyPageBaseFragment) {
-                    fragment.onBackBtnClicked()
-                    return@addCallback
-                }
-            }
-            if (binding.rootDl.isDrawerOpen(GravityCompat.END)) {
+            val myPageFrags = fragments.filterIsInstance<MyPageBaseFragment>()
+            if (myPageFrags.isNotEmpty()) {
+                myPageFrags.last().onBackBtnClicked()
+                return@addCallback
+            } else if (binding.rootDl.isDrawerOpen(GravityCompat.END)) {
                 viewModel.toggleDrawer()
                 return@addCallback
             }
@@ -647,12 +645,6 @@ class MainActivity : PermissionActivity(),
     }
     fun backMyPage(frag: Fragment, withAnim: Boolean = true) {
         removeSettingFragment(frag)
-        if (frag is MyMainPageFragment) {
-            if (binding.rootDl.isDrawerOpen(GravityCompat.END)) {
-                viewModel.toggleDrawer()
-            }
-        }
-
         myPageFragment.binding.rv.adapter?.notifyDataSetChanged()
     }
 
