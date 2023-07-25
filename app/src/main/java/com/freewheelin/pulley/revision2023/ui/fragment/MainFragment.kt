@@ -38,9 +38,11 @@ import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.adapter.MainPlannerListAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import org.joda.time.LocalDate
 
 class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
@@ -60,6 +62,10 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     }
     private val challengeMissionAdapter = ChallengeMissionAdapter {
         viewModel.onMissionClick(it)
+    }
+    private val plannerAdapter = MainPlannerListAdapter {
+        // TODO
+        println("aspasp planner click!")
     }
 
     companion object {
@@ -162,9 +168,15 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             dDayTv.setOnClickListener { onDDayBtnClicked() }
             startStudyClBtn.setOnClickListener { onStartBtnClicked() }
             challengeActionBtn.setOnClickListener { onChallengeAction() }
-
+            plannerPrevNaviBtn.setOnClickListener {
+                println("aspasp prevNaviBtn")
+            }
+            plannerNextNaviBtn.setOnClickListener {
+                println("aspasp nextNaviBtn")
+            }
         }
         viewModel.apply {
+//            initPlannerItems()
             challengeHeaders.observe(viewLifecycleOwner) {
                 challengeHeaderListAdapter.submitList(it)
                 if (it.isNotEmpty() && !wasInitUI) {
@@ -190,6 +202,10 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 }
                 challengeMissionAdapter.submitList(list)
 
+            }
+            plannerItems.observe(viewLifecycleOwner) {
+                println("aspasp planer items22 :${it.size}")
+                plannerAdapter.submitList(it)
             }
             toastMessage.observe(viewLifecycleOwner) {
                 DaebakToast.show(requireContext(), it)
@@ -271,6 +287,11 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 adapter = challengeMissionAdapter
                 viewModel.challengeDescAdapter = challengeMissionAdapter
             }
+//            plannerRv.apply {
+//                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+//                adapter = plannerAdapter
+//                viewModel.plannerAdapter = plannerAdapter
+//            }
 
             initChallenge()
         }

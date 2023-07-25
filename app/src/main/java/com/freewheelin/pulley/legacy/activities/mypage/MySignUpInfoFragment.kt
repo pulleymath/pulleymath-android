@@ -17,7 +17,8 @@ import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentMySignupInfoBinding
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.SignInChannel
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
@@ -66,17 +67,19 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
                     isGuestUser = it.serviceType.isGuestUser == true
                     nameTv.text = it.fullName
                     emailTv.text = it.email
-                    if (BuildConfig.FLAVOR == "beta") {
-                        studentIdTv.text = it.studentID
-                        studentIdTv.visibleIf(true)
-                    }
+
+                    studentIdTv.text = it.studentID
+                    studentIdTv.visibleIf(BuildConfig.FLAVOR == "beta")
                     phoneTv.text = it.cellPhone
                     parentPhoneTv.text = it.parentNumber
 
-                    emailModifyBtn.text = if(it.isValidEmail) "변경하기" else "인증하기"
+                    emailModifyBtn.text = "변경하기"
 
                     ivConfirmPhone.visibleIf(it.isValidPhone)
                     ivConfirmEmail.visibleIf(it.isValidEmail)
+
+                    socialIconIv.visibleIf(it.signInChannel == SignInChannel.WHALESPACE)
+                    passwordLl.visibleIf(it.signInChannel == SignInChannel.PULLEY)
                 }
 
             }
@@ -89,7 +92,7 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         viewModel.updateUser(user)
     }
 
-    override fun onModifyCompleted(user: User) {
+    override fun onModifyCompleted(user: UserV4) {
         viewModel.updateUser(user)
     }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,10 +23,12 @@ import com.freewheelin.pulley.databinding.DialogTeacherUtilityBinding
 import com.freewheelin.pulley.legacy.activities.SplashActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.manage.BookManager
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.legacy.core.manage.TestManager
+import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.legacy.utils.DialogType
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2023.ui.fragment.*
@@ -38,6 +41,9 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.view.SpyItemView
 import com.freewheelin.pulley.revision2023.utils.StringUtils
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 enum class SpyItem(val description: String, val isSwitch: Boolean = false) {
     LiveAPI("라이브 서버", true),
@@ -235,7 +241,7 @@ class SpyDialog(): DialogFragment() {
     }
 
     private fun changeApi(isLive: Boolean) {
-        MyApplication.user?.logout { errorMsg ->
+        val callback: (String?) -> Unit = { errorMsg ->
             val api = if (isLive) Network.Server.live.toString() else Network.Server.staging.toString()
             Preferences.onServerAPI.set(api)
 
@@ -249,6 +255,23 @@ class SpyDialog(): DialogFragment() {
 
             }
         }
+        API_V2.signout().enqueue(object: Callback<Template<String?>> {
+            override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                Log.d(javaClass.simpleName, "로그아웃 성공")
+                MyApplication.token = ""
+                MyApplication.user?.token = ""
+                MyApplication.user = null
+                MyApplication.isAppFirstLaunch = true
+                Preferences.userDataString.set("")
+
+                callback(null)
+            }
+
+            override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                Log.e(javaClass.simpleName, "로그아웃 실패")
+                callback(t.localizedMessage)
+            }
+        })
     }
 
     private fun setScreen() {

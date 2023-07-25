@@ -68,219 +68,213 @@
                     android:text="내 정보"
                     android:textSize="@dimen/sp16" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:paddingStart="@dimen/dp24"
-                    android:paddingBottom="@dimen/dp32">
+                    android:paddingHorizontal="@dimen/dp24"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/nameLabel"
-                        style="@style/TextGray_500"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp32"
-                        android:text="@string/text_name"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/nameTv"
-                        style="@style/TextGray_800"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:text="대박이"
-                        android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/nameLabel" />
-
-                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                        android:id="@+id/nameModifyBtn"
-                        android:layout_width="96dp"
-                        android:layout_height="36dp"
-                        android:layout_marginEnd="@dimen/dp24"
-                        android:text="@string/text_change"
-                        style="@style/h5"
-                        app:layout_constraintBottom_toBottomOf="@+id/nameTv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/nameTv" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/joinedUserInfoCl"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        visibleIf="@{ !isGuestUser }"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameLabel" >
-
+                        android:paddingVertical="@dimen/dp12"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/emailLabel"
-                            style="@style/TextGray_500"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp40"
-                            android:text="@string/text_email"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:text="이름"
+                            style="@style/h5"
+                            android:textColor="@color/gray_500"/>
+
+                        <TextView
+                            android:id="@+id/nameTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="김풀리"
+                            style="@style/b1r"
+                            android:layout_marginStart="16dp"/>
+
+                        <ImageView
+                            android:id="@+id/socialIconIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="5dp"
+                            android:layout_marginStart="8dp"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:background="@drawable/bg_whalespace_round_12"
+                            android:src="@drawable/ic_whale_secondary"/>
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                            android:id="@+id/nameModifyBtn"
+                            android:layout_width="96dp"
+                            android:layout_height="36dp"
+                            android:text="@string/text_change"
+                            style="@style/h5"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/dp12"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="이메일"
+                            style="@style/h5"
+                            android:textColor="@color/gray_500"/>
 
                         <TextView
                             android:id="@+id/emailTv"
-                            style="@style/TextGray_800"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="50dp"
-                            android:ellipsize="end"
-                            android:maxLength="30"
-                            android:text="daebak44435554545478@gmail.com"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="@+id/emailLabel"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/emailLabel" />
-
-                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                            android:id="@+id/emailModifyBtn"
-                            android:layout_width="96dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="@dimen/dp24"
-                            android:text="@string/text_change"
-                            style="@style/h5"
-                            app:layout_constraintBottom_toBottomOf="@+id/emailTv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/emailTv" />
-
-                        <TextView
-                            android:id="@+id/phoneLabel"
-                            style="@style/TextGray_500"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp40"
-                            android:text="@string/text_phone"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/emailLabel" />
-
-                        <TextView
-                            android:id="@+id/phoneTv"
-                            style="@style/TextGray_800"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="50dp"
-                            android:text="010-0000-0000"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="@+id/phoneLabel"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/phoneLabel" />
-
-                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                            android:id="@+id/phoneModifyBtn"
-                            android:layout_width="96dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="@dimen/dp24"
-                            android:text="@string/text_change"
-                            style="@style/h5"
-                            app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/phoneTv" />
-
-                        <TextView
-                            android:id="@+id/parentPhoneLabel"
-                            style="@style/TextGray_500"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp40"
-                            android:text="부모님 휴대폰"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/phoneLabel" />
-
-                        <TextView
-                            android:id="@+id/parentPhoneTv"
-                            style="@style/TextGray_800"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="90dp"
-                            android:text=""
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintBottom_toBottomOf="@+id/parentPhoneLabel"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/parentPhoneLabel" />
-
-                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                            android:id="@+id/parentPhoneModifyBtn"
-                            android:layout_width="96dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="@dimen/dp24"
-                            android:text="@string/text_change"
-                            style="@style/h5"
-                            app:layout_constraintBottom_toBottomOf="@+id/parentPhoneTv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/parentPhoneTv" />
-
-                        <TextView
-                            android:id="@+id/resetPasswordLabel"
-                            style="@style/TextGray_500"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp40"
-                            android:text="@string/text_modify_password"
-                            android:textSize="@dimen/sp16"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/parentPhoneLabel" />
-
-                        <TextView
-                            android:id="@+id/studentIdTv"
-                            style="@style/TextGray_800"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="100dp"
-                            android:text="B260153"
-                            android:textSize="@dimen/sp16"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@+id/resetPasswordLabel"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />
-
-                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                            android:id="@+id/passwordModifyBtn"
-                            android:layout_width="96dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="@dimen/dp24"
-                            android:text="@string/text_change"
-                            style="@style/h5"
-                            app:layout_constraintBottom_toBottomOf="@+id/resetPasswordLabel"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/resetPasswordLabel" />
+                            android:text="이메일"
+                            style="@style/b1r"
+                            android:layout_marginStart="16dp"/>
 
                         <ImageView
                             android:id="@+id/ivConfirmEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_check_green_circle_24"
-                            app:layout_constraintBottom_toBottomOf="@+id/emailTv"
-                            app:layout_constraintStart_toEndOf="@+id/emailTv"
-                            app:layout_constraintTop_toTopOf="@+id/emailTv" />
+                            android:src="@drawable/ic_check_green_circle_24"/>
 
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                            android:id="@+id/emailModifyBtn"
+                            android:layout_width="96dp"
+                            android:layout_height="36dp"
+                            android:text="@string/text_change"
+                            style="@style/h5"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/dp12"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="휴대폰 번호"
+                            style="@style/h5"
+                            android:textColor="@color/gray_500"/>
+
+                        <TextView
+                            android:id="@+id/phoneTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="김풀리"
+                            style="@style/b1r"
+                            android:layout_marginStart="16dp"/>
                         <ImageView
                             android:id="@+id/ivConfirmPhone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_check_green_circle_24"
-                            app:layout_constraintBottom_toBottomOf="@+id/phoneTv"
-                            app:layout_constraintStart_toEndOf="@+id/phoneTv"
-                            app:layout_constraintTop_toTopOf="@+id/phoneTv" />
+                            android:src="@drawable/ic_check_green_circle_24" />
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                            android:id="@+id/phoneModifyBtn"
+                            android:layout_width="96dp"
+                            android:layout_height="36dp"
+                            android:text="@string/text_change"
+                            style="@style/h5"/>
 
+                    </LinearLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/dp12"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="부모님 휴대폰 번호"
+                            style="@style/h5"
+                            android:textColor="@color/gray_500"/>
+
+                        <TextView
+                            android:id="@+id/parentPhoneTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="김풀리"
+                            style="@style/b1r"
+                            android:layout_marginStart="16dp"/>
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                            android:id="@+id/parentPhoneModifyBtn"
+                            android:layout_width="96dp"
+                            android:layout_height="36dp"
+                            android:text="@string/text_change"
+                            style="@style/h5"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/passwordLl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/dp12"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="비밀번호 변경"
+                            style="@style/h5"
+                            android:textColor="@color/gray_500"/>
+
+                        <TextView
+                            android:id="@+id/studentIdTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/b1r"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:text="개발에만 표시되는 studentId"
+                            android:layout_marginStart="16dp"/>
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                            android:id="@+id/passwordModifyBtn"
+                            android:layout_width="96dp"
+                            android:layout_height="36dp"
+                            android:text="@string/text_change"
+                            style="@style/h5"/>
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/loginBtn"

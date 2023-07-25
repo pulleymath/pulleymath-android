@@ -21,7 +21,7 @@ import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.legacy.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.legacy.model.ServerStatus
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
@@ -34,6 +34,7 @@ import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -222,7 +223,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     private fun toLogin() {
         Log.d(javaClass.simpleName, "moveActivity() => user ${user?.token?.isEmpty() == true} =${user?.token}")
-        user?.connectToCrashlytics()
+        user?.let { FirebaseCrashlytics.getInstance().setUserId(it.studentID) }
 
         when {
             isNeedOnboarding -> startActivity(OnboardingActivity::class.java)
@@ -256,7 +257,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 //        continueUpdateProcess()
     }
 
-    fun putFcmToken(user: User?) {
+    fun putFcmToken(user: UserV4?) {
         if(user?.token?.isNotEmpty() == true) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -276,13 +277,13 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    fun loadAlimSetting(user: User?) {
+    fun loadAlimSetting(user: UserV4?) {
         disposables += API_APP.getNotificationSetting()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 response.data.apply {
-                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing, schoolID = user.schoolID)
+//                    user?.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing, schoolID = user.schoolID)
                 }
             },{
                 /* do nothing */

@@ -29,7 +29,8 @@ class SchoolInfo {
     var regionID: Int? = null
     var grade: Int = 2
     var initMoGrade: Int = 4
-    var majorType: String = "" }
+    var majorType: String = ""
+}
 
 data class RequestChangeEmail(val email:String, val auth:String)
 data class RequestChangePhone(val cellphone:String, val auth:String, val countryCode: String)

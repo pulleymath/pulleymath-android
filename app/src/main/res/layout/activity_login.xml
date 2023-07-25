@@ -79,33 +79,27 @@
                         android:layout_marginTop="@dimen/dp32"
                         android:text="로그인하기"
                         />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="또는"
-                        android:visibility="gone"
-                        style="@style/mo_b1r"
-                        android:textColor="@color/gray_600"
-                        android:layout_gravity="center"
-                        android:layout_marginVertical="8dp"
-                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_400"
+                        android:layout_marginVertical="16dp"/>
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp56"
-                        android:visibility="gone"
                         app:cardCornerRadius="5dp"
-                        android:elevation="0dp">
+                        app:cardElevation="0dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/whaleLoginBtn"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp56"
-                            android:background="#0d48a1"
+                            android:background="@color/social_whalespace"
                             android:clickable="true"
                             android:focusable="true">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_marginStart="16dp"
                                 android:src="@drawable/ic_whale_secondary"
                                 app:layout_constraintTop_toTopOf="parent"

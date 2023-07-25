@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.model.Template
+import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.DialogUtils
@@ -20,6 +22,12 @@ class SignUpActViewModel(application: Application) : BaseAndroidViewModel(applic
     private val anonymousRepository by lazy { AnonymousRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
+    fun fetchUser(cb: (UserV4) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val user = userRepository.getUser()
+            cb(user)
+        }
+    }
 
     fun requestGuestSignUp(req: RequestSignup, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

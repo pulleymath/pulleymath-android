@@ -82,6 +82,10 @@
     <color name="purple_300_opa_50">#7E7EFF</color>
     <color name="purple_gray_300_opa_50">#DEDEEF</color>
 
+    <color name="purple_DCE6FF">#DCE6FF</color>
+    <color name="purple_5282FF">#5282FF</color>
+    <color name="social_whalespace">#193A97</color>
+
     <color name="bronze">#D49358</color>
 
     <color name="konkuk_primary">#046b08</color>

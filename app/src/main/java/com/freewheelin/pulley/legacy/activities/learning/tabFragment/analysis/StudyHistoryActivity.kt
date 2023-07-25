@@ -24,15 +24,22 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
+import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
+import com.freewheelin.pulley.legacy.model.ResponseListBody
 import com.freewheelin.pulley.legacy.model.contents.*
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.responseError
+import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExamGuideDialogListener {
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
@@ -92,36 +99,60 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
         setUpUI()
     }
 
+
+    private fun getStudyList(studentId: String, successCB: (contents: List<Content>) -> Unit) {
+        API_V3.getStudyList(studentId).enqueue(object: Callback<ResponseListBody<Content>> {
+            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
+                responseFailed(this@StudyHistoryActivity, t)
+            }
+
+            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
+                if(response.isSuccessful) {
+                    val contents = response.body()?.data ?: emptyList()
+                    successCB(contents)
+                } else {
+                    responseError(this@StudyHistoryActivity, response)
+                }
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         binding.apply {
-            user?.getStudyList(this@StudyHistoryActivity) {
-                this@StudyHistoryActivity.contents = it
-                if(this@StudyHistoryActivity.contents.isEmpty())
-                    emptyGuideTv.visibility = View.VISIBLE
-                else
-                    emptyGuideTv.visibility = View.INVISIBLE
+            user?.let {
+                getStudyList(it.studentID) {
+                    this@StudyHistoryActivity.contents = it
+                    if (this@StudyHistoryActivity.contents.isEmpty())
+                        emptyGuideTv.visibility = View.VISIBLE
+                    else
+                        emptyGuideTv.visibility = View.INVISIBLE
 
 
-                if(recyclerView.adapter == null) {
-                    recyclerView.layoutManager = LinearLayoutManager(this@StudyHistoryActivity, LinearLayoutManager.VERTICAL, false)
-                    recyclerView.adapter = StudyListAdapter()
-                } else {
-                    recyclerView.adapter?.notifyDataSetChanged()
-                }
-
-                recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-
-                        super.onScrolled(recyclerView, dx, dy)
-//                    Log.d("스크롤", "scrollY=$dy")
-                        if(dy > 0) {
-                            viewShadow.visibility = View.VISIBLE
-                        } else {
-                            viewShadow.visibility = View.INVISIBLE
-                        }
+                    if (recyclerView.adapter == null) {
+                        recyclerView.layoutManager = LinearLayoutManager(
+                            this@StudyHistoryActivity,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
+                        recyclerView.adapter = StudyListAdapter()
+                    } else {
+                        recyclerView.adapter?.notifyDataSetChanged()
                     }
-                })
+
+                    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                            super.onScrolled(recyclerView, dx, dy)
+//                    Log.d("스크롤", "scrollY=$dy")
+                            if (dy > 0) {
+                                viewShadow.visibility = View.VISIBLE
+                            } else {
+                                viewShadow.visibility = View.INVISIBLE
+                            }
+                        }
+                    })
+                }
             }
         }
     }

@@ -80,7 +80,7 @@ object MarketingManager {
 
 //    1643026270780 - 1642987740000 = 38530780
     fun filterBanner(marketing:Marketing) {
-        val studentSegment = getStudentSegment(user?.grade)
+        val studentSegment = getStudentSegment(user?.userGrade)
         Log.d("마케팅", "marketing studentSegment : $studentSegment")
 
         val userSegment = user?.serviceType!!

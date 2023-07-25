@@ -113,10 +113,15 @@ class AffiliatedTestFragment: MainTabFragment() {
             testListRv.adapter = adapter
             uuiTv.movementMethod = ScrollingMovementMethod()
 
-            if(user?.showMainKUTab == true)
-                testCompletedIv.setImageResource(R.drawable.box_colorful_ku)
-            else
-                testCompletedIv.setImageResource(R.drawable.box_colorful)
+            val univChannel = AffiliatedUniv.schoolIdOfNonNull(user?.schoolID)
+            when (univChannel) {
+                AffiliatedUniv.Konkuk -> {
+                    testCompletedIv.setImageResource(R.drawable.box_colorful_ku)
+                }
+                AffiliatedUniv.Soongsil -> {
+                    testCompletedIv.setImageResource(R.drawable.box_colorful)
+                }
+            }
 
             rightSv.setOnScrollChangeListener { view, i, i2, i3, i4 ->
                 if (i2 > 180 && isShowMainTab) {

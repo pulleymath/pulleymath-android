@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.core.manage.AndroidID
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.request.GuestSignInRequest
 import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
@@ -21,10 +22,10 @@ class StartActViewModel(application: Application) : BaseAndroidViewModel(applica
 
     val user = userRepository.user
 
-    fun updateUser(user: User) {
+    fun updateUser(user: UserV4) {
         userRepository.updateUser(user)
     }
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             withContext(Dispatchers.Main) {

@@ -29,7 +29,7 @@ import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.legacy.core.manage.TestManager
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentSnackTestBinding
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SnackTestFragViewModel
@@ -203,7 +203,7 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
         }
     }
 
-    override fun onModifyCompleted(user: User) {
+    override fun onModifyCompleted(user: UserV4) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK,"테스트","추천설정","수정하기")
     }
 

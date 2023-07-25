@@ -5,13 +5,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import com.freewheelin.pulley.legacy.dialogs.CompleteDialog
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 
 interface MyPageSettingDialogListener {
-    fun onModifyCompleted(user: User)
+    fun onModifyCompleted(user: UserV4)
 }
 
-open class MyPageSettingBaseDialog(context: Context, open val user: User, listener: MyPageSettingDialogListener): Dialog(context) {
+open class MyPageSettingBaseDialog(context: Context, open val user: UserV4, listener: MyPageSettingDialogListener): Dialog(context) {
     var listener: MyPageSettingDialogListener? = null
 
     init {

@@ -37,7 +37,7 @@ object ProblemManager {
 
 
     @SuppressLint("CheckResult")
-    fun getScrapProblems(context: Context, user: User, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
+    fun getScrapProblems(context: Context, user: UserV4, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
         val startDate = DateTimeUtils.yyyy_MM_dd.format(from)
         val endDate = DateTimeUtils.yyyy_MM_dd.format(to)
         API_V2.getWrongNotes(
@@ -55,7 +55,7 @@ object ProblemManager {
     }
 
     @SuppressLint("CheckResult")
-    fun getWrongProblems(context: Context, user: User, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
+    fun getWrongProblems(context: Context, user: UserV4, from: Date, to: Date, cb:(problems: List<Problem>) -> Unit) {
         val startDate = DateTimeUtils.yyyy_MM_dd.format(from)
         val endDate = DateTimeUtils.yyyy_MM_dd.format(to)
         API_V2.getWrongNotes(
@@ -73,7 +73,7 @@ object ProblemManager {
 
     }
 
-    fun scrap(context: Context, user: User, problem: Problem, isScrap: Boolean, successCB: () -> Unit) {
+    fun scrap(context: Context, user: UserV4, problem: Problem, isScrap: Boolean, successCB: () -> Unit) {
         val params: Parameter = Parameter(
                 "markType" to "SCRAP",
                 "problemID" to problem.id,
@@ -94,7 +94,7 @@ object ProblemManager {
         })
     }
 
-    fun clear(context: Context, user: User, problem: Problem, isClear: Boolean, needBroadCasting: Boolean = false, successCB: () -> Unit) {
+    fun clear(context: Context, user: UserV4, problem: Problem, isClear: Boolean, needBroadCasting: Boolean = false, successCB: () -> Unit) {
         val params: Parameter = Parameter(
                 "markType" to "CLEAR",
                 "problemID" to problem.id,
@@ -120,7 +120,7 @@ object ProblemManager {
         })
     }
 
-    fun getDetailInfo(context: Context, user: User, problem: Problem, successCB: (problem: Problem, detail: NoteStudyProblem?, history: List<History>) -> Unit) {
+    fun getDetailInfo(context: Context, user: UserV4, problem: Problem, successCB: (problem: Problem, detail: NoteStudyProblem?, history: List<History>) -> Unit) {
 
         API_V2.getProblemDetail(problem.id).enqueue(object: Callback<ResponseForceBody<NoteStudyDetailResponse>> {
             override fun onFailure(call: Call<ResponseForceBody<NoteStudyDetailResponse>>, t: Throwable) {
@@ -138,7 +138,7 @@ object ProblemManager {
     }
 
 
-    fun clearAllScrap(context: Context, user: User, cb:(() -> Unit)) {
+    fun clearAllScrap(context: Context, user: UserV4, cb:(() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
         API_V1.clearAllScrap(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -157,7 +157,7 @@ object ProblemManager {
         })
     }
 
-    fun clearAllClear(context: Context, user: User, cb: (() -> Unit)) {
+    fun clearAllClear(context: Context, user: UserV4, cb: (() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
         API_V1.clearAllClear(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -176,7 +176,7 @@ object ProblemManager {
         })
     }
 
-    fun clearAllScoring(context: Context, user: User, cb:(() -> Unit)) {
+    fun clearAllScoring(context: Context, user: UserV4, cb:(() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
         API_V1.clearAllScroing(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -193,7 +193,7 @@ object ProblemManager {
         })
     }
 
-    fun clearProblems(context: Context, problem: List<Problem>,  user: User, cb:(() -> Unit)) {
+    fun clearProblems(context: Context, problem: List<Problem>,  user: UserV4, cb:(() -> Unit)) {
         val param: Parameter = Parameter(
                 "markType" to "CLEAR",
                 "problemIDs" to problem.map { it.id },
@@ -214,7 +214,7 @@ object ProblemManager {
         })
     }
 
-    fun unclearProblems(context: Context, problem: List<Problem>, user: User, cb:(() -> Unit)) {
+    fun unclearProblems(context: Context, problem: List<Problem>, user: UserV4, cb:(() -> Unit)) {
         val param: Parameter = Parameter(
                 "markType" to "CLEAR",
                 "problemIDs" to problem.map { it.id },

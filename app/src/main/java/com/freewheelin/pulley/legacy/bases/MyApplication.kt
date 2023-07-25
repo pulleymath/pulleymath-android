@@ -23,6 +23,7 @@ import com.freewheelin.pulley.legacy.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.VersionInfo
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.legacy.utils.*
@@ -38,7 +39,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
         var isTest = false
 //        var user:User? = null
 
-        var user:User? = null
+        var user:UserV4? = null
         var schoolType: SchoolType = SchoolType.HIGH
         var token: String? = null
         var isAppFirstLaunch: Boolean = true
@@ -58,7 +59,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         if (Preferences.userDataString.get().isNotEmpty()) {
-            val user = Gson().fromJson(Preferences.userDataString.get(), User::class.java)
+            val user = Gson().fromJson(Preferences.userDataString.get(), UserV4::class.java)
             viewModel.updateUser(user)
         }
         setSchoolType()
@@ -109,7 +110,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 
 }
 
-val user: User?
+val user: UserV4?
     get() {
         return try {
 //            if(MyApplication.user == null) {
@@ -122,7 +123,7 @@ val user: User?
         }
     }
 
-val Application.user: User?
+val Application.user: UserV4?
     get() {
         return try {
             MyApplication.user

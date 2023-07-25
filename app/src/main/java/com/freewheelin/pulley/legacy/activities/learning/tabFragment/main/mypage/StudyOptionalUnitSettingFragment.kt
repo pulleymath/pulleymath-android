@@ -24,6 +24,7 @@ import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.views.DaebakInputSelection
 import com.freewheelin.pulley.legacy.views.DaebakInputSelectionListener
+import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 
 class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
 
@@ -39,6 +40,54 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpUI()
+        viewModel.apply {
+            fetchRecommendSubject()
+
+            recommendCommonSubjects.observe(viewLifecycleOwner) {
+
+            }
+            recommendOptionalSubjects.observe(viewLifecycleOwner) { optionalList ->
+                binding.apply {
+                    if (optionalList.isEmpty()) {
+                        noneSelection.isSelected = true
+                    } else {
+                        getOptionalBigUnitList(optionalList, SubjectV3.확률과통계)?.let { userUnits ->
+                            probAnsStatSelection.result = listOf(
+                                false,
+                                userUnits.contains(BigUnitV3.경우의_수.title),
+                                userUnits.contains(BigUnitV3.확률.title),
+                                userUnits.contains(BigUnitV3.통계.title)
+                            )
+                        }
+                        getOptionalBigUnitList(optionalList, SubjectV3.미적분)?.let { userUnits ->
+                            calculusSelection.result = listOf(
+                                false,
+                                userUnits.contains(BigUnitV3.수열의_극한.title),
+                                userUnits.contains(BigUnitV3.미분법.title),
+                                userUnits.contains(BigUnitV3.적분법.title)
+                            )
+                        }
+                        getOptionalBigUnitList(optionalList, SubjectV3.기하)?.let { userUnits ->
+                            geometrySelection.result = listOf(
+                                false,
+                                userUnits.contains(BigUnitV3.이차곡선.title),
+                                userUnits.contains(BigUnitV3.벡터.title),
+                                userUnits.contains(BigUnitV3.공간도형.title)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fun getOptionalBigUnitList (optionalList: List<RecommendSubject>, subject: SubjectV3): List<String>? {
+        return optionalList.find {
+            it.subjectId == subject.id
+        }?.chapters?.filter {
+            it.isSelected
+        }?.map {
+            it.chapterName
+        }
     }
 
     fun setUpUI() {
@@ -55,29 +104,29 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
                 listOf(BigUnitV3.이차곡선, BigUnitV3.벡터, BigUnitV3.공간도형).map { it.title }
 
 
-            val userUnits = user!!.optionalUnit
-            if (userUnits.isEmpty()) {
-                noneSelection.isSelected = true
-            } else {
-                probAnsStatSelection.result = listOf(
-                    false,
-                    userUnits.contains(BigUnitV3.경우의_수),
-                    userUnits.contains(BigUnitV3.확률),
-                    userUnits.contains(BigUnitV3.통계)
-                )
-                calculusSelection.result = listOf(
-                    false,
-                    userUnits.contains(BigUnitV3.수열의_극한),
-                    userUnits.contains(BigUnitV3.미분법),
-                    userUnits.contains(BigUnitV3.적분법)
-                )
-                geometrySelection.result = listOf(
-                    false,
-                    userUnits.contains(BigUnitV3.이차곡선),
-                    userUnits.contains(BigUnitV3.벡터),
-                    userUnits.contains(BigUnitV3.공간도형)
-                )
-            }
+//            val userUnits = user!!.optionalUnit
+//            if (userUnits.isEmpty()) {
+//                noneSelection.isSelected = true
+//            } else {
+//                probAnsStatSelection.result = listOf(
+//                    false,
+//                    userUnits.contains(BigUnitV3.경우의_수),
+//                    userUnits.contains(BigUnitV3.확률),
+//                    userUnits.contains(BigUnitV3.통계)
+//                )
+//                calculusSelection.result = listOf(
+//                    false,
+//                    userUnits.contains(BigUnitV3.수열의_극한),
+//                    userUnits.contains(BigUnitV3.미분법),
+//                    userUnits.contains(BigUnitV3.적분법)
+//                )
+//                geometrySelection.result = listOf(
+//                    false,
+//                    userUnits.contains(BigUnitV3.이차곡선),
+//                    userUnits.contains(BigUnitV3.벡터),
+//                    userUnits.contains(BigUnitV3.공간도형)
+//                )
+//            }
 
             noneSelection.setOnClickListener { onNoneSelection() }
             modifyBtn.setOnClickListener { onModifyBtnClicked() }

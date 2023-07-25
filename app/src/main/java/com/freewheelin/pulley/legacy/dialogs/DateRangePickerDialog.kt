@@ -23,7 +23,7 @@ interface DateRangePickerDialogListener {
     fun onUpdateClicked(picker: DateRangePickerDialog, from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type)
 }
 
-class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, firstDate: LocalDate) : Dialog(context), View.OnClickListener, DaebakCalendarListener {
+class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate) : Dialog(context), View.OnClickListener, DaebakCalendarListener {
     enum class Type (val text: String?) {
         RECENT7("최근 7일"),
         RECENT14("최근 14일"),
@@ -43,8 +43,6 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
     var listener: DateRangePickerDialogListener? = null
     val period: Int
         get() = DateTimeUtils.getPeriod(from, to)
-
-    var firstDate: LocalDate
 
     var tempFrom: LocalDate? = null
     var tempTo: LocalDate? = null
@@ -67,7 +65,6 @@ class DateRangePickerDialog(context: Context, from: LocalDate, to: LocalDate, fi
         initUI()
         this.from = from
         this.to = to
-        this.firstDate = firstDate
     }
 
     fun initUI() {

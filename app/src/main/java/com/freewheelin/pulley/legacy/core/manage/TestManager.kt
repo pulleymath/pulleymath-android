@@ -28,7 +28,7 @@ object TestManager {
 
     var isNeedToFullDailyResultInTab = false
 
-    fun getTestList(context: Context, user: User, cb: (tests: List<Test>) -> Unit) {
+    fun getTestList(context: Context, user: UserV4, cb: (tests: List<Test>) -> Unit) {
         if (BuildConfig.FLAVOR == "beta") {
             API_V3.getAllTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
                 override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
@@ -62,7 +62,7 @@ object TestManager {
         }
     }
 
-    fun getDailyTest(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
+    fun getDailyTest(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
         println("asoaso user!!.studentID :${user.studentID}")
         API_V2.getDailyTest(user.studentID).enqueue(object: Callback<Template<Test>>{
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
@@ -82,7 +82,7 @@ object TestManager {
     }
 
 
-    fun getTest(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
+    fun getTest(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "pieceSubCategory" to test.pieceSubCategory!!
@@ -105,7 +105,7 @@ object TestManager {
         })
     }
 
-    fun getInitTest(context: Context, user: User, successCB: (test: Test) -> Unit) {
+    fun getInitTest(context: Context, user: UserV4, successCB: (test: Test) -> Unit) {
         API_V2.getInitTest(user.studentID).enqueue(object: Callback<Test>{
             override fun onFailure(call: Call<Test>, t: Throwable) {
                 responseFailed(context, t)
@@ -122,7 +122,7 @@ object TestManager {
         })
     }
 
-    fun getTestReport(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
+    fun getTestReport(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
         val param: Parameter = Parameter(
                 "assignID" to test.assignID!!,
                 "studentID" to user.studentID,
@@ -145,7 +145,7 @@ object TestManager {
         })
     }
 
-    fun getDailyTestReport(context: Context, user: User, successCB: (tests: List<Test>) -> Unit) {
+    fun getDailyTestReport(context: Context, user: UserV4, successCB: (tests: List<Test>) -> Unit) {
 
         API_V3.getDailyTestReport().enqueue(object: Callback<ResponseListBody<Test>> {
             override fun onFailure(call: Call<ResponseListBody<Test>>, t: Throwable) {
@@ -169,7 +169,7 @@ object TestManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 
-    fun getTestReview(context: Context, user: User, test: Test, successCB: (test: Test) -> Unit) {
+    fun getTestReview(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
         val param: Parameter = Parameter (
                 "studentID" to user.studentID,
                 "assignID" to test.assignID!!
@@ -192,7 +192,7 @@ object TestManager {
         })
     }
 
-    fun clearTests(context: Context, user: User, cb: (() -> Unit)) {
+    fun clearTests(context: Context, user: UserV4, cb: (() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
 
         API_V1.clearAllTest(body).enqueue(object: Callback<Void> {

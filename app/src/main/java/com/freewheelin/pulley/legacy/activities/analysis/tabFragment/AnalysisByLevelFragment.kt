@@ -11,7 +11,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.legacy.activities.analysis.AnanlysisTabActivityInterface
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.FragmentAnalysisByLevelBinding
 import com.freewheelin.pulley.legacy.model.*
@@ -79,7 +78,7 @@ class AnalysisByLevelFragment : Fragment(), DabakTabRadioListener, AnalysisTabDe
             myPb.font = Theme.extraBold(requireContext())
             configureUI()
             (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
-            (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+//            (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
         }
     }
 

@@ -55,7 +55,7 @@
                 style="@style/TextGray_800.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="가입하신 휴대폰 번호가 다른 계정에서 사용되었습니다.\n휴대폰 번호 변경 및 재 인증해 주시기 바랍니다."
+                android:text="휴대폰 번호가 아직 인증되지 않았거나 다른계정에서 사용되었습니다.\n휴대폰 번호를 인증해주시기 바랍니다."
                 android:textSize="@dimen/sp18" />
 
             <com.freewheelin.pulley.legacy.views.PulleySpinner

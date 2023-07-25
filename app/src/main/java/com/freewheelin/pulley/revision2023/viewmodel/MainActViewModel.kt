@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.isSPYMode
 import com.freewheelin.pulley.legacy.core.API_APP
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
@@ -45,10 +45,10 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         showWholeLoading.postValue(show)
     }
 
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
-            initSchoolType(user.rawSchoolType ?: SchoolType.HIGH)
+            initSchoolType(user.schoolType ?: SchoolType.HIGH)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
         }
@@ -61,7 +61,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         }
     }
 
-    fun updateUser(user: User?) {
+    fun updateUser(user: UserV4?) {
         userRepository.updateUser(user)
     }
 

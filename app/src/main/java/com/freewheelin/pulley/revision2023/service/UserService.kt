@@ -5,8 +5,10 @@ import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
+import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -17,6 +19,12 @@ interface UserService {
 
     @GET("v3/me/app")
     suspend fun getUser(): ResponseBody<User>
+    @GET("v4/me/app")
+    suspend fun getUserV4(): ResponseBody<UserV4>
+    @PATCH("v4/me/email")
+    suspend fun changeEmail(
+        @Body req: ChangeEmailRequest
+    ): ResponseBody<Nothing>
 
     @POST("admin/spy/signup/user")
     suspend fun adminCreateUser(

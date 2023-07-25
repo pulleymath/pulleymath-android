@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
 import com.freewheelin.pulley.R
@@ -15,7 +16,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.API.RequestModel.SchoolInfo
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.databinding.FragmentMyStudyInfoSettingBinding
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.activity.dialog.FindSchoolDialog
 import com.freewheelin.pulley.revision2021.repository.FindCityRepository
 import com.freewheelin.pulley.revision2021.model.response.City
@@ -28,6 +29,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -79,7 +81,9 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
             registBtn.setOnClickListener {
                 if(registBtn.isEnabled) {
                     val grade = getGradeFromSpinner()
-                    update(selectedSchoolID, selectedCityID, grade, selectRate.position, selectMajor.position)
+                    val rate = selectRate.position - 1
+                    val major = selectMajor.position - 1
+                    update(selectedSchoolID, selectedCityID, grade, rate, major)
                 }
             }
             backBtn.setOnClickListener { onBackBtnClicked() }
@@ -136,7 +140,6 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
     }
 
     private fun initSpinners() {
-        setCites()
         setElementaryGrades()
         setMiddleGrades()
         setHighGrades()
@@ -144,6 +147,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
         setMajors()
         setRates()
         setEtc()
+        setCites()
 
         showMajor(false)
         showRates(false)
@@ -203,16 +207,22 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
 
                 registBtn.isEnabled = selectElementaryGrade.position != 0
             }
+            if (isNotSchoolUser()) {
+                if (!selectServicesGrade.isSelected) {
+                    registBtn.isEnabled = false
+                    return
+                }
+            }
 
 
             // 체크 값 변경사항 - 하나라도 변경내역이 있을 때만 반영
 
             MyApplication.user?.let { user ->
                 val mainChanged = user.schoolID != selectedSchoolID || user.regionID != selectedCityID
-                val middleGradeChanged = selectMiddleGrade.isSelected && user.grade.value != selectMiddleGrade.position + 4
+                val middleGradeChanged = selectMiddleGrade.isSelected && user.userGrade.value != selectMiddleGrade.position + 4
 
-                val rateChanged = selectRate.isSelected && user.rating != selectRate.position
-                val majorChanged = selectMajor.isSelected && user.rawMajorType != Major.getValue(selectMajor.position - 1)
+                val rateChanged = selectRate.isSelected && user.initMoGrade != selectRate.position
+                val majorChanged = selectMajor.isSelected && user.majorType != Major.getValue(selectMajor.position - 1)
 
                 if (isMiddleSchoolUser()) {
                     when (selectMiddleGrade.position) {
@@ -236,10 +246,10 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                 if (isNotSchoolUser()) {
                     when (selectServicesGrade.position) {
                         1, 2, 3 -> {
-                            registBtn.isEnabled = mainChanged || middleGradeChanged
+                            registBtn.isEnabled = mainChanged || user.userGrade.value != selectServicesGrade.position + 4
                         }
                         4 -> {
-                            registBtn.isEnabled = mainChanged && rateChanged && selectServicesGrade.isSelected
+                            registBtn.isEnabled = (mainChanged || rateChanged) && selectServicesGrade.isSelected
                         }
                         5, 6, 7 -> {
                             registBtn.isEnabled = (mainChanged || majorChanged || rateChanged) && ( selectMajor.isSelected && selectRate.isSelected)
@@ -303,19 +313,13 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                     selectedSchoolID = user.schoolID
                     selectSchool.text = user.schoolName
                     layoutInfoOption.visibility = View.VISIBLE
-                    if (user.schoolName?.contains("고등") == true) {
-                        showHighGrade(true)
-                    }
-                    if (user.schoolName?.contains("중학") == true) {
-                        showMiddleGrade(true)
-                    }
-                    if (user.schoolName?.contains("초등") == true) {
-                        showElementaryGrade(true)
-                    }
+                    showHighGrade(user.schoolType?.isHigh == true)
+                    showMiddleGrade(user.schoolType?.isMiddle == true)
+                    showElementaryGrade(user.schoolType?.isElementary == true)
                     setInitOption(user)
                 } else if(user.regionID != null) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        delay(200)
+                        delay(100)
                         switchNoStudent.isChecked = true
                         selectedCityID = user.regionID
                         val index = cityList.indexOfFirst {
@@ -329,64 +333,63 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
         }
     }
 
-    private fun setInitOption(user: User) {
+    private fun setInitOption(user: UserV4) {
         with(binding) {
-
-//            MyApplication.user?.let { user ->
-                if (user.schoolID == null) { // 학교를 다니지 않습니다.
-                    showServicesGrade(true)
-
-                    selectElementaryGrade.position = 0
-                    selectMiddleGrade.position = 0
-                    selectHighGrade.position = 0
-                    selectServicesGrade.position = when (user.grade.value) {
-                        in 1 .. 4 -> {
-                            user.grade.value + 4
-                        }
-                        in 5 .. 7 -> {
-                            user.grade.value - 4
-                        }
-                        else -> {
-                            showEtcList(true)
-                            selectEtc.position = user.grade.value - 10
-                            8
-                        }
+            if (user.schoolID == null) { // 학교를 다니지 않습니다.
+                showServicesGrade(true)
+                selectElementaryGrade.position = 0
+                selectMiddleGrade.position = 0
+                selectHighGrade.position = 0
+                val serviceGrade = when (user.userGrade.value) {
+                    in 1 .. 4 -> {
+                        user.userGrade.value + 3
                     }
-
-                } else {
-                    if (Grade.isHigh(user.rawGrade)) {
-                        selectElementaryGrade.position = 0
-                        selectMiddleGrade.position = 0
-                        selectHighGrade.position = user.grade.value
-                        selectServicesGrade.position = 1
-
-                        showServicesGrade(false)
-
-                    } else if(Grade.isMiddle(user.rawGrade)) {
-                        selectElementaryGrade.position = 0
-                        selectMiddleGrade.position = user.grade.value - 4
-                        selectHighGrade.position = 0
-                        selectServicesGrade.position = 1
-
-                        showMiddleGrade(true)
-
-                    } else if (Grade.isElementary(user.rawGrade)) {
-                        selectElementaryGrade.position = user.grade.value - 10
-                        selectMiddleGrade.position = 0
-                        selectHighGrade.position = 0
-                        selectServicesGrade.position = 0
-
-                        showElementaryGrade(true)
-                    } else {
-                        // 가입시 학교를 다니면 성인을 선택할 수 없음
+                    in 5 .. 7 -> {
+                        user.userGrade.value - 4
+                    }
+                    else -> {
+                        showEtcList(true)
+                        selectEtc.position = user.userGrade.value - 10
+                        8
                     }
                 }
+                selectServicesGrade.position = serviceGrade
+            } else {
+                if (Grade.isHigh(user.grade)) {
+                    selectElementaryGrade.position = 0
+                    selectMiddleGrade.position = 0
+                    selectHighGrade.position = user.userGrade.value
+                    selectServicesGrade.position = 1
 
-                selectRate.position = user.rating
-                selectMajor.position =  if(user.rawMajorType == "") 0 else Major.list.indexOf(user.major) + 1
+                    showServicesGrade(false)
 
-//            }
+                } else if(Grade.isMiddle(user.grade)) {
+                    selectElementaryGrade.position = 0
+                    selectMiddleGrade.position = user.userGrade.value - 4
+                    selectHighGrade.position = 0
+                    selectServicesGrade.position = 1
+
+                    showMiddleGrade(true)
+
+                } else if (Grade.isElementary(user.grade)) {
+                    selectElementaryGrade.position = user.userGrade.value - 10
+                    selectMiddleGrade.position = 0
+                    selectHighGrade.position = 0
+                    selectServicesGrade.position = 0
+
+                    showElementaryGrade(true)
+                } else {
+                    // 가입시 학교를 다니면 성인을 선택할 수 없음
+                }
+            }
+
             registBtn.isEnabled = false
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(200)
+                selectRate.position = user.initMoGrade + 1
+                selectMajor.position =  if(user.majorType == "") 0 else Major.list.indexOf(user.userMajor) + 1
+            }
+
         }
     }
 
@@ -452,40 +455,33 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
             var data = Grade.serviceGradeList.map { it.tabTitle }
             val hint = "학년을 선택해주세요"
             selectServicesGrade.set(data, hint) { position ->
+                selectMajor.position = 0
+                selectRate.position = 0
                 when(position) {
                     1, 2, 3 -> {
                         showMajor(false)
                         showRates(false)
                         showEtcList(false)
-                        selectMajor.position = 0
-                        selectRate.position = 0
                     }
                     4 -> {
                         showMajor(false)
                         showRates(true)
                         showEtcList(false)
-                        selectMajor.position = 0
-                        selectRate.position = 0
                     }
                     5, 6, 7 -> {
                         showMajor(true)
                         showRates(true)
                         showEtcList(false)
-                        selectMajor.position = 0
                     }
                     8 -> {
                         showMajor(false)
                         showRates(false)
                         showEtcList(true)
-                        selectMajor.position = 0
-                        selectRate.position = 0
                     }
                     else -> {
                         showMajor(false)
                         showRates(false)
                         showEtcList(false)
-                        selectMajor.position = 0
-                        selectRate.position = 0
                     }
                 }
                 checkRegist()
@@ -558,9 +554,9 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                             user.schoolName = binding.selectSchool.text.toString()
                             user.regionID = regionID
                             user.regionName = cityList.firstOrNull { it.id == regionID }?.name
-                            user.grade = Grade.init(grade)
-                            user.rating = initMoGrade
-                            user.rawMajorType = majorType
+                            user.userGrade = Grade.init(grade)
+                            user.initMoGrade = initMoGrade
+                            user.majorType = majorType
                             user.commit("mypage study info update")
                         }
                         setFragmentResult(MyStudyInfoFragment.RELOAD, bundleOf())

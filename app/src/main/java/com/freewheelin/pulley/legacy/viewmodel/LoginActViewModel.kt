@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.challenge.StartChallenge
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
@@ -19,7 +20,7 @@ class LoginActViewModel(application: Application): BaseAndroidViewModel(applicat
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
 
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             cb(user)

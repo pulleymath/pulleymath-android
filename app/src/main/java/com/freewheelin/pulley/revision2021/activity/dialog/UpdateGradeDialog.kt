@@ -23,7 +23,6 @@ import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.model.response.SchoolResponse
 import com.freewheelin.pulley.revision2021.utils.listener.UpdateGradeSchoolSelectListener
 import com.freewheelin.pulley.revision2021.viewmodel.UpdateGradeDialogViewModel
-import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -130,9 +129,9 @@ class UpdateGradeDialog(): DialogFragment() {
                         user.schoolName = viewModel.selectSchoolText.value.toString()
                         user.regionID = regionId
                         user.regionName = viewModel.cityList.firstOrNull { it.id == regionId }?.name
-                        user.grade = Grade.init(grade)
-                        user.rating = initMoGrade
-                        user.rawMajorType = majorType
+                        user.userGrade = Grade.init(grade)
+                        user.initMoGrade = initMoGrade
+                        user.majorType = majorType
                         user.commit("update grade dialog")
                     }
                     callback()
@@ -294,10 +293,10 @@ class UpdateGradeDialog(): DialogFragment() {
 
             MyApplication.user?.let { user ->
                 val mainChanged = user.schoolID != viewModel.selectedSchoolID || user.regionID != viewModel.selectedCityID
-                val middleGradeChanged = selectMiddleGrade.isSelected && user.grade.value != selectMiddleGrade.position + 4
+                val middleGradeChanged = selectMiddleGrade.isSelected && user.userGrade.value != selectMiddleGrade.position + 4
 
                 val rateChanged = selectRate.isSelected
-                val majorChanged = selectMajor.isSelected && user.rawMajorType != Major.getValue(selectMajor.position - 1)
+                val majorChanged = selectMajor.isSelected && user.majorType != Major.getValue(selectMajor.position - 1)
 
                 if (viewModel.showSelectMiddleGrade.value == true) {
                     when (selectMiddleGrade.position) {
@@ -346,12 +345,12 @@ class UpdateGradeDialog(): DialogFragment() {
                     viewModel.selectSchoolText.postValue(user.schoolName)
                     viewModel.showInfoOption.postValue(true)
 
-                    if (user.schoolName?.contains("고등") == true) {
+                    if (user.schoolType?.isHigh == true) {
                         viewModel.showSelectMiddleGrade.postValue(false)
                         viewModel.showSelectHighGrade.postValue(true)
                         viewModel.showSelectAllGrade.postValue(false)
                     }
-                    if (user.schoolName?.contains("중학") == true) {
+                    if (user.schoolType?.isMiddle == true) {
                         viewModel.showSelectMiddleGrade.postValue(true)
                         viewModel.showSelectHighGrade.postValue(false)
                         viewModel.showSelectAllGrade.postValue(false)
@@ -377,16 +376,16 @@ class UpdateGradeDialog(): DialogFragment() {
     private fun setInitOption() {
         with(binding) {
             MyApplication.user?.let { user ->
-                if (Grade.isHigh(user.rawGrade)) {
+                if (Grade.isHigh(user.grade)) {
                     selectMiddleGrade.position = 0
-                    selectHighGrade.position = user.grade.value
+                    selectHighGrade.position = user.userGrade.value
                 } else {
-                    selectMiddleGrade.position = max(0, user.grade.value - 4)
+                    selectMiddleGrade.position = max(0, user.userGrade.value - 4)
                     selectHighGrade.position = 0
                 }
 
-                selectRate.position = user.rating
-                selectMajor.position =  if(user.rawMajorType == "") 0 else Major.list.indexOf(user.major) + 1
+                selectRate.position = user.initMoGrade
+                selectMajor.position =  if(user.majorType == "") 0 else Major.list.indexOf(user.userMajor) + 1
             }
             submitBtn.isEnabled = false
         }

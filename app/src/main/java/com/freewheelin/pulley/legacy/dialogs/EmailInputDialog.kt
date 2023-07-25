@@ -12,7 +12,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.core.manage.ContentManager
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.DialogEmailInputBinding
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.utils.extensionTouchArea
@@ -27,12 +27,12 @@ interface EmailInputDialogListener {
 }
 
 
-class EmailInputDialog(context: Context, contents: List<Content>, user: User, listener: EmailInputDialogListener): Dialog(context), DaebakInputFieldListener {
+class EmailInputDialog(context: Context, contents: List<Content>, user: UserV4, listener: EmailInputDialogListener): Dialog(context), DaebakInputFieldListener {
     val binding: DialogEmailInputBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_email_input, null, false)
     }
     val contents: List<Content> = contents
-    val user: User = user
+    val user: UserV4 = user
 
     var listener: EmailInputDialogListener? = null
 
@@ -47,8 +47,8 @@ class EmailInputDialog(context: Context, contents: List<Content>, user: User, li
         with(binding) {
             emailField.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             emailField.listener = this@EmailInputDialog
-            emailField.text = user.email
-            emailField.editText.setSelection(user.email.length)
+            emailField.text = user.email ?: ""
+            emailField.editText.setSelection(user.email?.length ?: 0)
             xBtn.extensionTouchArea(24.toPx())
             xBtn.setOnClickListener {
                 dismiss()

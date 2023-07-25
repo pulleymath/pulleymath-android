@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
@@ -27,7 +28,7 @@ class AppViewModel(application: Application) : BaseAndroidViewModel(application)
         challengeRepository.getChallengesOnStatus()
     }
 
-    fun updateUser(user: User) {
+    fun updateUser(user: UserV4) {
         userRepository.updateUser(user)
     }
     fun updateSchoolType(type: SchoolType) {

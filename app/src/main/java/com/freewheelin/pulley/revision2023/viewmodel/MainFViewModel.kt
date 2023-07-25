@@ -1,13 +1,10 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
-import com.freewheelin.pulley.legacy.core.manage.UserManager
-import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.*
@@ -19,11 +16,15 @@ import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2023.model.MainPlannerListItem
+import com.freewheelin.pulley.revision2023.ui.adapter.MainPlannerListAdapter
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.joda.time.DateTimeConstants.*
+import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 
 class MainFViewModel(application: Application): BaseAndroidViewModel(application),
     ChallengeClickListener,
@@ -35,6 +36,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
 
     lateinit var challengeListAdapter: ChallengeHeaderListAdapter
     lateinit var challengeDescAdapter: ChallengeMissionAdapter
+    lateinit var plannerAdapter: MainPlannerListAdapter
 
     val showStartChallengeGuide = MutableLiveData<Boolean>(false)
     val toastMessage = MutableLiveData<String>()
@@ -50,6 +52,12 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     // 서버에서는 Course라는 명칭을, 클라이언트와 디자인에서는 Mission이라는 명칭을쓴다
     private val _challengeMissions = MutableLiveData<List<ChallengeCourse>>()
     val challengeMission: LiveData<List<ChallengeCourse>> = _challengeMissions
+
+    private val _plannerItems = MutableLiveData<List<MainPlannerListItem>>()
+    val plannerItems: LiveData<List<MainPlannerListItem>> = _plannerItems
+
+    val selectedMondayOfTheWeek = MutableLiveData<LocalDate>()
+    val selectedSundayOfTheWeek = MutableLiveData<LocalDate>()
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
@@ -96,6 +104,49 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         }
     }
 
+    fun initPlannerItems() {
+        val initDatePair = initPlannerWeek()
+        println("aspasp initdatepair : ${initDatePair}")
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val items = MainPlannerListItem.getItemList()
+            println("aspasp planer items :${items.size}")
+            _plannerItems.postValue(items)
+        }
+    }
+    private fun initPlannerWeek(): Pair<String, String> {
+        val today = LocalDate.now()
+        val dayOfWeek = today.dayOfWeek
+        val daysAgoAtMonday = when (dayOfWeek) {
+            MONDAY -> 0
+            TUESDAY -> 1
+            WEDNESDAY -> 2
+            THURSDAY -> 3
+            FRIDAY -> 4
+            SATURDAY -> 5
+            SUNDAY -> 6
+            else -> 0
+        }
+        val daysLeftUntilSunday = when (dayOfWeek) {
+            MONDAY -> 6
+            TUESDAY -> 5
+            WEDNESDAY -> 4
+            THURSDAY -> 3
+            FRIDAY -> 2
+            SATURDAY -> 1
+            SUNDAY -> 0
+            else -> 0
+        }
+        selectedMondayOfTheWeek.postValue(today.minusDays(daysAgoAtMonday))
+        selectedSundayOfTheWeek.postValue(today.plusDays(daysLeftUntilSunday))
+
+        return Pair(
+            today.minusDays(daysAgoAtMonday).toString("yyyy-MM-dd"),
+            today.plusDays(daysLeftUntilSunday).toString("yyyy-MM-dd")
+        )
+//        val mondayOfTheWeekStr = mondayOfTheWeek.toString("yy. MM. dd")
+//        val sundayOfTheWeekStr = sundayOfTheWeek.toString("yy. MM. dd")
+
+    }
     fun collectChallengeDetail(challengeId: Int) {
         contentJob?.cancel("다른 챌린지 헤더 클릭으로 인한 취소", CancellationException())
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

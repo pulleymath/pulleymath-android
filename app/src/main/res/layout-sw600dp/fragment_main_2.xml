@@ -69,7 +69,7 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
                     setUserServiceType="@{ vm.userPaidServiceType }"
-                    tools:text="머시깽이"
+                    tools:text="Premium"
                     app:layout_constraintTop_toBottomOf="@id/profileIv"
                     app:layout_constraintStart_toStartOf="@id/profileIv"
                     app:layout_constraintEnd_toEndOf="@id/profileIv"
@@ -303,8 +303,9 @@
             android:layout_marginTop="@dimen/dp32"
             android:layout_marginStart="@dimen/dp32"
             android:layout_marginEnd="@dimen/dp32"
-
             android:layout_marginBottom="@dimen/dp24"
+            tools:visibility="visible"
+            android:visibility="visible"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -357,16 +358,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
-<!--                <Button-->
-<!--                    android:id="@+id/challengeActionBtn"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="48dp"-->
-<!--                    android:text="@{ vm.currentMission.startBtnText }"-->
-<!--                    android:visibility="@{ vm.currentMission.reward != null ? View.VISIBLE : View.GONE }"-->
-<!--                    android:background="@{ vm.currentMission.userStatus == ChallengeUserStatus.YET ? @drawable/bg_purple_300_round_ripple : vm.currentMission.userStatus == ChallengeUserStatus.ING ? @drawable/bg_purple_300_disable_round : vm.currentMission.userStatus == ChallengeUserStatus.DONE &amp;&amp; vm.currentMission.remainRewardsCount != 0 ? @drawable/bg_purple_300_round_ripple : @drawable/bg_purple_300_disable_round }"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
                 <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                     android:id="@+id/challengeActionBtn"
                     android:layout_width="0dp"
@@ -463,6 +454,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="#FFFFFF"
+                    tools:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -484,11 +476,162 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/plannerContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp24"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/gray_100"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/profileContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="32dp">
+
+                <TextView
+                    android:id="@+id/studyPlannerTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="스터디 플래너"
+                    style="@style/h3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_main_beta"
+                    app:layout_constraintStart_toEndOf="@+id/studyPlannerTv"
+                    app:layout_constraintTop_toTopOf="@+id/studyPlannerTv"/>
+                
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/calendarContainerCl"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toBottomOf="@+id/studyPlannerTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dateRangeCl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_white_stroke_gray_500_round_18"
+                        android:paddingHorizontal="24dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:id="@+id/plannerCalendarIv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_calendar_gray"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/b2"
+                            android:text="@{ vm.selectedMondayOfTheWeek.toString(`yy. MM. dd`) + ` - ` + vm.selectedSundayOfTheWeek.toString(`yy. MM. dd`) }"
+                            tools:text="23. 07. 17 - 23. 07. 23"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toEndOf="@+id/plannerCalendarIv"
+                            app:layout_constraintTop_toTopOf="@+id/plannerCalendarIv"
+                            app:layout_constraintBottom_toBottomOf="@+id/plannerCalendarIv"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:id="@+id/plannerPrevNaviBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_tailless_arrow_left_24"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="8dp"
+                        app:tint="@color/gray_800"
+                        android:background="@drawable/bg_gray_100_ripple"
+                        app:layout_constraintTop_toTopOf="@+id/dateRangeCl"
+                        app:layout_constraintBottom_toBottomOf="@+id/dateRangeCl"
+                        app:layout_constraintEnd_toStartOf="@+id/dateRangeCl"/>
+                    <ImageView
+                        android:id="@+id/plannerNextNaviBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_tailless_arrow_right_24"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="8dp"
+                        app:tint="@color/gray_800"
+                        android:background="@drawable/bg_gray_100_ripple"
+                        app:layout_constraintTop_toTopOf="@+id/dateRangeCl"
+                        app:layout_constraintBottom_toBottomOf="@+id/dateRangeCl"
+                        app:layout_constraintStart_toEndOf="@+id/dateRangeCl"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/plannerRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        tools:listitem="@layout/item_main_planner"
+                        app:layout_constraintTop_toBottomOf="@+id/dateRangeCl"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/dateRangeCl"
+                        android:background="@drawable/gradient_shadow_main_planner_header"
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/plannerRv"
+                        android:background="@drawable/gradient_shadow_main_planner_above_footer"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/makePlanLl"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_purple_300_round_28_ripple"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_pencil_under_bar"
+                        />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
         <com.freewheelin.pulley.revision2023.ui.view.StartChallengeGuideView
             android:id="@+id/startChallengeGuideView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="@{ vm.showStartChallengeGuide ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

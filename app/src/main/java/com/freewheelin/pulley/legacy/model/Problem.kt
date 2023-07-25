@@ -229,7 +229,7 @@ open class Problem: Serializable {
         return this.rawPieceCategory.map { PieceCategory.init(it) }.toSet()
     }
 
-    fun getSimilarProblem(context: Context, user: User, content: Content, cb: (problem: Problem?) -> Unit) {
+    fun getSimilarProblem(context: Context, user: UserV4, content: Content, cb: (problem: Problem?) -> Unit) {
 
         val exceptionSimilarProblems = content.tempSimilarProblems
         val assignID = content.assignID!!

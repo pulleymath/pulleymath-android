@@ -57,7 +57,10 @@ class MyAppSettingFragment : MyPageBaseFragment(), CompoundButton.OnCheckedChang
                     binding.emailSwitch.isChecked = isAgreeEmail
                     binding.marketingSwitch.isChecked = isAgreeMarketing
 
-                    user.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing)
+                    user.agreeAlimtalk = isAgreeAlimtalk
+                    user.agreeAppPush = isAgreePush
+                    user.agreeEmail = isAgreeEmail
+                    user.agreeMarketing = isAgreeMarketing
                 }
             },{
                 DialogUtils.confirmDialog(requireContext(), "설정확인", "알림설정을 로드할 수 없습니다.")
@@ -88,7 +91,10 @@ class MyAppSettingFragment : MyPageBaseFragment(), CompoundButton.OnCheckedChang
                     DaebakToast.show(requireContext(), "변경되었습니다.", overDialog = true)
 
                     response.data.apply {
-                        user.update(agreeAlimtalk = isAgreeAlimtalk, agreeAppPush = isAgreePush, agreeEmail = isAgreeEmail, agreeMarketing = isAgreeMarketing)
+                        user.agreeAlimtalk = isAgreeAlimtalk
+                        user.agreeAppPush = isAgreePush
+                        user.agreeEmail = isAgreeEmail
+                        user.agreeMarketing = isAgreeMarketing
                     }
                 },{
                     // 실패일 경우 원복

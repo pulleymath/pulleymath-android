@@ -13,7 +13,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabActivity
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabDelegate
 import com.freewheelin.pulley.legacy.activities.analysis.AnanlysisTabActivityInterface
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.databinding.FragmentAnalysisStudyAmountBinding
 import com.freewheelin.pulley.legacy.model.Analysis
@@ -72,7 +71,7 @@ class AnalysisStudyAmountFragment : Fragment(), AnalysisTabDelegate {
         configUI(from, to)
 
         (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
-        (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+//        (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
 
         with(binding) {
             unitChart.post {

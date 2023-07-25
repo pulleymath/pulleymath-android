@@ -13,10 +13,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import io.reactivex.disposables.CompositeDisposable
 
 
-val Activity.user: User?
+val Activity.user: UserV4?
     get() = MyApplication.user
 
 abstract class BaseActivity : AppCompatActivity() {

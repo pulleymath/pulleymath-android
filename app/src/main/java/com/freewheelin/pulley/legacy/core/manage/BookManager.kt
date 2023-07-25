@@ -57,7 +57,7 @@ object BookManager {
     const val EVENT_BOOK_CLEAR = "EVENT_BOOK_CLEAR"
     const val EVENT_BOOK_SCORING = "EVENT_BOOK_SCORING"
 
-    fun getNewPlanList(context: Context, user: User, cb: (books: List<Book>, categories: List<Pair<String, List<BookCategory>>>) -> Unit) {
+    fun getNewPlanList(context: Context, user: UserV4, cb: (books: List<Book>, categories: List<Pair<String, List<BookCategory>>>) -> Unit) {
         API_V2.getBookPlans(user.studentID).enqueue(object : Callback<ResponseBookList> {
             override fun onFailure(call: Call<ResponseBookList>, t: Throwable) {
                 responseFailed(context, t)
@@ -75,7 +75,7 @@ object BookManager {
         })
     }
 
-    fun getMyBookList(user: User, cb: (list: MyBookList?) -> Unit) {
+    fun getMyBookList(user: UserV4, cb: (list: MyBookList?) -> Unit) {
         API_V3.getMyBookList(user.studentID).enqueue(object: Callback<ResponseBody<MyBookList>> {
             override fun onFailure(call: Call<ResponseBody<MyBookList>>, t: Throwable) {}
 
@@ -87,7 +87,7 @@ object BookManager {
 
     }
 
-    fun assign(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+    fun assign(context: Context, book: Book, user: UserV4, cb:(book: Book) -> Unit) {
         val param: Parameter = Parameter (
                 "studentID" to user.studentID,
                 "pieceID" to book.pieceID
@@ -110,11 +110,11 @@ object BookManager {
         })
     }
 
-    fun getBookFromContent(context: Context, content: Content, user: User, cb: ((book: Book) -> Unit)) {
+    fun getBookFromContent(context: Context, content: Content, user: UserV4, cb: ((book: Book) -> Unit)) {
         val book = Book(content)
         getBook(context, book, user, cb)
     }
-    fun getBook(context: Context, book: Book, user: User, cb: ((book: Book) -> Unit)) {
+    fun getBook(context: Context, book: Book, user: UserV4, cb: ((book: Book) -> Unit)) {
         API_V3.getBook(user.studentID, book.assignID ?: book.pieceID).enqueue(object: Callback<ResponseBody<ResponseBookInfo2>> {
             override fun onFailure(call: Call<ResponseBody<ResponseBookInfo2>>, t: Throwable) {
                 responseFailed(context, t)
@@ -147,7 +147,7 @@ object BookManager {
     }
 
     // Deprecated
-    fun getBooks(context: Context, user: User, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
+    fun getBooks(context: Context, user: UserV4, filters: Set<FilterType>, cb: ((books: List<Book>, filters: Set<FilterType>) -> Unit)) {
         val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
         API_V3.getBooksNew(filterString, FilterOrder.DEFAULT.text, FilterCategory.BOOK.text).enqueue(object: Callback<List<Book>> {
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {}
@@ -164,7 +164,7 @@ object BookManager {
         })
     }
 
-    fun getBookInfo(context: Context, book: Book, user: User, cb: ((book: Book) -> Unit)) {
+    fun getBookInfo(context: Context, book: Book, user: UserV4, cb: ((book: Book) -> Unit)) {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "assignID" to book.assignID!!
@@ -187,7 +187,7 @@ object BookManager {
         })
     }
 
-    fun getRecommendBookList(context: Context, user: User, cb:((recommendList: List<RecommendBookList>?) -> Unit)) {
+    fun getRecommendBookList(context: Context, user: UserV4, cb:((recommendList: List<RecommendBookList>?) -> Unit)) {
         API_V2.getRecommendBookList(user.studentID).enqueue(object: Callback<List<RecommendBookList>> {
             override fun onFailure(call: Call<List<RecommendBookList>>, t: Throwable) {}
 
@@ -198,7 +198,7 @@ object BookManager {
             }
         })
     }
-    fun clearBooks(context: Context, user: User, cb: (() -> Unit)) {
+    fun clearBooks(context: Context, user: UserV4, cb: (() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
         API_V1.clearAllBooks(body).enqueue(object: Callback<Template<Map<String, String>>> {
             override fun onFailure(call: Call<Template<Map<String, String>>>, t: Throwable) {
@@ -225,7 +225,7 @@ object BookManager {
         return cateogryByGroup.toList()
     }
 
-    fun score(context: Context, user: User, book: Book, answeredSet: Set<Problem>, cb:() -> Unit) {
+    fun score(context: Context, user: UserV4, book: Book, answeredSet: Set<Problem>, cb:() -> Unit) {
         val param: Parameter = Parameter(
                 "assignID" to book.assignID!!,
                 "studentID" to user.studentID
@@ -285,7 +285,7 @@ object BookManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 
-    fun review(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+    fun review(context: Context, book: Book, user: UserV4, cb:(book: Book) -> Unit) {
         val param: Parameter = Parameter(
                 "assignID" to book.assignID!!,
                 "studentID" to user.studentID
@@ -309,7 +309,7 @@ object BookManager {
         })
     }
 
-    fun reviewBookV2(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+    fun reviewBookV2(context: Context, book: Book, user: UserV4, cb:(book: Book) -> Unit) {
         val param: Parameter = Parameter(
             "assignID" to book.assignID!!,
             "studentID" to user.studentID
@@ -337,7 +337,7 @@ object BookManager {
         })
 
     }
-    fun reviewCustomBookV2(context: Context, book: Book, user: User, cb:(book: Book) -> Unit) {
+    fun reviewCustomBookV2(context: Context, book: Book, user: UserV4, cb:(book: Book) -> Unit) {
         val param: Parameter = Parameter(
             "assignID" to book.assignID!!,
             "studentID" to user.studentID
@@ -362,7 +362,7 @@ object BookManager {
 
     }
 
-    fun togglePin(context: Context, book: Book, user: User, cb:() -> Unit) {
+    fun togglePin(context: Context, book: Book, user: UserV4, cb:() -> Unit) {
 
         val id = if(book.assignID == null) book.pieceID else book.assignID!!
         //did
@@ -409,7 +409,7 @@ object BookManager {
     }
 
     fun getCommercialSimilarProblemCnt(context: Context,
-                                       user: User,
+                                       user: UserV4,
                                        pieceID: Int,
                                        pageProblems: List<CommercialBookPage>,
                                        problemPerCnt: Int,
@@ -440,7 +440,7 @@ object BookManager {
     }
 
     fun makeCustomBook(context: Context,
-                       user: User,
+                       user: UserV4,
                        commercialBook: CommercialBook,
                        pages: Set<CommercialBookPage>,
                        problemPerCnt: Int,
@@ -474,7 +474,7 @@ object BookManager {
     }
 
 
-    fun deleteBook(context: Context, user: User, book: Book, cb:() -> Unit) {
+    fun deleteBook(context: Context, user: UserV4, book: Book, cb:() -> Unit) {
 
         val id = if(book.assignID == null) book.pieceID else book.assignID!!
 

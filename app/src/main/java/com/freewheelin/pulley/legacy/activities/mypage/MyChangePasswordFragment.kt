@@ -2,6 +2,7 @@ package com.freewheelin.pulley.legacy.activities.mypage
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestChangePassword
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.databinding.FragmentMyResetPasswordBinding
+import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 //import com.freewheelin.pulley.legacy.views.editText.PasswordFieldV2
@@ -22,7 +24,10 @@ import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.HttpException
+import retrofit2.Response
 
 
 class MyChangePasswordFragment : MyPageBaseFragment() {
@@ -149,11 +154,29 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
     }
 
     fun showCompleteDialog() {
+        val callback: (String?) -> Unit = {
+            requireActivity().finishAffinity()
+            requireActivity().startActivity(Intent(requireContext(), SplashActivity::class.java))
+        }
+
         DialogUtils.toLoginDialog(requireActivity(), {
-            MyApplication.user?.logout {
-                requireActivity().finishAffinity()
-                requireActivity().startActivity(Intent(requireContext(), SplashActivity::class.java))
-            }
+            API_V2.signout().enqueue(object: Callback<Template<String?>> {
+                override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                    Log.d(javaClass.simpleName, "로그아웃 성공")
+                    MyApplication.token = ""
+                    MyApplication.user?.token = ""
+                    MyApplication.user = null
+                    MyApplication.isAppFirstLaunch = true
+                    Preferences.userDataString.set("")
+
+                    callback(null)
+                }
+
+                override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                    Log.e(javaClass.simpleName, "로그아웃 실패")
+                    callback(t.localizedMessage)
+                }
+            })
         },{
             onBackBtnClicked()
         })

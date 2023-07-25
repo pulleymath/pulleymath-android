@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus"/>
+        <import type="com.freewheelin.pulley.revision2023.model.MainPlannerListItemPosition"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2023.utils.listeners.MainPlannerListItemClickListener" />
+        <variable name="item" type="com.freewheelin.pulley.revision2023.model.MainPlannerListItem"/>
+        <variable name="isLastIndex" type="Boolean"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/bg_gray_100_ripple">
+
+        <View
+            android:id="@+id/headerBorderView"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@{ item.isToday ? @drawable/bg_gray_100_round_top_corner_stroke_purple_300_width_2 : @drawable/bg_gray_100_round_top_corner_stroke_gray_400_width_2 }"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <View
+            android:id="@+id/footerBorderView"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            android:background="@{ item.isToday ? @drawable/bg_gray_100_round_bottom_corner_stroke_purple_300_width_2 : @drawable/bg_gray_100_round_bottom_corner_stroke_gray_400_width_2 }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/bodyLl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@{ item.isToday ? @color/purple_300 : @color/gray_400, default=@color/purple_300 }"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/dateLl"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:orientation="vertical"
+                android:gravity="bottom">
+                <TextView
+                    android:id="@+id/dayOfTheWeekTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.dayOfWeek , default=화 }"
+                    style="@style/b2"
+                    tools:visibility="visible"
+                    android:layout_gravity="center"
+                    android:textColor="@{ item.isToday ? @color/purple_300 : @color/gray_500, default=@color/gray_500 }"/>
+                <TextView
+                    android:id="@+id/daysTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.dayOfMonth }"
+                    android:layout_gravity="center"
+                    style="@style/h3"
+                    android:textColor="@{ item.isToday ? @color/purple_300 : @color/gray_500, default=@color/gray_500 }"/>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@{ item.triedProblemCount > 0 ? @drawable/ic_check_purple_circle : @drawable/ic_round_gray_400 }"
+                tools:src="@drawable/ic_check_purple_circle"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+
+                app:cardElevation="0dp"
+                app:cardCornerRadius="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.pieceCategory }"
+                    tools:text="모의고사"
+                    style="@style/b3"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    mainPlannerCategory="@{ item.pieceCategory }"
+                    tools:textColor="@color/blue_400"
+                    tools:background="@color/blue_100"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                >
+                <TextView
+                    android:id="@+id/titleTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.title }"
+                    tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
+                    style="@style/b2"
+                    android:textColor="@{ item.triedProblemCount > 0 ? @color/gray_600 : @color/gray_800, default=@color/gray_600 }"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_600"
+                    visibleIf="@{ item.triedProblemCount > 0 }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/titleTv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/titleTv"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.triedProblemCount + ``, default=`2` }"
+                    style="@style/b2"
+                    android:textColor="@color/gray_700"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@{ `/` + item.totalProblemCount , default=`/10`}"
+                    style="@style/b2"
+                    android:textColor="@color/gray_500"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="·"
+                    style="@style/b2"
+                    android:layout_marginEnd="4dp"
+                    android:textColor="@color/gray_500"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.problemCorrectRate + `%`, default=`80%`}"
+                    style="@style/b2"
+                    mainPlannerCorrectRate="@{ item.problemCorrectRate }"
+                    tools:textColor="@color/green_300"
+                    />
+
+            </LinearLayout>
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_tailless_arrow_right_24"
+                app:tint="@color/gray_800"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="center_vertical"/>
+
+            <LinearLayout
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@{ item.isToday ? @color/purple_300 : @color/gray_400, default=@color/purple_300 }"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

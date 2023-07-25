@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.API_APP
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
@@ -33,10 +33,10 @@ class LearningTabViewModel(application: Application): BaseAndroidViewModel(appli
     fun setPageProgress(show: Boolean) {
         showWholeLoading.postValue(show)
     }
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
-            initSchoolType(user.rawSchoolType ?: SchoolType.HIGH)
+            initSchoolType(user.schoolType ?: SchoolType.HIGH)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
         }

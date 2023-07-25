@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.PurchaseGuide
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.repository.AnonymousRepository
@@ -37,7 +37,7 @@ class PurchaseGuideViewModel(application: Application) : BaseAndroidViewModel(ap
     val step2TabIndex = MutableLiveData<Int>(0)
     val purchaseEnabled = MutableLiveData(false)
 
-    fun fetchGuides(cb: (User) -> Unit = {}) {
+    fun fetchGuides(cb: (UserV4) -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val newGuides = anonymousRepository.getPurchaseGuide()
             _originalGuides.postValue(newGuides)

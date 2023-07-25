@@ -107,10 +107,6 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
             )
 
             updateRecommends(param) {
-                user!!.update(
-                    recommendLevel = recommendLevel,
-                    recommendChapter = recommendChapter
-                )
                 val intent = Intent(TestManager.EVENT_TEST_SETTING)
                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
                 exitBtn()

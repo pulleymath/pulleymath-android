@@ -68,7 +68,7 @@ class AnalysisTabActivity : BaseNavActivity(),
     val dialog: DateRangePickerDialog by lazy {
         val to = LocalDate.now()
         val from = LocalDate.now().minusDays(6)
-        val pickerDialog = DateRangePickerDialog(this, from, to, LocalDate(user!!.firstDate))
+        val pickerDialog = DateRangePickerDialog(this, from, to)
         pickerDialog.listener = this
         pickerDialog
     }

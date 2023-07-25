@@ -32,7 +32,7 @@ object MockExamManager {
     const val EVENT_MOCK_EXAM_CLEAR = "EVENT_MOCK_EXAM_CLEAR"
 
 
-    fun clearExam(context: Context, user: User, cb: (() -> Unit)) {
+    fun clearExam(context: Context, user: UserV4, cb: (() -> Unit)) {
         val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
         API_V1.clearAllMyMockExam(body).enqueue(object: Callback<Template<Map<String, String>>> {
             override fun onFailure(call: Call<Template<Map<String, String>>>, t: Throwable) {
@@ -52,7 +52,7 @@ object MockExamManager {
         })
     }
 
-    fun getMockExamReport(context: Context, exam: MockExam, user: User, successCB: ((analysis: MockExamAnalysis) -> Unit), failCB: () -> Unit) {
+    fun getMockExamReport(context: Context, exam: MockExam, user: UserV4, successCB: ((analysis: MockExamAnalysis) -> Unit), failCB: () -> Unit) {
 
         API_V3.getMockReport(user.studentID, exam.assignID!!).enqueue(object: Callback<MockExamAnalysis> {
             override fun onFailure(call: Call<MockExamAnalysis>, t: Throwable) {
@@ -106,7 +106,7 @@ object MockExamManager {
         })
     }
 
-    fun getProblems(context: Context, exam: MockExam, user: User, isRestart: Boolean, successCB: (exam: MockExam) -> Unit) {
+    fun getProblems(context: Context, exam: MockExam, user: UserV4, isRestart: Boolean, successCB: (exam: MockExam) -> Unit) {
         API_V2.getMo(exam.pieceID, user.studentID, isRestart).enqueue(object: Callback<MockExam> {
             override fun onFailure(call: Call<MockExam>, t: Throwable) {
                 responseFailed(context, t)
@@ -123,7 +123,7 @@ object MockExamManager {
         })
     }
 
-    fun getMockProblems(context: Context, orgExam: MockExam, user: User, successCB: (exam: MockExam) -> Unit) {
+    fun getMockProblems(context: Context, orgExam: MockExam, user: UserV4, successCB: (exam: MockExam) -> Unit) {
 
         Log.d("MockManager", "mockID=${orgExam.mockID}, optional=${orgExam.selectOptional}, isRestart=${orgExam.isRestart}")
 
@@ -146,7 +146,7 @@ object MockExamManager {
         })
     }
 
-    fun getExamReviewProblems(context: Context, exam: MockExam, user: User, successCB: (mockExam: MockExam) -> Unit) {
+    fun getExamReviewProblems(context: Context, exam: MockExam, user: UserV4, successCB: (mockExam: MockExam) -> Unit) {
         val params: Parameter = Parameter(
                 "assignID" to exam.assignID!!,
                 "studentID" to user.studentID
@@ -173,7 +173,7 @@ object MockExamManager {
         })
     }
 
-    fun getMockCuration(context: Context, user: User, successCB: (curation: String) -> Unit) {
+    fun getMockCuration(context: Context, user: UserV4, successCB: (curation: String) -> Unit) {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID
         )
@@ -195,7 +195,7 @@ object MockExamManager {
     }
 
 
-    fun getNewMockExamList(context: Context, user: User, cb:(examList: List<MockExam>) -> Unit) {
+    fun getNewMockExamList(context: Context, user: UserV4, cb:(examList: List<MockExam>) -> Unit) {
 
         API_V3.getNewMockExam(user.studentID).enqueue(object: Callback<List<MockExam>> {
             override fun onFailure(call: Call<List<MockExam>>, t: Throwable) {
@@ -224,7 +224,7 @@ object MockExamManager {
 
     }
 
-    fun getMyMockExamList(context: Context, user: User, cb: (examList: List<MockExam>?) -> Unit) {
+    fun getMyMockExamList(context: Context, user: UserV4, cb: (examList: List<MockExam>?) -> Unit) {
 
         API_V3.getMyMockExam(user.studentID).enqueue(object: Callback<List<MockExam>> {
             override fun onFailure(call: Call<List<MockExam>>, t: Throwable) {
@@ -290,7 +290,7 @@ object MockExamManager {
 //        })
     }
 
-    fun getMockSummary(context: Context, mockId:Int, user: User, cb: (summary: MockExamSummary?) -> Unit) {
+    fun getMockSummary(context: Context, mockId:Int, user: UserV4, cb: (summary: MockExamSummary?) -> Unit) {
 
         API_V3.getMockExamSummary(mockId, user.studentID).enqueue(object : Callback<MockExamSummary> {
             override fun onFailure(call: Call<MockExamSummary>, t: Throwable) {
@@ -314,7 +314,7 @@ object MockExamManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 
-    fun sendEmail(context: Context, mockExam: MockExam, user: User, email: String, cb:() -> Unit) {
+    fun sendEmail(context: Context, mockExam: MockExam, user: UserV4, email: String, cb:() -> Unit) {
         val request = MockEmailRequest(user.studentID, mockExam.selectOptional.map { it.name }, mockExam.isRestart, email)
 
         API_V3.sendMockMail(mockExam.mockID, request).enqueue(object: Callback<Void> {

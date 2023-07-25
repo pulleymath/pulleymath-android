@@ -2,7 +2,7 @@ package com.freewheelin.pulley.legacy.core
 
 import android.content.Context
 import com.freewheelin.pulley.legacy.model.Template
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.curation.MainCuration
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
@@ -59,7 +59,7 @@ object ServerCommunicator {
         return API_V1.update2(param)
     }
 
-    fun getMainCuration(context: Context, user: User, successCB: ((curation: MainCuration) -> Unit), failCB: (() -> Unit)) {
+    fun getMainCuration(context: Context, user: UserV4, successCB: ((curation: MainCuration) -> Unit), failCB: (() -> Unit)) {
         val param: Parameter = Parameter("studentID" to user.studentID)
 
         API_V1.getMainCuration(param).enqueue(object: Callback<Template<MainCuration>> {
@@ -80,7 +80,7 @@ object ServerCommunicator {
     }
 
 
-    fun authPhone(context: Context, user: User, phone: String, successCB: () -> Unit, failCB: (Int, String) -> Unit)  {
+    fun authPhone(context: Context, user: UserV4, phone: String, successCB: () -> Unit, failCB: (Int, String) -> Unit)  {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "cellPhone" to phone
@@ -122,7 +122,7 @@ object ServerCommunicator {
     }
 
 
-    fun authCode(context: Context, user: User, phone: String, code: String, successCB: () -> Unit, failCB: (Int, String) -> Unit) {
+    fun authCode(context: Context, user: UserV4, phone: String, code: String, successCB: () -> Unit, failCB: (Int, String) -> Unit) {
         val param: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "cellPhone" to phone,

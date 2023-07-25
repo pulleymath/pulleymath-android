@@ -10,7 +10,7 @@ import com.freewheelin.pulley.legacy.bases.isSPYMode
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -64,7 +64,7 @@ object LogUtils {
         }
     }
 
-    fun errorEvent(event: PulleyEvent, user:User?, msg: String? = null, item_category: String? = null, item_name: String? = null, item_value: String? = null) {
+    fun errorEvent(event: PulleyEvent, user:UserV4?, msg: String? = null, item_category: String? = null, item_name: String? = null, item_value: String? = null) {
         APHelper.getContext()?.let { context ->
             LogUtils.logEvent(context, user, event,)
         }
@@ -75,7 +75,7 @@ object LogUtils {
     }
 
 
-    fun logEvent(context: Context, user: User?, event_name: PulleyEvent, item_category: String? = null
+    fun logEvent(context: Context, user: UserV4?, event_name: PulleyEvent, item_category: String? = null
                  , item_name: String? = null, item_value: String? = null) {
         val param: Parameter = Parameter(
                 "event_name" to event_name,

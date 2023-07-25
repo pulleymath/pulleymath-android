@@ -128,7 +128,7 @@ class AddOptionUnitToast: PopupWindow() {
         }
 
         fun setNoShowConfigure() {
-            user?.setNoShowAddOptionalSubject(check)
+//            user?.setNoShowAddOptionalSubject(check)
         }
     }
 }

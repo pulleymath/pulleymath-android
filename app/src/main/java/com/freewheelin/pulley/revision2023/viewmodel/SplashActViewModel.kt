@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2023.viewmodel
 import android.app.Application
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
@@ -35,7 +35,7 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
 
     }
 
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler + exceptionHandler) {
             val user = userRepository.getUser()
             cb(user)

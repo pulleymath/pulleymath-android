@@ -18,14 +18,14 @@ import com.freewheelin.pulley.legacy.core.API.postInquiry
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.databinding.DialogMyContactWritingBinding
 import com.freewheelin.pulley.legacy.dialogs.CompleteDialog
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MyContactWritingDialog(context: Context, val user: User): Dialog(context), View.OnFocusChangeListener {
+class MyContactWritingDialog(context: Context, val user: UserV4): Dialog(context), View.OnFocusChangeListener {
     val cagetoryItems = listOf("건의사항", "오류 신고", "기능 문의", "회원정보 문의")
 
     private val binding: DialogMyContactWritingBinding by lazy {

@@ -423,4 +423,46 @@ object BindingAdapter {
             view.setTextColor(ContextCompat.getColor(view.context, color))
         }
     }
+    @JvmStatic
+    @BindingAdapter("mainPlannerCategory")
+    fun setMainPlannerCategory(view: TextView, value: String?) {
+        value?.let {
+            val textColor = when (it) {
+                "개념" -> R.color.purple_300
+                "문제집" -> R.color.purple_5282FF
+                "워크북" -> R.color.purple_5282FF
+                "모의고사" -> R.color.blue_400
+                "풀리북스" -> R.color.blue_400
+                "오답노트" -> R.color.red_300
+                "추천학습" -> R.color.gray_600
+                else -> R.color.purple_300
+            }
+            val backgroundColor = when (it) {
+                "개념" -> R.color.purple_100
+                "문제집" -> R.color.purple_DCE6FF
+                "워크북" -> R.color.purple_DCE6FF
+                "모의고사" -> R.color.blue_100
+                "풀리북스" -> R.color.blue_100
+                "오답노트" -> R.color.red_100
+                "추천학습" -> R.color.gray_200
+                else -> R.color.purple_100
+            }
+
+            view.setTextColor(ContextCompat.getColor(view.context, textColor))
+            view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("mainPlannerCorrectRate")
+    fun setMainPlannerCorrectRate(view: TextView, value: Int?) {
+        value?.let {
+            val textColor = when (it) {
+                in 0..30 -> R.color.red_250
+                in 30..70 -> R.color.yellow_200
+                in 70.. 100 -> R.color.green_300
+                else -> R.color.gray_500
+            }
+            view.setTextColor(ContextCompat.getColor(view.context, textColor))
+        }
+    }
 }

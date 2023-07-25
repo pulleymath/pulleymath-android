@@ -31,7 +31,6 @@ import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivityLoginBinding
-import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
@@ -84,21 +83,21 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         }
     }
     val viewModel: LoginActViewModel by viewModels()
-    private lateinit var getResult: ActivityResultLauncher<Intent>
 
     private val binding: ActivityLoginBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_login, null, false)
     }
+    var spyCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        initActivityResult()
 
         onBackPressedDispatcher.addCallback(this) {
             onBackBtnClicked()
         }
         binding.run {
+            spyCount = 0
             greetingLabel.text = "서비스 이용을 위해 로그인 해주세요 :)"
             val content = SpannableString(findIdPwTv.text)
             content.setSpan(UnderlineSpan(), 0, content.length, 0)
@@ -107,7 +106,8 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }
             whaleLoginBtn.setOnClickListener {
                 val intent = Intent(this@LoginActivity, WhaleSpaceLoginActivity::class.java)
-                getResult.launch(intent)
+                intent.putExtra("AUTO_ACTION", true)
+                startActivity(intent)
             }
             findIdPwTv.setOnClickListener {
                 this@LoginActivity.onFindIdPwTvClicked()
@@ -176,6 +176,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     startActivity(intent)
                 }
             }
+            signupGuideTv.setOnClickListener {
+                spyCount += 1
+                println("aspasp spc ${spyCount} : ${emailField.text == "staging" && spyCount > 10}")
+                stagingBtn.visibleIf((emailField.text == "staging" && spyCount > 10))
+            }
         }
         viewModel.apply {
             errorAction.observe(this@LoginActivity) { type ->
@@ -186,20 +191,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     }
                     NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
-                }
-            }
-        }
-    }
-    private fun initActivityResult() {
-        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
-                socialLoginFinished -> {
-                    it.data?.let {
-                        println("aspasp 토큰이 있어야함 : ${it.getStringExtra(USER_TOKEN)}")
-                        val token = it.getStringExtra(USER_TOKEN) ?: return@registerForActivityResult
-                        MyApplication.token = token
-                        goLearningTab()
-                    }
                 }
             }
         }

@@ -155,7 +155,7 @@ class NoteFilterFragment : Fragment() {
     }
 
     val dialog: DateRangePickerDialog by lazy {
-        val pickerDialog = DateRangePickerDialog(requireContext(), viewModel.from, viewModel.to, LocalDate(user!!.firstDate))
+        val pickerDialog = DateRangePickerDialog(requireContext(), viewModel.from, viewModel.to)
         pickerDialog.listener = object: DateRangePickerDialogListener {
             override fun onUpdateClicked(picker: DateRangePickerDialog, from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
                 val fromDate = when(type) {

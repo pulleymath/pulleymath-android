@@ -44,8 +44,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityMainBinding
 import com.freewheelin.pulley.legacy.activities.auth.InitSettingCompleteActivity
-import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
-
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.SnackTestFragment
@@ -55,6 +53,7 @@ import com.freewheelin.pulley.legacy.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.legacy.bases.*
 import com.freewheelin.pulley.legacy.core.manage.*
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
+import com.freewheelin.pulley.legacy.model.SignInChannel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
@@ -268,7 +267,6 @@ class MainActivity : PermissionActivity(),
             ServerStatusManager.setServerInspectionDialog(this@MainActivity)
         }
         showGuestWelcomeMessage()
-        saveSignedEmail()
     }
     private fun showGuestWelcomeMessage() {
         if (user?.serviceType?.isGuestUser == true) {
@@ -292,12 +290,17 @@ class MainActivity : PermissionActivity(),
         Preferences.guestWelcomeMessageAppeared = info
     }
     private fun saveSignedEmail() {
-        val userEmail = if (user?.serviceType?.isGuestUser == true) {
+        val userEmail = if (MyApplication.user?.serviceType?.isGuestUser == true) {
             ""
         } else {
-            user?.email ?: ""
+            MyApplication.user?.email ?: ""
         }
-        Preferences.signedEmail.set(userEmail)
+        val nextLoginPresentedEmail = if (MyApplication.user?.signInChannel == SignInChannel.PULLEY) {
+            userEmail
+        } else {
+            ""
+        }
+        Preferences.signedEmail.set(nextLoginPresentedEmail)
     }
 
     private fun checkNewAlarm() {
@@ -331,7 +334,6 @@ class MainActivity : PermissionActivity(),
                     val prevTab = viewModel.prevTab.first
                     binding.mainTl.selectTap(prevPosition, prevTab)
                 }
-                InitTestActivity.COMPLETED_SNACK_TEST -> {}
             }
         }
     }
@@ -340,7 +342,7 @@ class MainActivity : PermissionActivity(),
             if(!user.isValidPhone) { // 폰 변경, 기기중복 시 세션만료
                 sendBroadcast(Intent(UserManager.FILTER_SESSION_EXPIRED))
             }
-            else if(user.isNeedToUpdateGrade()) {
+            else if(user.canUpdateGrade) {
                 try {
                     val dialog = UpdateGradeDialog.newInstance()
                     dialog.callback = {
@@ -393,7 +395,7 @@ class MainActivity : PermissionActivity(),
                 AnalysisFragment.newInstance()
             )
         }
-        if (user?.isUnivUser == true) {
+        if (user?.schoolType == SchoolType.UNIVERSITY) {
             tabFragments.add(AffiliatedTestFragment.newInstance())
         }
     }
@@ -548,18 +550,9 @@ class MainActivity : PermissionActivity(),
         viewModel.apply {
             user.observe(this@MainActivity) { user ->
                 user?.let {
-                    if (MyApplication.user == null) {
-                        MyApplication.user = it
-                    } else {
-                        MyApplication.user!!.update(it)
-                    }
-
-                    MyApplication.user?.run {
-                        it.noShowAddOptionalDate = noShowAddOptionalDate
-                        it.noShowAddOptionalSubject = noShowAddOptionalSubject
-                    }
+                    MyApplication.user = it
+                    saveSignedEmail()
                     if (it.token.isNotEmpty()) {
-                        MyApplication.user = it
                         MyApplication.token = it.token
                     }
                     it.commit("LearningTabAct observe")

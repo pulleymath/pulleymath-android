@@ -3,17 +3,28 @@ package com.freewheelin.pulley.revision2023.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityWhaleSpaceLoginBinding
-import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity.Companion.USER_TOKEN
-import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity.Companion.socialLoginFinished
+import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.core.manage.UserManager
+import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
+import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.utils.DialogUtils
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.revision2023.viewmodel.WhaleSpaceLoginViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.UUID
 
 
@@ -27,33 +38,92 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
 
     val endpoint = "https://auth.whalespace.io/oauth2/v1.1/authorize"
     val clientId = "HGooZch3UpTdhnKgH_5o"
-//    val clientSecret = "5mRPQ6WASG"
-    val redirectUri = "https://dev.pulleymath.com/redirect"
-    var isCustomTabInit = false
+    val redirectUri = "${Network.homePageUrl}/signin/complete/whalespace/android"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if (intent != null) {
-            val data = intent.data
-            if (data != null && data.path != null) {
-                handleAuthCallback(data)
-                return
+        binding.apply {
+            loadingLottie.playAnimation()
+            reTryBtn.setOnClickListener {
+                finish()
             }
         }
-        authorize()
+        val autoAction = intent.getBooleanExtra("AUTO_ACTION", false)
+        intent?.let { intent ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            }
+
+            intent.data?.let {
+                if (it.path != null && it.path?.startsWith("/complete/whalespace") == true) {
+                    handleAuthCallback(it)
+                    return
+                }
+            }
+        }
+        if (autoAction) {
+            authorize()
+        }
     }
 
     private fun handleAuthCallback(uri: Uri) {
         uri.getQueryParameter("code")?.let { code ->
             viewModel.sendCode(code) {
-                // TODO token setting
-                intent.putExtra(USER_TOKEN, "userToken")
-                setResult(socialLoginFinished, intent)
+                handleResponse(it)
             }
         }
     }
 
+    fun handleResponse(res: ResponseBody<SignInAppToken>) {
+        if (res.error == null) {
+            when (res.data?.isValidPhone) {
+                false -> {
+                    ConfirmPhoneDialog(this, successCB = {
+                        goLearningTab()
+                    }, failCB = { clearToken() }).show()
+                }
+                else -> {
+                    goLearningTab()
+                }
+            }
+        } else {
+            clearToken()
+            errorHandle(res)
+        }
+    }
+    private fun goLearningTab() {
+        viewModel.fetchUser {
+            MyApplication.user = it
+            MyApplication.token = it.token
+            MyApplication.user?.commit("WhaleSpaceLoginActivity")
+
+            putFcmToken()
+
+            val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+    fun putFcmToken() {
+        if(MyApplication.token?.isNotEmpty() == true) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+
+                val token = task.result
+                if (token?.isNotEmpty() == true) {
+                    viewModel.putFcmToken(token)
+                }
+            })
+        }
+    }
     fun authorize() {
         val state = UUID.randomUUID().toString()
         val preferences = this.getSharedPreferences("OAUTH_STORAGE", Context.MODE_PRIVATE)
@@ -74,36 +144,33 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
         customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         customTabsIntent.launchUrl(this, uri)
     }
+    private fun clearToken() {
+        MyApplication.token = ""
+        MyApplication.user?.token = ""
+        MyApplication.user?.commit("WhaleSpaceLoginActivity")
+    }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (isCustomTabInit) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//                intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-//            }
-//            val forward = intent.resolveActivity(packageManager)
-//            println("aspasp packageName : ${forward.packageName}, calssName: ${forward.className}, ${forward.shortClassName}")
-//            println("aspasp this packageName : ${BuildConfig.APPLICATION_ID}, className: ${this.localClassName}")
-//
-//            if (forward.packageName == BuildConfig.APPLICATION_ID && forward.className == this.localClassName) {
-//                setResult(socialLoginFinished, intent)
-//                finish()
-//            }
-
-//            (intent.getParcelableExtra<Parcelable>(BuildConfig.APPLICATION_ID) as? Intent)?.let { forward ->
-//                println("aspasp 들어옴? ")
-//                val name: ComponentName = forward.resolveActivity(packageManager)
-//                println("aspasp packageName : ${name.packageName}, calssName: ${name.className}, ${name.shortClassName}")
-//
-//                if (name.packageName == "safe_package" && name.className == "safe_class") {
-//                    startActivity(forward)
-//                }
-//            }
-
+    private fun errorHandle(res: ResponseBody<SignInAppToken>) {
+        val error = res.error
+        val errMsg = res.message
+        binding.apply {
+            when (error) {
+                "UNAUTHORIZED" -> {
+                    DialogUtils.confirmV2(
+                        this@WhaleSpaceLoginActivity,
+                        title = "인증실패",
+                        contents = "문제가 지속될 경우\n카카오톡(@풀리는수학)으로 문의 바랍니다.",
+                        isOneBtn = true,
+                        successCb = {
+                            finish()
+                        }
+                    )
+                }
+                else -> {
+                    DialogUtils.showServerErr(this@WhaleSpaceLoginActivity)
+                }
+            }
         }
-        isCustomTabInit = true
     }
 
 }

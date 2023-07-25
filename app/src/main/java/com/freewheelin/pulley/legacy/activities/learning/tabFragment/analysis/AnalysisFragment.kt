@@ -43,8 +43,11 @@ import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.core.manage.ContentManager
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
+import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
+import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.model.ResponseListBody
 import com.freewheelin.pulley.legacy.model.contents.*
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
@@ -60,6 +63,9 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -68,7 +74,7 @@ import java.util.*
 
 
 class AnalysisFragment : MainTabFragment(),
-        ShareAnalysisDialogListener,
+//        ShareAnalysisDialogListener,
         AnalysisTodayStudyListViewListener,
         AnalysisStudyRateViewListener,
         AnalysisRecommendStudyViewListener,
@@ -126,13 +132,13 @@ class AnalysisFragment : MainTabFragment(),
                 }
 
                 user?.let { user ->
-                    user.getDailyStudy(requireContext()) { setUpStudyUI(it) }
-                    user.getDailyRecommend(requireContext(), callback = {
+                    getDailyStudy(user.studentID) { setUpStudyUI(it) }
+                    getDailyRecommend(user.studentID, callback = {
                         setUpRecommendUI(it)
                     }, failCB = {
                         setUpRecommendUI(null)
                     })
-                    user.getDailyPiece(requireContext()) { setUpPieceUI(it) }
+                    getDailyPiece(user.studentID) { setUpPieceUI(it) }
                 }
             }
         }
@@ -169,6 +175,19 @@ class AnalysisFragment : MainTabFragment(),
             })
         }
     }
+
+    private fun getDailyStudy(studentId: String, callback: (DailyStudy)->Unit) {
+        API_V3.getDailyStudy(studentId).enqueue(object : Callback<ResponseBody<DailyStudy>> {
+            override fun onResponse(call: Call<ResponseBody<DailyStudy>>, response: Response<ResponseBody<DailyStudy>>) {
+                val res = response.body() ?: return responseError(requireContext(), response)
+                res.data?.let { callback(it) }
+            }
+
+            override fun onFailure(call: Call<ResponseBody<DailyStudy>>, t: Throwable) {
+                responseFailed(requireContext(), t)
+            }
+        })
+    }
     fun initReceiver () {
         tabScrollReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
@@ -191,13 +210,13 @@ class AnalysisFragment : MainTabFragment(),
     override fun onResume() {
         super.onResume()
         user?.let {
-            it.getDailyStudy(requireContext()) { setUpStudyUI(it) }
-            it.getDailyRecommend(requireContext(), callback = {
+            getDailyStudy(it.studentID) { setUpStudyUI(it) }
+            getDailyRecommend(it.studentID, callback = {
                 setUpRecommendUI(it)
             }, failCB = {
                 setUpRecommendUI(null)
             })
-            it.getDailyPiece(requireContext()) {
+            getDailyPiece(it.studentID) {
                 setUpPieceUI(it)
             }
 
@@ -420,27 +439,27 @@ class AnalysisFragment : MainTabFragment(),
     }
 
 
-    override fun onDownloadClicked(dialog: ShareAnalysisDialog, bitmap: Bitmap) {
-            val permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            if(permission == PackageManager.PERMISSION_GRANTED) {
-                saveImage(bitmap)
-                DaebakToast.show(requireContext(), "저장되었습니다.", bottomOffset = 64.toPx(), overDialog = true)
-            } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
-            }
-    }
-
-    override fun onShareBtnClicked(dialog: ShareAnalysisDialog, bitmap: Bitmap) {
-        val uri = saveImageAsCache(bitmap)
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, uri)
-            type = "image/*"
-        }
-
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        startActivity(shareIntent)
-    }
+//    override fun onDownloadClicked(dialog: ShareAnalysisDialog, bitmap: Bitmap) {
+//            val permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//            if(permission == PackageManager.PERMISSION_GRANTED) {
+//                saveImage(bitmap)
+//                DaebakToast.show(requireContext(), "저장되었습니다.", bottomOffset = 64.toPx(), overDialog = true)
+//            } else {
+//                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
+//            }
+//    }
+//
+//    override fun onShareBtnClicked(dialog: ShareAnalysisDialog, bitmap: Bitmap) {
+//        val uri = saveImageAsCache(bitmap)
+//        val sendIntent: Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            putExtra(Intent.EXTRA_STREAM, uri)
+//            type = "image/*"
+//        }
+//
+//        val shareIntent = Intent.createChooser(sendIntent, null)
+//        startActivity(shareIntent)
+//    }
 
     override fun onStudyHistoryBtnClicked(view: AnalysisTodayStudyListView) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "학습내역보기")
@@ -593,13 +612,13 @@ class AnalysisFragment : MainTabFragment(),
     fun setTodayStudyNewOne() {
         Log.d("테스트", "AnalysisFragment => setTodayStudyNewOne.setList(true)")
         user?.let {
-            it.getDailyStudy(requireContext()) { setUpStudyUI(it) }
-            it.getDailyRecommend(requireContext(), callback = {
+            getDailyStudy(it.studentID) { setUpStudyUI(it) }
+            getDailyRecommend(it.studentID, callback = {
                 setUpRecommendUI(it)
             }, failCB = {
                 setUpRecommendUI(null)
             })
-            it.getDailyPiece(requireContext()) {
+            getDailyPiece(it.studentID) {
                 setUpPieceUI(it)
                 scrollToView(binding.scrollContainer, binding.todayStudyView)
                 binding.todayStudyView.newOne = true
@@ -646,5 +665,35 @@ class AnalysisFragment : MainTabFragment(),
 
             cb(mock)
         }
+    }
+
+    private fun getDailyPiece(studentId: String, callback: (List<Content>)->Unit) {
+        API_V3.getDailyPiece(studentId).enqueue(object : Callback<ResponseListBody<Content>> {
+            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
+                val data = response.body()?.data ?: return responseError(requireContext(), response)
+                callback(data)
+            }
+
+            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
+                responseFailed(requireContext(), t)
+            }
+        })
+    }
+
+    private fun getDailyRecommend(studentId: String, callback: (DailyRecommend)->Unit, failCB: () -> Unit) {
+        API_V3.getDailyRecommend(studentId).enqueue(object : Callback<ResponseBody<DailyRecommend>> {
+            override fun onResponse(call: Call<ResponseBody<DailyRecommend>>, response: Response<ResponseBody<DailyRecommend>>) {
+                val res = response.body() ?: return responseError(requireContext(), response)
+                if (res.data != null) {
+                    callback(res.data)
+                } else {
+                    failCB()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody<DailyRecommend>>, t: Throwable) {
+                failCB()
+            }
+        })
     }
 }

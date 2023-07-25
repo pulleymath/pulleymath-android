@@ -17,7 +17,7 @@ import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.databinding.DialogNoteDetailBinding
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.GlideApp
 import com.freewheelin.pulley.legacy.utils.LogUtils
@@ -59,7 +59,7 @@ class NoteDetailDialog: Dialog {
             }
         }
 
-    lateinit var user: User
+    lateinit var user: UserV4
     var startAnimator: ValueAnimator? = null
     var hideAnimator: ValueAnimator? = null
 
@@ -90,7 +90,7 @@ class NoteDetailDialog: Dialog {
             binding.leftArrowIb.isEnabled = value != null
         }
 
-    constructor(context: Context, problem: Problem, user: User): super(context) {
+    constructor(context: Context, problem: Problem, user: UserV4): super(context) {
         this.user = user
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)

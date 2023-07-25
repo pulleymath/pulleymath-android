@@ -24,11 +24,11 @@ object ContentManager {
 
     var isNeedToSyncMyContentList = true
 
-    fun clearAllScroing(context: Context, user: User, cb:() -> Unit) {
+    fun clearAllScroing(context: Context, user: UserV4, cb:() -> Unit) {
 
     }
 
-    fun sendEmail(context: Context, content: List<Content>, user: User, email: String, cb:() -> Unit) {
+    fun sendEmail(context: Context, content: List<Content>, user: UserV4, email: String, cb:() -> Unit) {
         val param = Parameter(
                 "studentID" to user.studentID,
                 "receiverEmail" to email,
@@ -51,7 +51,7 @@ object ContentManager {
         })
     }
 
-    fun getMyContentList(context: Context, user: User, successCB:(contents: List<Content>) -> Unit, failCB: () -> Unit) {
+    fun getMyContentList(context: Context, user: UserV4, successCB:(contents: List<Content>) -> Unit, failCB: () -> Unit) {
         isNeedToSyncMyContentList = false
 
         val param: Parameter = Parameter(
@@ -78,7 +78,7 @@ object ContentManager {
         })
     }
 
-    fun getReview(context: Context, user: User, chapters: List<ChapterAnalysis>, startDate: Date, endDate: Date, successCB: (piece: Piece) -> Unit) {
+    fun getReview(context: Context, user: UserV4, chapters: List<ChapterAnalysis>, startDate: Date, endDate: Date, successCB: (piece: Piece) -> Unit) {
         val param: Parameter = Parameter(
                 "chapterLittles" to chapters.map { it.code },
                 "studentID" to user.studentID,
@@ -104,7 +104,7 @@ object ContentManager {
     }
 
     fun score(context: Context,
-              user: User,
+              user: UserV4,
               content: Content,
               problems: Set<Problem>,
               time: Int? = null , successCB: (goalInfo: ScoredStudentGoalInfo?) -> Unit) {
@@ -204,7 +204,7 @@ object ContentManager {
         })
     }
 
-    fun makeRecommendPiece(context: Context, user: User, successCB: (context: Book) -> Unit) {
+    fun makeRecommendPiece(context: Context, user: UserV4, successCB: (context: Book) -> Unit) {
         API_V3.makeRecommend(user.studentID).enqueue(object: Callback<ResponseBody<Book>>{
             override fun onFailure(call: Call<ResponseBody<Book>>, t: Throwable) {
                 responseFailed(context, t)
@@ -220,7 +220,7 @@ object ContentManager {
         })
     }
 
-    fun makeWrongPiece(context: Context, user: User, successCB: (context: Piece) -> Unit) {
+    fun makeWrongPiece(context: Context, user: UserV4, successCB: (context: Piece) -> Unit) {
         API_V3.makeWrongNote(user.studentID).enqueue(object: Callback<ResponseBody<Piece>>{
             override fun onFailure(call: Call<ResponseBody<Piece>>, t: Throwable) {
                 responseFailed(context, t)

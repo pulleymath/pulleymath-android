@@ -221,7 +221,7 @@ class TestMainDailyFragment : TestMainBaseFragment() {
     override fun configureUI(test: Test) {
 
         Log.d("테스트","===> TestMainDailyFragment")
-        user?.log()
+//        user?.log()
 //        viewModel.fetchRecommendSubject()
 
         if(test.scoringTestPieceCount == 0) {

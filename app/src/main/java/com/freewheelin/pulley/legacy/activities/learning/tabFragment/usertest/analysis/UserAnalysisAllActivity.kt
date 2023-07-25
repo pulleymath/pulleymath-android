@@ -25,7 +25,7 @@ import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.legacy.model.Analysis
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.extensionTouchArea
 import com.freewheelin.pulley.legacy.utils.showBalloon
@@ -42,7 +42,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
         DateRangePickerDialogListener,
         AnanlysisTabActivityInterface {
 
-    lateinit var user: User
+    lateinit var user: UserV4
 
     override var analysis: com.freewheelin.pulley.legacy.model.Analysis? = null
     override var notExistDataText = "분석을 위한 학습 내역이 부족해요."
@@ -57,7 +57,7 @@ class UserAnalysisAllActivity : BaseNavActivity(),
     val dialog: DateRangePickerDialog by lazy {
         val to = LocalDate.now()
         val from = LocalDate.now().minusDays(6)
-        val pickerDialog = DateRangePickerDialog(this, from, to, LocalDate(user.firstDate))
+        val pickerDialog = DateRangePickerDialog(this, from, to)
         pickerDialog.listener = this
         pickerDialog
     }
@@ -74,9 +74,9 @@ class UserAnalysisAllActivity : BaseNavActivity(),
 
 //        val studentID = intent.getStringExtra(UserAnalysisActivity.KEY_STUDENT_ID)?:"none"
 
-        user = User()
+//        user = User()
 //        user.studentID = studentID
-        user.firstDate = Date(Date().time - 604800000L)
+//        user.firstDate = Date(Date().time - 604800000L)
 
         configTab(0)
         configTab(1)
@@ -228,30 +228,30 @@ class UserAnalysisAllActivity : BaseNavActivity(),
         val formerDate = from.minusDays(period - 1)
 
         with(binding) {
-            user.getAnalysis(this@UserAnalysisAllActivity, from.toDate(), to.toDate(), formerDate.toDate()) {
-                this@UserAnalysisAllActivity.analysis = it
-
-                if(it?.myScore != null) {
-                    correctRateTv.text = "${it.myScore}%"
-                } else {
-                    correctRateTv.text = "-"
-                }
-
-                if(it?.myRating != null) {
-                    ratingTv.text = "${it.myRating}등급"
-                } else {
-                    ratingTv.text = "-"
-                }
-
-                if(it?.problemTotalCount != null && it.problemTotalCount != 0) {
-                    problemCntTv.text = "${it.problemTotalCount}문제"
-                } else {
-                    problemCntTv.text = "-"
-                }
-
-                analysisTab[tabLayout.selectedTabPosition].onPeriodSelected(dialog.from, dialog.to, dialog.period)
-
-            }
+//            user.getAnalysis(this@UserAnalysisAllActivity, from.toDate(), to.toDate(), formerDate.toDate()) {
+//                this@UserAnalysisAllActivity.analysis = it
+//
+//                if(it?.myScore != null) {
+//                    correctRateTv.text = "${it.myScore}%"
+//                } else {
+//                    correctRateTv.text = "-"
+//                }
+//
+//                if(it?.myRating != null) {
+//                    ratingTv.text = "${it.myRating}등급"
+//                } else {
+//                    ratingTv.text = "-"
+//                }
+//
+//                if(it?.problemTotalCount != null && it.problemTotalCount != 0) {
+//                    problemCntTv.text = "${it.problemTotalCount}문제"
+//                } else {
+//                    problemCntTv.text = "-"
+//                }
+//
+//                analysisTab[tabLayout.selectedTabPosition].onPeriodSelected(dialog.from, dialog.to, dialog.period)
+//
+//            }
 
             if (dialog.from.plusDays(dialog.period) > LocalDate.now()) {
                 nextBtn.isEnabled = false

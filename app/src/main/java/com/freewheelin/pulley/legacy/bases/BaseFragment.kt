@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import io.reactivex.disposables.CompositeDisposable
-val Fragment.user: User?
+val Fragment.user: UserV4?
     get() = MyApplication.user
 
 abstract class BaseFragment(val layoutId: Int = 0) : Fragment() {

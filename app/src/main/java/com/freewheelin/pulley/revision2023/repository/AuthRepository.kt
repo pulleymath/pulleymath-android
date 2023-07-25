@@ -3,7 +3,7 @@ package com.freewheelin.pulley.revision2023.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.model.DummyCreatedUser
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.TempToken
 import com.freewheelin.pulley.revision2023.service.AuthApi
 import com.freewheelin.pulley.revision2023.service.AuthService

@@ -60,6 +60,10 @@ object Network {
         Server.live.toString() -> "${Preferences.shopUrl.get()}/ottway?token="
         else -> "${Preferences.devShopUrl.get()}/ottway?token="
     }
+    var homePageUrl = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> Preferences.shopUrl.get()
+        else -> Preferences.devShopUrl.get()
+    }
 
     const val marketingUrl = "https://pulleymath.com/marketing"
     var token = ""

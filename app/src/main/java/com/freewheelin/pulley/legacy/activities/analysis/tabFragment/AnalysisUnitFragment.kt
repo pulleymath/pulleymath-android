@@ -22,7 +22,6 @@ import com.freewheelin.pulley.legacy.activities.analysis.AnanlysisTabActivityInt
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.IS_SAMPLE
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment.Companion.TAB_SCROLL_EVENT_TARGET
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ContentManager
@@ -122,7 +121,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
             unitRv.isFocusable = false
 
             (activity as? AnalysisTabActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
-            (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
+//            (activity as? UserAnalysisAllActivity)?.binding?.scrollView?.scrollTo(0, scrollPosition)
         }
         viewModel.errorAction.observe(viewLifecycleOwner) {
             dialog?.dismiss()

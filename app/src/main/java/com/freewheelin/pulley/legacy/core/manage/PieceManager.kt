@@ -8,7 +8,7 @@ import com.freewheelin.pulley.legacy.dialogs.WrongManagementDialog
 import com.freewheelin.pulley.legacy.model.ChapterAnalysis
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Template
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.model.contents.Piece
@@ -36,7 +36,7 @@ object PieceManager {
     // 스크롤 후 필터 설정
     const val EVENT_FILTER = "EVENT_FILTER"
 
-    fun getReviewInfo(context: Context, subject: String, problems: List<Problem>, user: User, cb:(piece: Piece) -> Unit) {
+    fun getReviewInfo(context: Context, subject: String, problems: List<Problem>, user: UserV4, cb:(piece: Piece) -> Unit) {
         val params: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "studyIDs" to problems.map { it.studyID },
@@ -59,7 +59,7 @@ object PieceManager {
         })
     }
 
-    fun score(context: Context, user: User, piece: Piece, cb: (() -> Unit)) {
+    fun score(context: Context, user: UserV4, piece: Piece, cb: (() -> Unit)) {
 
         val params: Parameter = Parameter(
                 "studentID" to user.studentID,
@@ -104,7 +104,7 @@ object PieceManager {
         })
     }
 
-    fun makeWeakPiece(context: Context, user: User, problems: List<Problem>,
+    fun makeWeakPiece(context: Context, user: UserV4, problems: List<Problem>,
                        isSimilar: Boolean, difficulty: WrongManagementDialog.Level? = null,
                        requestProblemNumber: Int? = null, isIncludeClearProblem: Boolean? = null,
                        noteType: String,
@@ -162,7 +162,7 @@ object PieceManager {
         })
     }
 
-    fun spyMakePiece(context: Context, user: User, ids: List<String>,
+    fun spyMakePiece(context: Context, user: UserV4, ids: List<String>,
                      successCB: ((piece: Piece) -> Unit), failCB: () -> Unit) {
         val param: Parameter = Parameter(
                 "sameOrSimilar" to "SAME",
@@ -206,7 +206,7 @@ object PieceManager {
             }
         })
     }
-    fun makeWeakPieceUsingPiece(context: Context, user: User, content: List<Content>,
+    fun makeWeakPieceUsingPiece(context: Context, user: UserV4, content: List<Content>,
                       isSimilar: Boolean, difficulty: WrongManagementDialog.Level? = null,
                       requestProblemNumber: Int? = null, isIncludeClearProblem: Boolean? = null, successCB: ((piece: Piece) -> Unit), failCB: () -> Unit) {
         val param: Parameter = Parameter(
@@ -246,7 +246,7 @@ object PieceManager {
         })
     }
 
-    fun makeWeakPieceUsingChapters(context: Context, user: User, chapters: List<ChapterAnalysis>,
+    fun makeWeakPieceUsingChapters(context: Context, user: UserV4, chapters: List<ChapterAnalysis>,
                                    isSimilar: Boolean, difficulty: WrongManagementDialog.Level? = null,
                                    requestProblemNumber: Int? = null, isIncludeClearProblem: Boolean? = null,
                                    startDate: Date,
@@ -294,7 +294,7 @@ object PieceManager {
 
     }
 
-    fun getPieceReviewProblems(context: Context, content: Content, user: User, successCB: (piece: Piece) -> Unit) {
+    fun getPieceReviewProblems(context: Context, content: Content, user: UserV4, successCB: (piece: Piece) -> Unit) {
         val params: Parameter = Parameter(
                 "assignID" to content.assignID!!,
                 "studentID" to user.studentID
@@ -318,7 +318,7 @@ object PieceManager {
         })
     }
 
-    fun getProblems(context: Context, piece: Piece, user: User, successCB: (problems: List<Problem>) -> Unit) {
+    fun getProblems(context: Context, piece: Piece, user: UserV4, successCB: (problems: List<Problem>) -> Unit) {
         val params: Parameter = Parameter(
                 "studentID" to user.studentID,
                 "assignID" to piece.assignID!!

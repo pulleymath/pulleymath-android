@@ -21,6 +21,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -131,7 +132,7 @@ class MainTabLayout: FrameLayout {
                 setTabClickListener(view, index)
             }
             getTabletUnivTab().apply {
-                visibleIf(user?.isUnivUser == true)
+                visibleIf(user?.schoolType == SchoolType.UNIVERSITY)
                 text = getUnivTabText()
             }
         }
@@ -186,7 +187,7 @@ class MainTabLayout: FrameLayout {
             }
 
             getMobileUnivTab().apply {
-                visibleIf(user?.isUnivUser == true)
+                visibleIf(user?.schoolType == SchoolType.UNIVERSITY)
                 text = getUnivTabText()
             }
         }

@@ -3,6 +3,7 @@ package com.freewheelin.pulley.legacy.activities.auth.signup
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -22,18 +23,31 @@ import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.databinding.ActivitySignupBinding
 import com.freewheelin.pulley.legacy.assets.Grade
+import com.freewheelin.pulley.legacy.core.API_APP
+import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SignUpActViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.model.SignInAppToken
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.util.concurrent.TimeUnit
 
 
 class SignupActivity : BaseActivity(), StudentInfoInterface {
@@ -154,31 +168,59 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
         }
     }
 
-    private fun login(email: String, pw: String, isHighSchoolUser: Boolean) {
-        API_V3.loginApp(RequestLogin(email, pw)).enqueue(object: Callback<Template<User?>> {
-            override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
-                viewModel.setLoading(false)
-                responseFailed(this@SignupActivity, t)
-            }
-
-            override fun onResponse(call: Call<Template<User?>>, response: Response<Template<User?>>) {
-                viewModel.setLoading(false)
-                Preferences.isAvailableRushDialog.set(true)
-                val user = response.body()?.data
-                user?.connectToCrashlytics()
-
-                when(response.code()) {
-                    200 -> loginSuccess(user, isHighSchoolUser)
-                    else -> loginFailed(response)
-                }
-            }
-        })
+    private fun fetchUser(isHighSchoolUser: Boolean) {
+        viewModel.fetchUser {
+            MyApplication.user = it
+            MyApplication.token = it.token
+            FirebaseCrashlytics.getInstance().setUserId(it.studentID)
+            putFcmToken()
+            loginSuccess(isHighSchoolUser)
+        }
     }
+    private fun login(email: String, pw: String, isHighSchoolUser: Boolean) {
+        disposables += API_V3.getAppToken(RequestLogin(email, pw))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ res ->
+                viewModel.setLoading(false)
+                res.data?.let {
+                    MyApplication.token = it.token
+                }
+                fetchUser(isHighSchoolUser)
+            }, { error ->
+                viewModel.setLoading(false)
 
-    private fun loginSuccess(user: User?, isHighSchoolUser: Boolean) {
+                (error as? HttpException)?.response()?.errorBody()?.string()?.let {
+                    val listType = object: TypeToken<ResponseBody<SignInAppToken>>(){}.type
+                    val response: ResponseBody<SignInAppToken> = Gson().fromJson(it, listType)
+                    Log.e(javaClass.simpleName, "group error=${error.localizedMessage} , ${error.message}, ${response.error}, ${response.message}")
+                    loginFailed(response)
+
+                }
+            })
+//
+//        API_V3.loginApp(RequestLogin(email, pw)).enqueue(object: Callback<Template<User?>> {
+//            override fun onFailure(call: Call<Template<User?>>, t: Throwable) {
+//                viewModel.setLoading(false)
+//                responseFailed(this@SignupActivity, t)
+//            }
+//
+//            override fun onResponse(call: Call<Template<User?>>, response: Response<Template<User?>>) {
+//                viewModel.setLoading(false)
+//                Preferences.isAvailableRushDialog.set(true)
+//                val user = response.body()?.data
+//                user?.let { FirebaseCrashlytics.getInstance().setUserId(it.studentID) }
+//
+//                when(response.code()) {
+//                    200 -> loginSuccess(user, isHighSchoolUser)
+//                    else -> loginFailed(response)
+//                }
+//            }
+//        })
+    }
+    private fun loginSuccess(isHighSchoolUser: Boolean) {
         viewModel.requestSignUpReward {
-            MyApplication.user = user
-            MyApplication.token = user?.token
             startActivity(InitSettingCompleteActivity.getIntent(this, isHighSchoolUser, isGuestUser))
             if (isGuestUser) {
                 finish()
@@ -189,17 +231,15 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
 
     }
 
-    private fun loginFailed(response: Response<Template<User?>>) {
-        val errorTemplate = response?.errorBody()?.let { errorBody ->
-            Gson().fromJson(errorBody.string(), ResponseBody::class.java)
-        }
-        when(errorTemplate?.error) {
+    private fun loginFailed(response: ResponseBody<SignInAppToken>) {
+
+        when(response.error) {
             LoginActivity.NOT_MATCH_PW -> {
                 signupFragment.binding.emailDet.isShownError = false
-                signupFragment.binding.pwDet.showErrorMsg(errorTemplate.message?:"")
+                signupFragment.binding.pwDet.showErrorMsg(response.message?:"")
             }
             LoginActivity.LOCK_ACCOUNT, LoginActivity.LOGINID_INVALID -> {
-                signupFragment.binding.emailDet.showErrorMsg(errorTemplate.message?:"")
+                signupFragment.binding.emailDet.showErrorMsg(response.message?:"")
                 signupFragment.binding.pwDet.isShownError = false
             }
             else -> {
@@ -211,6 +251,26 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
     class SignupViewPagerAdapter(val fragments:List<Fragment>, activity:FragmentActivity) : FragmentStateAdapter(activity) {
         override fun getItemCount() = fragments.size
         override fun createFragment(position: Int) = fragments.get(position)
+    }
+    fun putFcmToken() {
+        if(MyApplication.token?.isNotEmpty() == true) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+                if (token?.isNotEmpty() == true) {
+                    disposables += API_APP.putToken(token)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { _ ->
+                            Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
+                        }
+                }
+            })
+        }
     }
 }
 

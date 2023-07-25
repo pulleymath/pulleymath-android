@@ -16,7 +16,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogDaebakBinding
 import com.freewheelin.pulley.databinding.DialogDaebakTitleOnlyBinding
 import com.freewheelin.pulley.legacy.activities.SplashActivity
-import com.freewheelin.pulley.legacy.activities.auth.InitTestActivity
 import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog

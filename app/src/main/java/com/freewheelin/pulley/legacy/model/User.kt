@@ -85,19 +85,18 @@ class User {
     @SerializedName("schoolType") @Expose
     var rawSchoolType: SchoolType? = null
 
-    @Expose @SerializedName("initMoGrade")
-    var rating: Int = 0
+    var initMoGrade: Int = 0
     val ratingText: String?
         get() {
-            return if (rating in 1..9)
-                "${rating}등급"
+            return if (initMoGrade in 1..9)
+                "${initMoGrade}등급"
             else
                 null
         }
 
     // add optional subject
-    var noShowAddOptionalSubject = false
-    var noShowAddOptionalDate:Long = 0 // 여기 timestamp 로 처리
+//    var noShowAddOptionalSubject = false
+//    var noShowAddOptionalDate:Long = 0 // 여기 timestamp 로 처리
 
     // 회원가입 개선 2021/04/13
     var token:String = ""
@@ -107,14 +106,13 @@ class User {
     var isValidPhone = false
     var isValidEmail = false
 
-    var userUniversityMajorCode: String? = null
-    val showMainKUTab: Boolean
-        get () {
-            return schoolID == 6000
-        }
+//    var userUniversityMajorCode: String? = null
+//    val showMainKUTab: Boolean
+//        get () {
+//            return schoolID == 6000
+//        }
 
     companion object {
-        const val EVENT_STUDENT_TYPE_SETTING = "EVENT_STUDENT_TYPE_SETTING"
 
 //        fun signup(context: Context, lastName: String, firstName: String, email: String, pw: String, phone: String,
 //                   successCB:() -> Unit,
@@ -173,10 +171,10 @@ class User {
 //                .toSet()
 //        }
 
-    var firstDate: Date = Date()
+//    var firstDate: Date = Date()
 //    var startDate: Date? = null
 //    var endDate: Date? = null
-    var serviceName: String = ""
+//    var serviceName: String = ""
 
     var recommendLevel: Int? = 0
     var recommendChapter: Int? = 0
@@ -207,11 +205,6 @@ class User {
         }
     var canUpdateGrade: Boolean = false
 
-//    var recentSubjectCode:String = ""
-//    var excludeSubjectCode:String = ""
-
-    constructor(json: Map<String, String>) {}
-    constructor() {}
 
     fun log() {
         Log.d("USER MODEL", "StudentID: " + studentID)
@@ -259,468 +252,7 @@ class User {
         return subject.bigUnits.filter { studiedUnit.contains(it) }
     }
 
-    fun connectToCrashlytics() {
-        FirebaseCrashlytics.getInstance().setUserId(studentID)
-//        Crashlytics.setUserIdentifier(studentID)
-//        Crashlytics.setUserEmail(this.email)
-    }
 
-    fun update(newUser:User?) {
-        newUser?.let {
-            if (newUser.email != null) this.email = newUser.email
-
-            if (newUser.fullName != null) this.fullName = newUser.fullName
-
-            if (newUser.studentID != null) this.studentID = newUser.studentID
-
-            if (newUser.schoolID != null) this.schoolID = newUser.schoolID
-
-            if (newUser.studentType != null) this.studentType = newUser.studentType
-
-            if (newUser.initSettingCompleted != null) this.initSettingCompleted = newUser.initSettingCompleted
-
-            if (newUser.grade != null) this.grade = newUser.grade
-
-            if (newUser.rawMajorType != null) this.rawMajorType = newUser.rawMajorType
-
-            if (newUser.cellPhone != null) this.cellPhone = newUser.cellPhone
-
-            if (newUser.rating != null) this.rating = newUser.rating
-
-            if (newUser.rawInitStudied?.isNotEmpty() == true) this.rawInitStudied = newUser.rawInitStudied
-
-            if (newUser.rawInitOptional?.isNotEmpty() == true) this.rawInitOptional = newUser.rawInitOptional
-
-            if (newUser.token != null) this.token = newUser.token
-
-            this.userUniversityMajorCode = newUser.userUniversityMajorCode
-
-            commit("update")
-        }
-    }
-
-    fun update(
-            email: String? = null,
-            fullName: String? = null,
-            initSettingCompleted: Boolean? = null,
-            majorType: String? = null,
-            schoolLocation: String? = null,
-            schoolID: Int? = null,
-            schoolName: String? = null,
-            regionID: Int? = null,
-            regionName: String? = null,
-            initMoGrade: Int? = null,
-            initStudied: String? = null,
-            initOptional: String? = null,
-            recommendLevel: Int? = null,
-            recommendChapter: Int? = null,
-            recommendStudyPoint: Int? = null,
-            grade: Int? = null,
-            agreeAlimtalk: Boolean? = null,
-            agreeAppPush: Boolean?= null,
-            agreeEmail: Boolean?= null,
-            agreeMarketing: Boolean? = null,
-            token: String?= null,
-    ) {
-        if (email != null) this.email = email
-
-        if (fullName != null) this.fullName = fullName
-
-        if (initSettingCompleted != null) this.initSettingCompleted = initSettingCompleted
-
-        if (grade != null) this.rawGrade = grade
-
-        if (majorType != null) this.rawMajorType = majorType
-
-        if (schoolLocation != null) this.schoolLocation = schoolLocation
-
-        if (schoolID != null) this.schoolID = schoolID else this.schoolID = 0
-
-        if (schoolName != null) this.schoolName = schoolName
-
-        if (regionID != null) this.regionID = regionID else this.regionID = 0
-
-        if (regionName != null) this.regionName = regionName
-
-        if (initMoGrade != null) this.rating = initMoGrade
-
-        if (initStudied?.isNotEmpty() == true) this.rawInitStudied = initStudied
-
-        if (initOptional?.isNotEmpty() == true) this.rawInitOptional = initOptional
-
-        if (recommendLevel != null) this.recommendLevel = recommendLevel
-
-        if (recommendChapter != null) this.recommendChapter = recommendChapter
-
-        if (recommendStudyPoint != null) this.recommendStudyPoint = recommendStudyPoint
-
-        if(agreeAlimtalk != null) this.agreeAlimtalk = agreeAlimtalk
-
-        if(agreeAppPush != null) this.agreeAppPush = agreeAppPush
-
-        if(agreeEmail != null) this.agreeEmail = agreeEmail
-
-        if(agreeMarketing != null) this.agreeMarketing = agreeMarketing
-
-        if(token != null) this.token = token
-
-        commit("update")
-    }
-
-    fun getAnalysis(context: Context, startDate: Date, endDate: Date, formerDate: Date,  cb: (analysis: com.freewheelin.pulley.legacy.model.Analysis?) -> Unit) {
-        val param: Parameter = Parameter(
-                "studentID" to studentID,
-                "formerDate" to DateTimeUtils.yyyy_MM_dd.format(formerDate),
-                "endDate" to DateTimeUtils.yyyy_MM_dd.format(endDate),
-                "startDate" to DateTimeUtils.yyyy_MM_dd.format(startDate)
-        )
-
-        API_V1.getAnalysis(param).enqueue(object: Callback<Template<com.freewheelin.pulley.legacy.model.Analysis>>{
-            override fun onFailure(call: Call<Template<com.freewheelin.pulley.legacy.model.Analysis>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<Template<com.freewheelin.pulley.legacy.model.Analysis>>, response: Response<Template<com.freewheelin.pulley.legacy.model.Analysis>>) {
-                val analysis = response.body()?.data
-                cb(analysis)
-                if(response.isSuccessful == false)
-                    responseError(context, response)
-            }
-        })
-    }
-
-    fun getRecommendLevelText(): String {
-        return when(recommendLevel) {
-            0 -> "더 쉽게"
-            1 -> "수준에 맞게"
-            2 -> "더 어렵게"
-            else -> {
-//                LogUtils.assert(false, "예상못한 recommendLevel ${recommendLevel}, user: ${studentID}")
-                Log.e(javaClass.simpleName, "예상못한 recommendLevel ${recommendLevel}, user: ${studentID}")
-                "더 어렵게"
-            }
-        }
-    }
-
-    fun getRecommendRangeText(): String {
-        return when(recommendChapter) {
-            0 -> "최근 공부한 범위"
-            1 -> "수능 전범위"
-            2 -> "내가 선택한 과목"
-            else -> {
-//                LogUtils.assert(false, "예상못한 recommendChapter ${recommendChapter}, user: ${studentID}")
-                Log.e(javaClass.simpleName, "예상못한 recommendChapter ${recommendChapter}, user: ${studentID}")
-                "내가 선택한 과목"
-            }
-        }
-    }
-
-    fun getCommonSubjectText() : String {
-        rawInitStudied = rawInitStudied ?: ""
-        val units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-
-        val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
-        return subjects
-    }
-
-    fun getOptionalSubjectText() : String {
-        rawInitOptional = rawInitOptional ?: ""
-        val units = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
-        return subjects
-    }
-
-    fun getAllSubjectText() : String {
-        rawInitStudied = rawInitStudied ?: ""
-        rawInitOptional = rawInitOptional ?: ""
-        var units = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val optionalUnits = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull().toSet()
-        val subjects = units.plus(optionalUnits)
-        return subjects.sortedBy { it }.map { BigUnitV3.init(it).subject.filterText }.toSet().joinToString(", ")
-    }
-
-    fun syncMyInfo(activity:Activity, cb: (user: User) -> Unit) {
-
-        API_V3.getUser().enqueue(object: Callback<Template<User>> {
-            override fun onFailure(call: Call<Template<User>>, t: Throwable) {}
-            override fun onResponse(call: Call<Template<User>>, response: Response<Template<User>>) {
-                val remoteUser = response.body()?.data
-
-                if(response.isSuccessful && remoteUser != null) {
-                    if(user != null) {
-                        remoteUser.apply {
-                            noShowAddOptionalDate = user!!.noShowAddOptionalDate
-                            noShowAddOptionalSubject = user!!.noShowAddOptionalSubject
-//                            excludeSubjectCode = user!!.excludeSubjectCode
-//                            recentSubjectCode = user!!.recentSubjectCode
-                        }
-                    }
-                    remoteUser.commit("syncMyInfo")
-                    cb(remoteUser)
-                }else if(response.code() == 401) {
-                    MyApplication.user?.apply {
-                        token = ""
-                        commit("User syncMyInfo Session Expired")
-                    }
-                    DialogUtils.expiredSessionDialog(activity)
-                }else {
-                    DialogUtils.showServerErr(activity)
-                }
-            }
-        })
-    }
-
-    fun setUserType(context: Context,
-                    studentType: DessertType,
-                    knowledgeScore: Int,
-                    technicalScore: Int,
-                    attitudePlanScore: Int,
-                    attitudeMentalScore: Int,
-                    successCB: () -> Unit) {
-        val param: Parameter = Parameter(
-                "studentType" to studentType,
-                "knowledgeScore" to knowledgeScore,
-                "technicalScore" to technicalScore,
-                "attitudePlanScore" to attitudePlanScore,
-                "attitudeMentalScore" to attitudeMentalScore
-        )
-
-        API_V2.setUserType(studentID, param).enqueue(object: Callback<Void> {
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if(response.code() == 200) {
-                    this@User.studentType = studentType
-                    commit("setUserType")
-                    val intent = Intent(EVENT_STUDENT_TYPE_SETTING)
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-                    successCB()
-                } else {
-                    responseError(context, response, param)
-                }
-            }
-
-        })
-    }
-
-//    fun getExpiredDday(): Int? {
-//        val today = Date()
-//        endDate ?: return null
-//        return DateTimeUtils.getDayDifferences(today, endDate!!)
-//    }
-
-    // 새해에 true이다
-    fun isNeedToUpdateGrade(): Boolean {
-        return canUpdateGrade
-    }
-
-
-    fun updateGrade(context: Context, updateGrade: Grade, cb: (() -> Unit)? = null) {
-        API_V2.plusGrade(studentID, updateGrade.value).enqueue(object: Callback<Void> {
-            override fun onFailure(call: Call<Void>, t: Throwable) {}
-
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.code() == 200) {
-                    grade = updateGrade
-                    if (cb != null)
-                        cb()
-                }
-            }
-        })
-    }
-    fun startFreeMembership(context: Context, cb: () -> Unit) {
-        val param: Parameter = Parameter(
-                "studentID" to studentID
-        )
-
-        API_V2.startFree(studentID).enqueue(object : Callback<Template<User>> {
-            override fun onFailure(call: Call<Template<User>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-            override fun onResponse(call: Call<Template<User>>, response: Response<Template<User>>) {
-                val user = response.body()?.data
-
-                if (response.isSuccessful && user != null) {
-                    user.commit("startFreeMembership")
-                    cb()
-                } else {
-                    responseError(context, response, param)
-                }
-            }
-        })
-    }
-
-    fun updateCellphone(context: Context, phone: String, successCB:() -> Unit) {
-        val param: Parameter = Parameter(
-                "studentID" to studentID,
-                "cellPhone" to phone
-        )
-
-        API_V1.updateCellphone(param).enqueue(object: Callback<Void> {
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if(response.isSuccessful) {
-                    cellPhone = phone
-                    commit("updateCellphone")
-                    successCB()
-                } else {
-                    responseError(context, response, param)
-                }
-            }
-        })
-    }
-
-    fun setStudyInfoVal(grade: Int, major: String, rating: Int, common: List<Int>?, optional: List<Int>?) {
-        this.rawGrade = grade
-        this.rawMajorType = major
-        this.rating = rating
-
-        if(common?.isNotEmpty() == true)
-            this.rawInitStudied = common.joinToString()
-
-        if(optional?.isNotEmpty() == true)
-            this.rawInitOptional = optional.joinToString()
-
-        Log.d("테스트", "rawStudied=${this.rawInitStudied}")
-        Log.d("테스트", "rawOptional=${this.rawInitOptional}")
-
-        commit("setStudyInfoVal")
-    }
-
-    fun setStudiedUnit(bigUnit: Collection<BigUnitV3>) {
-        this.rawInitStudied = bigUnit.map { it.id }.joinToString()
-        commit("setStudiedUnit")
-    }
-
-    fun setExcludeUnit(bigUnit: Collection<BigUnitV3>) {
-//        this.excludeSubjectCode = bigUnit.map { it.id }.joinToString()
-//        commit("setExcludeUnit")
-    }
-
-    fun setOptionalUnit(bigUnit: Collection<BigUnitV3>) {
-        this.rawInitOptional = bigUnit.map { it.id }.joinToString()
-        commit("setOptionalUnit")
-    }
-
-    fun setOptionalUnitBySubjects(subjects: Collection<SubjectV3>) {
-        val bigUnit = mutableListOf<BigUnitV3>()
-        for(subject in subjects) {
-            bigUnit.addAll(subject.bigUnits)
-        }
-        // 기존 optional unit에 더하기
-        bigUnit.addAll(optionalUnit)
-
-        this.rawInitOptional = bigUnit.map { it.id }.joinToString()
-        commit("setOptionalUnitBySubjects")
-    }
-
-    fun setRecentStudyCode(studyCodes:String, exclude:String) {
-//        recentSubjectCode = studyCodes
-//        excludeSubjectCode = exclude
-//        commit("setRecentStudyCode")
-    }
-
-    fun getDailyAnalysis(context: Context, successCB: (summary: DailySummary) -> Unit) {
-        API_V2.getDailySummary(studentID).enqueue(object: Callback<DailySummary>{
-            override fun onFailure(call: Call<DailySummary>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<DailySummary>, response: Response<DailySummary>) {
-                val summary = response.body()
-                if(response.isSuccessful && summary != null) {
-                    successCB(summary)
-                }
-            }
-        })
-    }
-
-    fun getStudyList(context: Context, successCB: (contents: List<Content>) -> Unit) {
-        API_V3.getStudyList(studentID).enqueue(object: Callback<ResponseListBody<Content>>{
-            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-
-            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
-                if(response.isSuccessful) {
-                    val contents = response.body()?.data ?: emptyList()
-                    successCB(contents)
-                } else {
-                    responseError(context, response)
-                }
-            }
-        })
-    }
-
-    fun getDailyStudy(context:Context, callback: (DailyStudy)->Unit) {
-        API_V3.getDailyStudy(studentID).enqueue(object : Callback<ResponseBody<DailyStudy>> {
-            override fun onResponse(call: Call<ResponseBody<DailyStudy>>, response: Response<ResponseBody<DailyStudy>>) {
-                val res = response.body() ?: return responseError(context, response)
-                res.data?.let { callback(it) }
-            }
-
-            override fun onFailure(call: Call<ResponseBody<DailyStudy>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-        })
-    }
-
-    fun getDailyPiece(context:Context, callback: (List<Content>)->Unit) {
-        API_V3.getDailyPiece(studentID).enqueue(object : Callback<ResponseListBody<Content>> {
-            override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
-                val data = response.body()?.data ?: return responseError(context, response)
-                callback(data)
-            }
-
-            override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
-                responseFailed(context, t)
-            }
-        })
-    }
-
-    fun getDailyRecommend(context:Context, callback: (DailyRecommend)->Unit, failCB: () -> Unit) {
-        API_V3.getDailyRecommend(studentID).enqueue(object : Callback<ResponseBody<DailyRecommend>> {
-            override fun onResponse(call: Call<ResponseBody<DailyRecommend>>, response: Response<ResponseBody<DailyRecommend>>) {
-                val res = response.body() ?: return responseError(context, response)
-                if (res.data != null) {
-                    callback(res.data)
-                } else {
-                    failCB()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody<DailyRecommend>>, t: Throwable) {
-                failCB()
-            }
-        })
-    }
-
-
-    @JvmName("setNoShowAddOptionalSubject1")
-    fun setNoShowAddOptionalSubject(noShow:Boolean) {
-        val now = System.currentTimeMillis()
-        noShowAddOptionalSubject = noShow
-        if(noShow) {
-            noShowAddOptionalDate = now
-        }
-        commit("setNoShowAddOptionalSubject")
-    }
-
-    fun isShowAddOptionalSubjectStatus() : Boolean {
-        Log.d("테스트", "askAddSubjectCode: noShowAddOptionalSubject=$noShowAddOptionalSubject, noShowAddOptionalDate=$noShowAddOptionalDate")
-        if(noShowAddOptionalSubject && noShowAddOptionalDate > 0) {
-            val now = System.currentTimeMillis()
-            val period = (now - noShowAddOptionalDate) / 1000 / 60 / 60 / 24 // 일단위
-            Log.d("테스트", "askAddSubjectCode: period=$period, now=$now")
-            if(period < 7) return false // 7일 미만이면 안보여줌
-        }
-        return true
-    }
 }
 
 data class DummyCreatedUser(

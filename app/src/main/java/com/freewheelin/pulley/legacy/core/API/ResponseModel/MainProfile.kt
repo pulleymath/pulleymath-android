@@ -1,7 +1,6 @@
 package com.freewheelin.pulley.legacy.core.API.ResponseModel
 
-import com.freewheelin.pulley.legacy.assets.Grade
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
@@ -95,10 +94,10 @@ class MainProfile {
             return "연속달성 ${continuousGoalCount}일째\uD83D\uDD25"
     }
 
-    fun getProblemCountGuideText(user: User): String {
-        val rating = user.rating
+    fun getProblemCountGuideText(user: UserV4): String {
+        val rating = user.initMoGrade
 
-        if(user.grade.isMiddle) {
+        if(user.userGrade.isMiddle) {
             return "더 나은 나를 위한 도전!\n하루 ${goalProblemCount}문제 꼬박꼬박"
         } else {
             val ratingText = if (rating <= 1) "1등급" else "${rating - 1}등급"

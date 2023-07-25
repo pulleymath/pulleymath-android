@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.core.Parameter
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
+import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.repository.*
@@ -29,14 +30,23 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
     private val _recommendOptionalSubjects = MutableLiveData<List<RecommendSubject>>()
     val recommendOptionalSubjects: LiveData<List<RecommendSubject>> = _recommendOptionalSubjects
 
-    fun updateUser(user: User?) {
+    fun updateUser(user: UserV4?) {
         userRepository.updateUser(user)
     }
 
-    fun fetchUser(cb: (User) -> Unit) {
+    fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             cb(user)
+        }
+    }
+    fun changeEmail(email: String, confirmCode: String, cb:() -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val req = ChangeEmailRequest(auth = confirmCode, email = email)
+            val nothing = userRepository.changeEmail(req)
+            withContext(Dispatchers.Main) {
+                cb()
+            }
         }
     }
     fun getTempToken(cb: (String) -> Unit = {}) {

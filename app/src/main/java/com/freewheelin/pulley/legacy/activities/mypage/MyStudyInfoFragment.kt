@@ -18,7 +18,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
 import com.freewheelin.pulley.legacy.dialogs.CompleteDialog
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
@@ -63,8 +63,8 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
                         it.chapters
                             .map { it.isSelected }
                             .reduce { p1, p2 ->
-                            p1 || p2
-                        }
+                                p1 || p2
+                            }
                     }
                     .map { it.subjectName }
                     .joinTo(StringBuilder(), ", ").toString()
@@ -116,25 +116,31 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         }
     }
 
-    private fun configureUI(user: User) {
+    private fun configureUI(user: UserV4) {
         with(binding) {
-            gradeTv.text = user.grade.text
+            gradeTv.text = user.userGrade.text
 
             configureSchool(user)
 
-            if (user.grade.isMiddle) {
+            if (user.userGrade.isMiddle) {
                 majorTv.text = "-"
                 ratingTv.text = "-"
             } else {
-                majorTv.text = user.major.title
-                ratingTv.text = user.ratingText
+                majorTv.text = user.userMajor.title
+                val ratingText = when (user.initMoGrade) {
+                    0 -> "모름"
+                    in 1..9 -> "${user.initMoGrade}등급"
+                    else -> null
+
+                }
+                ratingTv.text = ratingText
             }
 
 //            configureStudy(user)
         }
     }
 
-    private fun configureSchool(user: User) {
+    private fun configureSchool(user: UserV4) {
         with(binding) {
             if(user.schoolID?:0 > 0) {
                 schoolLabel.text = "학교"
@@ -146,20 +152,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
         }
     }
 
-    private fun configureStudy(user: User) {
-        with(binding) {
-            commonSubjectTv.text = user.getCommonSubjectText()
-            optionalSubjectTv.text = calcNoneText(user.getOptionalSubjectText())
-            middleSubjectTv.text = user.getCommonSubjectText()
-        }
-    }
-
-    private fun calcNoneText(text: String?): String {
-        return if (text?.isNotEmpty() == true) text
-        else getString(R.string.text_none)
-    }
-
-    override fun onModifyCompleted(user: User) {
+    override fun onModifyCompleted(user: UserV4) {
         CompleteDialog(requireContext(), "수정 완료!\n업데이트되었습니다.", "해당 수정 내역은 추천 문항에 반영됩니다.").showFor()
         configureUI(user)
     }

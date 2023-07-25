@@ -86,8 +86,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="pulleymath"/>
-                <data android:host="redirectcallback"/>
-                <data android:pathPattern="/whalespace"/>
+                <data android:host="signin"/>
+                <data android:pathPattern="/complete/whalespace"/>
 
             </intent-filter>
         </activity>
@@ -140,9 +140,6 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".legacy.activities.learning.tabFragment.usertest.analysis.UserAnalysisAllActivity"
-            android:exported="true" />
-        <activity
             android:name=".legacy.activities.learning.tabFragment.usertest.StudentManagerActivity"
             android:exported="true" />
         <activity
@@ -156,10 +153,6 @@
             android:name=".legacy.activities.auth.InitSettingCompleteActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".legacy.activities.auth.InitSettingActivity"
-            android:exported="true"
-            android:screenOrientation="sensorLandscape" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -171,10 +164,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".legacy.activities.auth.InitTestActivity"
-            android:exported="true"
-            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".legacy.activities.auth.StudyReportActivity"
             android:exported="true"

@@ -18,7 +18,7 @@ import com.freewheelin.pulley.legacy.core.manage.BookManager
 import com.freewheelin.pulley.databinding.ItemCellBinding
 import com.freewheelin.pulley.databinding.ItemHeaderBinding
 import com.freewheelin.pulley.databinding.ItemStudyPlanAddBinding
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
@@ -37,7 +37,7 @@ interface UnitPlanAddDialogListener {
     fun onBookAdded(book: Book)
 }
 
-class UnitPlanAddDialog(context: Context, val user: User) : Dialog(context) {
+class UnitPlanAddDialog(context: Context, val user: UserV4) : Dialog(context) {
 
     var selectedIndexPath = IndexPath(0,0,Type.row)
     var listener: UnitPlanAddDialogListener? = null

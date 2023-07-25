@@ -1,16 +1,11 @@
 package com.freewheelin.pulley.legacy.activities.mypage
 
-
-import android.app.AlarmManager
-import android.app.AlertDialog
-import android.app.PendingIntent
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,25 +13,19 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.SplashActivity
 import com.freewheelin.pulley.legacy.activities.StartActivity
-import com.freewheelin.pulley.legacy.activities.auth.InitSettingActivity
-
 import com.freewheelin.pulley.legacy.activities.mypage.Setting.*
-import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
-import com.freewheelin.pulley.legacy.assets.DessertType
 import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.MyApplication
-import com.freewheelin.pulley.legacy.bases.isSPYMode
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Theme
-import com.freewheelin.pulley.legacy.core.Version.v1
 import com.freewheelin.pulley.legacy.core.manage.*
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentMyMainPageBinding
 import com.freewheelin.pulley.databinding.ItemMypageListBinding
-import com.freewheelin.pulley.legacy.dialogs.UpdateDialog
-import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.core.API_V2
+import com.freewheelin.pulley.legacy.model.Template
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
@@ -46,6 +35,9 @@ import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 enum class SettingCategory(val title: String) {
     PRIVATE("개인정보 설정"),
@@ -147,7 +139,6 @@ class MyMainPageFragment : Fragment() {
             SettingCategory.SUPPORT,
             SettingCategory.ETC)
 
-    lateinit var typeReceiver: BroadcastReceiver
     lateinit var binding: FragmentMyMainPageBinding
     private val viewModel: MyMainPageFragViewModel by viewModels()
     lateinit var reconfigureReceiver: BroadcastReceiver
@@ -157,10 +148,6 @@ class MyMainPageFragment : Fragment() {
         initReceiver()
     }
     private fun initReceiver() {
-        typeReceiver = object: BroadcastReceiver() {
-            override fun onReceive(p0: Context?, p1: Intent?) {}
-        }
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(typeReceiver, IntentFilter(User.EVENT_STUDENT_TYPE_SETTING))
 
         reconfigureReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
@@ -173,7 +160,6 @@ class MyMainPageFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(typeReceiver)
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
         super.onDestroy()
     }
@@ -263,13 +249,30 @@ class MyMainPageFragment : Fragment() {
                     "로그아웃",
                     type = CommonDialog.DialogType.Alert,
                     successCb = {
-                        MyApplication.user?.logout {
+                        val callback: (String?) -> Unit = {
                             viewModel.updateUser(MyApplication.user)
                             activity?.finishAffinity()
                             val intent = Intent(activity, StartActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             activity?.startActivity(intent)
                         }
+                        API_V2.signout().enqueue(object: Callback<Template<String?>> {
+                            override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                                Log.d(javaClass.simpleName, "로그아웃 성공")
+                                MyApplication.token = ""
+                                MyApplication.user?.token = ""
+                                MyApplication.user = null
+                                MyApplication.isAppFirstLaunch = true
+                                Preferences.userDataString.set("")
+
+                                callback(null)
+                            }
+
+                            override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                                Log.e(javaClass.simpleName, "로그아웃 실패")
+                                callback(t.localizedMessage)
+                            }
+                        })
                     }
                 )
             }

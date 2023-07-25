@@ -29,7 +29,7 @@ fun ServiceV1.postInquiry(inquiryType: String, subject: String, contents: String
     return postInquiry(param)
 }
 
-fun ServiceV1.getMyMockExamList(user: User): Call<Template<List<MockExam>>> {
+fun ServiceV1.getMyMockExamList(user: UserV4): Call<Template<List<MockExam>>> {
     val params: Parameter = Parameter(
             "publicSearch" to false,
             "pieceCategory" to "MO",
@@ -40,7 +40,7 @@ fun ServiceV1.getMyMockExamList(user: User): Call<Template<List<MockExam>>> {
     return getPieceList(params)
 }
 
-fun ServiceV1.getNewMockExamList(user: User): Call<Template<List<MockExam>>> {
+fun ServiceV1.getNewMockExamList(user: UserV4): Call<Template<List<MockExam>>> {
     val params: Parameter = Parameter(
             "publicSearch" to true,
             "pieceCategory" to "MO",
@@ -67,7 +67,7 @@ fun ServiceV1.findPassword(email: String): Call<Template<String>> {
     return findPassword(params)
 }
 
-fun ServiceV1.assignMockExam(mock: MockExam, user: User): Call<Template<Map<String,String>>> {
+fun ServiceV1.assignMockExam(mock: MockExam, user: UserV4): Call<Template<Map<String,String>>> {
     val params: Parameter = Parameter(
             "studentID" to user.studentID,
             "pieceID" to mock.pieceID
@@ -75,7 +75,7 @@ fun ServiceV1.assignMockExam(mock: MockExam, user: User): Call<Template<Map<Stri
     return assignPiece(params)
 }
 
-fun ServiceV1.getProblemList(mock: MockExam, user: User): Call<Template<Map<String, String>>> {
+fun ServiceV1.getProblemList(mock: MockExam, user: UserV4): Call<Template<Map<String, String>>> {
     val params: Parameter = Parameter(
             "studentID" to user.studentID
     )
