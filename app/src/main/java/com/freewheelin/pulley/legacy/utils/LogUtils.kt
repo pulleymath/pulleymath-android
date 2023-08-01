@@ -118,9 +118,18 @@ object LogUtils {
         if(Preferences.onLoggingEvent.get()) {
             val toast = Toast.makeText(context, logText, Toast.LENGTH_SHORT)
             toast.show()
+            println("LogUtils :: ${logText}")
         }
 
         if (BuildConfig.FLAVOR != "beta") {
+            item_category?.let { category ->
+                FirebaseAnalytics.getInstance(context).logEvent(category) {
+                    param("student_id", user?.studentID ?: "student_id_null")
+                    param("item_name", item_name ?: "item_name_null")
+                    param("item_value", item_value ?: "item_value_null")
+                }
+            }
+
             API_V1.logUser(param).enqueue(object : Callback<Void> {
                 override fun onFailure(call: Call<Void>, t: Throwable) {}
 

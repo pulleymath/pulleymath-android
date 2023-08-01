@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPurchaseGuide2Binding
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2023.model.PurchaseGuideOffer
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
@@ -57,6 +58,7 @@ class PurchaseGuide2Fragment : Fragment() {
             }
 
             actionBtn.setOnClickListener { _ ->
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.DIALOG, "구매가이드", "풀리수학으로공부시작", "구매하러가기")
 
                 viewModel.selectedOffer?.let { offer ->
                     val offerId = offer.offerId
