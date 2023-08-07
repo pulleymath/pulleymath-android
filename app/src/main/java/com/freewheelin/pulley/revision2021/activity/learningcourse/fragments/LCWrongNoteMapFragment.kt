@@ -113,12 +113,6 @@ class LCWrongNoteMapFragment : Fragment() {
 
                         }
                         CourseSummary.MainMessageStatus.예제완료_유형완료_오답완료 -> {
-                            val subjectInKorean = LCSubject().run {
-                                val sid = (activity as LearningCourseActivity).viewModel.selectedSubjectId ?: -1
-                                this.subjectId = sid
-                                subjectIndicator.inKorean
-                            }
-                            LCSubject.SubjectIndicator.MathSang
                             (activity as LearningCourseActivity).finish()
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(200)
@@ -126,7 +120,6 @@ class LCWrongNoteMapFragment : Fragment() {
                                 intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 2)
                                 intent.putExtra(PieceManager.EVENT_SCROLL, true)
                                 intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
-                                intent.putExtra(PieceManager.EVENT_FILTER, subjectInKorean)
                                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
                             }
                         }

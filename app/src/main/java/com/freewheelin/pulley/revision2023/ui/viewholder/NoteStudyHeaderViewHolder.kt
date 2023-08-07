@@ -8,7 +8,6 @@ import androidx.core.view.doOnAttach
 import androidx.core.view.doOnDetach
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.revision2023.ui.fragment.OrderType
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.databinding.ItemNoteStudyHeaderBinding
 import com.freewheelin.pulley.legacy.model.Problem
@@ -16,8 +15,10 @@ import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2023.ui.activity.OrderType
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
 
-class NoteStudyHeaderViewHolder(val binding: ItemNoteStudyHeaderBinding, val viewModel: WrongNoteStudyViewModel, val listener: NoteStudyClickListener): RecyclerView.ViewHolder(binding.root) {
+class NoteStudyHeaderViewHolder(val binding: ItemNoteStudyHeaderBinding, val viewModel: WrongNoteActViewModel, val listener: NoteStudyClickListener): RecyclerView.ViewHolder(binding.root) {
     var orderBtns = listOf<Button>()
 
     init {

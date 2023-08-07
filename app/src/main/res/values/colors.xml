@@ -52,14 +52,16 @@
     <color name="yellow_400">#e19502</color>
     <color name="yellow_500">#8f5f00</color>
 
-    <color name="blue_100">#e1f1fe</color>
-    <color name="blue_200">#b9defe</color>
-    <color name="blue_300">#78beff</color>
-    <color name="blue_400">#30a4ff</color>
-    <color name="blue_500">#2287ef</color>
+    <color name="blue_100">#E1F1FE</color>
+    <color name="blue_200">#B9DEFE</color>
+    <color name="blue_300">#78BEFF</color>
+    <color name="blue_400">#30A4FF</color>
+    <color name="blue_500">#2287EF</color>
 
     <color name="green_100">#EAF8D9</color>
-    <color name="green_300">#70d000</color>
+    <color name="green_200">#A9E366</color>
+    <color name="green_300">#8DD933</color>
+    <color name="green_400">#70D000</color>
 
     <color name="black_100">#3d3d3d</color>
     <color name="black_200">#333333</color>
@@ -73,17 +75,25 @@
     <color name="blue_black_200">#4A4A66</color>
 
     <color name="purple_gray_100">#FAFAFE</color>
+    <color name="purple_gray_150">#F0EFFF</color>
     <color name="purple_gray_200">#ECEBFF</color>
     <color name="purple_gray_300">#BEBEDF</color>
     <color name="purple_gray_400">#A7A7D2</color>
     <color name="purple_gray_500">#8E8EBD</color>
+    <color name="purple_100_opa_50">#80ECEBFF</color>
     <color name="purple_200_opa_50">#D5D5FF</color>
     <color name="purple_250_opa_50">#BEBEFF</color>
     <color name="purple_300_opa_50">#7E7EFF</color>
     <color name="purple_gray_300_opa_50">#DEDEEF</color>
 
-    <color name="purple_DCE6FF">#DCE6FF</color>
-    <color name="purple_5282FF">#5282FF</color>
+    <color name="dark_blue_100">#DCE6FF</color>
+    <color name="dark_blue_100_opa_50">#80DCE6FF</color>
+    <color name="dark_blue_200">#BACDFF</color>
+    <color name="dark_blue_300">#749BFF</color>
+    <color name="dark_blue_400">#5282FF</color>
+    <color name="dark_blue_400_opa_50">#805282FF</color>
+    <color name="dark_blue_500">#4168CC</color>
+
     <color name="social_whalespace">#193A97</color>
 
     <color name="bronze">#D49358</color>

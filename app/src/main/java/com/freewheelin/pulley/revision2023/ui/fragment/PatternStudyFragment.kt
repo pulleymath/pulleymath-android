@@ -12,8 +12,10 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.gridlayout.widget.GridLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentPatternStudyBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.dialogs.*
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
@@ -40,8 +43,13 @@ import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.MarginDecoration
 import com.freewheelin.pulley.legacy.views.balloonWindow.BalloonWindow
 import com.freewheelin.pulley.revision2021.utils.observeThrottle
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.activity.TestActivity
+import com.freewheelin.pulley.revision2023.ui.activity.WrongNoteActivity
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.freewheelin.pulley.revision2023.ui.view.StudyMenuCard
 import com.pulleymath.android.pdf.utils.onThrottleClick
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +62,7 @@ class PatternStudyFragment : MainTabFragment(),
     private lateinit var binding: FragmentPatternStudyBinding
     private val viewModel: PatternStudyViewModel by viewModels()
 
-    override var type: MainTab = MainTab.유형
+    override var type: MainTab = MainTab.문제풀이
     var isViewCreated = false
     private val myPlanAdapter = PatternStudyMyPlanAdapter (this, listOf(ActionType.pin, ActionType.mail), OriginType.MyPlan, isGridLayout = false)
     private lateinit var getResult: ActivityResultLauncher<Intent>
@@ -132,13 +140,17 @@ class PatternStudyFragment : MainTabFragment(),
             binding.apply {
                 lifecycleOwner = viewLifecycleOwner
                 vm = viewModel
+                isMobile = requireContext().isMobile
 
                 initAdapter()
                 initGuide()
 
-                pulleyMathBookCv.onThrottleClick { goPulleyMathBooks() }
-                commercialBookCv.onThrottleClick { goPdfList() }
-                workBookCv.onThrottleClick { goWorkbooks() }
+//                pulleyMathBookCv.onThrottleClick { goPulleyMathBooks() }
+//                commercialBookCv.onThrottleClick { goPdfList() }
+//                workBookCv.onThrottleClick { goWorkbooks() }
+//                testCv.onThrottleClick { goTest() }
+//                wrongNoteCv.onThrottleClick { goWrongNote() }
+//                mockCv.onThrottleClick { goMock() }
             }
             viewModel.apply {
                 myPlans.observe(viewLifecycleOwner) {
@@ -159,6 +171,7 @@ class PatternStudyFragment : MainTabFragment(),
 
                     val isWorkbooksChallengeInProgress = it.find { it.startChallenge?.isWorkbooksInProgress == true } != null
                     showWorkbooksChallengeStamp.postValue(isWorkbooksChallengeInProgress)
+
                 }
                 errorAction.observe(viewLifecycleOwner) { type ->
                     when(type) {
@@ -168,6 +181,7 @@ class PatternStudyFragment : MainTabFragment(),
                     }
                 }
                 schoolType.observe(viewLifecycleOwner) {
+                    initMenuGrid(it)
                     CoroutineScope(Dispatchers.Default).launch {
                         delay(300)
                         myPlanAdapterItemListener.postValue(Unit)
@@ -179,6 +193,18 @@ class PatternStudyFragment : MainTabFragment(),
                     collectAllMyPlans()
                 }
             }
+        }
+    }
+
+    private fun initMenuGrid(schoolType: SchoolType) {
+        val menuGl = binding.menuGl
+        menuGl.removeAllViews()
+        StudyMenuCard.getMenuList(schoolType).forEach {
+            val menuCard = StudyMenuCard(requireContext(), getResult)
+            menuCard.type = it
+            menuCard.setViewModel(viewModel, viewLifecycleOwner)
+            menuCard.setParams(schoolType)
+            menuGl.addView(menuCard)
         }
     }
     private fun showGuestJoinInduceDialog() {
@@ -241,20 +267,38 @@ class PatternStudyFragment : MainTabFragment(),
     }
 
     fun goPulleyMathBooks(isFocus: Boolean = false) {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "풀리수학문제집")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "풀리수학문제집")
         PulleyMathBooksActivity.getIntent(requireContext(), isFocus).let {
             getResult.launch(it)
         }
     }
     fun goPdfList() {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "풀리북스")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "풀리북스")
         Intent(requireContext(), PdfListActivity::class.java).let {
             startActivity(it)
         }
     }
     fun goWorkbooks() {
-        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "유형학습", "워크북")
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "워크북")
         WorkbookListActivity.getIntent(requireContext()).let {
+            getResult.launch(it)
+        }
+    }
+    fun goTest() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "테스트")
+        TestActivity.getIntent(requireContext()).let {
+            getResult.launch(it)
+        }
+    }
+    fun goMock() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "테스트")
+        MockListActivity.getIntent(requireContext()).let {
+            getResult.launch(it)
+        }
+    }
+    fun goWrongNote() {
+        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "문제풀이", "테스트")
+        WrongNoteActivity.getIntent(requireContext()).let {
             getResult.launch(it)
         }
     }

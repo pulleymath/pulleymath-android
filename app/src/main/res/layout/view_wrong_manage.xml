@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="fragmentVM" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel"/>
+        <variable name="fragmentVM" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

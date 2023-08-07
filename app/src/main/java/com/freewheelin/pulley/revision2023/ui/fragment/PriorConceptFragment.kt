@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPriorConceptBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_BASE_CONCEPT
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.WHERE_ARE_YOU_FROM
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.adapter.PriorConceptAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.PriorConceptClickListener
@@ -27,8 +29,9 @@ class PriorConceptFragment : Fragment() {
     private val priorConceptAdapter = PriorConceptAdapter {
         val chapterId = it.priorConceptChapterId
         viewModel.createLearningCourseOnStudentId(chapterId) {
-            val subjectId = (activity as LearningCourseActivity).viewModel.selectedSubjectId ?: -1
-            startActivity(LearningCourseActivity.getIntent(requireContext(), subjectId, it))
+            val intent = LearningCourseActivity.getIntent(requireContext(), it)
+            intent.putExtra(WHERE_ARE_YOU_FROM, FROM_BASE_CONCEPT)
+            startActivity(LearningCourseActivity.getIntent(requireContext(), it))
         }
     }
 
@@ -69,7 +72,6 @@ class PriorConceptFragment : Fragment() {
                     if (it.isEmpty() && viewModel.afterFetch) { (activity as? LearningCourseActivity)?.setPagerToCookingFirstPage() }
                 }
             }
-
         }
     }
 

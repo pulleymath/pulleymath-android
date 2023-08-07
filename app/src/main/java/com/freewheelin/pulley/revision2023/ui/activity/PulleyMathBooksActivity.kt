@@ -27,6 +27,8 @@ import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_PULLEYMATH_BOOKS
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.WHERE_ARE_YOU_FROM
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialog
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.model.contents.Book
@@ -51,6 +53,8 @@ import com.freewheelin.pulley.legacy.views.GridMarginDecoration
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -309,6 +313,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                                     ChallengeManager.CourseName.스타트챌린지_유형.id,
                                 )
                                 completedDialog.moveEvent = moveEvent
+//                                completedDialog.useCouponEvent = {
+//                                    val pgDialog = PurchaseGuideDialog.newInstance(2)
+//                                    supportFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+//                                }
                                 supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog2") }
                             }
 
@@ -392,6 +400,8 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     override fun onSolveClicked(book: Book) {
         val intent = SolveActivity.getIntent(this, book)
+        intent.putExtra(WHERE_ARE_YOU_FROM, FROM_PULLEYMATH_BOOKS)
+
         getResult.launch(intent)
     }
 

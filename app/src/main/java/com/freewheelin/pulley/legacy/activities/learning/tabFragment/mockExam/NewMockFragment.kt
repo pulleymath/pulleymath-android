@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.FragmentNewMockBinding
+import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
@@ -38,6 +40,9 @@ import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
+import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -140,8 +145,8 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == MockExamFragment.REQUEST_MOCK_TEST
-                && resultCode == MockExamFragment.RESULT_MOCK_FINISH) {
+        if (requestCode == MockListActivity.RESULT_MOCK_FINISH
+                && resultCode == MockListActivity.RESULT_MOCK_FINISH) {
             listener?.onMockTestFinished()
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -167,16 +172,29 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
     override fun onSolveWithPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = OMRActivity.getIntent(requireContext(), mockExam)
         intent.putExtra(MockExamManager.ARG_MOCK_IS_RESTART, makeNew)
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
     }
 
     override fun onSolveWithoutPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = SolveActivity.getIntent(requireContext(), mockExam)
         intent.putExtra(MockExamManager.ARG_MOCK_IS_RESTART, makeNew)
         Log.d("NewMock", "이어풀기 isRestart=$makeNew")
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
+    }
+    var isShowFilter = true
+    fun expandFilterLl() {
+//        isShowFilter = true
+        binding.filterLl.showExpandVertical(true)
+    }
+    fun getFilterLlHeight(): Int {
+        return binding.filterLl.height
     }
 
+    private fun makeFilterSumUpText() {
+        binding.apply {
+
+        }
+    }
     private fun initUI() {
         with(binding) {
             vm = viewModel
@@ -184,6 +202,28 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
 
             mockRv.adapter = mockAdapter
             mockRv.layoutManager = LinearLayoutManager(context)
+            mockRv.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val scrollY = mockRv.computeVerticalScrollOffset()
+
+                    if (scrollY > 180 && isShowFilter) {
+                        isShowFilter = false
+                        showSumUpText = true
+                        filterLl.showExpandVertical(isShowFilter)
+                        if (requireContext().isMobile) {
+                            (activity as? MockListActivity)?.expandHeader(isShowFilter)
+                        }
+                    } else if (scrollY < 10 && !isShowFilter) {
+                        isShowFilter = true
+                        showSumUpText = false
+                        filterLl.showExpandVertical(isShowFilter)
+                        if (requireContext().isMobile) {
+                            (activity as? MockListActivity)?.expandHeader(isShowFilter)
+                        }
+                    }
+                }
+            })
 
             val typeList = listOf("계열 전체") + MockExam.Type.list.map { it.getStr() }.toList()
             typeSpinnerAdapter = ArrayAdapter<String>(requireContext(), R.layout.item_spinner_textview, typeList)

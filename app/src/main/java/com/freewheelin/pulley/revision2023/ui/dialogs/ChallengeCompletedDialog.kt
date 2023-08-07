@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogChallengeCompletedBinding
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.ui.activity.PurchaseInduceWebViewActivity
@@ -21,6 +23,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.ChallengeCompletedViewModel
 import com.freewheelin.pulley.legacy.utils.AnimUtils
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.utils.visibleOrInvisibleIf
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -101,7 +104,7 @@ class ChallengeCompletedDialog(): DialogFragment() {
             stampGl.columnCount = 2
             stampGl.alignmentMode = GridLayout.ALIGN_BOUNDS
             viewModel.challenge.courses.forEachIndexed { index, course ->
-                val stampIv = getMissionStampView(index, course)
+                val stampIv = MissionStampView.getMissionStampView(requireContext(), index, course)
                 stampGl.addView(stampIv)
             }
 
@@ -111,13 +114,37 @@ class ChallengeCompletedDialog(): DialogFragment() {
             }
 
             val nextCourse = viewModel.challenge.getNextCourse(viewModel.completedCourseId)
-            val courseName = nextCourse?.courseName ?: "메인"
-            subTitleTv.text = nextCourse?.completedSubTitle ?: "메인으로 이동해 현황을 확인해보세요 :)"
-            val partText = if (nextCourse?.challengeCourseId == 3) "로" else "으로"
-            nextChallengeTv.text = "${courseName}${partText} 이동하기"
-            nextChallengeBtnCl.setOnClickListener {
-                dismiss()
-                moveEvent(nextCourse)
+            if (nextCourse == null) {
+                subTitleTv.text = "모든 미션을 성공하면 50% 할인쿠폰을 드려요 :)"
+                nextChallengeTv.text = "쿠폰 발급받기"
+                nextChallengeBtnCl.setOnClickListener {
+                    dismiss()
+                    viewModel.challenge.userChallengeId?.let { userChallengeId ->
+
+                        viewModel.askForRedeemOfChallenge(userChallengeId) {
+                            if (user?.serviceType?.isNoneUser == true) {
+                                val dialog = StartChallengeInfoDialog.newInstance(viewModel.challenge.challengeId, true)
+                                dialog.startCallback = { _ ->
+                                    val pgDialog = PurchaseGuideDialog.newInstance(2)
+                                    childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+                                }
+                                childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
+                            } else {
+                                DaebakToast.show(requireContext(), "쿠폰 발급이 완료됐어요! 마이페이지에서 쿠폰함을 확인하세요 :)")
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                val courseName = nextCourse.courseName
+                subTitleTv.text = nextCourse.completedSubTitle
+                val partText = if (nextCourse.challengeCourseId == 3) "로" else "으로"
+                nextChallengeTv.text = "${courseName}${partText} 이동하기"
+                nextChallengeBtnCl.setOnClickListener {
+                    dismiss()
+                    moveEvent(nextCourse)
+                }
             }
         }
     }

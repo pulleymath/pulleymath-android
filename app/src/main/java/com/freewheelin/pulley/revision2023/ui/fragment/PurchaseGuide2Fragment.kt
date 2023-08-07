@@ -21,6 +21,10 @@ import com.freewheelin.pulley.revision2023.ui.activity.PurchaseWebViewActivity
 import com.freewheelin.pulley.revision2023.viewmodel.PurchaseGuideViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.adapter.PurchaseGuideAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 
 class PurchaseGuide2Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide2Binding
@@ -31,12 +35,13 @@ class PurchaseGuide2Fragment : Fragment() {
     })
     private lateinit var getResult: ActivityResultLauncher<Intent>
     val screenHeight by lazy { DisplayUtils.getScreenHeight(requireContext()) }
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         initActivityResult()
+        firebaseAnalytics = Firebase.analytics
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_purchase_guide2, container, false)
         return binding.root
     }
@@ -58,7 +63,11 @@ class PurchaseGuide2Fragment : Fragment() {
             }
 
             actionBtn.setOnClickListener { _ ->
-                LogUtils.logEvent(requireContext(), user, PulleyEvent.DIALOG, "구매가이드", "풀리수학으로공부시작", "구매하러가기")
+                firebaseAnalytics.logEvent("go_purchase_btn") {
+                    param("student_id", user?.studentID ?: "student_id_null")
+                    param("item_name", "start with pulleymath")
+                    param("item_value", "purchase guide2 fragment")
+                }
 
                 viewModel.selectedOffer?.let { offer ->
                     val offerId = offer.offerId

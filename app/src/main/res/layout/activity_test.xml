@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.activity.TestActivity">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.TestActViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_gray_100_ripple">
+
+        <LinearLayout
+            android:id="@+id/headerLl"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:background="@{ vm.schoolTypeInRepo.isHigh? @color/black_200 : @color/white }"
+            tools:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/dp16"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_arrow_left_18_14"
+                imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/h4"
+                android:layout_weight="999"
+                android:gravity="center"
+                android:text="테스트"
+                android:textColor="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
+            <View
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainContentsCl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shadow_left_only"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerLl"
+            app:layout_constraintWidth_percent="0.575"/>
+
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView
+            android:id="@+id/dailyContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shadow_clear"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerLl"
+            app:layout_constraintBottom_toTopOf="@+id/weeklyContainer"
+            app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
+        </com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.DailyTestSelectorView>
+
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView
+            android:id="@+id/weeklyContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shadow_clear"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dailyContainer"
+            app:layout_constraintBottom_toTopOf="@+id/wrongContainer"
+            app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
+        </com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WeeklyTestSelectorView>
+
+        <com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView
+            android:id="@+id/wrongContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shadow_clear"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp16"
+            app:layout_constraintTop_toBottomOf="@+id/weeklyContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mainContentsCl">
+        </com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.component.WrongTestSelectorView>
+
+        <View
+            android:id="@+id/arrowGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/mainContentsCl"/>
+
+        <ImageView
+            android:id="@+id/arrowIv"
+            android:src="@drawable/ic_pointed_triangle_left_18_22_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="13dp"
+            app:layout_constraintTop_toTopOf="@+id/dailyContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/dailyContainer"
+            app:layout_constraintEnd_toStartOf="@+id/arrowGuide"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

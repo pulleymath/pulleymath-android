@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="item" type="com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2023.utils.listeners.StudyPlannerItemClickListener" />
+        <variable name="depth" type="Integer" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@{ depth == 0 ? @color/white : item.isSelected ? @color/purple_gray_150 : @color/gray_100 }">
+
+        <LinearLayout
+            android:id="@+id/directoryLl"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            tools:visibility="visible"
+            android:gravity="center_vertical">
+            <View
+                android:id="@+id/invisibleStartPadding1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                />
+            <View
+                android:id="@+id/invisibleStartPadding2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                />
+            <ImageView
+                android:id="@+id/expandableIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_blunt_triangle_right_24_gray_400"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                style="@style/b2"
+                android:id="@+id/intentionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{ item.chapterName }"
+                tools:text="소수와 합성수, 거듭제곱"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/workbookLl"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            tools:visibility="visible"
+            android:gravity="center_vertical">
+            <View
+                android:id="@+id/invisibleContentPadding1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                />
+            <View
+                android:id="@+id/invisibleContentPadding2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                />
+            <View
+                android:id="@+id/invisibleContentPadding3"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                />
+            <ImageView
+                android:id="@+id/plusIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_plus"
+                tools:tint="@color/gray_800"
+                imageview_tint="@{ item.isCompleted ? @color/gray_500 : @color/gray_800 }"
+                android:background="@{ item.isCompleted ? @drawable/bg_gray_200_round_5_ripple : @drawable/bg_gray_300_round_5_ripple }"
+                tools:background="@drawable/bg_gray_300_round_5_ripple"
+                android:layout_marginStart="8dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ item.category.inKorean }"
+                    tools:text="모의고사"
+                    style="@style/mo_h6"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    studyPlannerSubjectCategoryCard="@{ item }"
+                    tools:textColor="@color/dark_blue_400"
+                    tools:background="@color/dark_blue_100"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ item.title }"
+                style="@style/b2"
+                android:textColor="@{ item.isCompleted ? @color/gray_600 : @color/gray_800 }"
+                tools:textColor="@color/gray_800"
+                tools:text="핵심유형 STEP A - 소인수분해"
+                android:layout_marginStart="8dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ item.progressText }"
+                tools:text="10/10"
+                style="@style/b2"
+                android:textColor="@color/gray_500"
+                android:layout_marginEnd="16dp"/>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"/>
+
+    </LinearLayout>
+</layout>

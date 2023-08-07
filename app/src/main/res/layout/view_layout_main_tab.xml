@@ -43,7 +43,6 @@
                 android:text="메인"
                 mainTabTextColor="@{ currentTab }"
                 />
-            <!--                android:textColor="@color/gray_700"-->
 
             <TextView
                 android:id="@+id/tab1"
@@ -65,49 +64,49 @@
                 style="@style/b1"
                 android:paddingStart="@dimen/dp24"
                 android:paddingEnd="@dimen/dp24"
-                android:text="유형"
+                android:text="문제풀이"
                 mainTabTextColor="@{ currentTab }"
                 />
+
+<!--            <TextView-->
+<!--                android:id="@+id/tab3"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/dp56"-->
+<!--                android:gravity="center"-->
+<!--                style="@style/b1"-->
+<!--                visibleIf="@{ schoolType.isHigh }"-->
+<!--                android:paddingStart="@dimen/dp24"-->
+<!--                android:paddingEnd="@dimen/dp24"-->
+<!--                android:text="모의고사"-->
+<!--                mainTabTextColor="@{ currentTab }"-->
+<!--                />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tab4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/dp56"-->
+<!--                android:gravity="center"-->
+<!--                style="@style/b1"-->
+<!--                android:paddingStart="@dimen/dp24"-->
+<!--                android:paddingEnd="@dimen/dp24"-->
+<!--                android:text="테스트"-->
+<!--                mainTabTextColor="@{ currentTab }"-->
+<!--                />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tab5"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/dp56"-->
+<!--                android:gravity="center"-->
+<!--                style="@style/b1"-->
+<!--                android:paddingStart="@dimen/dp24"-->
+<!--                android:paddingEnd="@dimen/dp24"-->
+<!--                android:text="오답노트"-->
+<!--                mainTabTextColor="@{ currentTab }"-->
+<!--                />-->
 
             <TextView
                 android:id="@+id/tab3"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp56"
-                android:gravity="center"
-                style="@style/b1"
-                visibleIf="@{ schoolType.isHigh }"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:text="모의고사"
-                mainTabTextColor="@{ currentTab }"
-                />
-
-            <TextView
-                android:id="@+id/tab4"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp56"
-                android:gravity="center"
-                style="@style/b1"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:text="테스트"
-                mainTabTextColor="@{ currentTab }"
-                />
-
-            <TextView
-                android:id="@+id/tab5"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp56"
-                android:gravity="center"
-                style="@style/b1"
-                android:paddingStart="@dimen/dp24"
-                android:paddingEnd="@dimen/dp24"
-                android:text="오답노트"
-                mainTabTextColor="@{ currentTab }"
-                />
-
-            <TextView
-                android:id="@+id/tab6"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp56"
                 android:gravity="center"
@@ -119,7 +118,7 @@
                 />
 
             <TextView
-                android:id="@+id/tab7"
+                android:id="@+id/tab4"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp56"
                 android:gravity="center"
@@ -131,7 +130,7 @@
                 />
 
             <TextView
-                android:id="@+id/tab8"
+                android:id="@+id/tab5"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp56"
                 android:gravity="center"
@@ -203,49 +202,49 @@
                     style="@style/b1"
                     android:paddingStart="@dimen/dp24"
                     android:paddingEnd="@dimen/dp24"
-                    android:text="유형"
+                    android:text="문제풀이"
                     mainTabTextColor="@{ currentTab }"
                     />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/mobileTab3"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/dp56"-->
+<!--                    android:gravity="center"-->
+<!--                    style="@style/b1"-->
+<!--                    android:paddingStart="@dimen/dp24"-->
+<!--                    visibleIf="@{ schoolType.isHigh }"-->
+<!--                    android:paddingEnd="@dimen/dp24"-->
+<!--                    android:text="모의고사"-->
+<!--                    mainTabTextColor="@{ currentTab }"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/mobileTab4"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/dp56"-->
+<!--                    android:gravity="center"-->
+<!--                    style="@style/b1"-->
+<!--                    android:paddingStart="@dimen/dp24"-->
+<!--                    android:paddingEnd="@dimen/dp24"-->
+<!--                    android:text="테스트"-->
+<!--                    mainTabTextColor="@{ currentTab }"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/mobileTab5"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/dp56"-->
+<!--                    android:gravity="center"-->
+<!--                    style="@style/b1"-->
+<!--                    android:paddingStart="@dimen/dp24"-->
+<!--                    android:paddingEnd="@dimen/dp24"-->
+<!--                    android:text="오답노트"-->
+<!--                    mainTabTextColor="@{ currentTab }"-->
+<!--                    />-->
 
                 <TextView
                     android:id="@+id/mobileTab3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp56"
-                    android:gravity="center"
-                    style="@style/b1"
-                    android:paddingStart="@dimen/dp24"
-                    visibleIf="@{ schoolType.isHigh }"
-                    android:paddingEnd="@dimen/dp24"
-                    android:text="모의고사"
-                    mainTabTextColor="@{ currentTab }"
-                    />
-
-                <TextView
-                    android:id="@+id/mobileTab4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp56"
-                    android:gravity="center"
-                    style="@style/b1"
-                    android:paddingStart="@dimen/dp24"
-                    android:paddingEnd="@dimen/dp24"
-                    android:text="테스트"
-                    mainTabTextColor="@{ currentTab }"
-                    />
-
-                <TextView
-                    android:id="@+id/mobileTab5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp56"
-                    android:gravity="center"
-                    style="@style/b1"
-                    android:paddingStart="@dimen/dp24"
-                    android:paddingEnd="@dimen/dp24"
-                    android:text="오답노트"
-                    mainTabTextColor="@{ currentTab }"
-                    />
-
-                <TextView
-                    android:id="@+id/mobileTab6"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp56"
                     android:gravity="center"
@@ -257,7 +256,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/mobileTab7"
+                    android:id="@+id/mobileTab4"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp56"
                     android:gravity="center"

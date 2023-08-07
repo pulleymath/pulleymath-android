@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,18 +30,23 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.ht.RecyclerAdapters.SectionAdapter.IndexPath
 import com.ht.RecyclerAdapters.SectionAdapter.SectionAdapter
 import com.ht.RecyclerAdapters.SectionAdapter.SectionType
 import com.ht.RecyclerAdapters.SectionAdapter.Type
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 enum class SettingCategory(val title: String) {
     PRIVATE("개인정보 설정"),
+    PRIVATE_CHALLENGE_NOT_CONTAIN("개인정보 설정"),
     SERVICE("서비스 이용"),
     SETTING("설정"),
     SUPPORT("지원"),
@@ -52,6 +58,12 @@ enum class SettingCategory(val title: String) {
         get() {
             return when (this) {
                 PRIVATE -> {
+                    if (user?.serviceType?.isGuestUser == true)
+                        listOf(SignUpInfo)
+                    else
+                        listOf(SignUpInfo, StudyInfo, StartChallenge)
+                }
+                PRIVATE_CHALLENGE_NOT_CONTAIN -> {
                     if (user?.serviceType?.isGuestUser == true)
                         listOf(SignUpInfo)
                     else
@@ -86,6 +98,7 @@ enum class SettingCategory(val title: String) {
 enum class Setting(val title: String) {
     SignUpInfo("개인 정보"),
     StudyInfo("학습 정보"),
+    StartChallenge("스타트 챌린지"),
 
     PulleyPlus("풀리수학+"),
     PulleyLesson("풀리과외"),
@@ -148,20 +161,14 @@ class MyMainPageFragment : Fragment() {
         initReceiver()
     }
     private fun initReceiver() {
-
         reconfigureReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
-                    binding.rv.adapter?.notifyDataSetChanged()
+                    binding.myPageMenuRv.adapter?.notifyDataSetChanged()
                 }
             }
         }
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
-    }
-
-    override fun onDestroy() {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
-        super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -174,32 +181,48 @@ class MyMainPageFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.rv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
-        binding.rv.layoutManager = LinearLayoutManager(context)
+        binding.myPageMenuRv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
+        binding.myPageMenuRv.layoutManager = LinearLayoutManager(context)
 
-//        if(isSPYMode) {
-//            settingCategory.add(SettingCategory.SPY)
-//        }
+
+        setFragmentResultListener(MyStartChallengeFragment.CHALLENGE_MENU_REMOVED) { key, bundle ->
+            updateNewCategory(false)
+        }
+
+        viewModel.apply {
+            joinedChallengeList.observe(viewLifecycleOwner) { list ->
+                list.find { it.isStartChallenge }?.let {
+                    updateNewCategory(it.userStatus != ChallengeUserStatus.FAILED)
+                }
+            }
+        }
+    }
+    fun updateNewCategory (containChallenge: Boolean) {
+        settingCategory.clear()
+        val newCategory = listOf(
+            if (containChallenge) SettingCategory.PRIVATE else SettingCategory.PRIVATE_CHALLENGE_NOT_CONTAIN,
+            SettingCategory.SERVICE,
+            SettingCategory.SETTING,
+            SettingCategory.SUPPORT,
+            SettingCategory.ETC)
+
+        settingCategory.addAll(newCategory)
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.myPageMenuRv.adapter?.notifyDataSetChanged()
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
     fun onSettingClicked(setting: Setting) {
         when (setting) {
             SignUpInfo -> moveTo(MySignUpInfoFragment())
             StudyInfo -> moveTo(MyStudyInfoFragment())
+            StartChallenge -> moveTo(MyStartChallengeFragment())
 
             PulleyPlus   -> moveTo(MyPulleyPlusFragment())
             PulleyLesson -> moveTo(MyPulleyLessonFragment())
             PulleyBooks  -> moveTo(MyPulleyBooksFragment())
             CouponBox    -> moveTo(MyPulleyCouponFragment())
-//            PaymentMethod -> {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(URL.결제정보)
-//                startActivity(intent)
-//            }
 
             AppSetting -> moveTo(MyAppSettingFragment())
             Home -> {
@@ -276,340 +299,14 @@ class MyMainPageFragment : Fragment() {
                     }
                 )
             }
-
-//            InitSetting -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "초기설정화면으로 돌아갑니다."
-//                    contents = "초기설정을 완료해야 다시 Main으로 돌아갈 수 있어요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        activity?.finish()
-//                        val user = requireActivity().application!!.user!!
-//                        user.initSettingCompleted = false
-//                        user.commit("MyMainPageFragment.onSettingClicked:InitSetting")
-//                        val intent = InitSettingActivity.getIntent(context)
-//                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                        startActivity(intent)
-//                    }
-//                }.show()
-//            }
-
-//            ClearMockExam -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "모의고사 풀이 내역을 모두 삭제합니다"
-//                    contents = "나의모의고사에서 전부 지워져요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        MockExamManager.clearExam(context, user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//
-//            ClearBooks -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "유형학습 풀이 내역을 모두 삭제합니다"
-//                    contents = "유형학습 탭에서 전부 지워져요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        BookManager.clearBooks(context,user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//
-//            ClearTests -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "테스트 풀이 내역을 모두 삭제합니다"
-//                    contents = "전부 지워져요 초기설정까지도"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        TestManager.clearTests(context,user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//            ClearAllClearHistory -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "클리어 내역을 모두 삭제합니다"
-//                    contents = "복구 할 수 없어요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        ProblemManager.clearAllClear(context, user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//
-//            ClearAllStudy -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "채점 내역을 모두 삭제합니다"
-//                    contents = "복구 할 수 없어요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        ProblemManager.clearAllScoring(context, user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//            ClearAllScrapHistory -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "즐겨찾기 내역을 모두 삭제합니다"
-//                    contents = "복구 할 수 없어요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text = "취소"
-//                    binding.rightBtn.text = "확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        ProblemManager.clearAllScrap(context, user!!) {
-//                            dismiss()
-//                        }
-//                    }
-//                }.show()
-//            }
-//
-//            CrashlyticsCrash -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "강제로 크래시를 냅니다"
-//                    contents = "앱은 종료되고, 크래시리틱에 보고가 가야해요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text ="취소"
-//                    binding.rightBtn.text="확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        throw RuntimeException("Firebase Test Crash")
-//                    }
-//                }.show()
-//            }
-//
-//            CrashlyticsReport -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "강제로 크래시를 냅니다"
-//                    contents = "개발용이면 앱이 꺼지고, 배포용이면 앱의 로그가 남습니다"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text ="취소"
-//                    binding.rightBtn.text="확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        dismiss()
-//                        LogUtils.assert(false, "SPY에서 심각하지 않은 에러")
-//                    }
-//                }.show()
-//            }
-//
-//            EventSignUp -> {
-//                LogUtils.logSignUpEvent(requireContext(), user?.studentID?:"None")
-//            }
-//
-//            ClearTutorialHistory -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title = "튜토리얼 내역을 모두 삭제합니다"
-//                    contents = "앱이 종료되었다 다시 켜져야 적용됩니다"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text ="취소"
-//                    binding.rightBtn.text="확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        Preferences.tooltipShowingCntTakeNoteScroll.set(0)
-//                        Preferences.tooltipShowingCntAddSimilar.set(0)
-//                        Preferences.tooltipShowingCntChangeSimilar.set(0)
-//                        Preferences.tooltipShowingCntAdditionalStudyInAnalysis.set(0)
-//                        Preferences.tooltipShowingCntAdditionalStudyInWrongNote.set(0)
-//                        Preferences.tooltipShowingCntMail.set(0)
-//                        Preferences.tooltipShowingCntAnalysisMain.set(0)
-//                        Preferences.galleryClickCnt.set(0)
-//                        Preferences.tooltipShowingCntRecommendPlan.set(0)
-//
-//                        val intent = Intent(context, SplashActivity::class.java)
-//                        val mPendingIntentId = 123456
-//                        val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
-//                        val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-//                        System.exit(0)
-//                    }
-//                }.show()
-//            }
-//
-//            StagingAPI -> {
-//
-//            }
-//            TestAPI -> {
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("현재 테스트 URL")
-//
-//                val input = EditText(requireContext())
-//                input.setText(Preferences.testBaseURL.get())
-//                builder.setView(input)
-//
-//                builder.setPositiveButton("OK") { _, _ ->
-//                    Preferences.testBaseURL.set(input.text.toString())
-//                }
-//                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-//
-//                builder.show()
-//            }
-//            Flutter_INIT_TEST -> {
-//                startActivity(InitSettingActivity.getIntent(requireContext()))
-//            }
-//
-//            ShowProblem -> {
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("문제ID들을 입력해봐바,\n,로 구분해서..\n 이렇게 만들어진건 [나의학습] 추가될거임!!")
-//
-//                val input = EditText(requireContext())
-//                builder.setView(input)
-//
-//                builder.setPositiveButton("OK") { _, _ ->
-//                    var ids = input.text.toString().split(",")
-//                    ids = ids.map { it.trim() }
-//                    PieceManager.spyMakePiece(requireContext(), user!!, ids,
-//                            successCB = {
-//                                val intent = SolveActivity.getIntent(requireContext(), it)
-//                                startActivity(intent)
-//                            },
-//                            failCB = {
-//                                Toast.makeText(requireContext(), "실패애", Toast.LENGTH_LONG).show()
-//                            })
-//                }
-//                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-//                builder.show()
-//            }
-//
-//            SHOW_UPDATE_DIALOG -> {
-//                val dialog = UpdateDialog(requireContext())
-//                dialog.show()
-//            }
-//            START_FREE -> {
-//                user?.startFreeMembership(requireContext()) {
-//                    Toast.makeText(requireContext(), "성고옹", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//            SNACKTEST_SETTING -> {
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("SPY-어떤타입??")
-//                builder.setItems(listOf(
-//                        "레모네이드",
-//                        "파이",
-//                        "솜사탕",
-//                        "바나나우유",
-//                        "마카롱",
-//                        "치즈볼"
-//                ).toTypedArray()) { dialog, position ->
-//                    val type = when (position) {
-//                        0 -> DessertType.LEMONADE
-//                        1 -> DessertType.PIE
-//                        2 -> DessertType.CANDY
-//                        3 -> DessertType.BANANA
-//                        4 -> DessertType.MACAROON
-//                        else -> DessertType.CHEESE_BALL
-//                    }
-//
-//                    user?.setUserType(requireContext(),
-//                            type,
-//                            10,
-//                            10,
-//                            10,
-//                            10) {
-//                        dialog.dismiss()
-//                    }
-//                }.show()
-//
-//            }
-//            OffSpyMode -> {
-//                DialogUtils.DaebakDialog(requireContext()).apply {
-//                    title="스파이모드를 종료합니다"
-//                    contents="다시 키려면.. 봉인을 푸셔야해요"
-//                    type = DialogType.alert
-//                    binding.leftBtn.text ="취소"
-//                    binding.rightBtn.text="확인"
-//                    binding.rightBtn.setOnClickListener {
-//                        dismiss()
-//                        spyOff()
-//                        (activity as MainActivity).spyOff()
-//
-//                    }
-//                }.show()
-//            }
             else -> {}
         }
     }
-//    fun setSpyMode(value: Boolean) {
-//        if (value) { spyOn() }
-//        else { spyOff() }
-//    }
-//
-//    fun spyOn() {
-//        isSPYMode = true
-//        settingCategory.add(SettingCategory.SPY)
-//        try {
-//            binding.rv.adapter?.notifyDataSetChanged()
-//        } catch (e:Exception) {}
-//    }
-//
-//    fun spyOff() {
-//        isSPYMode = false
-//        settingCategory.remove(SettingCategory.SPY)
-//        try {
-//            binding.rv.adapter?.notifyDataSetChanged()
-//        }catch (e:Exception) {}
-//    }
 
     fun moveTo(frag: Fragment) {
         (activity as MainActivity).addMyPage(frag)
     }
 
-    fun onCheckChanged(setting: Setting, value: Boolean) {
-
-        when (setting) {
-//            StagingAPI -> {
-//                MyApplication.user?.logout { errorMsg ->
-//                    val api = if (value) Network.Server.staging.toString() else Network.Server.live.toString()
-//                    Preferences.onServerAPI.set(api)
-//                    val intent = Intent(context, SplashActivity::class.java)
-//                    val mPendingIntentId = 123456
-//                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
-//                    val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-//                    System.exit(0)
-//                }
-//            }
-//            TestAPI -> {
-//                MyApplication.user?.logout { errorMsg ->
-////                    Preferences.onTestAPI.set(value)
-//                    val api = if (value) Network.Server.dev.toString() else Network.Server.live.toString()
-//                    Preferences.onServerAPI.set(api)
-//                    val intent = Intent(context, SplashActivity::class.java)
-//                    val mPendingIntentId = 123456
-//                    val mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_IMMUTABLE)
-//                    val mgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
-//                    System.exit(0)
-//                }
-//            }
-//            ShowEventLogging -> {
-//                Preferences.onLoggingEvent.set(value)
-//            }
-//            SHOW_ALWAYS_COMPLETE_TOAST -> {
-//                Preferences.onSuccessToast.set(value)
-//            }
-
-            else -> {}
-        }
-    }
-//    inner class SettingItemAdapter: RecyclerView.Adapter<> {}
     inner class MenuAdapter : SectionAdapter<RecyclerView.ViewHolder>() {
 
         override fun numberOfSection(): Int {
@@ -698,6 +395,11 @@ class MyMainPageFragment : Fragment() {
             }
             else -> ""
         }
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(reconfigureReceiver)
+        super.onDestroy()
     }
 }
 

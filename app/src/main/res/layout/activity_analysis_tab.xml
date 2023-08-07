@@ -58,7 +58,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round , default=@drawable/bg_gray_800_round_ripple }"
+            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round_ripple , default=@drawable/bg_gray_800_round_ripple }"
             android:text="?"
             android:textSize="@dimen/sp16"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"

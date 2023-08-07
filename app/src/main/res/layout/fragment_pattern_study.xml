@@ -6,6 +6,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PatternStudyViewModel"/>
+        <variable name="isMobile" type="Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,62 +28,71 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/headerCl"
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/menuGl"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="32dp"
+                    android:paddingHorizontal="32dp"
+                    tools:visibility="visible"
+                    app:alignmentMode="alignBounds"
+                    app:columnCount="3"
+                    app:layout_constraintTop_toBottomOf="@id/headerLl"
+                    app:orientation="horizontal">
+<!--                    하위 뷰들은 menuGl.removeAllViews() 를 통해 전부 삭제 후 schoolType에 따라 코드에서 새로 추가된다 -->
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/pulleyMathBookCv"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="132dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
-                        android:layout_marginTop="@dimen/dp48"
-                        android:layout_marginStart="@dimen/dp48"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/commercialBookCv"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/bg_white_ripple"
-                            android:paddingBottom="@dimen/dp30">
+                            android:background="@drawable/bg_white_ripple">
+
+
                             <ImageView
-                                android:id="@+id/categoryIv1"
-                                android:layout_width="0dp"
-                                android:src="@drawable/illust_category_1"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitXY"
-                                android:adjustViewBounds="true"
-                                app:layout_constraintTop_toTopOf="parent"
+                                android:id="@+id/iconIv1"
+                                android:layout_width="98dp"
+                                android:layout_height="98dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_pencil_calendar"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-                            <TextView
-                                android:id="@+id/categoryTitleTv1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/h3"
-                                android:text="풀리수학 문제집"
-                                android:layout_marginTop="@dimen/dp24"
-                                android:layout_marginStart="@dimen/dp24"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv1"
-                                app:layout_constraintStart_toStartOf="parent"/>
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/categorySubtitleTv1"
+                                android:id="@+id/categoryTitleTv1"
+                                style="@style/h3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/b2r"
-                                android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
-                                android:layout_marginTop="@dimen/dp8"
-                                android:layout_marginStart="@dimen/dp24"
-                                android:textColor="@color/gray_600"
-                                app:lineHeight="16sp"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv1"
-                                app:layout_constraintStart_toStartOf="parent"/>
+                                android:text="@{ isMobile ? `풀리수학\n문제집`: `풀리수학 문제집`}"
+                                tools:text="풀리수학 문제집"
+                                android:layout_marginStart="8dp"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv1"
+                                app:layout_constraintTop_toTopOf="parent"
+                                />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
 
                             <ImageView
                                 android:id="@+id/challengeStampInPulleyMathBooksIv"
@@ -91,76 +101,8 @@
                                 android:src="@drawable/challenge_stamp_3d_image"
                                 visibleIf="@{ vm.showPulleyMathChallengeStamp }"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv1"
-                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv1"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/commercialBookCv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp"
-                        android:layout_marginTop="@dimen/dp48"
-                        android:layout_marginStart="@dimen/dp24"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/pulleyMathBookCv"
-                        app:layout_constraintEnd_toStartOf="@+id/workBookCv">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_white_ripple"
-                            android:paddingBottom="@dimen/dp28">
-
-                            <ImageView
-                                android:id="@+id/categoryIv2"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitXY"
-                                android:adjustViewBounds="true"
-                                android:src="@drawable/illust_category_2"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-
-                            <TextView
-                                android:id="@+id/categoryTitleTv2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/h3"
-                                android:text="풀리북스"
-                                android:layout_marginTop="@dimen/dp24"
-                                android:layout_marginStart="@dimen/dp24"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv2"
-                                app:layout_constraintStart_toStartOf="parent"/>
-
-                            <TextView
-                                android:id="@+id/categorySubtitleTv2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b2r"
-                                android:text="풀리수학 제휴 출판사 문제집이 통째로!\n무겁게 책 들고 다니지 마세요 :)"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:layout_marginStart="@dimen/dp24"
-                                android:textColor="@color/gray_600"
-                                app:lineHeight="16sp"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv2"
-                                app:layout_constraintStart_toStartOf="parent"/>
-
-                            <ImageView
-                                android:id="@+id/challengeStampInCommercialBooksIv"
-                                android:layout_width="50dp"
-                                android:layout_height="64dp"
-                                android:src="@drawable/challenge_stamp_3d_image"
-                                visibleIf="@{ vm.showCommercialBooksChallengeStamp }"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv2"
-                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv2"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 />
 
@@ -170,58 +112,54 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/workBookCv"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="132dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
-                        android:layout_marginTop="@dimen/dp48"
-                        android:layout_marginStart="@dimen/dp24"
-                        android:layout_marginEnd="@dimen/dp48"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/commercialBookCv"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/bg_white_ripple"
-                            android:paddingBottom="@dimen/dp28">
+                            android:background="@drawable/bg_white_ripple">
+
 
                             <ImageView
-                                android:id="@+id/categoryIv3"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitXY"
-                                android:adjustViewBounds="true"
-                                android:src="@drawable/illust_category_3"
-                                app:layout_constraintTop_toTopOf="parent"
+                                android:id="@+id/iconIv2"
+                                android:layout_width="101dp"
+                                android:layout_height="102dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_book_check"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/categoryTitleTv3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:id="@+id/categoryTitleTv2"
                                 style="@style/h3"
-                                android:text="워크북"
-                                android:layout_marginTop="@dimen/dp24"
-                                android:layout_marginStart="@dimen/dp24"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv3"
-                                app:layout_constraintStart_toStartOf="parent"/>
-
-                            <TextView
-                                android:id="@+id/categorySubtitleTv3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/b2r"
-                                android:text="문제집에서 내가 원하는 부분만 골라\n나만의 워크북을 만들어보세요."
-                                android:textColor="@color/gray_600"
-                                app:lineHeight="16sp"
-                                android:layout_marginTop="@dimen/dp8"
-                                android:layout_marginStart="@dimen/dp24"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryTitleTv3"
-                                app:layout_constraintStart_toStartOf="parent"/>
+                                android:layout_marginStart="8dp"
+                                android:text="워크북"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv2"
+                                app:layout_constraintTop_toTopOf="parent" />
 
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
                             <ImageView
                                 android:id="@+id/challengeStampInWorkbooksIv"
                                 android:layout_width="50dp"
@@ -229,15 +167,234 @@
                                 android:src="@drawable/challenge_stamp_3d_image"
                                 visibleIf="@{ vm.showWorkbooksChallengeStamp }"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/categoryIv3"
-                                app:layout_constraintBottom_toBottomOf="@+id/categoryIv3"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 />
-
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/mockCv"
+                        android:layout_width="0dp"
+                        android:layout_height="132dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        tools:visibility="visible"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_white_ripple">
+
+                            <ImageView
+                                android:id="@+id/iconIv3"
+                                android:layout_width="98dp"
+                                android:layout_height="98dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_ox_panel"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/categoryTitleTv3"
+                                style="@style/h3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="모의고사"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv3"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/wrongNoteCv"
+                        android:layout_width="0dp"
+                        android:layout_height="132dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="16dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_white_ripple">
+
+                            <TextView
+                                android:id="@+id/categoryTitleTv4"
+                                style="@style/h3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="오답노트"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv4"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/iconIv4"
+                                android:layout_width="98dp"
+                                android:layout_height="98dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_calendar_x"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/testCv"
+                        android:layout_width="0dp"
+                        android:layout_height="132dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_white_ripple">
+
+                            <TextView
+                                android:id="@+id/categoryTitleTv5"
+                                style="@style/h3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="테스트"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv5"
+                                app:layout_constraintTop_toTopOf="parent" />
+                            <!--                                app:layout_constraintTop_toBottomOf="@+id/categoryHeader5"-->
+
+                            <ImageView
+                                android:id="@+id/iconIv5"
+                                android:layout_width="98dp"
+                                android:layout_height="98dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_check_panel"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/commercialBookCv"
+                        android:layout_width="0dp"
+                        android:layout_height="132dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:layout_columnWeight="1"
+                        app:layout_gravity="fill_horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_white_ripple">
+
+                            <TextView
+                                android:id="@+id/categoryTitleTv6"
+                                style="@style/h3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="풀리북스"
+                                android:textColor="@color/gray_800"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/iconIv6"
+                                app:layout_constraintTop_toTopOf="parent" />
+                            <!--                                app:layout_constraintTop_toBottomOf="@+id/categoryHeader6"-->
+
+                            <ImageView
+                                android:id="@+id/iconIv6"
+                                android:layout_width="98dp"
+                                android:layout_height="98dp"
+                                android:layout_marginStart="16dp"
+                                android:src="@drawable/ic_study_book_normal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/gray_500" />
+
+                            <ImageView
+                                android:id="@+id/challengeStampInCommercialBooksIv"
+                                android:layout_width="50dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/challenge_stamp_3d_image"
+                                visibleIf="@{ vm.showCommercialBooksChallengeStamp }"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.gridlayout.widget.GridLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/myPlanCl"
@@ -254,7 +411,6 @@
                         android:layout_height="wrap_content"
                         style="@style/h3"
                         android:text="최근 문제집"
-                        android:layout_marginTop="@dimen/dp48"
                         android:layout_marginStart="@dimen/dp48"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>

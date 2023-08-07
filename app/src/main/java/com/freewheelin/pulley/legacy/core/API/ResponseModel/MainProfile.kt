@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.legacy.core.API.ResponseModel
 
+import com.freewheelin.pulley.legacy.model.SignInChannel
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
@@ -7,6 +8,37 @@ import com.freewheelin.pulley.legacy.utils.Preferences
 import java.lang.Math.abs
 import java.util.*
 
+data class MainProfileV4 (
+    val studentId: String,
+    val studentName: String,
+    val serviceType: PaidServiceType,
+    val signInChannel: SignInChannel,
+    val isAffiliated: Boolean,
+    val affiliationInfo: AffiliationInfo?,
+    val schoolName: String?,
+    val regionName: String?,
+    val grade: Int?,
+    val profileImageUrl: String,
+    val welcomeText: String,
+    val numberOfUserText: String,
+    val defaultDDay: DDay
+
+) {
+
+    val ddayStr: String
+        get() {
+            val existTarget = defaultDDay.getTargetTitleAndDate()
+            val dday = defaultDDay.getDDay(existTarget?.third)
+            return if (dday < 0) {
+                defaultDDay.getDDayText(null)
+            } else {
+                defaultDDay.getDDayText(existTarget?.third)
+            }
+        }
+}
+data class AffiliationInfo(
+    val institutionName: String
+)
 class MainProfile {
     var studentName: String = ""
     var serviceType: PaidServiceType = PaidServiceType.NONE
@@ -125,10 +157,54 @@ class MainProfile {
 
 class DDay {
     var id: Int = 0
+    var type: String = ""
     var description: String = ""
     var startDate: Date = Date()
 
     fun getDDay(): Int {
         return DateTimeUtils.getDayDifferences(Date(), startDate)
     }
+
+    fun getTargetTitleAndDate(): Triple<Int, String, Date>? {
+        val targetTitle = Preferences.targetDateTitle.get()
+        val targetDate = Preferences.targetDate.get()
+        val targetID = Preferences.targetID.get()
+        return if(targetTitle.isEmpty() || targetDate == 0L) {
+            null
+        } else {
+            Triple(targetID, targetTitle, Date(targetDate))
+        }
+    }
+    fun getDDayTitle(targetTitle: String?): String {
+        if(targetTitle == null)
+            return description
+        else
+            return targetTitle
+    }
+    fun getDDayText(targetDay: Date?): String {
+        val dday = getDDay(targetDay)
+        return if(dday < 0 ) {
+            "D+${abs(dday)}"
+        } else if (dday == 0) {
+            "D-Day"
+        } else {
+            "D-${abs(dday)}"
+        }
+    }
+    fun getDDay(targetDay: Date?): Int {
+        if(targetDay == null)
+            return getDDay()
+        else
+            return DateTimeUtils.getDayDifferences(Date(), targetDay)
+    }
+    val ddayTargetStr: String
+        get() {
+            val existTarget = getTargetTitleAndDate()
+            val dday = getDDay(existTarget?.third)
+            return if (dday < 0) {
+                getDDayTitle(null)
+            } else {
+                getDDayTitle(existTarget?.second)
+            }
+        }
 }

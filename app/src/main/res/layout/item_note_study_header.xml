@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel"/>
         <variable name="item" type="com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper"/>
     </data>
 

@@ -52,7 +52,7 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
         fun newInstance() = SnackTestFragment()
     }
 
-    override var type: MainTab = MainTab.테스트
+    override var type: MainTab = MainTab.문제풀이
 
     lateinit var binding: FragmentSnackTestBinding
     val viewModel: SnackTestFragViewModel by viewModels()
@@ -111,7 +111,7 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         init()
-        syncTestList()
+//        syncTestList()
         viewModel.apply {
             schoolType.observe(viewLifecycleOwner) {
                 syncTestList()
@@ -220,35 +220,33 @@ class SnackTestFragment : MainTabFragment() ,TestMainBaseListener, MyPageSetting
     }
 
     private fun syncTestList(reStudyTest: Test? = null) {
-        user?.let { user ->
-            TestManager.getTestList(requireContext(), user) {
-                tests = it.filter { it.isPossibleTest() }
+        TestManager.getTestList(requireContext()) {
+            tests = it.filter { it.isPossibleTest() }
 
-                if (reStudyTest == null) {
+            if (reStudyTest == null) {
 
+            } else {
+                it.filter { test -> test.assignID == reStudyTest.assignID }.firstOrNull()
+                    ?.apply { this.isReStudy = true }
+            }
+
+            setSelectorUI()
+            binding.apply {
+                if (currentMainFragment == null) {
+                    val test = tests.first()
+                    when (test.getTestType()) {
+                        Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
+                        Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
+                        Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                        else -> {}
+                    }
                 } else {
-                    it.filter { test -> test.assignID == reStudyTest.assignID }.firstOrNull()
-                        ?.apply { this.isReStudy = true }
-                }
-
-                setSelectorUI()
-                binding.apply {
-                    if (currentMainFragment == null) {
-                        val test = tests.first()
-                        when (test.getTestType()) {
-                            Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
-//                            Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
-                            Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
-                            else -> {}
-                        }
-                    } else {
-                        val testType = currentMainFragment!!.testType
-                        when (testType) {
-                            Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
-                            Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
-                            Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
-                            else -> {}
-                        }
+                    val testType = currentMainFragment!!.testType
+                    when (testType) {
+                        Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
+                        Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
+                        Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
+                        else -> {}
                     }
                 }
             }

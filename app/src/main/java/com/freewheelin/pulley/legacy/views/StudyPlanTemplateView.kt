@@ -80,7 +80,7 @@ class StudyPlanTemplateView : CardView {
                 progressTitleTv.text = "학습 완료!"
                 progressTitleTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                 problemCntTv.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
-                mailBtn.setBackgroundResource(R.drawable.bg_gray_200_round)
+                mailBtn.setBackgroundResource(R.drawable.bg_gray_200_round_ripple)
                 completeIv.visibility = View.VISIBLE
                 reviewBtn.visibility = View.VISIBLE
                 solveBtn.visibility = View.INVISIBLE

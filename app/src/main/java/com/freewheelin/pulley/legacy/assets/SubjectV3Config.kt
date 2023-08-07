@@ -3,6 +3,7 @@ package com.freewheelin.pulley.legacy.assets
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.revision2023.SchoolType
 import java.lang.IllegalStateException
 
 enum class SubjectV3(val id: Int) {
@@ -61,6 +62,27 @@ enum class SubjectV3(val id: Int) {
                 중2_2 -> "중2-2"
                 중3_1 -> "중3-1"
                 중3_2 -> "중3-2"
+                else -> "교육과정 외"
+            }
+        }
+
+    val plannerText: String
+        get() {
+            return when(this) {
+                수학_상 -> "수학(상)"
+                수학_하 -> "수학(하)"
+                수학I -> "수학 1"
+                수학II -> "수학 2"
+                확률과통계 -> "확률과 통계"
+                미적분 -> "미적분"
+                기하 -> "기하"
+                중등 -> "중학교"
+                중1_1 -> "1-1"
+                중1_2 -> "1-2"
+                중2_1 -> "2-1"
+                중2_2 -> "2-2"
+                중3_1 -> "3-1"
+                중3_2 -> "3-2"
                 else -> "교육과정 외"
             }
         }
@@ -172,6 +194,14 @@ enum class SubjectV3(val id: Int) {
                 else -> {
                     수학_상
                 }
+            }
+        }
+        fun codeToSchoolType(code: Int): SchoolType {
+            val subject = codeToSubject(code)
+            return when (subject) {
+                수학_상, 수학_하, 수학I, 수학II, 확률과통계, 미적분, 기하 -> SchoolType.HIGH
+                중1_1, 중1_2, 중2_1, 중2_2, 중3_1, 중3_2 -> SchoolType.MIDDLE
+                else -> SchoolType.HIGH
             }
         }
         fun init(unitCode: Int): SubjectV3 {

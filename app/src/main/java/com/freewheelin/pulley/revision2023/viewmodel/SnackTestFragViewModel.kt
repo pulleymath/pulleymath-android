@@ -22,17 +22,11 @@ import kotlinx.coroutines.launch
 
 class SnackTestFragViewModel(application: Application): BaseAndroidViewModel(application) {
 
-    private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
     private val myPageRepository by lazy { MyPageRepository.instance }
 
-    val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
     val schoolType = userRepository.schoolType
-
-    fun updateChallenge (challenge: Challenge) {
-        challengeRepository.updateChallengeList(challenge)
-    }
 
     fun getRecommendLevelText(level: Int): String {
         return when(level) {

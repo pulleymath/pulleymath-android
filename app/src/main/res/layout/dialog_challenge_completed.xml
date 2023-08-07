@@ -165,16 +165,16 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         />
 
-                    <ImageView
-                        android:id="@+id/arrowIv"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_tailless_arrow_right_24"
-                        app:tint="@color/white"
-                        app:layout_constraintTop_toTopOf="@+id/nextChallengeTv"
-                        app:layout_constraintStart_toEndOf="@+id/nextChallengeTv"
-                        app:layout_constraintBottom_toBottomOf="@+id/nextChallengeTv"
-                        />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowIv"-->
+<!--                        android:layout_width="20dp"-->
+<!--                        android:layout_height="20dp"-->
+<!--                        android:src="@drawable/ic_tailless_arrow_right_24"-->
+<!--                        app:tint="@color/white"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/nextChallengeTv"-->
+<!--                        app:layout_constraintStart_toEndOf="@+id/nextChallengeTv"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/nextChallengeTv"-->
+<!--                        />-->
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

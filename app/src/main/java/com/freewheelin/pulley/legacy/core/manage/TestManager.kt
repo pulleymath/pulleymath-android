@@ -28,7 +28,7 @@ object TestManager {
 
     var isNeedToFullDailyResultInTab = false
 
-    fun getTestList(context: Context, user: UserV4, cb: (tests: List<Test>) -> Unit) {
+    fun getTestList(context: Context, cb: (tests: List<Test>) -> Unit) {
         if (BuildConfig.FLAVOR == "beta") {
             API_V3.getAllTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
                 override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
@@ -63,7 +63,6 @@ object TestManager {
     }
 
     fun getDailyTest(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
-        println("asoaso user!!.studentID :${user.studentID}")
         API_V2.getDailyTest(user.studentID).enqueue(object: Callback<Template<Test>>{
             override fun onFailure(call: Call<Template<Test>>, t: Throwable) {
                 // 데이터를 가져올 수 없습니다.

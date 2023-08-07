@@ -7,6 +7,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel"/>
+        <variable name="showSumUpText" type="Boolean" />
         <variable name="yearSpinnerAdapter" type="android.widget.ArrayAdapter" />
         <variable name="monthSpinnerAdapter" type="android.widget.ArrayAdapter" />
         <variable name="gradeSpinnerAdapter" type="android.widget.ArrayAdapter" />
@@ -29,92 +30,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.freewheelin.pulley.revision2021.views.Spinner
-                android:id="@+id/yearFilter"
-                android:layout_width="160dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/dp48"
-                android:layout_marginTop="50dp"
-                android:background="@drawable/bg_spinner_common"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:selectedItemPosition="@={vm.yearSelectedPosition}"
-                app:adapter="@{yearSpinnerAdapter}" />
+            <LinearLayout
+                android:id="@+id/filterLl"
+                android:layout_width="match_parent"
+                android:layout_height="108dp"
+                android:orientation="horizontal"
+                android:paddingTop="48dp"
+                app:layout_constraintTop_toTopOf="parent">
 
-<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
-<!--                android:id="@+id/yearFilter"-->
-<!--                android:layout_width="160dp"-->
-<!--                android:layout_height="36dp"-->
-<!--                android:layout_marginStart="@dimen/dp48"-->
-<!--                android:layout_marginTop="50dp"-->
-<!--                app:defaultStr="출제 연도 전체"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+                <com.freewheelin.pulley.revision2021.views.Spinner
+                    android:id="@+id/yearFilter"
+                    android:layout_width="160dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="@dimen/dp48"
+                    android:background="@drawable/bg_spinner_common"
+                    android:selectedItemPosition="@={vm.yearSelectedPosition}"
+                    app:adapter="@{yearSpinnerAdapter}" />
 
-            <com.freewheelin.pulley.revision2021.views.Spinner
-                android:id="@+id/monthFilter"
-                android:layout_width="136dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/dp16"
-                android:background="@drawable/bg_spinner_common"
-                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
-                app:layout_constraintStart_toEndOf="@+id/yearFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter"
-                android:selectedItemPosition="@={vm.monthSelectedPosition}"
-                app:adapter="@{monthSpinnerAdapter}" />
+                <com.freewheelin.pulley.revision2021.views.Spinner
+                    android:id="@+id/monthFilter"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:background="@drawable/bg_spinner_common"
+                    android:selectedItemPosition="@={vm.monthSelectedPosition}"
+                    app:adapter="@{monthSpinnerAdapter}" />
 
-<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
-<!--                android:id="@+id/monthFilter"-->
-<!--                android:layout_width="136dp"-->
-<!--                android:layout_height="36dp"-->
-<!--                android:layout_marginStart="@dimen/dp16"-->
-<!--                app:defaultStr="출제월 전체"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/yearFilter"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
+                <com.freewheelin.pulley.revision2021.views.Spinner
+                    android:id="@+id/gradeFilter"
+                    android:layout_width="120dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:background="@drawable/bg_spinner_common"
+                    android:selectedItemPosition="@={vm.gradeSelectedPosition}"
+                    app:adapter="@{gradeSpinnerAdapter}" />
 
-            <com.freewheelin.pulley.revision2021.views.Spinner
-                android:id="@+id/gradeFilter"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/dp16"
-                android:background="@drawable/bg_spinner_common"
-                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
-                app:layout_constraintStart_toEndOf="@+id/monthFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter"
-                android:selectedItemPosition="@={vm.gradeSelectedPosition}"
-                app:adapter="@{gradeSpinnerAdapter}" />
+                <com.freewheelin.pulley.revision2021.views.Spinner
+                    android:id="@+id/typeFilter"
+                    android:layout_width="120dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:background="@drawable/bg_spinner_common"
+                    android:selectedItemPosition="@={vm.typeSelectedPosition}"
+                    app:adapter="@{typeSpinnerAdapter}" />
 
-<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
-<!--                android:id="@+id/gradeFilter"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="36dp"-->
-<!--                android:layout_marginStart="@dimen/dp16"-->
-<!--                app:defaultStr="학년 전체"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/monthFilter"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
-
-            <com.freewheelin.pulley.revision2021.views.Spinner
-                android:id="@+id/typeFilter"
-                android:layout_width="120dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="@dimen/dp16"
-                android:background="@drawable/bg_spinner_common"
-                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"
-                app:layout_constraintStart_toEndOf="@+id/gradeFilter"
-                app:layout_constraintTop_toTopOf="@+id/yearFilter"
-                android:selectedItemPosition="@={vm.typeSelectedPosition}"
-                app:adapter="@{typeSpinnerAdapter}" />
-<!--            <com.freewheelin.pulley.legacy.views.ArduousSpinner-->
-<!--                android:id="@+id/typeFilter"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="36dp"-->
-<!--                android:layout_marginStart="@dimen/dp16"-->
-<!--                app:defaultStr="계열 전체"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/yearFilter"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/gradeFilter"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/yearFilter" />-->
+            </LinearLayout>
 
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -123,14 +83,13 @@
                 android:layout_width="@dimen/dp60"
                 android:layout_height="@dimen/dp56"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:paddingEnd="@dimen/dp12"
                 android:text="연도"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp16"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/yearFilter" />
+                app:layout_constraintTop_toBottomOf="@+id/filterLl" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/monthSl"
@@ -193,6 +152,20 @@
                 app:layout_constraintBottom_toBottomOf="@+id/yearSl"
                 app:layout_constraintStart_toEndOf="@+id/typeSl"
                 app:layout_constraintTop_toTopOf="@+id/yearSl" />
+
+            <TextView
+                android:id="@+id/filterSumUpTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ vm.filteredItemText }"
+                visibleIf="@{ showSumUpText }"
+                tools:text="2019년"
+                style="@style/b2"
+                android:textColor="@color/gray_600"
+                android:layout_marginEnd="42dp"
+                app:layout_constraintTop_toTopOf="@id/titleSl"
+                app:layout_constraintBottom_toBottomOf="@id/titleSl"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
                 android:id="@+id/view2"

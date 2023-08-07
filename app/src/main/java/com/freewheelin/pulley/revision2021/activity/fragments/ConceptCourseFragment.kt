@@ -42,6 +42,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.freewheelin.pulley.legacy.bases.isMobile
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import kotlinx.coroutines.withContext
 
 class ConceptCourseFragment : MainTabFragment() {
@@ -274,7 +276,7 @@ class ConceptCourseFragment : MainTabFragment() {
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
-                RESULT_OK -> ConceptLearningUsageMonitor.finishConceptLearning()
+                FROM_CONCEPT_TAB -> ConceptLearningUsageMonitor.finishConceptLearning()
                 CHALLENGE_TUTORIAL_FINISH -> {
                     viewModel.completedTutorial { startChallenge ->
                         // TODO 챌린지 완료 후
@@ -294,6 +296,10 @@ class ConceptCourseFragment : MainTabFragment() {
                                 isDelayedShowNextBtn = true
                             )
                             completedDialog.moveEvent = moveEvent
+//                            completedDialog.useCouponEvent = {
+//                                val pgDialog = PurchaseGuideDialog.newInstance(2)
+//                                childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+//                            }
                             childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                         }
 

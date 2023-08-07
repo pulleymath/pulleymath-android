@@ -4,14 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfileV4
 import com.freewheelin.pulley.legacy.model.DummyCreatedUser
-import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
+import com.freewheelin.pulley.revision2023.model.response.MainWeeklyStudySummary
 import com.freewheelin.pulley.revision2023.service.UserApi
 import com.freewheelin.pulley.revision2023.service.UserService
+import org.joda.time.LocalDate
 
 class UserRepository() {
 
@@ -45,8 +47,8 @@ class UserRepository() {
             _schoolType.postValue(level)
         }
     }
-    fun updateSchoolType(level: SchoolType) {
-        _schoolType.postValue(level)
+    fun updateSchoolType(type: SchoolType) {
+        _schoolType.postValue(type)
     }
 
     suspend fun createDummyUser(email: String) {
@@ -59,7 +61,14 @@ class UserRepository() {
     suspend fun getMainProfile(): MainProfile {
         return api.getProfiles().data
     }
+    suspend fun getMainProfileV4(): MainProfileV4 {
+        return api.getRenewProfiles().data
+    }
     suspend fun requestRewardSignUp() {
         api.requestRewardSignUp()
+    }
+    suspend fun getWeeklyStudySummary(todayDate: LocalDate): MainWeeklyStudySummary {
+        val date = todayDate.toString("yyyy-MM-dd")
+        return api.getWeeklyStudySummary(date).data
     }
 }

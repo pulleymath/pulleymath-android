@@ -41,6 +41,7 @@ class ResponseBookInfo2 {
     val bookPage: List<BookPage> = emptyList()
     val problemList: List<Problem> = emptyList()
     val assignID: Int? = null
+    val title: String? = null
 }
 
 class BookCategory {
@@ -112,10 +113,14 @@ object BookManager {
 
     fun getBookFromContent(context: Context, content: Content, user: UserV4, cb: ((book: Book) -> Unit)) {
         val book = Book(content)
-        getBook(context, book, user, cb)
+        getBook(
+            context = context,
+            book = book,
+            user = user,
+            cb = cb)
     }
-    fun getBook(context: Context, book: Book, user: UserV4, cb: ((book: Book) -> Unit)) {
-        API_V3.getBook(user.studentID, book.assignID ?: book.pieceID).enqueue(object: Callback<ResponseBody<ResponseBookInfo2>> {
+    fun getBook(context: Context, book: Book?, user: UserV4, workbookId: Int? = null, cb: ((book: Book) -> Unit)) {
+        API_V3.getBook(user.studentID, book?.assignID ?: book?.pieceID ?: workbookId!!).enqueue(object: Callback<ResponseBody<ResponseBookInfo2>> {
             override fun onFailure(call: Call<ResponseBody<ResponseBookInfo2>>, t: Throwable) {
                 responseFailed(context, t)
             }
@@ -125,17 +130,20 @@ object BookManager {
                     val responseBookPage = it.bookPage
                     val responseProblems = it.problemList
                     val responseAssignID = it.assignID
+                    val title = it.title
 
                     if(response.isSuccessful && responseAssignID != null) {
-                        book.assignID = responseAssignID
-                        book.bookPage = responseBookPage
-                        book.problems = responseProblems
-                        book.arrangeProblem()
-                        book.arrangeChapter()
+                        val newBook = book ?: Book()
+                        newBook.assignID = responseAssignID
+                        newBook.bookPage = responseBookPage
+                        newBook.problems = responseProblems
+                        newBook.arrangeProblem()
+                        newBook.arrangeChapter()
+                        newBook.bookName = title
                         LogUtils.logEvent(context, user, PulleyEvent.INIT_TEST, "문제풀기", "유형학습 세팅","Log: 문항개수 0개\n" +
-                            "param: ${"studentID: ${user.studentID}, id: ${book.assignID ?: book.pieceID}"}\n" +
+                            "param: ${"studentID: ${user.studentID}, id: ${newBook.assignID ?: newBook.pieceID}"}\n" +
                             "response: ${response.raw()}\n")
-                        cb(book)
+                        cb(newBook)
                     }
                 }
 

@@ -8,9 +8,11 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeStatus
 import com.freewheelin.pulley.revision2023.model.challenge.MainChallengeHeaderWrapper
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -50,4 +52,11 @@ interface ChallengeService {
 
     @GET("v2/info/messages/challenge/course?os=ANDROID")
     suspend fun getCompletedSubtitle(): ResponseForceBody<HighlightMessage>
+
+    @PATCH("v1/users/{studentId}/user-challenges/{userChallengeId}")
+    suspend fun stopChallenge(
+        @Path("userChallengeId") userChallengeId: Int,
+        @Path("studentId") studentId: String = user?.studentID!!,
+        @Query("status") status: String = ChallengeUserStatus.FAILED.toString(),
+    ): ResponseBody<Nothing>
 }

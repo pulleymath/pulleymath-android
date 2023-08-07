@@ -54,6 +54,10 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
+import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
@@ -85,6 +89,9 @@ class SolveActivity : BaseActivity(),
     lateinit var purchaseReceiver: BroadcastReceiver
 
     companion object {
+        val WHERE_ARE_YOU_FROM = "WHERE_ARE_YOU_FROM"
+        val FROM_MAIN_TAB = 302
+        val FROM_PULLEYMATH_BOOKS = 305
 
         val IS_REVIEW = "IS_REVIEW"
 
@@ -158,15 +165,10 @@ class SolveActivity : BaseActivity(),
 
         isReview = intent.getBooleanExtra(IS_REVIEW, false)
 
-        Log.d("문제풀기", "content=$content")
-        Log.d("문제풀기", "asoaso pieceSubCategory?=${content?.pieceSubCategory}")
-        Log.d("문제풀기", "isReview=$isReview")
         if(isReview)
             initReviewContent(content)
         else
             initContent(content)
-
-        Log.d("문제풀기", "onCreate()")
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
@@ -199,6 +201,7 @@ class SolveActivity : BaseActivity(),
     fun backBtnAction() {
         Log.d("문제풀기", "onBackPressed()")
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
+
         if(answeredSet.isNotEmpty()) {
             val cancelCallback = {
                 if (content is Test) {
@@ -207,13 +210,24 @@ class SolveActivity : BaseActivity(),
             }
             DialogUtils.showProblemSolveExitDialog(this, answeredSet.size, onExitClicked = {
                 saveMemo()
-                viewModel.startChallengeCompletedCallback()
+                setResultFromWhere()
                 finish()
             }, cancelCallback = cancelCallback)
         } else {
             saveMemo()
-            viewModel.startChallengeCompletedCallback()
+            setResultFromWhere()
             finish()
+        }
+    }
+    private fun setResultFromWhere() {
+        val fromWhere = intent.getIntExtra(WHERE_ARE_YOU_FROM, -1)
+        when (fromWhere) {
+            FROM_MAIN_TAB -> {
+                setResult(MainFragment.SOLVE_RESULT)
+            }
+            FROM_PULLEYMATH_BOOKS -> {
+                viewModel.startChallengeCompletedCallback()
+            }
         }
     }
     fun addBackBtnCallback() {
@@ -335,7 +349,8 @@ class SolveActivity : BaseActivity(),
                     itemValue = "유형학습"
                     timerView.visibility = View.INVISIBLE
                     mainFormatTool.visibility = View.VISIBLE
-                    BookManager.getBook(this@SolveActivity, content, user!!) {
+                    val workbookId = intent.getIntExtra(OPEN_PULLEY_WORKBOOK, -1)
+                    BookManager.getBook(this@SolveActivity, content, user!!, workbookId) {
                         Log.d("유형학습", "init getBook======>$it")
                         this@SolveActivity.content = it
                         viewModel.selectedContent.postValue(it)
@@ -415,7 +430,7 @@ class SolveActivity : BaseActivity(),
                                     ContentManager.score(this@SolveActivity, user!!, content, content.problems.toSet(), time) {
                                         val intent = MockReportActivity.getIntent(this@SolveActivity, content)
                                         startActivity(intent)
-                                        setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                                        setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                                         finish()
                                     }
                                 }
@@ -868,7 +883,7 @@ class SolveActivity : BaseActivity(),
                 if (notSolvedCnt > 0) {
                     DialogUtils.showExamSubmitDialog(this, notSolvedCnt) {
                         ContentManager.score(this, user!!, exam, answeredSet, time) {
-                            setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                            setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                             finish()
                         }
                     }
@@ -880,7 +895,7 @@ class SolveActivity : BaseActivity(),
                             getMockWithOptionalSubjects(exam) { mock ->
                                 val intent = MockReportActivity.getIntent(this@SolveActivity, mock)
                                 startActivity(intent)
-                                setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                                setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                                 finish()
                             }
                         }
@@ -1641,7 +1656,7 @@ class SolveActivity : BaseActivity(),
                     if (title.isNotEmpty()) { title += " / " }
                     title += book.chapter
                 }
-                title
+                book.bookName ?: title
             }
             is Test, is Piece -> {
                 "${content!!.subject}"

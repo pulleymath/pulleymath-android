@@ -29,3 +29,9 @@ data class ResponseListBody<T> (
     val error: String?,
     val current_time: String?
 )
+data class ResponseNullableListBody<T> (
+    val data: List<T>?,
+    val message: String?,
+    val error: String?,
+    val current_time: String?
+)

@@ -90,20 +90,20 @@
                     app:layout_constraintVertical_bias="0">
 
 
-                    <TextView
-                        android:id="@+id/newChip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New"
-                        visibleIf="@{ !showCompletedView }"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="24dp"
-                        android:textColor="@color/white"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="2dp"
-                        android:background="@drawable/bg_red_300_round"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/newChip"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="New"-->
+<!--                        visibleIf="@{ !showCompletedView }"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        android:layout_marginTop="24dp"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:paddingHorizontal="8dp"-->
+<!--                        android:paddingVertical="2dp"-->
+<!--                        android:background="@drawable/bg_red_300_round"/>-->
 
                     <TextView
                         android:id="@+id/titleTv"
@@ -111,9 +111,11 @@
                         android:layout_height="wrap_content"
                         style="@style/h4_sb"
                         android:text="@{ vm.titleTvText }"
+                        tools:text="쿠폰 발급이 완료됐어요!"
+                        android:layout_marginTop="24dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/newChip"
+                        app:layout_constraintTop_toTopOf="parent"
                         layout_margin_top_dimen="@{ showCompletedView ? @dimen/dp32 : @dimen/dp8 }"
                         />
                     <TextView
@@ -159,6 +161,7 @@
                         style="@style/h4"
                         android:background="@drawable/bg_btn_round_common"
                         android:text="@{ vm.startBtnText }"
+                        tools:text="쿠폰 사용하기"
                         android:textColor="@color/white"
                         />
 

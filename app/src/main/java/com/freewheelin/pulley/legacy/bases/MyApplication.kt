@@ -28,6 +28,7 @@ import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.google.gson.Gson
+import io.channel.plugin.android.util.lifecycleOwner
 //import dagger.hilt.android.HiltAndroidApp
 //import io.realm.Realm
 import net.danlew.android.joda.JodaTimeAndroid

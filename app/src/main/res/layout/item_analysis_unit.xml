@@ -11,7 +11,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
-            android:id="@+id/expandableIndictor"
+            android:id="@+id/expandableIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_expandable"
@@ -24,7 +24,7 @@
             android:id="@+id/checkboxContainerCl"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:layout_constraintStart_toEndOf="@+id/expandableIndictor"
+            app:layout_constraintStart_toEndOf="@+id/expandableIndicator"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/columnHorizontalBorder">
             <CheckBox

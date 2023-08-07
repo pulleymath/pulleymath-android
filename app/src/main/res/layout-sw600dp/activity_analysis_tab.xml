@@ -73,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintEnd_toEndOf="@+id/tabLayout"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round }"
+            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round_ripple }"
             android:textColor="@color/gray_600"
             android:text="내 전체 분석이란?"/>
         <View

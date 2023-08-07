@@ -68,7 +68,6 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
             val logResponse = postAddSimilarLog(content?.pieceID, problem?.id)
             if (logResponse.isChallengeCourse.not()) return@launch
             val startChallenge = logResponse.challengeStatus.find { it.isStartChallenge } ?: return@launch
-            println("asoaso startchallenge log [addSimilar]")
             updateChallenge(startChallenge)
             startChallengeCompletedCallback = pendingStartChallengeCompletedCallback
         }

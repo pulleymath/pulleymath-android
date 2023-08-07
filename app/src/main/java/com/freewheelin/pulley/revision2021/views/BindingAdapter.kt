@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.views
 
+import android.animation.ValueAnimator
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
+import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
 import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
@@ -22,11 +24,16 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.ui.view.MainUserStatusChip
-import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
+import com.freewheelin.pulley.revision2023.model.UserPlannerItem
+import com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem
+import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanStatus
+import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.freewheelin.pulley.revision2023.ui.view.MainUserStatusChip
+
 
 object BindingAdapter {
 
@@ -89,6 +96,11 @@ object BindingAdapter {
     @BindingAdapter("commonBackgroundIf")
     fun commonBackgroundIf(view: View, show: Boolean?) {
         view.setBackgroundResource(if (show == true) R.drawable.bg_purple_300_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
+    }
+    @JvmStatic
+    @BindingAdapter("secondaryBackgroundIf")
+    fun secondaryBackgroundIf(view: View, show: Boolean?) {
+        view.setBackgroundResource(if (show == true) R.drawable.bg_purple_100_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
     }
 
     @JvmStatic
@@ -428,24 +440,54 @@ object BindingAdapter {
     fun setMainPlannerCategory(view: TextView, value: String?) {
         value?.let {
             val textColor = when (it) {
-                "개념" -> R.color.purple_300
-                "문제집" -> R.color.purple_5282FF
-                "워크북" -> R.color.purple_5282FF
-                "모의고사" -> R.color.blue_400
-                "풀리북스" -> R.color.blue_400
-                "오답노트" -> R.color.red_300
-                "추천학습" -> R.color.gray_600
+                WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_400
                 else -> R.color.purple_300
             }
             val backgroundColor = when (it) {
-                "개념" -> R.color.purple_100
-                "문제집" -> R.color.purple_DCE6FF
-                "워크북" -> R.color.purple_DCE6FF
-                "모의고사" -> R.color.blue_100
-                "풀리북스" -> R.color.blue_100
-                "오답노트" -> R.color.red_100
-                "추천학습" -> R.color.gray_200
+                WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_100
                 else -> R.color.purple_100
+            }
+
+            view.setTextColor(ContextCompat.getColor(view.context, textColor))
+            view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("studyPlannerSubjectCategoryCard")
+    fun setPlannerMakerCategory(view: TextView, value: StudyPlannerItem?) {
+        value?.let {
+            val category = it.category
+            val textColor = when (category) {
+                WeeklyPlanTag.PULLEY_WORKBOOK ->
+                    if (it.isCompleted) {
+                        R.color.dark_blue_400_opa_50
+                    } else {
+                        R.color.dark_blue_400
+                    }
+                else -> {
+                    if (it.isCompleted) {
+                        R.color.purple_300_opa_50
+                    } else {
+                        R.color.purple_300
+                    }
+                }
+            }
+            val backgroundColor = when (category) {
+                WeeklyPlanTag.PULLEY_WORKBOOK -> {
+                    if (it.isCompleted) {
+                        R.color.dark_blue_100_opa_50
+                    } else {
+                        R.color.dark_blue_100
+                    }
+                }
+                else -> {
+                    if (it.isCompleted) {
+                        R.color.purple_100_opa_50
+                    } else {
+                        R.color.purple_100
+                    }
+                }
             }
 
             view.setTextColor(ContextCompat.getColor(view.context, textColor))
@@ -464,5 +506,88 @@ object BindingAdapter {
             }
             view.setTextColor(ContextCompat.getColor(view.context, textColor))
         }
+    }
+    @JvmStatic
+    @BindingAdapter("mainUserUnitPlanCompleteIcon")
+    fun setMainUserUnitPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
+        value?.let {
+            val imgRes = when {
+                it.isPast -> {
+                    if (it.solvedProblemCount != null && it.solvedProblemCount > 0) R.drawable.ic_round_selected
+                    else R.drawable.ic_round_x
+                }
+                else -> {
+                    if (it.solvedProblemCount != null && it.solvedProblemCount > 0) R.drawable.ic_round_selected_purple_300
+                    else R.drawable.ic_round_gray_400
+                }
+            }
+            view.setImageResource(imgRes)
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("mainDailyUserPlanCompleteIcon")
+    fun setMainDailyUserPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
+        value?.let {
+            val imgRes = when(it.statusOfDay) {
+                WeeklyPlanStatus.NONE -> R.drawable.ic_round_none
+                WeeklyPlanStatus.ING -> R.drawable.ic_check_gray_400_filled
+                WeeklyPlanStatus.DONE -> R.drawable.ic_round_check_filled_green_300
+                WeeklyPlanStatus.FAILED -> R.drawable.ic_round_x_filled
+            }
+            view.setImageResource(imgRes)
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("mainPlannerHeaderTextColor")
+    fun setMainPlannerHeaderTextColor(view: TextView, value: MainUserPlannerItem?) {
+        value?.let {
+            val resource = if (it.isAllPlanOfDayCompleted) {
+                R.color.green_300
+            } else if (it.isPast) {
+                R.color.gray_500
+            } else if (it.isToday) {
+                R.color.purple_300
+            } else {
+                R.color.gray_700
+            }
+
+            view.setTextColor(ContextCompat.getColor(view.context, resource))
+        }
+    }
+    @JvmStatic
+    @BindingAdapter("makePlannerHeaderTextColor")
+    fun setMakePlannerHeaderTextColor(view: TextView, value: UserPlannerItem?) {
+        value?.let {
+            val resource = if (it.isPast) {
+                R.color.gray_500
+            } else if (it.isToday) {
+                R.color.purple_300
+            } else {
+                R.color.gray_700
+            }
+
+            view.setTextColor(ContextCompat.getColor(view.context, resource))
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("layoutBottomMarginChangeAnim")
+    fun layoutBottomMarginChangeAnim(view: View, value: UserPlannerItem?) {
+        value?.let {
+//            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+//                this.topMargin = dimen.toInt()
+//            }
+            val params = view.layoutParams as LinearLayout.LayoutParams
+            val animator = ValueAnimator.ofInt(24.toPx(), params.bottomMargin)
+            animator.addUpdateListener {
+                params.bottomMargin = (animator.animatedValue as Int)
+                view.requestLayout()
+            }
+            animator.duration = 300
+            animator.start()
+        }
+
+
+
     }
 }

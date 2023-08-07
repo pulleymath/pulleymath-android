@@ -1,16 +1,20 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2023.model.SignInAppToken
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.net.UnknownHostException
 import kotlinx.coroutines.*
-import retrofit2.HttpException
 
 open class BaseAndroidViewModel(application: Application): AndroidViewModel(application) {
     protected val _isLoading = MutableLiveData<Boolean>()
@@ -18,6 +22,9 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
 
     protected val _errorAction = MutableLiveData<CoroutineExceptionType>()
     val errorAction: LiveData<CoroutineExceptionType> = _errorAction
+
+    protected val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
 
     protected var contentJob: Job? = null
 
@@ -51,6 +58,12 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
                     else -> CoroutineExceptionType.HttpException
                 }
                 _errorAction.postValue(type)
+
+                val responseStr = throwable.response()?.errorBody()?.string()
+                Log.e("BaseAndroidViewModel", "throwable :: response: ${responseStr}")
+                val listType = object: TypeToken<ResponseBody<*>>(){}.type
+                val response: ResponseBody<*> = Gson().fromJson(responseStr, listType)
+                response.message?.let { _errorMessage.postValue(it) }
             }
             else -> {
                 CoroutineScope(Dispatchers.Main).launch {

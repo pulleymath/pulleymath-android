@@ -1,10 +1,12 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfileV4
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.*
@@ -16,15 +18,20 @@ import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
 import com.freewheelin.pulley.legacy.utils.responseFailed
-import com.freewheelin.pulley.revision2023.model.MainPlannerListItem
+import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
+import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
+import com.freewheelin.pulley.revision2023.model.response.MainWeeklyStudySummary
+import com.freewheelin.pulley.revision2023.repository.PlannerRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.MainPlannerListAdapter
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.joda.time.DateTimeConstants.*
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.util.concurrent.TimeUnit
 
 class MainFViewModel(application: Application): BaseAndroidViewModel(application),
     ChallengeClickListener,
@@ -33,6 +40,8 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     private val repository: MainFRepository = MainFRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
+    private val plannerRepository by lazy { PlannerRepository.instance }
+    private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     lateinit var challengeListAdapter: ChallengeHeaderListAdapter
     lateinit var challengeDescAdapter: ChallengeMissionAdapter
@@ -46,6 +55,8 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     val userPaidServiceType = MutableLiveData<PaidServiceType>()
     val currentMission = MutableLiveData<Challenge>()
     val mainProfile = MutableLiveData<MainProfile>()
+    val mainProfileV4 = MutableLiveData<MainProfileV4>()
+    val weeklyStudySummary = MutableLiveData<MainWeeklyStudySummary>()
     private val _challengeHeaders = MutableLiveData<List<MainChallengeHeaderItem>>()
     val challengeHeaders: LiveData<List<MainChallengeHeaderItem>> = _challengeHeaders
 
@@ -53,15 +64,16 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     private val _challengeMissions = MutableLiveData<List<ChallengeCourse>>()
     val challengeMission: LiveData<List<ChallengeCourse>> = _challengeMissions
 
-    private val _plannerItems = MutableLiveData<List<MainPlannerListItem>>()
-    val plannerItems: LiveData<List<MainPlannerListItem>> = _plannerItems
+    private val _mainUserPlannerItems = MutableLiveData<List<MainUserPlannerItem>>()
+    val mainUserPlannerItems: LiveData<List<MainUserPlannerItem>> = _mainUserPlannerItems
 
     val selectedMondayOfTheWeek = MutableLiveData<LocalDate>()
     val selectedSundayOfTheWeek = MutableLiveData<LocalDate>()
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
-    var teacherSpyModeCount = 0
+
+    val selectedPlan = MutableLiveData<MainUserPlannerItem>()
 
     fun initChallengeSetting() {
         challengeHeaders.value?.first()?.let { onChallengeHeaderClick(it) }
@@ -104,49 +116,21 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         }
     }
 
-    fun initPlannerItems() {
-        val initDatePair = initPlannerWeek()
-        println("aspasp initdatepair : ${initDatePair}")
+    fun updateMainUserPlanner(monday: String? = null, sunday: String? = null) {
+        val datePair = if (monday != null && sunday != null) {
+            Pair(monday, sunday)
+        } else {
+            plannerRepository.initPlannerWeek()
+        }
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val items = MainPlannerListItem.getItemList()
-            println("aspasp planer items :${items.size}")
-            _plannerItems.postValue(items)
+            val items = plannerRepository.getWeeklyPlans(datePair)
+
+            _mainUserPlannerItems.postValue(items)
+            selectedMondayOfTheWeek.postValue(LocalDate(datePair.first))
+            selectedSundayOfTheWeek.postValue(LocalDate(datePair.second))
         }
     }
-    private fun initPlannerWeek(): Pair<String, String> {
-        val today = LocalDate.now()
-        val dayOfWeek = today.dayOfWeek
-        val daysAgoAtMonday = when (dayOfWeek) {
-            MONDAY -> 0
-            TUESDAY -> 1
-            WEDNESDAY -> 2
-            THURSDAY -> 3
-            FRIDAY -> 4
-            SATURDAY -> 5
-            SUNDAY -> 6
-            else -> 0
-        }
-        val daysLeftUntilSunday = when (dayOfWeek) {
-            MONDAY -> 6
-            TUESDAY -> 5
-            WEDNESDAY -> 4
-            THURSDAY -> 3
-            FRIDAY -> 2
-            SATURDAY -> 1
-            SUNDAY -> 0
-            else -> 0
-        }
-        selectedMondayOfTheWeek.postValue(today.minusDays(daysAgoAtMonday))
-        selectedSundayOfTheWeek.postValue(today.plusDays(daysLeftUntilSunday))
 
-        return Pair(
-            today.minusDays(daysAgoAtMonday).toString("yyyy-MM-dd"),
-            today.plusDays(daysLeftUntilSunday).toString("yyyy-MM-dd")
-        )
-//        val mondayOfTheWeekStr = mondayOfTheWeek.toString("yy. MM. dd")
-//        val sundayOfTheWeekStr = sundayOfTheWeek.toString("yy. MM. dd")
-
-    }
     fun collectChallengeDetail(challengeId: Int) {
         contentJob?.cancel("다른 챌린지 헤더 클릭으로 인한 취소", CancellationException())
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
@@ -164,6 +148,12 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         CoroutineScope(Dispatchers.IO + contentExceptionHandler).launch {
             val profile = userRepository.getMainProfile()
             mainProfile.postValue(profile)
+            val profileV4 = userRepository.getMainProfileV4()
+            mainProfileV4.postValue(profileV4)
+
+            val studySummary = userRepository.getWeeklyStudySummary(LocalDate.now())
+            weeklyStudySummary.postValue(studySummary)
+
             _errorAction.postValue(CoroutineExceptionType.NONE)
         }
     }
@@ -270,5 +260,37 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         ChallengeManager.getMainTabMoveIntent(item).let {
             LocalBroadcastManager.getInstance(context).sendBroadcast(it)
         }
+    }
+
+    fun moveNextPlannerWeek() {
+        val presentedMonday = selectedMondayOfTheWeek.value ?: return
+        val presentedSunday = selectedSundayOfTheWeek.value ?: return
+        val nextMonday = presentedMonday.plusWeeks(1)
+        val nextSunday = presentedSunday.plusWeeks(1)
+        selectedMondayOfTheWeek.postValue(nextMonday)
+        selectedSundayOfTheWeek.postValue(nextSunday)
+
+        updateMainUserPlanner(nextMonday.toString("yyyy-MM-dd"), nextSunday.toString("yyyy-MM-dd"))
+    }
+    fun movePrevPlannerWeek() {
+        val presentedMonday = selectedMondayOfTheWeek.value ?: return
+        val presentedSunday = selectedSundayOfTheWeek.value ?: return
+        val prevMonday = presentedMonday.minusWeeks(1)
+        val prevSunday = presentedSunday.minusWeeks(1)
+        selectedMondayOfTheWeek.postValue(prevMonday)
+        selectedSundayOfTheWeek.postValue(prevSunday)
+
+        updateMainUserPlanner(prevMonday.toString("yyyy-MM-dd"), prevSunday.toString("yyyy-MM-dd"))
+    }
+    fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {
+        val studentId = user?.studentID ?: return
+
+        compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .doOnComplete { callback() }
+            .doOnError {
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
+            }.subscribe()
     }
 }

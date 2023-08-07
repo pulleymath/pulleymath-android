@@ -39,6 +39,7 @@ import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.NoteStudyViewListener
 import com.freewheelin.pulley.legacy.views.WrongManageView
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.OrderType
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,19 +50,19 @@ import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 
-enum class OrderType(val rawValue: Int) {
-    recent(0),
-    old(1),
-    subject(2),
-    level(3)
-}
+//enum class OrderType(val rawValue: Int) {
+//    recent(0),
+//    old(1),
+//    subject(2),
+//    level(3)
+//}
 
 class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     NoteStudyClickListener, NoteStudyViewListener {
     private lateinit var binding: FragmentWrongNoteStudyBinding
     private val viewModel: WrongNoteStudyViewModel by viewModels()
     private var isViewCreated = false
-    override var type: MainTab = MainTab.오답노트
+    override var type: MainTab = MainTab.문제풀이
 
     lateinit var reConfigureReceiver: BroadcastReceiver
     lateinit var noteCardAdapter: NoteStudyCardAdapter
@@ -210,25 +211,25 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     private fun initAdapter () {
         binding.apply {
 
-            noteCardAdapter = NoteStudyCardAdapter(viewModel, this@WrongNoteStudyFragment)
-            val spanCount = if (requireContext().isTablet) 4 else 2
-            notesRv.layoutManager =
-                GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
-                    it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                        override fun getSpanSize(position: Int): Int {
-                            val type = noteCardAdapter.getItemViewType(position)
-                            val typeHeader = 0
-                            val typeGroupHeader = 1
-                            val typeItem = 2
-                            return when (type) {
-                                typeHeader -> spanCount
-                                typeGroupHeader -> spanCount
-                                else -> 1
-                            }
-                        }
-                    }
-                }
-            notesRv.adapter = noteCardAdapter
+//            noteCardAdapter = NoteStudyCardAdapter(viewModel, this@WrongNoteStudyFragment)
+//            val spanCount = if (requireContext().isTablet) 4 else 2
+//            notesRv.layoutManager =
+//                GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false).also {
+//                    it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//                        override fun getSpanSize(position: Int): Int {
+//                            val type = noteCardAdapter.getItemViewType(position)
+//                            val typeHeader = 0
+//                            val typeGroupHeader = 1
+//                            val typeItem = 2
+//                            return when (type) {
+//                                typeHeader -> spanCount
+//                                typeGroupHeader -> spanCount
+//                                else -> 1
+//                            }
+//                        }
+//                    }
+//                }
+//            notesRv.adapter = noteCardAdapter
         }
     }
 
@@ -342,11 +343,11 @@ class WrongNoteStudyFragment : MainTabFragment(), NoteFilterChangeListener,
     }
 
     override fun onOrderChanged(type: OrderType) {
-        viewModel.onOrderChanged(type) {
-            viewModel.setGroupedProblem() {
-                binding.notesRv.scrollToPosition(0)
-            }
-        }
+//        viewModel.onOrderChanged(type) {
+//            viewModel.setGroupedProblem() {
+//                binding.notesRv.scrollToPosition(0)
+//            }
+//        }
     }
 
     var dialog: Dialog? = null

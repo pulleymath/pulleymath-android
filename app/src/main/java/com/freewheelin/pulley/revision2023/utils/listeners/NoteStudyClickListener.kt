@@ -1,8 +1,8 @@
 package com.freewheelin.pulley.revision2023.utils.listeners
 
-import com.freewheelin.pulley.revision2023.ui.fragment.OrderType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.model.PriorConcept
+import com.freewheelin.pulley.revision2023.ui.activity.OrderType
 
 interface NoteStudyClickListener {
     fun onAllSelectedClicked(isChecked: Boolean)

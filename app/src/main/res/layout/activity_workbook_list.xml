@@ -70,10 +70,9 @@
                 android:background="@color/gray_200"
             >
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/totalLabel"
@@ -81,23 +80,60 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginTop="@dimen/dp32"
+                        android:layout_marginTop="48dp"
                         android:text="워크북"
                         android:textColor="@color/gray_800"
                         android:textSize="@dimen/sp36"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="0dp"
+
+                    <TextView
+                        android:id="@+id/subTitleTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp48"
+                        android:layout_marginTop="@dimen/dp16"
+                        android:layout_marginBottom="48dp"
+                        style="@style/b2r"
+                        android:text="문제집에서 내가 원하는 부분만 골라\n나만의 워크북을 만들어보세요."
+                        android:textColor="@color/gray_600"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalLabel"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <LinearLayout
+                        android:id="@+id/headerImageWrapperLl"
+                        android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:orientation="horizontal"
+                        android:gravity="end"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/src_workbook_header"
+                            />
+                    </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:id="@+id/headerIv"-->
+<!--                        android:layout_width="600dp"-->
+<!--                        android:layout_height="200dp"-->
+<!--                        android:src="@drawable/src_workbook_header"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        />-->
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/createWorkbookClWrapper"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="32dp"
+                        app:layout_constraintEnd_toEndOf="@+id/headerImageWrapperLl"
+                        app:layout_constraintBottom_toBottomOf="@+id/headerImageWrapperLl">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/createWorkbookCl"
@@ -108,7 +144,6 @@
                             android:background="@drawable/bg_purple_300_round_18_ripple"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:layout_marginEnd="@dimen/dp48"
                             android:layout_marginTop="@dimen/dp32"
                             >
                             <ImageView
@@ -150,26 +185,14 @@
 
 
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/subTitleTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp48"
-                    android:layout_marginTop="@dimen/dp16"
-                    style="@style/b2r"
-                    android:text="문제집에서 내가 원하는 부분만 골라\n나만의 워크북을 만들어보세요."
-                    android:textColor="@color/gray_600"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/titleTv"/>
 
                 <View
                     style="@style/Border_Gray_300_Horizontal"
                     android:id="@+id/topBorder"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp32"/>
+                    android:layout_height="1dp"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/workbookWrapperCl"

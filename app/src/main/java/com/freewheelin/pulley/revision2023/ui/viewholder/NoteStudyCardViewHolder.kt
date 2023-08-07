@@ -11,10 +11,10 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ItemNoteStudyCardBinding
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
-import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
 import com.squareup.picasso.Picasso
 
-class NoteStudyCardViewHolder(val binding: ItemNoteStudyCardBinding, val viewModel: WrongNoteStudyViewModel, val listener: NoteStudyClickListener): RecyclerView.ViewHolder(binding.root) {
+class NoteStudyCardViewHolder(val binding: ItemNoteStudyCardBinding, val viewModel: WrongNoteActViewModel, val listener: NoteStudyClickListener): RecyclerView.ViewHolder(binding.root) {
 
     init {
         itemView.doOnAttach {

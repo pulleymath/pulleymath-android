@@ -40,7 +40,7 @@
     <style name="Btn_Grey.Secondary.L" parent="Secondary.L">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/gray_800</item>
-        <item name="android:background">@drawable/bg_gray_200_round</item>
+        <item name="android:background">@drawable/bg_gray_200_round_ripple</item>
     </style>
 
 </resources>

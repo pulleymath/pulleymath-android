@@ -24,7 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 
 
-class ConfirmPhoneDialog(val activity: Activity, val successCB:()->Unit, val failCB:()->Unit): Dialog(activity), CodeConfirmView.CodeConfirmInterface {
+class ConfirmPhoneDialog(val activity: Activity, val successCB: () -> Unit, val failCB: () -> Unit): Dialog(activity), CodeConfirmView.CodeConfirmInterface {
     val binding: DialogConfirmPhoneBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_confirm_phone, null, false)
     }

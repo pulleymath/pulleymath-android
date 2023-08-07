@@ -19,7 +19,6 @@ class HeaderHolder(val binding: ItemMypageHeaderBinding) : RecyclerView.ViewHold
 
     fun set(category: SettingCategory) {
         this.headerTitleTv.text = category.title
-
         if (category.title.isEmpty())
             headerTitleTv.visibility = View.GONE
         else

@@ -141,6 +141,11 @@
         <item name="android:textSize">@dimen/sp36</item>
     </style>
 
+    <style name="h2" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp32</item>
+    </style>
+
     <style name="h3" parent="CustomFont">
         <item name="android:fontFamily">@font/font_pretendard_bold</item>
         <item name="android:textSize">@dimen/sp24</item>

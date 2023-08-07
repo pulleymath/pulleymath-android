@@ -18,9 +18,9 @@ import com.freewheelin.pulley.databinding.ViewWrongManageBinding
 import com.freewheelin.pulley.revision2021.utils.getLifecycleOwner
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
 
 interface WrongManageViewListener {
     fun onTrashBtnClicked(view: WrongManageView) {}
@@ -167,7 +167,7 @@ class WrongManageView: ConstraintLayout {
             marginStart = 8.toPx()
         }
         btn.setImageResource(type.resId)
-        btn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round)
+        btn.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_ripple)
         binding.btnContainerLl.addView(btn)
         btn.setColorFilter(ContextCompat.getColor(context!!, R.color.gray_400))
         btn.setOnClickListener {
@@ -223,7 +223,7 @@ class WrongManageView: ConstraintLayout {
 
     fun setViewModel(vm: BaseAndroidViewModel) {
 
-        (vm as WrongNoteStudyViewModel).apply {
+        (vm as WrongNoteActViewModel).apply {
             binding.fragmentVM = this
         }
     }

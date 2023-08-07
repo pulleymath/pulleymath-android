@@ -141,6 +141,10 @@ class PdfListActivity : AppCompatActivity() {
                             completedCourseId = ChallengeManager.CourseName.스타트챌린지_북스.id
                         )
                         completedDialog.moveEvent = moveEvent
+//                        completedDialog.useCouponEvent = {
+//                            val pgDialog = PurchaseGuideDialog.newInstance(2)
+//                            supportFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+//                        }
                         supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog3") }
                     }
                 }

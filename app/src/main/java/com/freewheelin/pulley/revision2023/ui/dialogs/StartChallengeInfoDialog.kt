@@ -33,6 +33,15 @@ class StartChallengeInfoDialog(): DialogFragment() {
             instance.arguments = args
             return instance
         }
+        fun newInstance(isChallengeFinished: Boolean = false): StartChallengeInfoDialog {
+            val args = Bundle().apply {
+//                putInt(CHALLENGE_ID, challengeId)
+                putBoolean(IS_CHALLENGE_FINISHED, isChallengeFinished)
+            }
+            val instance = StartChallengeInfoDialog()
+            instance.arguments = args
+            return instance
+        }
     }
 
     override fun onCreateView(

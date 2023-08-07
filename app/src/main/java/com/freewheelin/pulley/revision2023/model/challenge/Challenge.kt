@@ -44,6 +44,7 @@ open class Challenge: Serializable {
     val description: String = ""
     val seq: Int = -1
     val reward: ChallengeReward? = null
+    val rewardCouponStatus: String? = null
     val courses: List<ChallengeCourse> = listOf()
     val successfulUserCount: Int? = null
 

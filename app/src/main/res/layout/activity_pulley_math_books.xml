@@ -71,34 +71,78 @@
                 android:background="@color/gray_200"
                 android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/headerTv"
-                        style="@style/h1"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginTop="@dimen/dp32"
-                        android:text="풀리수학 문제집"
-                        android:textColor="@color/gray_800"
-                        android:textSize="@dimen/sp36" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/headerTv"
+                            style="@style/h1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp48"
+                            android:layout_marginTop="48dp"
+                            android:text="풀리수학 문제집"
+                            android:textColor="@color/gray_800"
+                            android:textSize="@dimen/sp36" />
 
-                    <TextView
-                        android:id="@+id/subHeaderTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp48"
-                        android:layout_marginTop="@dimen/dp16"
-                        style="@style/b2r"
-                        android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
-                        android:textColor="@color/gray_600"/>
+                        <TextView
+                            android:id="@+id/subHeaderTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp48"
+                            android:layout_marginTop="@dimen/dp16"
+                            style="@style/b2r"
+                            android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."
+                            android:textColor="@color/gray_600"
+                            android:layout_marginBottom="48dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/src_pulleymath_books_header"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/headerTv"-->
+<!--                        style="@style/h1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="@dimen/dp48"-->
+<!--                        android:layout_marginTop="48dp"-->
+<!--                        android:text="풀리수학 문제집"-->
+<!--                        android:textColor="@color/gray_800"-->
+<!--                        android:textSize="@dimen/sp36" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/subHeaderTv"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="@dimen/dp48"-->
+<!--                        android:layout_marginTop="@dimen/dp16"-->
+<!--                        style="@style/b2r"-->
+<!--                        android:text="유형별 학습부터 내신대비까지!\n풀리수학의 다양한 문제집을 만나보세요."-->
+<!--                        android:textColor="@color/gray_600"/>-->
 
                     <View
                         android:id="@+id/topBorder"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/gray_400"
-                        android:layout_marginTop="@dimen/dp32"/>
+                        />
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout

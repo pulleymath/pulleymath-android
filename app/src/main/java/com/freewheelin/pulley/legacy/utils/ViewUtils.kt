@@ -747,7 +747,7 @@ fun View.showExpandVertical(isShow: Boolean, startCallback: () -> Unit = {}, end
 
     AnimatorSet().apply {
         interpolator = AccelerateDecelerateInterpolator()
-        play(slideAnimator);
+        play(slideAnimator)
         start()
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {

@@ -19,6 +19,8 @@ import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.WHERE_ARE_YOU_FROM
 
 class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterBinding, private val viewModel: ConceptCourseViewModel, val getResult: ActivityResultLauncher<Intent>): RecyclerView.ViewHolder(binding.root) {
     val context: Context = binding.root.context
@@ -97,8 +99,9 @@ class ConceptCourseSmallChapterViewHolder(private val binding: ItemSmallChapterB
         viewModel.createLearningCourseOnStudentId(item.id) {
             val chapterId = item.id
             val name = item.name
-            val subjectId = viewModel.selectedSubjectId.value ?: LCSubject.SubjectIndicator.MathSang.rawValue
-            getResult.launch(LearningCourseActivity.getIntent(context, subjectId, chapterId, name))
+            val intent = LearningCourseActivity.getIntent(context, chapterId, name)
+            intent.putExtra(WHERE_ARE_YOU_FROM, FROM_CONCEPT_TAB)
+            getResult.launch(intent)
         }
     }
     private fun setLockIv(item: StudyChapter) {

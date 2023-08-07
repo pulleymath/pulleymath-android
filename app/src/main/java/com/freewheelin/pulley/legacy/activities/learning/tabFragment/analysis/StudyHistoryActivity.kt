@@ -37,6 +37,7 @@ import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -181,12 +182,12 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
     override fun onSolveWithPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = OMRActivity.getIntent(this, mockExam, makeNew)
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
     }
 
     override fun onSolveWithoutPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = SolveActivity.getIntent(this, mockExam, makeNew)
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
     }
 
     inner class StudyListAdapter: RecyclerView.Adapter<StudyListViewHolder>() {

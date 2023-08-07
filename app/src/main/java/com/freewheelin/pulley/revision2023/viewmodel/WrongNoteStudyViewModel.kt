@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.revision2023.ui.fragment.OrderType
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
@@ -20,6 +19,7 @@ import com.freewheelin.pulley.revision2023.model.response.NoteStudyAdvancedLearn
 import com.freewheelin.pulley.revision2023.repository.NotesRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.revision2023.ui.activity.OrderType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

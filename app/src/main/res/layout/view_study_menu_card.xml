@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PatternStudyViewModel"/>
+        <variable name="showStamp" type="androidx.lifecycle.LiveData&lt;Boolean>"/>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+
+        android:id="@+id/rootCv"
+        android:layout_width="match_parent"
+        tools:layout_width="match_parent"
+        android:layout_height="132dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_white_ripple">
+
+
+            <ImageView
+                android:id="@+id/iconIv"
+                android:layout_width="98dp"
+                android:layout_height="98dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_study_pencil_calendar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/titleTv"
+                style="@style/h3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                tools:text="풀리수학 문제집"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/gray_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iconIv"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="4dp"
+                android:src="@drawable/ic_tailless_arrow_right_10_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_500" />
+
+            <ImageView
+                android:id="@+id/challengeStamp"
+                android:layout_width="50dp"
+                android:layout_height="64dp"
+                visibleIf="@{ showStamp }"
+                android:src="@drawable/challenge_stamp_3d_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

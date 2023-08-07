@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.REQUEST_MOCK_TEST
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.RESULT_MOCK_FINISH
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockTabListener
 import com.freewheelin.pulley.legacy.bases.is10InchUI
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
@@ -29,6 +26,9 @@ import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.textViews.SortableListener
 import com.freewheelin.pulley.legacy.views.textViews.SortableTextView
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.REQUEST_MOCK_TEST
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.RESULT_MOCK_FINISH
+import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
 import java.util.*
 
 class StudentMockFragment : Fragment(), ObservableHashSetListener<MockExam> {

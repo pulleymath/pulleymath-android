@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.UserV4
+import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
@@ -23,12 +25,16 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
     val schoolType = userRepository.schoolType
+    val joinedChallengeList = challengeRepository.joinedChallengeList
 
     private val _recommendCommonSubjects = MutableLiveData<List<RecommendSubject>>()
     val recommendCommonSubjects: LiveData<List<RecommendSubject>> = _recommendCommonSubjects
 
     private val _recommendOptionalSubjects = MutableLiveData<List<RecommendSubject>>()
     val recommendOptionalSubjects: LiveData<List<RecommendSubject>> = _recommendOptionalSubjects
+
+//    var startChallengeCouponStatus: String? = null
+    val startChallengeCouponStatus = MutableLiveData<String>(null)
 
     fun updateUser(user: UserV4?) {
         userRepository.updateUser(user)
@@ -105,6 +111,40 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
             myPageRepository.updateRecommends(params)
             withContext(Dispatchers.Main) {
                 cb()
+            }
+        }
+    }
+    var userChallengeId: Int? = null
+    fun stopChallenge(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userChallengeId?.let {
+                challengeRepository.stopChallenge(it)
+                withContext(Dispatchers.Main) {
+                    cb()
+                }
+            }
+        }
+    }
+
+    fun askForRedeemOfChallenge(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userChallengeId?.let {
+                val res = challengeRepository.askForRedeemOfChallenge(it)
+                _errorAction.postValue(CoroutineExceptionType.NONE)
+                if (res.error != null) {
+                    println("[[[[[ERROR askForRedeemOfChallenge]]]]]")
+                    responseFailed(
+                        getApplication<Application>().applicationContext,
+                        Throwable("${res.error} ${res.message}")
+                    )
+                    return@launch
+                }
+                withContext(Dispatchers.Main) {
+                    cb()
+                }
+                res.data?.let {
+                    challengeRepository.updateChallengeList(it)
+                }
             }
         }
     }

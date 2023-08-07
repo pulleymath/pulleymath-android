@@ -1,12 +1,13 @@
 package com.freewheelin.pulley.revision2023.ui.fragment
 
-
 import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -31,11 +32,24 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.RecyclerView
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_MAIN_TAB
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_PULLEYMATH_BOOKS
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_MAIN_TAB
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.WHERE_ARE_YOU_FROM
+import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
+import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.PlannerActivity
+import com.freewheelin.pulley.revision2023.ui.activity.PlannerActivity.Companion.PLANNER_MONDAY
+import com.freewheelin.pulley.revision2023.ui.activity.PlannerActivity.Companion.PLANNER_SUNDAY
 import com.freewheelin.pulley.revision2023.ui.adapter.MainPlannerListAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
@@ -55,6 +69,8 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     var wasInitUI = false
     private var isViewCreated = false
     val viewModel: MainFViewModel by viewModels()
+    private lateinit var getResult: ActivityResultLauncher<Intent>
+
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
         viewModel.onChallengeHeaderClick(item)
     }
@@ -63,10 +79,15 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     }
     private val plannerAdapter = MainPlannerListAdapter {
         // TODO
-        println("aspasp planner click!")
+        viewModel.selectedPlan.postValue(it)
     }
 
     companion object {
+        const val PLANNER_RESULT = 205
+        const val SOLVE_RESULT = 206
+        const val OPEN_PULLEY_WORKBOOK = "OPEN_PULLEY_WORKBOOK"
+        const val OPEN_PRACTICE = "OPEN_PRACTICE"
+        const val OPEN_CONCEPT = "OPEN_CONCEPT"
         @JvmStatic
         fun newInstance() = MainFragment()
     }
@@ -74,6 +95,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isViewCreated = true
+        initActivityResult()
         profileReceiver = object: BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
@@ -162,19 +184,72 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             lifecycleOwner = viewLifecycleOwner
 //            viewModel.initUserInfo()
             initRv()
+            viewModel.updateMainUserPlanner()
 
             dDayTv.setOnClickListener { onDDayBtnClicked() }
+            dDayLl.setOnClickListener { onDDayBtnClicked() }
             startStudyClBtn.setOnClickListener { onStartBtnClicked() }
+            startStudyClBtn2.setOnClickListener { onStartBtnClicked() }
             challengeActionBtn.setOnClickListener { onChallengeAction() }
             plannerPrevNaviBtn.setOnClickListener {
-                println("aspasp prevNaviBtn")
+                viewModel.movePrevPlannerWeek()
             }
             plannerNextNaviBtn.setOnClickListener {
-                println("aspasp nextNaviBtn")
+                viewModel.moveNextPlannerWeek()
+            }
+            dateRangeCl.setOnClickListener {
+                (plannerRv.layoutManager as? LinearLayoutManager)?.let {lm ->
+                    val plan = plannerAdapter.currentList.find { it.isToday }
+                    val index = plannerAdapter.currentList.indexOf(plan)
+                    lm.scrollToPositionWithOffset(index, 24)
+                }
+            }
+            todayBtn.setOnClickListener {
+                (plannerRv.layoutManager as? LinearLayoutManager)?.let {lm ->
+                    val plan = plannerAdapter.currentList.find { it.isToday }
+                    val index = plannerAdapter.currentList.indexOf(plan)
+                    if (index == -1) {
+                        viewModel.updateMainUserPlanner()
+                    } else {
+                        lm.scrollToPositionWithOffset(index, 24)
+                    }
+                }
+            }
+            makePlanLl.setOnClickListener {
+                val intent = Intent(requireContext(), PlannerActivity::class.java).apply {
+                    val monday = LocalDate(viewModel.selectedMondayOfTheWeek.value).toString("yyyy-MM-dd")
+                    val sunday = LocalDate(viewModel.selectedSundayOfTheWeek.value).toString("yyyy-MM-dd")
+                    putExtra(PLANNER_MONDAY, monday)
+                    putExtra(PLANNER_SUNDAY, sunday)
+                }
+                getResult.launch(intent)
             }
         }
         viewModel.apply {
-//            initPlannerItems()
+            selectedPlan.observe(viewLifecycleOwner) {
+                when (it.tag) {
+                    WeeklyPlanTag.PULLEY_WORKBOOK -> {
+                        val intent = Intent(requireContext(), SolveActivity::class.java).apply {
+                            putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
+                            putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                        }
+                        getResult.launch(intent)
+                    }
+                    WeeklyPlanTag.PRACTICE -> {
+                        // TODO 아직 없어서 테스트 못함 230802
+                    }
+                    WeeklyPlanTag.CONCEPT -> {
+                        viewModel.createLearningCourseOnStudentId(it.workbookId) {
+                            val chapterId = it.workbookId
+                            val name = it.title
+                            val intent = LearningCourseActivity.getIntent(requireContext(), chapterId, name)
+                            intent.putExtra(WHERE_ARE_YOU_FROM, LearningCourseActivity.FROM_MAIN_TAB)
+                            getResult.launch(intent)
+                        }
+                    }
+                    else -> {}
+                }
+            }
             challengeHeaders.observe(viewLifecycleOwner) {
                 challengeHeaderListAdapter.submitList(it)
                 if (it.isNotEmpty() && !wasInitUI) {
@@ -201,10 +276,23 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 challengeMissionAdapter.submitList(list)
 
             }
-            plannerItems.observe(viewLifecycleOwner) {
-                println("aspasp planer items22 :${it.size}")
-                plannerAdapter.submitList(it)
+
+            mainUserPlannerItems.observe(requireActivity()) { list ->
+                plannerAdapter.submitList(list)
             }
+            plannerAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    (binding.plannerRv.layoutManager as? LinearLayoutManager)?.let { lm ->
+                        val plan = plannerAdapter.currentList.find { it.isToday }
+                        val index = plannerAdapter.currentList.indexOf(plan)
+                        val marginTop = 24
+                        lm.scrollToPositionWithOffset(index, marginTop)
+                    }
+                }
+            })
             toastMessage.observe(viewLifecycleOwner) {
                 DaebakToast.show(requireContext(), it)
             }
@@ -230,6 +318,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 if (isAlreadyAppearedUser) return@observe
                 println("currentMission update 5 it.userStatus : ${it.userStatus}")
                 if (it.userStatus == ChallengeUserStatus.YET) {
+                    // 강제참여
                     this@MainFragment.joinChallenge(it.challengeId) {
                         println("currentMission update 6 after join")
                         val studentId = user?.studentID ?: ""
@@ -271,7 +360,6 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
 
     override fun onStop() {
         super.onStop()
-        viewModel.teacherSpyModeCount = 0
     }
 
     private fun initRv() {
@@ -285,11 +373,11 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 adapter = challengeMissionAdapter
                 viewModel.challengeDescAdapter = challengeMissionAdapter
             }
-//            plannerRv.apply {
-//                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//                adapter = plannerAdapter
-//                viewModel.plannerAdapter = plannerAdapter
-//            }
+            plannerRv.apply {
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                adapter = plannerAdapter
+                viewModel.plannerAdapter = plannerAdapter
+            }
 
             initChallenge()
         }
@@ -351,6 +439,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         }
     }
 
+    // TODO 마이페이지로 옮겨질것임
     private fun onChallengeAction() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "챌린지액션")
         viewModel.apply {
@@ -429,6 +518,24 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     fun firstHeaderMove() {
         if (isViewCreated) {
             viewModel.firstHeaderDetailForceMove()
+        }
+    }
+    private fun initActivityResult() {
+        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val fromMainTabCode = LearningCourseActivity.FROM_MAIN_TAB
+            when (it.resultCode) {
+                PLANNER_RESULT -> {
+                    val mondayStr = it.data?.getStringExtra("monday")
+                    val sundayStr = it.data?.getStringExtra("sunday")
+                    viewModel.updateMainUserPlanner(mondayStr, sundayStr)
+                }
+                SOLVE_RESULT, fromMainTabCode -> {
+                    val monday = viewModel.selectedMondayOfTheWeek.value?.toString("yyyy-MM-dd")
+                    val sunday = viewModel.selectedSundayOfTheWeek.value?.toString("yyyy-MM-dd")
+                    viewModel.updateMainUserPlanner(monday, sunday)
+                }
+                else -> {}
+            }
         }
     }
 }

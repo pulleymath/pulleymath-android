@@ -435,6 +435,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 
             holder.checkbox.isChecked = selectedChapter.containsAll(chapterTree.leaf().map { it.chapter})
             holder.checkbox.setOnCheckedChangeListener { _, isCheckecd ->
+
                 if(isCheckecd) {
                     selectedChapter.addAll(chapterTree.leaf().map { it.chapter})
                 } else
@@ -458,7 +459,7 @@ class AnalysisUnitFragment : Fragment(), DabakTabRadioListener, AnalysisTabDeleg
 }
 
 class UnitHolder(val itemBinding: ItemAnalysisUnitBinding): RecyclerView.ViewHolder(itemBinding.root) {
-    val expandableIndicator = itemBinding.expandableIndictor
+    val expandableIndicator = itemBinding.expandableIndicator
     val unitTv = itemBinding.intentionTv
     val problemCntTv= itemBinding.problemCntTv
     val correctRateHb = itemBinding.correctRateHb

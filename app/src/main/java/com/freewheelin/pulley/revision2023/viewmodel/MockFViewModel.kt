@@ -43,28 +43,38 @@ class MockFViewModel(application: Application): BaseAndroidViewModel(application
         challengeRepository.updateChallengeList(challenge)
     }
 
+    val filteredItemText = MutableLiveData<String>()
+    var filteredItemList = mutableListOf<String>()
     fun filter() {
         mockOrgList.value?.let { orgList ->
             var result = orgList
+            filteredItemList.clear()
 
             val selectedYear = year.keys.toList().get(yearSelectedPosition.value ?: 0)
             if (selectedYear != "출제 연도 전체") {
                 result = result.filter {"${it.year}년" == selectedYear }
+                filteredItemList.add(selectedYear)
             }
             val selectedMonth = month.keys.toList().get(monthSelectedPosition.value ?: 0)
             if (selectedMonth != "출제월 전체") {
                 result = result.filter {"${it.month}월" == selectedMonth }
+                filteredItemList.add(selectedMonth)
             }
             val selectedGrade = grade.keys.toList().get(gradeSelectedPosition.value ?: 0)
             if (selectedGrade != "학년 전체") {
                 result = result.filter {"고${it.grade}" == selectedGrade }
+                filteredItemList.add(selectedGrade)
             }
             val selectedType = type.keys.toList().get(typeSelectedPosition.value ?: 0)
             if (selectedType != "계열 전체") {
                 result = result.filter {it.type.getStr() == selectedType }
+                filteredItemList.add(selectedType)
             }
 
             filteredMockList.postValue(result)
+
+            val filterText = filteredItemList.joinToString(", ")
+            filteredItemText.postValue(filterText)
         }
     }
 }

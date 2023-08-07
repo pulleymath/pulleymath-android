@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.activity.WrongNoteActivity">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_200"
+        >
+
+        <LinearLayout
+            android:id="@+id/headerLl"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp56"
+            android:background="@{ vm.schoolTypeInRepo.isHigh? @color/black_200 : @color/white }"
+            tools:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp12"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/dp16"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_arrow_left_18_14"
+                imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
+            <TextView
+                android:id="@+id/headerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/h4"
+                android:layout_weight="999"
+                android:gravity="center"
+                android:text="@{ `오답노트` }"
+                tools:text="오답노트"
+                android:textColor="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                />
+            <View
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filterCl"
+            android:layout_width="@dimen/learning_wrongNote_filter_width"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_white_stroke_gray_300"
+            app:layout_constraintTop_toBottomOf="@+id/headerLl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <View
+                style="@style/Border_Gray_300_Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintBottom_toBottomOf="@id/tabLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabSelectedTextColor="@color/purple_300"
+                app:tabGravity="fill"
+                app:tabMaxWidth="1000dp"
+                app:tabIndicatorColor="@color/purple_300"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="fixed">
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notesRv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/dp32"
+            android:paddingTop="@dimen/dp48"
+            android:paddingEnd="@dimen/dp32"
+            android:paddingBottom="@dimen/dp32"
+            app:layout_constraintTop_toBottomOf="@+id/headerLl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/filterCl" />
+
+        <com.freewheelin.pulley.legacy.views.WrongManageView
+            android:id="@+id/wrongManageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:viewModel="@{ vm }"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

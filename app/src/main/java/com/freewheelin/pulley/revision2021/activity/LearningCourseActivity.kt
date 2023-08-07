@@ -60,23 +60,26 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val STUDY_CHAPTER_FLAG = "STUDY_CHAPTER"
         val STUDY_CHAPTER_NAME = "STUDY_CHAPTER_NAME"
         val SMALL_CHAPTER_INDEX = "SMALL_CHAPTER_INDEX"
-        val SUBJECT_ID = "SUBJECT_ID"
+//        val SUBJECT_ID = "SUBJECT_ID"
         val CHAPTER_ID = "CHAPTER_ID"
         val CHAPTER_NAME = "CHAPTER_NAME"
         val COOKING_ID = "COOKING_ID"
         val IS_PRIOR_CONCEPT = "IS_PRIOR_CONCEPT"
 
-        fun getIntent(context: Context, subjectId: Int, chapterId: Int, chapterName: String) : Intent {
+        val WHERE_ARE_YOU_FROM = "WHERE_ARE_YOU_FROM"
+        val FROM_MAIN_TAB = 302
+        val FROM_CONCEPT_TAB = 303
+        val FROM_BASE_CONCEPT = 304
+
+        fun getIntent(context: Context, chapterId: Int, chapterName: String) : Intent {
             return Intent(context, LearningCourseActivity::class.java).apply {
-                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
             }
         }
 
-        fun getIntent(context: Context, subjectId: Int, chapterId: Int, chapterName: String, cookingId: Int) : Intent {
+        fun getIntent(context: Context, chapterId: Int, chapterName: String, cookingId: Int) : Intent {
             return Intent(context, LearningCourseActivity::class.java).apply {
-                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
@@ -84,12 +87,11 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
         }
 
-        fun getIntent(context: Context, subjectId: Int, priorConcept: PriorConcept) : Intent {
+        fun getIntent(context: Context, priorConcept: PriorConcept) : Intent {
             val chapterId = priorConcept.priorConceptChapterId
             val chapterName = priorConcept.name
             val cookingId = priorConcept.priorConceptCookingId
             return Intent(context, LearningCourseActivity::class.java).apply {
-                putExtra(SUBJECT_ID, subjectId)
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
@@ -121,7 +123,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         addBackBtnCallback()
         ChannelIOWrapper.initialize(application, this)
 
-        val subjectId = intent.getIntExtra(SUBJECT_ID, -1)
         val selectedChapterId = intent.getIntExtra(CHAPTER_ID, -1)
         val selectedChapterName = intent.getStringExtra(CHAPTER_NAME) ?: ""
         val isPriorConceptScene = intent.getBooleanExtra(IS_PRIOR_CONCEPT, false)
@@ -132,7 +133,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             vm = viewModel
             isTablet = this@LearningCourseActivity.isTablet
             viewModel.setLessonHeaderTitle(selectedChapterName)
-            viewModel.selectedSubjectId = subjectId
             viewModel.fetchCourseList(selectedChapterId) {
                 if (isPriorConceptScene) goCookingIfPriorConceptCourse(it, cookingId)
             }
@@ -320,7 +320,8 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         if (isChannelIoForeground) {
             beginBlackChannelIoFrame()
         } else {
-            setResult(ConceptCourseFragment.RESULT_OK, intent)
+            val fromWhere = intent.getIntExtra(WHERE_ARE_YOU_FROM, -1)
+            setResult(fromWhere, intent)
             finish()
         }
     }
@@ -384,8 +385,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 viewModel.createLearningCourseOnStudentId(chapterId) {
                     val name = course.name ?: ""
                     val cookingId = course.targetConceptCookingId ?: -1
-                    val subjectId = viewModel.selectedSubjectId ?: -1
-                    startActivity(getIntent(this, subjectId, chapterId, name, cookingId))
+                    startActivity(getIntent(this, chapterId, name, cookingId))
                 }
             } else {
                 binding.pager.currentItem = viewModel.trimPosition(course)

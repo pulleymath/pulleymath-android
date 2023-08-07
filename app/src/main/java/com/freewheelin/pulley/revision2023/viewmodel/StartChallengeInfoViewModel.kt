@@ -11,9 +11,6 @@ class StartChallengeInfoViewModel(application: Application): BaseAndroidViewMode
 
     val couponImageUrl: String
         get() {
-//            return if (user?.serviceType?.isPaidUser == true)
-//                "https://pulley-common.s3.ap-northeast-2.amazonaws.com/app/images/challenge_paid_user_reward_coupon.png"
-//            else
             return "https://pulley-common.s3.ap-northeast-2.amazonaws.com/app/images/challenge_free_user_reward_coupon.png"
         }
 

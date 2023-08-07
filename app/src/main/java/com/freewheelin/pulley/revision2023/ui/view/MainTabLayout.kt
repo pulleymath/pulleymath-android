@@ -35,23 +35,22 @@ fun interface MainTabListener {
 enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: List<String>) {
     메인(0, 0, listOf("메인")),
     개념(1, 1, listOf("개념")),
-    유형(2, 2, listOf("유형")),
-    모의고사(3, 3, listOf("모의고사")),
-    테스트(4, 4, listOf("테스트")),
-    오답노트(5 ,5, listOf("오답노트")),
-    분석(6, 6, listOf("분석")),
-    과외(7, -1, listOf("과외")),
-    대학(8, 7, listOf("대학", "SSU진단", "KU진단"));
+    문제풀이(2, 2, listOf("문제풀이")),
+//    유형(2, 2, listOf("유형")),
+//    모의고사(3, 3, listOf("모의고사")),
+//    테스트(4, 4, listOf("테스트")),
+//    오답노트(5 ,5, listOf("오답노트")),
+
+    분석(3, 3, listOf("분석")),
+    과외(4, -1, listOf("과외")),
+    대학(5, 4, listOf("대학", "SSU진단", "KU진단"));
 
     companion object {
         fun convertMainTab(value: String): MainTab {
             return when (value) {
                 메인.name -> 메인
                 개념.name -> 개념
-                유형.name -> 유형
-                모의고사.name -> 모의고사
-                테스트.name -> 테스트
-                오답노트.name -> 오답노트
+                문제풀이.name -> 문제풀이
                 분석.name -> 분석
                 과외.name -> 과외
                 대학.name -> 대학
@@ -63,10 +62,7 @@ enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: Li
                 when (index) {
                     메인.indexOnTablet -> 메인
                     개념.indexOnTablet -> 개념
-                    유형.indexOnTablet -> 유형
-                    모의고사.indexOnTablet -> 모의고사
-                    테스트.indexOnTablet -> 테스트
-                    오답노트.indexOnTablet -> 오답노트
+                    문제풀이.indexOnTablet -> 문제풀이
                     분석.indexOnTablet -> 분석
                     과외.indexOnTablet -> 과외
                     대학.indexOnTablet -> 대학
@@ -76,10 +72,7 @@ enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: Li
                 when (index) {
                     메인.indexOnMobile -> 메인
                     개념.indexOnMobile -> 개념
-                    유형.indexOnMobile -> 유형
-                    모의고사.indexOnMobile -> 모의고사
-                    테스트.indexOnMobile -> 테스트
-                    오답노트.indexOnMobile -> 오답노트
+                    문제풀이.indexOnMobile -> 문제풀이
                     분석.indexOnMobile -> 분석
                     과외.indexOnMobile -> 과외
                     대학.indexOnMobile -> 대학
@@ -221,9 +214,9 @@ class MainTabLayout: FrameLayout {
         return MainTab.convertIndexToMainTab(context.isTablet, index)
     }
 
-    fun getTabletUnivTab(): TextView = binding.tab8
+    fun getTabletUnivTab(): TextView = binding.tab5
 
-    fun getMobileUnivTab(): TextView = binding.mobileTab7
+    fun getMobileUnivTab(): TextView = binding.mobileTab4
 
     fun updateSchoolType() {
         binding.schoolType = schoolType

@@ -75,14 +75,12 @@ class DisplayUtils {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                println("zxpzxp hide system ui2")
 //            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
 //                hideSystemUI()
             } else {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
                 actionBar?.hide()
-                println("zxpzxp hide system ui")
             }
         }
     }

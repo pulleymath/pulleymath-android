@@ -37,6 +37,7 @@ import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 import com.freewheelin.pulley.legacy.views.OMRView.OMRViewType
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import kotlin.collections.ArrayList
 
@@ -309,7 +310,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
         if(notSolvedProblem.isNotEmpty()) {
             DialogUtils.showExamSubmitDialog(this, notSolvedProblem.size) {
                 ContentManager.score(this, user!!, mockExam, problems.filter { it.userAnswer != null }.toSet(), time) {
-                    setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                    setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                     finish()
                 }
             }
@@ -320,7 +321,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
                 ContentManager.score(this, user!!, mockExam, problems.toSet(), time) {
                     val intent = MockReportActivity.getIntent(this, mockExam)
                     startActivity(intent)
-                    setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                    setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                     finish()
                 }
             }
@@ -411,7 +412,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
                     ContentManager.score(this, user!!, mockExam, problems.toSet(), time) {
                         val intent = MockReportActivity.getIntent(this, mockExam)
                         startActivity(intent)
-                        setResult(MockExamFragment.RESULT_MOCK_FINISH, intent)
+                        setResult(MockListActivity.RESULT_MOCK_FINISH, intent)
                         finish()
 
                     }

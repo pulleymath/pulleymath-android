@@ -223,14 +223,13 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 context.startActivity(intent)
             }
             additionalLearningBtn.setOnClickListener {
-                println("asoaso additional learning btn! subject: ${subject}")
                 if (subject == "물리학") {
                     val intent = Intent(SHOW_ADDITIONAL_LEARNING)
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                     close()
                 } else {
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.유형.indexOnTablet)
+                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.문제풀이.indexOnTablet)
                     intent.putExtra(PieceManager.EVENT_SCROLL, true)
                     intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
                     intent.putExtra(PieceManager.EVENT_FILTER, subject)

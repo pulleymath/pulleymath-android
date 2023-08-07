@@ -14,10 +14,11 @@ import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListene
 import com.freewheelin.pulley.revision2023.utils.listeners.PriorConceptClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.PurchaseGuideClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.PurchaseGuideCompareClickListener
+import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 
 class NoteStudyCardAdapter(
-    val viewModel: WrongNoteStudyViewModel,
+    val viewModel: WrongNoteActViewModel,
     val listener: NoteStudyClickListener
 ): ListAdapter<NoteStudyProblemWrapper, RecyclerView.ViewHolder>(DiffCallback<NoteStudyProblemWrapper>()) {
     private val typeHeader = 0

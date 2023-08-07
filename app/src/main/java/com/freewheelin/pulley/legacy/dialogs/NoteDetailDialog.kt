@@ -39,7 +39,7 @@ class NoteDetailDialog: Dialog {
                 binding.clearBtn.setImageResource(R.drawable.ic_check_purple_300_circle_24)
             } else {
                 binding.clearHiderCl.visibility = View.GONE
-                binding.clearBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18)
+                binding.clearBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18_ripple)
                 binding.clearBtn.setImageResource(R.drawable.ic_check_grey_circle)
             }
         }
@@ -53,7 +53,7 @@ class NoteDetailDialog: Dialog {
                 binding.scrapBtn.setImageResource(R.drawable.ic_tag_purple)
                 binding.tagIv.visibility = View.VISIBLE
             } else {
-                binding.scrapBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18)
+                binding.scrapBtn.setBackgroundResource(R.drawable.bg_gray_100_stroke_gray_300_round_18_ripple)
                 binding.scrapBtn.setImageResource(R.drawable.ic_tag_grey)
                 binding.tagIv.visibility = View.GONE
             }

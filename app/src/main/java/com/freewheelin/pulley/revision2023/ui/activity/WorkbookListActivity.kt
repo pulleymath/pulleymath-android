@@ -278,6 +278,10 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 ChallengeManager.CourseName.스타트챌린지_워크북.id,
             )
             completedDialog.moveEvent = moveEvent
+//            completedDialog.useCouponEvent = {
+//                val pgDialog = PurchaseGuideDialog.newInstance(2)
+//                supportFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+//            }
             supportFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog4") }
         }
     }

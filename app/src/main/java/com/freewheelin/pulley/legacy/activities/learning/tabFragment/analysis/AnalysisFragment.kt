@@ -56,6 +56,7 @@ import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.textViews.UpDownTextView.Change.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.github.mikephil.charting.charts.BarChart
@@ -549,12 +550,12 @@ class AnalysisFragment : MainTabFragment(),
 
     override fun onSolveWithPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = OMRActivity.getIntent(requireContext(), mockExam, makeNew)
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
     }
 
     override fun onSolveWithoutPrint(mockExam: MockExam, makeNew: Boolean) {
         val intent = SolveActivity.getIntent(requireContext(), mockExam, makeNew)
-        startActivityForResult(intent, MockExamFragment.REQUEST_MOCK_TEST)
+        startActivityForResult(intent, MockListActivity.RESULT_MOCK_FINISH)
     }
 
     fun saveImage(bitmap: Bitmap) {

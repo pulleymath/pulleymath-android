@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.legacy.activities.OMRActivity
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.REQUEST_MOCK_TEST
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment.Companion.RESULT_MOCK_FINISH
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.is10InchUI
 import com.freewheelin.pulley.legacy.bases.isTablet
@@ -44,6 +42,9 @@ import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.textViews.SortableListener
 import com.freewheelin.pulley.legacy.views.textViews.SortableTextView
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.REQUEST_MOCK_TEST
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.RESULT_MOCK_FINISH
+import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
 import com.github.mikephil.charting.data.Entry
 import java.util.*
 import kotlin.collections.ArrayList

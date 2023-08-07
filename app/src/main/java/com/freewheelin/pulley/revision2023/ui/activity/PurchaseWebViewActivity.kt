@@ -85,7 +85,6 @@ class PurchaseWebViewActivity : AppCompatActivity() {
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                    println("zxpzxp shouldOverrideUrlLoading : ${url}")
                     if (!URLUtil.isNetworkUrl(url) && !URLUtil.isJavaScriptUrl(url)) {
                         val uri = try {
                             Uri.parse(url)

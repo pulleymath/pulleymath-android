@@ -17,24 +17,25 @@ import com.freewheelin.pulley.databinding.FragmentMockTestBinding
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.hide
+import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.google.android.material.tabs.TabLayoutMediator
 
-interface MockTabListener {
-    fun onMockTestFinished()
-    fun onNewExamBtnClicked()
-}
+//interface MockTabListener {
+//    fun onMockTestFinished()
+//    fun onNewExamBtnClicked()
+//}
 
 class MockExamFragment : MainTabFragment(),
-        MockTabListener {
+    MockTabListener {
 
     companion object {
         @JvmStatic
         fun newInstance() = MockExamFragment()
-
-        const val RESULT_MOCK_FINISH = 20
-        const val REQUEST_MOCK_TEST = 10
+//
+//        const val RESULT_MOCK_FINISH = 20
+//        const val REQUEST_MOCK_TEST = 10
     }
 
     lateinit var binding: FragmentMockTestBinding
@@ -43,7 +44,7 @@ class MockExamFragment : MainTabFragment(),
         MyMockFragment.newInstance()
     )
 
-    override var type: MainTab = MainTab.모의고사
+    override var type: MainTab = MainTab.문제풀이
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

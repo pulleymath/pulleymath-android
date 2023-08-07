@@ -206,7 +206,7 @@ class MainActivity : PermissionActivity(),
                 viewModel.prevTab = Pair(prevType, prevPosition)
                 when (newType) {
                     MainTab.메인 -> {
-                        checkStartChallengeFinish()
+//                        checkStartChallengeFinish()
                         vp.setCurrentItem(position, 200)
                     }
                     MainTab.과외 -> openLesson()
@@ -378,9 +378,9 @@ class MainActivity : PermissionActivity(),
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
-                MockExamFragment.newInstance(),
-                SnackTestFragment.newInstance(),
-                WrongNoteStudyFragment.newInstance(),
+//                MockExamFragment.newInstance(),
+//                SnackTestFragment.newInstance(),
+//                WrongNoteStudyFragment.newInstance(),
                 AnalysisFragment.newInstance(),
                 MainLessonFragment.newInstance()
             )
@@ -389,9 +389,9 @@ class MainActivity : PermissionActivity(),
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
-                MockExamFragment.newInstance(),
-                SnackTestFragment.newInstance(),
-                WrongNoteStudyFragment.newInstance(),
+//                MockExamFragment.newInstance(),
+//                SnackTestFragment.newInstance(),
+//                WrongNoteStudyFragment.newInstance(),
                 AnalysisFragment.newInstance()
             )
         }
@@ -594,9 +594,9 @@ class MainActivity : PermissionActivity(),
     }
     private fun updateHeaderItems(isMiddle: Boolean) {
         binding.apply {
-            if (mainTl.getCurrentTab() == MainTab.모의고사 && isMiddle) {
-                mainTl.selectTap(2)
-            }
+//            if (mainTl.getCurrentTab() == MainTab.모의고사 && isMiddle) {
+//                mainTl.selectTap(2)
+//            }
             mainTl.updateSchoolType()
             alarmBtn.setColorFilter(ContextCompat.getColor(this@MainActivity, if (isMiddle) R.color.gray_500 else R.color.gray_700))
         }
@@ -638,7 +638,7 @@ class MainActivity : PermissionActivity(),
     }
     fun backMyPage(frag: Fragment, withAnim: Boolean = true) {
         removeSettingFragment(frag)
-        myPageFragment.binding.rv.adapter?.notifyDataSetChanged()
+        myPageFragment.binding.myPageMenuRv.adapter?.notifyDataSetChanged()
     }
 
     private fun removeSettingFragment(frag: Fragment) {
