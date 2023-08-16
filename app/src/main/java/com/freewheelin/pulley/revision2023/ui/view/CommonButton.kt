@@ -230,4 +230,5 @@ fun setCommonButtonIsLoading(view: CommonButton, value: Boolean) {
 fun setCommonButtonEnabled(view: CommonButton, value: Boolean) {
     println("setCommonButtonEnabled : $value")
     view.rootCl.setBackgroundResource(if (value) R.drawable.bg_purple_300_round_ripple else R.drawable.bg_purple_300_round_non_ripple)
+    view.rootCl.isEnabled = value
 }

@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.viewmodel.learningcourse
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.squareup.picasso.Picasso
 import io.channel.plugin.android.extension.doOnElse
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -151,4 +153,21 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
         )
     }
 
+    fun setCookingImgIv(src: String, iv: ImageView) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val requestCreator = Picasso.get()
+                .load(src)
+
+            val width = requestCreator.get().width
+            val height = requestCreator.get().height
+            withContext(Dispatchers.Main) {
+
+                requestCreator
+                    .resize(if (height > 5000) 3000 else width, 0)
+                    .onlyScaleDown()
+                    .into(iv)
+            }
+
+        }
+    }
 }

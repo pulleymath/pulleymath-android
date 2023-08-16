@@ -117,20 +117,73 @@ class ChallengeCompletedDialog(): DialogFragment() {
             if (nextCourse == null) {
                 subTitleTv.text = "모든 미션을 성공하면 50% 할인쿠폰을 드려요 :)"
                 nextChallengeTv.text = "쿠폰 발급받기"
+                println("couponEnter : 0")
                 nextChallengeBtnCl.setOnClickListener {
-                    dismiss()
+                    println("couponEnter : 1")
+                    println("couponEnter : viewModel.challenge.userChallengeId : ${viewModel.challenge.userChallengeId}")
                     viewModel.challenge.userChallengeId?.let { userChallengeId ->
 
                         viewModel.askForRedeemOfChallenge(userChallengeId) {
+                            dismiss()
+                            println("couponEnter : 2 : user?.serviceType : ${user?.serviceType}")
                             if (user?.serviceType?.isNoneUser == true) {
-                                val dialog = StartChallengeInfoDialog.newInstance(viewModel.challenge.challengeId, true)
-                                dialog.startCallback = { _ ->
-                                    val pgDialog = PurchaseGuideDialog.newInstance(2)
-                                    childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+                                println("couponEnter : 3")
+
+
+
+                                if (requireActivity() is AppCompatActivity && !requireActivity().isFinishing) {
+                                    println("couponEnter : 4")
+                                    val fm = requireActivity().supportFragmentManager
+                                    if (!fm.isDestroyed) {
+                                        println("couponEnter : 5")
+                                        val infoDialog = StartChallengeInfoDialog.newInstance(viewModel.challenge.challengeId, true)
+                                        infoDialog.startCallback = {
+                                            val pgDialog = PurchaseGuideDialog.newInstance(2)
+                                            try {
+                                                println("couponEnter : 6")
+                                                fm.let { pgDialog.show(it, "purchaseGuideDialog") }
+                                            } catch (e: IllegalStateException) {
+                                                fm.beginTransaction().add(pgDialog, "purchaseGuideDialog")
+                                                    .commitAllowingStateLoss()
+                                            }
+
+                                        }
+                                        try {
+                                            println("couponEnter : 6")
+                                            fm.let { infoDialog.show(it, tag) }
+                                        } catch (e: IllegalStateException) {
+                                            fm.beginTransaction().add(infoDialog, tag)
+                                                .commitAllowingStateLoss()
+                                        }
+                                    }
                                 }
-                                childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
+
+
+
+//
+//                                val dialog = StartChallengeInfoDialog.newInstance(viewModel.challenge.challengeId, true)
+//                                dialog.startCallback = { _ ->
+//                                    val pgDialog = PurchaseGuideDialog.newInstance(2)
+//                                    childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+//                                }
+//                                childFragmentManager.let { dialog.show(it, "StartChallengeEndInfoDialog") }
+
+
+
+
+
+
+
+
                             } else {
+                                println("couponEnter : 7")
                                 DaebakToast.show(requireContext(), "쿠폰 발급이 완료됐어요! 마이페이지에서 쿠폰함을 확인하세요 :)")
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                println("couponEnter : 8")
+                                delay(500)
+                                dismiss()
+                                println("couponEnter : 9")
                             }
                         }
                     }

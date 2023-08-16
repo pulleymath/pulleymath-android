@@ -56,7 +56,7 @@ class ConceptCourseFragment : MainTabFragment() {
     lateinit var binding: FragmentConceptCourseBinding
     private var isViewCreated = false
     val viewModel: ConceptCourseViewModel by viewModels()
-    private lateinit var getResult: ActivityResultLauncher<Intent>
+//    private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var reconfigureReceiver: BroadcastReceiver
 
@@ -103,7 +103,7 @@ class ConceptCourseFragment : MainTabFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initActivityResult()
+//        initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_concept_course, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.CONCEPT_STUDY_MOVE_EVENT))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
@@ -272,44 +272,84 @@ class ConceptCourseFragment : MainTabFragment() {
             }
         }
     }
-
-    private fun initActivityResult() {
-        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
-                FROM_CONCEPT_TAB -> ConceptLearningUsageMonitor.finishConceptLearning()
-                CHALLENGE_TUTORIAL_FINISH -> {
-                    viewModel.completedTutorial { startChallenge ->
-                        // TODO 챌린지 완료 후
-                        viewModel.initHeaderSubject()
-                        viewModel.updateChallenge(startChallenge)
+    val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        when (it.resultCode) {
+            FROM_CONCEPT_TAB -> {
+                val reFetchReceiverIntent = Intent(RE_CONFIGURE_UI)
+                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(reFetchReceiverIntent)
+                ConceptLearningUsageMonitor.finishConceptLearning()
+            }
+            CHALLENGE_TUTORIAL_FINISH -> {
+                viewModel.completedTutorial { startChallenge ->
+                    // TODO 챌린지 완료 후
+                    viewModel.initHeaderSubject()
+                    viewModel.updateChallenge(startChallenge)
 //                        fetch(viewModel.getInitHeaderBySchoolType().rawValue)
-                        val turnOnCompletedDialog = {
-                            val moveEvent: (ChallengeCourse?) -> Unit = { it ->
-                                ChallengeManager.getMainTabMoveIntent(it).let {
-                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
-                                }
+                    val turnOnCompletedDialog = {
+                        val moveEvent: (ChallengeCourse?) -> Unit = { it ->
+                            ChallengeManager.getMainTabMoveIntent(it).let {
+                                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
                             }
+                        }
 
-                            val completedDialog = ChallengeCompletedDialog.newInstance(
-                                challenge = startChallenge,
-                                completedCourseId = ChallengeManager.CourseName.스타트챌린지_개념.id,
-                                isDelayedShowNextBtn = true
-                            )
-                            completedDialog.moveEvent = moveEvent
+                        val completedDialog = ChallengeCompletedDialog.newInstance(
+                            challenge = startChallenge,
+                            completedCourseId = ChallengeManager.CourseName.스타트챌린지_개념.id,
+                            isDelayedShowNextBtn = true
+                        )
+                        completedDialog.moveEvent = moveEvent
 //                            completedDialog.useCouponEvent = {
 //                                val pgDialog = PurchaseGuideDialog.newInstance(2)
 //                                childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
 //                            }
-                            childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
-                        }
-
-                        val finishGuideDialog = ChallengeGuideManager
-                            .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)
-                        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
+                        childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                     }
+
+                    val finishGuideDialog = ChallengeGuideManager
+                        .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)
+                    childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
                 }
             }
         }
+    }
+
+    private fun initActivityResult() {
+//        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//            when (it.resultCode) {
+//                FROM_CONCEPT_TAB -> ConceptLearningUsageMonitor.finishConceptLearning()
+//                CHALLENGE_TUTORIAL_FINISH -> {
+//                    viewModel.completedTutorial { startChallenge ->
+//                        // TODO 챌린지 완료 후
+//                        viewModel.initHeaderSubject()
+//                        viewModel.updateChallenge(startChallenge)
+////                        fetch(viewModel.getInitHeaderBySchoolType().rawValue)
+//                        val turnOnCompletedDialog = {
+//                            val moveEvent: (ChallengeCourse?) -> Unit = { it ->
+//                                ChallengeManager.getMainTabMoveIntent(it).let {
+//                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
+//                                }
+//                            }
+//
+//                            val completedDialog = ChallengeCompletedDialog.newInstance(
+//                                challenge = startChallenge,
+//                                completedCourseId = ChallengeManager.CourseName.스타트챌린지_개념.id,
+//                                isDelayedShowNextBtn = true
+//                            )
+//                            completedDialog.moveEvent = moveEvent
+////                            completedDialog.useCouponEvent = {
+////                                val pgDialog = PurchaseGuideDialog.newInstance(2)
+////                                childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
+////                            }
+//                            childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
+//                        }
+//
+//                        val finishGuideDialog = ChallengeGuideManager
+//                            .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)
+//                        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
+//                    }
+//                }
+//            }
+//        }
     }
 
     interface ChapterItemClickListener {

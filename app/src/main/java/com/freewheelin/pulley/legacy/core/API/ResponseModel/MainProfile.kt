@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.legacy.core.API.ResponseModel
 
+import com.freewheelin.pulley.legacy.assets.Grade
 import com.freewheelin.pulley.legacy.model.SignInChannel
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
@@ -33,6 +34,16 @@ data class MainProfileV4 (
                 defaultDDay.getDDayText(null)
             } else {
                 defaultDDay.getDDayText(existTarget?.third)
+            }
+        }
+    val affiliationAndGradeStr: String
+        get() {
+            return if (serviceType.isGuestUser) ""
+            else {
+                val affiliation = schoolName ?: regionName ?: ""
+                val gradeStr = Grade.init(grade ?: return "학생").text
+
+                "$affiliation · $gradeStr"
             }
         }
 }

@@ -16,14 +16,23 @@ data class MainUserPlannerItem (
     override val tag: WeeklyPlanTag?,
     val statusOfDay: WeeklyPlanStatus,
     val statusOfPlan: WeeklyPlanStatus,
+    val childrenCount: Int? = null,
     val totalProblemCount: Int?,
     val solvedProblemCount: Int?,
     val correctRate: Int?,
 ): UserPlannerItem(dailyPlanId, itemId, title, date, itemType, tag, workbookId), BaseDiffItem {
 
-    val isAllPlanOfDayCompleted: Boolean
+    val isChildrenEmpty: Boolean
+        get() {
+            return childrenCount == 0
+        }
+    val isCompleted: Boolean
         get() {
             return statusOfDay == WeeklyPlanStatus.DONE
+        }
+    val isFailed: Boolean
+        get() {
+            return statusOfDay == WeeklyPlanStatus.FAILED
         }
 
     override fun getId(): String {
@@ -54,6 +63,7 @@ data class MainUserPlannerItem (
                 statusOfDay = plan.status,
                 statusOfPlan = WeeklyPlanStatus.NONE,
                 tag = null,
+                childrenCount = plan.plans.size,
                 totalProblemCount = 0,
                 solvedProblemCount = null,
                 correctRate = null,
@@ -71,7 +81,8 @@ data class MainUserPlannerItem (
                 statusOfDay = plan.status,
                 statusOfPlan = WeeklyPlanStatus.NONE,
                 tag = null,
-                totalProblemCount = 0,
+                childrenCount = plan.plans.size,
+                totalProblemCount = null,
                 solvedProblemCount = null,
                 correctRate = null,
                 workbookId = -1,

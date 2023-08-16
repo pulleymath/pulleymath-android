@@ -16,7 +16,6 @@ import com.freewheelin.pulley.revision2023.utils.listeners.StudyPlannerItemClick
 
 class StudyPlannerItemViewHolder(
     val binding: ItemStudyPlannerBinding,
-    private val listener: StudyPlannerItemClickListener
 ): RecyclerView.ViewHolder(binding.root) {
     private val viewContext: Context = binding.root.context
 
@@ -30,7 +29,6 @@ class StudyPlannerItemViewHolder(
     fun bind(item: StudyPlannerItem, position: Int) {
         binding.apply {
             this.item = item
-            this.listener = listener
             directoryLl.visibleIf(item.itemType == StudyPlannerItemType.DIRECTORY)
             workbookLl.visibleIf(item.itemType == StudyPlannerItemType.WORKBOOK)
             

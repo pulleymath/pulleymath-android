@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.legacy.core.manage
 
 import android.content.Context
+import android.util.Log
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.StudentGoalInfo
@@ -12,11 +13,13 @@ import com.freewheelin.pulley.legacy.core.manage.TestManager.COUNT_MAXIMUM_DAILY
 import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.legacy.model.contents.*
 import com.freewheelin.pulley.legacy.utils.*
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 import java.util.*
+import kotlin.Exception
 
 
 object ContentManager {
@@ -204,7 +207,7 @@ object ContentManager {
         })
     }
 
-    fun makeRecommendPiece(context: Context, user: UserV4, successCB: (context: Book) -> Unit) {
+    fun makeRecommendPiece(context: Context, user: UserV4, successCB: (context: Book) -> Unit, failedCb: (String?) -> Unit) {
         API_V3.makeRecommend(user.studentID).enqueue(object: Callback<ResponseBody<Book>>{
             override fun onFailure(call: Call<ResponseBody<Book>>, t: Throwable) {
                 responseFailed(context, t)
@@ -214,8 +217,14 @@ object ContentManager {
                 val piece = response.body()
                 if(response.isSuccessful && piece != null)
                     piece.data?.let { successCB(it) }
-                else
-                    responseError(context, response)
+                else {
+                    try {
+                        val errorBody = Gson().fromJson(response.errorBody()?.string(), ResponseBody::class.java)
+                        failedCb(errorBody.error)
+                    } catch (e: Exception) {
+                        Log.e("ContentManager", "errorBody Parsing ERROR!")
+                    }
+                }
             }
         })
     }

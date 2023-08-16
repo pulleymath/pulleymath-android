@@ -25,8 +25,8 @@ import com.freewheelin.pulley.legacy.bases.BaseActivity
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.isTablet
-import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
 import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFragment
@@ -43,6 +43,7 @@ import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData
@@ -64,7 +65,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         val CHAPTER_ID = "CHAPTER_ID"
         val CHAPTER_NAME = "CHAPTER_NAME"
         val COOKING_ID = "COOKING_ID"
-        val IS_PRIOR_CONCEPT = "IS_PRIOR_CONCEPT"
+        val FROM_PRIOR_CONCEPT = "FROM_PRIOR_CONCEPT"
 
         val WHERE_ARE_YOU_FROM = "WHERE_ARE_YOU_FROM"
         val FROM_MAIN_TAB = 302
@@ -83,7 +84,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
-                putExtra(IS_PRIOR_CONCEPT, true)
+                putExtra(FROM_PRIOR_CONCEPT, true)
             }
         }
 
@@ -95,7 +96,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 putExtra(CHAPTER_ID, chapterId)
                 putExtra(CHAPTER_NAME, chapterName)
                 putExtra(COOKING_ID, cookingId)
-                putExtra(IS_PRIOR_CONCEPT, true)
+                putExtra(FROM_PRIOR_CONCEPT, true)
             }
         }
     }
@@ -125,7 +126,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
         val selectedChapterId = intent.getIntExtra(CHAPTER_ID, -1)
         val selectedChapterName = intent.getStringExtra(CHAPTER_NAME) ?: ""
-        val isPriorConceptScene = intent.getBooleanExtra(IS_PRIOR_CONCEPT, false)
+        val fromPriorConceptScene = intent.getBooleanExtra(FROM_PRIOR_CONCEPT, false)
         val cookingId = intent.getIntExtra(COOKING_ID, -1)
 
         binding.apply {
@@ -134,9 +135,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             isTablet = this@LearningCourseActivity.isTablet
             viewModel.setLessonHeaderTitle(selectedChapterName)
             viewModel.fetchCourseList(selectedChapterId) {
-                if (isPriorConceptScene) goCookingIfPriorConceptCourse(it, cookingId)
+                if (fromPriorConceptScene) goCookingIfPriorConceptCourse(it, cookingId)
             }
-            viewModel.isPriorConceptScene.postValue(isPriorConceptScene)
+            viewModel.isPriorConceptScene.postValue(fromPriorConceptScene)
 
             pencilcaseView.listener = this@LearningCourseActivity
 
@@ -320,9 +321,22 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         if (isChannelIoForeground) {
             beginBlackChannelIoFrame()
         } else {
-            val fromWhere = intent.getIntExtra(WHERE_ARE_YOU_FROM, -1)
-            setResult(fromWhere, intent)
-            finish()
+            finishWithResult()
+        }
+    }
+    fun finishWithResult() {
+        setResultFromWhere()
+        finish()
+    }
+    private fun setResultFromWhere() {
+        val fromWhere = intent.getIntExtra(SolveActivity.WHERE_ARE_YOU_FROM, -1)
+        when (fromWhere) {
+            FROM_MAIN_TAB -> {
+                setResult(MainFragment.SOLVE_RESULT)
+            }
+            FROM_CONCEPT_TAB -> {
+                setResult(FROM_CONCEPT_TAB)
+            }
         }
     }
     fun addBackBtnCallback() {

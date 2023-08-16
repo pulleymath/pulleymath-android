@@ -16,7 +16,7 @@
         android:id="@+id/rootCv"
         android:layout_width="match_parent"
         tools:layout_width="match_parent"
-        android:layout_height="132dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_columnWeight="1"
@@ -24,15 +24,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_white_ripple">
 
 
             <ImageView
                 android:id="@+id/iconIv"
-                android:layout_width="98dp"
-                android:layout_height="98dp"
-                android:layout_marginStart="16dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginVertical="24dp"
                 android:src="@drawable/ic_study_pencil_calendar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

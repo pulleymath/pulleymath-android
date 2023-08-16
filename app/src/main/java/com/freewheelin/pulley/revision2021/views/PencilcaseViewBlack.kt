@@ -115,10 +115,10 @@ class CookingPencilcaseView: ConstraintLayout, CookingPencilcase {
             listener?.onEditTypeChanged(value)
         }
     private fun setMode(mode: Xfermode?) {
-        println("xjcl2 - setMode nul? :${mode == null}, memoviews size: ${memoViews.size}")
-        memoViews.forEach {
-            println("xjcl2 - setmode  memoId: ${it.memoId}")
-        }
+//        println("xjcl2 - setMode nul? :${mode == null}, memoviews size: ${memoViews.size}")
+//        memoViews.forEach {
+//            println("xjcl2 - setmode  memoId: ${it.memoId}")
+//        }
         memoViews.forEach {
             if (mode == null) it.setPencil(mode, penColor.value, penColor.alpha, thickness.width)
             else it.setEraser(ERASE_THICK)

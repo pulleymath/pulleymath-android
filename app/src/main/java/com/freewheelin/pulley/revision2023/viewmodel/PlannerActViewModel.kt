@@ -42,7 +42,7 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     private val _studyPlanItems = MutableLiveData<List<StudyPlannerItem>>(listOf())
     val studyPlanItems: LiveData<List<StudyPlannerItem>> = _studyPlanItems
     val selectedUserPlan = MutableLiveData<UserPlannerItem>()
-    val showEmptyText = MutableLiveData<Boolean>(false)
+    val showEmptyText = MutableLiveData<Boolean>(true)
 
     fun updateUserPlanList(monday: String? = null, sunday: String? = null) {
         val datePair = if (monday != null && sunday != null) {
@@ -102,7 +102,7 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     fun deleteUserPlan(item: UserPlannerItem) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             plannerRepository.deleteUserPlan(item)
-            var currentList = plannerAdapter.currentList.toMutableList()
+            val currentList = plannerAdapter.currentList.toMutableList()
 
             val itemIndex = currentList.indexOf(item)
             currentList.removeAt(itemIndex)
@@ -125,52 +125,130 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     fun fetchStudyPlanWorkbookList(subjectId: Int) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val items = plannerRepository.fetchStudyPlanOnSubject(subjectId)
-            showEmptyText.postValue(items.isNotEmpty())
+            showEmptyText.postValue(items.isEmpty())
             _studyPlanItems.postValue(items)
         }
     }
 
     fun expandSelectedPlan(plan: UserPlannerItem) {
+        println("expandSelectedPlan ------------------------------------------")
+        println("expandSelectedPlan title: ${plan.title}")
         val chapter = plan.chapterInfo ?: return
+        println("expandSelectedPlan subjectId: ${chapter.subjectId}")
+        println("expandSelectedPlan chapterBigId: ${chapter.chapterBigId}")
+        println("expandSelectedPlan chapterMiddleId: ${chapter.chapterMiddleId}")
+        println("expandSelectedPlan chapterSmallId: ${chapter.chapterSmallId}")
 
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val workbookId = plan.workbookId
             val subjectId = chapter.subjectId
             val items = plannerRepository.fetchStudyPlanOnSubject(subjectId)
 
-            val bigChapterId = chapter.chapterBigId ?: -1
-            val middleChapterId = chapter.chapterMiddleId
-            val smallChapterId = chapter.chapterSmallId
-
             studyPlannerAdapter.clearItems()
             studyPlannerAdapter.setItems(items)
+            println("expandSelectedPlan item size : ${studyPlannerAdapter.mItems.size}")
             withContext(Dispatchers.Main) {
                 val schoolType1 = SubjectV3.codeToSchoolType(subjectId)
                 userRepository.updateSchoolType(schoolType1)
                 selectedSubjectId.postValue(subjectId)
                 studyPlannerAdapter.notifyDataSetChanged()
-                showEmptyText.postValue(items.isNotEmpty())
+                showEmptyText.postValue(items.isEmpty())
             }
 
-
-            println("bigChapterId:${bigChapterId}")
             val chapterItems = studyPlannerAdapter.mItems
-            val bigPlan = chapterItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.chapterId == bigChapterId } ?: return@launch
+
+            var bigChapterId: Int? = null
+            var middleChapterId: Int? = null
+            var smallChapterId: Int? = null
+
+            chapterItems.forEach {
+                (it.item as? StudyPlannerItem)?.let { bigChapter ->
+                    // 대단원
+                    if (bigChapter.itemType.isDirectory) {
+                        bigChapter.items?.forEach { middleAddedChapter ->
+                            if (middleAddedChapter.itemType.isDirectory) {
+                                middleAddedChapter.items?.forEach { smallAddedChapter ->
+                                    if (smallAddedChapter.itemType.isDirectory) {
+                                        smallAddedChapter.items?.forEach { item ->
+                                            if (item.workbookId == workbookId) {
+                                                bigChapterId = bigChapter.id
+                                                middleChapterId = middleAddedChapter.id
+                                                smallChapterId = smallAddedChapter.id
+                                            }
+                                        }
+                                    } else {
+                                        if (smallAddedChapter.workbookId == workbookId) {
+                                            bigChapterId = bigChapter.id
+                                            middleChapterId = middleAddedChapter.id
+                                            smallChapterId = smallAddedChapter.id
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (middleAddedChapter.workbookId == workbookId) {
+                                    bigChapterId = bigChapter.id
+                                    middleChapterId = middleAddedChapter.id
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            println("apapap : bci : ${bigChapterId}, mci : ${middleChapterId}, sci : ${smallChapterId}")
+
+            val bigPlan = chapterItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.id == bigChapterId } ?: return@launch
+            println("expandSelectedPlan big title : ${(bigPlan.item as StudyPlannerItem).title}")
+            println("expandSelectedPlan big chapterName : ${(bigPlan.item as StudyPlannerItem).chapterName}")
             val bigPlanIndex = chapterItems.indexOf(bigPlan)
+            println("expandSelectedPlan bigPlanIndex : ${bigPlanIndex}")
 
             CoroutineScope(Dispatchers.Main).launch {
                 studyPlannerAdapter.forceClickListener(bigPlanIndex) { bigAddedItems ->
                     println("middleChapterId:${middleChapterId}")
-                    val middlePlan = bigAddedItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.chapterId == middleChapterId } ?: return@forceClickListener
+                    println("bigAddedItems outer subjectId :${subjectId} , middleChapterId : ${middleChapterId}")
+
+                    bigAddedItems.forEach {item ->
+                        (item.item as? StudyPlannerItem)?.let {
+                            println("bigAddedItems [${item.depth}] - subjectId:${it.subjectId}, id:${it.id}, ${it.chapterName}")
+                        }
+                    }
+
+                    val middlePlan = bigAddedItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.id == middleChapterId } ?: return@forceClickListener
+                    println("expandSelectedPlan middle title : ${(middlePlan.item as StudyPlannerItem).title}")
+                    println("expandSelectedPlan middle chapterName : ${(middlePlan.item as StudyPlannerItem).chapterName}")
+
                     val middlePlanIndex = bigAddedItems.indexOf(middlePlan)
+                    println("expandSelectedPlan middlePlanIndex : ${middlePlanIndex}")
 
                     studyPlannerAdapter.forceClickListener(middlePlanIndex) { middleAddedItems ->
                         println("smallChapterId:${smallChapterId}")
-                        val smallPlan = bigAddedItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.chapterId == smallChapterId } ?: return@forceClickListener
-                        val smallPlanIndex = bigAddedItems.indexOf(smallPlan)
+
+                        println("middleAddedItems outer subjectId :${subjectId} , smallChapterId : ${smallChapterId}")
+
+                        middleAddedItems.forEach {item ->
+                            (item.item as? StudyPlannerItem)?.let {
+                                println("middleAddedItems [${item.depth}] - subjectId:${it.subjectId}, id:${it.id}, ${it.chapterName ?: it.title}")
+                            }
+                        }
+
+
+                        val smallPlan = middleAddedItems.find { (it.item as? StudyPlannerItem)?.subjectId == subjectId && (it.item as? StudyPlannerItem)?.id == smallChapterId } ?: return@forceClickListener
+                        println("expandSelectedPlan small title : ${(smallPlan.item as StudyPlannerItem).title}")
+                        println("expandSelectedPlan small chapterName : ${(smallPlan.item as StudyPlannerItem).chapterName}")
+                        val smallPlanIndex = middleAddedItems.indexOf(smallPlan)
+                        println("expandSelectedPlan smallPlanIndex : ${smallPlanIndex}")
 
                         studyPlannerAdapter.forceClickListener(smallPlanIndex) { allItems ->
-                            val thePlan = allItems.find { (it.item as? StudyPlannerItem)?.workbookId == workbookId } ?: return@forceClickListener
+
+                            println("allItems outer subjectId :${subjectId} , workbookId : ${workbookId}")
+
+                            allItems.forEach {item ->
+                                (item.item as? StudyPlannerItem)?.let {
+                                    println("allItems [${item.depth}] - subjectId:${it.subjectId}, id:${it.id}, ${it.chapterName ?: it.title}")
+                                }
+                            }
+
+                            val thePlan = allItems.find { (it.item as? StudyPlannerItem)?.id == workbookId } ?: return@forceClickListener
                             val planIndex = allItems.indexOf(thePlan)
                             studyPlannerAdapter.changePlanBgColor(planIndex)
                         }

@@ -7,6 +7,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfileV4
+import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.challenge.*
@@ -29,7 +30,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.joda.time.DateTimeConstants.*
 import org.joda.time.LocalDate
 import java.util.concurrent.TimeUnit
 
@@ -67,8 +67,10 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     private val _mainUserPlannerItems = MutableLiveData<List<MainUserPlannerItem>>()
     val mainUserPlannerItems: LiveData<List<MainUserPlannerItem>> = _mainUserPlannerItems
 
-    val selectedMondayOfTheWeek = MutableLiveData<LocalDate>()
-    val selectedSundayOfTheWeek = MutableLiveData<LocalDate>()
+    val selectedMondayOfTheWeek = MutableLiveData<LocalDate>(LocalDate.now())
+    val selectedSundayOfTheWeek = MutableLiveData<LocalDate>(LocalDate.now())
+
+    val isClickedPlanMakeBtn = MutableLiveData<Boolean>()
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
@@ -116,19 +118,39 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         }
     }
 
+    fun checkPlanMakeBtn() {
+        val clickedInfo = Preferences.checkPlanMakeBtnClicked
+        val clickedIds = clickedInfo.studentIds
+        val planMakeBtnClicked = clickedIds.contains(user?.studentID)
+        isClickedPlanMakeBtn.postValue(planMakeBtnClicked)
+    }
     fun updateMainUserPlanner(monday: String? = null, sunday: String? = null) {
         val datePair = if (monday != null && sunday != null) {
             Pair(monday, sunday)
         } else {
             plannerRepository.initPlannerWeek()
         }
-        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
-            val items = plannerRepository.getWeeklyPlans(datePair)
+        selectedMondayOfTheWeek.postValue(LocalDate(datePair.first))
+        selectedSundayOfTheWeek.postValue(LocalDate(datePair.second))
+        compositeDisposable += plannerRepository.fetchMainPlannerItems(datePair)
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ res ->
+                val list = if (res.data == null) {
+                    listOf()
+                } else {
+                    val mainPlannerList = mutableListOf<MainUserPlannerItem>()
+                    res.data!!.forEach {
+                        val list = MainUserPlannerItem.convertFromPlanRes(it)
+                        mainPlannerList.addAll(list)
+                    }
+                    mainPlannerList
+                }
+                _mainUserPlannerItems.postValue(list)
 
-            _mainUserPlannerItems.postValue(items)
-            selectedMondayOfTheWeek.postValue(LocalDate(datePair.first))
-            selectedSundayOfTheWeek.postValue(LocalDate(datePair.second))
-        }
+            }, { error ->
+                Log.e("updateMainUserPlanner", " error : ${error.localizedMessage}")
+            })
     }
 
     fun collectChallengeDetail(challengeId: Int) {

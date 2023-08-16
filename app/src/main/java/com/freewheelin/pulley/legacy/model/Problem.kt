@@ -45,7 +45,13 @@ enum class Result(val rawValue: Int) {
     correct(1),
     incorrect(-2),
     yet(0),
-    temp(-999)
+    temp(-999);
+
+    val isYet: Boolean
+        get() {
+            return this == yet
+        }
+
 }
 
 enum class ProblemErrorStatus {

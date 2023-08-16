@@ -71,7 +71,7 @@ class PlannerActivity : AppCompatActivity() {
             plannerPrevNaviBtn.setOnClickListener {
                 viewModel.movePrevPlannerWeek()
             }
-            plannerNextNaviBtn.setOnClickListener {
+            plannerNextNaviBtn.setOnClickListener { 
                 viewModel.moveNextPlannerWeek()
             }
 

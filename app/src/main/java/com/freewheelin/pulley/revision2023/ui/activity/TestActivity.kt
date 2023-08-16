@@ -224,10 +224,10 @@ class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListene
         // TODO 공부하러가기 or 오답풀러가기
         if(test.wrongInfo.totalProblemCount == 0) {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "유형학습")
-//            (activity as MainActivity).tabMove(2)
+            finish()
         } else {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "오답테스트-링크", "오답노트")
-//            (activity as MainActivity).tabMove(5)
+            finish()
         }
     }
 

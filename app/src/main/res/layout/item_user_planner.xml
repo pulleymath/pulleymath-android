@@ -34,7 +34,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             >
-<!--            android:background="@drawable/bg_white_round_10_ripple_purple_100"-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -101,13 +100,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/bg_white_ripple"
-            tools:background="@color/gray_150"
             visibleIf="@{ item.plannerItemTypeOb.isBody }"
             tools:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-<!--            android:background="@{ item.isSelectedUserPlan ? @color/gray_150 : @color/white }"-->
 
             <LinearLayout
                 android:layout_width="8dp"
@@ -119,67 +115,76 @@
                     android:background="@{ item.isSelectedDate ? @color/purple_300 : @color/gray_400, default=@color/purple_300 }"/>
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-
-                app:cardElevation="0dp"
-                app:cardCornerRadius="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{ item.tagStr }"
-                    tools:text="모의고사"
-                    style="@style/mo_h6"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    mainPlannerCategory="@{ item.tagStr }"
-                    tools:textColor="@color/blue_400"
-                    tools:background="@color/blue_100"/>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/bodyContentLl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                >
-                <TextView
-                    android:id="@+id/titleTv"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_white_round_5_ripple_gray300"
+                tools:background="@color/gray_150">
+                <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{ item.title }"
-                    tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
-                    style="@style/b2"
-                    android:paddingVertical="8dp"
-                    android:textColor="@color/gray_800"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.tagStr }"
+                        tools:text="모의고사"
+                        style="@style/mo_h6"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        mainPlannerCategory="@{ item.tagStr }"
+                        tools:textColor="@color/blue_400"
+                        tools:background="@color/blue_100"/>
+                </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="@{ () -> listener.onRemoveItemClick(item) }">
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_trash_outlined"
-                    android:padding="4dp"
-                    android:background="@drawable/bg_gray_300_round_5_ripple"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_gravity="center"
-                    />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    >
+                    <TextView
+                        android:id="@+id/titleTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.title }"
+                        tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
+                        style="@style/b2"
+                        android:paddingVertical="8dp"
+                        android:textColor="@color/gray_800"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{ () -> listener.onRemoveItemClick(item) }">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_minus_gray_700"
+                        android:padding="4dp"
+                        android:background="@drawable/bg_gray_300_round_5_ripple"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -205,72 +210,6 @@
             tools:background="@drawable/bg_white_round_bottom_corner_stroke_purple_300_width_1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/nothingBodyLl"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/bg_white_round_10_ripple_purple_100"-->
-<!--            tools:background="@drawable/bg_white_stroke_purple_300_round_10"-->
-<!--            android:orientation="horizontal"-->
-<!--            visibleIf="@{ item.plannerPositionOb.isNothingBody }"-->
-<!--            tools:visibility="visible"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:onClick="@{ () -> listener.onPlanClick(item) }"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent">-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:background="@{ item.isSelectedUserPlan ? @drawable/bg_transparent_stroke_purple_300_round_10 : @drawable/bg_transparent_stroke_gray_400_round_10 }"-->
-<!--                android:padding="16dp"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="@style/h3"-->
-<!--                    android:text="@{ item.dayOfMonth, default=18 }"-->
-<!--                    makePlannerHeaderTextColor="@{ item }"-->
-<!--                    tools:textColor="@color/gray_700" />-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="@style/b2"-->
-<!--                    android:text="@{ `(` + item.dayOfWeek + `)` , default=`(화)` }"-->
-<!--                    android:textColor="@{ item.isPast ? @color/gray_400 : item.isToday ? @color/purple_300 : @color/gray_700, default=@color/gray_700 }"-->
-<!--                    android:layout_marginStart="2dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="@{ item.title, default=`오늘의 일정이 없네요. \n 새로 추가해보세요!` }"-->
-<!--                    android:maxLines="2"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:gravity="center"-->
-<!--                    style="@style/b2"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    android:textColor="@color/gray_500"/>-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="@style/h3"-->
-<!--                    android:text="@{ item.dayOfMonth, default=18 }"-->
-<!--                    android:visibility="invisible"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    style="@style/b2"-->
-<!--                    android:text="@{ `(` + item.dayOfWeek + `)` , default=`(화)` }"-->
-<!--                    android:visibility="invisible"-->
-<!--                    android:layout_marginStart="2dp"/>-->
-<!--            </LinearLayout>-->
-<!--        </LinearLayout>-->
 
 
     </LinearLayout>

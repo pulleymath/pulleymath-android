@@ -7,7 +7,6 @@
     <data>
         <import type="android.view.View"/>
         <variable name="item" type="com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem"/>
-        <variable name="listener" type="com.freewheelin.pulley.revision2023.utils.listeners.StudyPlannerItemClickListener" />
         <variable name="depth" type="Integer" />
 
     </data>
@@ -76,11 +75,12 @@
                 />
             <ImageView
                 android:id="@+id/plusIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_plus"
-                tools:tint="@color/gray_800"
-                imageview_tint="@{ item.isCompleted ? @color/gray_500 : @color/gray_800 }"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_plus_gray_700"
+                tools:tint="@color/gray_700"
+                imageview_tint="@{ item.isCompleted ? @color/gray_500 : @color/gray_700 }"
                 android:background="@{ item.isCompleted ? @drawable/bg_gray_200_round_5_ripple : @drawable/bg_gray_300_round_5_ripple }"
                 tools:background="@drawable/bg_gray_300_round_5_ripple"
                 android:layout_marginStart="8dp"/>

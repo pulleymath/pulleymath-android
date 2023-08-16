@@ -523,7 +523,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
+                                android:layout_marginTop="4dp"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -540,6 +540,15 @@
                                     android:layout_height="wrap_content"
                                     android:text="님" />
                             </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/b3"
+                                android:textColor="@color/gray_600"
+                                android:text="@{ vm.mainProfileV4.affiliationAndGradeStr }"
+                                android:layout_marginTop="8dp"
+                                tools:text="풀리고등학교 · 고1"/>
 
                         </LinearLayout>
 
@@ -566,7 +575,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/h3"
-                            android:text="이번주 나의 학습"/>
+                            android:text="이번 주 나의 학습"/>
                         <LinearLayout
                             android:id="@+id/guestStudyProfileLl"
                             android:layout_width="match_parent"
@@ -577,7 +586,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="공부하면 푼 문제수, 순공시간, 정답률을 알려줘요 :)"
+                                android:text="공부하면 푼 문제수, 공부시간, 정답률을 알려줘요 :)"
                                 style="@style/b1"
                                 android:textColor="@color/gray_500"
                                 android:layout_gravity="center_horizontal"
@@ -680,7 +689,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="순공시간"
+                                        android:text="공부시간"
                                         android:textColor="@color/gray_600"
                                         style="@style/b2"
                                         android:layout_gravity="center_vertical"
@@ -779,13 +788,13 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:gravity="center_horizontal">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:padding="4dp"
-                                    android:src="@drawable/ic_teacher"
-                                    android:background="@drawable/bg_gray_200_round"
-                                    />
+<!--                                <ImageView-->
+<!--                                    android:layout_width="30dp"-->
+<!--                                    android:layout_height="30dp"-->
+<!--                                    android:padding="4dp"-->
+<!--                                    android:src="@drawable/ic_teacher"-->
+<!--                                    android:background="@drawable/bg_gray_200_round"-->
+<!--                                    />-->
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -824,13 +833,13 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:gravity="center_horizontal">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:padding="4dp"
-                                    android:src="@drawable/ic_calendar_filled"
-                                    android:background="@drawable/bg_red_100_round"
-                                    />
+<!--                                <ImageView-->
+<!--                                    android:layout_width="30dp"-->
+<!--                                    android:layout_height="30dp"-->
+<!--                                    android:padding="4dp"-->
+<!--                                    android:src="@drawable/ic_calendar_filled"-->
+<!--                                    android:background="@drawable/bg_red_100_round"-->
+<!--                                    />-->
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -865,7 +874,7 @@
                                 <ImageView
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    android:src="@drawable/ic_tailless_24_red_300"
+                                    android:src="@drawable/ic_pencil_under_bar"
                                     android:layout_marginStart="4dp"
                                     app:tint="@color/red_300"
                                     android:layout_gravity="center"/>
@@ -1005,7 +1014,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="300dp"
+                                android:layout_height="400dp"
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 visibleIf="@{ vm.mainUserPlannerItems.size == 0 }"
@@ -1019,6 +1028,8 @@
                                     android:layout_height="60dp"
                                     android:src="@drawable/ic_plan_empty"
                                     android:layout_gravity="center"
+                                    visibleIf="@{ vm.isClickedPlanMakeBtn }"
+                                    tools:visibility="gone"
                                     />
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -1029,7 +1040,18 @@
                                     android:gravity="center"
                                     android:layout_marginTop="24dp"
                                     android:lineHeight="24sp"
-                                    android:textColor="@color/gray_500"/>
+                                    android:textColor="@color/gray_500"
+                                    visibleIf="@{ vm.isClickedPlanMakeBtn }"
+                                    tools:visibility="gone"
+                                    />
+                                <ImageView
+                                    android:layout_width="300dp"
+                                    android:layout_height="264dp"
+                                    android:src="@drawable/main_planner_sample"
+                                    visibleIf="@{ !vm.isClickedPlanMakeBtn }"
+                                    android:layout_gravity="center"
+                                    tools:visibility="visible"
+                                    />
                             </LinearLayout>
 
                             <androidx.recyclerview.widget.RecyclerView

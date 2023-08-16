@@ -60,6 +60,7 @@
             <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                 android:id="@+id/categoryTab"
                 android:layout_width="wrap_content"
+                tools:layout_width="300dp"
                 android:layout_height="@dimen/dp42"
                 android:layout_marginTop="@dimen/dp48"
                 android:layout_marginStart="@dimen/dp48"
@@ -70,6 +71,7 @@
             <com.freewheelin.pulley.legacy.views.DaebakTabRadio
                 android:id="@+id/ingTab"
                 android:layout_width="wrap_content"
+                tools:layout_width="200dp"
                 android:layout_height="@dimen/dp42"
                 android:layout_marginStart="@dimen/dp32"
                 app:layout_constraintStart_toEndOf="@+id/categoryTab"
@@ -182,7 +184,7 @@
                 android:textSize="@dimen/sp16"
                 android:lineSpacingExtra="8sp"
                 android:gravity="center"
-                android:text="학습 데이터가 없습니다.\n&lt;테스트&gt; &lt;유형학습&gt; &lt;모의고사&gt; 탭에서 학습을 진행할 수 있어요."
+                android:text="학습 데이터가 없습니다. 학습을 진행해보세요!"
                 app:layout_constraintStart_toStartOf="@+id/recyclerView"
                 app:layout_constraintEnd_toEndOf="@+id/recyclerView"
                 app:layout_constraintBottom_toBottomOf="@+id/recyclerView"

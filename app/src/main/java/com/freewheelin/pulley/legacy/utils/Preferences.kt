@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.legacy.utils
 
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
 import com.google.gson.Gson
@@ -85,6 +87,17 @@ object Preferences {
     val createdUUID = APPreference("")
     var signedEmail = APPreference("")
     var schoolType = APPreference("")
+
+    val _checkPlanMakeBtnClicked = APPreference("")
+    var checkPlanMakeBtnClicked: OnceAppearInfoByStudentId
+        get() {
+            val infoStr = _checkPlanMakeBtnClicked.get()
+            return Gson().fromJson(infoStr, OnceAppearInfoByStudentId::class.java) ?: OnceAppearInfoByStudentId(listOf())
+        }
+        set (value) {
+            val scInfoStr = Gson().toJson(value)
+            _checkPlanMakeBtnClicked.set(scInfoStr)
+        }
 
 }
 

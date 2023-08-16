@@ -298,8 +298,8 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
             }
             SortType.title -> {
                 when (order) {
-                    SortableTextView.Order.ascend -> exams?.sortedBy { it.title }
-                    SortableTextView.Order.descend -> exams?.sortedByDescending { it.title }
+                    SortableTextView.Order.ascend -> exams?.sortedBy { it.mockExamTitle }
+                    SortableTextView.Order.descend -> exams?.sortedByDescending { it.mockExamTitle }
                 }
             }
             SortType.correctPercent -> {
@@ -432,7 +432,7 @@ class MyMockHolder(val binding: ItemMyMockListBinding): RecyclerView.ViewHolder(
 
             typeTv.text = exam.type.getStr()
             gradeTv.text = "고${exam.grade}"
-            titleTv.text = exam.title //+ if(exam.count > 0) " (${exam.count})" else ""
+            titleTv.text = exam.mockExamTitle //+ if(exam.count > 0) " (${exam.count})" else ""
 
             val isPaidUser = user?.serviceType?.isPaidUser == true
             reportBtn.showStartIcon(!isPaidUser && exam.isTwins)

@@ -39,6 +39,7 @@ class GuestJoinIntroduceFragment : Fragment() {
 //                viewModel?.replaceStep?.let { it(GuestJoinStep.회원가입) }
                 val intent = SignupActivity.getIntent(requireContext(), true)
                 startActivity(intent)
+                viewModel?.exitBtn()
             }
             loginTv.setOnClickListener {
                 viewModel?.setStep?.let { it(GuestJoinStep.로그인) }

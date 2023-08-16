@@ -79,13 +79,16 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".revision2023.ui.activity.MockListActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".revision2023.ui.activity.WrongNoteActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".revision2023.ui.activity.TestActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".revision2023.ui.activity.PlannerActivity"
             android:exported="false"
@@ -134,10 +137,13 @@
             android:name=".revision2021.activity.LCWrongNoteActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
+
+        <!-- 하드웨어가속을 켜면 문제 이미지가 화면을 넘어가는 경우 필기가 동작하지 않는다.  -->
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
+            android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".revision2021.activity.AlarmActivity"

@@ -76,7 +76,7 @@ object LogUtils {
 
 
     fun logEvent(context: Context, user: UserV4?, event_name: PulleyEvent, item_category: String? = null
-                 , item_name: String? = null, item_value: String? = null) {
+                 , item_name: String? = null, item_value: String? = null, cb: (() -> Unit)? = null) {
         val param: Parameter = Parameter(
                 "event_name" to event_name,
                 "deviceModel" to Build.MODEL,
@@ -131,10 +131,17 @@ object LogUtils {
             }
 
             API_V1.logUser(param).enqueue(object : Callback<Void> {
-                override fun onFailure(call: Call<Void>, t: Throwable) {}
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    cb?.invoke()
+                }
 
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    cb?.invoke()
+                }
             })
+        } else {
+            println("LogUtils :: v1/log/user 발사!")
+            cb?.invoke()
         }
     }
 

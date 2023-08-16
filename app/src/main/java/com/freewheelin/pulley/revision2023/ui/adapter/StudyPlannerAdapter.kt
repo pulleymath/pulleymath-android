@@ -24,7 +24,7 @@ class StudyPlannerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyPlannerItemViewHolder {
         val itemBinding = ItemStudyPlannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return StudyPlannerItemViewHolder(itemBinding, listener)
+        return StudyPlannerItemViewHolder(itemBinding)
     }
     override fun onBindViewHolder(holder: StudyPlannerItemViewHolder, position: Int, depth: Int) {
         val planItem = getItem(position) as StudyPlannerItem
@@ -61,7 +61,9 @@ class StudyPlannerAdapter(
                 holder.itemView.setOnClickListener(null)
                 holder.binding.plusIv.extensionTouchArea(4.toPx())
                 holder.binding.plusIv.setOnClickListener {
-                    listener.onStudyPlanClick(planItem)
+                    if (!planItem.isCompleted) {
+                        listener.onStudyPlanClick(planItem)
+                    }
                 }
             }
         }
@@ -71,6 +73,18 @@ class StudyPlannerAdapter(
         val _item = mItems[position]
         addItems(_item, item.children)
         cb(mItems)
+    }
+    fun addItemsssss(parent: Any, items: List<*>) {
+        val position = mItems.indexOf(parent)
+        for (i in items.indices) {
+            val item = items[i]
+            mItems.add(position + 1 + i, ExpandableItemSet(
+                item!!, false, mItems!![position].depth + 1
+            ))
+        }
+//        mItems[position].isExpanded = true
+        notifyItemRangeInserted(position + 1, items.size)
+        notifyItemChanged(position)
     }
     private fun getExpanded(planItem: StudyPlannerItem, position: Int): Boolean? {
         return if (planItem.children.isEmpty()) {

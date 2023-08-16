@@ -61,9 +61,11 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
 
                 val responseStr = throwable.response()?.errorBody()?.string()
                 Log.e("BaseAndroidViewModel", "throwable :: response: ${responseStr}")
-                val listType = object: TypeToken<ResponseBody<*>>(){}.type
-                val response: ResponseBody<*> = Gson().fromJson(responseStr, listType)
-                response.message?.let { _errorMessage.postValue(it) }
+                if (responseStr?.startsWith("<html>") == false) {
+                    val listType = object : TypeToken<ResponseBody<*>>() {}.type
+                    val response: ResponseBody<*> = Gson().fromJson(responseStr, listType)
+                    response.message?.let { _errorMessage.postValue(it) }
+                }
             }
             else -> {
                 CoroutineScope(Dispatchers.Main).launch {

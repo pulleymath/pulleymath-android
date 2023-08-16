@@ -96,7 +96,7 @@ class LCWrongNoteMapFragment : Fragment() {
 
 
                 val exitCallback: () -> Unit = {
-                    (activity as LearningCourseActivity).finish()
+                    (activity as LearningCourseActivity).finishWithResult()
                 }
                 val moreStudyCallback: (CourseSummary.MainMessageStatus) -> Unit = {
                     when (it) {

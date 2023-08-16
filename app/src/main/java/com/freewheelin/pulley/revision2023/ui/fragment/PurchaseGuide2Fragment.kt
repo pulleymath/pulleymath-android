@@ -63,15 +63,17 @@ class PurchaseGuide2Fragment : Fragment() {
             }
 
             actionBtn.setOnClickListener { _ ->
-                firebaseAnalytics.logEvent("go_purchase_btn") {
-                    param("student_id", user?.studentID ?: "student_id_null")
-                    param("item_name", "start with pulleymath")
-                    param("item_value", "purchase guide2 fragment")
-                }
-
-                viewModel.selectedOffer?.let { offer ->
-                    val offerId = offer.offerId
-                    getResult.launch(PurchaseWebViewActivity.getIntent(requireContext(), offerId))
+                LogUtils.logEvent(requireContext(),
+                    user,
+                    PulleyEvent.BUTTON_CLICK,
+                    "go_purchase_btn",
+                    "구매유도",
+                    "offerId_${viewModel.selectedOffer?.offerId}"
+                ) {
+                    viewModel.selectedOffer?.let { offer ->
+                        val offerId = offer.offerId
+                        getResult.launch(PurchaseWebViewActivity.getIntent(requireContext(), offerId))
+                    }
                 }
             }
             fixedTermBtn.setOnClickListener { viewModel.step2TabIndex.postValue(0) }

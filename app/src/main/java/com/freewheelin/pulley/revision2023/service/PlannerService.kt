@@ -1,12 +1,18 @@
 package com.freewheelin.pulley.revision2023.service
 
 import com.freewheelin.pulley.legacy.model.*
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestResponse
+import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
+import com.freewheelin.pulley.revision2021.model.response.base.BaseListResponse
+import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.request.UserPlanRequest
 import com.freewheelin.pulley.revision2023.model.response.UserPlanResponse
 import com.freewheelin.pulley.revision2023.model.response.MainWeeklyPlanResponse
 import com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem
 import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanResponse
+import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -17,6 +23,8 @@ import retrofit2.http.Query
 object PlannerApi {
     fun plannerService(): PlannerService = Network.retrofit(Network.Type.spring).create(PlannerService::class.java)
 }
+class MainUserPlanResponse : BaseListResponse<MainWeeklyPlanResponse>()
+
 interface PlannerService {
 
     @GET("v1/users/plans")
@@ -24,6 +32,12 @@ interface PlannerService {
         @Query("from") from: String,
         @Query("to") to: String,
     ) : ResponseBody<List<MainWeeklyPlanResponse>>
+
+    @GET("v1/users/plans")
+    fun getWeeklyPlansOb(
+        @Query("from") from: String,
+        @Query("to") to: String
+    ) : Observable<MainUserPlanResponse>
 
     @POST("v1/users/plans")
     suspend fun postUserPlan (

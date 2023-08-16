@@ -28,6 +28,7 @@ import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
 import com.freewheelin.pulley.databinding.FragmentPatternStudyBinding
 import com.freewheelin.pulley.databinding.TooltipAnalysisBinding
 import com.freewheelin.pulley.legacy.bases.isMobile
+import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.legacy.dialogs.*
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
@@ -122,9 +123,15 @@ class PatternStudyFragment : MainTabFragment(),
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.PATTERN_STUDY_MOVE_EVENT))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reConfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == PLAN_PINNED) {
-                binding.apply {
-                    scrollRootView.smoothScrollTo(0, myPlanCl.top)
+            when (it.resultCode) {
+                MainFragment.SOLVE_RESULT -> {
+                    val reFetchReceiverIntent = Intent(RE_CONFIGURE_UI)
+                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(reFetchReceiverIntent)
+                }
+                PLAN_PINNED -> {
+                    binding.apply {
+                        scrollRootView.smoothScrollTo(0, myPlanCl.top)
+                    }
                 }
             }
         }
@@ -350,7 +357,9 @@ class PatternStudyFragment : MainTabFragment(),
     }
     override fun onSolveClicked(book: Book) {
         val intent = SolveActivity.getIntent(requireContext(), book)
-        startActivity(intent)
+        intent.putExtra(SolveActivity.WHERE_ARE_YOU_FROM, SolveActivity.FROM_PATTERN_STUDY)
+
+        getResult.launch(intent)
     }
 
     override fun filterFromTagOnCard(filterType: String) {

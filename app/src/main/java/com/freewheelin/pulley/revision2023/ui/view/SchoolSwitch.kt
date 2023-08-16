@@ -32,19 +32,19 @@ class SchoolSwitch: ConstraintLayout {
             isMiddleSchool = schoolType.isMiddle
             schoolSwitch.setOnCheckedChangeListener { btn, isChecked ->
                 val type = if (isChecked) {
-                    SchoolType.MIDDLE
-                } else {
                     SchoolType.HIGH
+                } else {
+                    SchoolType.MIDDLE
                 }
-                isMiddleSchool = isChecked
+                isMiddleSchool = !isChecked
                 userRepository.updateSchoolType(type)
             }
 
 
         }
     }
-    fun changeSchoolType(isMiddle: Boolean) {
-        binding.schoolSwitch.isChecked = isMiddle
+    fun changeSchoolType(isHigh: Boolean) {
+        binding.schoolSwitch.isChecked = isHigh
     }
 
     fun setTransition(isChecked: Boolean, btn: CompoundButton) {

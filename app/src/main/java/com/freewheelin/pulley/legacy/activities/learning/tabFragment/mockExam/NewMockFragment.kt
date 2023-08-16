@@ -356,7 +356,7 @@ class MockListHolder(val view: View) : RecyclerView.ViewHolder(view) {
         gradeTv.text = "고${exam.grade}"
         yearTv.text = "${exam.year}년"
         monthTv.text = "${exam.month}월"
-        titleTv.text = exam.title
+        titleTv.text = exam.mockExamTitle
 
         if (exam.updated)
             updateTag.visibility = View.VISIBLE

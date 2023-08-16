@@ -105,9 +105,9 @@ class GuestLoginFragment : Fragment(),
                 }
             }
             findIdPwTv.setOnClickListener {
+                viewModel?.onExitClickCallback?.invoke()
                 val intent = FindEmailAndPwActivity.getIntent(requireContext(), true)
                 startActivity(intent)
-
             }
             updateGradeCl.setOnTouchListener { view, motionEvent ->
                 val imm: InputMethodManager = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -36,11 +36,14 @@ class PriorConceptViewModel(application: Application): BaseAndroidViewModel(appl
             _isLoading.postValue(true)
             val newConcepts = fetchAllPriorConcepts(chapterId)
             _isLoading.postValue(false)
-            afterFetch = true
 
-            val oldConcepts = priorConcepts.value?.filterNot { it in newConcepts }
-            oldConcepts?.forEach { deletePriorConcepts(it) }
+
+
+//            val oldConcepts = priorConcepts.value?.filterNot { it in newConcepts }
+//            println("aspasp  - oldConcepts size :${oldConcepts?.size}")
+//            oldConcepts?.forEach { deletePriorConcepts(it) }
             upsertPriorConcepts(newConcepts)
+            afterFetch = true
             adapterUpdateIfNewConceptSizeZero(newConcepts)
         }
     }

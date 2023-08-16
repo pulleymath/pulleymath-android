@@ -86,7 +86,6 @@ class MyStartChallengeFragment : MyPageBaseFragment() {
                         }
                     }
                 }
-
             }
         }
     }

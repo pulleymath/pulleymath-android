@@ -120,7 +120,7 @@
             android:layout_height="match_parent"
             android:background="@color/black3c_000000"
             android:visibility="@{ vm.showNumkeyboard ? View.VISIBLE : View.GONE }"
-            tools:visibility="visible"
+            tools:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

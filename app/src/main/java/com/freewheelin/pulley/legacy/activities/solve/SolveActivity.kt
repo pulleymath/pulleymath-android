@@ -28,7 +28,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.legacy.bases.*
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.*
@@ -54,7 +53,6 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
@@ -69,7 +67,7 @@ class SolveActivity : BaseActivity(),
         SpeedAnswerDelegate,
         PencilcaseListener,
         ProblemGestureListener,
-    ObservableHashSetListener<Problem>,
+        ObservableHashSetListener<Problem>,
         LifecycleObserver,
         AppUsageMonitorListener {
 
@@ -92,6 +90,7 @@ class SolveActivity : BaseActivity(),
         val WHERE_ARE_YOU_FROM = "WHERE_ARE_YOU_FROM"
         val FROM_MAIN_TAB = 302
         val FROM_PULLEYMATH_BOOKS = 305
+        val FROM_PATTERN_STUDY = 308
 
         val IS_REVIEW = "IS_REVIEW"
 
@@ -226,7 +225,11 @@ class SolveActivity : BaseActivity(),
                 setResult(MainFragment.SOLVE_RESULT)
             }
             FROM_PULLEYMATH_BOOKS -> {
+                setResult(MainFragment.SOLVE_RESULT)
                 viewModel.startChallengeCompletedCallback()
+            }
+            FROM_PATTERN_STUDY -> {
+                setResult(MainFragment.SOLVE_RESULT)
             }
         }
     }
@@ -349,8 +352,8 @@ class SolveActivity : BaseActivity(),
                     itemValue = "유형학습"
                     timerView.visibility = View.INVISIBLE
                     mainFormatTool.visibility = View.VISIBLE
-                    val workbookId = intent.getIntExtra(OPEN_PULLEY_WORKBOOK, -1)
-                    BookManager.getBook(this@SolveActivity, content, user!!, workbookId) {
+
+                    val cb: ((book: Book) -> Unit) = {
                         Log.d("유형학습", "init getBook======>$it")
                         this@SolveActivity.content = it
                         viewModel.selectedContent.postValue(it)
@@ -359,7 +362,14 @@ class SolveActivity : BaseActivity(),
                         answerView.showMarkingBtn()
                         answerView.selectedBook = it
                         speedAnswerView.showMarkingBtn()
-//                        answerView.showChallengeStampIv(it)
+                    }
+                    val isNull = -999
+                    val workbookId = intent.getIntExtra(OPEN_PULLEY_WORKBOOK, isNull)
+
+                    if (workbookId == isNull) {
+                        BookManager.getBook(this@SolveActivity, content, user!!, cb)
+                    } else {
+                        BookManager.getBookByWorkbookId(this@SolveActivity, content, workbookId, cb)
                     }
                 }
                 is Piece -> {
@@ -757,6 +767,12 @@ class SolveActivity : BaseActivity(),
                     }
                 }
             }
+            selectedProblemOb.observe(this@SolveActivity) {
+                val isYet = it.getResultByScoring().isYet
+                val isSwitchChecked = binding.solutionSwitch.daebakSwitch.isChecked
+                // 푼문제면 열고 안푼문제면
+                binding.solutionSwitch.daebakSwitch.isChecked = !isYet && isSwitchChecked
+            }
         }
     }
     private fun initStartChallenge() {
@@ -767,49 +783,19 @@ class SolveActivity : BaseActivity(),
 
     fun onMarkingBtnClicked() {
         if (content == null || answeredSet.isEmpty()) return
-        if(content is Test) {
-            ContentManager.score(this, user!!, content!!, answeredSet) {
-                viewModel.sendSubmitLog(content!!.pieceID, "유형학습", answeredSet.size)
-                val scoredCnt = answeredSet.size
-                answeredSet.forEach { it.mark() }
-                answeredSet.clear()
-                binding.galleryView.updateAll()
-                binding.speedAnswerView.updateAll()
-                onProblemSelected(selectedProblem)
+        if(content is Book) {
+            if((content as Book).clientBookType == ClientBookType.RECOMMEND)
+                LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면-추천", "채점", content?.assignID?.toString()?:"")
+        }
 
-//                AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
-
-//                if(it?.isNeedToShowCompletedToast() == true) {
-//                    SuccessToast.showCompleteDialogIfNeed(this, it)
-//                }
-//                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
-//                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
-//                }
-            }
-        } else {
-            // 추천 학습지 채점 로그 분리
-            if(content is Book) {
-                if((content as Book).clientBookType == ClientBookType.RECOMMEND)
-                    LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면-추천", "채점", content?.assignID?.toString()?:"")
-            }
-
-            ContentManager.score(this, user!!, content!!, answeredSet) {
-                viewModel.sendSubmitLog(content!!.pieceID, "유형학습", answeredSet.size)
-                val scoredCnt = answeredSet.size
-
-                answeredSet.forEach { it.mark() }
-                answeredSet.clear()
-                binding.galleryView.updateAll()
-                binding.speedAnswerView.updateAll()
-                onProblemSelected(selectedProblem)
-
-//                if(it?.isNeedToShowCompletedToast() == true) {
-//                    SuccessToast.showCompleteDialogIfNeed(this, it)
-//                }
-//                if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
-//                    AddOptionUnitToast.showCompleteDialogIfNeed(this, it)
-//                }
-            }
+        ContentManager.score(this, user!!, content!!, answeredSet) {
+            viewModel.sendSubmitLog(content!!.pieceID, "유형학습", answeredSet.size)
+            val scoredCnt = answeredSet.size
+            answeredSet.forEach { it.mark() }
+            answeredSet.clear()
+            binding.galleryView.updateAll()
+            binding.speedAnswerView.updateAll()
+            onProblemSelected(selectedProblem)
         }
     }
 
@@ -974,6 +960,8 @@ class SolveActivity : BaseActivity(),
         val problem = problem ?: selectedProblem ?: return
 
         problem.userAnswer = if(answer != null && answer.isNotEmpty()) answer else null
+        viewModel.selectedProblemOb.postValue(problem)
+
         if(problem.userAnswer == null)
             answeredSet.remove(problem)
         else
@@ -1464,6 +1452,8 @@ class SolveActivity : BaseActivity(),
     override fun onProblemSelected(problem: Problem?, autoFocus: Boolean) {
         saveMemo()
         selectedProblem = problem
+        viewModel.selectedProblemOb.postValue(problem)
+
         onSetProblem()
         if(problem != null) {
             binding.speedAnswerView.scrollTo(problem, "onProblemSelected")

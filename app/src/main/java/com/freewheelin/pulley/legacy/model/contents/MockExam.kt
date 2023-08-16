@@ -118,7 +118,7 @@ class MockExam: Content, BaseDiffItem {
             }
         }
 
-    val title: String
+    val mockExamTitle: String
         get() {
             return subject
         }
@@ -134,7 +134,7 @@ class MockExam: Content, BaseDiffItem {
     }
 
     fun getMockTitle(): String {
-        val title = title.split("월").let { it[0].plus("월 고$grade ").plus(it[1].trim()) }
+        val title = mockExamTitle.split("월").let { it[0].plus("월 고$grade ").plus(it[1].trim()) }
         val selectStr =
                 if (selectOptional.isNotEmpty())
                     "${selectOptional.joinToString(", ") { it.text }} 선택"

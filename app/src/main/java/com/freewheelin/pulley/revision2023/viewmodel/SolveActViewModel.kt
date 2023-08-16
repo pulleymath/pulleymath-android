@@ -8,16 +8,13 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.legacy.model.contents.Test
-import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.repository.ChallengeRepository
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
-import com.freewheelin.pulley.revision2023.model.response.NoteReviewResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,12 +28,15 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
+    val mainProfileV4 = userRepository.mainProfileV4
+
     val isStartChallengeInProgress = MutableLiveData<Boolean>(false)
 //    val isStartChallengeBookPiece = MutableLiveData<Boolean>(false)
     val isOnlyStartChallengePiece = MutableLiveData<Boolean>(false)  // 스타트챌린지 문제집만 true
 //    val isStartChallengeOrStartChallengeRewardPiece = MutableLiveData<Boolean>(false) // 스타트챌린지 문제집과 보상으로 받은 문제집 둘다 true
     val enableTargetService = MutableLiveData<Boolean>(false)
     val selectedContent = MutableLiveData<Content>()
+    val selectedProblemOb = MutableLiveData<Problem>()
 
     fun sendSubmitLog(pieceId: Int?, note: String, size: Int, callback: () -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

@@ -625,6 +625,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
+        int layerId = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
+
         if (loadedBitmap != null) {
             canvas.drawBitmap(loadedBitmap, 0, 0, null);
         }
@@ -688,6 +690,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             }
         }, 0);
 
+        canvas.restore(); // Line 2 added
     }
 
     // Create a path from the current points

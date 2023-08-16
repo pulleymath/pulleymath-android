@@ -45,7 +45,7 @@ class UserPlannerItemViewHolder(
                     clickListener.onPlanClick(item)
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(300)
-                        binding.bodyLl.setBackgroundResource(R.color.gray_150)
+                        bodyContentLl.setBackgroundResource(R.drawable.bg_gray_150_round)
                         delay(1)
                         delayClick = false
                     }
@@ -56,7 +56,7 @@ class UserPlannerItemViewHolder(
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     (sender as? ObservableBoolean)?.get()?.let { value ->
                         if (!value) {
-                            bodyLl.setBackgroundResource(R.drawable.bg_white_ripple)
+                            bodyContentLl.setBackgroundResource(R.drawable.bg_white_round_5_ripple_gray300)
                         }
                     }
                 }

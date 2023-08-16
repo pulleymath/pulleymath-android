@@ -3,87 +3,93 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
+    <ScrollView
         android:layout_width="@dimen/dp560"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_round_ripple"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp">
-
-            <TextView
-                android:id="@+id/labelSelectSchool"
-                style="@style/TextGray_800.ExtraBold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:text="휴대폰 번호 인증"
-                android:textSize="@dimen/sp16"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/btnClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@android:color/transparent"
-                android:padding="8dp"
-                android:src="@drawable/ic_x_grey_19dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray_300" />
-
+        >
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/dp560"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/dp24">
+            android:orientation="vertical">
 
-            <TextView
-                style="@style/TextGray_800.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="휴대폰 번호가 아직 인증되지 않았거나 다른 계정에서 사용되었습니다.\n휴대폰 번호를 인증해주시기 바랍니다."
-                android:textSize="@dimen/sp18" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
 
-            <com.freewheelin.pulley.legacy.views.PulleySpinner
-                android:id="@+id/countrySpinner"
+                <TextView
+                    android:id="@+id/labelSelectSchool"
+                    style="@style/TextGray_800.ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="휴대폰 번호 인증"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/btnClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_x_grey_19dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_300" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp24"/>
+                android:orientation="vertical"
+                android:padding="@dimen/dp24">
 
-            <com.freewheelin.pulley.legacy.views.CodeConfirmView
-                android:id="@+id/codeConfirm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp24"
-                app:title="휴대폰 번호"
-                app:hint="- 는 제외하고 입력하세요"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    style="@style/TextGray_800.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="휴대폰 번호가 아직 인증되지 않았거나 다른 계정에서 사용되었습니다.\n휴대폰 번호를 인증해주시기 바랍니다."
+                    android:textSize="@dimen/sp18" />
 
-            <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
-                android:id="@+id/closeBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:layout_marginTop="@dimen/dp32"
-                android:text="닫기"/>
+                <com.freewheelin.pulley.legacy.views.PulleySpinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp24"/>
+
+                <com.freewheelin.pulley.legacy.views.CodeConfirmView
+                    android:id="@+id/codeConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp24"
+                    app:title="휴대폰 번호"
+                    app:hint="- 는 제외하고 입력하세요"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                    android:id="@+id/closeBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:text="닫기"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </layout>

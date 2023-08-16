@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <data>
         <import type="android.view.View" />
@@ -82,8 +84,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp64"
                         android:layout_marginTop="@dimen/dp48"
-                        app:AnalysisCompareTextView_BottomLabel="순공시간"
-                        app:AnalysisCompareTextView_TopLabel="오늘 공부한 시간"
+                        app:AnalysisCompareTextView_BottomLabel="공부시간"
+                        app:AnalysisCompareTextView_TopLabel="오늘 풀리한 시간"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/percentCompareTv"
@@ -184,14 +186,12 @@
                 android:id="@+id/recommendStudyView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="@drawable/shadow_clear" />
 
             <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisStudyRateView
                 android:id="@+id/studyRateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="@drawable/shadow_clear" />
             <com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListView
                 android:id="@+id/todayStudyView"

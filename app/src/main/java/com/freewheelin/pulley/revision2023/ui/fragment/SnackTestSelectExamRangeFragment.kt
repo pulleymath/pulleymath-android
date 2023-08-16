@@ -137,7 +137,7 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
                 Test.TestLevel.LIKE_ME -> R.id.middleButton
                 Test.TestLevel.EASY -> R.id.lowButton
             }
-            viewModel.selectedLevelIndex = level
+            viewModel.selectedLevelIndex = testLevel.ordinal
             levelRg.check(levelRadioBtn)
 
             levelRg.setOnCheckedChangeListener { _, checkedId ->
@@ -164,7 +164,7 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
                 Test.TestRange.SUBJECT_BY_GRADE -> R.id.myChoiceBtn
             }
             rangeRg.check(radioBtn)
-            viewModel.selectedRangeIndex = range
+            viewModel.selectedRangeIndex = testRange.ordinal
             rangeRg.setOnCheckedChangeListener { _, checkedId ->
                 viewModel.selectedRangeIndex = getRangeIndex(checkedId)
                 showSubView()

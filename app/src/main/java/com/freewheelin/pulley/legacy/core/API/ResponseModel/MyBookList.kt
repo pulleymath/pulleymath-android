@@ -16,6 +16,9 @@ data class MyBookList(
     fun publicSync() {
         pinBookPlanCount = myPieceStorageList.filter { it.isPinned }.size
         totalPlanList = myPieceStorageList.size
+        val newList = myPieceStorageList.sortedBy { !it.isPinned }
+        myPieceStorageList.clear()
+        myPieceStorageList.addAll(newList)
     }
     fun removeBook(book: Book, cb: ((index: Int) -> Unit)? = null) {
         val index = myPieceStorageList.indexOf(book)

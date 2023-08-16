@@ -63,7 +63,6 @@ class WrongNoteFragViewModel(application: Application): BaseAndroidViewModel(app
 //        val endDate = DateTimeUtils.yyyy_MM_dd.format(to.toDate())
 //        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
 //            val wrongNotes = notesRepository.fetchNotes(startDate, endDate, "WRONG")
-//            println("qwoqwo wrongNote size: ${wrongNotes.size}")
 //            _wrongProblem.postValue(wrongNotes)
 //            cb()
 //        }

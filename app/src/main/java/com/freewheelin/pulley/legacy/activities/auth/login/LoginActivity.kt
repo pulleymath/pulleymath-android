@@ -178,7 +178,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }
             signupGuideTv.setOnClickListener {
                 spyCount += 1
-                println("aspasp spc ${spyCount} : ${emailField.text == "staging" && spyCount > 10}")
                 stagingBtn.visibleIf((emailField.text == "staging" && spyCount > 10))
             }
         }

@@ -99,12 +99,7 @@ open class UserPlannerItem (
 
     val tagStr: String
         get() {
-            return when (tag) {
-                WeeklyPlanTag.CONCEPT -> "개념"
-                WeeklyPlanTag.PRACTICE -> "연습문제"
-                WeeklyPlanTag.PULLEY_WORKBOOK -> "풀리문제집"
-                null -> ""
-            }
+            return tag?.inKorean ?: ""
         }
 
     val dayOfWeek: String
@@ -143,7 +138,7 @@ open class UserPlannerItem (
             return UserPlannerItem(
                 dailyPlanId = plan.dailyPlanId,
                 itemId = null,
-                title = "",
+                title = if (plan.isToday) "오늘의 일정이 없네요. 새로 추가해보세요!" else "일정이 없어요.",
                 date = plan.localDate,
                 itemType = UserPlannerItemType.Header,
                 tag = null,

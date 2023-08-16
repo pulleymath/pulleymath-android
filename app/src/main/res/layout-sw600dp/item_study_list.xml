@@ -33,7 +33,7 @@
                 android:layout_marginStart="@dimen/dp16"
                 android:background="@drawable/bg_gray_300_round"
                 android:gravity="center"
-                android:text="03-29"
+                android:text="유형학습"
                 android:textSize="@dimen/sp12" />
 
             <TextView

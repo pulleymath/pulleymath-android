@@ -21,6 +21,7 @@ import android.widget.ScrollView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -488,10 +489,7 @@ class AnalysisFragment : MainTabFragment(),
                     SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
-            BookType.BOOK -> {
-//                val intent = if (content.isCompleted())
-//                    SolveActivity.getReviewIntent(requireContext(), Book(content))
-//                else
+            BookType.BOOK, BookType.PRACTICE -> {
                 val intent = SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
@@ -593,10 +591,13 @@ class AnalysisFragment : MainTabFragment(),
 
     override fun onRecommendBtnClicked(view: AnalysisRecommendStudyView) {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "데일리서머리", "추천문제집버튼")
-        ContentManager.makeRecommendPiece(requireContext(), user!!) {
+        ContentManager.makeRecommendPiece(requireContext(), user!!, successCB = {
             val intent = SolveActivity.getIntent(requireContext(), it)
             startActivity(intent)
-        }
+        }, failedCb = {
+            val message = it ?: "추천 문제를 찾을 수 없습니다."
+            DaebakToast.show(requireContext(), message)
+        })
     }
 
 //    override fun onDeniedCallback() {   val dialog = PurchaseGuideDialog()

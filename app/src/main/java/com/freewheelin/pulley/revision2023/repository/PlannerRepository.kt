@@ -1,12 +1,16 @@
 package com.freewheelin.pulley.revision2023.repository
 
+import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
 import com.freewheelin.pulley.revision2023.model.UserPlannerItem
 import com.freewheelin.pulley.revision2023.model.request.UserPlanRequest
+import com.freewheelin.pulley.revision2023.model.response.MainWeeklyPlanResponse
 import com.freewheelin.pulley.revision2023.model.response.UserPlanResponse
 import com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem
+import com.freewheelin.pulley.revision2023.service.MainUserPlanResponse
 import com.freewheelin.pulley.revision2023.service.PlannerApi
 import com.freewheelin.pulley.revision2023.service.PlannerService
+import io.reactivex.Observable
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 
@@ -18,12 +22,10 @@ class PlannerRepository() {
     private val api: PlannerService by lazy { PlannerApi.plannerService() }
 
     suspend fun getWeeklyPlans(datePair: Pair<String, String>): List<MainUserPlannerItem> {
-        println("getweeklyPlans 1")
+        // 왜 suspend로 구성한 함수에서 retrofit의 http 호출이 짤리는지는 찾지못했다
         val monday = datePair.first
         val sunday = datePair.second
-        println("getweeklyPlans 2")
         val list = api.getWeeklyPlans(monday, sunday).data?.let {
-            println("getweeklyPlans 3")
             val mainPlannerList = mutableListOf<MainUserPlannerItem>()
             it.forEach {
                 val list = MainUserPlannerItem.convertFromPlanRes(it)
@@ -33,8 +35,12 @@ class PlannerRepository() {
             mainPlannerList
         }
 
-        println("getweeklyPlans 4")
         return list?.toList() ?: listOf()
+    }
+    fun fetchMainPlannerItems(datePair: Pair<String, String>): Observable<MainUserPlanResponse> {
+        val monday = datePair.first
+        val sunday = datePair.second
+        return api.getWeeklyPlansOb(monday, sunday)
     }
 
     suspend fun postUserPlan(req: UserPlanRequest): UserPlanResponse {

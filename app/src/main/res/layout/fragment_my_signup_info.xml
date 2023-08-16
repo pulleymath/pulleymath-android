@@ -126,7 +126,8 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/dp12"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        visibleIf="@{ !isGuestUser }">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -168,8 +169,10 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/dp12"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <TextView
+                        android:orientation="horizontal"
+                        visibleIf="@{ !isGuestUser }">
+
+                    <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="휴대폰 번호"
@@ -208,8 +211,10 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/dp12"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <TextView
+                        android:orientation="horizontal"
+                        visibleIf="@{ !isGuestUser }">
+
+                    <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="부모님 휴대폰 번호"
@@ -243,8 +248,10 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/dp12"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-                        <TextView
+                        android:orientation="horizontal"
+                        visibleIf="@{ !isGuestUser }">
+
+                    <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="비밀번호 변경"

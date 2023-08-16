@@ -271,19 +271,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:nestedScrollingEnabled="false"
-                            android:paddingStart="@dimen/dp24"
+                            android:paddingStart="@dimen/dp36"
                             android:paddingEnd="@dimen/dp24"
                             android:paddingBottom="@dimen/dp24"
+                            app:layout_constraintHorizontal_bias="0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/totalLabelTv" />
+                            app:layout_constraintTop_toBottomOf="@+id/totalLabelTv"
+                            app:layout_constraintEnd_toStartOf="@+id/totalRv"
+                            />
 
                         <View
                             android:layout_width="1dp"
                             android:layout_height="0dp"
                             android:background="@color/gray_400"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
                             app:layout_constraintBottom_toBottomOf="@+id/filterRv"
-                            app:layout_constraintStart_toEndOf="@+id/filterRv"/>
+                            app:layout_constraintStart_toEndOf="@+id/filterRv"
+                            app:layout_constraintEnd_toStartOf="@+id/totalRv"/>
 
                         <com.freewheelin.pulley.legacy.views.GridRecyclerView
                             android:id="@+id/totalRv"
@@ -298,8 +303,8 @@
                             android:layout_marginBottom="32dp"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="@+id/filterRv"
-                            app:layout_constraintStart_toEndOf="@+id/filterRv"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/filterRv"
                             app:layout_constraintVertical_bias="0"/>
 
                         <FrameLayout

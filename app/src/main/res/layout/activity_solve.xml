@@ -28,7 +28,8 @@
                 android:layout_width="400dp"
                 android:layout_height="match_parent"
                 android:focusable="false"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:visibility="gone"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/solveCl"
@@ -258,6 +259,7 @@
                         android:layout_marginEnd="@dimen/dp16"
                         android:padding="8dp"
                         android:focusable="false"
+                        visibleIf="@{ !vm.mainProfileV4.isAffiliated || !vm.selectedProblemOb.getResultByScoring().isYet }"
                         app:DaebakSwitch_Label="정답/해설 표시"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"

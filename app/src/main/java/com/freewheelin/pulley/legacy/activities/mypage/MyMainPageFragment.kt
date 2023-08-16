@@ -30,6 +30,7 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
@@ -187,6 +188,8 @@ class MyMainPageFragment : Fragment() {
 
         setFragmentResultListener(MyStartChallengeFragment.CHALLENGE_MENU_REMOVED) { key, bundle ->
             updateNewCategory(false)
+            val intent = Intent(ChallengeManager.CHALLENGE_UPDATE)
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
         }
 
         viewModel.apply {

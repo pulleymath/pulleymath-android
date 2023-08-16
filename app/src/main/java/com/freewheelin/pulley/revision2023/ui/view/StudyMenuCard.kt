@@ -63,8 +63,8 @@ class StudyMenuCard(context: Context, val getResult: ActivityResultLauncher<Inte
         radius = 10f.toPx()
         elevation = 0f
 
-        binding.iconIv.layoutParams.width = if (context.isMobile) 82.toPx() else 98.toPx()
-        binding.iconIv.layoutParams.height = if (context.isMobile) 82.toPx() else 98.toPx()
+        binding.iconIv.layoutParams.width = 64.toPx()
+        binding.iconIv.layoutParams.height = 64.toPx()
     }
 
 
@@ -73,7 +73,7 @@ class StudyMenuCard(context: Context, val getResult: ActivityResultLauncher<Inte
             GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f), GridLayout.spec(
                 GridLayout.UNDEFINED, GridLayout.FILL, 1f),)
         param.width = 0
-        param.height = 132.toPx()
+//        param.height = 132.toPx()
         setMarginByType(param, schoolType)
         layoutParams = param
     }

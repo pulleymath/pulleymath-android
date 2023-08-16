@@ -358,6 +358,11 @@ object BindingAdapter {
                 28 -> R.drawable.book_plan_v2_cover_28
                 29 -> R.drawable.book_plan_v2_cover_29
                 30 -> R.drawable.book_plan_v2_cover_30
+                31 -> R.drawable.book_plan_v2_cover_31
+                32 -> R.drawable.book_plan_v2_cover_32
+                33 -> R.drawable.book_plan_v2_cover_33
+                34 -> R.drawable.book_plan_v2_cover_34
+                35 -> R.drawable.book_plan_v2_cover_35
                 else -> R.drawable.book_plan_v2_cover_8
             }
             view.setImageResource(imgRes)
@@ -513,12 +518,17 @@ object BindingAdapter {
         value?.let {
             val imgRes = when {
                 it.isPast -> {
-                    if (it.solvedProblemCount != null && it.solvedProblemCount > 0) R.drawable.ic_round_selected
-                    else R.drawable.ic_round_x
+                    when (value.statusOfPlan) {
+                        WeeklyPlanStatus.NONE, WeeklyPlanStatus.ING  -> R.drawable.ic_round_gray_400
+                        WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected
+                        WeeklyPlanStatus.FAILED -> R.drawable.ic_round_x
+                    }
                 }
                 else -> {
-                    if (it.solvedProblemCount != null && it.solvedProblemCount > 0) R.drawable.ic_round_selected_purple_300
-                    else R.drawable.ic_round_gray_400
+                    when (value.statusOfPlan) {
+                        WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected_purple_300
+                        else -> R.drawable.ic_round_gray_400
+                    }
                 }
             }
             view.setImageResource(imgRes)
@@ -528,11 +538,11 @@ object BindingAdapter {
     @BindingAdapter("mainDailyUserPlanCompleteIcon")
     fun setMainDailyUserPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
         value?.let {
-            val imgRes = when(it.statusOfDay) {
-                WeeklyPlanStatus.NONE -> R.drawable.ic_round_none
-                WeeklyPlanStatus.ING -> R.drawable.ic_check_gray_400_filled
-                WeeklyPlanStatus.DONE -> R.drawable.ic_round_check_filled_green_300
-                WeeklyPlanStatus.FAILED -> R.drawable.ic_round_x_filled
+            val imgRes = when {
+                it.isChildrenEmpty -> R.drawable.ic_round_none
+                it.isCompleted -> R.drawable.ic_round_check_filled_green_300
+                it.isFailed -> R.drawable.ic_round_x_filled
+                else -> R.drawable.ic_check_gray_400_filled
             }
             view.setImageResource(imgRes)
         }
@@ -541,9 +551,7 @@ object BindingAdapter {
     @BindingAdapter("mainPlannerHeaderTextColor")
     fun setMainPlannerHeaderTextColor(view: TextView, value: MainUserPlannerItem?) {
         value?.let {
-            val resource = if (it.isAllPlanOfDayCompleted) {
-                R.color.green_300
-            } else if (it.isPast) {
+            val resource = if (it.isPast) {
                 R.color.gray_500
             } else if (it.isToday) {
                 R.color.purple_300

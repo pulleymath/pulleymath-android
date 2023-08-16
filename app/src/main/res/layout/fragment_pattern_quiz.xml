@@ -91,6 +91,7 @@
                         android:id="@+id/mainQuizWrapperLl"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        tools:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -127,6 +128,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
+                        tools:visibility="gone"
                         app:layout_constraintStart_toEndOf="@+id/mainQuizWrapperLl"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -247,6 +249,7 @@
                         android:layout_height="140dp"
                         android:visibility="@{ vm.patternQuiz.isCorrect == null ? View.GONE : View.VISIBLE }"
                         android:src="@{ vm.patternQuiz.isCorrect == false ? @drawable/ic_x_wrong_answer : vm.patternQuiz.isFirstTry == true ? @drawable/ic_o_right_answer : @drawable/ic_triangle_wrong_right_green }"
+                        tools:src="@drawable/ic_triangle_wrong_right_green"
                         android:layout_marginTop="8dp"
                         app:layout_constraintStart_toStartOf="@+id/quizIv"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -269,7 +272,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bg_white_stroke_gray_300_left"
-
             app:layout_constraintWidth_percent="0.375"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

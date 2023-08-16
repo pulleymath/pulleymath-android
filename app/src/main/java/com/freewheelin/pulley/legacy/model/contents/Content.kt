@@ -75,6 +75,7 @@ open class Content: Serializable {
 
     open var subject: String = ""
     var subjectTag: String = ""
+    var title: String = ""
 
     var totalNumber: Int = 0
     var markedNumber: Int = 0

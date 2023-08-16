@@ -33,12 +33,29 @@ class StudyPlannerItem (
 
     var isSelected: Boolean = false
 
+    val id: Int
+        get() {
+            return if (itemType.isDirectory) {
+                chapterId ?: items?.first()?.studyPlanBookId
+            } else {
+                workbookId
+            } ?: -99
+        }
+
 //    var isSelected2: ObservableBoolean = ObservableBoolean(false)
 
 }
 
 enum class StudyPlannerItemType {
-    DIRECTORY, WORKBOOK
+    DIRECTORY, WORKBOOK;
+    val isDirectory: Boolean
+        get() {
+            return this == DIRECTORY
+        }
+    val isWorkbook: Boolean
+        get() {
+            return this == WORKBOOK
+        }
 }
 
 data class StudyPlannerProgress(

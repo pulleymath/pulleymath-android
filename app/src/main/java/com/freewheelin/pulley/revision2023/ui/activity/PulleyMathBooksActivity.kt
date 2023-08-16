@@ -55,6 +55,7 @@ import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.SOLVE_RESULT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -298,6 +299,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
+                SOLVE_RESULT -> {
+                    val reFetchReceiverIntent = Intent(UserManager.RE_CONFIGURE_UI)
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(reFetchReceiverIntent)
+                }
                 CHALLENGE_PATTERN_FINISHED -> {
                     viewModel.joinedChallengeList.value?.find { it.isStartChallenge }?.startChallenge?.let { startChallenge ->
                         if (startChallenge.isPulleyBooksCourseFinished) {

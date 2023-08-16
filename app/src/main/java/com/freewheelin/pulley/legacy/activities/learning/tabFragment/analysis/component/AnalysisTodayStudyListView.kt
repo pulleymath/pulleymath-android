@@ -124,7 +124,7 @@ class StudyListViewHolder(val listBinding: ItemStudyListBinding): RecyclerView.V
     fun set(piece: Content) {
         listBinding.apply {
             dateTv.text = DateTimeUtils.mMDashddFormat.format(piece.updateDateTime)
-            titleTv.text = piece.subject
+            titleTv.text = if (piece.title.isNullOrEmpty()) piece.subject else piece.title
 
             val solvedCnt = piece.markedNumber + piece.similarProblemNumber
             val totalCnt = piece.totalNumber + piece.similarProblemNumber

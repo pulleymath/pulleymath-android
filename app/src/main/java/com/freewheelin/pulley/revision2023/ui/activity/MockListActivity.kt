@@ -2,11 +2,14 @@ package com.freewheelin.pulley.revision2023.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -21,9 +24,11 @@ import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.Ne
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.pxToSp
 import com.freewheelin.pulley.legacy.utils.showExpandVertical
 import com.freewheelin.pulley.revision2023.viewmodel.MockListActViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+
 
 interface MockTabListener {
     fun onMockTestFinished()

@@ -103,6 +103,7 @@ class MainActivity : PermissionActivity(),
 
     lateinit var tabMoveReceiver: BroadcastReceiver
     lateinit var challengeReceiver: BroadcastReceiver
+    lateinit var challengeUpdateReceiver: BroadcastReceiver
     lateinit var purchaseReceiver: BroadcastReceiver
     lateinit var userUpdateReceiver: BroadcastReceiver
     lateinit var middleHighChangeReceiver: BroadcastReceiver
@@ -230,6 +231,7 @@ class MainActivity : PermissionActivity(),
 //                SpyDialog().apply {
 //
 //                }.show(supportFragmentManager, "SpyDialog")
+//                Preferences._checkPlanMakeBtnClicked.set("")
             }
 
             setSpy()
@@ -430,6 +432,11 @@ class MainActivity : PermissionActivity(),
                 }
             }
         }
+        challengeUpdateReceiver = object : BroadcastReceiver() {
+            override fun onReceive(p0: Context?, p1: Intent?) {
+                viewModel.fetchUserChallenges()
+            }
+        }
         challengeReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {
                 intent?.let {
@@ -530,6 +537,7 @@ class MainActivity : PermissionActivity(),
         listOf(
             Pair(tabMoveReceiver, IntentFilter(PieceManager.EVENT_MOVE_TAB)),
             Pair(challengeReceiver, IntentFilter(ChallengeManager.MAIN_SCREEN_TAB_MOVE_EVENT)),
+            Pair(challengeUpdateReceiver, IntentFilter(ChallengeManager.CHALLENGE_UPDATE)),
             Pair(purchaseReceiver, IntentFilter(PurchaseWebViewActivity.PURCHASE_SUCCESS)),
             Pair(userUpdateReceiver, IntentFilter(UserManager.EVENT_USER_UPDATE)),
             Pair(middleHighChangeReceiver, IntentFilter(UserManager.EVENT_SCHOOL_CHANGE)),
@@ -586,7 +594,7 @@ class MainActivity : PermissionActivity(),
             schoolType.observe(this@MainActivity) {
                 Preferences.schoolType.set(it.name)
                 MyApplication.schoolType = it
-                binding.schoolSwitch.changeSchoolType(it.isMiddle)
+                binding.schoolSwitch.changeSchoolType(it.isHigh)
                 updateHeaderItems(it.isMiddle)
                 updateHeaderColors(it.isMiddle)
             }
@@ -741,7 +749,7 @@ class MainActivity : PermissionActivity(),
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
 
-        listOf(tabMoveReceiver, challengeReceiver, purchaseReceiver, userUpdateReceiver, middleHighChangeReceiver)
+        listOf(tabMoveReceiver, challengeUpdateReceiver, challengeReceiver, purchaseReceiver, userUpdateReceiver, middleHighChangeReceiver)
             .forEach { LocalBroadcastManager.getInstance(this).unregisterReceiver(it) }
         AppUsageMonitor.finishAppUsage()
         WebStorage.getInstance().deleteAllData()

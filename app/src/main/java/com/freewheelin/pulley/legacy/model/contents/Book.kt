@@ -18,17 +18,21 @@ enum class BookType {
     BOOK,
     MO,
     RECOMMEND,
+    PRACTICE,
     TEST,
     NOTE;
 
     val getTagTitle: String
     get() {
         return when(this) {
-            BOOK, CUSTOM_BOOK -> "유형학습"
+            BOOK -> "유형학습"
+            CUSTOM_BOOK -> "워크북"
             MO -> "모의고사"
             RECOMMEND -> "추천학습"
             TEST -> "테스트"
-            else -> "오답학습"
+            NOTE -> "오답학습"
+            PRACTICE -> "연습문제"
+            COMMERCIAL -> "풀리북스"
         }
     }
 }
@@ -72,7 +76,7 @@ class Book: Content, BaseDiffItem {
         }
     val splitedTag1: String
         get() {
-            val tags = bookTag?.split(",") ?: listOf("", "")
+            val tags = bookTag?.trim()?.split(",") ?: listOf("", "")
             if (tags.isNotEmpty()) {
                 return tags[0]
             }
@@ -80,7 +84,7 @@ class Book: Content, BaseDiffItem {
         }
     val splitedTag2: String
         get() {
-            val tags = bookTag?.split(",") ?: listOf("", "")
+            val tags = bookTag?.trim()?.split(",") ?: listOf("", "")
             if (tags.size > 1) {
                 return tags[1]
             }

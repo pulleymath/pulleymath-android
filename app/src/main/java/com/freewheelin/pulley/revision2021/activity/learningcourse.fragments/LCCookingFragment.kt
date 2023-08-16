@@ -125,21 +125,7 @@ class LCCookingFragment() : Fragment(),
                     cookingAdapter.submitList(it)
                 }
                 cookingImageUrl.observe(viewLifecycleOwner) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val requestCreator = Picasso.get()
-                            .load(it)
-//                        .load("${it}?time=${Date().time}")
-
-                        val width = requestCreator.get().width
-                        val height = requestCreator.get().height
-                        withContext(Dispatchers.Main) {
-
-                            requestCreator
-                                .resize(if (height > 5000) 3000 else width, 0)
-                                .onlyScaleDown()
-                                .into(exerciseIv)
-                        }
-                    }
+                    viewModel.setCookingImgIv(it, exerciseIv)
                 }
                 selectedExerciseIndex.observe(viewLifecycleOwner) {index ->
                     val selectedExercise =
@@ -219,6 +205,7 @@ class LCCookingFragment() : Fragment(),
                                     val lcActivity = (activity as LearningCourseActivity)
                                     lcActivity.binding.pencilcaseView.listener = this@LCCookingFragment
                                     binding.cookingMemoView.set(lcActivity.binding.pencilcaseView)
+
                                     quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
                                 }
 

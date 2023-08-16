@@ -64,7 +64,6 @@ class LCCourseEndDialog(): DialogFragment() {
 
             lifecycleOwner = this@LCCourseEndDialog
             vm = viewModel
-//            count = "$solvedPatternCount"
 
             exitBtn.setOnClickListener {
                 exitBtnCallback()

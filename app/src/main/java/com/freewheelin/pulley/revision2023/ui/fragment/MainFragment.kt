@@ -34,15 +34,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
-import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_MAIN_TAB
-import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_PULLEYMATH_BOOKS
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
+import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_MAIN_TAB
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.WHERE_ARE_YOU_FROM
-import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
@@ -78,7 +75,6 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         viewModel.onMissionClick(it)
     }
     private val plannerAdapter = MainPlannerListAdapter {
-        // TODO
         viewModel.selectedPlan.postValue(it)
     }
 
@@ -104,11 +100,13 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         userUpdateReceiver = object :BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
+                viewModel.updateMainUserPlanner()
             }
         }
         reconfigureReceiver = object :BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 syncProfile()
+                viewModel.updateMainUserPlanner()
             }
         }
     }
@@ -185,6 +183,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
 //            viewModel.initUserInfo()
             initRv()
             viewModel.updateMainUserPlanner()
+            viewModel.checkPlanMakeBtn()
 
             dDayTv.setOnClickListener { onDDayBtnClicked() }
             dDayLl.setOnClickListener { onDDayBtnClicked() }
@@ -198,14 +197,14 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                 viewModel.moveNextPlannerWeek()
             }
             dateRangeCl.setOnClickListener {
-                (plannerRv.layoutManager as? LinearLayoutManager)?.let {lm ->
+                (plannerRv.layoutManager as? LinearLayoutManager)?.let { lm ->
                     val plan = plannerAdapter.currentList.find { it.isToday }
                     val index = plannerAdapter.currentList.indexOf(plan)
                     lm.scrollToPositionWithOffset(index, 24)
                 }
             }
             todayBtn.setOnClickListener {
-                (plannerRv.layoutManager as? LinearLayoutManager)?.let {lm ->
+                (plannerRv.layoutManager as? LinearLayoutManager)?.let { lm ->
                     val plan = plannerAdapter.currentList.find { it.isToday }
                     val index = plannerAdapter.currentList.indexOf(plan)
                     if (index == -1) {
@@ -215,7 +214,9 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                     }
                 }
             }
-            makePlanLl.setOnClickListener {
+            makePlanLl.setOnJoinedUserClickListener(cb = {
+                val clickedInfo = Preferences.checkPlanMakeBtnClicked
+                viewModel.isClickedPlanMakeBtn.postValue(true)
                 val intent = Intent(requireContext(), PlannerActivity::class.java).apply {
                     val monday = LocalDate(viewModel.selectedMondayOfTheWeek.value).toString("yyyy-MM-dd")
                     val sunday = LocalDate(viewModel.selectedSundayOfTheWeek.value).toString("yyyy-MM-dd")
@@ -223,13 +224,16 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                     putExtra(PLANNER_SUNDAY, sunday)
                 }
                 getResult.launch(intent)
-            }
+            }, deniedCb = { // Guest User
+                LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "메인", "가입유도","플래너만들기")
+                showGuestJoinInduceDialog()
+            })
         }
         viewModel.apply {
             selectedPlan.observe(viewLifecycleOwner) {
                 when (it.tag) {
                     WeeklyPlanTag.PULLEY_WORKBOOK -> {
-                        val intent = Intent(requireContext(), SolveActivity::class.java).apply {
+                        val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
                             putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
                             putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
                         }
@@ -237,6 +241,11 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
                     }
                     WeeklyPlanTag.PRACTICE -> {
                         // TODO 아직 없어서 테스트 못함 230802
+                        val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
+                            putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
+                            putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                        }
+                        getResult.launch(intent)
                     }
                     WeeklyPlanTag.CONCEPT -> {
                         viewModel.createLearningCourseOnStudentId(it.workbookId) {
@@ -279,6 +288,15 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
 
             mainUserPlannerItems.observe(requireActivity()) { list ->
                 plannerAdapter.submitList(list)
+                if (list.isNotEmpty() && user?.serviceType?.isGuestUser == false) {
+                    val info = Preferences.checkPlanMakeBtnClicked
+                    val studentId = user?.studentID ?: ""
+                    val newList = info.studentIds + listOf(studentId)
+                    info.studentIds = newList.toSet().toList()
+
+                    Preferences.checkPlanMakeBtnClicked = info
+                    isClickedPlanMakeBtn.postValue(true)
+                }
             }
             plannerAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(
@@ -354,6 +372,15 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             userInRepo.observe(viewLifecycleOwner) {
                 showPaidView.postValue(it?.serviceType?.isPaidUser)
                 userPaidServiceType.postValue(it?.serviceType)
+            }
+            isClickedPlanMakeBtn.observe(viewLifecycleOwner) { isClicked ->
+                if (isClicked) {
+                    val info = Preferences.checkPlanMakeBtnClicked
+                    val studentId = user?.studentID ?: ""
+                    val newList = info.studentIds + listOf(studentId)
+                    info.studentIds = newList.toSet().toList()
+                    Preferences.checkPlanMakeBtnClicked = info
+                }
             }
         }
     }
@@ -522,17 +549,18 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     }
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val fromMainTabCode = LearningCourseActivity.FROM_MAIN_TAB
+            println("resultupdate getResult : code : ${it.resultCode}")
             when (it.resultCode) {
                 PLANNER_RESULT -> {
-                    val mondayStr = it.data?.getStringExtra("monday")
-                    val sundayStr = it.data?.getStringExtra("sunday")
+                    val mondayStr = it.data?.getStringExtra(PLANNER_MONDAY)
+                    val sundayStr = it.data?.getStringExtra(PLANNER_SUNDAY)
                     viewModel.updateMainUserPlanner(mondayStr, sundayStr)
                 }
-                SOLVE_RESULT, fromMainTabCode -> {
+                SOLVE_RESULT -> {
                     val monday = viewModel.selectedMondayOfTheWeek.value?.toString("yyyy-MM-dd")
                     val sunday = viewModel.selectedSundayOfTheWeek.value?.toString("yyyy-MM-dd")
                     viewModel.updateMainUserPlanner(monday, sunday)
+                    syncProfile()
                 }
                 else -> {}
             }

@@ -6,6 +6,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterCategory
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterOrder
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterType
+import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.*
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.core.API_V2
@@ -119,13 +121,23 @@ object BookManager {
             user = user,
             cb = cb)
     }
-    fun getBook(context: Context, book: Book?, user: UserV4, workbookId: Int? = null, cb: ((book: Book) -> Unit)) {
-        API_V3.getBook(user.studentID, book?.assignID ?: book?.pieceID ?: workbookId!!).enqueue(object: Callback<ResponseBody<ResponseBookInfo2>> {
+    fun getBook(context: Context, book: Book, user: UserV4, cb: ((book: Book) -> Unit)) {
+        API_V3.getBook(user.studentID, book.assignID ?: book.pieceID).enqueue(v3GetBookRes(context, book, cb))
+    }
+    fun getBookByWorkbookId(context: Context, book: Book, workbookId: Int, cb: ((book:Book) -> Unit)) {
+        val user = MyApplication.user ?: return
+        API_V3.getBook(user.studentID, workbookId).enqueue(v3GetBookRes(context, book, cb))
+    }
+    private fun v3GetBookRes(context: Context, book: Book, cb: (book: Book) -> Unit) :Callback<ResponseBody<ResponseBookInfo2>> {
+        return object: Callback<ResponseBody<ResponseBookInfo2>> {
             override fun onFailure(call: Call<ResponseBody<ResponseBookInfo2>>, t: Throwable) {
                 responseFailed(context, t)
             }
 
-            override fun onResponse(call: Call<ResponseBody<ResponseBookInfo2>>, response: Response<ResponseBody<ResponseBookInfo2>>) {
+            override fun onResponse(
+                call: Call<ResponseBody<ResponseBookInfo2>>,
+                response: Response<ResponseBody<ResponseBookInfo2>>
+            ) {
                 response.body()?.data?.let {
                     val responseBookPage = it.bookPage
                     val responseProblems = it.problemList
@@ -133,17 +145,16 @@ object BookManager {
                     val title = it.title
 
                     if(response.isSuccessful && responseAssignID != null) {
-                        val newBook = book ?: Book()
-                        newBook.assignID = responseAssignID
-                        newBook.bookPage = responseBookPage
-                        newBook.problems = responseProblems
-                        newBook.arrangeProblem()
-                        newBook.arrangeChapter()
-                        newBook.bookName = title
+                        book.assignID = responseAssignID
+                        book.bookPage = responseBookPage
+                        book.problems = responseProblems
+                        book.arrangeProblem()
+                        book.arrangeChapter()
+                        book.bookName = title
                         LogUtils.logEvent(context, user, PulleyEvent.INIT_TEST, "문제풀기", "유형학습 세팅","Log: 문항개수 0개\n" +
-                            "param: ${"studentID: ${user.studentID}, id: ${newBook.assignID ?: newBook.pieceID}"}\n" +
+                            "param: ${"studentID: ${user?.studentID}, id: ${book.assignID ?: book.pieceID}"}\n" +
                             "response: ${response.raw()}\n")
-                        cb(newBook)
+                        cb(book)
                     }
                 }
 
@@ -151,7 +162,8 @@ object BookManager {
                     responseFailed(context, Throwable("${response.body()?.error}, ${response.body()?.message}"))
                 }
             }
-        })
+
+        }
     }
 
     // Deprecated

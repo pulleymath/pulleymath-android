@@ -73,3 +73,10 @@ class BaseCookingListResponse<T> : Serializable {
     var message: Any? = null
     var current_time: String? = null
 }
+
+abstract class BaseListResponse<T> : Serializable {
+    var data: List<T>? = null
+    var error: Any? = null
+    var message: Any? = null
+    var current_time: String? = null
+}

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/barContainer"
         android:layout_width="@dimen/dp200"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp32"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
