@@ -143,8 +143,8 @@
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustNothing" />
+<!--            android:hardwareAccelerated="false"-->
         <activity
             android:name=".revision2021.activity.AlarmActivity"
             android:exported="true"

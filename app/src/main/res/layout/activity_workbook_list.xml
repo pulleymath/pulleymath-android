@@ -254,10 +254,10 @@
                         android:layout_width="@dimen/dp200"
                         android:layout_height="@dimen/dp200"
                         android:visibility="@{ vm.showTotalLoadingView ? View.VISIBLE : View.GONE }"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/totalRv"
                         app:layout_constraintStart_toStartOf="@+id/totalRv"
                         app:layout_constraintTop_toTopOf="@+id/totalRv"
+                        android:layout_marginTop="120dp"
                         app:lottie_autoPlay="true"
                         app:lottie_fileName="circle_loading.json"
                         app:lottie_loop="true" />
@@ -267,10 +267,10 @@
                         android:visibility="@{ vm.showEmptyContainer ? View.VISIBLE : View.GONE }"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="120dp"
                         app:layout_constraintTop_toTopOf="@+id/filterRv"
                         app:layout_constraintStart_toEndOf="@+id/filterRv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="@+id/filterRv">
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <ImageView
                             android:id="@+id/emptyIv"

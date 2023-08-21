@@ -372,32 +372,33 @@ class MyMainPageFragment : Fragment() {
     }
 
     private fun getSubText(setting: Setting): String {
-        val user = requireActivity().application.user!!
+        requireActivity().application.user?.let { user ->
+            return when(setting) {
+                AppSetting -> {
+                    var agrees: MutableList<String> = mutableListOf()
+                    if(user.agreeAlimtalk) agrees.add("알림톡(문자)")
+                    if(user.agreeAppPush) agrees.add("푸시")
+                    if(user.agreeEmail) agrees.add("이메일")
+                    if(user.agreeMarketing) agrees.add("마케팅")
 
-        return when(setting) {
-            AppSetting -> {
-                var agrees: MutableList<String> = mutableListOf()
-                if(user.agreeAlimtalk) agrees.add("알림톡(문자)")
-                if(user.agreeAppPush) agrees.add("푸시")
-                if(user.agreeEmail) agrees.add("이메일")
-                if(user.agreeMarketing) agrees.add("마케팅")
-
-                if(agrees.isEmpty()) {
-                    "수신 거부"
-                } else {
-                    "${agrees.joinToString(",")} 알림 허용"
+                    if(agrees.isEmpty()) {
+                        "수신 거부"
+                    } else {
+                        "${agrees.joinToString(",")} 알림 허용"
+                    }
                 }
-            }
-            Version -> {
-                val isNeedUpdate = VersionManager.isNeedToUpdate()
-                when (isNeedUpdate) {
-                    true -> "V ${VersionManager.appVersion}"
-                    false -> "최신 버전입니다."
-                    else -> ""
+                Version -> {
+                    val isNeedUpdate = VersionManager.isNeedToUpdate()
+                    when (isNeedUpdate) {
+                        true -> "V ${VersionManager.appVersion}"
+                        false -> "최신 버전입니다."
+                        else -> ""
+                    }
                 }
+                else -> ""
             }
-            else -> ""
         }
+        return ""
     }
 
     override fun onDestroy() {

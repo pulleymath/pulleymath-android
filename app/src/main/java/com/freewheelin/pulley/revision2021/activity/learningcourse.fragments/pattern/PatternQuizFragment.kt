@@ -105,7 +105,6 @@ class PatternQuizFragment() : Fragment(),
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
 
-                memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                 viewModel.apply {
                     remainingHintSize.observe(viewLifecycleOwner) { size ->
                         (parentFragment as LCPatternFragment).setHintBtnDisabled(size == 0)
@@ -117,11 +116,9 @@ class PatternQuizFragment() : Fragment(),
                     }
 
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
-//                    patternQuiz.observe(viewLifecycleOwner) {
                         val patternId = quiz.patternId
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
-                        memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         memoView.setPatternMemoId(patternId, it.patternQuizId)
                         memoView.clearBitmap()
                         memoView.load()
