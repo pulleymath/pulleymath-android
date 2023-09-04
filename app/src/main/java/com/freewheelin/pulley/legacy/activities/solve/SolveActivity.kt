@@ -367,7 +367,13 @@ class SolveActivity : BaseActivity(),
                     val workbookId = intent.getIntExtra(OPEN_PULLEY_WORKBOOK, isNull)
 
                     if (workbookId == isNull) {
-                        BookManager.getBook(this@SolveActivity, content, user!!, cb)
+                        if (user == null) {
+                            viewModel.fetchUser {
+                                BookManager.getBook(this@SolveActivity, content, it, cb)
+                            }
+                        } else {
+                            BookManager.getBook(this@SolveActivity, content, user!!, cb)
+                        }
                     } else {
                         BookManager.getBookByWorkbookId(this@SolveActivity, content, workbookId, cb)
                     }

@@ -49,10 +49,13 @@
     <dimen name="dp68">60dp</dimen>
     <dimen name="dp64">56dp</dimen>
     <dimen name="dp60">48dp</dimen>
+    <dimen name="dp58">50dp</dimen>
     <dimen name="dp56">48dp</dimen>
     <dimen name="dp50">44dp</dimen>
     <dimen name="dp48">40dp</dimen>
+    <dimen name="dp44">38dp</dimen>
     <dimen name="dp42">36dp</dimen>
+    <dimen name="dp41">34dp</dimen>
     <dimen name="dp40">32dp</dimen>
     <dimen name="dp36">32dp</dimen>
     <dimen name="dp35">30dp</dimen>

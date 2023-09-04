@@ -13,9 +13,11 @@
         android:id="@+id/rootView"
         android:layout_width="320dp"
         android:layout_height="382dp"
-        android:background="@drawable/shadow_main_page_card"
-        android:padding="26dp"
+        android:background="@drawable/bg_white_round_10"
+        android:padding="16dp"
+        android:layout_marginHorizontal="10dp"
         >
+<!--        android:background="@drawable/shadow_main_page_card"-->
 
         <TextView
             android:id="@+id/cardChipTv"
@@ -23,7 +25,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{ item.priorConceptSubjectName }"
+            android:text="@{ item.priorConceptSubjectName, default=중등 }"
             style="@style/mo_h6"
             android:paddingHorizontal="8dp"
             android:paddingVertical="3dp"
@@ -35,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/h5"
-            android:text="@{ item.name }"
+            android:text="@{ item.name, default=곱셈공식 }"
             android:textColor="@color/purple_300"
             app:layout_constraintStart_toEndOf="@+id/cardChipTv"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,9 +52,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             cookingImgRes="@{ item.priorConceptImageUrl }"
             android:layout_marginTop="16dp"/>
-        <!--            android:background="@color/purple_100"-->
-        <!--            android:paddingHorizontal="8dp"-->
-        <!--            android:paddingVertical="14dp"/>-->
 
         <com.freewheelin.pulley.revision2021.views.LabelFlowLayout
             android:id="@+id/labelFlowLayout"

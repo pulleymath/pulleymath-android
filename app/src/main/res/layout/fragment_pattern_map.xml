@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_200"
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -85,8 +86,9 @@
             android:id="@+id/challengeLoadingContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#FAFAFA"
+            android:background="@color/gray_200"
             android:layout_marginTop="120dp"
+            tools:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

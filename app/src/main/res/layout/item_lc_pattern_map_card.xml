@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:focusable="true"
-        android:paddingStart="@{ isLeftPosition ? @dimen/dp0 : @dimen/dp6 }"
-        android:paddingEnd="@{ isFinalCard &amp;&amp; isRightPosition ? @dimen/dp30 : isFinalCard ? @dimen/dp18 : @dimen/dp0 }"
+        android:paddingStart="@{ isLeftPosition ? @dimen/dp14 : @dimen/dp0 }"
+        android:paddingEnd="@{ isFinalCard &amp;&amp; isRightPosition ? @dimen/dp44 : isFinalCard ? @dimen/dp44 : @dimen/dp0 }"
         android:paddingBottom="@{ isBottomPosition &amp;&amp; showNextStepButton ? @dimen/dp144 : isBottomPosition ? @dimen/dp36 : @dimen/dp0 }">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,8 +32,8 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:onClick="@{() -> listener.onPatternCardClickListener(item)}"
-            layout_margin_top_dimen="@{ isTopPosition ? @dimen/dp48 : @dimen/dp0 }"
-            android:layout_marginTop="40dp"
+            layout_margin_top_dimen="@{ isTopPosition ? @dimen/dp58 : @dimen/dp0 }"
+            tools:layout_marginTop="50dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,8 +44,7 @@
                 android:id="@+id/cardInnerCl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shadow_card_white"
-                android:padding="10dp"
+                android:background="@drawable/bg_white_round_10"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +54,7 @@
                     android:id="@+id/patternTitleChipTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{ `유형 0` + CardNumber }"
+                    android:text="@{ `유형 0` + CardNumber, default=`유형 02` }"
                     android:textColor="@color/white"
                     style="@style/mo_h6"
                     android:paddingVertical="5dp"
@@ -72,7 +71,7 @@
                     style="@style/h5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{ item.name }"
+                    android:text="@{ item.name, default=`다항식의 연산` }"
                     android:textColor="@color/purple_300"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
@@ -195,7 +194,7 @@
 
         <LinearLayout
             android:id="@+id/cardHeaderLl"
-            android:layout_width="75dp"
+            android:layout_width="60dp"
             android:layout_height="50dp"
             android:visibility="@{ isTopPosition &amp;&amp; isLeftPosition ? View.VISIBLE : View.GONE }"
             app:layout_constraintTop_toTopOf="parent"
@@ -204,7 +203,7 @@
                 android:id="@+id/startIv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_flag"
+                android:src="@drawable/ic_flag_green"
                 />
 <!--                android:visibility="@{ isLeftPosition ? View.VISIBLE : View.GONE }"-->
         </LinearLayout>
@@ -213,7 +212,7 @@
             android:id="@+id/arrowIconIv"
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginHorizontal="14dp"
             android:src="@drawable/ic_blunt_triangle_8_gray_400"
             app:tint="@color/purple_200"
             android:visibility="@{ isFinalCard ? View.GONE : View.VISIBLE }"

@@ -12,7 +12,7 @@
         android:id="@+id/lessonPageRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_100"
+        android:background="@color/gray_200"
         tools:context=".revision2023.ui.fragment.PriorConceptFragment">
 
 
@@ -105,7 +105,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
             android:visibility="@{ vm.priorConcepts.size > 0 ? View.VISIBLE : View.GONE }"
-            android:background="@color/gray_100"
+            android:background="@color/gray_200"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
             android:paddingHorizontal="22dp"

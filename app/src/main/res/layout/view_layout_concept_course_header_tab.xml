@@ -61,7 +61,7 @@
                         android:onClick="@{ _ -> vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
                         android:src="@drawable/ic_course_star"
-                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/gray_500 }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -79,7 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
                         android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
@@ -101,7 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
                         android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
@@ -121,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue }"
                         android:text="@{ SubjectIndicator.Math1.inKorean }"/>
@@ -142,7 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue }"
                         android:text="@{ SubjectIndicator.Math2.inKorean }"/>
@@ -163,7 +163,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue }"
                         android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
@@ -184,7 +184,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue }"
                         android:text="@{ SubjectIndicator.MathCalculus.inKorean }"/>
@@ -205,7 +205,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue }"
                         android:text="@{ SubjectIndicator.MathKiha.inKorean }"/>
@@ -249,7 +249,7 @@
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
                             android:src="@drawable/ic_course_star"
-                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/gray_500 }"/>
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
@@ -270,7 +270,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
                             android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
@@ -294,7 +294,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
                             android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
@@ -316,7 +316,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue  }"
                             android:text="@{ SubjectIndicator.Math1.inKorean }"/>
@@ -339,7 +339,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue  }"
                             android:text="@{ SubjectIndicator.Math2.inKorean }"/>
@@ -362,7 +362,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue  }"
                             android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
@@ -385,7 +385,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue  }"
                             android:text="@{ SubjectIndicator.MathCalculus.inKorean }" />
@@ -409,7 +409,7 @@
                             android:paddingHorizontal="30dp"
                             android:minWidth="80dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue  }"
                             android:text="@{ SubjectIndicator.MathKiha.inKorean }" />
@@ -461,7 +461,7 @@
                         android:onClick="@{ _ -> vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
                         android:src="@drawable/ic_course_star"
-                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                        imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/gray_500 }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -480,7 +480,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue }"
                         android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
@@ -503,7 +503,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue }"
                         android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
@@ -524,7 +524,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue }"
                         android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
@@ -546,7 +546,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue }"
                         android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
@@ -568,7 +568,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue }"
                         android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
@@ -591,7 +591,7 @@
                         android:layout_height="match_parent"
                         android:minWidth="80dp"
                         style="@style/h5"
-                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue }"
                         android:text="@{ SubjectIndicator.Middle3_2.inKorean }"/>
@@ -636,7 +636,7 @@
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Tutorial.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue }"
                             android:src="@drawable/ic_course_star"
-                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/purple_gray_400 }"/>
+                            imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/gray_500 }"/>
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
@@ -657,7 +657,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
@@ -681,7 +681,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
@@ -703,7 +703,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
@@ -726,7 +726,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
@@ -749,7 +749,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
@@ -773,7 +773,7 @@
                             android:layout_height="match_parent"
                             android:paddingHorizontal="30dp"
                             style="@style/h5"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/purple_gray_500 }"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue  }"
                             android:text="@{ SubjectIndicator.Middle3_2.inKorean }" />
