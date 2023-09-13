@@ -24,7 +24,10 @@ import com.freewheelin.pulley.legacy.model.ServerStatus
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.OnBoardingItem
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.activity.OnBoardingActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -36,10 +39,13 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
+import org.jsoup.Jsoup
+import java.text.SimpleDateFormat
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
@@ -80,7 +86,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     suspend fun checkServerInspection(): Boolean {
         var status: ServerStatus? = null
         val inspectionJob = CoroutineScope(Dispatchers.IO).async {
-            delay(800)
+//            delay(800)
             status = ServerStatusManager.requestInspectionFlag()
 
             withContext(Dispatchers.Main) {
@@ -202,13 +208,30 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         Preferences.forceUpdateDialogCount.set(0)
         Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
+        println("온보딩 :checkSign : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
-        if (isNeedOnboarding) {
-            startActivity(OnboardingActivity::class.java)
+        if (isNeedNewOnBoarding) {
+            viewModel.getOnBoardItems (
+                successCb = { images ->
+
+                    val intent = OnBoardingActivity.getIntent(this, images)
+                    startActivity(intent)
+                },
+                deniedCb = {
+                    checkTokenAndMoveActivity()
+                }
+            )
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(500)
+                finishAffinity()
+            }
             return
         }
         println("asoaso SplashACt : MyApplication.user?.token : ${MyApplication.user?.token}")
         println("asoaso SplashACt : MyApplication.token : ${MyApplication.token}")
+        checkTokenAndMoveActivity()
+    }
+    private fun checkTokenAndMoveActivity() {
         if(MyApplication.user?.token?.isNotEmpty() == true) {
             viewModel.fetchUser { user ->
                 MyApplication.isAppFirstLaunch = true
@@ -224,24 +247,34 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private fun toLogin() {
         Log.d(javaClass.simpleName, "moveActivity() => user ${user?.token?.isEmpty() == true} =${user?.token}")
         user?.let { FirebaseCrashlytics.getInstance().setUserId(it.studentID) }
+        println("온보딩 : toLogin : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
         when {
-            isNeedOnboarding -> startActivity(OnboardingActivity::class.java)
+            isNeedNewOnBoarding -> {
+                viewModel.getOnBoardItems (
+                    successCb = { images ->
+                        val intent = OnBoardingActivity.getIntent(this, images)
+                        startActivity(intent)
+                    },
+                    deniedCb = {
+                        goMainActivity()
+                    }
+                )
+            }
             else -> {
-                loadAlimSetting(user)
-                putFcmToken(user)
-
-                val pushParam = intent.getStringExtra("target_android")
-//                Intent(this, LearningTabActivity::class.java)
-//                    .putExtra("target_android", pushParam).apply {
-//                        startActivity(this)
-//                    }
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-//                startActivity(LCTutorialActivity.getIntent(this))
+                goMainActivity()
             }
         }
-        finish()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(500)
+            finishAffinity()
+        }
+    }
+    private fun goMainActivity() {
+        loadAlimSetting(user)
+        putFcmToken(user)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onResume() {
@@ -289,7 +322,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 /* do nothing */
             })
     }
-
     override fun onStop() {
         super.onStop()
         disposables.clear()

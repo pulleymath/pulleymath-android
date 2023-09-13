@@ -78,17 +78,21 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".revision2023.ui.activity.OnBoardingActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+        <activity
             android:name=".revision2023.ui.activity.MockListActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.WrongNoteActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.TestActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.PlannerActivity"
             android:exported="false"
@@ -138,13 +142,11 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
 
-        <!-- 하드웨어가속을 켜면 문제 이미지가 화면을 넘어가는 경우 필기가 동작하지 않는다.  -->
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing" />
-<!--            android:hardwareAccelerated="false"-->
         <activity
             android:name=".revision2021.activity.AlarmActivity"
             android:exported="true"
@@ -192,11 +194,6 @@
             android:name=".legacy.activities.StartActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".legacy.activities.OnboardingActivity"
-            android:exported="true"
-            android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".legacy.activities.auth.signup.SignupActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

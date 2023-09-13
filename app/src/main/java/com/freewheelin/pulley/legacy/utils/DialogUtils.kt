@@ -242,7 +242,7 @@ class DialogUtils {
                 title = title,
                 contents = contents,
                 cancelText = "나가기",
-                successText = "시작하기"
+                successText = "더 보기"
             )
 
             dialog.cancelCallback = leftBtnCB

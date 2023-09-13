@@ -22,6 +22,7 @@ import com.freewheelin.pulley.databinding.DialogSpyBinding
 import com.freewheelin.pulley.databinding.DialogTeacherUtilityBinding
 import com.freewheelin.pulley.legacy.activities.SplashActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.isNeedNewOnBoarding
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.manage.BookManager
@@ -37,6 +38,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.TeacherUtilityViewModel
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.view.SpyItemView
@@ -49,6 +51,7 @@ enum class SpyItem(val description: String, val isSwitch: Boolean = false) {
     LiveAPI("라이브 서버", true),
     StagingAPI("스테이징 서버", true),
 //    InitSetting("초기설정으로가기"),
+    ClearOnBoard("온보딩 초기화"),
     ClearAllStudy("학습내역 전체 삭제"),
     ClearBooks("유형학습 내역 전체 삭제"),
     ClearMockExam("모의고사 풀이내역 전체 삭제"),
@@ -58,6 +61,7 @@ enum class SpyItem(val description: String, val isSwitch: Boolean = false) {
 //    CrashlyticsCrash("강제 크래시"),
 //    CrashlyticsReport("크래시리틱 리포트"),
 //    ClearTutorialHistory("튜토리얼 보인 내역 삭제"),
+
 
     ShowEventLogging("이벤트 로깅 보이기", true),
 //    SHOW_UPDATE_DIALOG("강제업데이트 UI확인하기"),
@@ -87,6 +91,7 @@ class SpyDialog(): DialogFragment() {
     val spyItems = listOf(
         SpyItem.LiveAPI,
         SpyItem.StagingAPI,
+        SpyItem.ClearOnBoard,
         SpyItem.ClearAllStudy,
         SpyItem.ClearBooks,
         SpyItem.ClearMockExam,
@@ -120,6 +125,10 @@ class SpyDialog(): DialogFragment() {
                         when(spyItem) {
                             SpyItem.LiveAPI -> changeApi(true)
                             SpyItem.StagingAPI -> changeApi(false)
+                            SpyItem.ClearOnBoard -> {
+                                DaebakToast.show(context, "앱종료 후 다시 온보딩 확인 가능!")
+                                isNeedNewOnBoarding = true
+                            }
                             SpyItem.ClearAllStudy -> {
                                 DialogUtils.DaebakDialog(requireContext()).apply {
                                     title = "채점 내역을 모두 삭제합니다"

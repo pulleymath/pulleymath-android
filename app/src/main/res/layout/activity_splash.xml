@@ -8,29 +8,17 @@
         android:layout_height="match_parent">
 
         <Button
-            style="@style/ExtraBold"
             android:id="@+id/startBtn"
             android:layout_width="300dp"
             android:layout_height="200dp"
             android:textColor="@color/purple_300"
-            android:background="@drawable/bg_transparent_stroke_black_200"
-            android:textSize="@dimen/sp36"
+            android:background="@color/ch_transparent"
+            android:textSize="@dimen/sp48"
             android:text="PULLEY"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/splashLottie"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_fileName="splash.json" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

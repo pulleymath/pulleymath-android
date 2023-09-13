@@ -26,7 +26,7 @@ object Preferences {
     var userDataString =  APPreference("")
     var versionDataString = APPreference("")
     val isSpyMode = APPreference(false)
-    val isNeedOnboarding = APPreference(true)
+    val isNeedNewOnBoarding = APPreference(true)
     val lastExpiredShowingDate = APPreference(0L)
     val initTestData = APPreference("")
 

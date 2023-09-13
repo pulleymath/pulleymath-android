@@ -145,12 +145,13 @@ val suspendVersionInfo: VersionInfo?
             null
         }
     }
-var isNeedOnboarding: Boolean
+
+var isNeedNewOnBoarding: Boolean
     set(value) {
-        Preferences.isNeedOnboarding.set(value)
+        Preferences.isNeedNewOnBoarding.set(value)
     }
     get() {
-        return Preferences.isNeedOnboarding.get()
+        return Preferences.isNeedNewOnBoarding.get()
     }
 var isSPYMode: Boolean
     set(value) {
