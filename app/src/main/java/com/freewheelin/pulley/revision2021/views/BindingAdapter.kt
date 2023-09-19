@@ -363,6 +363,7 @@ object BindingAdapter {
                 33 -> R.drawable.book_plan_v2_cover_33
                 34 -> R.drawable.book_plan_v2_cover_34
                 35 -> R.drawable.book_plan_v2_cover_35
+                36 -> R.drawable.book_plan_v2_cover_36
                 else -> R.drawable.book_plan_v2_cover_8
             }
             view.setImageResource(imgRes)
