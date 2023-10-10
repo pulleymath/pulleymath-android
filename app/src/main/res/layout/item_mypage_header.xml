@@ -1,20 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp24"
-        android:paddingStart="@dimen/dp16">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/profileLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <TextView
-            style="@style/TextGray_500"
-            android:id="@+id/headerTitleTv"
-            android:layout_marginBottom="@dimen/dp12"
-            android:text="내 정보"
-            android:textSize="@dimen/sp16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="128dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/profilePullingIv"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        tools:src="@drawable/profile_image_free"
+                        android:layout_margin="24dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/studentNameTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/h4"
+                        tools:text="박주혜"/>
+                    <TextView
+                        android:id="@+id/accountEmailTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        style="@style/b1"
+                        android:textColor="@color/gray_500"
+                        tools:text="joohye@pulleymath.com"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp24"
+            android:paddingStart="@dimen/dp16">
+
+
+            <TextView
+                style="@style/TextGray_500"
+                android:id="@+id/headerTitleTv"
+                android:layout_marginBottom="@dimen/dp12"
+                android:text="내 정보"
+                android:textSize="@dimen/sp16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </LinearLayout>
 </layout>

@@ -134,6 +134,7 @@ class MyChangeEmailFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
                         when (it) {
                             is retrofit2.HttpException -> {
                                 println("throwable - HttpException : ${it.code()} / ${it.message}")
+                                callback(CodeConfirmView.Status.Fail, "")
                                 when (it.code()) {
                                     400 -> {
                                         DaebakToast.show(requireContext(), "인증번호가 유효하지 않습니다", overDialog = true)

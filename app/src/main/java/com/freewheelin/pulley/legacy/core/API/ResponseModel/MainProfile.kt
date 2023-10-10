@@ -10,6 +10,8 @@ import java.lang.Math.abs
 import java.util.*
 
 data class MainProfileV4 (
+    val accountEmail: String,
+    val email: String,
     val studentId: String,
     val studentName: String,
     val serviceType: PaidServiceType,

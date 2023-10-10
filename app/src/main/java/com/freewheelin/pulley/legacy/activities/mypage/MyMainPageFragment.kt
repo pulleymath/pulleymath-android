@@ -46,14 +46,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 enum class SettingCategory(val title: String) {
-    PRIVATE("개인정보 설정"),
-    PRIVATE_CHALLENGE_NOT_CONTAIN("개인정보 설정"),
+    PRIVATE("내 정보"),
+    PRIVATE_CHALLENGE_NOT_CONTAIN("내 정보"),
     SERVICE("서비스 이용"),
     SETTING("설정"),
     SUPPORT("지원"),
     ETC("");
 
 //    SPY("개발 테스트용");
+    val isPrivate: Boolean
+        get() {
+            return this == PRIVATE || this == PRIVATE_CHALLENGE_NOT_CONTAIN
+        }
 
     val setting: List<Setting>
         get() {
@@ -181,6 +185,7 @@ class MyMainPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.myPageMenuRv.adapter = MenuAdapter().apply { this.sectionType = SectionType.header }
         binding.myPageMenuRv.layoutManager = LinearLayoutManager(context)
@@ -329,7 +334,7 @@ class MyMainPageFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return if (viewType == 0) {
-                HeaderHolder.create(parent)
+                HeaderHolder.create(parent, viewModel)
             } else {
                 val binding: ItemMypageListBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_mypage_list, parent, false)
                 ListHolder(binding)
@@ -340,7 +345,7 @@ class MyMainPageFragment : Fragment() {
             (holder as? HeaderHolder)?.apply {
                 val category = settingCategory[indexPath.section]
 
-                set(category)
+                set(category, indexPath)
             }
 
             (holder as? ListHolder)?.apply {

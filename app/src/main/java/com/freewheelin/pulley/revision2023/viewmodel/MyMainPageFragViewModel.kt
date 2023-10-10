@@ -25,6 +25,7 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
     val schoolType = userRepository.schoolType
+    val mainProfileV4 = userRepository.mainProfileV4
     val joinedChallengeList = challengeRepository.joinedChallengeList
 
     private val _recommendCommonSubjects = MutableLiveData<List<RecommendSubject>>()

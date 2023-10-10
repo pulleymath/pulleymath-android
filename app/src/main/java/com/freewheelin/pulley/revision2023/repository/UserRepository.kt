@@ -36,6 +36,7 @@ class UserRepository() {
             println("asoaso - - - - - getUser, ${it.token}")
             _user.postValue(it)
             MyApplication.user = it
+            getMainProfileV4()
             it
         }
     }
