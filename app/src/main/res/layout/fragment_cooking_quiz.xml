@@ -213,9 +213,102 @@
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/dummyAnswerPanelLl"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_percent="0.65"
-            app:layout_constraintHorizontal_bias="0"/>
+            />
+
+<!--        cookingMemoView의 width 측정을 위한 더미 뷰, 항상 Invisible 이어야 한다-->
+        <LinearLayout
+            android:id="@+id/dummyAnswerPanelLl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                >
+
+                <LinearLayout
+                    android:id="@+id/hintBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_gray_300_round_stroke"
+                    tools:background="@drawable/bg_btn_round_common">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="힌트"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        style="@style/mo_h5"/>
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/quizSingleAnswerCl"
+                    android:layout_width="80dp"
+                    android:layout_height="36dp">
+
+                    <TextView
+                        android:id="@+id/quizSingleAnswer"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="정답 입력"
+                        tools:text="정답 입력"
+                        style="@style/b2"
+                        android:gravity="center"
+                        tools:visibility="gone"
+                        android:background="@drawable/bg_white_stroke_gray_300_round_5"
+                        tools:background="@drawable/bg_white_stroke_purple_300_round_5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+
+
+                    <Button
+                        android:id="@+id/quizAnswerBtn"
+                        android:layout_width="80dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_white_stroke_gray_300_round_5"
+                        tools:background="@drawable/bg_white_stroke_purple_300_round_5"
+                        android:gravity="center"
+                        android:text="정답 입력"
+                        tools:visibility="visible"
+                        android:maxLength="9"
+                        android:singleLine="true"
+                        style="@style/b2"
+                        tools:textColor="@color/purple_300"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/alreadySelectedAnswerIv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        app:layout_constraintTop_toTopOf="@+id/quizSingleAnswer"
+                        app:layout_constraintStart_toStartOf="@+id/quizSingleAnswer"
+                        app:layout_constraintEnd_toEndOf="@+id/quizSingleAnswer"
+                        app:layout_constraintBottom_toBottomOf="@+id/quizSingleAnswer"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

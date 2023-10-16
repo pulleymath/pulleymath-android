@@ -241,7 +241,6 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
 
         val noteProblems = originalNoteProblem
         var notes = filterProblems(noteProblems, tabPosition)
-
         val result = makeNotesWrappers(notes, tabPosition == 0, withSelectedClear)
         updateNoteWrapper(result)
         cb()
@@ -268,12 +267,15 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
 //            scrapNoteFilterFragment.setFiltersStatus(filters) // TODO 이걸왜함?  동기화작업
         } else {
             filteredProblem = filteredProblem
-                .filter { LocalDate(it.scrapDateTime) in from..to }
+                .filter {
+                    LocalDate(it.scrapDateTime) in from..to
+                }
                 .filter {
                     var correctCondition = false
 
-                    if(filters.contains(LearningFilterType.보기설정_전체))
+                    if(filters.contains(LearningFilterType.보기설정_전체)) {
                         correctCondition = true
+                    }
 
                     if(filters.contains(LearningFilterType.보기설정_맞은문제))
                         correctCondition = (correctCondition || it.getResultByScoring() == Result.correct)
@@ -382,6 +384,17 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
                 cb(res)
             }
         }
+
+    }
+
+    fun updateProblemScrap(problem: Problem) {
+        _noteWrapper.postValue(_noteWrapper.value?.map {
+            if (it.problem == problem) {
+                println("기존: ${it.problem.isScrap} , 변경 : ${problem.isScrap}")
+                it.problem.isScrap = problem.isScrap
+            }
+            it
+        })
 
     }
 }

@@ -46,7 +46,6 @@ import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.adapter.NoteStudyCardAdapter
-import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
@@ -93,6 +92,7 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
         if (tabIndex == 0) {
             if (tabFragments[0] is NoteFilterFragment) {
                 (tabFragments[0] as NoteFilterFragment).updateParentFilters()
+
                 vm.fetchWrongNotes()
             }
         } else {
@@ -329,6 +329,8 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
             ProblemManager.scrap(this, user!!, dialog.problem, isScrap) {
                 dialog.problem.isScrap = isScrap
                 dialog.problem.rawScrapDateTime = LocalDateTime().toString()
+                val changedIndex = noteCardAdapter.currentList.indexOfFirst { it.problem == dialog.problem }
+                noteCardAdapter.notifyItemChanged(changedIndex)
                 dialog.configureUI(dialog.problem)
                 viewModel.setGroupedProblem(false) {
                     binding.notesRv.scrollToPosition(0)

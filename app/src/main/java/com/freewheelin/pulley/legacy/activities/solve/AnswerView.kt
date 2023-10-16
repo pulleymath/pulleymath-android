@@ -44,6 +44,9 @@ class AnswerView : ConstraintLayout,
     var keyPad: PopupWindow? = null
     var isShowSubmit = false
 
+    var shortAnswerWrapperCl: ConstraintLayout
+    var shortAnswerPrefixTv: TextView
+    var shortAnswerSuffixTv: TextView
     var shortAnswerView: EditText
     var dragIv: ImageView
     var selectionAnswerView: AnswerSelectionView
@@ -58,7 +61,10 @@ class AnswerView : ConstraintLayout,
     init {
         LayoutInflater.from(context).inflate(R.layout.view_answer, this)
 
-        shortAnswerView = findViewById(R.id.shortAnswerView)
+        shortAnswerWrapperCl = findViewById(R.id.shortAnswerWrapperCl)
+        shortAnswerView = findViewById(R.id.shortAnswerEt)
+        shortAnswerPrefixTv = findViewById(R.id.shortAnswerPrefixTv)
+        shortAnswerSuffixTv = findViewById(R.id.shortAnswerSuffixTv)
         dragIv = findViewById(R.id.dragIv)
         selectionAnswerView = findViewById(R.id.selectionAnswerView)
         focusContainer = findViewById(R.id.focusContainer)
@@ -74,7 +80,6 @@ class AnswerView : ConstraintLayout,
         background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_32)
 
         shortAnswerView.removeKeyboard()
-        shortAnswerView.setTextSize( resources.getDimension(R.dimen.sp24), resources.getDimension(R.dimen.sp14))
 
         shortAnswerView.setOnKeyListener { v, keyCode, event ->
 
@@ -197,11 +202,15 @@ class AnswerView : ConstraintLayout,
     fun configureUI(problem: Problem, requestFocus: Boolean) {
         selectedProblem = problem
         if (problem.problemType == ProblemType.short) {
-            shortAnswerView.visibility = View.VISIBLE
+            shortAnswerWrapperCl.visibility = View.VISIBLE
             selectionAnswerView.visibility = View.INVISIBLE
             shortAnswerView.setText(problem.userAnswer)
+            shortAnswerPrefixTv.visibleIf(!problem.unitPrefix.isNullOrEmpty())
+            shortAnswerSuffixTv.visibleIf(!problem.unitSuffix.isNullOrEmpty())
+            shortAnswerPrefixTv.text = problem.unitPrefix
+            shortAnswerSuffixTv.text = problem.unitSuffix
         } else {
-            shortAnswerView.visibility = View.INVISIBLE
+            shortAnswerWrapperCl.visibility = View.INVISIBLE
             selectionAnswerView.visibility = View.VISIBLE
             selectionAnswerView.setAnswerType(problem.problemType)
             selectionAnswerView.setAnswerByRawString(problem.userAnswer)
@@ -213,7 +222,6 @@ class AnswerView : ConstraintLayout,
         when (problem.getResultByScoring()) {
             Result.yet -> {
                 selectionAnswerView.theme = NumberingButton.THEME_BLACK
-                shortAnswerView.setBackgroundResource(R.drawable.bg_white_stroke_gray_400_round_2)
                 shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 shortAnswerView.isEnabled = true
                 selectionAnswerView.isEnabled = true
@@ -227,8 +235,7 @@ class AnswerView : ConstraintLayout,
             }
             else -> {
                 selectionAnswerView.theme = NumberingButton.THEME_GREY
-                shortAnswerView.setBackgroundResource(R.drawable.bg_gray_400_round_2)
-                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_600))
                 shortAnswerView.isEnabled = false
                 selectionAnswerView.isEnabled = false
                 resultIv.visibility = View.VISIBLE

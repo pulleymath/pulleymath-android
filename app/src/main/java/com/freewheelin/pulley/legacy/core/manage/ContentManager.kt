@@ -117,7 +117,7 @@ object ContentManager {
         param["scoringProblemRequest"] = problems.map {
 
             // 멀티 선택 처리
-            if(it.userAnswer?.contains(",") == false && it.userAnswer?.contains("-") == false) { // - 입력 시 처리 추가
+            if(it.userAnswer?.contains(",") == false && it.userAnswer?.contains("-") == false) { // - 주관식이나 선다형이 아닐때
                 try { // 숫자 변환 시 Exceptio 처리
                     it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toFloat().toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
                 } catch (e:Exception) {

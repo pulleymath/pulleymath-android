@@ -163,8 +163,8 @@ class SpeedAnswerView: ConstraintLayout {
         prevHolder?.keypadWindow?.dismiss()
 
         val focusedHolder = recyclerView.findViewHolderForAdapterPosition(focusIndex) as? SpeedAnswerHolder ?: return
-        if (focusedHolder.holderBinding.shortAnswerView.visibility == View.VISIBLE) {
-            focusedHolder.holderBinding.shortAnswerView.requestFocus()
+        if (focusedHolder.holderBinding.shortAnswerEt.visibility == View.VISIBLE) {
+            focusedHolder.holderBinding.shortAnswerEt.requestFocus()
         } else {
             focusedHolder.itemView.run {
                 performClick()
@@ -184,7 +184,10 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
     val numberTv = holderBinding.numberTv
     val infoContainer = holderBinding.infoContainer
     val selectionAnswerView = holderBinding.selectionAnswerView
-    val shortAnswerView = holderBinding.shortAnswerView
+    val shortAnswerWrapperCl = holderBinding.shortAnswerWrapperCl
+    val shortAnswerView = holderBinding.shortAnswerEt
+    val shortAnswerPrefixTv = holderBinding.shortAnswerPrefixTv
+    val shortAnswerSuffixTv = holderBinding.shortAnswerSuffixTv
 
 
     val answerTv = holderBinding.answerTv
@@ -213,11 +216,6 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         }
 
         shortAnswerView.run {
-            setHintTextColor(ContextCompat.getColor(viewContext, R.color.gray_500))
-            setTextSize(
-                viewContext.resources.getDimension(R.dimen.sp24),
-                viewContext.resources.getDimension(R.dimen.sp14)
-            )
             setTextIsSelectable(true)
             showSoftInputOnFocus = false
         }
@@ -378,8 +376,11 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
                 numberTv.setTextColor(ContextCompat.getColor(viewContext, R.color.gray_800))
                 answerTv.text = "정답 : ${getAnswerStr(problem.answerData)}"
                 if(problem.getResultByScoring() == Result.incorrect) {
-                    infoTv.text = if(problem.userAnswer != null) "(내 입력 : ${getAnswerStr(problem.userAnswer!!)})"
-                        else "(정답 미입력)"
+                    infoTv.text = if(problem.userAnswer != null) {
+                        "(내 입력 : ${getAnswerStr(problem.userAnswer!!)})"
+                    } else {
+                        "(정답 미입력)"
+                    }
                     infoTv.visibility = View.VISIBLE
                 } else {
                     infoTv.visibility = View.INVISIBLE
@@ -397,8 +398,11 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
                 "4" -> "④"
                 else -> "⑤"
             }
-        else
-            return answer
+        else {
+            val prefix = problem.unitPrefix ?: ""
+            val suffix = problem.unitSuffix ?: ""
+            return "${prefix} ${answer} ${suffix}".trim()
+        }
     }
 
     fun getInfoContainerVisibility(): Int {
@@ -412,6 +416,7 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
     }
 
     fun setSelectionAnswerUI() {
+        shortAnswerWrapperCl.visibility = View.INVISIBLE
         shortAnswerView.visibility = View.INVISIBLE
         if(getInfoContainerVisibility() == View.VISIBLE) {
             selectionAnswerView.visibility = View.INVISIBLE
@@ -425,18 +430,26 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
     }
 
     fun setShortAnswerUI() {
+        shortAnswerWrapperCl.visibility = View.INVISIBLE
         selectionAnswerView.visibility = View.INVISIBLE
         if(getInfoContainerVisibility() == View.VISIBLE) {
+            shortAnswerWrapperCl.visibility = View.INVISIBLE
             shortAnswerView.visibility = View.INVISIBLE
         } else {
+            shortAnswerWrapperCl.visibility = View.VISIBLE
             shortAnswerView.visibility = View.VISIBLE
         }
 
         shortAnswerView.isEnabled = true
-        if (problem.userAnswer != null)
+        if (problem.userAnswer != null) {
             shortAnswerView.setText(problem.userAnswer.toString())
-        else
+            shortAnswerPrefixTv.visibleIf(!problem.unitPrefix.isNullOrEmpty())
+            shortAnswerSuffixTv.visibleIf(!problem.unitSuffix.isNullOrEmpty())
+            shortAnswerPrefixTv.text = problem.unitPrefix
+            shortAnswerSuffixTv.text = problem.unitSuffix
+        } else {
             shortAnswerView.text = null
+        }
     }
 
     fun enterNumberBtnClicked(text:String) {

@@ -16,6 +16,7 @@ import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
+import com.freewheelin.pulley.revision2023.ui.activity.WrongNoteActivity
 import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
 import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 import com.freewheelin.pulley.revision2023.utils.listeners.BookFilterItemListener
@@ -100,7 +101,7 @@ class NoteFilterFragment : Fragment() {
 
     fun updateParentFilters() {
         if (isViewCreated) {
-            (parentFragment as? WrongNoteStudyFragment)?.updateFilter(viewModel.selectedFilterTypes)
+            (activity as? WrongNoteActivity)?.updateFilter(viewModel.selectedFilterTypes)
         }
     }
     private fun initUI() {

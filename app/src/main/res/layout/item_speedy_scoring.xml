@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -29,22 +30,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.freewheelin.pulley.legacy.views.AnswerSelectionView
-            android:id="@+id/selectionAnswerView"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginEnd="@dimen/dp24"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:selectionTheme="dark"
-            app:buttonHeight="28dp"
-            app:buttonWidth="28dp"
-            app:buttonMargin="@dimen/dp16"
-            app:layout_constraintStart_toEndOf="@+id/numberTv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
         <LinearLayout
             android:id="@+id/focusContainer"
             android:layout_width="0px"
@@ -55,33 +40,107 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/shortAnswerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/bg_white_stroke_gray_300"
-            android:gravity="center_vertical"
-            android:hint="정답 입력"
-            android:inputType="numberSigned"
-            android:maxLength="9"
-            android:paddingStart="@dimen/dp16"
-            android:singleLine="true"
-            android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/selectionAnswerView"
-            app:layout_constraintEnd_toEndOf="@+id/selectionAnswerView"
-            app:layout_constraintStart_toStartOf="@+id/selectionAnswerView"
-            app:layout_constraintTop_toTopOf="@+id/selectionAnswerView" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/answerWrapperCl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"
+            app:layout_constraintStart_toEndOf="@+id/numberTv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.freewheelin.pulley.legacy.views.AnswerSelectionView
+                android:id="@+id/selectionAnswerView"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="@dimen/dp24"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                tools:visibility="invisible"
+                app:selectionTheme="dark"
+                app:buttonHeight="28dp"
+                app:buttonWidth="28dp"
+                app:buttonMargin="@dimen/dp16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/shortAnswerWrapperCl"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_white_stroke_gray_300_round_5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/shortAnswerPrefixTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시속"
+                    style="@style/b1"
+                    android:layout_marginStart="16dp"
+                    tools:visibility="visible"
+                    android:textColor="@color/gray_600"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <EditText
+                    android:id="@+id/shortAnswerEt"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_transparent"
+                    android:gravity="center_vertical"
+                    android:hint="정답 입력"
+                    android:textColorHint="@color/gray_400"
+                    android:inputType="numberSigned"
+                    android:maxLength="9"
+                    android:paddingHorizontal="@dimen/dp16"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"
+                    android:digits="1234567890-+"
+                    style="@style/b1"
+                    app:layout_constraintStart_toEndOf="@+id/shortAnswerPrefixTv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/shortAnswerSuffixTv"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/shortAnswerSuffixTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="자리의 정수"
+                    android:layout_marginEnd="16dp"
+                    style="@style/b1"
+                    android:textColor="@color/gray_600"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/shortAnswerView"
-            app:layout_constraintTop_toTopOf="@+id/shortAnswerView"
-            app:layout_constraintBottom_toBottomOf="@+id/shortAnswerView">
+            tools:visibility="gone"
+            android:paddingStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/answerWrapperCl"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 style="@style/TextGray_500.Bold"
@@ -89,10 +148,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sp16"
-                android:text="정답: 1"
+                android:text="정답: 65000000원"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
 
             <TextView
@@ -101,12 +159,11 @@
                 android:textSize="@dimen/sp16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="내입력(3)"
-                android:layout_marginStart="8dp"
-                app:layout_goneMarginStart="0dp"
-                app:layout_constraintStart_toEndOf="@+id/answerTv"
-                app:layout_constraintTop_toTopOf="@+id/answerTv"
-                app:layout_constraintBottom_toBottomOf="@+id/answerTv"/>
+                android:text="(내 입력 : 64000000원)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/answerTv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
             <TextView
                 android:id="@+id/errorTv"
@@ -117,10 +174,9 @@
                 android:text="삭제된 문제입니다."
                 android:textSize="@dimen/sp16"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/answerTv"
-                app:layout_constraintStart_toEndOf="@+id/answerTv"
-                app:layout_constraintTop_toTopOf="@+id/answerTv"
-                app:layout_goneMarginStart="0dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -74,6 +74,9 @@ open class Problem: Serializable {
     var correctTimes: Int = 312000203
     var totalTimes: Int = 0
 
+    var unitPrefix: String? = null
+    var unitSuffix: String? = null
+
     @Expose @SerializedName("result")
     var rawResult: Int? = null
     var deprecatedResult: Result? = null

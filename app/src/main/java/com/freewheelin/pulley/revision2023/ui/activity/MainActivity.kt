@@ -74,7 +74,6 @@ import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainLessonFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
-import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
