@@ -108,7 +108,10 @@ class MainActivity : PermissionActivity(),
     lateinit var middleHighChangeReceiver: BroadcastReceiver
     lateinit var mainEventReceiver: BroadcastReceiver
 
-    val myPageFragment by lazy { MyMainPageFragment() }
+    val myPageFragment by lazy {
+        viewModel.fetchMainProfile()
+        MyMainPageFragment()
+    }
     var snackBar: SnackBar? = null
 
     var doubleBackToExitPressedOnce = false
@@ -294,7 +297,7 @@ class MainActivity : PermissionActivity(),
         val userEmail = if (MyApplication.user?.serviceType?.isGuestUser == true) {
             ""
         } else {
-            MyApplication.user?.email ?: ""
+            MyApplication.user?.accountEmail ?: ""
         }
         val nextLoginPresentedEmail = if (MyApplication.user?.signInChannel == SignInChannel.PULLEY) {
             userEmail

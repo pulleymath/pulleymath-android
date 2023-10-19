@@ -401,7 +401,7 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         else {
             val prefix = problem.unitPrefix ?: ""
             val suffix = problem.unitSuffix ?: ""
-            return "${prefix} ${answer} ${suffix}".trim()
+            return "${prefix} ${answer}${suffix}".trim()
         }
     }
 
@@ -443,13 +443,14 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         shortAnswerView.isEnabled = true
         if (problem.userAnswer != null) {
             shortAnswerView.setText(problem.userAnswer.toString())
-            shortAnswerPrefixTv.visibleIf(!problem.unitPrefix.isNullOrEmpty())
-            shortAnswerSuffixTv.visibleIf(!problem.unitSuffix.isNullOrEmpty())
-            shortAnswerPrefixTv.text = problem.unitPrefix
-            shortAnswerSuffixTv.text = problem.unitSuffix
         } else {
             shortAnswerView.text = null
         }
+
+        shortAnswerPrefixTv.visibleIf(!problem.unitPrefix.isNullOrEmpty())
+        shortAnswerSuffixTv.visibleIf(!problem.unitSuffix.isNullOrEmpty())
+        shortAnswerPrefixTv.text = problem.unitPrefix
+        shortAnswerSuffixTv.text = problem.unitSuffix
     }
 
     fun enterNumberBtnClicked(text:String) {

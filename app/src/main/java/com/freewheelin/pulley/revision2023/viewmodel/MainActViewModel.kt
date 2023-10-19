@@ -53,6 +53,11 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
             cb(user)
         }
     }
+    fun fetchMainProfile() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+        }
+    }
 
     fun fetchUserChallenges() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

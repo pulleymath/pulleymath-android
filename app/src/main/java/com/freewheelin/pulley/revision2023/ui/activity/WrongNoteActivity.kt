@@ -29,6 +29,7 @@ import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.c
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.legacy.core.manage.PieceManager
 import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
@@ -58,6 +59,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 
 enum class OrderType(val rawValue: Int) {
     recent(0),
@@ -313,6 +317,10 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
             ProblemManager.clear(this, user!!, dialog.problem, isClear) {
                 dialog.problem.isClear = isClear
                 dialog.problem.rawClearDateTime = LocalDateTime().toString()
+
+                val changedIndex = noteCardAdapter.currentList.indexOfFirst { it.problem == dialog.problem }
+                noteCardAdapter.notifyItemChanged(changedIndex)
+
                 dialog.configureUI(dialog.problem)
                 viewModel.setGroupedProblem(false) {
                     binding.notesRv.scrollToPosition(0)
@@ -388,12 +396,38 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
                     var text = if(dialogType == WrongManagementDialog.Type.wrongProblem) "오답문제" else "즐겨찾기 문제"
                     text += " ${selectedProblem.size}개로 학습지를 만들었습니다."
                     // TODO snackback
-//                    showSnackBar(text, "바로가기")
+                    showSnackBar(text, "바로가기")
                 }
                 viewModel.selectedProblem.postValue(listOf())
 
             })
         }
+    }
+
+    var snackBar: SnackBar? = null
+    fun showSnackBar(text: String, buttonText: String, action: (() -> Unit)? = null) {
+        if (snackBar?.isShowing == true) { snackBar?.dismiss() }
+
+        val newSnackBar = snackBar ?: SnackBar(this)
+        newSnackBar.setText(text, buttonText)
+        newSnackBar.setSnackBarViewListener(object : SnackBarViewListener {
+            override fun onXBtnClicked(view: SnackBarView) {
+                newSnackBar.dismiss()
+            }
+
+            override fun onActionBtnClicked(view: SnackBarView) {
+                if (action == null) {
+                    finish()
+                } else {
+                    action()
+                }
+                newSnackBar.dismiss()
+
+            }
+        })
+
+        snackBar = newSnackBar
+        newSnackBar.show()
     }
 
     override fun onReviewBtnClicked(view: WrongManageView) {

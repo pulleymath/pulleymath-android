@@ -43,18 +43,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-                android:weightSum="10">
+                android:weightSum="100">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="35"
                     android:adjustViewBounds="true"
                     android:scaleType="fitStart"
+                    tools:src="@drawable/dummy_cooking_only_quiz"
                     cookingImgResOnPicasso="@{ cookingExercise.imageUrl }"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="6"
+                    android:layout_weight="65"
                     android:text=""/>
 
             </LinearLayout>

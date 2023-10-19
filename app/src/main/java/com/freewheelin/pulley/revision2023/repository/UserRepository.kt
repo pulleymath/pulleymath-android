@@ -28,6 +28,9 @@ class UserRepository() {
     private val _mainProfileV4 = MutableLiveData<MainProfileV4>()
     val mainProfileV4: LiveData<MainProfileV4> = _mainProfileV4
 
+    private val _mainProfile = MutableLiveData<MainProfile>()
+    val mainProfile: LiveData<MainProfile> = _mainProfile
+
     private val _schoolType = MutableLiveData<SchoolType>()
     val schoolType: LiveData<SchoolType> = _schoolType
 
@@ -36,7 +39,6 @@ class UserRepository() {
             println("asoaso - - - - - getUser, ${it.token}")
             _user.postValue(it)
             MyApplication.user = it
-            getMainProfileV4()
             it
         }
     }
@@ -63,7 +65,10 @@ class UserRepository() {
         return api.getSignupMessage().data
     }
     suspend fun getMainProfile(): MainProfile {
-        return api.getProfiles().data
+        return api.getProfiles().data.let {
+            _mainProfile.postValue(it)
+            it
+        }
     }
     suspend fun getMainProfileV4(): MainProfileV4 {
         return api.getRenewProfiles().data.let {

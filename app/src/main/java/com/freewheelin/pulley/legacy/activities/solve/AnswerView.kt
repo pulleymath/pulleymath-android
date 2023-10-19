@@ -224,6 +224,7 @@ class AnswerView : ConstraintLayout,
                 selectionAnswerView.theme = NumberingButton.THEME_BLACK
                 shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_800))
                 shortAnswerView.isEnabled = true
+                shortAnswerWrapperCl.background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_500_round)
                 selectionAnswerView.isEnabled = true
                 resultIv.visibility = View.GONE
 //                challengeStampIv.visibility = if (selectedBook?.pieceSubCategory == "START") {
@@ -237,6 +238,7 @@ class AnswerView : ConstraintLayout,
                 selectionAnswerView.theme = NumberingButton.THEME_GREY
                 shortAnswerView.setTextColor(ContextCompat.getColor(context, R.color.gray_600))
                 shortAnswerView.isEnabled = false
+                shortAnswerWrapperCl.background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_stroke_gray_500_round)
                 selectionAnswerView.isEnabled = false
                 resultIv.visibility = View.VISIBLE
                 challengeStampIv.visibility = View.GONE

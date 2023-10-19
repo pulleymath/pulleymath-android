@@ -116,6 +116,9 @@ class LCWrongNoteActivity : AppCompatActivity() {
                         val pagerLastIndex = filteredNoteCardList.value?.lastIndex
                         isPagerFirstIndex.postValue(position == 0)
                         isPagerLastIndex.postValue(position == pagerLastIndex)
+                        filteredNoteCardList.value?.let {
+                            patternName.postValue(it[position].patternName)
+                        }
                     }
                 }
             })
@@ -178,8 +181,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
                 if (pagerIndex == 0) {
                     Toast.makeText(this@LCWrongNoteActivity, "첫 페이지입니다.", Toast.LENGTH_SHORT).show()
                 } else {
-                    binding.pagerWrapper.pager.currentItem = binding.pagerWrapper.pager.currentItem - 1
-                }
+                    val prevIndex = binding.pagerWrapper.pager.currentItem - 1
+
+                    binding.pagerWrapper.pager.currentItem = prevIndex
+                    }
             }
 
             navNextBtn.setOnClickListener {
@@ -188,7 +193,8 @@ class LCWrongNoteActivity : AppCompatActivity() {
                     if (it.lastIndex == pagerIndex) {
                         Toast.makeText(this@LCWrongNoteActivity, "마지막 페이지입니다.", Toast.LENGTH_SHORT).show()
                     } else {
-                        binding.pagerWrapper.pager.currentItem = binding.pagerWrapper.pager.currentItem + 1
+                        val nextIndex = binding.pagerWrapper.pager.currentItem + 1
+                        binding.pagerWrapper.pager.currentItem = nextIndex
                     }
                 }
             }
