@@ -1579,7 +1579,8 @@ class SolveActivity : BaseActivity(),
             solutionGesture?.init()
             binding.problemIv.setProblemImageURL(problem.getProblemUrl())
             binding.solutionIv.setProblemImageURL(problem.getSolutionUrl())
-            binding.answerTv.text = "정답 : ${problem.answerData}"
+            binding.answerTv.text = "정답 : ${getAnswerStr(problem)}"
+
 
             if(problem.correctRate == null)
                 binding.correctRateTv.text = "정답률 : -"
@@ -1893,6 +1894,22 @@ class SolveActivity : BaseActivity(),
             }
 
             cb(mock)
+        }
+    }
+    fun getAnswerStr(problem: Problem): String {
+        val answer = problem.answerData
+        return if(problem.problemType == ProblemType.single)
+            when(answer) {
+                "1" -> "①"
+                "2" -> "②"
+                "3" -> "③"
+                "4" -> "④"
+                else -> "⑤"
+            }
+        else {
+            val prefix = problem.unitPrefix ?: ""
+            val suffix = problem.unitSuffix ?: ""
+            return "${prefix} ${answer}${suffix}".trim()
         }
     }
 }
