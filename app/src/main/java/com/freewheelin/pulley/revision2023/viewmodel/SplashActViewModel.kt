@@ -48,6 +48,15 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
             cb(user)
         }
     }
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
+        }
+    }
+
     private val onBoardLiveUrl = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/management/on_boarding/on_boarding_android.json"
     private val onBoardStagingUrl = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/management/on_boarding/on_boarding_android_staging.json"
 

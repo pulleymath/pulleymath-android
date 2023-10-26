@@ -29,7 +29,14 @@ class WhaleSpaceLoginViewModel(application: Application): BaseAndroidViewModel(a
             cb(user)
         }
     }
-
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
+        }
+    }
     fun sendCode(code: String, cb: (ResponseBody<SignInAppToken>) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val response = whaleSpaceLoginRepository.sendCode(code)

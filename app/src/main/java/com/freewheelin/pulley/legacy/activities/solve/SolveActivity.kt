@@ -1439,7 +1439,6 @@ class SolveActivity : BaseActivity(),
                     it.rootProblem = problem.rootProblem
                     similarProblems = problem.rootProblem!!.similarProblems
                 }
-
                 val index = similarProblems.indexOf(problem)
                 if(index >= 0) { // 문제교체 버튼 빨리 클릭하면 죽는 케이스
                     similarProblems.set(index, it)

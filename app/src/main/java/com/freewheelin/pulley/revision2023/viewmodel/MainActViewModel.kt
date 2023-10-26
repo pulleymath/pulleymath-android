@@ -33,6 +33,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     private val alarmRepository by lazy { AlarmRepository() }
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
+    val mainProfileV4 = userRepository.mainProfileV4
     val schoolType = userRepository.schoolType
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val showWholeLoading = MutableLiveData<Boolean>(false)

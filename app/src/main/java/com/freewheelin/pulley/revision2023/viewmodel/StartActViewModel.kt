@@ -33,6 +33,14 @@ class StartActViewModel(application: Application) : BaseAndroidViewModel(applica
             }
         }
     }
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
+        }
+    }
 
     fun requestGuestSignIn(cb: (String) -> Unit) {
         val uuid = getDeviceUUID()

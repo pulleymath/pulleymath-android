@@ -273,8 +273,10 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private fun goMainActivity() {
         loadAlimSetting(user)
         putFcmToken(user)
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        viewModel.fetchMainProfile {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

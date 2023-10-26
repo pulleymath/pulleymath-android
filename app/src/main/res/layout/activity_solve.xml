@@ -33,7 +33,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/solveCl"
-                android:layout_width="600dp"
+                android:layout_width="1000dp"
                 android:layout_height="match_parent"
                 android:focusable="false">
 

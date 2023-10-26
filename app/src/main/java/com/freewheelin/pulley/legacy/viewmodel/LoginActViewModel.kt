@@ -14,6 +14,7 @@ import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginActViewModel(application: Application): BaseAndroidViewModel(application) {
 
@@ -24,6 +25,14 @@ class LoginActViewModel(application: Application): BaseAndroidViewModel(applicat
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             cb(user)
+        }
+    }
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
         }
     }
 }

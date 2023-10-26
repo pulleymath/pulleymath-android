@@ -40,7 +40,6 @@ class PriorConceptViewModel(application: Application): BaseAndroidViewModel(appl
 
 
 //            val oldConcepts = priorConcepts.value?.filterNot { it in newConcepts }
-//            println("aspasp  - oldConcepts size :${oldConcepts?.size}")
 //            oldConcepts?.forEach { deletePriorConcepts(it) }
             upsertPriorConcepts(newConcepts)
             afterFetch = true

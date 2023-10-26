@@ -104,10 +104,11 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
 
             val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
             LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
-
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+            viewModel.fetchMainProfile {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+            }
         }
     }
     fun putFcmToken() {

@@ -67,9 +67,11 @@ class OnBoardingActivity : AppCompatActivity() {
             viewModel.fetchUser { user ->
                 MyApplication.isAppFirstLaunch = true
                 MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                viewModel.fetchMainProfile {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }
         } else {
             val intent = Intent(this, StartActivity::class.java)

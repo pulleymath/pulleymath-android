@@ -21,8 +21,10 @@ import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -98,6 +100,9 @@ class MainTabLayout: FrameLayout {
             lifecycleOwner = binding.root.findViewTreeLifecycleOwner()
             initOnDevice()
         }
+    }
+    fun setViewModel(viewModel: MainActViewModel) {
+        binding.vm = viewModel
     }
     fun initOnDevice() {
         binding.apply {

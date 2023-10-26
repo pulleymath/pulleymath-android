@@ -168,7 +168,7 @@ class MainActivity : PermissionActivity(),
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@MainActivity
-
+            mainTl.setViewModel(viewModel)
 
             rootDl.addDrawerListener(object: DrawerLayout.DrawerListener {
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -377,7 +377,14 @@ class MainActivity : PermissionActivity(),
     }
 
     private fun initTabFragment() {
-        tabFragments = if (isTablet) {
+        tabFragments = if (viewModel.mainProfileV4.value?.isAffiliated == true) {
+            mutableListOf(
+                MainFragment.newInstance(),
+                ConceptCourseFragment.newInstance(),
+                PatternStudyFragment.newInstance(),
+                AnalysisFragment.newInstance()
+            )
+        } else if (isTablet) {
             mutableListOf(
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
@@ -393,9 +400,6 @@ class MainActivity : PermissionActivity(),
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
-//                MockExamFragment.newInstance(),
-//                SnackTestFragment.newInstance(),
-//                WrongNoteStudyFragment.newInstance(),
                 AnalysisFragment.newInstance()
             )
         }
@@ -558,6 +562,15 @@ class MainActivity : PermissionActivity(),
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         viewModel.apply {
+//            mainProfileV4.observe(this@MainActivity) {
+//                if (it.isAffiliated) {
+//                    val exceptLessonFragments= tabFragments.filter { it.type != MainTab.과외 }
+//                    binding.vp.adapter = MainPagerAdapter(exceptLessonFragments, supportFragmentManager, lifecycle)
+//                }
+//                println("aspasp mainProfile V4 observe ")
+//                println("aspasp mainProfile V4 observe ${it.isAffiliated}")
+//                println("aspasp mainProfile V4 observe ${it.affiliationInfo?.institutionName}")
+//            }
             user.observe(this@MainActivity) { user ->
                 user?.let {
                     MyApplication.user = it

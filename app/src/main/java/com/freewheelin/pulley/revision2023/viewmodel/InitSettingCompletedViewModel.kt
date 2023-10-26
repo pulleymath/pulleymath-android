@@ -9,6 +9,7 @@ import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class InitSettingCompletedViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
     private val userRepository by lazy { UserRepository.instance }
@@ -28,5 +29,13 @@ class InitSettingCompletedViewModel(application: Application) : BaseAndroidViewM
     fun updateSchoolType(isHighSchoolUser: Boolean) {
         val schoolType = if (isHighSchoolUser) SchoolType.HIGH else SchoolType.MIDDLE
         userRepository.updateSchoolType(schoolType)
+    }
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
+        }
     }
 }

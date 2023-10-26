@@ -42,5 +42,13 @@ class OnBoardingViewModel(application: Application) : BaseAndroidViewModel(appli
             cb(user)
         }
     }
+    fun fetchMainProfile(cb: () -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            userRepository.getMainProfileV4()
+            withContext(Dispatchers.Main) {
+                cb()
+            }
+        }
+    }
 
 }

@@ -396,12 +396,12 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             MyApplication.user = it
             MyApplication.token = it.token
             commitUser()
-
             putFcmToken()
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finishAffinity()
+            viewModel.fetchMainProfile {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finishAffinity()
+            }
         }
     }
 

@@ -66,16 +66,17 @@ class InitSettingCompleteActivity : AppCompatActivity() {
     }
 
     private fun moveToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-
-        if (isGuestUser) {
-            val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
-            userUpdateIntent.putExtra(IS_GUEST_USER, true)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
-            finish()
-        } else {
-            finishAffinity()
+        viewModel.fetchMainProfile {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            if (isGuestUser) {
+                val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
+                userUpdateIntent.putExtra(IS_GUEST_USER, true)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
+                finish()
+            } else {
+                finishAffinity()
+            }
         }
     }
 }
