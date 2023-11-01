@@ -213,18 +213,15 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         if (isNeedNewOnBoarding) {
             viewModel.getOnBoardItems (
                 successCb = { images ->
-
+                    finishAffinity()
                     val intent = OnBoardingActivity.getIntent(this, images)
                     startActivity(intent)
                 },
                 deniedCb = {
+                    finishAffinity()
                     checkTokenAndMoveActivity()
                 }
             )
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(500)
-                finishAffinity()
-            }
             return
         }
         println("asoaso SplashACt : MyApplication.user?.token : ${MyApplication.user?.token}")
