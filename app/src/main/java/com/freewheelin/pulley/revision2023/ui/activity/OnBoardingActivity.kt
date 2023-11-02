@@ -54,9 +54,9 @@ class OnBoardingActivity : AppCompatActivity() {
         }
         viewModel.apply {
             goLoginActCallback = {
-                val intent = Intent(this@OnBoardingActivity, StartActivity::class.java)
-                startActivity(intent)
-                finishAffinity()
+//                val intent = Intent(this@OnBoardingActivity, StartActivity::class.java)
+//                startActivity(intent)
+//                finishAffinity()
             }
         }
     }
@@ -70,7 +70,7 @@ class OnBoardingActivity : AppCompatActivity() {
                 viewModel.fetchMainProfile {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                    finish()
+//                    finish()
                 }
             }
         } else {

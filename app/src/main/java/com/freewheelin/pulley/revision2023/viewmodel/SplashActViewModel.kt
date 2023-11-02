@@ -1,8 +1,10 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
+import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
@@ -12,6 +14,9 @@ import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.OnBoardingItem
 import com.google.gson.Gson
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +50,9 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
     fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler + exceptionHandler) {
             val user = userRepository.getUser()
-            cb(user)
+            withContext(Dispatchers.Main) {
+                cb(user)
+            }
         }
     }
     fun fetchMainProfile(cb: () -> Unit) {
@@ -68,9 +75,11 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
                 Network.Server.dev.toString() -> onBoardStagingUrl
                 else -> onBoardStagingUrl
             }
+            println("온보딩 :url :${url}")
             val data = Jsoup.connect(url).ignoreContentType(true).execute().body()
             if(data != null && data.isNotEmpty()) {
                 println("온보딩 : data not null")
+                println("온보딩 : data : ${data}")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm")
                 val current = sdf.format(System.currentTimeMillis())
 
@@ -78,10 +87,10 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
                     val dateCheck = current <= item.endDate && current >= item.startDate
                     val imageSize = item.images.size
                     println("온보딩 : dateCheck : ${dateCheck}")
-                    withContext(Dispatchers.Main) {
+//                    withContext(Dispatchers.Main) {
                         if (dateCheck && item.images.isNotEmpty()) successCb(item.images)
                         else deniedCb()
-                    }
+//                    }
                 }
             } else {
                 println("온보딩 : data null or error")

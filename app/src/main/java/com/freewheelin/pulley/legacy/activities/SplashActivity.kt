@@ -218,7 +218,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                     startActivity(intent)
                 },
                 deniedCb = {
-                    finishAffinity()
                     checkTokenAndMoveActivity()
                 }
             )
@@ -250,6 +249,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             isNeedNewOnBoarding -> {
                 viewModel.getOnBoardItems (
                     successCb = { images ->
+                        finishAffinity()
                         val intent = OnBoardingActivity.getIntent(this, images)
                         startActivity(intent)
                     },
@@ -262,15 +262,12 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 goMainActivity()
             }
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(500)
-            finishAffinity()
-        }
     }
     private fun goMainActivity() {
         loadAlimSetting(user)
         putFcmToken(user)
         viewModel.fetchMainProfile {
+            finishAffinity()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

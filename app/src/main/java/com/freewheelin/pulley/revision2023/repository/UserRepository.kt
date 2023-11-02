@@ -75,7 +75,6 @@ class UserRepository() {
             _mainProfileV4.postValue(it)
             it
         }
-
     }
     suspend fun requestRewardSignUp() {
         api.requestRewardSignUp()
