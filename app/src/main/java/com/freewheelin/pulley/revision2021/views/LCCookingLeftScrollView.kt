@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
+import com.freewheelin.pulley.legacy.views.memoView.MemoView
 import java.lang.Float.max
 import java.lang.Float.min
 
@@ -26,11 +26,12 @@ class LCCookingLeftScrollView: ScrollView,
     private val gestureScale: ScaleGestureDetector = ScaleGestureDetector(context, this)
     private val gesture: GestureDetector = GestureDetector(context, this)
     private var touchStart = false
+    var fingerDrawMode = false
 
 
     // pattern에서도 이 뷰를 쓰고있으므로 아래의 뷰는 id로 받기보다는 fragment로부터 받아와야 할것같다.
     val leftContentCl by lazy { this.findViewById<ConstraintLayout>(R.id.leftContentWrapperCl) }
-    val memoView by lazy { this.findViewById<CookingMemoView>(R.id.cookingMemoView) }
+    val memoView by lazy { this.findViewById<MemoView>(R.id.memoView) }
 
     // 문제이미지가 화면사이즈보다 클때 y 스크롤의 양이 그렇지 않을때보다 큼. (손가락으로 이동한만큼보다 더 큰 량이 이미지 스크롤이됨
     //
@@ -74,6 +75,11 @@ class LCCookingLeftScrollView: ScrollView,
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return if(isBlock) {
+            val pp = MotionEvent.PointerProperties()
+            ev?.getPointerProperties(0, pp)
+            if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
+                return true
+            }
             ev?.pointerCount == 2
         } else {
             true
@@ -142,8 +148,6 @@ class LCCookingLeftScrollView: ScrollView,
         leftContentCl.y = getIvY()
     }
     override fun onScaleBegin(p0: ScaleGestureDetector): Boolean {
-        println("zxoo: lccl width : ${leftContentCl.width} , lccl height: ${leftContentCl.height}")
-        println("zxoo: memoView width : ${memoView.width} , memoView height: ${memoView.height}")
         return true
     }
 

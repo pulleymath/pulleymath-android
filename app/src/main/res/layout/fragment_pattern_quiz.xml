@@ -256,7 +256,7 @@
                         app:layout_constraintTop_toTopOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
+                <com.freewheelin.pulley.legacy.views.memoView.MemoView
                     android:id="@+id/memoView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"

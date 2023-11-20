@@ -20,6 +20,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfileV4
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.SchoolType
@@ -44,7 +45,7 @@ enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: Li
 //    오답노트(5 ,5, listOf("오답노트")),
 
     분석(3, 3, listOf("분석")),
-    과외(4, -1, listOf("과외")),
+    과외(4, -1, listOf("과외, 튜터")),
     대학(5, 4, listOf("대학", "SSU진단", "KU진단"));
 
     companion object {

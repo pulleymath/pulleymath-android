@@ -16,6 +16,8 @@ package com.freewheelin.pulley.legacy.views.memoView;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.freewheelin.pulley.revision2023.ui.view.DrawPathType;
+
 import java.io.Serializable;
 
 /**
@@ -29,6 +31,13 @@ class Point implements Parcelable, Serializable {
     float x, y;
 
     Point() {
+        x = y = -1;
+    }
+
+    public DrawPathType type = DrawPathType.Curve;
+
+    Point(DrawPathType type) {
+        this.type = type;
         x = y = -1;
     }
 

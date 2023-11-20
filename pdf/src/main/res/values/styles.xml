@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Bold">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextGray_500.Bold" parent="Bold">
-        <item name="android:textColor">@color/gray_500</item>
-    </style>
-
-    <style name="TextGray_700.Bold" parent="Bold">
-        <item name="android:textColor">@color/gray_700</item>
-    </style>
-
-    <style name="TextGray_600.Bold" parent="Bold">
-        <item name="android:textColor">@color/gray_600</item>
-    </style>
-
     <style name="Border_Gray_300_Horizontal">
         <item name="android:background">@color/gray_300</item>
         <item name="android:layout_height">1dp</item>
@@ -38,7 +22,12 @@
         <item name="android:track">@drawable/switch_track_light</item>
         <item name="android:thumb">@drawable/switch_thumb_light</item>
     </style>
-
+<!--    <style name="Switch.ExtraLight" parent="Switch">-->
+<!--        <item name="android:textOff">""</item>-->
+<!--        <item name="android:textOn">""</item>-->
+<!--        <item name="android:track">@drawable/switch_track_extra_light</item>-->
+<!--        <item name="android:thumb">@drawable/switch_thumb_extra_light</item>-->
+<!--    </style>-->
     <style name="Switch.Grey" parent="Switch">
         <item name="android:textOff">""</item>
         <item name="android:textOn">""</item>

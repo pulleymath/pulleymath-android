@@ -2,14 +2,12 @@ package com.freewheelin.pulley.revision2021.activity
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.BindingAdapter
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -24,13 +22,16 @@ import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
-import com.freewheelin.pulley.revision2021.model.CookingExercise
-import com.freewheelin.pulley.revision2021.model.CourseType
+//import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
-import com.freewheelin.pulley.revision2021.views.CookingPencilcase
+//import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.legacy.utils.getSerializable
+import com.freewheelin.pulley.legacy.utils.setMarginTop
+import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -97,8 +98,8 @@ class LCWrongNoteActivity : AppCompatActivity() {
                         }
                     }
                 }
-                pencilcaseView.hasOneMemoPerPage(true)
-                pencilcaseView.courseType = CourseType.Pattern
+//                pencilcaseView.hasOneMemoPerPage(true)
+//                penPanel.courseType = CourseType.Pattern
             }
 
             pagerWrapper.pager.adapter = WrongNotePagerAdapter(tabFragments, supportFragmentManager, lifecycle)
@@ -170,10 +171,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
                 onBackPressed()
             }
             headerCl.setOnClickListener {
-                hidePencilcasePanel()
+                hidePenPanel()
             }
             subHeaderCl.setOnClickListener {
-                hidePencilcasePanel()
+                hidePenPanel()
             }
 
             navPrevBtn.setOnClickListener {
@@ -196,6 +197,17 @@ class LCWrongNoteActivity : AppCompatActivity() {
                         val nextIndex = binding.pagerWrapper.pager.currentItem + 1
                         binding.pagerWrapper.pager.currentItem = nextIndex
                     }
+                }
+            }
+//            penPanel.isCookingMemo = true
+            externalPenBtn.setOnClickListener {
+                penPanel.visibleIf(!penPanel.isVisible)
+                if (penPanel.isVisible) {
+                    penPanel.openPencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil_fliled_purple)
+                } else {
+                    penPanel.closePencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil)
                 }
             }
         }
@@ -274,9 +286,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
             }
         }
     }
-    fun hidePencilcasePanel() {
-        binding.pencilcaseView.pencilOptionLl.isSelected = false
-        binding.pencilcaseView.pencilOptionLl.visibility = View.GONE
+    fun hidePenPanel() {
+        binding.penPanel.penOptionPanelCl.visibleIf(false)
+        binding.penPanel.eraserPanelCl.visibleIf(false)
+        binding.penPanel.figurePanelCl.visibleIf(false)
     }
 
     fun setQuizImageScale(scale: Float) {
@@ -293,30 +306,30 @@ class LCWrongNoteActivity : AppCompatActivity() {
         }
     }
 
-    fun savePencilcaseType(type: CookingPencilcase.EditType?) {
-        viewModel.pencilcaseType = type
+    fun savePencilcaseType(type: DrawType?) {
+        viewModel.pencilDrawType = type
     }
-    fun getPencilcaseType(): CookingPencilcase.EditType? {
-        return viewModel.pencilcaseType
+    fun getPencilcaseType(): DrawType? {
+        return viewModel.pencilDrawType
     }
-    fun savePencilcaseColor(color: CookingPencilcase.PenColor) {
-        viewModel.pencilcaseColor = color
+    fun savePencilcaseColor(color: PenColorType) {
+        viewModel.pencilColorType = color
     }
-    fun getPencilcaseColor(): CookingPencilcase.PenColor? {
-        return viewModel.pencilcaseColor
+    fun getPencilcaseColor(): PenColorType? {
+        return viewModel.pencilColorType
     }
 
-    fun savePencilcaseThicknesss(thickness: CookingPencilcase.Thickness) {
-        viewModel.pencilcaseThickness = thickness
+    fun savePencilcaseThicknesss(thickness: Float) {
+        viewModel.pencilThickness = thickness
     }
-    fun getPencilcaseThickness(): CookingPencilcase.Thickness? {
-        return viewModel.pencilcaseThickness
+    fun getPencilcaseThickness(): Float? {
+        return viewModel.pencilThickness
     }
-    fun savePencilcaseMode(isFixedMode: Boolean) {
-        viewModel.pencilcaseModeFixed = isFixedMode
+    fun saveFingerDrawMode(value: Boolean) {
+        viewModel.fingerDrawMode = value
     }
-    fun getPencilcaseMode(): Boolean {
-        return viewModel.pencilcaseModeFixed
+    fun getFingerDrawMode(): Boolean {
+        return viewModel.fingerDrawMode
     }
 
     fun setPagerSwipeBlocked(blocked: Boolean) {
@@ -326,10 +339,10 @@ class LCWrongNoteActivity : AppCompatActivity() {
         binding.conceptSolutionToggleBtn.text = if (isOpened) "개념 | 정답 닫기" else "개념 | 정답 보기"
     }
     fun setUndoCount(count: Int) {
-        binding.pencilcaseView.undoCount = count
+        binding.penPanel.undoCount = count
     }
     fun setRedoCount(count: Int) {
-        binding.pencilcaseView.redoCount = count
+        binding.penPanel.redoCount = count
     }
     private fun hideSystemUI() {
 //        if (Build.VERSION.SDK_INT < 16) {

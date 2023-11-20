@@ -10,32 +10,31 @@ import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.revision2021.views.CookingPencilcaseView
 
-interface CookingMemoViewListener {
-    fun onMemorizing(ev: MotionEvent?)
-}
-
 class CookingMemoView: FreeDrawView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
     var pencilcase: CookingPencilcase? = null
-    var listener: CookingMemoViewListener? = null
-
-    var isBlocked: Boolean = false
+    var fingerDrawMode = false
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
 //        println("xjcl2 onTouch ")
-        if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
-            isPencilcaseVisibleBeforeOnTouchDraw = isPencilPanelVisible()
-        }
+//        if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
+//            isPencilcaseVisibleBeforeOnTouchDraw = isPencilPanelVisible()
+//        }
 
         (pencilcase as? CookingPencilcaseView)?.run {
             pencilOptionLl.isSelected = false
             pencilOptionLl.visibility = View.GONE
         }
 
-        listener?.onMemorizing(motionEvent)
+        val pp = MotionEvent.PointerProperties()
+        motionEvent?.getPointerProperties(0, pp)
+        if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
+            parent.requestDisallowInterceptTouchEvent(false)
+            return false
+        }
 
         val buttonType = motionEvent?.buttonState
 
@@ -45,7 +44,16 @@ class CookingMemoView: FreeDrawView {
             return true
         }
 //        println("xjcl2 onTouch 1 : ${pencilcase?.editType} : ${pencilcase?.editType == CookingPencilcase.EditType.pencil}")
-        if(pencilcase?.editType == CookingPencilcase.EditType.pencil && buttonType != MotionEvent.BUTTON_STYLUS_PRIMARY) {
+        if(pencilcase?.editType == CookingPencilcase.EditType.Pencil && buttonType != MotionEvent.BUTTON_STYLUS_PRIMARY) {
+            editType = CookingPencilcase.EditType.Pencil
+            if (pencilcase?.figureType == CookingPencilcase.FigureType.Circle) {
+                pathType = PathType.Circle
+            } else if (pencilcase?.figureType == CookingPencilcase.FigureType.Line) {
+                pathType = PathType.Line
+            } else {
+                pathType = PathType.Curve
+            }
+
             if (motionEvent?.pointerCount == 2) {
                 parent.requestDisallowInterceptTouchEvent(false)
                 mPoints.clear()
@@ -58,15 +66,22 @@ class CookingMemoView: FreeDrawView {
             }
 
             if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
-                println("xjcl2,  -  -  - pencil mode,  memoview action down ")
                 super.onTouch(view, motionEvent)
                 return true
             }
-            println("xjcl2,  -  -  - pencil mode,  memoview action not down ")
+
             super.onTouch(view, motionEvent)
             return false
-
-        } else if(pencilcase?.editType == CookingPencilcase.EditType.eraser || buttonType == MotionEvent.BUTTON_STYLUS_PRIMARY) {
+        } else if (pencilcase?.editType == CookingPencilcase.EditType.Figure && buttonType != MotionEvent.BUTTON_STYLUS_PRIMARY) {
+            editType = CookingPencilcase.EditType.Figure
+            pathType = when(pencilcase?.figureType) {
+                CookingPencilcase.FigureType.Circle -> PathType.Circle
+                CookingPencilcase.FigureType.Line -> PathType.Line
+                else -> PathType.Curve
+            }
+            super.onTouch(view, motionEvent)
+            return false
+        } else if(pencilcase?.editType == CookingPencilcase.EditType.Eraser || buttonType == MotionEvent.BUTTON_STYLUS_PRIMARY) {
 
 //            saveHistoryPathFromPoints()
             if (motionEvent?.pointerCount in 2..3 ) {
@@ -155,20 +170,20 @@ class CookingMemoView: FreeDrawView {
 
     override fun restoreStateFromSerializable(state: FreeDrawSerializableState) {
         super.restoreStateFromSerializable(state)
-        setPaintWidthDp(pencilcase!!.thickness.width)
+        setPaintWidthDp(pencilcase!!.thickness)
         paintColor = pencilcase!!.penColor.value
-        paintAlpha = pencilcase!!.penColor.alpha
+        paintAlpha = pencilcase!!.penAlpha.value
     }
 
-    fun set(pencilcase: CookingPencilcase) {
-        this.pencilcase = pencilcase
-        paintColor = pencilcase.penColor.value
-        paintAlpha = pencilcase.penColor.alpha
-        setPaintWidthDp(pencilcase.thickness.width)
-        if (!pencilcase.memoViews.contains(this)) {
-            pencilcase.memoViews.add(this)
-        }
-    }
+//    fun set(penPanel: IPencilPanel) {
+//        this.pencilcase = penPanel
+//        paintColor = penPanel.penColorType.value
+//        paintAlpha = penPanel.penAlphaType.value
+//        setPaintWidthDp(penPanel.thickness)
+//        if (!penPanel.memoViews.contains(this)) {
+//            penPanel.memoViews.add(this)
+//        }
+//    }
 
     fun save(fileName: String) {
         FileHelper.saveStateIntoFile(context, currentViewStateAsSerializable, fileName, null)

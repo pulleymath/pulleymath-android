@@ -87,7 +87,7 @@ class AffiliatedTestWorkbook: BaseDiffItem, Serializable {
     var finished_at: String? = null
     var score: Int? = null
     var school_id: Int = 0
-    lateinit var major_code: String
+    var major_code: String? = null
     lateinit var name: String
     var student_code: String? = null
 
@@ -399,7 +399,7 @@ class AffiliatedStudentWorkbook: Serializable {
     var finished_at: String? = null
     var score: Int? = null
     var school_id: Int = 0
-    lateinit var major_code: String
+    var major_code: String? = null
     lateinit var name: String
     var student_code: String? = null
 }

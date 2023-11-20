@@ -15,7 +15,6 @@ package com.freewheelin.pulley.revision2021.cookingmemo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -32,6 +31,11 @@ class Point implements Parcelable, Serializable {
         x = y = -1;
     }
 
+    public PathType type = PathType.Curve;
+    Point(PathType type) {
+        this.type = type;
+        x = y = -1;
+    }
     @Override
     public String toString() {
         return "" + x + " : " + y + " - ";

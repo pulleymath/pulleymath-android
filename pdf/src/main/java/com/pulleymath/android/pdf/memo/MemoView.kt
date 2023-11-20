@@ -21,18 +21,25 @@ class MemoView: FreeDrawView {
 
     var memoId: String = ""
 
-    var pencilcase: Pencilcase? = null
+    var pencilPanel: IPencilPanel? = null
     var listener: MemoViewListener? = null
+    var fingerDrawMode = false
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
 
-        (pencilcase as? PencilcaseView)?.run {
-            pencilOptionLl.isSelected = false
-            pencilOptionLl.visibility = View.GONE
-            clearAllBtn.isSelected = false
-            clearAllBtn.visibility = View.GONE
+        (pencilPanel as? PencilPanel)?.run {
+            penOptionPanelCl.visibility = View.GONE
+            eraserPanelCl.visibility = View.GONE
+            figurePanelCl.visibility = View.GONE
+            transparencyMainPanel()
         }
 
+        val pp = MotionEvent.PointerProperties()
+        motionEvent?.getPointerProperties(0, pp)
+        if (!fingerDrawMode && pp.toolType == MotionEvent.TOOL_TYPE_FINGER) {
+            parent.parent.requestDisallowInterceptTouchEvent(false)
+            return false
+        }
 
         listener?.onMemorizing(motionEvent)
 
@@ -42,20 +49,53 @@ class MemoView: FreeDrawView {
             super.onTouch(view, motionEvent)
             saveDrawing()
             return true
-        } else if (motionEvent?.pointerCount == 2) {
-            parent.parent.requestDisallowInterceptTouchEvent(false)
-            mPoints.clear()
-            return false
-        } else if(pencilcase?.editType == Pencilcase.EditType.pencil && buttonType != BUTTON_STYLUS_PRIMARY) {
-            if (motionEvent?.action == MotionEvent.ACTION_DOWN)
-                return true
-            super.onTouch(view, motionEvent)
-        }else if(pencilcase?.editType == Pencilcase.EditType.eraser || buttonType == BUTTON_STYLUS_PRIMARY) {
-            if (motionEvent?.action == MotionEvent.ACTION_DOWN)
-                return true
-            super.onTouch(view, motionEvent)
+
         }
-        return false
+
+        drawType = null
+
+        if(pencilPanel?.drawType == DrawType.Pencil && buttonType != BUTTON_STYLUS_PRIMARY) {
+            drawType = DrawType.Pencil
+            if (pencilPanel?.pathType == DrawPathType.Circle) {
+                pathType = DrawPathType.Circle
+            } else if (pencilPanel?.pathType == DrawPathType.Line) {
+                pathType = DrawPathType.Line
+            } else if (pencilPanel?.pathType == DrawPathType.Arrow) {
+                pathType = DrawPathType.Arrow
+            } else {
+                pathType = DrawPathType.Curve
+            }
+            if (motionEvent?.pointerCount == 2) {
+                parent.requestDisallowInterceptTouchEvent(false)
+                mPoints.clear()
+                return false
+            }
+
+            if (motionEvent?.action == MotionEvent.ACTION_DOWN)
+                return true
+
+            super.onTouch(view, motionEvent)
+
+            return false
+
+        } else if(pencilPanel?.drawType == DrawType.Figure && buttonType != BUTTON_STYLUS_PRIMARY) {
+            drawType = DrawType.Figure
+            pathType = pencilPanel?.pathType ?: DrawPathType.Curve
+            super.onTouch(view, motionEvent)
+            return true
+        } else if(pencilPanel?.drawType == DrawType.Eraser || buttonType == BUTTON_STYLUS_PRIMARY) {
+            pathType = DrawPathType.Curve
+            drawType = DrawType.Eraser
+            parent.requestDisallowInterceptTouchEvent(true)
+            if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
+                super.onTouch(view, motionEvent)
+                return true
+            }
+            super.onTouch(view, motionEvent)
+            return false
+        } else {
+            return true
+        }
     }
 
     private var isWaitingExecutionSignal = false
@@ -90,22 +130,22 @@ class MemoView: FreeDrawView {
     }
 
     fun applyPencilMode() {
-        pencilcase?.apply {
-            paintColor = penColor.value
-            paintAlpha = penColor.alpha
-            setPaintWidthDp(thickness.width)
-            when (editType) {
-                Pencilcase.EditType.pencil -> setPencil(paintColor, paintAlpha, thickness.width)
-                else -> setEraser(ERASE_THICK)
-            }
+        pencilPanel?.apply {
+            paintColor = penColorType.value
+            paintAlpha = penAlphaType.value
+            setPaintWidthDp(thickness)
+//            when (drawType) {
+//                DrawType.Pencil -> setPencil(paintColor, paintAlpha, thickness.width)
+//                else -> setEraser(ERASE_THICK)
+//            }
         }
     }
 
-    fun set(pencilcase: Pencilcase) {
-        this.pencilcase = pencilcase
-        paintColor = pencilcase.penColor.value
-        paintAlpha = pencilcase.penColor.alpha
-        setPaintWidthDp(pencilcase.thickness.width)
+    fun set(pencilcase: PencilPanel) {
+        this.pencilPanel = pencilcase
+        paintColor = pencilcase.penColorType.value
+        paintAlpha = pencilcase.penAlphaType.value
+        setPaintWidthDp(pencilcase.thickness)
         pencilcase.memoViews.add(this)
     }
 
@@ -118,8 +158,10 @@ class MemoView: FreeDrawView {
     }
 
     fun load() {
+        println("aspasp load from memoId : ${memoId}")
         FileHelper.loadMemo(context, memoId, { state ->
             Handler(Looper.getMainLooper()).post {
+                clearMemoState()
                 loadedBitmap = null
                 restoreStateFromSerializable(state)
             }

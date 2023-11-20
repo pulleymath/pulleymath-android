@@ -19,7 +19,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Xfermode;
@@ -31,13 +30,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
-
 import com.freewheelin.pulley.R;
+import com.freewheelin.pulley.revision2021.views.CookingPencilcase;
 
 
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     public ArrayList<Point> mPoints = new ArrayList<>();
     public ArrayList<HistoryPath> mPaths = new ArrayList<>();
-    private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
+    public ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
 
     @ColorInt
     private int mPaintColor = DEFAULT_COLOR;
@@ -639,13 +637,16 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         mFinishPath = false;
 
         for (HistoryPath currentPath : mPaths) {
-
+            Log.d("currentPath", "type : " + currentPath.type);
             // If the path is just a single point, draw as a point
-            if (currentPath.isPoint()) {
-
-                canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
+            if (currentPath.type == PathType.Curve) {
+                if (currentPath.isPoint()) {
+                    canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, currentPath.getPaint());
-            } else {// Else draw the complete path
+                } else {// Else draw the complete path
+                    canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
+                }
+            } else if (currentPath.type == PathType.Circle || currentPath.type == PathType.Line) {
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
             }
         }
@@ -664,19 +665,42 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                     createAndCopyColorAndAlphaForFillPaint(mCurrentPaint, false));
         } else if (mPoints.size() != 0) {// Else draw the complete series of points
 
-            boolean first = true;
+            if (editType == CookingPencilcase.EditType.Pencil || editType == CookingPencilcase.EditType.Eraser) {
+                boolean first = true;
 
-            for (Point point : mPoints) {
+                for (Point point : mPoints) {
 
-                if (first) {
-                    mCurrentPath.moveTo(point.x, point.y);
-                    first = false;
-                } else {
-                    mCurrentPath.lineTo(point.x, point.y);
+                    if (first) {
+                        mCurrentPath.moveTo(point.x, point.y);
+                        first = false;
+                    } else {
+                        mCurrentPath.lineTo(point.x, point.y);
+                    }
+                }
+
+                canvas.drawPath(mCurrentPath, mCurrentPaint);
+            } else if (editType == CookingPencilcase.EditType.Figure) {
+                if (pathType == PathType.Circle) {
+                    Point startP = mPoints.get(0);
+                    Point endP = mPoints.get(mPoints.size() - 1);
+                    mCurrentPath.moveTo(startP.x, startP.y);
+
+                    double dx = (double) (endP.x - startP.x);
+                    double dy = (double) (endP.y - startP.y);
+                    double radius = Math.sqrt(dx * dx + dy * dy);
+                    mCurrentPath.addCircle(startP.x, startP.y, (float) radius, Path.Direction.CW);
+                    canvas.drawPath(mCurrentPath, mCurrentPaint);
+//                canvas.drawCircle(startP.x, startP.y, (float)radius , mCurrentPaint);
+                } else if (pathType == PathType.Line) {
+                    Point startP = mPoints.get(0);
+                    mCurrentPath.moveTo(startP.x, startP.y);
+
+                    Point endP = mPoints.get(mPoints.size() - 1);
+                    mCurrentPath.lineTo(endP.x, endP.y);
+                    canvas.drawPath(mCurrentPath, mCurrentPaint);
+
                 }
             }
-
-            canvas.drawPath(mCurrentPath, mCurrentPaint);
         }
 
         // If the path is finished, add it to the history
@@ -711,6 +735,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     Boolean isStylusBtnClicked = false;
+    public PathType pathType = PathType.Curve;
+    public CookingPencilcase.EditType editType = null;
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -721,7 +747,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         mCanceledPaths = new ArrayList<>();
-        int BUTTON_STYLUS = 213; // spen 버튼 클릭시 왜 motionEvent가 213으로 표기될까?
+        int BUTTON_STYLUS = 213;
 
         if (motionEvent.getAction() == MotionEvent.ACTION_MOVE || motionEvent.getAction() == BUTTON_STYLUS) {
             if (motionEvent.getAction() == BUTTON_STYLUS) {
@@ -734,12 +760,12 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             }
             Point point;
             for (int i = 0; i < motionEvent.getHistorySize(); i++) {
-                point = new Point();
+                point = new Point(pathType);
                 point.x = motionEvent.getHistoricalX(i);
                 point.y = motionEvent.getHistoricalY(i);
                 mPoints.add(point);
             }
-            point = new Point();
+            point = new Point(pathType);
             point.x = motionEvent.getX();
             point.y = motionEvent.getY();
             mPoints.add(point);

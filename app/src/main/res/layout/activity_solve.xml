@@ -68,6 +68,22 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
+                    <com.freewheelin.pulley.legacy.views.SolveTimerView
+                        android:id="@+id/timerView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp24"
+                        android:layout_marginEnd="@dimen/dp32"
+                        tools:visibility="visible"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/spyBtn"
+                        app:layout_constraintStart_toEndOf="@+id/titleTv"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:orientation_subname="solve"
+                        >
+                    </com.freewheelin.pulley.legacy.views.SolveTimerView>
+
                     <Button
                         style="@style/TextGray_800.ExtraBold"
                         android:id="@+id/spyBtn"
@@ -97,7 +113,7 @@
                     android:id="@+id/galleryBtn"
                     android:layout_width="@dimen/dp36"
                     android:layout_height="@dimen/dp36"
-                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginStart="16dp"
                     android:visibility="visible"
                     android:focusable="false"
                     app:lottie_loop="true"
@@ -111,7 +127,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp36"
                     android:layout_marginStart="@dimen/dp24"
-                    android:background="@drawable/bg_black_100_stroke_gray_800_round"
                     android:orientation="horizontal"
                     app:layout_goneMarginStart="@dimen/dp32"
                     app:layout_constraintStart_toEndOf="@+id/galleryBtn"
@@ -122,13 +137,10 @@
                         android:id="@+id/prevBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_tailless_arrow_left_8_18"
+                        android:src="@drawable/ic_tailless_arrow_left_24"
                         android:background="@null"
                         android:focusable="false"/>
 
-                    <View
-                        style="@style/Border_Gray_800_Vertical"
-                        android:layout_height="match_parent"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
@@ -178,15 +190,11 @@
                             app:layout_constraintStart_toEndOf="@+id/numExtTv" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <View
-                        style="@style/Border_Gray_800_Vertical"
-                        android:layout_height="match_parent"/>
-
                     <ImageButton
                         android:id="@+id/nextBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_tailless_arrow_right_8_18"
+                        android:src="@drawable/ic_tailless_arrow_right_24"
                         android:background="@null"
                         android:focusable="false"/>
 
@@ -196,58 +204,75 @@
                     android:id="@+id/controlTool"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp24"
-                    app:layout_constraintStart_toEndOf="@+id/pageTool"
+                    android:layout_marginHorizontal="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/pageTool"
                     app:layout_constraintBottom_toBottomOf="@+id/pageTool">
+
+                    <ImageButton
+                        android:id="@+id/externalPenBtn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_black_200_round_ripple"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_npot_pencil"
+                        android:layout_marginEnd="6dp"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="16dp"
+                        android:background="@drawable/bg_gray_600_round"/>
 
                     <ImageButton
                         android:id="@+id/clearBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="@dimen/dp36"
-                        android:layout_marginEnd="8dp"
-                        android:visibility="gone"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="20dp"
+                        android:visibility="visible"
                         android:focusable="false"
-                        android:src="@drawable/ic_check_grey_20"
-                        android:background="@drawable/bg_black_100_stroke_gray_800_round"/>
+                        android:src="@drawable/ic_check_gray_24"
+                        tools:src="@drawable/ic_check_filled_purple"
+                        android:background="@null"/>
 
                     <ImageButton
                         android:id="@+id/scrapBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="@dimen/dp36"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="20dp"
                         android:focusable="false"
-                        android:src="@drawable/ic_tag_14_unselected"
-                        android:background="@drawable/bg_black_100_stroke_gray_800_round"/>
+                        android:src="@drawable/ic_bookmark"
+                        tools:src="@drawable/ic_bookmark_filled_purple"
+                        android:background="@null"/>
 
                     <ImageButton
                         android:id="@+id/reportBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="@dimen/dp36"
-                        android:src="@drawable/ic_siren_w22"
+                        android:src="@drawable/ic_report"
+                        android:layout_marginEnd="20dp"
                         android:focusable="false"
-                        android:background="@drawable/bg_black_100_stroke_gray_800_round"/>
+                        android:background="@null"/>
+                    <ImageButton
+                        android:id="@+id/quickPanelBtn"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:src="@drawable/ic_toggle"
+                        tools:src="@drawable/ic_toggle_filled_purple"
+                        android:focusable="false"
+                        android:background="@null"/>
                 </LinearLayout>
 
-                <com.freewheelin.pulley.legacy.views.SolveTimerView
-                    android:id="@+id/timerView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp24"
-                    android:layout_marginEnd="@dimen/dp32"
-                    app:layout_constraintTop_toBottomOf="@+id/mainHeaderView"
-                    app:layout_constraintBottom_toBottomOf="@+id/toolView2"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:orientation_subname="solve"
-                    >
-                </com.freewheelin.pulley.legacy.views.SolveTimerView>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/mainFormatTool"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginEnd="@dimen/dp24"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mainHeaderView"
                     app:layout_constraintBottom_toBottomOf="@+id/toolView2">
@@ -284,9 +309,9 @@
                     android:layout_marginStart="@dimen/dp24"
                     android:visibility="visible"
                     android:background="@drawable/bg_yellow_300_round_18"
-                    app:layout_constraintBottom_toBottomOf="@+id/controlTool"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintTop_toTopOf="@+id/controlTool">
+                    app:layout_constraintBottom_toBottomOf="@+id/pageTool"
+                    app:layout_constraintStart_toEndOf="@+id/pageTool"
+                    app:layout_constraintTop_toTopOf="@+id/pageTool">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -571,15 +596,81 @@
                             app:layout_constraintEnd_toStartOf="@+id/solutionContainer"
                             app:layout_constraintTop_toTopOf="@+id/problemContainer"/>
 
-                        <com.freewheelin.pulley.legacy.views.PencilcaseView
-                            android:id="@+id/pencilcaseView"
+                        <com.freewheelin.pulley.revision2023.ui.view.PencilPanel
+                            android:id="@+id/penPanel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp32"
                             android:layout_marginEnd="@dimen/dp32"
-                            app:layout_constraintTop_toTopOf="@+id/problemContainer"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            app:layout_constraintTop_toBottomOf="@+id/quickPanelLl"
+                            app:layout_constraintEnd_toStartOf="@id/solutionContainer"/>
 
+                        <LinearLayout
+                            android:id="@+id/quickPanelLl"
+                            android:layout_width="192dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp32"
+                            android:layout_marginEnd="@dimen/dp32"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="16dp"
+                            android:background="@drawable/bg_gray_100_stroke_gray_300_round_10"
+                            app:layout_constraintTop_toTopOf="@+id/problemContainer"
+                            app:layout_constraintEnd_toStartOf="@+id/solutionContainer">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="6dp">
+
+                                <TextView
+                                    style="@style/h6"
+                                    android:layout_width="88dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/gray_600"
+                                    android:layout_gravity="center"
+                                    android:text="정답/해설 표시"/>
+
+                                <Switch
+                                    style="@style/Switch.ExtraLight"
+                                    android:id="@+id/solutionPanelSwitch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"/>
+                            </LinearLayout>
+                            <View
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="6dp">
+
+                                <TextView
+                                    style="@style/h6"
+                                    android:layout_width="88dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/gray_600"
+                                    android:layout_gravity="center"
+                                    android:text="빠른 채점"/>
+
+                                <Switch
+                                    style="@style/Switch.ExtraLight"
+                                    android:id="@+id/quickScoringPanelSwitch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/statusContainer"
                             android:layout_width="0dp"

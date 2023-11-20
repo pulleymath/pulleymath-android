@@ -2,7 +2,6 @@ package com.freewheelin.pulley.revision2021.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -10,11 +9,12 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
+import com.freewheelin.pulley.legacy.views.memoView.MemoView
 import kotlin.math.abs
 
 interface WrongNoteScrollListener {
     fun onScaleFactor(scale: Float)
+    fun onGestureListener()
 }
 
 class WrongNoteQuizScrollView: ScrollView,
@@ -31,13 +31,15 @@ class WrongNoteQuizScrollView: ScrollView,
     private val gestureScale: ScaleGestureDetector = ScaleGestureDetector(context, this)
     private val gesture: GestureDetector = GestureDetector(context, this)
     private var touchStarted = false
+    var fingerDrawMode = false
 
     // pattern에서도 이 뷰를 쓰고있으므로 아래의 뷰는 id로 받기보다는 fragment로부터 받아와야 할것같다.
     val leftContentCl by lazy { this.findViewById<ConstraintLayout>(R.id.ivWrapperCl) }
-    val memoView by lazy { this.findViewById<CookingMemoView>(R.id.memoView) }
+    val memoView by lazy { this.findViewById<MemoView>(R.id.memoView) }
 
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
+        listener?.onGestureListener()
         try {
             if (ev != null) { gesture.onTouchEvent(ev) }
         } catch (e: NullPointerException) {
@@ -86,7 +88,13 @@ class WrongNoteQuizScrollView: ScrollView,
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
 //        return false // 한손가락 필기중일때 false
         return if(isBlock) {
-            ev.pointerCount == 2
+            val pp = MotionEvent.PointerProperties()
+            ev.getPointerProperties(0, pp)
+            if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
+                return true
+            } else {
+                ev.pointerCount == 2
+            }
         } else {
             true
         }

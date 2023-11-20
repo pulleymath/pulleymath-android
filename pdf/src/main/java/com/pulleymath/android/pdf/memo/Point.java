@@ -32,6 +32,12 @@ class Point implements Parcelable, Serializable {
         x = y = -1;
     }
 
+    public DrawPathType type = DrawPathType.Curve;
+    Point(DrawPathType type) {
+        this.type = type;
+        x = y = -1;
+    }
+
     @Override
     public String toString() {
         return "" + x + " : " + y + " - ";

@@ -103,8 +103,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/exerciseContainer"
             android:layout_width="0dp"

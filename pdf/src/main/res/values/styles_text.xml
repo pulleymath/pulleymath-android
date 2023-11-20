@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExtraBold">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+    </style>
+
+    <style name="TextPurple_200.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/purple_200</item>
+    </style>
+
+    <style name="TextPurple_300">
+        <item name="android:textColor">@color/purple_300</item>
+    </style>
+
+    <style name="TextPurple_300.Bold" parent="Bold">
+        <item name="android:textColor">@color/purple_300</item>
+    </style>
+
+    <style name="TextPurple_300.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/purple_300</item>
+    </style>
+
+
+    <style name="TextGray_800">
+        <item name="android:textColor">@color/gray_800</item>
+    </style>
+
+    <style name="TextGray_800.Bold"  parent="Bold">
+        <item name="android:textColor">@color/gray_800</item>
+    </style>
+
+    <style name="TextGray_800.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/gray_800</item>
+    </style>
+
+    <style name="TextBlack_200.Bold"  parent="Bold">
+        <item name="android:textColor">@color/black_200</item>
+    </style>
+
+    <style name="TextBlack_200.ExtraBold"  parent="ExtraBold">
+        <item name="android:textColor">@color/black_200</item>
+    </style>
+
+
+    <style name="TextGray_500">
+        <item name="android:textColor">@color/gray_500</item>
+    </style>
+
+    <style name="TextGray_500.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_500</item>
+    </style>
+
+    <style name="TextGray_500.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/gray_500</item>
+    </style>
+
+
+    <style name="TestGray_200.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_200</item>
+    </style>
+
+
+    <style name="TextWhite.Bold" parent="Bold">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextWhite.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextBlue_400.Bold" parent="Bold">
+        <item name="android:textColor">@color/blue_400</item>
+    </style>
+
+    <style name="TextBlue_500.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/blue_500</item>
+    </style>
+
+    <style name="TextGray_600">
+        <item name="android:textColor">@color/gray_600</item>
+    </style>
+
+    <style name="TextGray_600.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_600</item>
+    </style>
+
+    <style name="TextGray_600.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/gray_600</item>
+    </style>
+
+    
+    <style name="TextRed_300">
+        <item name="android:textColor">@color/red_300</item>
+    </style>
+
+    <style name="TextRed_300.Bold" parent="Bold">
+        <item name="android:textColor">@color/red_300</item>
+    </style>
+
+    <style name="TextRed_300.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/red_300</item>
+    </style>
+
+    <style name="TextGray_700.Bold" parent="Bold">
+        <item name="android:textColor">@color/gray_700</item>
+    </style>
+
+    <style name="TextGray_700.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/gray_700</item>
+    </style>
+
+
+    <style name="TextGreen_300.Bold" parent="Bold">
+        <item name="android:textColor">@color/green_300</item>
+    </style>
+
+    <style name="TextYellow_300.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/yellow_300</item>
+    </style>
+
+    <style name="TextYellow_500.Bold" parent="Bold">
+        <item name="android:textColor">@color/yellow_500</item>
+    </style>
+
+    <style name="TextYellow_500.ExtraBold" parent="ExtraBold">
+        <item name="android:textColor">@color/yellow_500</item>
+    </style>
+
+
+    <style name="CustomFont">
+        <item name="android:textColor">@color/gray_800</item>
+    </style>
+
+    <style name="h1" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp36</item>
+    </style>
+
+    <style name="h2" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp32</item>
+    </style>
+
+    <style name="h3" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp24</item>
+    </style>
+    <style name="h4" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp18</item>
+    </style>
+    <style name="h4_sb" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp18</item>
+    </style>
+    <style name="h5" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+
+    <style name="mo_h2" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp20</item>
+    </style>
+    <style name="mo_h3" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp18</item>
+    </style>
+    <style name="mo_h4" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+    <style name="mo_h4_sb" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+    <style name="b1" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+    <style name="b1r" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">@dimen/sp16</item>
+    </style>
+    <style name="h6" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+
+    <style name="mo_h5" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="b2" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="mo_b1" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="c1" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="b2r" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="mo_b1r" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">@dimen/sp14</item>
+    </style>
+    <style name="mo_h6" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_bold</item>
+        <item name="android:textSize">@dimen/sp12</item>
+    </style>
+    <style name="b3" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp12</item>
+    </style>
+    <style name="mo_b2" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">@dimen/sp12</item>
+    </style>
+    <style name="mo_b2r" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">@dimen/sp12</item>
+    </style>
+
+
+</resources>

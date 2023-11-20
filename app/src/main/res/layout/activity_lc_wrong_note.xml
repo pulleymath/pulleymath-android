@@ -60,8 +60,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <ImageButton
+                android:id="@+id/externalPenBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_black_200_round_ripple"
+                android:scaleType="center"
+                android:src="@drawable/ic_npot_pencil"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mainToolDivider"/>
+
 
             <View
+                android:id="@+id/mainToolDivider"
                 android:layout_width="2dp"
                 android:layout_height="12dp"
                 android:background="@drawable/bg_gray_750_round"
@@ -98,28 +111,28 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pencilContainer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:elevation="2dp"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/pencilContainer"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:elevation="2dp"-->
+<!--            app:layout_constraintVertical_bias="0"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent">-->
 
 
-            <com.freewheelin.pulley.revision2021.views.CookingPencilcaseView
-                android:id="@+id/pencilcaseView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="122dp"/>
+<!--            <com.freewheelin.pulley.revision2021.views.CookingPencilcaseView-->
+<!--                android:id="@+id/pencilcaseView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="122dp"/>-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/subHeaderCl"
@@ -307,6 +320,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.freewheelin.pulley.revision2023.ui.view.PencilPanel
+            android:id="@+id/penPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="@+id/pagerWrapper"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

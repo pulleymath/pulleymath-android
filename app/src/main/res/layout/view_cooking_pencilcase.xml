@@ -82,51 +82,170 @@
                 android:scaleType="center"/>
 
         </LinearLayout>
+
+        <View style="@style/Border_Gray_300_Horizontal"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            >
+
+            <LinearLayout
+                android:id="@+id/figureOptionBtn1"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@color/gray_400"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="커브"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/figureOptionBtn2"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@color/yellow_200"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="동그라미"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/figureOptionBtn3"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@color/red_200"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="직선"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <View style="@style/Border_Gray_300_Horizontal"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
 
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/lineBtn"
-                android:layout_width="48dp"
+            <SeekBar
+                android:id="@+id/thickSeekBar"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"
-                android:src="@drawable/ic_pen_line"
-                android:scaleType="center"/>
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/thinBtn"
+                android:layout_weight="1"
+                android:max="125"
+                android:progress="35"
+                android:progressTint="@color/yellow_200"
+                android:thumb="@drawable/seekbar_thumb_40"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"
-                android:src="@drawable/ic_pen_thin"/>
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/mediumBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"
-                android:src="@drawable/ic_pen_medium"/>
-            <ImageButton
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/thickBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"
-                android:src="@drawable/ic_pen_thick"/>
+                android:layout_height="48dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/thicknessIndicator"
+                    android:layout_width="5dp"
+                    android:layout_height="40dp"
+                    android:layout_marginVertical="4dp"
+                    app:cardBackgroundColor="@color/gray_400"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+                <!--                <View-->
+                <!--                    android:id="@+id/thicknessIndicator"-->
+                <!--                    android:layout_width="5dp"-->
+                <!--                    android:layout_height="48dp"-->
+                <!--                    android:layout_marginVertical="4dp"-->
+                <!--                    android:background="@drawable/bg_gray_400_round_20"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    />-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </LinearLayout>
+
+<!--        <View style="@style/Border_Gray_300_Horizontal"/>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:paddingStart="16dp"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:paddingTop="8dp"-->
+<!--            android:paddingBottom="8dp">-->
+
+<!--            <ImageButton-->
+<!--                style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--                android:id="@+id/lineBtn"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"-->
+<!--                android:src="@drawable/ic_pen_line"-->
+<!--                android:scaleType="center"/>-->
+<!--            <ImageButton-->
+<!--                style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--                android:id="@+id/thinBtn"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"-->
+<!--                android:src="@drawable/ic_pen_thin"/>-->
+<!--            <ImageButton-->
+<!--                style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--                android:id="@+id/mediumBtn"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"-->
+<!--                android:src="@drawable/ic_pen_medium"/>-->
+<!--            <ImageButton-->
+<!--                style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--                android:id="@+id/thickBtn"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:background="@drawable/bg_gray_100_round_5_ripple_gray200"-->
+<!--                android:src="@drawable/ic_pen_thick"/>-->
+
+<!--        </LinearLayout>-->
 
         <View style="@style/Border_Gray_300_Horizontal"/>
 
@@ -153,7 +272,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"
-                    android:background="@drawable/bg_gray_700_circle">
+                    android:background="@drawable/bg_black_200_circle">
 
                     <ImageView
                         android:id="@+id/blackCheck"
@@ -263,6 +382,44 @@
         </LinearLayout>
 
         <View style="@style/Border_Gray_300_Horizontal"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            >
+            <LinearLayout
+                android:id="@+id/alphaOptionBtn1"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@color/gray_400"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/alphaOptionBtn2"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@color/yellow_200"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View style="@style/Border_Gray_300_Horizontal"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -272,29 +429,52 @@
             android:paddingStart="16dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
+<!--            <TextView-->
+<!--                android:id="@+id/writeModeLabel"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/font_pretendard_bold"-->
+<!--                android:textSize="16sp"-->
+<!--                app:lineHeight="24dp"-->
+<!--                android:textColor="@color/gray_600"-->
+<!--                android:text="필기 유지"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+
+<!--            <Switch-->
+<!--                android:id="@+id/writeModeSwitch"-->
+<!--                android:layout_width="48dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/writeModeLabel"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/writeModeLabel"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/writeModeLabel"/>-->
+
             <TextView
-                android:id="@+id/writeModeLabel"
+                android:id="@+id/fingerDrawModeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/font_pretendard_bold"
                 android:textSize="16sp"
                 app:lineHeight="24dp"
                 android:textColor="@color/gray_600"
-                android:text="필기 유지"
+                android:text="손으로 필기"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <Switch
-                android:id="@+id/writeModeSwitch"
+                android:id="@+id/fingerDrawModeSwitch"
                 android:layout_width="48dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintTop_toTopOf="@+id/writeModeLabel"
-                app:layout_constraintBottom_toBottomOf="@+id/writeModeLabel"
-                app:layout_constraintStart_toEndOf="@+id/writeModeLabel"/>
+                app:layout_constraintTop_toTopOf="@+id/fingerDrawModeLabel"
+                app:layout_constraintBottom_toBottomOf="@+id/fingerDrawModeLabel"
+                app:layout_constraintStart_toEndOf="@+id/fingerDrawModeLabel"/>
+
 
             <TextView
                 android:id="@+id/clearBtn"
@@ -307,11 +487,11 @@
                 android:text="모두 지우기"
                 android:textColor="@color/red_250"
                 android:background="@drawable/bg_gray_100_round_5_ripple_gray200"
-                app:layout_constraintBottom_toBottomOf="@id/writeModeSwitch"
+                app:layout_constraintBottom_toBottomOf="@id/fingerDrawModeSwitch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.525"
-                app:layout_constraintStart_toEndOf="@id/writeModeSwitch"
-                app:layout_constraintTop_toTopOf="@id/writeModeSwitch"
+                app:layout_constraintStart_toEndOf="@id/fingerDrawModeSwitch"
+                app:layout_constraintTop_toTopOf="@id/fingerDrawModeSwitch"
                 app:layout_constraintVertical_bias="0.538" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

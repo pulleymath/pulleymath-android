@@ -75,6 +75,14 @@ class PriorConceptFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as LearningCourseActivity).run {
+            hideMainPenPanel()
+            hidePenPanel()
+        }
+    }
+
     companion object {
         val CHAPTER_NAME = "CHAPTER_NAME"
 

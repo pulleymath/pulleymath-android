@@ -12,11 +12,14 @@
  */
 package com.freewheelin.pulley.legacy.views.memoView;
 
+import android.util.Log;
+
 import com.freewheelin.pulley.legacy.views.memoView.HistoryPath;
 import com.freewheelin.pulley.legacy.views.memoView.ResizeBehaviour;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Riccardo on 23/05/2017.
@@ -26,25 +29,25 @@ public class FreeDrawSerializableState implements Serializable {
 
     static final long serialVersionUID = 40L;
 
-    private ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> mCanceledPaths;
-    private ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> mPaths;
+    private ArrayList<HistoryPath> mCanceledPaths;
+    private ArrayList<HistoryPath> mPaths;
 
     private int mPaintColor;
     private int mPaintAlpha;
     private float mPaintWidth;
 
-    private com.freewheelin.pulley.legacy.views.memoView.ResizeBehaviour mResizeBehaviour;
+    private ResizeBehaviour mResizeBehaviour;
 
     private int mLastDimensionW;
     private int mLastDimensionH;
 
-    public FreeDrawSerializableState(ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> canceledPaths,
-                                     ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> paths, int paintColor, int paintAlpha,
-                                     float paintWidth, com.freewheelin.pulley.legacy.views.memoView.ResizeBehaviour resizeBehaviour,
+    public FreeDrawSerializableState(ArrayList<HistoryPath> canceledPaths,
+                                     ArrayList<HistoryPath> paths, int paintColor, int paintAlpha,
+                                     float paintWidth, ResizeBehaviour resizeBehaviour,
                                      int lastW, int lastH) {
 
-        setCanceledPaths(canceledPaths != null ? canceledPaths : new ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath>());
-        setPaths(paths != null ? paths : new ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath>());
+        setCanceledPaths(canceledPaths != null ? canceledPaths : new ArrayList<HistoryPath>());
+        setPaths(paths != null ? paths : new ArrayList<HistoryPath>());
         setPaintWidth(paintWidth >= 0 ? paintWidth : 0);
         setPaintColor(paintColor);
         setPaintAlpha(paintAlpha);
@@ -53,19 +56,19 @@ public class FreeDrawSerializableState implements Serializable {
         setLastDimensionH(lastH >= 0 ? lastH : 0);
     }
 
-    public ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> getCanceledPaths() {
+    public ArrayList<HistoryPath> getCanceledPaths() {
         return mCanceledPaths;
     }
 
-    public void setCanceledPaths(ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> canceledPaths) {
+    public void setCanceledPaths(ArrayList<HistoryPath> canceledPaths) {
         this.mCanceledPaths = canceledPaths;
     }
 
-    public ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> getPaths() {
+    public ArrayList<HistoryPath> getPaths() {
         return mPaths;
     }
 
-    public void setPaths(ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> paths) {
+    public void setPaths(ArrayList<HistoryPath> paths) {
         this.mPaths = paths;
     }
 
@@ -93,7 +96,7 @@ public class FreeDrawSerializableState implements Serializable {
         this.mPaintAlpha = paintAlpha;
     }
 
-    public com.freewheelin.pulley.legacy.views.memoView.ResizeBehaviour getResizeBehaviour() {
+    public ResizeBehaviour getResizeBehaviour() {
         return mResizeBehaviour;
     }
 

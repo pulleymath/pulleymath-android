@@ -21,6 +21,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import org.joda.time.LocalDateTime;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -49,18 +51,21 @@ class HistoryPath implements Parcelable, Serializable {
     private transient Path path = null;
     private transient Paint paint = null;
 
-    private boolean isErase = false;
+    public boolean isErase = false;
+    public DrawPathType type = DrawPathType.Curve;
+    public LocalDateTime createdAt;
 
     HistoryPath(@NonNull CopyOnWriteArrayList<Point> points, @NonNull Paint paint) {
         this.points = new CopyOnWriteArrayList<>(points);
+        this.type = points.get(0).type;
         this.paintColor = paint.getColor();
         this.paintAlpha = paint.getAlpha();
         this.paintWidth = paint.getStrokeWidth();
         this.originX = points.get(0).x;
         this.originY = points.get(0).y;
         this.isPoint = FreeDrawHelper.isAPoint(points);
-
-        this.isErase = (paint.getXfermode() != null) ? true : false;
+        this.createdAt = LocalDateTime.now();
+        this.isErase = paint.getXfermode() != null;
 
         generatePath();
         generatePaint();
@@ -73,19 +78,61 @@ class HistoryPath implements Parcelable, Serializable {
         if (points != null) {
             boolean first = true;
 
-            for (int i = 0; i < points.size(); i++) {
+            if (type == DrawPathType.Curve) {
+                for (int i = 0; i < points.size(); i++) {
 
-                Point point = points.get(i);
+                    Point point = points.get(i);
 
-                if (first) {
-                    path.moveTo(point.x, point.y);
-                    first = false;
-                } else {
-                    path.lineTo(point.x, point.y);
+                    if (first) {
+                        path.moveTo(point.x, point.y);
+                        first = false;
+                    } else if (type == DrawPathType.Curve) {
+                        path.lineTo(point.x, point.y);
+                    }
                 }
+            } else if (type == DrawPathType.Circle) {
+                Point startP = points.get(0);
+                path.moveTo(startP.x, startP.y);
+
+                Point endP = points.get(points.size() - 1);
+                double dx = (double) (endP.x - startP.x);
+                double dy = (double) (endP.y - startP.y);
+                double radius = Math.sqrt(dx * dx + dy * dy);
+
+                path.addCircle(startP.x, startP.y, (float) radius, Path.Direction.CW);
+            } else if (type == DrawPathType.Line) {
+                Point startP = points.get(0);
+                path.moveTo(startP.x, startP.y);
+
+                Point endP = points.get(points.size() - 1);
+                path.lineTo(endP.x, endP.y);
+            } else if (type == DrawPathType.Arrow) {
+                Point startP = points.get(0);
+                path.moveTo(startP.x, startP.y);
+
+                Point endP = points.get(points.size() - 1);
+                path.lineTo(endP.x, endP.y);
+
+                // A  = endp,  B = startp
+                double mfDegree = Math.atan2(startP.y - endP.y, startP.x - endP.x) * 180 / Math.PI;
+                float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+                double angle = mfDegree - 45;
+                x1 = endP.x + (float)(30 * Math.cos(angle * (Math.PI / 180)));
+                y1 = endP.y + (float)(30 * Math.sin(angle * (Math.PI / 180)));
+
+                path.moveTo(endP.x, endP.y);
+                path.lineTo(x1, y1);
+
+                double angle2 = mfDegree + 45;
+                x2 = endP.x + (float)(30 * Math.cos(angle2 * (Math.PI / 180)));
+                y2 = endP.y + (float)(30 * Math.sin(angle2 * (Math.PI / 180)));
+                path.moveTo(endP.x, endP.y);
+                path.lineTo(x2, y2);
+
             }
         }
     }
+
 
     private void generatePaint() {
         paint = FreeDrawHelper.createPaintAndInitialize(paintColor, paintAlpha, paintWidth,

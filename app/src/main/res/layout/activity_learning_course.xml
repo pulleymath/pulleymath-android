@@ -273,7 +273,7 @@
                 android:focusable="false"
                 android:src="@drawable/ic_tailless_arrow_left_24_gray_600"
                 android:enabled="@{ vm.isPagerFirstIndex == false }"
-                tools:visibility="gone"
+                tools:visibility="visible"
                 visibleIf="@{ isTablet }"
                 imageview_tint="@{ vm.isPagerFirstIndex ? @color/gray_800 : @color/gray_600 }"
                 app:layout_constraintBottom_toBottomOf="@+id/navNextBtn"
@@ -288,38 +288,51 @@
                 android:background="@drawable/bg_black_200_round_ripple"
                 android:src="@drawable/ic_tailless_arrow_right_24_gray_600"
                 android:enabled="@{ vm.isPagerLastIndex == false}"
-                tools:visibility="gone"
+                tools:visibility="visible"
                 visibleIf="@{ isTablet }"
                 imageview_tint="@{ vm.isPagerLastIndex ? @color/gray_800 : @color/gray_600 }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pencilContainer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:elevation="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0">
-
-
-            <com.freewheelin.pulley.revision2021.views.CookingPencilcaseView
-                android:id="@+id/pencilcaseView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                layout_margin_end_dimen="@{ isTablet ? @dimen/dp148 : @dimen/dp20 }"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-<!--                android:layout_marginEnd="122dp"-->
+            <ImageButton
+                android:id="@+id/externalPenBtn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_black_200_round_ripple"
+                android:visibility="@{ isTablet &amp;&amp; (vm.currentCourseType == CourseType.Pattern || vm.currentCourseType == CourseType.Cooking) ? View.VISIBLE : View.GONE }"
+                android:scaleType="center"
+                android:src="@drawable/ic_npot_pencil"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/barOnLeftNavBtn"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/pencilContainer"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:elevation="2dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintVertical_bias="0">-->
+
+
+<!--            <com.freewheelin.pulley.revision2021.views.CookingPencilcaseView-->
+<!--                android:id="@+id/pencilcaseView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                layout_margin_end_dimen="@{ isTablet ? @dimen/dp148 : @dimen/dp20 }"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+<!--&lt;!&ndash;                android:layout_marginEnd="122dp"&ndash;&gt;-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
@@ -332,6 +345,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headerCl"
             app:layout_constraintVertical_bias="1.0" />
+
+        <com.freewheelin.pulley.revision2023.ui.view.PencilPanel
+            android:id="@+id/penPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="@+id/pager"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <FrameLayout
             android:id="@+id/naviFl"
@@ -354,16 +378,17 @@
             android:background="@drawable/shadow_question_floating"
             android:padding="16dp"
             android:visibility="@{ vm.showChannelIoFrame ? View.VISIBLE : View.GONE }"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerCl" />
 
-        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView
-            android:layout_width="700dp"
-            android:layout_height="200dp"
-            tools:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+<!--        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView-->
+<!--            android:layout_width="700dp"-->
+<!--            android:layout_height="200dp"-->
+<!--            tools:visibility="gone"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="48dp"

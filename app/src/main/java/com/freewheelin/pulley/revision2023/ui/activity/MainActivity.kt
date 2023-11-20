@@ -377,21 +377,11 @@ class MainActivity : PermissionActivity(),
     }
 
     private fun initTabFragment() {
-        tabFragments = if (viewModel.mainProfileV4.value?.isAffiliated == true) {
+        tabFragments = if (isTablet) {
             mutableListOf(
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
-                AnalysisFragment.newInstance()
-            )
-        } else if (isTablet) {
-            mutableListOf(
-                MainFragment.newInstance(),
-                ConceptCourseFragment.newInstance(),
-                PatternStudyFragment.newInstance(),
-//                MockExamFragment.newInstance(),
-//                SnackTestFragment.newInstance(),
-//                WrongNoteStudyFragment.newInstance(),
                 AnalysisFragment.newInstance(),
                 MainLessonFragment.newInstance()
             )

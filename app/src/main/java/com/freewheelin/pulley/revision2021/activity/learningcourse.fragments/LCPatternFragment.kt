@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
@@ -21,11 +20,11 @@ import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeListOnce
-import com.freewheelin.pulley.revision2021.utils.observeOnce
+import com.freewheelin.pulley.revision2021.views.LCTouchListener
 import kotlinx.coroutines.*
 
 
-class LCPatternFragment : Fragment() {
+class LCPatternFragment : Fragment(), LCTouchListener {
 
     companion object {
         val COURSE_DESC = "COURSE_DESC"
@@ -74,6 +73,7 @@ class LCPatternFragment : Fragment() {
             binding.apply {
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
+                pagerWrapper.listener = this@LCPatternFragment
                 viewModel.setPatternName(course)
                 viewModel.patternQuizList.observe(viewLifecycleOwner) {
                     it.forEachIndexed { index, quiz ->
@@ -126,7 +126,7 @@ class LCPatternFragment : Fragment() {
                 }
 
                 conceptSolutionToggleBtn.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    (activity as LearningCourseActivity).hidePenPanel()
                     val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(pagerWrapper.pager.currentItem)) }
                     children.forEach {
                         (it as PatternQuizFragment).toggleDrawer()
@@ -159,7 +159,7 @@ class LCPatternFragment : Fragment() {
                 }
 
                 questionBtnLl.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    (activity as LearningCourseActivity).hidePenPanel()
 
                     getChildrenPage().forEach {
                         val quizFrag = (it as PatternQuizFragment)
@@ -174,7 +174,7 @@ class LCPatternFragment : Fragment() {
                     (activity as LearningCourseActivity).setPagerUserInputEnable(it)
                 }
                 headerCl.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    (activity as LearningCourseActivity).hidePenPanel()
                 }
             }
         }
@@ -187,6 +187,10 @@ class LCPatternFragment : Fragment() {
             val courseId = course.learningCourseDetailId
 
             viewModel.fetchPatternInfo(courseId)
+        }
+        (activity as LearningCourseActivity).run {
+            showMainPanPanelIfPenSelected()
+            mainPanelTopMarginByCourseType()
         }
     }
 
@@ -234,6 +238,9 @@ class LCPatternFragment : Fragment() {
     }
     fun setPagerSwipeBlocked(blocked: Boolean) {
         binding.pagerWrapper.isPagerSwipeBlocked = blocked
+    }
+    fun setFingerDrawMode(value: Boolean) {
+        binding.pagerWrapper.fingerDrawMode = value
     }
     fun setPagerUserInputEnabled(enabled: Boolean) {
         binding.pagerWrapper.pager.isUserInputEnabled = enabled
@@ -291,6 +298,10 @@ class LCPatternFragment : Fragment() {
         viewModel.run {
             clearCompositeDisposable()
         }
+    }
+
+    override fun onGestureTouch() {
+        (activity as LearningCourseActivity).hidePenPanel()
     }
 
 }

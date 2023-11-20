@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.revision2021.viewmodel.learningcourse
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import android.widget.ImageView
@@ -12,29 +11,20 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ItemCookingQuizDetailBinding
 import com.freewheelin.pulley.databinding.ItemCookingRightViewBinding
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
-import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
 import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
-import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
-import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.views.memoView.MemoView
 import com.squareup.picasso.Picasso
-import io.channel.plugin.android.extension.doOnElse
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
@@ -60,8 +50,9 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
     var selectedItemBinding: ItemCookingQuizDetailBinding? = null
     var rightViewBinding: ItemCookingRightViewBinding? = null
 
-    val quizMemoViewList: MutableList<CookingMemoView> = mutableListOf()
+    val quizMemoViewList: MutableList<MemoView> = mutableListOf()
     var focusedQuizList: MutableList<CookingQuiz> = mutableListOf()
+    val fingerDrawModeMode by lazy { MutableLiveData(false) }
 
     lateinit var adapter: LCCookingFragment.CookingAdapter
 

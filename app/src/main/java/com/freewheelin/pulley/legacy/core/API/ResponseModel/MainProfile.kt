@@ -16,6 +16,7 @@ data class MainProfileV4 (
     val studentName: String,
     val serviceType: PaidServiceType,
     val signInChannel: SignInChannel,
+    val hasLesson: Boolean,
     val isAffiliated: Boolean,
     val affiliationInfo: AffiliationInfo?,
     val schoolName: String?,

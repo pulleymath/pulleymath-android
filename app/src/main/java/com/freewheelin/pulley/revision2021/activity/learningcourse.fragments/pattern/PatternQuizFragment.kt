@@ -19,13 +19,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCPatternFragment
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.PatternQuizViewModel
-import com.freewheelin.pulley.revision2021.cookingmemo.PathRedoUndoCountChangeListener
 import com.google.android.material.tabs.TabLayoutMediator
-import androidx.core.content.ContextCompat
-import androidx.databinding.BindingAdapter
-import androidx.lifecycle.lifecycleScope
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.ChannelIoQuestionDialog
@@ -33,10 +28,12 @@ import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.DatabaseHelper
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
-import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import kotlinx.coroutines.*
 import java.io.File
 
@@ -44,7 +41,7 @@ class PatternQuizFragment() : Fragment(),
     FloatingAnswerDelegate,
 //    ProblemGestureListener,
     PatternScrollListener,
-    CookingPencilcaseListener,
+    PencilPanelListener,
     PathRedoUndoCountChangeListener {
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
@@ -117,6 +114,7 @@ class PatternQuizFragment() : Fragment(),
 
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
                         val patternId = quiz.patternId
+                        memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
                         memoView.setPatternMemoId(patternId, it.patternQuizId)
@@ -423,35 +421,33 @@ class PatternQuizFragment() : Fragment(),
 
     private fun resetMemoView() {
         (activity as? LearningCourseActivity)?.apply {
-            binding.pencilcaseView.memoViews.clear()
+            binding.penPanel.memoViews.clear()
         }
     }
     private fun resumePencilcaseView() {
         (activity as? LearningCourseActivity)?.let { lcActivity ->
-            lcActivity.binding.pencilcaseView.listener = this@PatternQuizFragment
-            binding.memoView.set(lcActivity.binding.pencilcaseView)
+            lcActivity.binding.penPanel.listener = this@PatternQuizFragment
+            binding.memoView.set(lcActivity.binding.penPanel)
 
             val pencilType = lcActivity.getPencilcaseType()
-            val color = lcActivity.getPencilcaseColor()
-            val thickn = lcActivity.getPencilcaseThickness()
-            val isFixedMode = lcActivity.getPencilcaseMode()
+            val fingerDrawMode = lcActivity.getFingerDrawMode()
 
-            lcActivity.binding.pencilcaseView.apply {
-
-                if (isFixedMode) {
-                    editType = pencilType
-                    if (color != null) { penColor = color }
-                    if (thickn != null) { thickness = thickn }
-                    writeModeSwitch.isChecked = isFixedMode
+            lcActivity.binding.penPanel.apply {
+                drawType?.let {
+                    resetMode()
+                    fingerDrawModeSwitch.isChecked = fingerDrawMode
 
                     val isBlocked = pencilType != null
                     binding.leftScrollView.isBlock = isBlocked
+                    binding.leftScrollView.fingerDrawMode = fingerDrawMode
+                    binding.memoView.fingerDrawMode = fingerDrawMode
                     (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
-                } else {
-                    editType = null
+                    (parentFragment as? LCPatternFragment)?.setFingerDrawMode(fingerDrawMode)
+
                 }
-                pencilOptionLl.isSelected = false
-                pencilOptionLl.visibility = View.GONE
+
+                lcActivity.hidePenPanel()
+
             }
         }
     }
@@ -498,25 +494,30 @@ class PatternQuizFragment() : Fragment(),
         viewModel.setCurrentAnswer(answer)
     }
 
-    override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         val isBlocked = type != null
         binding.leftScrollView.isBlock = isBlocked
-        binding.memoView.isBlocked = isBlocked
 
         (activity as? LearningCourseActivity)?.savePencilcaseType(type)
         (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
+//        (parentFragment as? LCPatternFragment)?.setStylusOnlyMode(isBlocked)
     }
 
-    override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {
-        (activity as? LearningCourseActivity)?.savePencilcaseThicknesss(thickness)
-    }
-    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
-        (activity as? LearningCourseActivity)?.savePencilcaseColor(color)
+    // TODO
+//    override fun onThicknessSelected(thickness: Float) {
+//        (activity as? LearningCourseActivity)?.savePencilcaseThicknesss(thickness)
+//    }
+//    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
+//        (activity as? LearningCourseActivity)?.savePencilcaseColor(color)
+//    }
+
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        (activity as LearningCourseActivity).saveFingerDrawMode(value)
+        binding.leftScrollView.fingerDrawMode = value
+        binding.memoView.fingerDrawMode = value
+        (parentFragment as? LCPatternFragment)?.setFingerDrawMode(value)
     }
 
-    override fun onModeChanged(isFixedMode: Boolean) {
-        (activity as? LearningCourseActivity)?.savePencilcaseMode(isFixedMode)
-    }
 
     override fun onScaleFactor(scale: Float) {
         (parentFragment as LCPatternFragment).setQuizImageScale(scale)

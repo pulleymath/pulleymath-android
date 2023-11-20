@@ -35,27 +35,34 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 
 import com.pulleymath.android.pdf.memo.MemoView;
-import com.pulleymath.android.pdf.memo.PencilcaseView;
+import com.pulleymath.android.pdf.memo.PathRedoUndoCountChangeListener;
+import com.pulleymath.android.pdf.memo.PencilPanel;
+//import com.pulleymath.android.pdf.memo.PencilcaseView;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PageAdapter extends BaseAdapter {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PageAdapter extends BaseAdapter implements PathRedoUndoCountChangeListener {
 	private final Context mContext;
 	private final com.pulleymath.android.pdf.MuPDFCore mCore;
+  public boolean fingerDrawMode = false;
 	private final SparseArray<PointF> mPageSizes = new SparseArray<PointF>();
 	private       Bitmap mSharedHqBm;
 
 	public final static String TAG_PAGEVIEW = "pageView";
 	public final static String TAG_MEMOVIEW = "memoView";
 
-	private PencilcaseView pencilcase;
+	private PencilPanel penPanel;
 
 	private String drawingId = "";
 
-	public PageAdapter(Context c, com.pulleymath.android.pdf.MuPDFCore core) {
+	public PageAdapter(Context c, com.pulleymath.android.pdf.MuPDFCore core, boolean fingerDrawMode) {
 		mContext = c;
 		mCore = core;
+    this.fingerDrawMode = fingerDrawMode;
 	}
 
 	public int getCount() {
@@ -97,9 +104,11 @@ public class PageAdapter extends BaseAdapter {
 			// pageview 가 생성될 때 memoview add
 			final MemoView memoView = new MemoView(mContext);
 			memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-			memoView.set(pencilcase);
+			memoView.set(penPanel);
 			memoView.setLayoutParams(layoutParams);
 			memoView.setTag(TAG_MEMOVIEW);
+      memoView.setPathRedoUndoCountChangeListener(this);
+      memoView.setFingerDrawMode(fingerDrawMode);
 
 			pageView.memoView = memoView;
 			container.addView(memoView);
@@ -152,15 +161,41 @@ public class PageAdapter extends BaseAdapter {
 	private void loadDrawing(View container, int position) {
 		MemoView memoView = container.findViewWithTag(TAG_MEMOVIEW);
 		String memoId = drawingId + position;
+    Log.d("aspasp", "memoId: " + memoId + "");
     memoView.setMemoId(memoId);
     memoView.clearBitmap();
 		memoView.load();
 	}
 
-	public void setPencilcase(@Nullable PencilcaseView pencilcase) {
-		this.pencilcase = pencilcase;
+  public void setMemoViewFingerDrawModeInPencilcase(boolean value) {
+      this.penPanel.setFingerDrawModeWithPencilcase(value);
+  }
+	public void setPenPanel(@Nullable PencilPanel penPanel) {
+		this.penPanel = penPanel;
 	}
 	public void setDrawingId(@NotNull String drawingId) {
 		this.drawingId = drawingId;
 	}
+
+    @Override
+    public void onUndoCountChanged(int undoCount) {
+        if (this.penPanel.getMemoViews().size() == 0) return;
+        List<MemoView> list = this.penPanel.getMemoViews();
+        int totalUndoCount = 0;
+        for (int i = 0; i < list.size(); i++) {
+            totalUndoCount += list.get(i).getUndoCount();
+        }
+        this.penPanel.setUndoCount(totalUndoCount);
+    }
+
+    @Override
+    public void onRedoCountChanged(int redoCount) {
+        if (this.penPanel.getMemoViews().size() == 0) return;
+        List<MemoView> list = this.penPanel.getMemoViews();
+        int totalRedoCount = 0;
+        for (int i = 0; i < list.size(); i++) {
+            totalRedoCount += list.get(i).getRedoCount();
+        }
+        this.penPanel.setRedoCount(totalRedoCount);
+    }
 }

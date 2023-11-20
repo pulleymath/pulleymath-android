@@ -11,6 +11,7 @@ import com.freewheelin.pulley.legacy.views.memoView.MemoView
 interface ProblemGestureListener {
     fun onLeftSwipe()
     fun onRightSwipe()
+    fun onGestureTouch()
 }
 open class ProblemGestures(context: Context, val imageView: View, val memoView: MemoView) : View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetector.OnScaleGestureListener {
     private val gesture: GestureDetector = GestureDetector(context, this)
@@ -29,6 +30,7 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
     var blockSwipe: Boolean = false
 
     override fun onTouch(view: View?, event: MotionEvent): Boolean {
+        listener?.onGestureTouch()
         try {
             if (event != null) { gesture.onTouchEvent(event) }
         } catch (e: NullPointerException) {
@@ -57,7 +59,7 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
 
     override fun onLongPress(event: MotionEvent) {}
 
-    override  fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
         val minX = getMinX()
         val minY = getMinY()
 

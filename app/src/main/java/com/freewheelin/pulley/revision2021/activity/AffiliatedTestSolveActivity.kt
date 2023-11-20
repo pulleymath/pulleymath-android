@@ -48,7 +48,10 @@ import com.freewheelin.pulley.revision2021.views.AffiliatedGalleryViewDelegate
 import com.freewheelin.pulley.revision2021.views.AffiliatedTestGalleryView
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.google.android.material.tabs.TabLayoutMediator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +61,8 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     AnswerV2Delegate,
     ProblemGestureListener,
     AffiliatedGalleryViewDelegate,
-    PencilcaseListener {
+    PencilPanelListener,
+    PathRedoUndoCountChangeListener {
 
     private val binding: ActivityAffiliatedTestSolveBinding by lazy {
         DataBindingUtil.inflate(
@@ -80,7 +84,6 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     var itemValue = ""
         set(value) {
             field = value
-            binding.pencilcaseView.itemValue = value
         }
 
     val sdf by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA) }
@@ -237,8 +240,13 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 }
                 true
             }
-            pencilcaseView.listener = this@AffiliatedTestSolveActivity
-            problemMemoView.set(pencilcaseView)
+
+            penPanel.listener = this@AffiliatedTestSolveActivity
+            problemMemoView.set(penPanel)
+            problemMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            problemMemoView.removePathRedoUndoCountChangeListener()
+            problemMemoView.setPathRedoUndoCountChangeListener(this@AffiliatedTestSolveActivity)
+
 //            solutionMemoView.set(pencilcaseView)
 
             val imageWidth = when (this@AffiliatedTestSolveActivity.densityLevel) {
@@ -608,8 +616,20 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     fun onSetProblem(problem: AffiliatedTestProblem?) {
-        if (binding.pencilcaseView.writeModeSwitch.isChecked == false)
-            binding.pencilcaseView.setDefaultState()
+//        if (binding.pencilcaseView.writeModeSwitch.isChecked == false)
+//            binding.pencilcaseView.setDefaultState()
+
+        binding.penPanel.apply {
+            if (drawType != null) {
+                val fingerDrawMode = binding.penPanel.fingerDrawModeSwitch.isChecked
+                binding.problemMemoView.fingerDrawMode = fingerDrawMode
+                binding.problemContainer.fingerDrawMode = fingerDrawMode
+            }
+
+            binding.penPanel.figurePanelCl.visibleIf(false)
+            binding.penPanel.penOptionPanelCl.visibleIf(false)
+            binding.penPanel.eraserPanelCl.visibleIf(false)
+        }
 
         if (problem == null) {
             problemGesture?.init()
@@ -629,6 +649,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
                 conceptFragment?.gestureInit()
 
                 problemMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
+                penPanel.resetMode()
 //                solutionMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
                 answerView.configureUI(problem, false)
 
@@ -785,7 +806,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         anim.start()
     }
 
-    override fun onEditTypeChanged(type: Pencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         if (type == null) {
             binding.apply {
                 problemContainer.isBlock = false
@@ -802,26 +823,28 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             }
         }
 
-        if (type == Pencilcase.EditType.pencil)
+        if (type == DrawType.Pencil)
             Tutor.showToolTipIfNeed(
-                binding.pencilcaseView.pencilBtn,
+                binding.penPanel.penBtn,
                 Tutor.TooltipType.takeNoteScroll
             )
     }
 
-    override fun onThicknessSelected(thickness: Pencilcase.Thickness) {
-        val itemName = when (thickness) {
-            Pencilcase.Thickness.line -> "펜굵기-1"
-            Pencilcase.Thickness.thin -> "펜굵기-2"
-            Pencilcase.Thickness.medium -> "펜굵기-3"
-            Pencilcase.Thickness.thick -> "펜굵기-4"
+//    override fun onThicknessSelected(thickness: Float) {
+//        val itemName = when (thickness) {
+//            Pencilcase.Thickness.line -> "펜굵기-1"
+//            Pencilcase.Thickness.thin -> "펜굵기-2"
+//            Pencilcase.Thickness.medium -> "펜굵기-3"
+//            Pencilcase.Thickness.thick -> "펜굵기-4"
+//
+//        }
+//        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "펜 굵기", "$thickness")
+//    }
 
-        }
-        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", itemName, itemValue)
-    }
-
-    override fun onModeChanged() {
-        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "필기모드토글", itemValue)
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "스타일러스온리모드", itemValue)
+        binding.problemContainer.fingerDrawMode = value
+        binding.problemMemoView.fingerDrawMode = value
     }
 
 //    var answeredSet: ObservableHashSet<AffiliatedTestProblem> = ObservableHashSet()
@@ -872,9 +895,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     override fun prev() {
         onPrevBtnClicked()
     }
-
+    override fun onGestureTouch() {
+        binding.penPanel.run {
+//            pencilOptionLl.isSelected = false
+//            pencilOptionLl.visibility = View.GONE
+//            clearAllBtn.isSelected = false
+//            clearAllBtn.visibility = View.GONE
+        }
+    }
     override fun onLeftSwipe() {
-        if (binding.pencilcaseView.editType == null) {
+        if (binding.penPanel.drawType == null || !binding.penPanel.fingerDrawMode) {
             LogUtils.logEvent(
                 this,
                 user,
@@ -891,7 +921,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     override fun onRightSwipe() {
-        if (binding.pencilcaseView.editType == null) {
+        if (binding.penPanel.drawType == null || !binding.penPanel.fingerDrawMode) {
             LogUtils.logEvent(
                 this,
                 user,
@@ -924,6 +954,24 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         animator.duration = 150
         animator.start()
         viewModel.currentProblem.value?.let { binding.answerView.configureUI(it, true) }
+    }
+
+    override fun onUndoCountChanged(undoCount: Int) {
+        if (binding.penPanel.memoViews.size == 0) return
+        val undoCount = binding.penPanel.memoViews.map {
+            it.undoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.undoCount = undoCount
+    }
+
+    override fun onRedoCountChanged(redoCount: Int) {
+        if (binding.penPanel.memoViews.size == 0) return
+        val redoCount = binding.penPanel.memoViews.map {
+            it.redoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.redoCount = redoCount
     }
 }
 

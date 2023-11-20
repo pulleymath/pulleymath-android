@@ -140,6 +140,10 @@ class LCWrongNoteMapFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchLCWrongNote()
+        (activity as LearningCourseActivity).run {
+            hideMainPenPanel()
+            hidePenPanel()
+        }
     }
 
     private fun fetchLCWrongNote() {

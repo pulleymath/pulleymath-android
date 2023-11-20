@@ -102,6 +102,7 @@ public class DocumentActivity extends Activity
 	private boolean mAlertsActive= false;
 	private AlertDialog mAlertDialog;
 	private ArrayList<OutlineActivity.Item> mFlatOutline;
+  private boolean fingerDrawMode = false;
 
 	protected int mDisplayDPI;
 	private int mLayoutEM = 10;
@@ -336,9 +337,8 @@ public class DocumentActivity extends Activity
 				}
 			}
 		};
-		mDocView.setAdapter(new PageAdapter(this, core));
-
-		mSearchTask = new SearchTask(this, core) {
+		mDocView.setAdapter(new PageAdapter(this, core, fingerDrawMode));
+    mSearchTask = new SearchTask(this, core) {
 			@Override
 			protected void onTextFound(SearchTaskResult result) {
 				SearchTaskResult.set(result);
@@ -495,6 +495,7 @@ public class DocumentActivity extends Activity
 						Bundle bundle = new Bundle();
 						bundle.putInt("POSITION", mDocView.getDisplayedViewIndex());
 						bundle.putSerializable("OUTLINE", mFlatOutline);
+//						bundle.putBoolean("FINGER_DRAW_MODE", fingerDrawMode);
 						intent.putExtras(bundle);
 						startActivityForResult(intent, OUTLINE_REQUEST);
 					}

@@ -89,10 +89,10 @@
                 style="@style/b1"
                 android:visibility="gone"
                 tools:visibility="visible"
-                visibleIf="@{ !vm.mainProfileV4.affiliated }"
+                visibleIf="@{ !vm.mainProfileV4.isAffiliated || vm.mainProfileV4.hasLesson }"
                 android:paddingStart="@dimen/dp24"
                 android:paddingEnd="@dimen/dp24"
-                android:text="과외"
+                android:text="@{ vm.mainProfileV4.isAffiliated ? `튜터` : `과외`, default=`과외`}"
                 mainTabTextColor="@{ currentTab }"
                 />
 

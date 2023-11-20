@@ -2,7 +2,6 @@ package com.freewheelin.pulley.revision2021.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Patterns
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -10,8 +9,7 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView
-import kotlin.math.abs
+import com.freewheelin.pulley.legacy.views.memoView.MemoView
 
 interface PatternScrollListener {
     fun onScaleFactor(scale: Float)
@@ -31,10 +29,11 @@ class PatternQuizScrollView: ScrollView,
     private val gestureScale: ScaleGestureDetector = ScaleGestureDetector(context, this)
     private val gesture: GestureDetector = GestureDetector(context, this)
     private var touchStart = false
+    var fingerDrawMode = false
 
     // pattern에서도 이 뷰를 쓰고있으므로 아래의 뷰는 id로 받기보다는 fragment로부터 받아와야 할것같다.
     val leftContentCl by lazy { this.findViewById<ConstraintLayout>(R.id.ivWrapperCl) }
-    val memoView by lazy { this.findViewById<CookingMemoView>(R.id.memoView) }
+    val memoView by lazy { this.findViewById<MemoView>(R.id.memoView) }
 //    var leftContentCl: ConstraintLayout? = null
 //    var memoView: CookingMemoView? = null
 
@@ -52,8 +51,15 @@ class PatternQuizScrollView: ScrollView,
             parent.requestDisallowInterceptTouchEvent(true)
             parent.parent.requestDisallowInterceptTouchEvent(true)
         }
+
+        val pp = MotionEvent.PointerProperties()
+        ev?.getPointerProperties(0, pp)
+
         if (ev?.pointerCount == 2) {
             gestureScale.onTouchEvent(ev)
+        } else if (ev?.pointerCount == 1 && !fingerDrawMode && pp.toolType == MotionEvent.TOOL_TYPE_FINGER) {
+            parent.requestDisallowInterceptTouchEvent(false)
+            parent.parent.requestDisallowInterceptTouchEvent(false)
         }
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
@@ -86,7 +92,13 @@ class PatternQuizScrollView: ScrollView,
     //
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         return if(isBlock) {
-            ev.pointerCount == 2
+            val pp = MotionEvent.PointerProperties()
+            ev.getPointerProperties(0, pp)
+            if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
+                return true
+            } else {
+                ev.pointerCount == 2
+            }
         } else {
             true
         }

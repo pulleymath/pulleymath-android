@@ -19,6 +19,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import androidx.annotation.ColorInt;
@@ -26,19 +29,12 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.freewheelin.pulley.R;
-import com.freewheelin.pulley.legacy.views.memoView.FreeDrawHelper;
-import com.freewheelin.pulley.legacy.views.memoView.FreeDrawSavedState;
-import com.freewheelin.pulley.legacy.views.memoView.FreeDrawSerializableState;
-import com.freewheelin.pulley.legacy.views.memoView.HistoryPath;
-import com.freewheelin.pulley.legacy.views.memoView.PathDrawnListener;
-import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener;
-import com.freewheelin.pulley.legacy.views.memoView.Point;
-import com.freewheelin.pulley.legacy.views.memoView.ResizeBehaviour;
-
+import com.freewheelin.pulley.revision2023.ui.view.DrawPathType;
+import com.freewheelin.pulley.revision2023.ui.view.DrawType;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -52,14 +48,16 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private static final int DEFAULT_COLOR = Color.BLACK;
     private static final int DEFAULT_ALPHA = 255;
 
-    private Paint mCurrentPaint;
+    public Paint mCurrentPaint;
     private Path mCurrentPath;
-
+    public Bitmap loadedBitmap;
+    public Bitmap loadedBitmapAtWillRedo;
     private ResizeBehaviour mResizeBehaviour;
+    public boolean isCookingMemo = false;
 
-    public ArrayList<com.freewheelin.pulley.legacy.views.memoView.Point> mPoints = new ArrayList<>();
-    public ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> mPaths = new ArrayList<>();
-    private ArrayList<com.freewheelin.pulley.legacy.views.memoView.HistoryPath> mCanceledPaths = new ArrayList<>();
+    public ArrayList<Point> mPoints = new ArrayList<>();
+    public ArrayList<HistoryPath> mPaths = new ArrayList<>();
+    public ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
 
     @ColorInt
     private int mPaintColor = DEFAULT_COLOR;
@@ -196,6 +194,51 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mCurrentPaint.setStrokeWidth(widthPx);
         }
     }
+    class PrevPencil {
+        Xfermode mode;
+        int color;
+        int alpha;
+        float stroke;
+        PrevPencil(Xfermode mode, int color, int alpha, float stroke) {
+            this.mode = mode;
+            this.color = color;
+            this.alpha = alpha;
+            this.stroke = stroke;
+        }
+    }
+
+    PrevPencil pp = new PrevPencil(null,-8289919, 255, 1.5f);
+    Boolean isStylusBtnClicked = false;
+    public void setPencil(Xfermode mode, int paintColor, int paintAlpha, float stroke) {
+        isStylusBtnClicked = false;
+        pp = new PrevPencil(mode, paintColor, paintAlpha, stroke);
+        mCurrentPaint.setXfermode(mode);
+        mCurrentPaint.setColor(paintColor);
+        mCurrentPaint.setAlpha(paintAlpha);
+        setPaintWidthDp(stroke);
+    }
+    public void setEraser(float stroke) {
+        pp = new PrevPencil(new PorterDuffXfermode(PorterDuff.Mode.CLEAR), Color.TRANSPARENT, Color.TRANSPARENT, stroke);
+        mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mCurrentPaint.setColor(Color.TRANSPARENT);
+        mCurrentPaint.setAlpha(Color.TRANSPARENT);
+        setPaintWidthPx(FreeDrawHelper.convertDpToPixels(stroke));
+    }
+    public void setCurrPaint(Xfermode mode, int paintColor, int paintAlpha) {
+        isStylusBtnClicked = false;
+        pp.color = paintColor;
+        pp.alpha = paintAlpha;
+        mCurrentPaint.setXfermode(mode);
+        mCurrentPaint.setColor(paintColor);
+        mCurrentPaint.setAlpha(paintAlpha);
+    }
+    public void setEraserFromOnTouch(float stroke) {
+        mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        mCurrentPaint.setColor(Color.TRANSPARENT);
+        mCurrentPaint.setAlpha(Color.TRANSPARENT);
+        setPaintWidthPx(FreeDrawHelper.convertDpToPixels(stroke));
+
+    }
 
     /**
      * Set the paint width in dp
@@ -279,24 +322,30 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             // Cancel the last one and redraw
             mCanceledPaths.add(mPaths.get(mPaths.size() - 1));
             mPaths.remove(mPaths.size() - 1);
-            invalidate();
 
-            notifyRedoUndoCountChanged();
+        } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+            loadedBitmapAtWillRedo = loadedBitmap;
+            loadedBitmap = null;
         }
+
+        invalidate();
+        notifyRedoUndoCountChanged();
     }
 
     /**
      * Re-add the first removed path and redraw
      */
     public void redoLast() {
-
-        if (mCanceledPaths.size() > 0) {
+        if (loadedBitmapAtWillRedo != null && isCookingMemo) {
+            loadedBitmap = loadedBitmapAtWillRedo;
+            loadedBitmapAtWillRedo = null;
+        } else if (mCanceledPaths.size() > 0) {
             mPaths.add(mCanceledPaths.get(mCanceledPaths.size() - 1));
             mCanceledPaths.remove(mCanceledPaths.size() - 1);
-            invalidate();
-
-            notifyRedoUndoCountChanged();
         }
+
+        invalidate();
+        notifyRedoUndoCountChanged();
     }
 
     /**
@@ -329,13 +378,26 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Get how many undo operations are available
      */
     public int getUndoCount() {
-        return mPaths.size();
+        if (mPaths.size() > 0) {
+            return mPaths.size();
+        } else {
+            if (isCookingMemo && loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+                return 0;
+            } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
 
     /**
      * Get how many redo operations are available
      */
     public int getRedoCount() {
+        if (isCookingMemo && loadedBitmapAtWillRedo != null) {
+            return 1;
+        }
         return mCanceledPaths.size();
     }
 
@@ -446,16 +508,32 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * @param state A {@link FreeDrawSerializableState} containing all the draw and paint info,
      *              if null, nothing will be restored. Null sub fields will be ignored
      */
+    private final transient PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+
     public void restoreStateFromSerializable(FreeDrawSerializableState state) {
 
         if (state != null) {
 
             if (state.getCanceledPaths() != null) {
                 mCanceledPaths = state.getCanceledPaths();
+                // Xfermode는 serialize가 불가능하여 restore할때 자동복원되지 않는다.
+                for (HistoryPath path : mCanceledPaths) {
+                    Paint a = path.getPaint();
+                    if (path.isErase) {
+                        a.setXfermode(clear);
+                    }
+                }
             }
 
             if (state.getPaths() != null) {
                 mPaths = state.getPaths();
+                // Xfermode는 serialize가 불가능하여 restore할때 자동복원되지 않는다.
+                for (HistoryPath path : mPaths) {
+                    Paint a = path.getPaint();
+                    if (path.isErase) {
+                        a.setXfermode(clear);
+                    }
+                }
             }
 
             mPaintColor = state.getPaintColor();
@@ -507,7 +585,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mPathRedoUndoCountChangeListener.onUndoCountChanged(getUndoCount());
         }
     }
-
+    public void notifyRedoUndoCountSetting() {
+        notifyRedoUndoCountChanged();
+    }
     private void initPaints(TypedArray a) {
         mCurrentPaint = FreeDrawHelper.createPaint();
 
@@ -546,34 +626,37 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
+        if (loadedBitmap != null) {
+            canvas.drawBitmap(loadedBitmap, 0, 0, null);
+        }
         if (mPaths.size() == 0 && mPoints.size() == 0) {
             return;
         }
 
-        // Avoid concurrency errors by first setting the finished path variable to false
         final boolean finishedPath = mFinishPath;
         mFinishPath = false;
 
-        for (com.freewheelin.pulley.legacy.views.memoView.HistoryPath currentPath : mPaths) {
-
-            // If the path is just a single point, draw as a point
-            if (currentPath.isPoint()) {
-
-                canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
+        for (HistoryPath currentPath : mPaths) {
+            if (currentPath.type == DrawPathType.Curve) {
+                if (currentPath.isPoint()) {
+                    canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, currentPath.getPaint());
-            } else {// Else draw the complete path
+                } else {
 
+                    canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
+                }
+            } else if (currentPath.type == DrawPathType.Circle || currentPath.type == DrawPathType.Line) {
+                canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
+            } else if (currentPath.type == DrawPathType.Arrow) {
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
             }
         }
 
-        // Initialize the current path
         if (mCurrentPath == null)
             mCurrentPath = new Path();
         else
             mCurrentPath.rewind();
 
-        // If a single point, add a circle to the path
         if (mPoints.size() == 1 || FreeDrawHelper.isAPoint(mPoints)) {
 
             canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
@@ -581,30 +664,82 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                     createAndCopyColorAndAlphaForFillPaint(mCurrentPaint, false));
         } else if (mPoints.size() != 0) {// Else draw the complete series of points
 
-            boolean first = true;
+            Log.d("draw Path", "editType : " + drawType.toString());
+            if (drawType == DrawType.Pencil || drawType == DrawType.Eraser) {
+                Log.d("draw Path", "pathType : " + pathType.toString());
 
-            for (com.freewheelin.pulley.legacy.views.memoView.Point point : mPoints) {
+                boolean first = true;
 
-                if (first) {
-                    mCurrentPath.moveTo(point.x, point.y);
-                    first = false;
-                } else {
-                    mCurrentPath.lineTo(point.x, point.y);
+                for (Point point : mPoints) {
+
+                    if (first) {
+                        mCurrentPath.moveTo(point.x, point.y);
+                        first = false;
+                    } else {
+                        mCurrentPath.lineTo(point.x, point.y);
+                    }
+                }
+
+                canvas.drawPath(mCurrentPath, mCurrentPaint);
+            } else if(drawType == DrawType.Figure) {
+                Log.d("draw Path", "pathType : " + pathType.toString());
+
+                if (pathType == DrawPathType.Circle) {
+                    Point startP = mPoints.get(0);
+                    Point endP = mPoints.get(mPoints.size() - 1);
+                    mCurrentPath.moveTo(startP.x, startP.y);
+
+                    double dx = (double) (endP.x - startP.x);
+                    double dy = (double) (endP.y - startP.y);
+                    double radius = Math.sqrt(dx * dx + dy * dy);
+                    mCurrentPath.addCircle(startP.x, startP.y, (float) radius, Path.Direction.CW);
+                    canvas.drawPath(mCurrentPath, mCurrentPaint);
+
+                } else if (pathType == DrawPathType.Line) {
+                    Point startP = mPoints.get(0);
+                    mCurrentPath.moveTo(startP.x, startP.y);
+
+                    Point endP = mPoints.get(mPoints.size() - 1);
+                    mCurrentPath.lineTo(endP.x, endP.y);
+                    canvas.drawPath(mCurrentPath, mCurrentPaint);
+
+                } else if (pathType == DrawPathType.Arrow) {
+                    Point startP = mPoints.get(0);
+                    mCurrentPath.moveTo(startP.x, startP.y);
+
+                    Point endP = mPoints.get(mPoints.size() - 1);
+                    mCurrentPath.lineTo(endP.x, endP.y);
+
+                    double mfDegree = Math.atan2(startP.y - endP.y, startP.x - endP.x) * 180 / Math.PI;
+                    float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+                    double angle = mfDegree - 45;
+                    x1 = endP.x + (float)(30 * Math.cos(angle * (Math.PI / 180)));
+                    y1 = endP.y + (float)(30 * Math.sin(angle * (Math.PI / 180)));
+
+                    mCurrentPath.moveTo(endP.x, endP.y);
+                    mCurrentPath.lineTo(x1, y1);
+
+                    double angle2 = mfDegree + 45;
+                    x2 = endP.x + (float)(30 * Math.cos(angle2 * (Math.PI / 180)));
+                    y2 = endP.y + (float)(30 * Math.sin(angle2 * (Math.PI / 180)));
+                    mCurrentPath.moveTo(endP.x, endP.y);
+                    mCurrentPath.lineTo(x2, y2);
+                    canvas.drawPath(mCurrentPath, mCurrentPaint);
                 }
             }
-
-            canvas.drawPath(mCurrentPath, mCurrentPaint);
         }
 
         // If the path is finished, add it to the history
         if (finishedPath && mPoints.size() > 0) {
+            Log.d("after finishedPath", "editType : " + drawType.toString());
             createHistoryPathFromPoints();
         }
     }
 
     // Create a path from the current points
     private void createHistoryPathFromPoints() {
-        mPaths.add(new com.freewheelin.pulley.legacy.views.memoView.HistoryPath(mPoints, new Paint(mCurrentPaint)));
+
+        mPaths.add(new HistoryPath(mPoints, new Paint(mCurrentPaint)));
 
         mPoints = new ArrayList<>();
 
@@ -614,10 +749,13 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     public void saveHistoryPathFromPoints() {
         if (mPoints.size() > 0) {
-            mPaths.add(new com.freewheelin.pulley.legacy.views.memoView.HistoryPath(mPoints, new Paint(mCurrentPaint)));
+            mPaths.add(new HistoryPath(mPoints, new Paint(mCurrentPaint)));
             mPoints = new ArrayList<>();
         }
     }
+
+    public DrawType drawType = null;
+    public DrawPathType pathType = DrawPathType.Curve;
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -631,25 +769,45 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         // Clear all the history when restarting to draw
         mCanceledPaths = new ArrayList<>();
+        int BUTTON_STYLUS = 213; // spen 버튼 클릭시 왜 motionEvent가 213으로 표기될까?
 
-        if ( motionEvent.getAction() == MotionEvent.ACTION_MOVE &&
-                motionEvent.getButtonState() != MotionEvent.BUTTON_STYLUS_PRIMARY &&
-                motionEvent.getButtonState() != MotionEvent.BUTTON_STYLUS_SECONDARY ) {
-            com.freewheelin.pulley.legacy.views.memoView.Point point;
+        if ( motionEvent.getAction() == MotionEvent.ACTION_MOVE || motionEvent.getAction() == BUTTON_STYLUS) {
+
+            if (motionEvent.getAction() == BUTTON_STYLUS) {
+                isStylusBtnClicked = true;
+                float ERASE_THICK = 28f;
+                setEraserFromOnTouch(ERASE_THICK);
+            } else if (isStylusBtnClicked) {
+                isStylusBtnClicked = false;
+                setPencil(pp.mode, pp.color, pp.alpha, pp.stroke);
+            }
+            Point point;
             for (int i = 0; i < motionEvent.getHistorySize(); i++) {
-                point = new com.freewheelin.pulley.legacy.views.memoView.Point();
+                point = new Point(pathType);
                 point.x = motionEvent.getHistoricalX(i);
                 point.y = motionEvent.getHistoricalY(i);
                 mPoints.add(point);
             }
-            point = new com.freewheelin.pulley.legacy.views.memoView.Point();
+            point = new Point(pathType);
             point.x = motionEvent.getX();
             point.y = motionEvent.getY();
             mPoints.add(point);
             mFinishPath = false;
 
-        } else
+        } else {
             mFinishPath = true;
+//            if (mFinishPath && mPoints.size() > 0) {
+//                if (mPoints.size() < 50) {
+//
+//                    if (isPencilcaseVisibleBeforeOnTouchDraw) {
+//                        mPoints = new ArrayList<>();
+//                    }
+//
+//                } else {
+//                    createHistoryPathFromPoints();
+//                }
+//            }
+        }
 
         invalidate();
         return false;

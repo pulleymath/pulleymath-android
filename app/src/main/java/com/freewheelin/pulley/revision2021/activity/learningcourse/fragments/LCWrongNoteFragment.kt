@@ -17,12 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentLcWrongNoteBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternConceptFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternSolutionFragment
-import com.freewheelin.pulley.revision2021.cookingmemo.PathRedoUndoCountChangeListener
-import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.utils.debounce
 import com.freewheelin.pulley.revision2021.utils.observeOnce
@@ -31,10 +29,14 @@ import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LCWrongNoteFragment : Fragment(),
-    WrongNoteScrollListener, CookingPencilcaseListener, FloatingAnswerDelegate,
+    WrongNoteScrollListener, PencilPanelListener, FloatingAnswerDelegate,
     PathRedoUndoCountChangeListener {
 
     companion object {
@@ -78,9 +80,11 @@ class LCWrongNoteFragment : Fragment(),
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCWrongNoteFragment)
                     memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    val studentId = MyApplication.user?.studentID ?: ""
+                    val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
                     memoView.setMemoSavedName(it.userQuizSolvingHistoryId, it.refPatternQuizId, "lcwrongnotememo")
                     memoView.clearBitmap()
-                    memoView.load()
+                    memoView.load(memoId)
                 }
 
                 viewModel.init(noteCard)
@@ -156,7 +160,13 @@ class LCWrongNoteFragment : Fragment(),
         resetMemoView()
         resumePencilcaseView()
     }
-
+    fun saveMemo() {
+        viewModel.noteCard.value?.let {
+            val studentId = MyApplication.user?.studentID ?: ""
+            val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
+            binding.memoView.save(memoId)
+        }
+    }
     fun hasMoreHint(): Boolean {
         return viewModel.hasMoreHint()
     }
@@ -171,38 +181,33 @@ class LCWrongNoteFragment : Fragment(),
     }
     private fun resetMemoView() {
         val noteActivity = (activity as LCWrongNoteActivity)
-        noteActivity.binding.pencilcaseView.memoViews.clear()
+        noteActivity.binding.penPanel.memoViews.clear()
     }
+
     private fun resumePencilcaseView() {
         val noteActivity = (activity as LCWrongNoteActivity)
-        noteActivity.binding.pencilcaseView.listener = this@LCWrongNoteFragment
-        binding.memoView.set(noteActivity.binding.pencilcaseView)
+        noteActivity.binding.penPanel.listener = this@LCWrongNoteFragment
+        binding.memoView.set(noteActivity.binding.penPanel)
 
         val pencilType = noteActivity.getPencilcaseType()
-        val color = noteActivity.getPencilcaseColor()
-        val thickn = noteActivity.getPencilcaseThickness()
-        val isFixedMode = noteActivity.getPencilcaseMode()
+        val fingerDrawMode = noteActivity.getFingerDrawMode()
 
-        noteActivity.binding.pencilcaseView.apply {
+        noteActivity.binding.penPanel.apply {
 
-            if (isFixedMode) {
-                editType = pencilType
-                if (color != null) {
-                    penColor = color
-                }
-                if (thickn != null) {
-                    thickness = thickn
-                }
-                writeModeSwitch.isChecked = isFixedMode
+            if (drawType != null) {
+                resetMode()
+                fingerDrawModeSwitch.isChecked = fingerDrawMode
 
                 val isBlocked = pencilType != null
                 binding.leftScrollView.isBlock = isBlocked
+                binding.leftScrollView.fingerDrawMode = fingerDrawMode
+                binding.memoView.fingerDrawMode = fingerDrawMode
                 (activity as LCWrongNoteActivity).setPagerSwipeBlocked(isBlocked)
-            } else {
-                editType = null
+                (activity as LCWrongNoteActivity).saveFingerDrawMode(fingerDrawMode)
             }
-            pencilOptionLl.isSelected = false
-            pencilOptionLl.visibility = View.GONE
+            noteActivity.hidePenPanel()
+//            pencilOptionLl.isSelected = false
+//            pencilOptionLl.visibility = View.GONE
         }
     }
     fun setTempConceptSolutionViewFlag() {
@@ -307,25 +312,30 @@ class LCWrongNoteFragment : Fragment(),
     override fun onScaleFactor(scale: Float) {
         (activity as LCWrongNoteActivity).setQuizImageScale(scale)
     }
+    override fun onGestureListener() {
+        (activity as LCWrongNoteActivity).hidePenPanel()
+    }
 
-    override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         val isBlocked = type != null
         binding.leftScrollView.isBlock = isBlocked
-        binding.memoView.isBlocked = isBlocked
 
         (activity as LCWrongNoteActivity).setPagerSwipeBlocked(isBlocked)
         (activity as LCWrongNoteActivity).savePencilcaseType(type)
     }
+    // TODO
 
-    override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {
-        (activity as LCWrongNoteActivity).savePencilcaseThicknesss(thickness)
-    }
-    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
-        (activity as LCWrongNoteActivity).savePencilcaseColor(color)
-    }
+//    override fun onThicknessSelected(thickness: Float) {
+//        (activity as LCWrongNoteActivity).savePencilcaseThicknesss(thickness)
+//    }
+//    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
+//        (activity as LCWrongNoteActivity).savePencilcaseColor(color)
+//    }
 
-    override fun onModeChanged(isFixedMode: Boolean) {
-        (activity as LCWrongNoteActivity).savePencilcaseMode(isFixedMode)
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        (activity as LCWrongNoteActivity).saveFingerDrawMode(value)
+        binding.leftScrollView.fingerDrawMode = value
+        binding.memoView.fingerDrawMode = value
     }
 
     override fun onAnswerChanged(view: View, answer: String?) {
@@ -347,6 +357,7 @@ class LCWrongNoteFragment : Fragment(),
     }
     override fun onStop() {
         super.onStop()
+        saveMemo()
         viewModel.run {
             clearCompositeDisposable()
         }

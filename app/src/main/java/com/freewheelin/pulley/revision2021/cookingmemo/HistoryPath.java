@@ -19,6 +19,7 @@ import android.graphics.PorterDuffXfermode;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import org.joda.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  * Created by Riccardo Moro on 9/27/2016.
  */
 
-class HistoryPath implements Parcelable, Serializable {
+public class HistoryPath implements Parcelable, Serializable {
 
     static final float ERASE_WIDTH = 10; //dp
 
@@ -47,17 +48,19 @@ class HistoryPath implements Parcelable, Serializable {
     private transient Paint paint = null;
 
     private boolean isErase = false;
-
+    public PathType type = PathType.Curve;
+    public LocalDateTime createdAt;
     HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint) {
         this.points = new ArrayList<>(points);
+        this.type = points.get(0).type;
         this.paintColor = paint.getColor();
         this.paintAlpha = paint.getAlpha();
         this.paintWidth = paint.getStrokeWidth();
         this.originX = points.get(0).x;
         this.originY = points.get(0).y;
         this.isPoint = FreeDrawHelper.isAPoint(points);
-
-        this.isErase = (paint.getXfermode() != null) ? true : false;
+        this.createdAt = LocalDateTime.now();
+        this.isErase = paint.getXfermode() != null;
 
         generatePath();
         generatePaint();
@@ -70,17 +73,37 @@ class HistoryPath implements Parcelable, Serializable {
         if (points != null) {
             boolean first = true;
 
-            for (int i = 0; i < points.size(); i++) {
+            if (type == PathType.Curve) {
+                for (int i = 0; i < points.size(); i++) {
 
-                Point point = points.get(i);
+                    Point point = points.get(i);
 
-                if (first) {
-                    path.moveTo(point.x, point.y);
-                    first = false;
-                } else {
-                    path.lineTo(point.x, point.y);
+                    if (first) {
+                        path.moveTo(point.x, point.y);
+                        first = false;
+                    } else {
+                        path.lineTo(point.x, point.y);
+                    }
                 }
+            } else if (type == PathType.Circle) {
+                Point startP = points.get(0);
+                path.moveTo(startP.x, startP.y);
+
+                Point endP = points.get(points.size() - 1);
+                double dx = (double) (endP.x - startP.x);
+                double dy = (double) (endP.y - startP.y);
+                double radius = Math.sqrt(dx * dx + dy * dy);
+
+                path.addCircle(startP.x, startP.y, (float) radius, Path.Direction.CW);
+            } else if (type == PathType.Line) {
+                Point startP = points.get(0);
+                path.moveTo(startP.x, startP.y);
+
+                Point endP = points.get(points.size() - 1);
+                path.lineTo(endP.x, endP.y);
             }
+
+
         }
     }
 

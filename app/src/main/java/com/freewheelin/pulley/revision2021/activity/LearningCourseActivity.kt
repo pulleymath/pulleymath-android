@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -37,13 +38,15 @@ import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.viewmodel.LearningCourseViewModel
 import com.freewheelin.pulley.revision2021.views.BalloonCourseRoadView
-import com.freewheelin.pulley.revision2021.views.CookingPencilcase
-import com.freewheelin.pulley.revision2021.views.CookingPencilcaseListener
+//import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PenColorType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData
@@ -54,7 +57,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener,
-    CookingPencilcaseListener {
+    PencilPanelListener {
 
     companion object {
         val COURSE_DETAIL_ID = "COURSE_DETAIL_ID"
@@ -139,40 +142,54 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
             viewModel.isPriorConceptScene.postValue(fromPriorConceptScene)
 
-            pencilcaseView.listener = this@LearningCourseActivity
+//            pencilcaseView.listener = this@LearningCourseActivity
 
             backBtn.setOnClickListener {
 //                onBackPressed()
                 backBtnAction()
             }
+            penPanel.isCookingMemo = true
+            externalPenBtn.setOnClickListener {
+                penPanel.visibleIf(!penPanel.isVisible)
+                if (penPanel.isVisible) {
+                    penPanel.openPencilPanel()
+                    penPanel.setMarginTop(if (isCourseTypePattern()) 80 else 24)
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil_fliled_purple)
+                } else {
+                    penPanel.closePencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil)
+                }
+            }
             // 헤더 ripple 분리하려면 각 버튼마다 따로붙여야함
             headerPriorConceptCl.setOnClickListener { sourceView ->
-                hidePencilcasePanel()
+                hidePenPanel()
                 showHeaderNaviView(CourseType.PriorConcept, headerPriorConceptCl)
             }
             headerCookingCl.setOnClickListener { sourceView ->
-                hidePencilcasePanel()
+                hidePenPanel()
                 showHeaderNaviView(CourseType.Cooking, headerCookingCl)
             }
             headerPatternCl.setOnClickListener { sourceView ->
-                hidePencilcasePanel()
+                hidePenPanel()
                 showHeaderNaviView(CourseType.Pattern, headerPatternCl)
             }
             headerWrongNoteCl.setOnClickListener { sourceView ->
-                hidePencilcasePanel()
+                hidePenPanel()
                 viewModel.naviViewDismiss()
                 setPagerToWrongNoteMap()
                 binding.naviFl.removeAllViews()
             }
             headerCl.setOnClickListener {
-                hidePencilcasePanel()
+                hidePenPanel()
             }
 
             viewModel.selectedPagerIndex.observe(this@LearningCourseActivity) {
                 resumeLCPatternFloatingAnswerSheetLocation()
                 val courseType = viewModel.getCourseTypeByPosition(it)
-                pencilcaseView.hasOneMemoPerPage(courseType == CourseType.Pattern)
-                pencilcaseView.courseType = viewModel.getCourseTypeByPosition(it) ?: CourseType.PriorConcept
+
+//                pencilcaseView.hasOneMemoPerPage(courseType == CourseType.Pattern)
+                // TODO 페이지 타입별로 external onoff
+//                pencilcaseView.courseType = viewModel.getCourseTypeByPosition(it) ?: CourseType.PriorConcept
             }
 
             navPrevBtn.setOnClickListener {
@@ -250,6 +267,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
                 pager.adapter = LCViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
                 pager.offscreenPageLimit = 1
+                pager.setOnTouchListener { view, motionEvent ->
+                    println("qwpqwp pager setonTouchListener ")
+                    true
+                }
             }
 
             onPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
@@ -303,10 +324,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             list.forEachIndexed { index, singleCourseDesc ->
                 val isEqualType = singleCourseDesc.courseType == CourseType.Cooking
                 val isEqualId = singleCourseDesc.learningCourseDetailId == cookingId
-                    if (isEqualType && isEqualId) return@let index
-                }
-                return@let -1
+                if (isEqualType && isEqualId) return@let index
             }
+            return@let -1
+        }
 
         if (targetCookingIndex != -1) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -521,40 +542,53 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     fun setPagerUserInputEnable(enabled: Boolean) {
         binding.pager.isUserInputEnabled = enabled
     }
-    fun savePencilcaseType(type: CookingPencilcase.EditType?) {
-        viewModel.pencilcaseType = type
+    fun savePencilcaseType(type: DrawType?) {
+        viewModel.pencilDrawType = type
     }
-    fun getPencilcaseType(): CookingPencilcase.EditType? {
-        return viewModel.pencilcaseType
+    fun getPencilcaseType(): DrawType? {
+        return viewModel.pencilDrawType
     }
-    fun savePencilcaseColor(color: CookingPencilcase.PenColor) {
-        viewModel.pencilcaseColor = color
+    fun savePencilcaseColor(color: PenColorType) {
+        viewModel.pencilColorType = color
     }
-    fun getPencilcaseColor(): CookingPencilcase.PenColor? {
-        return viewModel.pencilcaseColor
-    }
-
-    fun savePencilcaseThicknesss(thickness: CookingPencilcase.Thickness) {
-        viewModel.pencilcaseThickness = thickness
-    }
-    fun getPencilcaseThickness(): CookingPencilcase.Thickness? {
-        return viewModel.pencilcaseThickness
+    fun getPencilcaseColor(): PenColorType? {
+        return viewModel.pencilColorType
     }
 
-    fun savePencilcaseMode(isFixedMode: Boolean) {
-        viewModel.pencilcaseModeFixed = isFixedMode
+    fun savePencilcaseThicknesss(thickness: Float) {
+        viewModel.pencilThickness = thickness
     }
-    fun getPencilcaseMode(): Boolean {
-        return viewModel.pencilcaseModeFixed
+    fun getPencilcaseThickness(): Float? {
+        return viewModel.pencilThickness
     }
 
+    fun saveFingerDrawMode(value: Boolean) {
+        viewModel.fingerDrawModeMode = value
+    }
+    fun getFingerDrawMode(): Boolean {
+        return viewModel.fingerDrawModeMode
+    }
     fun hideKeyboard (view: View) {
         val imm = getSystemService(INPUT_METHOD_SERVICE ) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
-    fun hidePencilcasePanel() {
-        binding.pencilcaseView.pencilOptionLl.isSelected = false
-        binding.pencilcaseView.pencilOptionLl.visibility = View.GONE
+
+    fun mainPanelTopMarginByCourseType() {
+        binding.penPanel.setMarginTop(if (isCourseTypePattern()) 80 else 24)
+
+    }
+    fun showMainPanPanelIfPenSelected() {
+        if (binding.penPanel.isVisible) {
+            binding.penPanel.mainPanelLl.visibleIf(true)
+        }
+    }
+    fun hideMainPenPanel() {
+        binding.penPanel.mainPanelLl.visibleIf(false)
+    }
+    fun hidePenPanel() {
+        binding.penPanel.figurePanelCl.visibleIf(false)
+        binding.penPanel.penOptionPanelCl.visibleIf(false)
+        binding.penPanel.eraserPanelCl.visibleIf(false)
     }
     fun isPagerLastPage(): Boolean {
         val pagerIndex = binding.pager.currentItem
@@ -566,10 +600,20 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     }
 
     fun setUndoCount(count: Int) {
-        binding.pencilcaseView.undoCount = count
+        if (binding.penPanel.memoViews.size == 0) return
+        val undoCount = binding.penPanel.memoViews.map {
+            it.undoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.undoCount = undoCount
     }
     fun setRedoCount(count: Int) {
-        binding.pencilcaseView.redoCount = count
+        if (binding.penPanel.memoViews.size == 0) return
+        val redoCount = binding.penPanel.memoViews.map {
+            it.redoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.redoCount = redoCount
     }
     override fun onDestroy() {
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
@@ -660,15 +704,19 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         ConceptLearningUsageMonitor.pauseConceptLearning()
     }
 
-    override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         binding.naviFl.removeAllViews()
     }
 
-    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {}
+//    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {}
+//
+//    override fun onThicknessSelected(thickness: Float) {}
 
-    override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {}
+//    override fun onModeChanged(isFixedMode: Boolean) {}
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        saveFingerDrawMode(value)
+    }
 
-    override fun onModeChanged(isFixedMode: Boolean) {}
     override fun onStop() {
         super.onStop()
         viewModel.run {

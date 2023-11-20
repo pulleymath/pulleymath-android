@@ -86,4 +86,7 @@ class AffiliatedSolveConceptFragment : Fragment(), ProblemGestureListener {
     override fun onLeftSwipe() {}
 
     override fun onRightSwipe() {}
+    override fun onGestureTouch() {
+        println("AffiliatedSolveConceptFragment onGestureTouch!")
+    }
 }

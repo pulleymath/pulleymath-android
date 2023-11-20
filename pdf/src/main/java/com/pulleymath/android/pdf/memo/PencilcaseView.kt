@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Switch
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.pulleymath.android.pdf.R
@@ -64,18 +65,18 @@ interface Pencilcase {
 }
 
 
-//interface PencilcaseListener {
+interface PencilcaseListener {
 //    fun onEditTypeChanged(type: Pencilcase.EditType?)
 //    fun onThicknessSelected(thickness: Pencilcase.Thickness)
-//    fun onModeChanged()
-//}
+    fun onFingerDrawModeChanged(value: Boolean)
+}
 
 class PencilcaseView: ConstraintLayout, Pencilcase {
     private val clear = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     private var screenWidth:Int = 0
     private var screenHeight:Int = 0
 
-//    var listener: PencilcaseListener? = null
+    var listener: PencilcaseListener? = null
 
     override var editType: Pencilcase.EditType? = null
         set(value) {
@@ -129,6 +130,7 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
     var redCheck: ImageView
     var yellowCheck: ImageView
     var greenCheck: ImageView
+    var fingerDrawModeSwitch: Switch
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pencilcase, this)
@@ -152,6 +154,7 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
         redCheck = findViewById(R.id.redCheck)
         yellowCheck = findViewById(R.id.yellowCheck)
         greenCheck = findViewById(R.id.greenCheck)
+        fingerDrawModeSwitch = findViewById(R.id.fingerDrawModeSwitch)
 
         pencilBtn.setOnClickListener {
             if (editType == Pencilcase.EditType.pencil) {
@@ -237,9 +240,9 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
             }
         }
 
-//        writeModeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
-//            listener?.onModeChanged()
-//        }
+        fingerDrawModeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            listener?.onFingerDrawModeChanged(isChecked)
+        }
         configUI()
         setScreenSize()
         hideWriteMode()
@@ -327,12 +330,21 @@ class PencilcaseView: ConstraintLayout, Pencilcase {
     }
 
     private fun setMode(mode: Xfermode?) {
-        if(mode == null) {
-            memoViews.forEach { it.setPencil(penColor.value, penColor.alpha, thickness.width) }
-        } else {
-            memoViews.forEach {
-                it.setEraser(ERASE_THICK)
-            }
+//        if(mode == null) {
+//            memoViews.forEach {
+//                it.setPencil(penColor.value, penColor.alpha, thickness.width)
+//                it.fingerDrawMode = fingerDrawModeSwitch.isChecked
+//            }
+//        } else {
+//            memoViews.forEach {
+//                it.setEraser(ERASE_THICK)
+//                it.fingerDrawMode = fingerDrawModeSwitch.isChecked
+//            }
+//        }
+    }
+    fun setFingerDrawModeWithPencilcase(value: Boolean) {
+        memoViews.forEach {
+            it.fingerDrawMode = value
         }
     }
 

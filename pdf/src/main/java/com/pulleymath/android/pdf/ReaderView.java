@@ -39,6 +39,8 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
 import com.artifex.mupdf.fitz.Link;
+import com.pulleymath.android.pdf.memo.MemoView;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -52,6 +54,8 @@ public class ReaderView
 	private boolean mLinksEnabled = false;
 	private boolean tapDisabled = false;
 	private int tapPageMargin;
+  public boolean isBlock = false;
+  public boolean fingerDrawMode = false;
 
 	private static final int MOVING_DIAGONALLY = 0;
 	private static final int MOVING_LEFT       = 1;
@@ -572,10 +576,17 @@ public class ReaderView
 
   @Override
   public boolean onInterceptTouchEvent(MotionEvent ev) {
-    if (ev.getPointerCount() == 2) {
-      return true;
+    if (isBlock) {
+        MotionEvent.PointerProperties pp = new MotionEvent.PointerProperties();
+        ev.getPointerProperties(0, pp);
+
+        if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
+            return true;
+        }
+
+        return ev.getPointerCount() == 2;
     }
-    return super.onInterceptTouchEvent(ev);
+    return true;
   }
 
     @Override
@@ -728,6 +739,8 @@ public class ReaderView
 		int cvLeft, cvRight, cvTop, cvBottom;
 		boolean notPresent = (mChildViews.get(mCurrent) == null);
 		cv = getOrCreateChild(mCurrent);
+//    FrameLayout container = (FrameLayout) cv;
+//    setFingerDrawOption(container, fingerDrawMode);
 		// When the view is sub-screen-size in either dimension we
 		// offset it to center within the screen area, and to keep
 		// the views spaced out
@@ -770,6 +783,8 @@ public class ReaderView
 
 		if (mCurrent > 0) {
 			View lv = getOrCreateChild(mCurrent - 1);
+//      FrameLayout lvC = (FrameLayout) lv;
+//      setFingerDrawOption(lvC, fingerDrawMode);
 			Point leftOffset = subScreenSizeOffset(lv);
 			if (HORIZONTAL_SCROLLING)
 			{
@@ -789,6 +804,8 @@ public class ReaderView
 
 		if (mCurrent + 1 < mAdapter.getCount()) {
 			View rv = getOrCreateChild(mCurrent + 1);
+//      FrameLayout rvC = (FrameLayout) rv;
+//      setFingerDrawOption(rvC, fingerDrawMode);
 			Point rightOffset = subScreenSizeOffset(rv);
 			if (HORIZONTAL_SCROLLING)
 			{
@@ -813,6 +830,9 @@ public class ReaderView
 	public Adapter getAdapter() {
 		return mAdapter;
 	}
+  public void asd () {
+
+  }
 
 	@Override
 	public View getSelectedView() {
@@ -844,12 +864,21 @@ public class ReaderView
 		View v = mChildViews.get(i);
 		if (v == null) {
 			v = mAdapter.getView(i, getCached(), this);
-			addAndMeasureChild(i, v);
+
+      FrameLayout container = (FrameLayout) v;
+      setFingerDrawOption(container, fingerDrawMode);
+      addAndMeasureChild(i, v);
 			onChildSetup(i, v);
 		}
 
 		return v;
 	}
+  public final static String TAG_MEMOVIEW = "memoView";
+
+  private void setFingerDrawOption (View container, boolean value) {
+    MemoView mv = container.findViewWithTag(TAG_MEMOVIEW);
+    mv.setFingerDrawMode(value);
+  }
 
 	private void addAndMeasureChild(int i, View v) {
 		LayoutParams params = v.getLayoutParams();

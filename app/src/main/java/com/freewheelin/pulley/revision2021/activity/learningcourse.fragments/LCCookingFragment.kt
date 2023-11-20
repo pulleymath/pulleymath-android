@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -27,13 +26,15 @@ import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
-import com.freewheelin.pulley.revision2021.utils.observeThrottle
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.*
+import com.freewheelin.pulley.legacy.views.memoView.MemoView
+import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 
 class LCCookingFragment() : Fragment(),
-    CookingPencilcaseListener,
-    PlusMinusEnterKeypadListener {
+    PencilPanelListener,
+    PlusMinusEnterKeypadListener,
+    PathRedoUndoCountChangeListener {
     companion object {
         fun newInstance(courseId: Int) : LCCookingFragment {
             return LCCookingFragment().apply {
@@ -93,13 +94,6 @@ class LCCookingFragment() : Fragment(),
             customKeyboardCl.layoutParams = initCustomKeyboardClParams()
             numberKeyboard.layoutParams = initNumberKeyboardParams()
 
-            cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // observe 안에 이 코드가 있지만 상단에서 선언되어야 작동한다ㅠㅠ
-
-//                viewModel.fetchCookingGroceries(courseId)
-
-            leftScrollRootCl.setOnTouchListener { view, motionEvent -> false }
-            cookingMemoView.layoutParams.width = leftScrollRootCl.layoutParams.width
-
             selectionFl.setOnClickListener {
                 viewModel.showSelection.postValue(false)
                 recoveryQuizSingleAnswer()
@@ -116,10 +110,12 @@ class LCCookingFragment() : Fragment(),
                 cookingInfo.observe(viewLifecycleOwner) {
                     val chapterId = it.chapterId
                     val cookingId = it.conceptCookingId
-                    cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    cookingMemoView.setCookingMemoId(chapterId, cookingId)
-                    cookingMemoView.clearBitmap()
-                    cookingMemoView.load()
+                    memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    memoView.removePathRedoUndoCountChangeListener()
+                    memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
+                    memoView.setCookingMemoId(chapterId, cookingId)
+                    memoView.clearBitmap()
+                    memoView.load()
                 }
                 cookingInfoItems.observe(viewLifecycleOwner) {
                     cookingAdapter.submitList(it)
@@ -156,8 +152,8 @@ class LCCookingFragment() : Fragment(),
         }
     }
 
+    var prevExerciseMemoView: MemoView? = null
     inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root) {
-        var quizItemWidth = screenWidth * 0.55 - 96.toPx()
         fun bind(item: CookingInfoItem, position: Int) {
             itemBinding.apply {
                 this.item = item
@@ -166,7 +162,7 @@ class LCCookingFragment() : Fragment(),
                 lifecycleOwner = viewLifecycleOwner
                 setAllContainerViewGone(this)
                 rightRvItemRoot.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    (activity as LearningCourseActivity).hidePenPanel()
                 }
 
 
@@ -175,7 +171,7 @@ class LCCookingFragment() : Fragment(),
                         videoContainerCl.visibility = View.VISIBLE
                         viewModel.rightViewBinding = itemBinding
                         webView.setOnTouchListener { view, motionEvent ->
-                            (activity as LearningCourseActivity).hidePencilcasePanel()
+                            (activity as LearningCourseActivity).hidePenPanel()
                             false
                         }
 
@@ -191,22 +187,24 @@ class LCCookingFragment() : Fragment(),
 
                         viewModel.apply {
                             selectedExerciseIndex.observe(viewLifecycleOwner) { selectedIndex ->
+                                println("aspasp selectedExerciseIndex : ${selectedIndex}")
                                 item.cookingInfo?.let {
                                     val chapterId = it.chapterId
                                     val cookingId = it.conceptCookingId
                                     quizMemoViewList.clear()
 
-                                    cookingQuizzes.cookingMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                                    cookingQuizzes.cookingMemoView.setMemoSavedName(chapterId,cookingId,"cooking_quiz_${selectedIndex}")
-                                    cookingQuizzes.cookingMemoView.clearBitmap()
-                                    cookingQuizzes.cookingMemoView.load()
-                                    quizMemoViewList.add(cookingQuizzes.cookingMemoView)
+//                                    cookingQuizzes.memoView.saveImaged()
+                                    cookingQuizzes.memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                                    cookingQuizzes.memoView.removePathRedoUndoCountChangeListener()
+                                    cookingQuizzes.memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
+                                    cookingQuizzes.memoView.setMemoSavedName(chapterId,cookingId,"cooking_quiz_${selectedIndex}")
+                                    cookingQuizzes.memoView.clearBitmap()
+                                    cookingQuizzes.memoView.load()
+                                    prevExerciseMemoView = cookingQuizzes.memoView
+                                    quizMemoViewList.add(cookingQuizzes.memoView)
 
                                     val lcActivity = (activity as LearningCourseActivity)
-                                    lcActivity.binding.pencilcaseView.listener = this@LCCookingFragment
-                                    binding.cookingMemoView.set(lcActivity.binding.pencilcaseView)
-
-                                    quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
+                                    quizMemoViewList.forEach { it.set(lcActivity.binding.penPanel) }
                                 }
 
                                 cookingInfoItems.value?.filter { it.type == CookingInfoItem.ItemType.Exercise }
@@ -217,6 +215,9 @@ class LCCookingFragment() : Fragment(),
                                         val quizBinding = cookingQuizzes
                                         setOnQuizView(quizBinding, selectedExercise)
                                     }
+                            }
+                            fingerDrawModeMode.observe(viewLifecycleOwner) {
+                                cookingQuizzes.memoView.fingerDrawMode = it
                             }
                         }
                     }
@@ -238,7 +239,8 @@ class LCCookingFragment() : Fragment(),
                 }
 
                 exerciseBtn.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    prevExerciseMemoView?.saveImaged()
+                    (activity as LearningCourseActivity).hidePenPanel()
 
                     itemBinding.quizTabHeader.children.forEach {
                         (it as? CookingExerciseHeaderBtn)?.setStateCommon()
@@ -285,7 +287,7 @@ class LCCookingFragment() : Fragment(),
 
                 webView.webViewClient = CookingWebClient({ url ->
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    (activity as LearningCourseActivity).hidePencilcasePanel()
+                    (activity as LearningCourseActivity).hidePenPanel()
                 },
                 {
                     itemBinding.loadingContainer.hide(300)
@@ -473,10 +475,14 @@ class LCCookingFragment() : Fragment(),
     override fun onResume() {
         super.onResume()
         resetMemoView()
-        resumePencilcaseView()
+        resumePencilCaseView()
         recoveryQuizSingleAnswer()
         viewModel.rightViewBinding?.webView?.onResume()
         setRedOnAllClearBtnOfPenPanel()
+        (activity as LearningCourseActivity).run {
+            mainPanelTopMarginByCourseType()
+            showMainPanPanelIfPenSelected()
+        }
     }
     private fun setRedOnAllClearBtnOfPenPanel() {
         (activity as? LearningCourseActivity)?.setUndoCount(1)
@@ -490,62 +496,64 @@ class LCCookingFragment() : Fragment(),
     }
     private fun resetMemoView() {
         val lcActivity = (activity as LearningCourseActivity)
-        lcActivity.binding.pencilcaseView.memoViews.clear()
+        lcActivity.binding.penPanel.memoViews.clear()
     }
 
-    private fun resumePencilcaseView() {
+    private fun resumePencilCaseView() {
         val lcActivity = (activity as LearningCourseActivity)
-        lcActivity.binding.pencilcaseView.listener = this@LCCookingFragment
-        binding.cookingMemoView.set(lcActivity.binding.pencilcaseView)
-        viewModel.quizMemoViewList.forEach { it.set(lcActivity.binding.pencilcaseView) }
+        lcActivity.binding.penPanel.listener = this@LCCookingFragment
+        binding.memoView.set(lcActivity.binding.penPanel)
+        viewModel.quizMemoViewList.forEach { it.set(lcActivity.binding.penPanel) }
 
         val pencilType = lcActivity.getPencilcaseType()
         val color = lcActivity.getPencilcaseColor()
         val thickn = lcActivity.getPencilcaseThickness()
-        val isFixedMode = lcActivity.getPencilcaseMode()
+        val fingerDrawMode = lcActivity.getFingerDrawMode()
 
-        lcActivity.binding.pencilcaseView.apply {
+        lcActivity.binding.penPanel.apply {
 
-            if (isFixedMode) {
-                editType = pencilType
-                color?.let { penColor = it }
-                thickn?.let { thickness = it }
-
-                writeModeSwitch.isChecked = isFixedMode
+            if (drawType != null) {
+                resetMode()
+                fingerDrawModeSwitch.isChecked = fingerDrawMode
 
                 val isBlocked = pencilType != null
                 binding.leftScrollView.isBlock = isBlocked
-            } else {
-                editType = null
+                binding.leftScrollView.fingerDrawMode = fingerDrawMode
+                binding.memoView.fingerDrawMode = fingerDrawMode
+                viewModel.fingerDrawModeMode.postValue(fingerDrawMode)
+
             }
-            pencilOptionLl.isSelected = false
-            pencilOptionLl.visibility = View.GONE
+            lcActivity.hidePenPanel()
         }
     }
 
 
-    override fun onEditTypeChanged(type: CookingPencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         val isBlocked = type != null
         binding.leftScrollView.isBlock = isBlocked
 //        binding.rightRv.isBlocked = isBlocked
-
-        binding.cookingMemoView.isBlocked = isBlocked
-        viewModel.quizMemoViewList.forEach { it.isBlocked = isBlocked }
 
 //        (parentFragment as LCPatternFragment).setPagerSwipeBlocked(isBlocked)
         (activity as LearningCourseActivity).savePencilcaseType(type)
     }
 
-    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
-        (activity as LearningCourseActivity).savePencilcaseColor(color)
-    }
+//    override fun onEditColorChanged(color: CookingPencilcase.PenColor) {
+//        (activity as LearningCourseActivity).savePencilcaseColor(color)
+//    }
 
-    override fun onThicknessSelected(thickness: CookingPencilcase.Thickness) {
-        (activity as LearningCourseActivity).savePencilcaseThicknesss(thickness)
-    }
+//    override fun onThicknessSelected(thickness: Float) {
+//        (activity as LearningCourseActivity).savePencilcaseThicknesss(thickness)
+//    }
 
-    override fun onModeChanged(isFixedMode: Boolean) {
-        (activity as LearningCourseActivity).savePencilcaseMode(isFixedMode)
+//    override fun onModeChanged(isFixedMode: Boolean) {
+//        (activity as LearningCourseActivity).savePencilcaseMode(isFixedMode)
+//    }
+
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        (activity as LearningCourseActivity).saveFingerDrawMode(value)
+        binding.leftScrollView.fingerDrawMode = value
+        binding.memoView.fingerDrawMode = value
+        viewModel.fingerDrawModeMode.postValue(value)
     }
 
     override fun onEnterBtnClicked(button: Button, answer: String) {
@@ -577,5 +585,13 @@ class LCCookingFragment() : Fragment(),
         viewModel.run {
             clearCompositeDisposable()
         }
+    }
+
+    override fun onUndoCountChanged(undoCount: Int) {
+        (activity as? LearningCourseActivity)?.setUndoCount(undoCount)
+    }
+
+    override fun onRedoCountChanged(redoCount: Int) {
+        (activity as? LearningCourseActivity)?.setRedoCount(redoCount)
     }
 }

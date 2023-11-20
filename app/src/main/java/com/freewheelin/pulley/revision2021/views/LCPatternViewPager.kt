@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -12,6 +11,9 @@ import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.absoluteValue
 
 
+interface LCTouchListener {
+    fun onGestureTouch()
+}
 class LCPatternViewPager: LinearLayout {
 
     constructor(context: Context) : this(context, null)
@@ -22,6 +24,8 @@ class LCPatternViewPager: LinearLayout {
     var isPagerSwipeBlocked = false
     var scaleFactor = 1f
     var pagerEnableCallback: (Boolean) -> Unit = {}
+    var fingerDrawMode = false
+    var listener: LCTouchListener? = null
 
     init {
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
@@ -35,6 +39,7 @@ class LCPatternViewPager: LinearLayout {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        listener?.onGestureTouch()
         handleInterceptTouchEvent(ev)
 
         return super.dispatchTouchEvent(ev)
@@ -60,10 +65,27 @@ class LCPatternViewPager: LinearLayout {
             val scaledDx = dx.absoluteValue * 1f
             val scaledDy = dy.absoluteValue * .5f
 
+            val pp = MotionEvent.PointerProperties()
+            e.getPointerProperties(0, pp)
+
             if (e.pointerCount == 2) {
                 pager.isUserInputEnabled = !isPagerSwipeBlocked
             }
             if (scaleFactor != 1f) return
+
+            if (!fingerDrawMode && pp.toolType == MotionEvent.TOOL_TYPE_FINGER) {
+                if (isPageStartIndex && (scaledDx > scaledDy) && dx > 0) {
+                    pagerEnableCallback(true)
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    return
+                } else if (isPageEndIndex && (scaledDx > scaledDy) && dx < 0) {
+                    pagerEnableCallback(true)
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    return
+                }
+            }
+
+
             if (isPageStartIndex && (scaledDx > scaledDy) && dx > 0 && !isPagerSwipeBlocked) {
                 pagerEnableCallback(true)
                 parent.requestDisallowInterceptTouchEvent(false)

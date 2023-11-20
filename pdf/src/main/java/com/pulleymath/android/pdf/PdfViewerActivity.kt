@@ -1,12 +1,10 @@
 package com.pulleymath.android.pdf
 
-import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -24,11 +22,15 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.core.view.isVisible
 import com.pulleymath.android.pdf.ReaderView.ViewMapper
 import com.pulleymath.android.pdf.log.Network
 import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
-import com.pulleymath.android.pdf.memo.PencilcaseView
+import com.pulleymath.android.pdf.memo.DrawType
+import com.pulleymath.android.pdf.memo.PathRedoUndoCountChangeListener
+import com.pulleymath.android.pdf.memo.PencilPanel
+import com.pulleymath.android.pdf.memo.PencilPanelListener
 import com.pulleymath.android.pdf.memo.storage.DatabaseHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,7 @@ import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
 
-open class PdfViewerActivity : Activity() {
+open class PdfViewerActivity : Activity(), PencilPanelListener {
     /* The core rendering instance */
     internal enum class TopBarMode {
         Main, Search, More
@@ -61,6 +63,7 @@ open class PdfViewerActivity : Activity() {
     private var mPageNumberView: TextView? = null
     private var mSearchButton: ImageButton? = null
     private var mOutlineButton: ImageButton? = null
+    private var mExternalPenBtn: ImageButton? = null
     private var mTopBarSwitcher: ViewAnimator? = null
     private var mLinkButton: ImageButton? = null
     private var mTopBarMode = TopBarMode.Main
@@ -396,11 +399,17 @@ open class PdfViewerActivity : Activity() {
         setButtons(mButtonsView!!)
 
         /** set drawingId */
-        val adapter = PageAdapter(this, core)
+        val adapter = PageAdapter(this, core, fingerDrawMode)
         adapter.setDrawingId("memo_${studentId}_${pdfId}_")
         /** set pencilcase */
-        val pencilcase = mButtonsView!!.findViewById(R.id.pencilcase) as PencilcaseView
-        adapter.setPencilcase(pencilcase)
+//        val pencilcase = mButtonsView!!.findViewById(R.id.pencilcase) as PencilcaseView
+//        pencilcase.listener = this
+//        adapter.setPencilcase(pencilcase)
+        val penPanel = mButtonsView!!.findViewById(R.id.penPanel) as PencilPanel
+        penPanel.listener = this
+        adapter.setPenPanel(penPanel)
+
+
 
         mDocView?.adapter = adapter
 
@@ -427,6 +436,16 @@ open class PdfViewerActivity : Activity() {
         // Activate the search-preparing button
         mSearchButton!!.setOnClickListener { searchModeOn() }
         mSearchClose!!.setOnClickListener { searchModeOff() }
+        mExternalPenBtn!!.setOnClickListener {
+            penPanel.visibility = if (penPanel.isVisible) View.GONE else View.VISIBLE
+            if (penPanel.isVisible) {
+                penPanel.openPencilPanel()
+                mExternalPenBtn?.setImageResource(R.drawable.ic_pencil_fliled_purple)
+            } else {
+                penPanel.closePencilPanel()
+                mExternalPenBtn?.setImageResource(R.drawable.ic_pencil)
+            }
+        }
 
         // Search invoking buttons are disabled while there is no text specified
         mSearchBack!!.isEnabled = false
@@ -726,6 +745,7 @@ open class PdfViewerActivity : Activity() {
             mPageNumberView = findViewById<View>(R.id.pageNumber) as TextView
             mSearchButton = findViewById<View>(R.id.searchButton) as ImageButton
             mOutlineButton = findViewById<View>(R.id.outlineButton) as ImageButton
+            mExternalPenBtn = findViewById<View>(R.id.externalPenBtn) as ImageButton
             mTopBarSwitcher = findViewById<View>(R.id.switcher) as ViewAnimator
             mSearchBack = findViewById<View>(R.id.searchBack) as ImageButton
             mSearchFwd = findViewById<View>(R.id.searchForward) as ImageButton
@@ -872,6 +892,20 @@ open class PdfViewerActivity : Activity() {
 //                memos.clear()
 //            }
 //        }
+    }
+
+    private var fingerDrawMode = false
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        fingerDrawMode = value
+        mDocView?.fingerDrawMode = value
+        (mDocView?.adapter as? PageAdapter)?.let {
+            it.fingerDrawMode = value
+            it.setMemoViewFingerDrawModeInPencilcase(value)
+        }
+    }
+
+    override fun onDrawTypeChanged(type: DrawType?) {
+        mDocView?.isBlock = type != null
     }
 
     companion object {

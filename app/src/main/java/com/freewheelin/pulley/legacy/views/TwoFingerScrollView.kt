@@ -34,17 +34,6 @@ class DisableHorizontalScrollView: HorizontalScrollView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
-//    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-//        if(childCount > 0)
-//            when(event?.keyCode) {
-//                KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
-//                    getChildAt(0).dispatchKeyEvent(event)
-//                    return true
-//                }
-//            }
-//        return super.dispatchKeyEvent(event)
-//    }
-
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         return false
     }
@@ -62,6 +51,7 @@ class DisableVerticalScrollView: ScrollView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     var isBlock = false
+    var fingerDrawMode = false
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         return false
@@ -69,10 +59,12 @@ class DisableVerticalScrollView: ScrollView {
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if(isBlock) {
-            if(ev?.pointerCount == 2)
+            val pp = MotionEvent.PointerProperties()
+            ev?.getPointerProperties(0, pp)
+            if (!fingerDrawMode && pp.toolType != MotionEvent.TOOL_TYPE_STYLUS) {
                 return true
-            else
-                return false
+            }
+            return ev?.pointerCount == 2
         } else {
             return true
         }

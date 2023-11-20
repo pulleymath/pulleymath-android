@@ -199,7 +199,7 @@
         <View
             style="@style/Border_Gray_300_Horizontal"
             android:id="@+id/writeModeContainerDivider"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/writeModeContainer"
@@ -208,37 +208,58 @@
             android:clipToPadding="false"
             android:paddingBottom="@dimen/dp24"
             android:paddingTop="@dimen/dp24"
-            android:visibility="gone">
+            android:visibility="visible">
             <TextView
                 style="@style/TextGray_600.Bold"
-                android:id="@+id/writeModeLabel"
-                android:layout_width="wrap_content"
+                android:id="@+id/fingerDrawModeLabel"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/dp16"
+                android:textSize="14dp"
                 android:layout_marginStart="20dp"
-                android:text="필기 모드 유지"
+                android:text="손으로 필기"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <Switch
                 style="@style/Switch.Grey"
-                android:id="@+id/writeModeSwitch"
+                android:id="@+id/fingerDrawModeSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@+id/writeModeLabel"
-                app:layout_constraintBottom_toBottomOf="@+id/writeModeLabel"
-                app:layout_constraintStart_toEndOf="@+id/writeModeLabel"/>
+                android:layout_marginEnd="20dp"
+                app:layout_constraintTop_toTopOf="@+id/fingerDrawModeLabel"
+                app:layout_constraintBottom_toBottomOf="@+id/fingerDrawModeLabel"
+                app:layout_constraintEnd_toEndOf="parent"/>
+<!--            -->
+<!--            <TextView-->
+<!--                style="@style/TextGray_600.Bold"-->
+<!--                android:id="@+id/writeModeLabel"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="@dimen/dp16"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="필기 모드 유지"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
 
-            <TextView
-                style="@style/TextGray_500.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/dp14"
-                android:layout_marginTop="@dimen/dp12"
-                android:text="필기 모드 시 한 손 스크롤,\n좌우 스와이프가 제한됩니다."
-                app:layout_constraintTop_toBottomOf="@+id/writeModeSwitch"
-                app:layout_constraintStart_toStartOf="@+id/writeModeLabel"/>
+<!--            <Switch-->
+<!--                style="@style/Switch.Grey"-->
+<!--                android:id="@+id/writeModeSwitch"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/writeModeLabel"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/writeModeLabel"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/writeModeLabel"/>-->
+
+<!--            <TextView-->
+<!--                style="@style/TextGray_500.Bold"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="@dimen/dp14"-->
+<!--                android:layout_marginTop="@dimen/dp12"-->
+<!--                android:text="필기 모드 시 한 손 스크롤,\n좌우 스와이프가 제한됩니다."-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/writeModeSwitch"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/writeModeLabel"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

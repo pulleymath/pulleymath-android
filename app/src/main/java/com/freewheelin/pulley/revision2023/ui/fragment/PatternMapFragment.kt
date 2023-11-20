@@ -82,6 +82,10 @@ class PatternMapFragment : Fragment() {
         super.onResume()
         val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
         viewModel.collectAllPatternMaps(chapterId)
+        (activity as LearningCourseActivity).run {
+            hideMainPenPanel()
+            hidePenPanel()
+        }
     }
 
     private fun fetch() {

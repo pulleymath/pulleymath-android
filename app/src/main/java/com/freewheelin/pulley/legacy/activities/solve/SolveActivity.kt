@@ -21,6 +21,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -53,23 +54,27 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
 
 
 class SolveActivity : BaseActivity(),
-        AnswerDelegate,
-        GalleryViewDelegate,
-        SpeedAnswerDelegate,
-        PencilcaseListener,
-        ProblemGestureListener,
-        ObservableHashSetListener<Problem>,
-        LifecycleObserver,
-        AppUsageMonitorListener {
+    AnswerDelegate,
+    GalleryViewDelegate,
+    SpeedAnswerDelegate,
+    PencilPanelListener,
+    ProblemGestureListener,
+    ObservableHashSetListener<Problem>,
+    LifecycleObserver,
+    AppUsageMonitorListener,
+    PathRedoUndoCountChangeListener {
 
     private val binding: ActivitySolveBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_solve, null,false)
@@ -142,13 +147,12 @@ class SolveActivity : BaseActivity(),
 
     var selectedProblem: Problem? = null
     override val isShowAnswer: Boolean
-        get() = binding.speedyScoreSwitch.isChecked
+        get() = binding.quickScoringPanelSwitch.isChecked
 
     var answeredSet: ObservableHashSet<Problem> = ObservableHashSet()
     var itemValue = ""
         set(value) {
             field = value
-            binding.pencilcaseView.itemValue = value
             binding.galleryView.itemValue = value
         }
 
@@ -244,7 +248,7 @@ class SolveActivity : BaseActivity(),
         with(binding) {
             onItemChanged(answeredSet)
             timerView.visibility = View.INVISIBLE
-            mainFormatTool.visibility = View.VISIBLE
+//            mainFormatTool.visibility = View.VISIBLE
 
             when(content) {
                 is Book -> {
@@ -351,7 +355,7 @@ class SolveActivity : BaseActivity(),
                 is Book -> {
                     itemValue = "유형학습"
                     timerView.visibility = View.INVISIBLE
-                    mainFormatTool.visibility = View.VISIBLE
+//                    mainFormatTool.visibility = View.VISIBLE
 
                     val cb: ((book: Book) -> Unit) = {
                         Log.d("유형학습", "init getBook======>$it")
@@ -381,7 +385,7 @@ class SolveActivity : BaseActivity(),
                 is Piece -> {
                     itemValue = "2차학습"
                     timerView.visibility = View.INVISIBLE
-                    mainFormatTool.visibility = View.VISIBLE
+//                    mainFormatTool.visibility = View.VISIBLE
                     BookManager.getBookFromContent(this@SolveActivity, content, user!!) {
                         this@SolveActivity.content = it
                         viewModel.selectedContent.postValue(it)
@@ -394,9 +398,9 @@ class SolveActivity : BaseActivity(),
                 }
                 is Test -> {
                     itemValue = "테스트"
-                    solutionSwitch.visibility = View.GONE
+//                    solutionSwitch.visibility = View.GONE
                     timerView.visibility = View.INVISIBLE
-                    mainFormatTool.visibility = View.VISIBLE
+//                    mainFormatTool.visibility = View.VISIBLE
 
                     viewModel.getTest(content.getTestType()) {
                         it.scoringTestPieceCount = content.scoringTestPieceCount
@@ -411,7 +415,7 @@ class SolveActivity : BaseActivity(),
                 }
                 is MockExam -> {
                     itemValue = "모의고사"
-                    solutionSwitch.visibility = View.GONE
+//                    solutionSwitch.visibility = View.GONE
                     val isRestart = intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
                     timerView.visibility = View.VISIBLE
                     timerView.setTimerViewListener(object : SolveTimerViewListener {
@@ -454,7 +458,7 @@ class SolveActivity : BaseActivity(),
                         }
                     })
 
-                    mainFormatTool.visibility = View.GONE
+//                    mainFormatTool.visibility = View.GONE
 
                     MockExamManager.getMockProblems(this@SolveActivity, content, user!!) {
                         Log.d("문제풀기", "모의고사 it=${it.assignID}, isRestart=${isRestart}")
@@ -557,6 +561,26 @@ class SolveActivity : BaseActivity(),
             clearBtn.setOnClickListener { onClearBtnClicked() }
             scrapBtn.setOnClickListener { onScrapBtnClicked() }
             reportBtn.setOnClickListener { onSirenBtnClicked() }
+            quickPanelBtn.setOnClickListener { onQuickPanelBtnClicked() }
+            externalPenBtn.setOnClickListener {
+                penPanel.visibleIf(!penPanel.isVisible)
+                if (penPanel.isVisible) {
+                    penPanel.openPencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil_fliled_purple)
+                } else {
+                    penPanel.closePencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil)
+                }
+            }
+
+            solutionPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
+                onShowSolutionCheckChanged(isChecked)
+            }
+            quickScoringPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
+                onSpeedyScoringCheckChanged(isChecked)
+            }
+
+
             // 스타트챌린지 중일 때 plusIv 및 stampIv turn on,
             // 스타트챌린지 중이 아닐 때: 구독 basic_p 이상인 경우 plusIv turn on
             // 이외의 경우 lockIv
@@ -605,16 +629,23 @@ class SolveActivity : BaseActivity(),
                 onSubmitBtnClicked()
                 viewModel.sendSubmitLog(content?.pieceID, "유형학습-빠른", answeredSet.size)
             }
-            pencilcaseView.listener = this@SolveActivity
-            problemMemoView.set(pencilcaseView)
-            solutionMemoView.set(pencilcaseView)
+//            pencilcaseView.listener = this@SolveActivity
+            penPanel.listener = this@SolveActivity
+            problemMemoView.set(penPanel)
+            solutionMemoView.set(penPanel)
+            problemMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            solutionMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            problemMemoView.removePathRedoUndoCountChangeListener()
+            solutionMemoView.removePathRedoUndoCountChangeListener()
+            problemMemoView.setPathRedoUndoCountChangeListener(this@SolveActivity)
+            solutionMemoView.setPathRedoUndoCountChangeListener(this@SolveActivity)
 
-            speedyScoreSwitch.setOnCheckedChangeListener { _, isChecked ->
-                onSpeedyScoringCheckChanged(isChecked)
-            }
-            solutionSwitch.setOnCheckedChangeListener { _, isChecked ->
-                onShowSolutionCheckChanged(isChecked)
-            }
+//            speedyScoreSwitch.setOnCheckedChangeListener { _, isChecked ->
+//                onSpeedyScoringCheckChanged(isChecked)
+//            }
+//            solutionSwitch.setOnCheckedChangeListener { _, isChecked ->
+//                onShowSolutionCheckChanged(isChecked)
+//            }
 
             val imageWidth = when(densityLevel) {
                 DensityLevel.Low -> screenWidth / 2
@@ -775,9 +806,11 @@ class SolveActivity : BaseActivity(),
             }
             selectedProblemOb.observe(this@SolveActivity) {
                 val isYet = it.getResultByScoring().isYet
-                val isSwitchChecked = binding.solutionSwitch.daebakSwitch.isChecked
-                // 푼문제면 열고 안푼문제면
-                binding.solutionSwitch.daebakSwitch.isChecked = !isYet && isSwitchChecked
+//                val isSwitchChecked = binding.solutionSwitch.daebakSwitch.isChecked
+//                // 푼문제면 열고 안푼문제면
+//                binding.solutionSwitch.daebakSwitch.isChecked = !isYet && isSwitchChecked
+                val isSwitchChecked = binding.solutionPanelSwitch.isChecked
+                binding.solutionPanelSwitch.isChecked = !isYet && isSwitchChecked
             }
         }
     }
@@ -843,7 +876,7 @@ class SolveActivity : BaseActivity(),
                                 binding.answerView.showMarkingBtn()
                                 binding.speedAnswerView.showMarkingBtn()
                                 binding.galleryView.showFilter()
-                                binding.solutionSwitch.visibility = View.VISIBLE
+//                                binding.solutionSwitch.visibility = View.VISIBLE
 
 
 //                            if(it?.getAskAddSubjects()?.isNotEmpty() == true && user!!.isShowAddOptionalSubjectStatus()) {
@@ -1074,7 +1107,7 @@ class SolveActivity : BaseActivity(),
         selectedProblem?.let { selected ->
             binding.answerView?.configureUI(selected, true)
 
-            if (binding.speedyScoreSwitch.isChecked) {
+            if (binding.quickScoringPanelSwitch.isChecked) {
                 binding.speedAnswerView.scrollTo(selected, "onFoldBtnClicked()")
             }
         }
@@ -1109,7 +1142,7 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onLeftSwipe() {
-        if(binding.pencilcaseView.editType == null) {
+        if(binding.penPanel.drawType == null || !binding.penPanel.fingerDrawMode) {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-이전", itemValue)
             if(selectedProblem != content?.problems?.firstOrNull())
                 prevAnim()
@@ -1119,12 +1152,22 @@ class SolveActivity : BaseActivity(),
     }
 
     override fun onRightSwipe() {
-        if(binding.pencilcaseView.editType == null) {
+        if(binding.penPanel.drawType == null || !binding.penPanel.fingerDrawMode) {
             LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "문제 스와이프-다음", itemValue)
-            if(selectedProblem != content?.problems?.lastOrNull())
+            if(selectedProblem != content?.problems?.lastOrNull()) {
                 nextAnim()
-            else
+            } else {
                 DaebakToast.show(this, "마지막 문제입니다 :)")
+            }
+        }
+    }
+
+    override fun onGestureTouch() {
+        binding.penPanel.run {
+//            pencilOptionLl.isSelected = false
+//            pencilOptionLl.visibility = View.GONE
+//            clearAllBtn.isSelected = false
+//            clearAllBtn.visibility = View.GONE
         }
     }
 
@@ -1324,6 +1367,13 @@ class SolveActivity : BaseActivity(),
             dialog.show()
         }
     }
+    fun onQuickPanelBtnClicked() {
+        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "펜 선택 버튼", itemValue)
+        binding.apply {
+            setBtnSelected(quickPanelBtn, !quickPanelBtn.isSelected)
+            quickPanelLl.visibleIf(!quickPanelLl.isVisible)
+        }
+    }
 
     fun onShowSolutionCheckChanged(isChecked: Boolean) {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "정답/해설표시토글", itemValue)
@@ -1362,24 +1412,28 @@ class SolveActivity : BaseActivity(),
     private fun setBtnSelected(btn: ImageButton, isSelected: Boolean) {
         btn.isSelected = isSelected
         val selectedImage = if(btn === binding.scrapBtn)
-            ContextCompat.getDrawable(this, R.drawable.ic_tag_14_selected)
+            ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_purple)
         else if(btn == binding.clearBtn)
-            ContextCompat.getDrawable(this, R.drawable.ic_check_purple_20)
+            ContextCompat.getDrawable(this, R.drawable.ic_check_filled_purple)
+        else if (btn == binding.quickPanelBtn)
+            ContextCompat.getDrawable(this, R.drawable.ic_toggle_filled_purple)
         else
             null
 
         val unselectedImage = if(btn === binding.scrapBtn)
-            ContextCompat.getDrawable(this, R.drawable.ic_tag_14_unselected)
+            ContextCompat.getDrawable(this, R.drawable.ic_bookmark)
         else if(btn == binding.clearBtn)
-            ContextCompat.getDrawable(this, R.drawable.ic_check_grey_20)
+            ContextCompat.getDrawable(this, R.drawable.ic_check_gray_24)
+        else if (btn == binding.quickPanelBtn)
+            ContextCompat.getDrawable(this, R.drawable.ic_toggle)
         else
             null
 
         if(btn.isSelected) {
-            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_purple_100_round)
+            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_gray_800_round)
             btn.setImageDrawable(selectedImage)
         } else {
-            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_black_100_stroke_gray_800_round)
+            btn.background = ContextCompat.getDrawable(this, R.drawable.bg_black_200_round)
             btn.setImageDrawable(unselectedImage)
         }
     }
@@ -1463,7 +1517,7 @@ class SolveActivity : BaseActivity(),
         if(problem != null) {
             binding.speedAnswerView.scrollTo(problem, "onProblemSelected")
             binding.galleryView.scrollTo(problem)
-            if(selectedProblem?.getResultByScoring() == Result.yet && selectedProblem?.problemType == ProblemType.short && !binding.speedyScoreSwitch.isChecked && !binding.solutionSwitch.isChecked) { // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
+            if(selectedProblem?.getResultByScoring() == Result.yet && selectedProblem?.problemType == ProblemType.short && !binding.quickScoringPanelSwitch.isChecked && !binding.solutionPanelSwitch.isChecked) { // 문제 안풀었고, 단답이고, 정답보기가off 이고, 빠른채점도 off이면 포커스
                 Log.d("포커스", "autoFocus=$autoFocus, keyPad=${binding.answerView.keyPad}, isShow=${binding.answerView.keyPad?.isShowing}")
                 Log.d("포커스", "galleryCloser.visibility=${binding.galleryCloser.visibility}")
 //                answerView.keyPad?.dismiss()
@@ -1557,15 +1611,10 @@ class SolveActivity : BaseActivity(),
     }
 
     fun onSetProblem() {
-        if(!binding.pencilcaseView.writeModeSwitch.isChecked)
-            binding.pencilcaseView.setDefaultState()
-
         val problem = selectedProblem
         binding.titleTv.text = getTitleText()
 
-
         Log.d("테스트", "SolveActivity problem=${problem}")
-
 
         if(problem == null) {
             problemGesture?.init()
@@ -1603,7 +1652,7 @@ class SolveActivity : BaseActivity(),
 
             binding.problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p")
             binding.solutionMemoView.load("${problem.id}_${content?.assignID ?: 0}_s")
-
+            binding.penPanel.resetMode()
             if(binding.galleryCloser.visibility != View.VISIBLE) {
                 var requestFocus = if(binding.speedAnswerView.visibility == View.GONE) binding.galleryCloser.visibility != View.VISIBLE else false
                 binding.answerView.configureUI(problem, requestFocus)
@@ -1667,7 +1716,7 @@ class SolveActivity : BaseActivity(),
         }
     }
 
-    override fun onEditTypeChanged(type: Pencilcase.EditType?) {
+    override fun onDrawTypeChanged(type: DrawType?) {
         with(binding) {
             if(type == null) {
                 problemContainer.isBlock = false
@@ -1677,26 +1726,23 @@ class SolveActivity : BaseActivity(),
                 solutionContainer.isBlock = true
             }
 
-            if(type == Pencilcase.EditType.pencil)
-                Tutor.showToolTipIfNeed(pencilcaseView.pencilBtn, Tutor.TooltipType.takeNoteScroll)
+            if(type == DrawType.Pencil) {
+                Tutor.showToolTipIfNeed(penPanel.penBtn, Tutor.TooltipType.takeNoteScroll)
+            }
         }
-
     }
 
 
-    override fun onThicknessSelected(thickness: Pencilcase.Thickness) {
-        val itemName  = when(thickness) {
-            Pencilcase.Thickness.line -> "펜굵기-1"
-            Pencilcase.Thickness.thin -> "펜굵기-2"
-            Pencilcase.Thickness.medium -> "펜굵기-3"
-            Pencilcase.Thickness.thick -> "펜굵기-4"
+//    override fun onThicknessSelected(thickness: Float) {
+//        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "펜 굵기", "$thickness")
+//    }
 
-        }
-        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", itemName, itemValue)
-    }
-
-    override fun onModeChanged() {
-        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "필기모드토글", itemValue)
+    override fun onFingerDrawModeChanged(value: Boolean) {
+        LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "스타일러스온리모드", "${value}")
+        binding.problemContainer.fingerDrawMode = value
+        binding.solutionContainer.fingerDrawMode = value
+        binding.problemMemoView.fingerDrawMode = value
+        binding.solutionMemoView.fingerDrawMode = value
     }
 
     override fun onItemChanged(set: ObservableHashSet<Problem>) {
@@ -1910,6 +1956,24 @@ class SolveActivity : BaseActivity(),
             val suffix = problem.unitSuffix ?: ""
             return "${prefix} ${answer}${suffix}".trim()
         }
+    }
+
+    override fun onUndoCountChanged(undoCount: Int) {
+        if (binding.penPanel.memoViews.size == 0) return
+        val undoCount = binding.penPanel.memoViews.map {
+            it.undoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.undoCount = undoCount
+    }
+
+    override fun onRedoCountChanged(redoCount: Int) {
+        if (binding.penPanel.memoViews.size == 0) return
+        val redoCount = binding.penPanel.memoViews.map {
+            it.redoCount
+        }.reduce { acc, next -> acc + next }
+
+        binding.penPanel.redoCount = redoCount
     }
 }
 

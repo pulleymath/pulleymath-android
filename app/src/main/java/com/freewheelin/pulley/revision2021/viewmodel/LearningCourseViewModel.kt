@@ -1,8 +1,6 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
-import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
@@ -16,8 +14,9 @@ import com.freewheelin.pulley.revision2021.model.response.channelio.ChannelIOIma
 import com.freewheelin.pulley.revision2021.repository.ChannelTalkRepository
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
-import com.freewheelin.pulley.revision2021.views.CookingPencilcase
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2023.ui.view.DrawType
+import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.zoyi.channel.plugin.android.store.ChannelStore
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -43,10 +42,11 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     val headerTitle by lazy { MutableLiveData<String>("") }
 
-    var pencilcaseType: CookingPencilcase.EditType? = null
-    var pencilcaseColor: CookingPencilcase.PenColor? = null
-    var pencilcaseThickness: CookingPencilcase.Thickness? = null
-    var pencilcaseModeFixed: Boolean = false
+    var pencilDrawType: DrawType? = null
+    var pencilColorType: PenColorType? = null
+    var pencilThickness: Float? = null
+
+    var fingerDrawModeMode: Boolean = false
     var selectedChapter: StudyChapter? = null
     var selectedSubjectId: Int? = null
     var selectedChapterId: Int? = null
