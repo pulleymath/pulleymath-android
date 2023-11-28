@@ -260,7 +260,7 @@
                     android:maxHeight="8dp"
                     android:minHeight="8dp"
                     android:max="125"
-                    android:progress="35"
+                    android:progress="5"
                     android:splitTrack="false"
                     android:background="@null"
                     android:progressTint="@color/gray_500"
@@ -268,17 +268,6 @@
                     android:thumb="@drawable/seekbar_thumb_40"
                     android:progressDrawable="@drawable/seekbar_progress"
                     />
-<!--                <com.google.android.material.slider.Slider-->
-<!--                    android:id="@+id/thickSlider"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="48dp"-->
-<!--                    app:trackColor="#ffd400"-->
-<!--                    app:trackColorActive="#ffd400"-->
-<!--                    app:trackColorInactive="#e7e7e7"-->
-<!--                    app:thumbColor="#ffb300"-->
-<!--                    app:trackHeight="12dp"/>-->
-<!--                app:activeTrackColor="#ffd400"-->
-<!--                app:inactiveTrackColor="#e7e7e7"-->
 
             </LinearLayout>
 
@@ -298,6 +287,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/blackColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_black_200_circle"
@@ -322,6 +312,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/blueColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_blue_400_circle"
@@ -346,6 +337,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/greenColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_green_300_circle"
@@ -370,6 +362,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/yellowColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_yellow_300_circle"
@@ -394,6 +387,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/redColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_red_300_circle"

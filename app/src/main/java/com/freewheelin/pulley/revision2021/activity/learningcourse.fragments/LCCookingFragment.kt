@@ -110,7 +110,7 @@ class LCCookingFragment() : Fragment(),
                 cookingInfo.observe(viewLifecycleOwner) {
                     val chapterId = it.chapterId
                     val cookingId = it.conceptCookingId
-                    memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
                     memoView.setCookingMemoId(chapterId, cookingId)
@@ -194,7 +194,7 @@ class LCCookingFragment() : Fragment(),
                                     quizMemoViewList.clear()
 
 //                                    cookingQuizzes.memoView.saveImaged()
-                                    cookingQuizzes.memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                                    cookingQuizzes.memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                                     cookingQuizzes.memoView.removePathRedoUndoCountChangeListener()
                                     cookingQuizzes.memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
                                     cookingQuizzes.memoView.setMemoSavedName(chapterId,cookingId,"cooking_quiz_${selectedIndex}")

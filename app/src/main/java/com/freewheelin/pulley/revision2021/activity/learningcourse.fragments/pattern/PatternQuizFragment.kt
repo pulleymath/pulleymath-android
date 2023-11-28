@@ -114,7 +114,7 @@ class PatternQuizFragment() : Fragment(),
 
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
                         val patternId = quiz.patternId
-                        memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                        memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
                         memoView.setPatternMemoId(patternId, it.patternQuizId)

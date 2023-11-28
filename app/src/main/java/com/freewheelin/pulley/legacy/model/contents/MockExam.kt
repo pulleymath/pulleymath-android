@@ -134,13 +134,18 @@ class MockExam: Content, BaseDiffItem {
     }
 
     fun getMockTitle(): String {
+        println("aspasp mockExamTitle : ${mockExamTitle}")
+        println("aspasp selectOptional : ${selectOptional}")
         val title = mockExamTitle.split("월").let { it[0].plus("월 고$grade ").plus(it[1].trim()) }
-        val selectStr =
-                if (selectOptional.isNotEmpty())
-                    "${selectOptional.joinToString(", ") { it.text }} 선택"
-                else
-                    "선택과목 없음"
-        return "$title [${type.getStr()}] - $selectStr"
+        println("aspasp title : ${title}")
+        println("aspasp type.getStr() : ${type.getStr()}")
+//        val selectStr =
+//                if (selectOptional.isNotEmpty())
+//                    "${selectOptional.joinToString(", ") { it.text }} 선택"
+//                else
+//                    "선택과목 없음"
+//        return "$title [${type.getStr()}] - $selectStr"
+        return title
     }
 
     constructor()

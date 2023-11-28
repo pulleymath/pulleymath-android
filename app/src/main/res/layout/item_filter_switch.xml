@@ -17,7 +17,7 @@
             android:textSize="@dimen/sp16" />
 
         <Switch
-            style="@style/Switch"
+            style="@style/Switch.ExtraLight"
             android:id="@+id/filterSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

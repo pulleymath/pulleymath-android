@@ -574,7 +574,17 @@ class SolveActivity : BaseActivity(),
             }
 
             solutionPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
-                onShowSolutionCheckChanged(isChecked)
+                viewModel.mainProfileV4.value?.let {
+                    if (it.isAffiliated && selectedProblem?.isUserAnswerInput() == false) {
+                        DaebakToast.show(this@SolveActivity, "문제를 푼 뒤 확인 할 수 있습니다.")
+                        solutionPanelSwitch.isEnabled = false
+                        solutionPanelSwitch.isChecked = false
+                        solutionPanelSwitch.isEnabled = true
+                    } else {
+                        onShowSolutionCheckChanged(isChecked)
+                    }
+                }
+
             }
             quickScoringPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
                 onSpeedyScoringCheckChanged(isChecked)
@@ -633,8 +643,8 @@ class SolveActivity : BaseActivity(),
             penPanel.listener = this@SolveActivity
             problemMemoView.set(penPanel)
             solutionMemoView.set(penPanel)
-            problemMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-            solutionMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            problemMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            solutionMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             problemMemoView.removePathRedoUndoCountChangeListener()
             solutionMemoView.removePathRedoUndoCountChangeListener()
             problemMemoView.setPathRedoUndoCountChangeListener(this@SolveActivity)

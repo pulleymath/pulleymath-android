@@ -138,6 +138,7 @@
             android:id="@+id/purchaseSwtich"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Switch.ExtraLight"
             android:checked="@={vm.isOpenableBookSelected}"
             android:onCheckedChanged="@{(switch, flag) -> vm.openableBookListener(flag)}"
             app:layout_constraintTop_toTopOf="@+id/purchaseTv"

@@ -92,6 +92,7 @@
                             android:textSize="@dimen/sp14" />
 
                         <Switch
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/switchNoStudent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

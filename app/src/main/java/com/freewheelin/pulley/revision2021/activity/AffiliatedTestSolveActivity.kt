@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -234,6 +235,16 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 //            solutionContainer.visibility = View.GONE
             prevBtn.setOnClickListener { onPrevBtnClicked() }
             nextBtn.setOnClickListener { onNextBtnClicked() }
+            externalPenBtn.setOnClickListener {
+                penPanel.visibleIf(!penPanel.isVisible)
+                if (penPanel.isVisible) {
+                    penPanel.openPencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil_fliled_purple)
+                } else {
+                    penPanel.closePencilPanel()
+                    externalPenBtn.setImageResource(R.drawable.ic_pencil)
+                }
+            }
             galleryCloser.setOnTouchListener { view, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     onFoldBtnClicked()
@@ -243,7 +254,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
 
             penPanel.listener = this@AffiliatedTestSolveActivity
             problemMemoView.set(penPanel)
-            problemMemoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            problemMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             problemMemoView.removePathRedoUndoCountChangeListener()
             problemMemoView.setPathRedoUndoCountChangeListener(this@AffiliatedTestSolveActivity)
 
@@ -479,7 +490,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         val problemIndex = viewModel.problemList.value?.indexOf(problem) ?: 0
         viewModel.problemIndex.postValue(problemIndex)
 
-        saveMemo()
+//        saveMemo()
         onSetProblem(problem)
 
 
@@ -630,7 +641,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             binding.penPanel.penOptionPanelCl.visibleIf(false)
             binding.penPanel.eraserPanelCl.visibleIf(false)
         }
-
+        println("aspasp onSetProblem problem null? : ${problem == null}")
         if (problem == null) {
             problemGesture?.init()
 //            solutionGesture?.init()
@@ -683,6 +694,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     fun prevAnim() {
+        saveMemo()
         checkShortAnswer()
 
         binding.apply {
@@ -745,6 +757,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
 
     fun nextAnim() {
+        saveMemo()
         checkShortAnswer()
 
         binding.apply {
@@ -859,17 +872,21 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
         if (viewModel.answeredSet.isNotEmpty()) {
             DialogUtils.v2GetOutSolveViewDialog(this) {
+                println("aspasp savememo onBackPressed v2GetOutSolveViewDialog ")
                 saveMemo()
                 super.onBackPressed()
             }
         } else {
+            println("aspasp savememo onBackPressed ")
             saveMemo()
             super.onBackPressed()
         }
     }
 
     private fun saveMemo() {
+        println("aspasp saveMemo 1")
         val problem = viewModel.currentProblem.value ?: return
+        println("aspasp saveMemo 2")
         binding.problemMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
 //        binding.solutionMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
     }
@@ -938,6 +955,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
     }
     override fun onStop() {
         super.onStop()
+        saveMemo()
         viewModel.run {
             clearCompositeDisposable()
         }

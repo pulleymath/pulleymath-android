@@ -85,7 +85,7 @@
                             android:text="알림톡(문자) 알림"/>
 
                         <Switch
-                            style="@style/Switch.Light"
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/alimtalkSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -108,7 +108,7 @@
                             android:text="푸시 알림"/>
 
                         <Switch
-                            style="@style/Switch.Light"
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/pushSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -131,7 +131,7 @@
                             android:text="이메일 알림"/>
 
                         <Switch
-                            style="@style/Switch.Light"
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/emailSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -173,7 +173,7 @@
                             android:text="마케팅 알림"/>
 
                         <Switch
-                            style="@style/Switch.Light"
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/marketingSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>

@@ -120,6 +120,7 @@ class MemoView: FreeDrawView {
     }
 
     fun save(fileName: String) {
+        println("aspasp save filename: $fileName")
         FileHelper.saveStateIntoFile(context, currentViewStateAsSerializable, fileName, null)
     }
 
@@ -160,6 +161,7 @@ class MemoView: FreeDrawView {
     }
 
     fun load(fileName: String) {
+        println("aspasp load filename: $fileName")
         FileHelper.getSavedStoreFromFile(context, fileName, object : FileHelper.StateExtractorInterface {
             override fun onStateExtracted(state: FreeDrawSerializableState) {
                 restoreStateFromSerializable(state)

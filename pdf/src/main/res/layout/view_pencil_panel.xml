@@ -298,6 +298,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/blackColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_black_200_circle"
@@ -322,6 +323,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/blueColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_blue_400_circle"
@@ -346,6 +348,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/greenColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_green_300_circle"
@@ -370,6 +373,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/yellowColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_yellow_300_circle"
@@ -394,6 +398,7 @@
                     android:padding="6dp"
                     android:layout_marginEnd="8dp">
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/redColorCl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_red_300_circle"

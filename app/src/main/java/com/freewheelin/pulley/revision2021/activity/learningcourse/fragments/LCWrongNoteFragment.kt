@@ -79,7 +79,7 @@ class LCWrongNoteFragment : Fragment(),
 //                    val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCWrongNoteFragment)
-                    memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                     val studentId = MyApplication.user?.studentID ?: ""
                     val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
                     memoView.setMemoSavedName(it.userQuizSolvingHistoryId, it.refPatternQuizId, "lcwrongnotememo")

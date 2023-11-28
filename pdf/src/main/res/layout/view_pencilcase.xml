@@ -221,7 +221,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <Switch
-                style="@style/Switch.Grey"
+                style="@style/Switch.ExtraLight"
                 android:id="@+id/fingerDrawModeSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

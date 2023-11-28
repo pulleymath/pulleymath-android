@@ -253,7 +253,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            style="@style/Switch"
+                            style="@style/Switch.ExtraLight"
                             android:id="@+id/phoneMessageSwitch"
                             android:background="@null"
                             android:layout_width="wrap_content"

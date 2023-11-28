@@ -137,8 +137,9 @@
                         android:id="@+id/prevBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_tailless_arrow_left_24"
-                        android:background="@null"
+                        android:src="@{ vm.selectedContent.problems.indexOf(vm.selectedProblemOb) == 0 ? @drawable/ic_tailless_arrow_left_24 : @drawable/ic_tailless_arrow_left_24_gray_600}"
+                        tools:src="@drawable/ic_tailless_arrow_left_24_gray_600"
+                        android:background="@drawable/bg_black_200_round_ripple"
                         android:focusable="false"/>
 
 
@@ -147,55 +148,65 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <TextView
-                            android:id="@+id/numTv"
-                            style="@style/TextWhite.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:gravity="center"
-                            android:text="-"
-                            android:textSize="@dimen/sp24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/numExtTv"
-                            app:layout_constraintHorizontal_bias="0.5"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/numCl"
+                            android:layout_width="96dp"
+                            android:layout_height="match_parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/numExtTv"
-                            style="@style/TextWhite.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="-"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
-                            app:layout_constraintEnd_toStartOf="@+id/totalCntTv"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/numTv" />
-
-                        <TextView
-                            android:id="@+id/totalCntTv"
-                            style="@style/TextGray_700.ExtraBold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:text="/ -"
-                            android:textSize="@dimen/sp14"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/numExtTv" />
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/numTv"
+                                style="@style/TextWhite.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                tools:text="3"
+                                android:textSize="@dimen/sp24"
+                                app:layout_constraintEnd_toStartOf="@+id/numExtTv"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintHorizontal_chainStyle="packed"/>
+
+                            <TextView
+                                android:id="@+id/numExtTv"
+                                style="@style/TextWhite.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                tools:text="+1"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numTv"
+                                app:layout_constraintStart_toEndOf="@+id/numTv"
+                                app:layout_constraintEnd_toStartOf="@+id/totalCntTv"/>
+
+                            <TextView
+                                android:id="@+id/totalCntTv"
+                                style="@style/TextGray_700.ExtraBold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/ -"
+                                android:layout_marginStart="4dp"
+                                tools:text="/ 30 (+1)"
+                                tools:visibility="visible"
+                                android:textSize="@dimen/sp14"
+                                app:layout_constraintBaseline_toBaselineOf="@+id/numExtTv"
+                                app:layout_constraintStart_toEndOf="@+id/numExtTv"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ImageButton
                         android:id="@+id/nextBtn"
                         android:layout_width="@dimen/dp36"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_tailless_arrow_right_24"
-                        android:background="@null"
+                        android:src="@{ vm.selectedContent.problems.indexOf(vm.selectedProblemOb) == vm.selectedContent.problems.size - 1 ? @drawable/ic_tailless_arrow_right_24 : @drawable/ic_tailless_arrow_right_24_gray_600}"
+                        tools:src="@drawable/ic_tailless_arrow_right_24"
+                        android:background="@drawable/bg_black_200_round_ripple"
                         android:focusable="false"/>
 
                 </LinearLayout>

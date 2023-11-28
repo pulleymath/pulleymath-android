@@ -583,6 +583,7 @@
                                     android:id="@+id/timerOptionSwitch"
                                     android:layout_width="48dp"
                                     android:layout_height="24dp"
+                                    style="@style/Switch.ExtraLight"
                                     android:checked="true"
                                     android:onCheckedChanged="@{(switch, flag) -> vm.onTimerSwitch(flag)}"
                                     app:layout_constraintEnd_toEndOf="parent"

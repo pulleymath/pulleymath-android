@@ -103,7 +103,7 @@ public class PageAdapter extends BaseAdapter implements PathRedoUndoCountChangeL
 
 			// pageview 가 생성될 때 memoview add
 			final MemoView memoView = new MemoView(mContext);
-			memoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+			memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 			memoView.set(penPanel);
 			memoView.setLayoutParams(layoutParams);
 			memoView.setTag(TAG_MEMOVIEW);

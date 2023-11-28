@@ -93,7 +93,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     override var memoViews: ArrayList<MemoView> = arrayListOf()
 
     var fingerDrawMode = false
-    override var thickness: Float = 5f
+    override var thickness: Float = 2f
     override var drawType: DrawType? = null
     override var pathType: DrawPathType = DrawPathType.Curve
     override var penColorType: PenColorType = PenColorType.Black
@@ -123,6 +123,13 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     private val yellowColorLl: LinearLayout by lazy { findViewById(R.id.yellowColorLl) }
     private val greenColorLl: LinearLayout by lazy { findViewById(R.id.greenColorLl) }
     private val blueColorLl: LinearLayout by lazy { findViewById(R.id.blueColorLl) }
+
+    private val blackColorCl: ConstraintLayout by lazy { findViewById(R.id.blackColorCl) }
+    private val blueColorCl: ConstraintLayout by lazy { findViewById(R.id.blueColorCl) }
+    private val greenColorCl: ConstraintLayout by lazy { findViewById(R.id.greenColorCl) }
+    private val yellowColorCl: ConstraintLayout by lazy { findViewById(R.id.yellowColorCl) }
+    private val redColorCl: ConstraintLayout by lazy { findViewById(R.id.redColorCl) }
+
     private val blackColorInnerCircleIv: ImageView by lazy { findViewById(R.id.blackColorInnerCircleIv) }
     private val blueColorInnerCircleIv: ImageView by lazy { findViewById(R.id.blueColorInnerCircleIv) }
     private val greenColorInnerCircleIv: ImageView by lazy { findViewById(R.id.greenColorInnerCircleIv) }
@@ -140,9 +147,13 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     private val arrowFigure by lazy { Pair(arrowFigureBtn, DrawPathType.Arrow) }
     private val circleFigure by lazy { Pair(circleFigureBtn, DrawPathType.Circle) }
 
+    private var prevHighlighterThickness = 14f
+    private var prevHighlighterColor = PenColorType.Blue
+    private var prevPenThickness = 2f
+    private var prevPenColor = PenColorType.Black
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pencil_panel, this)
-
+        setThicknessIndicatorHeight(thickness.toInt())
 
         undoBtn.setOnClickListener {
             isMainPanelTransparency = false
@@ -214,22 +225,62 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
         }
 
         penAlphaOptionBtn.setOnClickListener {
+            if (penAlphaType == PenAlphaType.Normal) return@setOnClickListener
+            prevHighlighterThickness = thickness
+            prevHighlighterColor = penColorType
+
             penAlphaType = PenAlphaType.Normal
-            changeMemoAlpha()
+            penColorType = prevPenColor
+            thickness = prevPenThickness
+
+            setClearMode(null)
+
+            setThicknessIndicatorHeight(thickness.toInt())
+            thickSeekBar.progress = thickness.toInt() * 10 - 15
+
+            // prevSelectedColor
+            listOf(blackColor, redColor, yellowColor, greenColor, blueColor)
+                .find { it.third === penColorType }
+                ?.let {
+                    changeColorCheckIcon(it.second)
+                    prevSelectedColor = it
+                }
+            prevSelectedAlpha = PenAlphaType.Normal
+            selectAlphaOptionTextColor(prevSelectedAlpha)
+            changeColorOnAlphaOption(prevSelectedAlpha)
+
             setAlphaTypeBackground(it)
         }
         highlighterAlphaOptionBtn.setOnClickListener {
+            if (penAlphaType == PenAlphaType.Highlighter) return@setOnClickListener
+            prevPenThickness = thickness
+            prevPenColor = penColorType
+
             penAlphaType = PenAlphaType.Highlighter
-            changeMemoAlpha()
+            penColorType = prevHighlighterColor
+            thickness = prevHighlighterThickness
+            setClearMode(null)
+
+            setThicknessIndicatorHeight(thickness.toInt())
+            thickSeekBar.progress = thickness.toInt() * 10 - 15
+
+            // prevSelectedColor
+            listOf(blackColor, redColor, yellowColor, greenColor, blueColor)
+                .find { it.third === penColorType }
+                ?.let {
+                    changeColorCheckIcon(it.second)
+                    prevSelectedColor = it
+                }
+            prevSelectedAlpha = PenAlphaType.Highlighter
+            selectAlphaOptionTextColor(prevSelectedAlpha)
+            changeColorOnAlphaOption(prevSelectedAlpha)
+//            changeMemoAlpha()
             setAlphaTypeBackground(it)
         }
         thickSeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val thickness = (p1.toFloat() + 15) / 10
-                (thicknessIndicator.layoutParams as? LayoutParams)?.apply {
-                    height = thickness.toInt() * 2
-                }
-                thicknessIndicator.requestLayout()
+                setThicknessIndicatorHeight(thickness.toInt())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {}
@@ -249,7 +300,9 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
             item.first.setOnClickListener {
                 changeColorCheckIcon(item.second)
                 penColorType = item.third
+                penAlphaType = prevSelectedAlpha
                 changeMemoColor()
+                changeMemoAlpha()
                 prevSelectedColor = item
             }
         }
@@ -281,8 +334,33 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
         }
     }
     var prevSelectedColor = blackColor
+    var prevSelectedAlpha = PenAlphaType.Normal
     var prevFigure = lineFigure
 
+    private fun selectAlphaOptionTextColor(penAlphaType: PenAlphaType) {
+        val penBtnColor = if (penAlphaType == PenAlphaType.Normal) ContextCompat.getColor(context, R.color.gray_800) else ContextCompat.getColor(context, R.color.gray_600)
+        val highlighterBtnColor = if (penAlphaType == PenAlphaType.Highlighter) ContextCompat.getColor(context, R.color.gray_800) else ContextCompat.getColor(context, R.color.gray_600)
+        penAlphaOptionBtn.setTextColor(penBtnColor)
+        highlighterAlphaOptionBtn.setTextColor(highlighterBtnColor)
+    }
+    private fun changeColorOnAlphaOption(penAlphaType: PenAlphaType) {
+        when (penAlphaType) {
+            PenAlphaType.Normal -> {
+                blackColorCl.setBackgroundResource(R.drawable.bg_black_200_circle)
+                blueColorCl.setBackgroundResource(R.drawable.bg_blue_400_circle)
+                greenColorCl.setBackgroundResource(R.drawable.bg_green_300_circle)
+                yellowColorCl.setBackgroundResource(R.drawable.bg_yellow_300_circle)
+                redColorCl.setBackgroundResource(R.drawable.bg_red_300_circle)
+            }
+            PenAlphaType.Highlighter -> {
+                blackColorCl.setBackgroundResource(R.drawable.bg_gray_700_circle)
+                blueColorCl.setBackgroundResource(R.drawable.bg_blue_300_circle)
+                greenColorCl.setBackgroundResource(R.drawable.bg_green_200_circle)
+                yellowColorCl.setBackgroundResource(R.drawable.bg_yellow_200_circle)
+                redColorCl.setBackgroundResource(R.drawable.bg_red_200_circle)
+            }
+        }
+    }
     private fun selectFigureBtn(selectedBtn: View) {
         listOf(lineFigureBtn, arrowFigureBtn, circleFigureBtn).forEach {
             if (it == selectedBtn) {
@@ -321,7 +399,12 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
                 isClickable = value != 0
             }
         }
-
+    private fun setThicknessIndicatorHeight(value: Int) {
+        (thicknessIndicator.layoutParams as? LayoutParams)?.apply {
+            height = value * 3
+        }
+        thicknessIndicator.requestLayout()
+    }
     fun openPencilPanel() {
         selectPanelAndShowSubPanel(penBtn)
         isMainPanelTransparency = false
@@ -341,10 +424,14 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
 
         changeDrawType(DrawType.Pencil)
         pathType = DrawPathType.Curve
-        setClearMode(null)
         changeColorCheckIcon(prevSelectedColor.second)
         penColorType = prevSelectedColor.third
+        penAlphaType = prevSelectedAlpha
+        selectAlphaOptionTextColor(prevSelectedAlpha)
+        changeColorOnAlphaOption(prevSelectedAlpha)
+        setClearMode(null)
         changeMemoColor()
+        changeMemoAlpha()
     }
     fun closePencilPanel() {
         changeDrawType(null)
@@ -354,7 +441,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
     fun transparencyMainPanel() {
         if (!isMainPanelTransparency) {
             isMainPanelTransparency = true
-            mainPanelLl.animate().alpha(0.3f).setDuration(3000)
+            mainPanelLl.animate().alpha(0.4f).setDuration(3000)
                 .setInterpolator(AccelerateDecelerateInterpolator()).start()
         }
     }
