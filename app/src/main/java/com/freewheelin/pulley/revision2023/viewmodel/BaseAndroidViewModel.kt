@@ -60,7 +60,7 @@ open class BaseAndroidViewModel(application: Application): AndroidViewModel(appl
                 _errorAction.postValue(type)
 
                 val responseStr = throwable.response()?.errorBody()?.string()
-                Log.e("BaseAndroidViewModel", "throwable :: response: ${responseStr}")
+                Log.e("BaseAndroidViewModel", "throwable :: response: ${responseStr}, type: ${type}")
                 if (responseStr?.startsWith("<html>") == false) {
                     val listType = object : TypeToken<ResponseBody<*>>() {}.type
                     val response: ResponseBody<*> = Gson().fromJson(responseStr, listType)

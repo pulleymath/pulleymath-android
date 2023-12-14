@@ -386,14 +386,24 @@ class SolveActivity : BaseActivity(),
                     itemValue = "2차학습"
                     timerView.visibility = View.INVISIBLE
 //                    mainFormatTool.visibility = View.VISIBLE
-                    BookManager.getBookFromContent(this@SolveActivity, content, user!!) {
+
+                    val cb: ((book: Book) -> Unit) = {
+                        Log.d("유형학습", "init getBook======>$it")
                         this@SolveActivity.content = it
                         viewModel.selectedContent.postValue(it)
                         galleryView.set(it)
                         speedAnswerView.set(it)
                         answerView.showMarkingBtn()
-                        speedAnswerView.showMarkingBtn()
                         answerView.selectedBook = it
+                        speedAnswerView.showMarkingBtn()
+                    }
+
+                    val isNull = -999
+                    val workbookId = intent.getIntExtra(OPEN_PULLEY_WORKBOOK, isNull)
+                    if (workbookId == isNull) {
+                        BookManager.getBook(this@SolveActivity, Book(content), user!!, cb)
+                    } else {
+                        BookManager.getPieceByWorkbookId(this@SolveActivity, content, workbookId, cb)
                     }
                 }
                 is Test -> {
@@ -415,8 +425,7 @@ class SolveActivity : BaseActivity(),
                 }
                 is MockExam -> {
                     itemValue = "모의고사"
-//                    solutionSwitch.visibility = View.GONE
-                    val isRestart = intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
+                    content.isRestart = content.isRestart || intent.getBooleanExtra(ARG_MOCK_IS_RESTART, false)
                     timerView.visibility = View.VISIBLE
                     timerView.setTimerViewListener(object : SolveTimerViewListener {
                         override fun onSubmitTypeChanged(submitType: SolveTimerView.SubmitType) {
@@ -458,17 +467,14 @@ class SolveActivity : BaseActivity(),
                         }
                     })
 
-//                    mainFormatTool.visibility = View.GONE
-
                     MockExamManager.getMockProblems(this@SolveActivity, content, user!!) {
-                        Log.d("문제풀기", "모의고사 it=${it.assignID}, isRestart=${isRestart}")
+                        Log.d("문제풀기", "모의고사 it=${it.assignID}, isRestart=${content.isRestart}, content.time : ${content.time}")
                         content.assignID = it.assignID
                         content.problems = it.problems
                         content.time = it.time
-//                    content.problems.forEach { if(it.getResultByScoring() != Result.yet) { it.rawResult == Result.yet.rawValue } }
+
                         this@SolveActivity.content = content
-//                        viewModel.selectedContent.postValue(content)
-                        if (content.time != null && !isRestart) {
+                        if (content.time != null && !content.isRestart) {
                             val time = content.time!!
                             if (time >= 6000) {
                                 timerView.submitType = SolveTimerView.SubmitType.lenient
@@ -1931,10 +1937,10 @@ class SolveActivity : BaseActivity(),
     }
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
-        MockExamManager.getMockSummary(this, content.mockID, user!!) { mockExamSummery ->
+        viewModel.fetchMockSummary(content.mockID, content.assignID) { mockExamSummary ->
             val optionResult = mutableListOf<CommercialSubject>()
-            mockExamSummery?.let {
-                val optionalSubjects = mockExamSummery.optionalSubjectSummary
+            mockExamSummary?.let {
+                val optionalSubjects = mockExamSummary.optionalSubjectSummary
 
                 for(subject in optionalSubjects) {
                     if (subject.isSelected) {
@@ -1942,10 +1948,10 @@ class SolveActivity : BaseActivity(),
                     }
                 }
                 mock.selectOptional = optionResult
-                mock.examType = mockExamSummery.examType.let {
+                mock.examType = mockExamSummary.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }
-                mock.grade = mockExamSummery.grade
+                mock.grade = mockExamSummary.grade
             }
 
             cb(mock)

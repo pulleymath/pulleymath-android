@@ -18,6 +18,7 @@ import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.legacy.model.contents.BookPage
 import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
@@ -113,6 +114,10 @@ object BookManager {
         })
     }
 
+    fun getPieceByWorkbookId(context: Context, piece: Piece, workbookId: Int, cb: ((book:Book) -> Unit)) {
+        val user = MyApplication.user ?: return
+        API_V3.getBook(user.studentID, workbookId).enqueue(v3GetBookRes(context, Book(piece), cb))
+    }
     fun getBookFromContent(context: Context, content: Content, user: UserV4, cb: ((book: Book) -> Unit)) {
         val book = Book(content)
         getBook(

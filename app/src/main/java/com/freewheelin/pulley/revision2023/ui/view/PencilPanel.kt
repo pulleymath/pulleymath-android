@@ -206,7 +206,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
 
             it.background = ContextCompat.getDrawable(
                 context,
-                R.drawable.bg_gray_200_round_5
+                R.drawable.bg_gray_200_round_5_ripple
             )
             penBtn.background = null
             figureBtn.background = null
@@ -228,7 +228,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
 
             figureBtn.background = ContextCompat.getDrawable(
                 context,
-                R.drawable.bg_gray_200_round_5
+                R.drawable.bg_gray_200_round_5_ripple
             )
             penBtn.background = null
             eraserBtn.background = null
@@ -384,7 +384,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
             if (it == selectedBtn) {
                 it.background = ContextCompat.getDrawable(
                     context,
-                    R.drawable.bg_gray_200_round_5
+                    R.drawable.bg_gray_200_round_5_ripple
                 )
             } else {
                 it.setBackgroundResource(0)
@@ -436,7 +436,7 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
 
         penBtn.background = ContextCompat.getDrawable(
             context,
-            R.drawable.bg_gray_200_round_5
+            R.drawable.bg_gray_200_round_5_ripple
         )
         eraserBtn.background = null
         figureBtn.background = null

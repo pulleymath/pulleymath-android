@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
@@ -107,6 +108,12 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
             withContext(Dispatchers.Main) {
                 cb(piece)
             }
+        }
+    }
+    fun fetchMockSummary(mockId: Int, assignId: Int?, cb: (MockExamSummary?) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val summary = legacyV2Repository.fetchMockSummary(mockId, assignId ?: -999)
+            cb(summary)
         }
     }
 }

@@ -205,7 +205,7 @@ class PdfListActivity : AppCompatActivity() {
                 with(binding) {
                     searchName.let { searchView ->
                         if (searchView.isIconified == isIconified) {
-                            searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round_5 else R.drawable.bg_white_round_5)
+                            searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round else R.drawable.bg_white_round_5)
                         }
                     }
                 }
@@ -310,7 +310,7 @@ class PdfListActivity : AppCompatActivity() {
                         with(binding) {
                             this.searchNameInHeader.let { searchView ->
                                 if (searchView.isIconified == isIconified) {
-                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round_5 else R.drawable.bg_white_round_5)
+                                    searchView.setBackgroundResource(if (isIconified) R.drawable.bg_gray_200_round else R.drawable.bg_white_round_5)
                                 }
                             }
                         }
@@ -452,13 +452,13 @@ class PdfListActivity : AppCompatActivity() {
         private fun openPdf(context: Context, pdf:Pdf, answerPath:String, answerLinks:List<PdfLinkAnswerItem>) {
             val intent = Intent(context, PdfViewerActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
-                data = Uri.parse(makeLocalPdfName(pdf))
+                data = Uri.parse(makeLocalPdfName(pdf)) // cmbookid , id
 
                 putExtra(PdfViewerActivity.KEY_BOOK_ID, pdf.cm_book_id)
                 putExtra(PdfViewerActivity.KEY_BOOK_TITLE, "${pdf.title} ${pdf.subject}")
                 putExtra(PdfViewerActivity.KEY_PDF_ID, pdf.id)
 
-                if(pdf.answer != null) putExtra(PdfViewerActivity.KEY_ANSWER_PDF_ID, pdf.answer!!.id)
+                if(pdf.answer != null) putExtra(PdfViewerActivity.KEY_ANSWER_PDF_ID, pdf.answer!!.id) // 메인에서는 제외
 
                 putExtra(PdfViewerActivity.KEY_INCLUDE_ANSWER, false)
                 putExtra(PdfViewerActivity.KEY_ANSWER_PDF_PATH, answerPath)

@@ -13,6 +13,8 @@ import com.freewheelin.pulley.legacy.utils.setMarginBottom
 import com.freewheelin.pulley.legacy.utils.setMarginTop
 import com.freewheelin.pulley.legacy.utils.setOnBasicCOrHigherClickListener
 import com.freewheelin.pulley.legacy.utils.setOnBasicPOrHigherClickListener
+import com.freewheelin.pulley.legacy.utils.setOnJoinedUserClickListener
+import com.freewheelin.pulley.legacy.utils.setOnPremiumClickListener
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
 import com.freewheelin.pulley.revision2023.model.UserPlannerItemType.*
 import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
@@ -40,6 +42,15 @@ class MainPlannerItemViewHolder(
                 binding.rootView.setOnBasicPOrHigherClickListener(cb = cb, deniedCb = deniedCb)
             }
             WeeklyPlanTag.PULLEY_WORKBOOK -> {
+                binding.rootView.setOnBasicPOrHigherClickListener(cb = cb, deniedCb = deniedCb)
+            }
+            WeeklyPlanTag.MOCK -> {
+                binding.rootView.setOnJoinedUserClickListener(cb = cb, deniedCb = deniedCb)
+            }
+            WeeklyPlanTag.CUSTOM_WORKBOOK, WeeklyPlanTag.COMMERCIAL_BOOK -> {
+                binding.rootView.setOnPremiumClickListener(cb = cb, deniedCb = deniedCb)
+            }
+            WeeklyPlanTag.RECOMMEND, WeeklyPlanTag.NOTE -> {
                 binding.rootView.setOnBasicPOrHigherClickListener(cb = cb, deniedCb = deniedCb)
             }
             else -> {}

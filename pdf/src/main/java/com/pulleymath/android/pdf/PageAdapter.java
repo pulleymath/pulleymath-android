@@ -161,7 +161,6 @@ public class PageAdapter extends BaseAdapter implements PathRedoUndoCountChangeL
 	private void loadDrawing(View container, int position) {
 		MemoView memoView = container.findViewWithTag(TAG_MEMOVIEW);
 		String memoId = drawingId + position;
-    Log.d("aspasp", "memoId: " + memoId + "");
     memoView.setMemoId(memoId);
     memoView.clearBitmap();
 		memoView.load();

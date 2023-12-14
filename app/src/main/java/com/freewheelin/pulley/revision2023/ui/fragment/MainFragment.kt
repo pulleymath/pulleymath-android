@@ -33,16 +33,11 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
-import com.freewheelin.pulley.legacy.model.contents.Book
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_MAIN_TAB
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.WHERE_ARE_YOU_FROM
+import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
-import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.PlannerActivity
 import com.freewheelin.pulley.revision2023.ui.activity.PlannerActivity.Companion.PLANNER_MONDAY
@@ -52,6 +47,26 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeInduceDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import org.joda.time.LocalDate
+import android.content.Context
+import android.net.Uri
+import com.freewheelin.pulley.legacy.activities.OMRActivity
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.WHERE_ARE_YOU_FROM
+import com.freewheelin.pulley.legacy.model.contents.Book
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
+import com.freewheelin.pulley.revision2021.utils.PdfDownloader
+import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
+import com.freewheelin.pulley.revision2023.model.response.WeeklyPlanTag
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.RESULT_MOCK_FINISH
+import com.freewheelin.pulley.revision2023.ui.dialogs.MainPdfOpeningDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.MockExamOptionalSubjectSelectDialog
+import com.pulleymath.android.pdf.PdfViewerActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 
 class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObserver,
     LifecycleEventObserver {
@@ -66,7 +81,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     var wasInitUI = false
     private var isViewCreated = false
     val viewModel: MainFViewModel by viewModels()
-    private lateinit var getResult: ActivityResultLauncher<Intent>
+    lateinit var getResult: ActivityResultLauncher<Intent>
 
     private val challengeHeaderListAdapter = ChallengeHeaderListAdapter { item ->
         viewModel.onChallengeHeaderClick(item)
@@ -147,16 +162,6 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         }
     }
 
-    override fun onFragmentSelected() {
-        super.onFragmentSelected()
-//        syncProfile()
-//        if (challengeHeaderListAdapter.currentList.size > 0) {
-//            val headerItem = challengeHeaderListAdapter.currentList[0]
-//            viewModel.onChallengeHeaderClick(headerItem)
-//        }
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_2, container, false)
@@ -231,33 +236,8 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         }
         viewModel.apply {
             selectedPlan.observe(viewLifecycleOwner) {
-                when (it.tag) {
-                    WeeklyPlanTag.PULLEY_WORKBOOK -> {
-                        val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
-                            putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
-                            putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
-                        }
-                        getResult.launch(intent)
-                    }
-                    WeeklyPlanTag.PRACTICE -> {
-                        // TODO 아직 없어서 테스트 못함 230802
-                        val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
-                            putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
-                            putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
-                        }
-                        getResult.launch(intent)
-                    }
-                    WeeklyPlanTag.CONCEPT -> {
-                        viewModel.createLearningCourseOnStudentId(it.workbookId) {
-                            val chapterId = it.workbookId
-                            val name = it.title
-                            val intent = LearningCourseActivity.getIntent(requireContext(), chapterId, name)
-                            intent.putExtra(WHERE_ARE_YOU_FROM, LearningCourseActivity.FROM_MAIN_TAB)
-                            getResult.launch(intent)
-                        }
-                    }
-                    else -> {}
-                }
+//                downloadAndOpenPulleyCommercialBook(15)
+                openPlannerItemByPlanTag(it)
             }
             challengeHeaders.observe(viewLifecycleOwner) {
                 challengeHeaderListAdapter.submitList(it)
@@ -385,6 +365,48 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
         }
     }
 
+    private fun openPlannerItemByPlanTag(it: MainUserPlannerItem) {
+        when (it.tag) {
+            WeeklyPlanTag.PULLEY_WORKBOOK,
+            WeeklyPlanTag.CUSTOM_WORKBOOK,
+            WeeklyPlanTag.PRACTICE,
+            WeeklyPlanTag.RECOMMEND,
+            WeeklyPlanTag.NOTE -> {
+                val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
+                    putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)
+                    putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                }
+                getResult.launch(intent)
+            }
+            WeeklyPlanTag.CONCEPT -> {
+                viewModel.createLearningCourseOnStudentId(it.workbookId) {
+                    val chapterId = it.workbookId
+                    val name = it.title
+                    val intent = LearningCourseActivity.getIntent(requireContext(), chapterId, name)
+                    intent.putExtra(WHERE_ARE_YOU_FROM, LearningCourseActivity.FROM_MAIN_TAB)
+                    getResult.launch(intent)
+                }
+            }
+            WeeklyPlanTag.MOCK -> {
+                val dialog = MockExamOptionalSubjectSelectDialog.newInstance(it.studyPlanBookId!!, null)
+                dialog.goSolveCb = {
+                    val intent = SolveActivity.getIntent(requireContext(), it,  false)
+                    intent.putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                    getResult.launch(intent)
+                }
+                dialog.goOMRCb = {
+                    val intent = OMRActivity.getIntent(requireContext(), it, false)
+                    intent.putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                    getResult.launch(intent)
+                }
+                dialog.show(parentFragmentManager, "mockSelectDialog")
+            }
+            WeeklyPlanTag.COMMERCIAL_BOOK -> {
+                downloadAndOpenPulleyCommercialBook(it.studyPlanBookId!!)
+            }
+            else -> {}
+        }
+    }
     override fun onStop() {
         super.onStop()
     }
@@ -547,22 +569,117 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             viewModel.firstHeaderDetailForceMove()
         }
     }
+
+    private fun makeLocalPdfName(pdf: Pdf) = "${requireActivity().filesDir}/pdfs/${pdf.cm_book_id}/${pdf.id}.pdf"
+    private fun openPdf(pdf:Pdf, answerPath:String, answerLinks:List<PdfLinkAnswerItem>) {
+        val intent = Intent(requireContext(), PdfViewerActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(makeLocalPdfName(pdf)) // cmbookid , id
+
+            putExtra(PdfViewerActivity.KEY_BOOK_ID, pdf.cm_book_id)
+            putExtra(PdfViewerActivity.KEY_BOOK_TITLE, "${pdf.title} ${pdf.subject}")
+            putExtra(PdfViewerActivity.KEY_PDF_ID, pdf.id)
+
+            if(pdf.answer != null) putExtra(PdfViewerActivity.KEY_ANSWER_PDF_ID, pdf.answer!!.id) // 메인에서는 제외
+
+            putExtra(PdfViewerActivity.KEY_INCLUDE_ANSWER, false)
+            putExtra(PdfViewerActivity.KEY_ANSWER_PDF_PATH, answerPath)
+
+            putExtra(PdfViewerActivity.KEY_STUDENT_ID, user!!.studentID)
+            putExtra(PdfViewerActivity.KEY_TOKEN, user!!.token)
+
+//                putExtra(PdfViewerActivity.KEY_TEST_API_FLAG, Preferences.onTestAPI.get())
+            putExtra(PdfViewerActivity.KEY_API_FLAG, Preferences.onServerAPI.get().toString())
+            putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+
+            var linkString = ""
+            for(link in answerLinks) {
+                val item = "${link.pdf_page_no}:${link.answer_page_no}"
+                linkString += "/$item"
+            }
+            if (linkString.isNotEmpty() && linkString.length > 1) {
+                putExtra(PdfViewerActivity.KEY_ANSWER_PAGE_LINK, linkString.substring(1)) // exclude first char "/"
+            }
+//                runOnUiThread {
+//                    context.startActivity(this)
+//                }
+        }
+//        viewModel.openTutorialPdfBook(pdf.cm_book_id)
+        CoroutineScope(Dispatchers.Main).launch {
+            getResult.launch(intent)
+        }
+    }
+    fun isPdfFileDownloaded(pdf: Pdf): Boolean {
+        val answerPath = makeLocalPdfName(pdf)
+        val file = File(answerPath)
+        return file.exists()
+    }
+
+    fun checkDownloaded(pdf: Pdf, downloaderCb: () -> Unit, afterDownloadCb: (String) -> Unit) {
+        val answerPath = makeLocalPdfName(pdf)
+        val file = File(answerPath)
+        if(!file.exists()) {
+            downloaderCb()
+        } else {
+            afterDownloadCb(answerPath)
+        }
+    }
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            println("resultupdate getResult : code : ${it.resultCode}")
             when (it.resultCode) {
                 PLANNER_RESULT -> {
                     val mondayStr = it.data?.getStringExtra(PLANNER_MONDAY)
                     val sundayStr = it.data?.getStringExtra(PLANNER_SUNDAY)
                     viewModel.updateMainUserPlanner(mondayStr, sundayStr)
                 }
-                SOLVE_RESULT -> {
+                SOLVE_RESULT, RESULT_MOCK_FINISH, PdfViewerActivity.COMMERCIAL_PDF_EXITED -> {
                     val monday = viewModel.selectedMondayOfTheWeek.value?.toString("yyyy-MM-dd")
                     val sunday = viewModel.selectedSundayOfTheWeek.value?.toString("yyyy-MM-dd")
                     viewModel.updateMainUserPlanner(monday, sunday)
                     syncProfile()
                 }
-                else -> {}
+                else -> {
+                }
+            }
+        }
+    }
+    private fun downloadAndOpenPulleyCommercialBook(pdfId: Int) {
+        viewModel.fetchPdfOnId(pdfId) {
+            it?.let { pdf ->
+                val dialog = MainPdfOpeningDialog.newInstance(pdf.id, {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        it.putExtra(WHERE_ARE_YOU_FROM, SolveActivity.FROM_MAIN_TAB)
+                        getResult.launch(it)
+                    }
+                }, {
+                    DaebakToast.show(requireContext(), "다운로드에 실패했습니다.")
+                })
+
+                val fetchAnswerAndOpenPdf = {
+                    viewModel.fetchPdfAnswer(pdf.cm_book_id) { answerLinks ->
+                        val openPdf: (String) -> Unit = { answerPath ->
+                            val links = answerLinks ?: listOf()
+                            openPdf(pdf, answerPath, links)
+                            pdf.opening.set(false)
+                        }
+
+                        if(pdf.answer != null) {
+                            checkDownloaded(pdf.answer!!, {
+                                dialog.show(parentFragmentManager, "mainPdfOpeningDialog")
+                            }, {
+                                openPdf(it)
+                            })
+                        } else {
+                            openPdf("")
+                        }
+                    }
+                }
+
+                if (isPdfFileDownloaded(it)) {
+                    fetchAnswerAndOpenPdf()
+                } else {
+                    dialog.show(parentFragmentManager, "mainPdfOpeningDialog")
+                }
             }
         }
     }

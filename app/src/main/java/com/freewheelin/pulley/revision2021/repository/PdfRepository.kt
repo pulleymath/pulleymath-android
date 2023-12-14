@@ -14,6 +14,7 @@ class PdfRepository {
     private val pdfService : PdfService by lazy { PdfApi.pdfService() }
     private val springService : SpringService by lazy { SpringApi.springService() }
 
+    suspend fun fetchPdf(pdfId: Int) = pdfService.fetchPdf(pdfId).data
     fun pdfList(title:String="", page:Int=0, size:Int=20, subjectCode: String="", category:String="") = pdfService.listV2(title, page, size, subjectCode, category)
     fun answer(cmBookId:Int) = pdfService.answer(cmBookId)
     fun eventBookCheck(param: EventBook) = springService.eventBookCheck(param)

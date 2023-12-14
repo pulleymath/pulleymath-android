@@ -158,7 +158,6 @@ class MemoView: FreeDrawView {
     }
 
     fun load() {
-        println("aspasp load from memoId : ${memoId}")
         FileHelper.loadMemo(context, memoId, { state ->
             Handler(Looper.getMainLooper()).post {
                 clearMemoState()

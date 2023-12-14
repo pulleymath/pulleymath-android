@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
@@ -30,5 +31,11 @@ class AnalysisFViewModel(application: Application): BaseAndroidViewModel(applica
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
+    }
+    fun fetchMockSummary(mockId: Int, assignId: Int?, cb: (MockExamSummary?) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val summary = legacyV2Repository.fetchMockSummary(mockId, assignId ?: -999)
+            cb(summary)
+        }
     }
 }

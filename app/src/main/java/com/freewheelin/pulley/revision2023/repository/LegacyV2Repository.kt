@@ -5,6 +5,7 @@ import android.os.Build
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
+import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.revision2023.model.V2LogUser
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
@@ -39,5 +40,8 @@ class LegacyV2Repository(val context: Context, private val applicationScope: Cor
 
     suspend fun changeParentPhoneNumber(req: ParentPhoneNumberRequest) {
         legacyV2Api.patchParentPhoneNumber(req)
+    }
+    suspend fun fetchMockSummary(mockId: Int, assignId: Int): MockExamSummary? {
+        return legacyV2Api.fetchMockSummary(mockId, assignId).data
     }
 }

@@ -21,6 +21,7 @@ import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.DialogMockExamGuideBinding
+import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.legacy.model.contents.SubjectSummary
@@ -43,7 +44,7 @@ class MockExamGuideDialog(
         context: Context,
         val mockExam: MockExam,
         val isSolved: Boolean,
-        val listener: MockExamGuideDialogListener
+        val listener: MockExamGuideDialogListener,
 ): Dialog(context), EmailInputDialogListener {
     val binding: DialogMockExamGuideBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_mock_exam_guide, null, false)
@@ -64,10 +65,10 @@ class MockExamGuideDialog(
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         progress(true)
-        MockExamManager.getMockSummary(context, mockExam.mockID, user!!) {
+        MockExamManager.getMockSummary(context, mockExam, user!!) {
             progress(false)
             mockSummary = it
-            mockSummary?.commonSubjectSummary?.forEach { it.isSelected = true }
+            mockSummary?.commonSubjectSummary?.forEach { it.isSelected = true } // 이후 이닛할때 isSelected true인것만 추가하는부분이있는데 그거때문인것같음
             resetSelectedOptions()
             setUi()
         }

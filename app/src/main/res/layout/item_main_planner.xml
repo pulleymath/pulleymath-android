@@ -142,32 +142,68 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_weight="1"
                 >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/titleWrapperCl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/homeWorkTv"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintHorizontal_bias="0">
+
+                    <TextView
+                        android:id="@+id/titleTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ item.title }"
+                        tools:text="2024 EBS 수능특강 "
+                        style="@style/b2"
+                        android:textColor="@{ item.correctRate != null ? @color/gray_600 : @color/gray_800, default=@color/gray_600 }"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_600"
+                        visibleIf="@{ item.correctRate != null }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/titleTv"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/titleTv"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
-                    android:id="@+id/titleTv"
+                    android:id="@+id/homeWorkTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{ item.title }"
-                    tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
-                    style="@style/b2"
-                    android:textColor="@{ item.correctRate != null ? @color/gray_600 : @color/gray_800, default=@color/gray_600 }"
-                    android:maxLines="1"
-                    android:ellipsize="end"
+                    style="@style/b3"
+                    android:layout_gravity="center"
+                    visibleIf="@{ item.isHomework }"
+                    tools:visibility="visible"
+                    android:text="숙제"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/gray_600"
+                    android:background="@drawable/bg_transparent_stroke_gray_500_round_11"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_600"
-                    visibleIf="@{ item.correctRate != null }"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/titleTv"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/titleTv"/>
+                    app:layout_constraintStart_toEndOf="@id/titleWrapperCl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -22,6 +22,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.core.view.isVisible
 import com.pulleymath.android.pdf.ReaderView.ViewMapper
 import com.pulleymath.android.pdf.log.Network

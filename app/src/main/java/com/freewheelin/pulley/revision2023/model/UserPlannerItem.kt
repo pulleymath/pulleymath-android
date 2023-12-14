@@ -51,7 +51,8 @@ open class UserPlannerItem (
     open var itemType: UserPlannerItemType,
     open val tag: WeeklyPlanTag?,
     open val workbookId: Int,
-    val chapterInfo: PlanChapterInfo? = null
+    open val isHomework: Boolean,
+    open val chapterInfo: PlanChapterInfo? = null
 ): BaseDiffItem {
     override fun getId(): String {
         return "${itemType.name}_${dailyPlanId}_${itemId}"
@@ -143,6 +144,7 @@ open class UserPlannerItem (
                 itemType = UserPlannerItemType.Header,
                 tag = null,
                 workbookId = -1,
+                isHomework = false,
             )
         }
         private fun convertBody(plan: WeeklyPlanResponse): List<UserPlannerItem> {
@@ -156,7 +158,8 @@ open class UserPlannerItem (
                     itemType = UserPlannerItemType.Body,
                     tag = weeklyPlan.tag,
                     workbookId = weeklyPlan.workbookId,
-                    chapterInfo = weeklyPlan.chapterInfo
+                    chapterInfo = weeklyPlan.chapterInfo,
+                    isHomework = weeklyPlan.isHomework,
                 )
             }
         }
@@ -169,6 +172,7 @@ open class UserPlannerItem (
                 itemType = UserPlannerItemType.NothingHeader,
                 tag = null,
                 workbookId = -1,
+                isHomework = false,
             )
         }
         private fun convertFooter(plan: WeeklyPlanResponse): UserPlannerItem {
@@ -180,6 +184,7 @@ open class UserPlannerItem (
                 itemType = UserPlannerItemType.Footer,
                 tag = null,
                 workbookId = -1,
+                isHomework = false,
             )
         }
 
@@ -192,7 +197,8 @@ open class UserPlannerItem (
                 itemType = UserPlannerItemType.Body,
                 tag = res.tag,
                 workbookId = res.workbookId,
-                chapterInfo = res.chapterInfo
+                chapterInfo = res.chapterInfo,
+                isHomework = false,
             )
         }
     }

@@ -19,7 +19,10 @@ import com.freewheelin.pulley.revision2023.ui.adapter.ChallengeHeaderListAdapter
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeClickListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClickListener
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2021.model.response.Pdf
+import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
+import com.freewheelin.pulley.revision2021.repository.PdfRepository
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
 import com.freewheelin.pulley.revision2023.model.response.MainWeeklyStudySummary
 import com.freewheelin.pulley.revision2023.repository.PlannerRepository
@@ -42,6 +45,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     private val userRepository by lazy { UserRepository.instance }
     private val plannerRepository by lazy { PlannerRepository.instance }
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
+    private val pdfRepository: PdfRepository by lazy { PdfRepository() }
 
     lateinit var challengeListAdapter: ChallengeHeaderListAdapter
     lateinit var challengeDescAdapter: ChallengeMissionAdapter
@@ -314,5 +318,23 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             .doOnError {
                 Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
             }.subscribe()
+    }
+
+    fun fetchPdfOnId(pdfId: Int, cb: (Pdf?) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val pdf = pdfRepository.fetchPdf(pdfId)
+            cb(pdf)
+        }
+    }
+    fun fetchPdfAnswer(cmBookId:Int, callback:(List<PdfLinkAnswerItem>?)->Unit) {
+        compositeDisposable += pdfRepository.answer(cmBookId)
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ response ->
+                response.data?.let { callback(it) }
+            }, { error ->
+                callback(null)
+                Log.e(javaClass.simpleName, "answer=${error.localizedMessage}")
+            })
     }
 }

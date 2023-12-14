@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.legacy.core.API
 
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestLogin
 import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.WeeklyProblemCount
@@ -95,6 +96,12 @@ interface ServiceV1 {
 
 //    @POST("/users/register")
 //    fun signup(@Body params: Parameter): Call<Template<Map<String, String>>>
+    @GET("v4/mock/{mockId}/summary/{studentId}/{assignId}")
+    fun getMockExamSummary(
+        @Path("mockId") mockId: Int,
+        @Path("assignId") assignId: String,
+        @Path("studentId") studentId: String = user?.studentID!!,
+    ): Call<ResponseBody<MockExamSummary>>
 
     @POST("/v1/users/signup/app")
     fun signup(@Body request: RequestSignup): Call<Template<String?>>

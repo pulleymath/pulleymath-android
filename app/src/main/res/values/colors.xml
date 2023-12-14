@@ -47,6 +47,7 @@
     <color name="red_300">#fe7b67</color>
 
     <color name="yellow_100">#fffbef</color>
+    <color name="yellow_150">#FFEFC0</color>
     <color name="yellow_200">#ffd545</color>
     <color name="yellow_300">#ffb300</color>
     <color name="yellow_400">#e19502</color>
@@ -87,6 +88,7 @@
     <color name="purple_gray_300_opa_50">#DEDEEF</color>
 
     <color name="dark_blue_100">#DCE6FF</color>
+    <color name="dark_blue_150">#CCDAFF</color>
     <color name="dark_blue_100_opa_50">#80DCE6FF</color>
     <color name="dark_blue_200">#BACDFF</color>
     <color name="dark_blue_300">#749BFF</color>

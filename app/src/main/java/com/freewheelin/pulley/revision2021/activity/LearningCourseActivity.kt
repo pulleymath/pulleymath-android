@@ -268,7 +268,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
                 pager.adapter = LCViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
                 pager.offscreenPageLimit = 1
                 pager.setOnTouchListener { view, motionEvent ->
-                    println("qwpqwp pager setonTouchListener ")
                     true
                 }
             }

@@ -304,7 +304,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
-        MockExamManager.getMockSummary(this, content.mockID, user!!) { mockExamSummery ->
+        MockExamManager.getMockSummary(this, content, user!!) { mockExamSummery ->
             val optionResult = mutableListOf<CommercialSubject>()
             mockExamSummery?.let {
                 val optionalSubjects = mockExamSummery.optionalSubjectSummary

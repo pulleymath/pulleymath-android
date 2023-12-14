@@ -26,6 +26,8 @@ class MainWeeklyPlan(
     val title: String,
     val workbookId: Int, // 범용적인 학습지 id를 표현하고 싶었다고 한다.
     val status: WeeklyPlanStatus,
+    val studyPlanBookId: Int?,
+    val isHomework: Boolean,
     val progress: WeeklyPlanProgress?,
 ): Serializable {
 

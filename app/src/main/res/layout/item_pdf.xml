@@ -189,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     visibleIf="@{ item.downloading }"
+                    tools:visibility="gone"
                     android:background="@drawable/bg_purple_100_round_ripple"
                     app:layout_constraintVertical_bias="1"
                     app:layout_constraintTop_toBottomOf="@id/bookInfoLl"

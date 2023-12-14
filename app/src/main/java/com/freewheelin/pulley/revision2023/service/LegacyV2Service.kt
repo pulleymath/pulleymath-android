@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2023.service
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.PriorConceptWrapper
 import com.freewheelin.pulley.revision2023.model.V2LogUser
@@ -23,5 +24,12 @@ interface LegacyV2Service {
 
     @PATCH("v2/me/parent")
     suspend fun patchParentPhoneNumber(@Body req: ParentPhoneNumberRequest): ResponseBody<String?>
+
+    @GET("v4/mock/{mockId}/summary/{studentId}/{assignId}")
+    suspend fun fetchMockSummary(
+        @Path("mockId") mockId: Int,
+        @Path("assignId") assignId: Int,
+        @Path("studentId") studentId: String = user?.studentID!!,
+    ): ResponseBody<MockExamSummary>
 
 }

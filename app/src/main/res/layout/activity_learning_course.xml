@@ -383,12 +383,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerCl" />
 
-<!--        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView-->
-<!--            android:layout_width="700dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            tools:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"/>-->
+        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView
+            android:layout_width="700dp"
+            android:layout_height="200dp"
+            tools:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="48dp"

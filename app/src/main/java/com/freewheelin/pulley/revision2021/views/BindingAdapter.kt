@@ -447,10 +447,21 @@ object BindingAdapter {
         value?.let {
             val textColor = when (it) {
                 WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_400
+                WeeklyPlanTag.CONCEPT.inKorean, WeeklyPlanTag.PRACTICE.inKorean -> R.color.purple_300
+                WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_500
+                WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_300
+                WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_400
+                WeeklyPlanTag.NOTE.inKorean -> R.color.red_300
+                WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_600
                 else -> R.color.purple_300
             }
             val backgroundColor = when (it) {
                 WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_100
+                WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_150
+                WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_150
+                WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_100
+                WeeklyPlanTag.NOTE.inKorean -> R.color.red_100
+                WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_200
                 else -> R.color.purple_100
             }
 

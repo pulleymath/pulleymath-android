@@ -7,7 +7,6 @@ import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 class PatternIndexButtonViewModel: BaseViewModel(), LifecycleObserver {
 
     val isSelected by lazy { MutableLiveData<Boolean>(true) }
-    val asd by lazy { MutableLiveData<Boolean>(true) }
 
     fun toggleIsSelected() {
         isSelected.postValue(isSelected.value?.not())

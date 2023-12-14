@@ -14,13 +14,15 @@ data class MainUserPlannerItem (
     override var itemType: UserPlannerItemType,
     override val workbookId: Int,
     override val tag: WeeklyPlanTag?,
+    override val isHomework: Boolean,
     val statusOfDay: WeeklyPlanStatus,
     val statusOfPlan: WeeklyPlanStatus,
     val childrenCount: Int? = null,
     val totalProblemCount: Int?,
     val solvedProblemCount: Int?,
     val correctRate: Int?,
-): UserPlannerItem(dailyPlanId, itemId, title, date, itemType, tag, workbookId), BaseDiffItem {
+    val studyPlanBookId: Int?,
+): UserPlannerItem(dailyPlanId, itemId, title, date, itemType, tag, workbookId, isHomework), BaseDiffItem {
 
     val isChildrenEmpty: Boolean
         get() {
@@ -68,6 +70,8 @@ data class MainUserPlannerItem (
                 solvedProblemCount = null,
                 correctRate = null,
                 workbookId = -1,
+                studyPlanBookId = null,
+                isHomework = false,
             )
         }
 
@@ -86,6 +90,8 @@ data class MainUserPlannerItem (
                 solvedProblemCount = null,
                 correctRate = null,
                 workbookId = -1,
+                studyPlanBookId = null,
+                isHomework = false,
             )
         }
         private fun convertBody(plan: MainWeeklyPlanResponse): List<MainUserPlannerItem> {
@@ -104,6 +110,8 @@ data class MainUserPlannerItem (
                     solvedProblemCount = weeklyPlan.progress?.solvedProblemCount,
                     correctRate = weeklyPlan.progress?.correctRate,
                     workbookId = weeklyPlan.workbookId,
+                    studyPlanBookId = weeklyPlan.studyPlanBookId,
+                    isHomework = weeklyPlan.isHomework,
                 )
             }
         }
@@ -122,6 +130,8 @@ data class MainUserPlannerItem (
                 solvedProblemCount = null,
                 correctRate = null,
                 workbookId = -1,
+                studyPlanBookId = null,
+                isHomework = false,
             )
         }
     }

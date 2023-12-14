@@ -641,7 +641,7 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
             binding.penPanel.penOptionPanelCl.visibleIf(false)
             binding.penPanel.eraserPanelCl.visibleIf(false)
         }
-        println("aspasp onSetProblem problem null? : ${problem == null}")
+
         if (problem == null) {
             problemGesture?.init()
 //            solutionGesture?.init()
@@ -872,21 +872,17 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
         if (viewModel.answeredSet.isNotEmpty()) {
             DialogUtils.v2GetOutSolveViewDialog(this) {
-                println("aspasp savememo onBackPressed v2GetOutSolveViewDialog ")
                 saveMemo()
                 super.onBackPressed()
             }
         } else {
-            println("aspasp savememo onBackPressed ")
             saveMemo()
             super.onBackPressed()
         }
     }
 
     private fun saveMemo() {
-        println("aspasp saveMemo 1")
         val problem = viewModel.currentProblem.value ?: return
-        println("aspasp saveMemo 2")
         binding.problemMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
 //        binding.solutionMemoView.save("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
     }

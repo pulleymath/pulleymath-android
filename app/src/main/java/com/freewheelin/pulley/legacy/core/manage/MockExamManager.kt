@@ -290,16 +290,15 @@ object MockExamManager {
 //        })
     }
 
-    fun getMockSummary(context: Context, mockId:Int, user: UserV4, cb: (summary: MockExamSummary?) -> Unit) {
-
-        API_V3.getMockExamSummary(mockId, user.studentID).enqueue(object : Callback<MockExamSummary> {
-            override fun onFailure(call: Call<MockExamSummary>, t: Throwable) {
+    fun getMockSummary(context: Context, content: Content, user: UserV4, cb: (summary: MockExamSummary?) -> Unit) {
+        API_V1.getMockExamSummary(content.mockID, "${content.assignID}", user.studentID).enqueue(object : Callback<ResponseBody<MockExamSummary>> {
+            override fun onFailure(call: Call<ResponseBody<MockExamSummary>>, t: Throwable) {
                 responseFailed(context!!, t)
             }
 
-            override fun onResponse(call: Call<MockExamSummary>, response: Response<MockExamSummary>) {
+            override fun onResponse(call: Call<ResponseBody<MockExamSummary>>, response: Response<ResponseBody<MockExamSummary>>) {
                 if (response.isSuccessful) {
-                    val examList = response.body()
+                    val examList = response.body()?.data
                     cb(examList)
                 } else {
                     responseError(context, response)

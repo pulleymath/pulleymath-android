@@ -100,7 +100,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:scaleType="fitCenter"
-                android:background="@drawable/bg_gray_200_round_5"
+                android:background="@drawable/bg_gray_200_round_5_ripple"
                 android:layout_marginEnd="4dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_figure_line" />
@@ -203,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="4dp"
-                android:background="@drawable/bg_gray_200_round_5"
+                android:background="@drawable/bg_gray_200_round_5_ripple"
                 android:weightSum="2"
                 >
                 <TextView

@@ -187,7 +187,6 @@ class LCCookingFragment() : Fragment(),
 
                         viewModel.apply {
                             selectedExerciseIndex.observe(viewLifecycleOwner) { selectedIndex ->
-                                println("aspasp selectedExerciseIndex : ${selectedIndex}")
                                 item.cookingInfo?.let {
                                     val chapterId = it.chapterId
                                     val cookingId = it.conceptCookingId

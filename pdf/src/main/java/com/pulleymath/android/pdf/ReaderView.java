@@ -830,9 +830,6 @@ public class ReaderView
 	public Adapter getAdapter() {
 		return mAdapter;
 	}
-  public void asd () {
-
-  }
 
 	@Override
 	public View getSelectedView() {

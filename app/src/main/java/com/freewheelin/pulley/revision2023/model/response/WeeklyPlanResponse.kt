@@ -24,6 +24,7 @@ class WeeklyPlan(
     val tag: WeeklyPlanTag?,
     val title: String,
     val workbookId: Int, // 범용적인 학습지 id를 표현하고 싶었다고 한다.
+    val isHomework: Boolean,
     val chapterInfo: PlanChapterInfo?,
 ) {
 
@@ -65,7 +66,7 @@ data class WeeklyPlanProgress(
 }
 
 enum class WeeklyPlanTag {
-    CONCEPT, PRACTICE, PULLEY_WORKBOOK;
+    CONCEPT, PRACTICE, PULLEY_WORKBOOK, CUSTOM_WORKBOOK, MOCK, COMMERCIAL_BOOK, RECOMMEND, NOTE;
 
     val inKorean: String
         get() {
@@ -73,6 +74,11 @@ enum class WeeklyPlanTag {
                 CONCEPT -> "개념"
                 PRACTICE -> "연습문제"
                 PULLEY_WORKBOOK -> "풀리문제집"
+                CUSTOM_WORKBOOK -> "워크북"
+                MOCK -> "모의고사"
+                COMMERCIAL_BOOK -> "풀리북스"
+                RECOMMEND -> "추천학습"
+                NOTE -> "오답노트"
             }
         }
 }

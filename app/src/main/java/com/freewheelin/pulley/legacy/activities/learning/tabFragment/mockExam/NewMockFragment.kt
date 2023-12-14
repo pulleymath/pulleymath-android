@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -40,7 +39,6 @@ import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
@@ -65,10 +63,7 @@ class NewMockFragment : Fragment(), EmailInputDialogListener, MockExamGuideDialo
     private val mockAdapter = MockListAdapter()
     companion object {
         @JvmStatic
-        fun newInstance(): NewMockFragment {
-            val fragment = NewMockFragment()
-            return fragment
-        }
+        fun newInstance(): NewMockFragment = NewMockFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

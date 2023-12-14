@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MockExam
+import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
@@ -21,6 +22,7 @@ class MockFViewModel(application: Application): BaseAndroidViewModel(application
 
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
+    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
@@ -75,6 +77,13 @@ class MockFViewModel(application: Application): BaseAndroidViewModel(application
 
             val filterText = filteredItemList.joinToString(", ")
             filteredItemText.postValue(filterText)
+        }
+    }
+
+    fun fetchMockSummary(mockId: Int, assignId: Int?, cb: (MockExamSummary?) -> Unit) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val summary = legacyV2Repository.fetchMockSummary(mockId, assignId ?: -999)
+            cb(summary)
         }
     }
 }

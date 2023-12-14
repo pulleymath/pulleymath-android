@@ -41,6 +41,10 @@ class PlannerActivity : AppCompatActivity() {
         }
 
         override fun onRemoveItemClick(item: UserPlannerItem) {
+            if (item.isHomework) {
+                DaebakToast.show(this@PlannerActivity, "선생님이 추가한 일정은 삭제할 수 없어요.")
+                return
+            }
             viewModel.selectedUserPlan.postValue(item)
             viewModel.deleteUserPlan(item)
         }

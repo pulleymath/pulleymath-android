@@ -27,14 +27,14 @@ interface EmailInputDialogListener {
 }
 
 
-class EmailInputDialog(context: Context, contents: List<Content>, user: UserV4, listener: EmailInputDialogListener): Dialog(context), DaebakInputFieldListener {
+class EmailInputDialog(context: Context, contents: List<Content>, user: UserV4, listener: EmailInputDialogListener?): Dialog(context), DaebakInputFieldListener {
     val binding: DialogEmailInputBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_email_input, null, false)
     }
     val contents: List<Content> = contents
     val user: UserV4 = user
 
-    var listener: EmailInputDialogListener? = null
+    var listener: EmailInputDialogListener? = listener
 
     init {
         setContentView(binding.root)

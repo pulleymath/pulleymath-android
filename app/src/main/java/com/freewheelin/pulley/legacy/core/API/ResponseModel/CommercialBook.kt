@@ -68,7 +68,7 @@ enum class CommercialSubject {
 
         val arrayOnSchool: Array<CommercialSubject>
             get() = if (schoolType.isHigh) {
-                arrayOf(MATH_TOP, MATH_BOTTOM, MATH_ONE, MATH_TOP, PROBABILITY_AND_STATISTICS, CALCULUS, GEOMETRY)
+                arrayOf(MATH_TOP, MATH_BOTTOM, MATH_ONE, MATH_TWO, PROBABILITY_AND_STATISTICS, CALCULUS, GEOMETRY)
             } else {
                 arrayOf(M1_1, M1_2, M2_1, M2_2, M3_1, M3_2)
             }

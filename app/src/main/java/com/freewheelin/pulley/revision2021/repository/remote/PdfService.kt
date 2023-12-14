@@ -1,7 +1,11 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.model.DummyCreatedUser
+import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.revision2021.model.response.*
+import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingResponse
+import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 //import dagger.Module
 //import dagger.Provides
 //import dagger.hilt.InstallIn
@@ -17,6 +21,12 @@ object PdfApi {
 }
 
 interface PdfService {
+
+    @GET("v1/pdf/{pdf_id}/single")
+    suspend fun fetchPdf(
+        @Path("pdf_id") pdfId:Int
+    ): ResponseBody<Pdf>
+
     @GET("v1/pdf/list")
     fun list(@Query("title") title:String,
              @Query("page") page:Int,

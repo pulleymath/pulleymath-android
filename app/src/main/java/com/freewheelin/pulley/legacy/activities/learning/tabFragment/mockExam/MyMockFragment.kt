@@ -388,23 +388,22 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
 
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
-        MockExamManager.getMockSummary(requireContext(), content.mockID, user!!) { mockExamSummery ->
+        viewModel.fetchMockSummary(content.mockID, content.assignID) { mockExamSummary ->
             val optionResult = mutableListOf<CommercialSubject>()
-            mockExamSummery?.let {
-                val optionalSubjects = mockExamSummery.optionalSubjectSummary
+            mockExamSummary?.let {
+                val optionalSubjects = mockExamSummary.optionalSubjectSummary
 
-                for(subject in optionalSubjects?: arrayOf()) {
+                for(subject in optionalSubjects) {
                     if (subject.isSelected) {
                         optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
                     }
                 }
                 mock.selectOptional = optionResult
-                mock.examType = mockExamSummery.examType.let {
+                mock.examType = mockExamSummary.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }
-                mock.grade = mockExamSummery.grade
+                mock.grade = mockExamSummary.grade
             }
-
 
             cb(mock)
         }

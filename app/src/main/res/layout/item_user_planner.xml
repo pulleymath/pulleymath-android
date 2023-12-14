@@ -151,20 +151,54 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     >
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/titleWrapperCl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/homeWorkTv"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintHorizontal_bias="0"
+                        >
+
+                        <TextView
+                            android:id="@+id/titleTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{ item.title }"
+                            tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
+                            style="@style/b2"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/gray_800"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <TextView
-                        android:id="@+id/titleTv"
+                        android:id="@+id/homeWorkTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ item.title }"
-                        tools:text="2024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 12024 EBS 수능특강 수학 1"
-                        style="@style/b2"
-                        android:paddingVertical="8dp"
-                        android:textColor="@color/gray_800"
-                        android:maxLines="2"
-                        android:ellipsize="end"
+                        style="@style/b3"
+                        android:layout_gravity="center"
+                        visibleIf="@{ item.isHomework }"
+                        tools:visibility="visible"
+                        android:text="숙제"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/gray_600"
+                        android:background="@drawable/bg_transparent_stroke_gray_500_round_11"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                        app:layout_constraintStart_toEndOf="@id/titleWrapperCl"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <LinearLayout
@@ -177,9 +211,9 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_minus_gray_700"
+                        android:src="@{ item.isHomework ? @drawable/ic_minus_gray_400 : @drawable/ic_minus_gray_700}"
                         android:padding="4dp"
-                        android:background="@drawable/bg_gray_300_round_5_ripple"
+                        android:background="@{ item.isHomework ? @drawable/bg_gray_200_round : @drawable/bg_gray_300_round_5_ripple }"
                         android:layout_marginHorizontal="8dp"
                         android:layout_gravity="center"
                         />
