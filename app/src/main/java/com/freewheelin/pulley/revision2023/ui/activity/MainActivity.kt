@@ -406,6 +406,27 @@ class MainActivity : PermissionActivity(),
                     val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
                     tabMove(tabIndex)
                     when(tabIndex) {
+                        MainTab.문제풀이.indexOnTablet -> {
+                            if (isTablet) {
+                                val actionName = intent.getStringExtra(PieceManager.EVENT_ADDITIONAL_ACTION) ?: ""
+                                when (actionName) {
+                                    "WRONG_NOTE" -> {
+                                        p0?.let { ctx ->
+                                            WrongNoteActivity.getIntent(ctx).let {
+                                                getResult.launch(it)
+                                            }
+                                        }
+                                    }
+                                    "PULLEY_MATH_BOOKS" -> {
+                                        p0?.let { ctx ->
+                                            PulleyMathBooksActivity.getIntent(ctx).let {
+                                                getResult.launch(it)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         6 -> {
                             (tabFragments[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
                         }

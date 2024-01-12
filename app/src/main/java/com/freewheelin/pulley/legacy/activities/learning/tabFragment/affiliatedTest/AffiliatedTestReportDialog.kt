@@ -230,9 +230,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 } else {
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB)
                     intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.문제풀이.indexOnTablet)
-                    intent.putExtra(PieceManager.EVENT_SCROLL, true)
-                    intent.putExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, true)
-                    intent.putExtra(PieceManager.EVENT_FILTER, subject)
+                    intent.putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, "WRONG_NOTE")
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                     close()
                 }

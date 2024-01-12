@@ -534,6 +534,7 @@ class SolveActivity : BaseActivity(),
 
             vm = viewModel
             lifecycleOwner = this@SolveActivity
+            isTablet = this@SolveActivity.isTablet
             galleryView.layoutParams.width = GalleryView.getGalleryViewWidth(this@SolveActivity)
             solveCl.layoutParams.width = screenWidth
             galleryView.delegate = this@SolveActivity
@@ -1454,7 +1455,10 @@ class SolveActivity : BaseActivity(),
         }
     }
 
+    var addOrChangeSimilarProblemProcessing = false
     fun onAddSimilarBtnClicked() {
+        if (addOrChangeSimilarProblemProcessing) return
+        addOrChangeSimilarProblemProcessing = true
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "유사문제버튼", itemValue)
         val problem = selectedProblem ?: return
 
@@ -1463,7 +1467,7 @@ class SolveActivity : BaseActivity(),
 //        Log.d("유사문제", "similar check===>${content!!.tempSimilarProblems}")
 
 
-        problem.getSimilarProblem(this, user!!, content!!) {
+        problem.getSimilarProblem(this, user!!, content!!, {
             viewModel.sendAddSimilarLog(content, selectedProblem)
 
             if(it == null) {
@@ -1485,7 +1489,10 @@ class SolveActivity : BaseActivity(),
                 binding.speedAnswerView.updateAll()
                 showSimilarProblemAddedToast(problem)
             }
-        }
+            addOrChangeSimilarProblemProcessing = false
+        }, {
+            addOrChangeSimilarProblemProcessing = false
+        })
     }
 
     fun onChangeSimilarBtnClicked() {
@@ -1494,7 +1501,7 @@ class SolveActivity : BaseActivity(),
 
         if(content == null) return // 컨텐츠 안내려오는 경우 있음
 
-        problem.getSimilarProblem(this, user!!, content!!) {
+        problem.getSimilarProblem(this, user!!, content!!, {
             if(it == null) {
                 showNotExistSimilarToast()
             } else {
@@ -1521,7 +1528,11 @@ class SolveActivity : BaseActivity(),
                     showSimilarProblemAddedToast(problem)
                 }
             }
-        }
+            addOrChangeSimilarProblemProcessing = false
+        }, {
+            addOrChangeSimilarProblemProcessing = false
+
+        })
     }
 
     override fun onProblemSelected(problem: Problem?, autoFocus: Boolean) {

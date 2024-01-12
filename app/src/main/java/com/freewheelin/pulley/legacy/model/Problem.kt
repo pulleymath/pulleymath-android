@@ -238,7 +238,7 @@ open class Problem: Serializable {
         return this.rawPieceCategory.map { PieceCategory.init(it) }.toSet()
     }
 
-    fun getSimilarProblem(context: Context, user: UserV4, content: Content, cb: (problem: Problem?) -> Unit) {
+    fun getSimilarProblem(context: Context, user: UserV4, content: Content, cb: (problem: Problem?) -> Unit, deniedCb: () -> Unit) {
 
         val exceptionSimilarProblems = content.tempSimilarProblems
         val assignID = content.assignID!!
@@ -256,6 +256,7 @@ open class Problem: Serializable {
 
         API_V2.getSimilarProblem(param).enqueue(object : Callback<Template<Problem>> {
             override fun onFailure(call: Call<Template<Problem>>, t: Throwable) {
+                deniedCb()
                 responseFailed(context, t)
             }
 

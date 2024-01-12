@@ -7,6 +7,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel"/>
+        <variable name="isTablet" type="Boolean"/>
     </data>
     <com.freewheelin.pulley.legacy.views.DisableHorizontalScrollView
         android:animateLayoutChanges="true"
@@ -227,6 +228,7 @@
                         android:background="@drawable/bg_black_200_round_ripple"
                         android:scaleType="center"
                         android:src="@drawable/ic_npot_pencil"
+                        visibleIf="@{ isTablet }"
                         android:layout_marginEnd="6dp"/>
 
                     <View
@@ -234,6 +236,7 @@
                         android:layout_height="12dp"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="16dp"
+                        visibleIf="@{ isTablet }"
                         android:background="@drawable/bg_gray_600_round"/>
 
                     <ImageButton
@@ -318,7 +321,7 @@
                     android:layout_width="@dimen/dp120"
                     android:layout_height="@dimen/dp36"
                     android:layout_marginStart="@dimen/dp24"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:background="@drawable/bg_yellow_300_round_18"
                     app:layout_constraintBottom_toBottomOf="@+id/pageTool"
                     app:layout_constraintStart_toEndOf="@+id/pageTool"
@@ -378,9 +381,10 @@
                     android:layout_marginStart="@dimen/dp24"
                     android:background="@drawable/bg_yellow_300_round_18"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/controlTool"
-                    app:layout_constraintStart_toEndOf="@+id/controlTool"
-                    app:layout_constraintTop_toTopOf="@+id/controlTool">
+                    tools:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/pageTool"
+                    app:layout_constraintStart_toEndOf="@+id/pageTool"
+                    app:layout_constraintTop_toTopOf="@+id/pageTool">
 
                     <ImageView
                         android:id="@+id/changeIv"
