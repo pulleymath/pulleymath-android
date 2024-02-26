@@ -133,12 +133,6 @@ class PlannerActivity : AppCompatActivity() {
 
     private fun initSchoolType() {
         viewModel.initSchoolType(schoolType)
-//        val subjectId = if (schoolType.isMiddle) {
-//            SubjectV3.중1_1.id
-//        } else {
-//            SubjectV3.수학_상.id
-//        }
-//        viewModel.onHeaderSubjectBtnClick(subjectId)
     }
 
     private fun backBtnAction () {

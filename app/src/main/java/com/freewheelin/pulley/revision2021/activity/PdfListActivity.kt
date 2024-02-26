@@ -91,7 +91,6 @@ class PdfListActivity : AppCompatActivity() {
             recyclerPdf.layoutManager = manager
             btnBack.setOnClickListener { finish() }
 
-            /** 아이템 변경시 스크롤이 top으로 안가는 문제 해결용 */
             adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     super.onItemRangeInserted(positionStart, itemCount)

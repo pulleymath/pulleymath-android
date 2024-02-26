@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2023.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
@@ -28,15 +29,23 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import java.lang.Exception
 
 class UnivAdditionalLearningActivity : BaseActivity() {
-
-    val API_ADDITIONAL_LEARNING_DOMAIN = when (Preferences.onServerAPI.get()) {
-        Network.Server.live.toString() -> "https://pulleymath.com/exam/study?token=${user?.token}"
-        Network.Server.staging.toString() -> "https://dev.pulleymath.com/exam/study?token=${user?.token}"
-        Network.Server.dev.toString() -> "https://dev.pulleymath.com/exam/study?token=${user?.token}"
-        else -> "https://pulleymath.com"
+    private var selectedSubject = ""
+    val getDomain = fun (subject: String): String {
+        return when (Preferences.onServerAPI.get()) {
+            Network.Server.live.toString() -> "https://pulleymath.com/exam/study?subject=${subject}&token=${user?.token}"
+            Network.Server.staging.toString() -> "https://dev.pulleymath.com/exam/study?subject=${subject}&token=${user?.token}"
+            Network.Server.dev.toString() -> "https://dev.pulleymath.com/exam/study?subject=${subject}&token=${user?.token}"
+            else -> "https://pulleymath.com"
+        }
     }
 
-//    val enableHost = arrayOf("https://pulleymath.com", "https://dev.pulleymath.com")
+    companion object {
+        fun getIntent(context: Context?, subject: String?): Intent {
+            val intent = Intent(context, UnivAdditionalLearningActivity::class.java)
+            intent.putExtra("subject", subject)
+            return intent
+        }
+    }
 
     private val binding: ActivityLessonBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_lesson, null, false)
@@ -45,6 +54,7 @@ class UnivAdditionalLearningActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        selectedSubject = intent.getStringExtra("subject") ?: ""
         setWebView()
     }
 
@@ -73,7 +83,7 @@ class UnivAdditionalLearningActivity : BaseActivity() {
             }, "androidInterface")
 
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            loadUrl(API_ADDITIONAL_LEARNING_DOMAIN)
+            loadUrl(getDomain(selectedSubject))
         }
     }
 
@@ -86,7 +96,7 @@ class UnivAdditionalLearningActivity : BaseActivity() {
 //            audioManager.adjustVolume(AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND)
 //        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 //            audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND)
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(API_ADDITIONAL_LEARNING_DOMAIN) == true) {
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.url?.startsWith(getDomain(selectedSubject)) == true) {
             finish()
         } else if (keyCode == KeyEvent.KEYCODE_BACK)  {
             binding.webView.goBack()

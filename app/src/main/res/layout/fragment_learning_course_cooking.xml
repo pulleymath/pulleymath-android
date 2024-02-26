@@ -87,15 +87,7 @@
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-<!--                <com.freewheelin.pulley.revision2021.cookingmemo.CookingMemoView-->
-<!--                    android:id="@+id/cookingMemoView"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:focusable="false"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"/>-->
+
                 <com.freewheelin.pulley.legacy.views.memoView.MemoView
                     android:id="@+id/memoView"
                     android:layout_width="0dp"

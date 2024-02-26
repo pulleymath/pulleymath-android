@@ -86,23 +86,35 @@ class AnalysisTabActivity : BaseNavActivity(),
         viewModel.isSampleLiveData.postValue(isSample)
         viewModel.isSample = isSample
         viewModel.schoolType.observe(this) {
-            if (it.isHigh) {
-                analysisTab = listOf(
-                    AnalysisUnitFragment.newInstance(isSample),
-                    AnalysisByLevelFragment.newInstance(),
-                    AnalysisStudyAmountFragment.newInstance()
-                )
-                configTab(0)
-                configTab(1)
-                configTab(2)
-            } else {
-                analysisTab = listOf(
-                    AnalysisUnitFragment.newInstance(isSample),
-                    AnalysisStudyAmountFragment.newInstance()
-                )
-                configTab(0)
-                configTab(1)
+            when (it) {
+                SchoolType.ELEMENTARY -> {
+                    analysisTab = listOf(
+                        AnalysisUnitFragment.newInstance(isSample),
+                        AnalysisStudyAmountFragment.newInstance()
+                    )
+                    configTab(0)
+                    configTab(1)
+                }
+                SchoolType.MIDDLE -> {
+                    analysisTab = listOf(
+                        AnalysisUnitFragment.newInstance(isSample),
+                        AnalysisStudyAmountFragment.newInstance()
+                    )
+                    configTab(0)
+                    configTab(1)
+                }
+                else -> {
+                    analysisTab = listOf(
+                        AnalysisUnitFragment.newInstance(isSample),
+                        AnalysisByLevelFragment.newInstance(),
+                        AnalysisStudyAmountFragment.newInstance()
+                    )
+                    configTab(0)
+                    configTab(1)
+                    configTab(2)
+                }
             }
+
             replaceFragment(analysisTab[0])
         }
 
@@ -347,10 +359,19 @@ class AnalysisTabView: ConstraintLayout {
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
 
-        if(selected)
-            tabTitleTv.setTextColor(ContextCompat.getColor(context, if (schoolType.isHigh) R.color.white else R.color.purple_300))
-        else
-            tabTitleTv.setTextColor(ContextCompat.getColor(context, R.color.gray_700))
+        if(selected) {
+            tabTitleTv.setTextAppearance(R.style.mo_h3)
+            tabTitleTv.setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    if (schoolType.isMiddle) R.color.purple_300 else R.color.white
+                )
+            )
+
+        } else {
+            tabTitleTv.setTextAppearance(R.style.h4_r)
+            tabTitleTv.setTextColor(ContextCompat.getColor(context, if (schoolType.isElementary) R.color.purple_150 else R.color.gray_700))
+        }
     }
 }
 

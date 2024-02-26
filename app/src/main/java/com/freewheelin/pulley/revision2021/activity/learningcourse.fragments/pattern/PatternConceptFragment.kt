@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.PatternConceptViewModel
@@ -59,42 +61,70 @@ class PatternConceptFragment : Fragment() {
         }
 
     }
-    fun addBaseConcept() {
+    private fun addBaseConcept() {
         binding.apply {
-            viewModel.patternQuiz.value?.concepts?.filter {
-                it.conceptTypeEnum == LCPatternConcept.ConceptType.base
-            }?.forEach {
-                val iv = ImageView(context)
-                val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                layoutParams.setMargins(0, 16.toPx(), 0, 0)
+            val conceptsBase = viewModel.patternQuiz.value?.concepts?.filter { it.conceptTypeEnum == LCPatternConcept.ConceptType.base }
 
-                iv.layoutParams = layoutParams
-                iv.id = View.generateViewId()
-                iv.setImageUrlGlide(it.conceptImageUrl)
-                scrollRootLl.addView(iv)
+            if (conceptsBase?.isEmpty() == true) {
+                val tv = TextView(context).also { tv ->
+                    val tvLp: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    tvLp.setMargins(0, 24.toPx(), 0, 0)
+                    tv.setPadding(0, 50.toPx(), 0, 50.toPx())
+                    tv.id = View.generateViewId()
+                    tv.text = "해당 문제는 유형별 개념을 제공하지 않아요."
+                    tv.setTextAppearance(R.style.c1)
+                    tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
+                    tv.gravity = Gravity.CENTER
+                }
+
+                scrollRootLl.addView(tv)
+            } else {
+                conceptsBase?.forEach {
+                    val iv = ImageView(context)
+                    val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    layoutParams.setMargins(0, 16.toPx(), 0, 0)
+
+                    iv.layoutParams = layoutParams
+                    iv.id = View.generateViewId()
+                    iv.setImageUrlGlide(it.conceptImageUrl)
+                    scrollRootLl.addView(iv)
+                }
             }
         }
     }
 
-    fun addReleatedConcepts() {
+    private fun addReleatedConcepts() {
         binding.apply {
             val relatedConcepts = viewModel.patternQuiz.value?.concepts?.filter {
                 it.conceptTypeEnum == LCPatternConcept.ConceptType.related
             }
 
-            if (relatedConcepts?.isNotEmpty() == true) {
-                addReleatedTextView()
-            }
+            addReleatedTextView()
 
-            relatedConcepts?.forEach {
-                val iv = ImageView(context)
-                val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                layoutParams.setMargins(0, 16.toPx(), 0, 0)
+            if (relatedConcepts?.isEmpty() == true) {
+                val tv = TextView(context).also { tv ->
+                    val tvLp: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    tvLp.setMargins(0, 24.toPx(), 0, 0)
+                    tv.setPadding(0, 50.toPx(), 0, 50.toPx())
+                    tv.id = View.generateViewId()
+                    tv.text = "해당 문제는 연관 개념을 제공하지 않아요."
+                    tv.setTextAppearance(R.style.c1)
+                    tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
+                    tv.gravity = Gravity.CENTER
+                }
 
-                iv.layoutParams = layoutParams
-                iv.id = View.generateViewId()
-                iv.setImageUrlGlide(it.conceptImageUrl)
-                scrollRootLl.addView(iv)
+                scrollRootLl.addView(tv)
+            } else {
+                relatedConcepts?.forEach {
+                    val iv = ImageView(context)
+                    val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    layoutParams.setMargins(0, 16.toPx(), 0, 0)
+
+                    iv.layoutParams = layoutParams
+                    iv.id = View.generateViewId()
+                    iv.setImageUrlGlide(it.conceptImageUrl)
+                    scrollRootLl.addView(iv)
+                }
             }
         }
     }

@@ -512,11 +512,6 @@ class AffiliatedTestSolveActivity : AppCompatActivity(),
         // 리뷰중이고 틀린문제면 해설 표시
         viewModel.apply {
             val isWrongAnswer = problem?.is_correct == false
-            val _isReview = isReview.value == true
-            val showSolutionFlag = _isReview && isWrongAnswer
-            if (!showSolutionFlag) {
-                showSolutionView.postValue(false)
-            }
             isEnableSolutionSwitch.postValue(isWrongAnswer)
         }
     }

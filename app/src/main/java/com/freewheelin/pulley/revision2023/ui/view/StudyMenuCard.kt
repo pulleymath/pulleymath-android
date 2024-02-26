@@ -32,16 +32,22 @@ class StudyMenuCard(context: Context, val getResult: ActivityResultLauncher<Inte
 
     companion object {
         fun getMenuList(schoolType: SchoolType): List<Type> {
-            return if (schoolType.isMiddle) {
-                listOf(
+            return when(schoolType) {
+                SchoolType.ELEMENTARY -> listOf(
                     Type.PulleyMath,
                     Type.Workbook,
                     Type.WrongNote,
                     Type.Test,
                     Type.CommercialBook,
                 )
-            } else {
-                listOf(
+                SchoolType.MIDDLE -> listOf(
+                    Type.PulleyMath,
+                    Type.Workbook,
+                    Type.WrongNote,
+                    Type.Test,
+                    Type.CommercialBook,
+                )
+                else -> listOf(
                     Type.PulleyMath,
                     Type.Workbook,
                     Type.Mock,
@@ -91,14 +97,14 @@ class StudyMenuCard(context: Context, val getResult: ActivityResultLauncher<Inte
                 param.setMargins(marginOnDevice8And16, 0, 8.toPx(), 0)
             }
             Type.WrongNote -> {
-                if (schoolType.isMiddle) {
-                    param.setMargins(marginOnDevice8And16, 0, 8.toPx(), 0)
-                } else {
+                if (schoolType.isHigh) {
                     param.setMargins(8.toPx(), marginOnDevice16And32, marginOnDevice8And16, 0)
+                } else {
+                    param.setMargins(marginOnDevice8And16, 0, 8.toPx(), 0)
                 }
             }
             Type.Test -> {
-                if (schoolType.isMiddle) {
+                if (!schoolType.isHigh) {
                     param.setMargins(8.toPx(), marginOnDevice16And32, marginOnDevice8And16, 0)
                 }
             }

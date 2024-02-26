@@ -19,7 +19,7 @@
             android:id="@+id/headerLl"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp56"
-            android:background="@{ vm.schoolTypeInRepo.isHigh? @color/black_200 : @color/white }"
+            android:background="@{ vm.schoolTypeInRepo.isElementary ? @color/purple_300 : vm.schoolTypeInRepo.isHigh ? @color/black_200 : @color/white }"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
                 android:padding="@dimen/dp16"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_arrow_left_18_14"
-                imagebtn_tint="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                imagebtn_tint="@{ vm.schoolTypeInRepo.isElementary ? @color/white : vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
                 app:tint="@color/gray_800" />
             <TextView
                 android:id="@+id/headerTitle"
@@ -45,7 +45,7 @@
                 android:layout_weight="999"
                 android:gravity="center"
                 android:text="풀리수학 문제집"
-                android:textColor="@{ vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
+                android:textColor="@{ vm.schoolTypeInRepo.isElementary ? @color/white : vm.schoolTypeInRepo.isHigh ? @color/white : @color/gray_800 }"
                 />
             <View
                 android:layout_width="48dp"

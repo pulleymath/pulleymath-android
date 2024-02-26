@@ -1,20 +1,26 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.repository.*
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(application) {
 

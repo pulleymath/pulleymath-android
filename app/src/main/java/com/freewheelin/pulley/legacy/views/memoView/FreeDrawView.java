@@ -642,7 +642,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                     canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, currentPath.getPaint());
                 } else {
-
                     canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
                 }
             } else if (currentPath.type == DrawPathType.Circle || currentPath.type == DrawPathType.Line) {

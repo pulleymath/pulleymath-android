@@ -11,6 +11,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.databinding.ViewLayoutConceptCourseHeaderTabBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
@@ -30,7 +31,7 @@ class ConceptCourseHeaderTab : FrameLayout {
 
         binding.apply {
             isTablet = context.isTablet
-            isHighSchool = schoolType == SchoolType.HIGH
+            schoolType = MyApplication.schoolType
         }
     }
 
@@ -42,7 +43,7 @@ class ConceptCourseHeaderTab : FrameLayout {
     }
 
     fun changeSchoolType(type: SchoolType) {
-        binding.isHighSchool = type == SchoolType.HIGH
+        binding.schoolType = type
     }
     fun setMiddleAvailableSubjects(list: List<LCSubject>) {
         if (schoolType.isMiddle) {

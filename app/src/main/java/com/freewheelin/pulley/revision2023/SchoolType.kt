@@ -23,12 +23,30 @@ enum class SchoolType {
                 UNIVERSITY -> "대학"
             }
         }
+    val mainSpinnerPosition: Int
+        get() {
+            return when (this) {
+                ELEMENTARY -> 0
+                MIDDLE -> 1
+                else -> 2
+            }
+        }
     companion object {
         fun convertFromStr(name: String): SchoolType {
             return when (name) {
+                ELEMENTARY.name -> ELEMENTARY
                 MIDDLE.name -> MIDDLE
                 HIGH.name -> HIGH
                 UNIVERSITY.name -> UNIVERSITY
+                else -> HIGH
+            }
+        }
+
+        fun convertSwitchPositionToType(position: Int): SchoolType {
+            return when (position) {
+                0 -> ELEMENTARY
+                1 -> MIDDLE
+                2 -> HIGH
                 else -> HIGH
             }
         }

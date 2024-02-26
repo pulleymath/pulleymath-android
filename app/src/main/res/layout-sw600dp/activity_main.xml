@@ -8,6 +8,8 @@
     <data>
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel"/>
+        <variable name="schoolSpinnerAdapter" type="android.widget.ArrayAdapter" />
+        <variable name="schoolSpinnerAdapter2" type="android.widget.ArrayAdapter" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -32,22 +34,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <com.freewheelin.pulley.revision2023.ui.view.SchoolSwitch
-                    android:id="@+id/schoolSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                <com.freewheelin.pulley.revision2023.ui.view.SchoolSpinner
+                    android:id="@+id/schoolSpinner"
+                    android:layout_width="72dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:background="@{vm.schoolSpinnerPosition == 0 ? @drawable/bg_school_spinner_purple_100 : @drawable/bg_school_spinner_purple_300}"
+                    tools:background="@drawable/bg_school_spinner_purple_300"
+                    android:selectedItemPosition="@={vm.schoolSpinnerPosition}"
+                    android:popupElevation="0dp"
+                    app:adapter="@{schoolSpinnerAdapter}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <com.freewheelin.pulley.revision2023.ui.view.MainTabLayout
                     android:id="@+id/mainTl"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp56"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/schoolSwitch"
+                    app:layout_constraintStart_toEndOf="@+id/schoolSpinner"
                     app:layout_constraintEnd_toStartOf="@+id/alarmCl"
                     />
 

@@ -26,16 +26,25 @@ import com.freewheelin.pulley.revision2023.ui.fragment.AffiliatedTestFragment.Co
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.PieceManager
 import com.freewheelin.pulley.databinding.DialogAffiliatedTestReportDialogBinding
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.marketing.Marketing
+import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestWorkbook
+import com.freewheelin.pulley.revision2021.model.response.base.BaseIntResponseNode
+import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.google.gson.Gson
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int, workbook: AffiliatedTestWorkbook?): Dialog(context) {
@@ -44,6 +53,17 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
 
     data class ProblemInfo(val number:Int, val subject :String, val singleScore: Int, val result: Int)
     private var problemInfoList = listOf<ProblemInfo>()
+    private val mathSubjectList = listOf(
+        "수학",
+        "미적분",
+        "확률과통계",
+        "확률과 통계",
+        "기하",
+        "수학1",
+        "수학2",
+        "수학(상)",
+        "수학(하)"
+    )
 
     private val binding: DialogAffiliatedTestReportDialogBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_affiliated_test_report_dialog, null, false)
@@ -79,7 +99,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
 
                     val problemDataList = answerList.map { that ->
                         val problem = problemList.filter { problem -> problem.no == that.problem_no }[0]
-                        ProblemInfo(problem.no, problem.intention, problem.point, that.result)
+                        ProblemInfo(problem.no, problem.unit, problem.point, that.result)
                     }
 
                     val problemHeader = ProblemInfo(-1, "과목", -1, -1)
@@ -94,8 +114,8 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
             }, { error ->
                 Log.e(javaClass.simpleName, "fetchScoringResult error=${error.localizedMessage}")
             })
-    }
 
+    }
 
     private fun initUI() {
         setCancelable(true)
@@ -223,14 +243,16 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
                 context.startActivity(intent)
             }
             additionalLearningBtn.setOnClickListener {
-                if (subject == "물리학") {
-                    val intent = Intent(SHOW_ADDITIONAL_LEARNING)
+
+                if (mathSubjectList.contains(subject)) {
+                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
+                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.문제풀이.indexOnTablet)
+//                    intent.putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, "WRONG_NOTE")
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                     close()
                 } else {
-                    val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.문제풀이.indexOnTablet)
-                    intent.putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, "WRONG_NOTE")
+                    val intent = Intent(SHOW_ADDITIONAL_LEARNING)
+                    intent.putExtra("subject", subject)
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                     close()
                 }
@@ -281,23 +303,35 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
             }
         }
 
+        @SuppressLint("CheckResult")
+        private fun fetchAdditionalLearningCount(subject: String?, cb: (Boolean) -> Unit) {
+            val studentId = user?.studentID ?: return
+            val schoolId = user?.schoolID ?: return
+            subject ?: return
+
+            affiliatedTestRepository.fetchAdditionalLearningBySchool(studentId, schoolId, subject)
+                .subscribeOn(Schedulers.io())
+                .timeout(3, TimeUnit.SECONDS)
+                .subscribe({ res ->
+                    Log.d(javaClass.simpleName, "fetchAdditionalLearningCount res=>${res}")
+                    cb(res.data > 0)
+                }, { error ->
+                    Log.e(javaClass.simpleName, "fetchAdditionalLearningCount error=${error.localizedMessage}")
+                })
+        }
         private fun setSubjectView(problem: AffiliatedTestProblem) {
             subject = problem.subject.toString()
-            Handler(Looper.getMainLooper()).post {
+            if (mathSubjectList.contains(subject)) {
                 binding.apply {
-                    if (AffiliatedUniv.schoolIdOfNonNull(user?.schoolID).isSoongsil) {
-                        label2Tv.visibility = View.VISIBLE
-                        supportLearnCl.visibility = View.VISIBLE
-                    } else {
-                        when (subject) {
-                            "확률과 통계", "미적분", "물리학" -> {
-                                label2Tv.visibility = View.VISIBLE
-                                supportLearnCl.visibility = View.VISIBLE
-                            }
-                            else -> {
-                                label2Tv.visibility = View.GONE
-                                supportLearnCl.visibility = View.GONE
-                            }
+                    label2Tv.visibleIf(true)
+                    supportLearnCl.visibleIf(true)
+                }
+            } else {
+                fetchAdditionalLearningCount(problem.subject) { isVisible ->
+                    Handler(Looper.getMainLooper()).post {
+                        binding.apply {
+                            label2Tv.visibleIf(isVisible)
+                            supportLearnCl.visibleIf(isVisible)
                         }
                     }
                 }
@@ -313,7 +347,7 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
 
         fun set() {
             problemNumTv.text = "번호"
-            subjectTv.text = "문제 유형"
+            subjectTv.text = "단원"
             scoreTv.text = "배점"
             resultTv.text = "결과"
         }
@@ -338,57 +372,3 @@ class AffiliatedTestReportDialog(context: Context, workbookId: Int, version: Int
     }
 
 }
-
-class UnivTestReportAdapter(val problems: List<AffiliatedTestReportDialog.ProblemInfo>, val parent: LinearLayout) {
-    fun notifyDataSetChanged() {
-        parent.removeAllViews()
-        for((idx, problem) in problems.withIndex()) {
-            val view = getView(problem, idx, problems.size - 1)
-            parent.addView(view)
-        }
-    }
-
-    private fun getView(problem: AffiliatedTestReportDialog.ProblemInfo, idx:Int, endIdx: Int): View {
-        val view = when (idx) {
-            0 -> LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_affiliated_test_report_problem_info_top, parent, false)
-            endIdx -> {
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_affiliated_test_report_problem_info_bottom, parent, false)
-            }
-            else -> {
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_affiliated_test_report_problem_info_middle, parent, false)
-            }
-        }
-        set(view, problem, idx)
-
-        return view
-    }
-
-    fun set(view:View, info: AffiliatedTestReportDialog.ProblemInfo, idx: Int) {
-        val problemNumTv = view.findViewById<TextView>(R.id.problemNumTv)
-        val subjectTv = view.findViewById<TextView>(R.id.subjectTv)
-        val scoreTv = view.findViewById<TextView>(R.id.scoreTv)
-
-        if (idx == 0) {
-            val resultTv = view.findViewById<TextView>(R.id.reportResultTv)
-            problemNumTv.text = "번호"
-            subjectTv.text = "문제 유형"
-            scoreTv.text = "배점"
-            resultTv.text = "결과"
-        } else {
-            val reportResultIv = view.findViewById<ImageView>(R.id.reportResultIv)
-            problemNumTv.text = "${info.number}"
-            subjectTv.text = info.subject
-            scoreTv.text = "${info.singleScore}"
-
-            if (info.result == 1) {
-                reportResultIv.setBackgroundResource(R.drawable.ic_mock_report_result_o)
-            } else {
-                reportResultIv.setBackgroundResource(R.drawable.ic_mock_report_result_x)
-            }
-        }
-    }
-}
-

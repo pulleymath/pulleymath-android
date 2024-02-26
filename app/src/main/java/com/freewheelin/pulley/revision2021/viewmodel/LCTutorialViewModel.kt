@@ -17,6 +17,7 @@ import com.freewheelin.pulley.revision2021.repository.LCCookingRepository
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.ViewTransition
+import com.freewheelin.pulley.revision2023.SchoolType
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -27,29 +28,6 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     private val cookingRepository = LCCookingRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
-
-    val tutorialImages = listOf(
-        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_1 else R.drawable.android_concept_learning_middle_tutorial_1,
-        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_2 else R.drawable.android_concept_learning_middle_tutorial_2,
-        if (schoolType.isHigh) R.drawable.android_concept_learning_high_tutorial_3 else R.drawable.android_concept_learning_middle_tutorial_3,
-        R.drawable.android_concept_learning_tutorial_4,
-        R.drawable.android_concept_learning_tutorial_5,
-        R.drawable.android_concept_learning_tutorial_6,
-        R.drawable.android_concept_learning_tutorial_7,
-        R.drawable.android_concept_learning_tutorial_8,
-        R.drawable.android_concept_learning_tutorial_9,
-        R.drawable.android_concept_learning_tutorial_10,
-        R.drawable.android_concept_learning_tutorial_11, // 이거 클릭했을때 예제채점
-        R.drawable.android_concept_learning_tutorial_12,
-        R.drawable.android_concept_learning_tutorial_13,
-        R.drawable.android_concept_learning_tutorial_14,
-        R.drawable.android_concept_learning_tutorial_15,
-        R.drawable.android_concept_learning_tutorial_16, // 여기서 클릭했을때 유형학습 채점
-        R.drawable.android_concept_learning_tutorial_17,
-        R.drawable.android_concept_learning_tutorial_18,
-        R.drawable.android_concept_learning_tutorial_19,
-        R.drawable.android_concept_learning_tutorial_20,
-    )
 
     val transitionList = listOf(
         ViewTransition.Instant,
@@ -75,6 +53,19 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     )
     val sequence by lazy { MutableLiveData(0) }
 
+    fun getImageListBySchoolType(): List<Int> {
+        return when (schoolType) {
+            SchoolType.ELEMENTARY -> {
+                studyRepository.elementarySchoolTutorialImages
+            }
+            SchoolType.MIDDLE -> {
+                studyRepository.middleSchoolTutorialImages
+            }
+            else -> {
+                studyRepository.highSchoolTutorialImages
+            }
+        }
+    }
 
     fun sequencePlus1() {
         sequence.value?.let {
@@ -88,7 +79,7 @@ class LCTutorialViewModel(application: Application) : BaseAndroidViewModel(appli
     }
 
     fun isSeqOver(seq: Int): Boolean {
-        return seq >= tutorialImages.size
+        return seq >= getImageListBySchoolType().size
     }
     fun answerApiCall(seq: Int) {
         if (seq == 11) {

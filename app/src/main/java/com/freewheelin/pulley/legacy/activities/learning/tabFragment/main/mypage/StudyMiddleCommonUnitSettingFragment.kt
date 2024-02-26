@@ -59,11 +59,7 @@ class StudyMiddleCommonUnitSettingFragment : MyPageBaseFragment(),
                     }
                     selection.initSelected(it)
 
-                    if (getUnitClicked()) {
-                        modifyBtn.isEnabled = true
-                    } else {
-                        modifyBtn.isEnabled = false
-                    }
+                    modifyBtn.isEnabled = getUnitClicked()
                 }
             }
         }
@@ -81,30 +77,6 @@ class StudyMiddleCommonUnitSettingFragment : MyPageBaseFragment(),
         }
     }
 
-    fun setRecommendCommonSubject(subjects: List<RecommendSubject>) {
-        subjects.forEach {
-            val subject = SubjectV3.idOfNonNull(it.subjectId)
-            binding.apply {
-                val selection = when (subject) {
-                    SubjectV3.중1_1 -> middle11Selection
-                    SubjectV3.중1_2 -> middle12Selection
-                    SubjectV3.중2_1 -> middle21Selection
-                    SubjectV3.중2_2 -> middle22Selection
-                    SubjectV3.중3_1 -> middle31Selection
-                    SubjectV3.중3_2 -> middle32Selection
-                    else -> { middle11Selection }
-                }
-                selection.initSelected(it)
-
-                if (getUnitClicked()) {
-                    modifyBtn.isEnabled = true
-                } else {
-                    modifyBtn.isEnabled = false
-                }
-            }
-        }
-
-    }
     private fun onModifyBtnClicked() {
         val selectedIds = getClickedUnit()
         if (selectedIds != null) {

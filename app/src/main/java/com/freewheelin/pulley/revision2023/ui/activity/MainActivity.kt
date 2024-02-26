@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
+import android.content.res.ColorStateList
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,8 +28,8 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.browser.customtabs.CustomTabsCallback
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -45,8 +47,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityMainBinding
 import com.freewheelin.pulley.legacy.activities.auth.InitSettingCompleteActivity
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.AnalysisFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.SnackTestFragment
 import com.freewheelin.pulley.legacy.activities.lesson.LessonActivity
 import com.freewheelin.pulley.legacy.activities.mypage.MyMainPageFragment
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageBaseFragment
@@ -67,6 +67,7 @@ import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
+import com.freewheelin.pulley.revision2023.ui.adapter.SchoolSpinnerAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.SpyDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.AffiliatedTestFragment
@@ -235,12 +236,12 @@ class MainActivity : PermissionActivity(),
 //                }.show(supportFragmentManager, "SpyDialog")
 //                Preferences._checkPlanMakeBtnClicked.set("")
             }
-
+            setSchoolSpinner()
             setSpy()
-            val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-            anim.duration = 250
-            schoolSwitch.startAnimation(anim)
-            showTooltipIfNeedOnAnim(Tutor.TooltipType.middleIntroduceOpening, anim)
+//            val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+//            anim.duration = 250
+//            schoolSwitch.startAnimation(anim)
+//            showTooltipIfNeedOnAnim(Tutor.TooltipType.middleIntroduceOpening, anim)
         }
     }
 
@@ -251,9 +252,9 @@ class MainActivity : PermissionActivity(),
                 }
 
                 override fun onAnimationEnd(p0: Animation?) {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        Tutor.showToolTipIfNeed(binding.schoolSwitch.binding.middleWrapperCl, type)
-                    }, 500)
+//                    Handler(Looper.getMainLooper()).postDelayed({
+//                        Tutor.showToolTipIfNeed(binding.schoolSwitch.binding.middleWrapperCl, type)
+//                    }, 500)
                 }
 
                 override fun onAnimationStart(p0: Animation?) {}
@@ -329,7 +330,12 @@ class MainActivity : PermissionActivity(),
         val emoji = StringUtils.getEmojiByUnicode(0x1F977)
         binding.spyBtn.text = emoji
     }
-
+    private fun setSchoolSpinner() {
+        binding.apply {
+            val items = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
+            schoolSpinnerAdapter = SchoolSpinnerAdapter(this@MainActivity, R.layout.item_school_spinner_textview, items)
+        }
+    }
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
@@ -350,6 +356,7 @@ class MainActivity : PermissionActivity(),
                 try {
                     val dialog = UpdateGradeDialog.newInstance()
                     dialog.callback = {
+                        sendBroadcast(Intent(UserManager.EVENT_USER_MODIFYING))
                         DaebakToast.show(this, "저장 완료! 업데이트 되었습니다.")
                     }
                     dialog.isCancelable = false
@@ -620,46 +627,38 @@ class MainActivity : PermissionActivity(),
             schoolType.observe(this@MainActivity) {
                 Preferences.schoolType.set(it.name)
                 MyApplication.schoolType = it
-                binding.schoolSwitch.changeSchoolType(it.isHigh)
-                updateHeaderItems(it.isMiddle)
-                updateHeaderColors(it.isMiddle)
+                updateHeaderItems(it)
+                updateHeaderColors(it)
+            }
+            schoolSpinnerPosition.observe(this@MainActivity) {
+                updateSchoolType(SchoolType.convertSwitchPositionToType(it))
             }
         }
     }
-    private fun updateHeaderItems(isMiddle: Boolean) {
+    private fun updateHeaderItems(type: SchoolType) {
         binding.apply {
-//            if (mainTl.getCurrentTab() == MainTab.모의고사 && isMiddle) {
-//                mainTl.selectTap(2)
-//            }
             mainTl.updateSchoolType()
-            alarmBtn.setColorFilter(ContextCompat.getColor(this@MainActivity, if (isMiddle) R.color.gray_500 else R.color.gray_700))
+            val alarmBtnColor = when (type) {
+                SchoolType.ELEMENTARY -> R.color.purple_200
+                SchoolType.MIDDLE -> R.color.gray_500
+                SchoolType.HIGH -> R.color.gray_700
+                SchoolType.UNIVERSITY -> R.color.gray_700
+            }
+            alarmBtn.setColorFilter(ContextCompat.getColor(this@MainActivity, alarmBtnColor))
         }
     }
     fun moveConceptCourseSubject(id: Int) {
         val conceptFragment = tabFragments.find { it.type == MainTab.개념 } as ConceptCourseFragment?
         conceptFragment?.moveSubjectId(id)
     }
-    private fun updateHeaderColors(isMiddle: Boolean) {
+    private fun updateHeaderColors(type: SchoolType) {
         binding.mainTl.setTabTextColorsBySchoolType()
+        val transitionDrawable = binding.mainTl.makeHeaderTransitionDrawable(type)
 
-        val transitionDrawable = makeHeaderTransitionDrawable(isMiddle)
         binding.apply {
             headerCl.background = transitionDrawable
             transitionDrawable.startTransition(400)
         }
-    }
-
-    private fun makeHeaderTransitionDrawable(isMiddle: Boolean): TransitionDrawable {
-        val colors: Array<ColorDrawable> = if (isMiddle) arrayOf(
-            ColorDrawable(ContextCompat.getColor(this, R.color.black_200)),
-            ColorDrawable(ContextCompat.getColor(this, R.color.white))
-        ) else {
-            arrayOf(
-                ColorDrawable(ContextCompat.getColor(this, R.color.white)),
-                ColorDrawable(ContextCompat.getColor(this, R.color.black_200))
-            )
-        }
-        return TransitionDrawable(colors)
     }
 
     fun addMyPage(frag: Fragment, withAnim: Boolean = true) {

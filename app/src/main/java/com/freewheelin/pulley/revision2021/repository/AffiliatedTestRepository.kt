@@ -1,13 +1,19 @@
 package com.freewheelin.pulley.revision2021.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedMediaLog
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
+import com.freewheelin.pulley.revision2021.model.response.base.BaseIntResponseNode
+import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestApi
 import com.freewheelin.pulley.revision2021.repository.remote.AffiliatedTestService
 import com.freewheelin.pulley.revision2021.repository.remote.SpringService
 import com.freewheelin.pulley.revision2021.repository.remote.SpringService2
+import io.reactivex.Observable
+import io.reactivex.Single
+import retrofit2.Response
 
 class AffiliatedTestRepository private constructor() {
     companion object {
@@ -29,7 +35,7 @@ class AffiliatedTestRepository private constructor() {
     fun finishTest(studentId: String, workbookId: Int) = affiliatedTestService.finish(studentId, workbookId)
     fun insertAnswer(studentId: String, workbookId: Int, problemNo: Int, param: Parameter) = affiliatedTestService.insertAnswer(studentId, workbookId, problemNo, param)
     fun fetchScoringResult(studentId: String, workbookId: Int, version: Int) = affiliatedTestService.fetchScoringResult(studentId, workbookId, version)
-
+    fun fetchAdditionalLearningBySchool(studentId: String, schoolId: Int, subject: String) = affiliatedTestService.fetchAdditionalLearningBySchool(studentId, schoolId, subject)
     fun fetchMedia(problemId: Int) = affiliatedTestService.fetchMedia(problemId)
     fun makeMediaLog(params: AffiliatedMediaLog) = affiliatedTestService.makeMediaLog(params)
     fun finishMediaLog(responseMediaId: Int, params: AffiliatedMediaLog) = affiliatedTestService.finishMediaLog(responseMediaId, params)

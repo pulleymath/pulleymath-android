@@ -154,6 +154,18 @@
 
                             <!--            이외의 이미지나 텍스트뷰는 addView로 집어넣음-->
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:text="해당문제는 유형별 개념을 제공하지 않아요"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginStart="-24dp"
+                                style="@style/c1"
+                                android:visibility="gone"
+                                tools:visibility="visible"
+                                android:textColor="@color/gray_600"
+                                android:gravity="center"/>
+
 
                         </LinearLayout>
                         <LinearLayout

@@ -1,11 +1,13 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.UserPlannerItem
 import com.freewheelin.pulley.revision2023.model.UserPlannerItemType
@@ -15,11 +17,14 @@ import com.freewheelin.pulley.revision2023.repository.PlannerRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.StudyPlannerAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.UserPlannerAdapter
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
+import java.util.concurrent.TimeUnit
 
 class PlannerActViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
 
@@ -122,11 +127,37 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
         }
     }
 
+    val isE3_1ItemExist = MutableLiveData<Boolean>()
+    val isE3_2ItemExist = MutableLiveData<Boolean>()
+    val isE4_1ItemExist = MutableLiveData<Boolean>()
+    val isE4_2ItemExist = MutableLiveData<Boolean>()
+    private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
+
+    private fun fetchAvailableElementarySubjects() {
+        compositeDisposable += studyRepository.getAvailableSubject()
+            .subscribeOn(Schedulers.io())
+            .timeout(3, TimeUnit.SECONDS)
+            .subscribe({ response ->
+                Log.d(javaClass.simpleName, "fetchAvailableElementarySubjects =>${response.data}")
+                response.data?.let {
+                    val availableSubjectIds = it.map { it.subjectId }
+                    isE3_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_1.id))
+                    isE3_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_2.id))
+                    isE4_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_1.id))
+                    isE4_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_2.id))
+                }
+            }, { error ->
+                Log.e(javaClass.simpleName, "fetchAvailableElementarySubjects fetch error=${error.localizedMessage}")
+            })
+    }
+
     fun fetchStudyPlanWorkbookList(subjectId: Int) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val items = plannerRepository.fetchStudyPlanOnSubject(subjectId)
             showEmptyText.postValue(items.isEmpty())
             _studyPlanItems.postValue(items)
+            val subjectIds = items.map { it.subjectId }
+
         }
     }
 
@@ -263,10 +294,13 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     }
     fun updateSchoolType(type: SchoolType) {
         userRepository.updateSchoolType(type)
-        val subjectId = if (type.isMiddle) {
-            SubjectV3.중1_1.id
-        } else {
-            SubjectV3.수학_상.id
+        val subjectId = when (type) {
+            SchoolType.ELEMENTARY -> {
+                fetchAvailableElementarySubjects()
+                SubjectV3.초5_1.id
+            }
+            SchoolType.MIDDLE -> SubjectV3.중1_1.id
+            else -> SubjectV3.수학_상.id
         }
         onHeaderSubjectBtnClick(subjectId)
     }

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".revision2023.ui.fragment.SnackTestMiddleSubjectModifyFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_gray_100_round_ripple"
+        android:clickable="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_tailless_arrow_left_24"
+                android:paddingStart="20dp"
+                android:paddingEnd="@dimen/dp32"
+                android:paddingTop="20dp"
+                android:paddingBottom="18dp"
+                android:background="@null"
+                app:tint="@color/gray_800"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View style="@style/Border_Gray_300_Horizontal"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp24">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/titleLabel"
+                    style="@style/TextGray_800.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:text="풀고 싶은 대단원을 선택해주세요!\n문제를 추천해드릴게요 :)"
+                    android:textSize="@dimen/sp18"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lineHeight="@dimen/sp24" />
+
+
+                <TextView
+                    android:id="@+id/guideBottomLabel"
+                    style="@style/b2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="일정량의 학습 데이터가 쌓일 때까지 선택한대로 추천됩니다!"
+                    android:textColor="@color/purple_300"
+                    app:layout_constraintStart_toStartOf="@+id/titleLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/titleLabel" />
+
+
+                <LinearLayout
+                    android:id="@+id/selectionContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/guideBottomLabel">
+
+<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
+<!--                        android:id="@+id/elementary11Selection"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:unitType="e1-1" />-->
+
+<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
+<!--                        android:id="@+id/elementary12Selection"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:unitType="e1-2" />-->
+<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
+<!--                        android:id="@+id/elementary21Selection"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:unitType="e2-1" />-->
+<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
+<!--                        android:id="@+id/elementary22Selection"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:unitType="e2-2" />-->
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary31Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e3-1" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary32Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e3-2" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary41Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e4-1" />
+
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary42Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e4-2" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary51Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e5-1" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary52Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e5-2" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary61Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e6-1" />
+                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
+                        android:id="@+id/elementary62Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:unitType="e6-2" />
+
+                </LinearLayout>
+
+
+
+                <com.freewheelin.pulley.revision2023.ui.view.CommonButton
+                    android:id="@+id/modifyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp56"
+                    android:layout_marginStart="@dimen/dp24"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:layout_marginEnd="@dimen/dp24"
+                    android:text="@string/text_change"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/selectionContainer" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

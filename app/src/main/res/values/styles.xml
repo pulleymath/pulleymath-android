@@ -166,6 +166,13 @@
         <item name="android:thumb">@drawable/switch_thumb_extra_light</item>
     </style>
 
+    <style name="Switch.ExtraLightDisabled" parent="Switch">
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
+        <item name="android:track">@drawable/switch_track_extra_light_disabled</item>
+        <item name="android:thumb">@drawable/switch_thumb_extra_light_disabled</item>
+    </style>
+
     <style name="Switch.Grey" parent="Switch">
         <item name="android:textOff">""</item>
         <item name="android:textOn">""</item>

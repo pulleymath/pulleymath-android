@@ -36,6 +36,7 @@
     <color name="purple_100">#ecebff</color>
     <color name="purple_150">#F0EFFF</color>
     <color name="purple_200">#acacff</color>
+    <color name="purple_200_opa_40_based_black_200">#636382</color>
     <color name="purple_250">#7E7EFF</color>
     <color name="purple_300">#6d6dff</color>
     <color name="purple_300_disabled">#406D6DFF</color>

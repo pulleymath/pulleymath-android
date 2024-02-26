@@ -124,7 +124,8 @@ class SnackTestRecommendSettingDialog(): DialogFragment() {
         과목제외,
         고등공통과목수정,
         고등선택과목수정,
-        중등과목수정;
+        중등과목수정,
+        초등과목수정;
     }
     fun getFragment(step: ViewType): Fragment {
         return when (step) {
@@ -132,6 +133,7 @@ class SnackTestRecommendSettingDialog(): DialogFragment() {
             ViewType.고등공통과목수정 -> SnackTestHighCommonSubjectModifyFragment.newInstance(viewModel)
             ViewType.고등선택과목수정 -> SnackTestHighOptionalSubjectModifyFragment.newInstance(viewModel)
             ViewType.중등과목수정 -> SnackTestMiddleSubjectModifyFragment.newInstance(viewModel)
+            ViewType.초등과목수정 -> SnackTestElementarySubjectModifyFragment.newInstance(viewModel)
             ViewType.과목제외 -> SnackTestSubjectExcludeModifyFragment.newInstance(viewModel)
         }
     }

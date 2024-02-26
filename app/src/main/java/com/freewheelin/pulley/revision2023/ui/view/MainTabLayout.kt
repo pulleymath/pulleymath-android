@@ -3,6 +3,8 @@ package com.freewheelin.pulley.revision2023.ui.view
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.TransitionDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -93,6 +95,7 @@ class MainTabLayout: FrameLayout {
     var listener: MainTabListener? = null
     lateinit var binding: ViewLayoutMainTabBinding
     var prevTabType = MainTab.메인
+    var prevSchoolType: SchoolType = SchoolType.HIGH
     var prevPosition = 0
 
     init {
@@ -225,6 +228,14 @@ class MainTabLayout: FrameLayout {
     fun getMobileUnivTab(): TextView = binding.mobileTab4
 
     fun updateSchoolType() {
+        prevSchoolType = when (binding.schoolType) {
+            SchoolType.ELEMENTARY -> SchoolType.ELEMENTARY
+            SchoolType.MIDDLE -> SchoolType.MIDDLE
+            SchoolType.HIGH -> SchoolType.HIGH
+            SchoolType.UNIVERSITY -> SchoolType.UNIVERSITY
+            null -> SchoolType.HIGH
+        }
+
         binding.schoolType = schoolType
     }
 
@@ -258,10 +269,37 @@ class MainTabLayout: FrameLayout {
     }
 
     private fun setSelectedTabTextColor(textView: TextView) {
-        val isMiddle = schoolType.isMiddle
+        val fromTextColor = when (prevSchoolType) {
+            SchoolType.ELEMENTARY -> R.color.white
+            SchoolType.MIDDLE -> R.color.gray_800
+            SchoolType.HIGH -> R.color.white
+            SchoolType.UNIVERSITY -> R.color.white
+        }
+        val toTextColor = when (schoolType) {
+            SchoolType.ELEMENTARY -> R.color.white
+            SchoolType.MIDDLE -> R.color.gray_800
+            SchoolType.HIGH -> R.color.white
+            SchoolType.UNIVERSITY -> R.color.white
+        }
+        val colorFrom = ContextCompat.getColor(context, fromTextColor)
+        val colorTo = ContextCompat.getColor(context, toTextColor)
 
-        val fromTextColor = if (isMiddle) R.color.white else R.color.gray_800
-        val toTextColor = if (isMiddle) R.color.gray_800 else R.color.white
+        val colorAnimation: ValueAnimator =
+            ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
+        colorAnimation.addUpdateListener { animator ->
+            textView.setTextColor(animator.animatedValue as Int)
+        }
+        colorAnimation.start()
+    }
+    private fun setUnSelectedTabTextColor(textView: TextView) {
+        val fromTextColor = when (prevSchoolType) {
+            SchoolType.ELEMENTARY -> R.color.purple_150
+            else -> R.color.gray_700
+        }
+        val toTextColor = when (schoolType) {
+            SchoolType.ELEMENTARY -> R.color.purple_150
+            else -> R.color.gray_700
+        }
         val colorFrom = ContextCompat.getColor(context, fromTextColor)
         val colorTo = ContextCompat.getColor(context, toTextColor)
 
@@ -280,12 +318,37 @@ class MainTabLayout: FrameLayout {
                     if (it is TextView) {
                         val tabName = it.text.toString()
                         if (tabName in selectedTab.names) {
+//                            setSelectedTabTextAppearance(it)
                             setSelectedTabTextColor(it)
+                        } else {
+                            // TODO
+//                            println("aspasp tabName : ${tabName} 선택되지 않은것인가? ")
+//                            setUnSelectedTabTextAppearance(it)
+                            setUnSelectedTabTextColor(it)
                         }
                     }
                 }
             }
         }
+    }
+
+    fun makeHeaderTransitionDrawable(type: SchoolType): TransitionDrawable {
+        val prevColor = when (prevSchoolType) {
+            SchoolType.ELEMENTARY -> R.color.purple_300
+            SchoolType.MIDDLE -> R.color.white
+            SchoolType.HIGH -> R.color.black_200
+            SchoolType.UNIVERSITY -> R.color.black_200
+        }
+        val nextColor = when (type) {
+            SchoolType.ELEMENTARY -> R.color.purple_300
+            SchoolType.MIDDLE -> R.color.white
+            SchoolType.HIGH -> R.color.black_200
+            SchoolType.UNIVERSITY -> R.color.black_200
+        }
+        val prevColorDrawable = ColorDrawable(ContextCompat.getColor(context, prevColor))
+        val nextColorDrawable = ColorDrawable(ContextCompat.getColor(context, nextColor))
+        val cd = arrayOf(prevColorDrawable, nextColorDrawable)
+        return TransitionDrawable(cd)
     }
 
 }

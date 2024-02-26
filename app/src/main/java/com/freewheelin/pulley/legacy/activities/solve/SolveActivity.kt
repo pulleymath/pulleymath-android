@@ -815,13 +815,13 @@ class SolveActivity : BaseActivity(),
                 content = it
                 isStartChallengeInProgress.postValue(isStartChallengeInProgress.value)
                 (it as? Book)?.let { book ->
-                    println("asoaso pieceSubCategory : ${book.pieceSubCategory}")
                     if (book.isStartChallengeBookPiece()) {
                         isOnlyStartChallengePiece.postValue(it.isStartChallengeBookPiece())
                     }
                 }
             }
             selectedProblemOb.observe(this@SolveActivity) {
+                if (it == null) return@observe
                 val isYet = it.getResultByScoring().isYet
 //                val isSwitchChecked = binding.solutionSwitch.daebakSwitch.isChecked
 //                // 푼문제면 열고 안푼문제면

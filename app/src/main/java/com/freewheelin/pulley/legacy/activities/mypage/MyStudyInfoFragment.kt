@@ -17,6 +17,7 @@ import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyElementaryCommonUnitSettingFragment
 import com.freewheelin.pulley.legacy.dialogs.CompleteDialog
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
@@ -71,6 +72,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
                 binding.commonSubjectTv.text = subjectNames
                 binding.middleSubjectTv.text = subjectNames
+                binding.elementarySubjectTv.text = subjectNames
             }
             recommendOptionalSubjects.observe(viewLifecycleOwner) { subjects ->
                 val subjectNames = subjects
@@ -104,6 +106,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
             modifyCommonBtn.setOnClickListener { moveTo(StudyCommonUnitSettingFragment()) }
             modifySelectBtn.setOnClickListener { moveTo(StudyOptionalUnitSettingFragment()) }
             middleSubjectModifyBtn.setOnClickListener { moveTo(StudyMiddleCommonUnitSettingFragment()) }
+            elementarySubjectModifyBtn.setOnClickListener { moveTo(StudyElementaryCommonUnitSettingFragment()) }
 //        deleteAllBtn.setOnClickListener { deleteAll() }
             backBtn.setOnClickListener { onBackBtnClicked() }
         }

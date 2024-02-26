@@ -419,6 +419,31 @@
                                     visibleIf="@{ vm.schoolType.isMiddle }"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@+id/myChoiceMiddleSubjectText"  />
+
+                                <TextView
+                                    android:id="@+id/myChoiceElementarySubjectText"
+                                    style="@style/TextGray_800.Bold"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="초 1-1"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isElementary }"
+                                    android:layout_marginTop="16dp"
+                                    app:layout_constraintEnd_toStartOf="@+id/myChoiceElementarySubjectModifyBtn"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/myChoiceMiddleSubjectText"
+                                    app:layout_constraintTop_toBottomOf="@+id/myChoiceMiddleSubjectText"   />
+
+                                <TextView
+                                    android:id="@+id/myChoiceElementarySubjectModifyBtn"
+                                    style="@style/TextPurple_300.ExtraBold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_do_edit_go"
+                                    android:textSize="@dimen/sp14"
+                                    visibleIf="@{ vm.schoolType.isElementary }"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@+id/myChoiceElementarySubjectText"  />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </RadioGroup>
 

@@ -143,19 +143,19 @@ class User {
 //        }
     }
 
-    val studiedUnit: Set<BigUnitV3>
-        get() {
-            val ids = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
-                .toSet()
-        }
+//    val studiedUnit: Set<BigUnitV3>
+//        get() {
+//            val ids = rawInitStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
+//            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
+//                .toSet()
+//        }
 
-    val optionalUnit: Set<BigUnitV3>
-        get() {
-            val ids = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
-                .toSet()
-        }
+//    val optionalUnit: Set<BigUnitV3>
+//        get() {
+//            val ids = rawInitOptional.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
+//            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
+//                .toSet()
+//        }
 
 //    val recentUnit: Set<BigUnitV3>
 //        get() {
@@ -248,9 +248,9 @@ class User {
         Preferences.userDataString.set(json)
     }
 
-    fun getStudiedUnit(subject: SubjectV3): List<BigUnitV3> {
-        return subject.bigUnits.filter { studiedUnit.contains(it) }
-    }
+//    fun getStudiedUnit(subject: SubjectV3): List<BigUnitV3> {
+//        return subject.bigUnits.filter { studiedUnit.contains(it) }
+//    }
 
 
 }

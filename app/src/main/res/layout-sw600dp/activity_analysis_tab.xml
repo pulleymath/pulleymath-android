@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp64"
             android:layout_gravity="center"
-            android:background="@{ vm.schoolType.isHigh? @color/black_200 : @color/white }"
+            android:background="@{ vm.schoolType.isElementary ? @color/purple_300 : vm.schoolType.isHigh ? @color/black_200 : @color/white }"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,8 @@
             app:tabTextColor="@color/gray_700"
             app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@style/AppTheme.TabBar.TabText">
-
+<!--            app:tabTextColor="@color/purple_150"-->
+<!--            app:tabSelectedTextColor="@color/white"-->
         </com.google.android.material.tabs.TabLayout>
 
         <ImageButton
@@ -42,7 +43,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:src="@drawable/ic_toolbar_back"
-            imagebtn_tint="@{ vm.schoolType.isHigh ? @color/white : @color/gray_800 }"
+            imagebtn_tint="@{ vm.schoolType.isElementary ? @color/white : vm.schoolType.isHigh ? @color/white : @color/gray_800 }"
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintStart_toStartOf="@+id/tabLayout"
             app:layout_constraintTop_toTopOf="@+id/tabLayout"
@@ -55,13 +56,13 @@
             android:text="Sample"
             style="@style/mo_h6"
             visibleIf="@{ vm.isSampleLiveData }"
-            android:background="@drawable/bg_gray_600_round"
+            android:background="@{ vm.schoolType.isElementary ? @drawable/bg_purple_100_round : @drawable/bg_gray_600_round }"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             app:layout_constraintTop_toTopOf="@+id/backBtn"
             app:layout_constraintStart_toEndOf="@+id/backBtn"
             app:layout_constraintBottom_toBottomOf="@+id/backBtn"
-            android:textColor="@color/white"
+            android:textColor="@{ vm.schoolType.isElementary ? @color/purple_300 : @color/white }"
             />
 
         <Button
@@ -73,8 +74,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/tabLayout"
             app:layout_constraintEnd_toEndOf="@+id/tabLayout"
             android:layout_marginEnd="@dimen/dp32"
-            android:background="@{ vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round_ripple }"
-            android:textColor="@color/gray_600"
+            android:background="@{ vm.schoolType.isElementary ? @drawable/bg_purple_100_round_ripple : vm.schoolType.isHigh ? @drawable/bg_gray_800_round_ripple : @drawable/bg_gray_200_round_ripple }"
+            android:textColor="@{ vm.schoolType.isElementary ? @color/purple_300 : @color/gray_600 }"
             android:text="내 전체 분석이란?"/>
         <View
             android:id="@+id/mobileGuideDummyView"

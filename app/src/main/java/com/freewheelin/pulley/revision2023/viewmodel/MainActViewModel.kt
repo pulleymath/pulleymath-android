@@ -37,6 +37,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     val schoolType = userRepository.schoolType
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val showWholeLoading = MutableLiveData<Boolean>(false)
+    val schoolSpinnerPosition = MutableLiveData(0)
 
     var prevTab: Pair<MainTab, Int> = Pair(MainTab.메인, 0)
     val showDrawer = MutableLiveData<Boolean>(false)
@@ -50,6 +51,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             initSchoolType(user.schoolType ?: SchoolType.HIGH)
+            schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
         }

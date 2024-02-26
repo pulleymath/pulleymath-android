@@ -126,9 +126,9 @@
                         android:layout_marginStart="@dimen/dp56"
                         android:text="-"
                         android:textSize="@dimen/sp16"
-                        app:layout_constraintBottom_toBottomOf="@+id/nameLabel"
+                        app:layout_constraintBottom_toBottomOf="@+id/schoolLabel"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/nameLabel" />
+                        app:layout_constraintTop_toTopOf="@+id/schoolLabel" />
 
                     <TextView
                         android:id="@+id/gradeTv"
@@ -291,7 +291,7 @@
                         android:layout_marginEnd="8dp"
                         visibleIf="@{ vm.schoolType.isMiddle }"
                         android:singleLine="false"
-                        android:text="-"
+                        tools:text="중등 단원"
                         android:textSize="@dimen/sp16"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/middleSubjectModifyBtn"
@@ -309,6 +309,34 @@
                         app:layout_constraintBottom_toBottomOf="@+id/middleSubjectTv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/middleSubjectTv" />
+
+                    <TextView
+                        android:id="@+id/elementarySubjectTv"
+                        style="@style/TextGray_800"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp36"
+                        android:layout_marginEnd="8dp"
+                        visibleIf="@{ vm.schoolType.isElementary }"
+                        android:singleLine="false"
+                        tools:text="초등 단원"
+                        android:textSize="@dimen/sp16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/elementarySubjectModifyBtn"
+                        app:layout_constraintTop_toBottomOf="@+id/middleSubjectTv" />
+
+
+                    <com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
+                        android:id="@+id/elementarySubjectModifyBtn"
+                        android:layout_width="96dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="@dimen/dp24"
+                        android:text="변경하기"
+                        style="@style/h5"
+                        visibleIf="@{ vm.schoolType.isElementary }"
+                        app:layout_constraintBottom_toBottomOf="@+id/elementarySubjectTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/elementarySubjectTv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

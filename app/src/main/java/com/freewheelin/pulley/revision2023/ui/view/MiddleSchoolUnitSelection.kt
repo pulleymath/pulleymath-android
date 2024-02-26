@@ -63,8 +63,8 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
         }
 
     private fun setTypedArray(attrs: AttributeSet) {
-        val array = context.obtainStyledAttributes(attrs, R.styleable.MiddleSchoolUnitSelection)
-        this.label = array.getInt(R.styleable.MiddleSchoolUnitSelection_unitType, 0)
+        val array = context.obtainStyledAttributes(attrs, R.styleable.SchoolUnitSelection)
+        this.label = array.getInt(R.styleable.SchoolUnitSelection_unitType, 0)
         array.recycle()
     }
 
@@ -112,23 +112,3 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
     }
 }
 
-class SubjectSelectionButton: androidx.appcompat.widget.AppCompatButton {
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-
-    init {
-
-    }
-    var bigUnits: MutableList<BigUnitV3> = mutableListOf()
-    override fun setSelected(selected: Boolean) {
-        super.setSelected(selected)
-        if(isSelected) {
-            typeface = Theme.extraBold(context)
-            setTextColor(ContextCompat.getColor(context,R.color.purple_300))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_purple_100_stroke_purple_200_round_24)
-        } else {
-            typeface = Theme.bold(context)
-            setTextColor(ContextCompat.getColor(context,R.color.gray_800))
-            background = ContextCompat.getDrawable(context, R.drawable.bg_white_stroke_gray_300_round_24)
-        }
-    }
-}

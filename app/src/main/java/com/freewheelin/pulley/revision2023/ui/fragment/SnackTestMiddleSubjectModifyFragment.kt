@@ -81,11 +81,7 @@ class SnackTestMiddleSubjectModifyFragment : Fragment(), MiddleSchoolUnitSelecti
                     }
                     selection.initSelected(it)
 
-                    if (getUnitClicked()) {
-                        modifyBtn.isEnabled = true
-                    } else {
-                        modifyBtn.isEnabled = false
-                    }
+                    modifyBtn.isEnabled = getUnitClicked()
                 }
             }
         }

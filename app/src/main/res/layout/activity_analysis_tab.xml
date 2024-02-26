@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp64"
             android:layout_gravity="center"
-            android:background="@{ vm.schoolType.isHigh? @color/black_200 : @color/white }"
+            android:background="@{ vm.schoolType.isElementary ? @color/purple_300 : vm.schoolType.isHigh ? @color/black_200 : @color/white }"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

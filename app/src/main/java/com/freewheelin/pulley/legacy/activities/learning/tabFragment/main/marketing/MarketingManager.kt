@@ -27,7 +27,8 @@ object MarketingManager {
 
     val URL = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing.json"
     val URL_BETA = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/marketing/marketing_beta.json"
-
+//    val URL = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/marketing_banner/marketing_banner_android.json"
+//    val URL_BETA = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/marketing_banner/marketing_banner_android_staging.json"
     fun getInfo(context: Context, callback:(marketing: Marketing?)->Unit) {
 
         val url = when (Preferences.onServerAPI.get()) {

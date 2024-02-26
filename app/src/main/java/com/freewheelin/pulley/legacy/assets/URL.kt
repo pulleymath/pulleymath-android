@@ -29,6 +29,11 @@ object URL {
 //    val PULLEY_API = "https://api-dev.pulleymath.com"
     val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection.json"
     val STAGING_SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection_staging.json"
+
+//    val SERVER_INSPECTION = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection_android.json"
+//    val STAGING_SERVER_INSPECTION = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection_android_staging.json"
+
+
     val SERVER_INSPECTION_ORIGINAL = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/serverCheck.json"
 
     val 구매촉구 = "https://pulleymath.com/?utm_source=pulley_app&utm_medium=social&utm_campaign=init&utm_content=intro_pay#part03"

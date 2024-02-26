@@ -24,6 +24,7 @@ import com.freewheelin.pulley.revision2021.model.*
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
@@ -429,14 +430,24 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("mainTabTextColor")
-    fun setMainTabTextColor(view: TextView, type: MainTab?) {
+    @BindingAdapter("mainTabTextStyle")
+    fun setMainTabTextStyle(view: TextView, type: MainTab?) {
         type?.let {
             val tabName = view.text.toString()
             val color = if (tabName in it.names) {
-                if (schoolType.isMiddle) R.color.gray_800 else R.color.white
+                view.setTextAppearance(R.style.b1)
+                when (schoolType) {
+                    SchoolType.ELEMENTARY -> R.color.white
+                    SchoolType.MIDDLE -> R.color.gray_800
+                    SchoolType.HIGH -> R.color.white
+                    SchoolType.UNIVERSITY -> R.color.white
+                }
             } else {
-                R.color.gray_700
+                view.setTextAppearance(R.style.b1r)
+                when (schoolType){
+                    SchoolType.ELEMENTARY -> R.color.purple_150
+                    else -> R.color.gray_700
+                }
             }
             view.setTextColor(ContextCompat.getColor(view.context, color))
         }

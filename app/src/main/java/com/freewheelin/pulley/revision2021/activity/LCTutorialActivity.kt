@@ -19,6 +19,7 @@ import com.freewheelin.pulley.databinding.ActivityLcTutorialBinding
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.viewmodel.LCTutorialViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.SchoolType
 
 class LCTutorialActivity : AppCompatActivity() {
     companion object {
@@ -30,8 +31,6 @@ class LCTutorialActivity : AppCompatActivity() {
         }
         fun getIntentAddFlags(context: Context, isFromMainActivity: Boolean = false): Intent {
             return Intent(context, LCTutorialActivity::class.java).apply {
-//                putExtra(FROM_MAIN_ACTIVITY, isFromMainActivity)
-//                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
     }
@@ -99,7 +98,8 @@ class LCTutorialActivity : AppCompatActivity() {
     private fun changeImageWrapperCl(seq: Int) {
         binding.apply {
             val isSeqOdd = seq % 2 == 1
-            val uri = viewModel.tutorialImages.get(seq)
+            val tutorialImages = viewModel.getImageListBySchoolType()
+            val uri = tutorialImages.get(seq)
             if (isSeqOdd) {
                 Glide.with(this@LCTutorialActivity)
                     .load(uri)

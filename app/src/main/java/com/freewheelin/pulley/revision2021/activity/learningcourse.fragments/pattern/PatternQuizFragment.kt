@@ -4,6 +4,7 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -239,24 +241,38 @@ class PatternQuizFragment() : Fragment(),
         }
     }
 
-    fun addBaseConcept(quiz: LCPatternQuiz) {
+    private fun addBaseConcept(quiz: LCPatternQuiz) {
         binding.apply {
-            quiz.concepts.filter {
-                it.conceptTypeEnum == LCPatternConcept.ConceptType.base
-            }?.forEach {
-                val iv = ImageView(context)
-                val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                layoutParams.setMargins(0, 16.toPx(), 0, 0)
+            val conceptsBase = quiz.concepts.filter { it.conceptTypeEnum == LCPatternConcept.ConceptType.base }
+            if (conceptsBase.isEmpty()) {
+                val tv = TextView(context).also { tv ->
+                    val tvLp: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    tvLp.setMargins((-24).toPx(), 24.toPx(), 0, 0)
+                    tv.setPadding(0, 50.toPx(), 0, 50.toPx())
+                    tv.id = View.generateViewId()
+                    tv.text = "해당 문제는 유형별 개념을 제공하지 않아요."
+                    tv.setTextAppearance(R.style.c1)
+                    tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_600))
+                    tv.gravity = Gravity.CENTER
+                }
 
-                iv.layoutParams = layoutParams
-                iv.id = View.generateViewId()
-                iv.setImageUrlGlide(it.conceptImageUrl)
-                conceptScrollRootLl.addView(iv)
+                conceptScrollRootLl.addView(tv)
+            } else {
+                conceptsBase.forEach {
+                    val iv = ImageView(context)
+                    val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    layoutParams.setMargins(0, 16.toPx(), 0, 0)
+
+                    iv.layoutParams = layoutParams
+                    iv.id = View.generateViewId()
+                    iv.setImageUrlGlide(it.conceptImageUrl)
+                    conceptScrollRootLl.addView(iv)
+                }
             }
         }
     }
 
-    fun addRelatedConcepts(quiz: LCPatternQuiz) {
+    private fun addRelatedConcepts(quiz: LCPatternQuiz) {
         binding.apply {
             val relatedConcepts = quiz.concepts.filter {
                 it.conceptTypeEnum == LCPatternConcept.ConceptType.related

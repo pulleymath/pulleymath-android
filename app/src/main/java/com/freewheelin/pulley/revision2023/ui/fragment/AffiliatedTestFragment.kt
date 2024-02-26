@@ -93,7 +93,8 @@ class AffiliatedTestFragment: MainTabFragment() {
 
         additionalLearningReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, intent: Intent?) {
-                startActivity(Intent(requireContext(), UnivAdditionalLearningActivity::class.java))
+                val actIntent = UnivAdditionalLearningActivity.getIntent(p0, intent?.getStringExtra("subject"))
+                startActivity(actIntent)
             }
         }
 

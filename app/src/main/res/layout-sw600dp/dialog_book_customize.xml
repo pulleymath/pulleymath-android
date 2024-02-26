@@ -43,13 +43,23 @@
                 android:paddingStart="@dimen/dp48"
                 android:paddingEnd="@dimen/dp48">
 
-                <com.freewheelin.pulley.legacy.views.DaebakTabRadio
-                    android:id="@+id/subjectTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    app:tabWidth="@dimen/dp96"
+                <HorizontalScrollView
+                    android:id="@+id/horizontalSv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <com.freewheelin.pulley.legacy.views.DaebakTabRadio
+                        android:id="@+id/subjectTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        app:tabWidth="@dimen/dp96"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+                </HorizontalScrollView>
+
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +68,7 @@
                     android:background="@drawable/bg_white_stroke_gray_300"
                     android:layout_marginTop="@dimen/dp24"
                     android:layout_marginBottom="@dimen/dp32"
-                    app:layout_constraintTop_toBottomOf="@+id/subjectTab">
+                    app:layout_constraintTop_toBottomOf="@+id/horizontalSv">
 
                     <com.freewheelin.pulley.legacy.views.textViews.SortableTextView
                         android:id="@+id/subjectSl"

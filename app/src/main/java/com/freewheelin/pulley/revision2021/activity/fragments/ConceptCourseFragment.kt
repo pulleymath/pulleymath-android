@@ -218,9 +218,9 @@ class ConceptCourseFragment : MainTabFragment() {
         }
     }
 
-    fun moveAvailableFirstSubject() {
-        viewModel.moveAvailableFirstSubject()
-    }
+//    fun moveAvailableFirstSubject() {
+//        viewModel.moveAvailableFirstSubject()
+//    }
     fun fetch (subjectId: Int? = null) {
         if (subjectId != null) {
             viewModel.fetch(subjectId)

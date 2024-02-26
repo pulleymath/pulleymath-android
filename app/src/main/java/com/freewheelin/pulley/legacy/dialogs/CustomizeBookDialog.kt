@@ -25,6 +25,7 @@ import com.freewheelin.pulley.databinding.ItemCommercialListBinding
 import com.freewheelin.pulley.databinding.ItemCommercialPageBinding
 import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
@@ -154,11 +155,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
     private fun sort() {
         var list = commercialBooks
         if(subjectSl.isSelected) {
-            val subjectList = if (schoolType.isHigh) {
-                listOf("수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
-            } else {
-                listOf("중1-1", "중1-2", "중2-1", "중2-2", "중3-1", "중3-2")
-            }
+            val subjectList = SubjectV3.listOnSchoolType
             val indexComparatorAscend =
                 Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
                     subjectList.indexOf(cbook1.subject) - subjectList.indexOf(cbook2.subject)
@@ -207,11 +204,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
 //        setCancelable(false)
         initComponents()
         step = 1
-        subjectTab.labels = if (schoolType.isHigh) {
-            listOf("전체", "수학(상)", "수학(하)", "수학1", "수학2", "확률과 통계", "미적분", "기하")
-        } else {
-            listOf("전체", "중 1-1", "중 1-2", "중 2-1", "중 2-2", "중 3-1", "중 3-2")
-        }
+        subjectTab.labels = SubjectV3.totalListOnSchoolType
         subjectTab.listener = this
         step2Container.visibility = View.GONE
         nowCheckbox.visibility = View.GONE
@@ -270,10 +263,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
             sort()
             bookListRv.adapter?.notifyDataSetChanged()
 
-            if(this.commercialBooks?.isEmpty() == true)
-                bookEmptyTv.visibility = View.VISIBLE
-            else
-                bookEmptyTv.visibility = View.GONE
+            bookEmptyTv.visibleIf(this.commercialBooks?.isEmpty() == true)
         }
     }
 

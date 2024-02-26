@@ -623,8 +623,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected synchronized void onDraw(Canvas canvas) {
-        int layerId = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
-
+//        int layerId = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null);
         if (loadedBitmap != null) {
             canvas.drawBitmap(loadedBitmap, 0, 0, null);
         }
@@ -638,7 +637,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         for (HistoryPath currentPath : mPaths) {
             Log.d("currentPath", "type : " + currentPath.type);
-            // If the path is just a single point, draw as a point
             if (currentPath.type == PathType.Curve) {
                 if (currentPath.isPoint()) {
                     canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),

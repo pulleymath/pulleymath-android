@@ -22,7 +22,7 @@ enum class AffiliatedUniv(val schoolId: Int) {
     val isThirdTestExist: Boolean
         get() {
             return when(this) {
-                Konkuk -> false
+                Konkuk -> true
                 Soongsil -> false
             }
         }

@@ -58,6 +58,7 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
 
                     myChoiceCommonText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
                     myChoiceMiddleSubjectText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
+                    myChoiceElementarySubjectText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
 
                     satOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
                     myChoiceOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
@@ -87,6 +88,7 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
             myChoiceCommonSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.고등공통과목수정) }
             myChoiceOptionalSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.고등선택과목수정) }
             myChoiceMiddleSubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.중등과목수정) }
+            myChoiceElementarySubjectModifyBtn.setOnClickListener { viewModel.setStep(ViewType.초등과목수정) }
 
             cancelBtn.setOnClickListener { cancelConfigure() }
             saveBtn.setOnClickListener { sendConfigure() }

@@ -80,3 +80,7 @@ abstract class BaseListResponse<T> : Serializable {
     var message: Any? = null
     var current_time: String? = null
 }
+
+data class BaseIntResponseNode(
+    val data: Int
+)

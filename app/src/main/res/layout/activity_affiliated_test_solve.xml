@@ -258,26 +258,50 @@
                         android:layout_height="wrap_content"
                         android:text="정답/해설 표시"
                         style="@style/b1"
-                        android:textColor="@color/gray_600"
-                        visibleIf="@{vm.isReview &amp;&amp; !vm.currentProblem.is_correct }"
+                        android:textColor="@{ vm.isEnableSolutionSwitch ? @color/gray_600 : @color/gray_800 }"
+                        visibleIf="@{vm.isReview }"
                         android:layout_marginEnd="8dp"
-                        app:layout_constraintTop_toTopOf="@+id/solutionSwitch"
-                        app:layout_constraintBottom_toBottomOf="@+id/solutionSwitch"
-                        app:layout_constraintEnd_toStartOf="@+id/solutionSwitch"/>
+                        app:layout_constraintTop_toTopOf="@+id/switchCl"
+                        app:layout_constraintBottom_toBottomOf="@+id/switchCl"
+                        app:layout_constraintEnd_toStartOf="@+id/switchCl"/>
 
-                    <Switch
-                        android:id="@+id/solutionSwitch"
-                        android:layout_width="48dp"
-                        android:layout_height="24dp"
-                        android:checked="@{vm.showSolutionView}"
-                        style="@style/Switch.ExtraLight"
-                        visibleIf="@{ vm.isReview &amp;&amp; !vm.currentProblem.is_correct }"
-                        android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
-                        android:enabled="@{vm.isEnableSolutionSwitch}"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/switchCl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <Switch
+                            android:id="@+id/solutionSwitch"
+                            android:layout_width="48dp"
+                            android:layout_height="24dp"
+                            android:checked="@{ vm.showSolutionView }"
+                            style="@style/Switch.ExtraLight"
+                            visibleIf="@{ vm.isReview &amp;&amp; vm.isEnableSolutionSwitch }"
+                            android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
+                            android:enabled="@{vm.isEnableSolutionSwitch}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <Switch
+                            android:id="@+id/solutionSwitchDisabled"
+                            android:layout_width="48dp"
+                            android:layout_height="24dp"
+                            android:checked="@{ vm.showSolutionView }"
+                            style="@style/Switch.ExtraLightDisabled"
+                            visibleIf="@{ vm.isReview &amp;&amp; !vm.isEnableSolutionSwitch }"
+                            android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
+                            android:enabled="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -335,7 +359,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/bg_white_stroke_gray_300_left"
-                        android:visibility="@{vm.showSolutionView ? View.VISIBLE : View.GONE }"
+                        android:visibility="@{vm.showSolutionView &amp;&amp; vm.currentProblem.is_correct == false ? View.VISIBLE : View.GONE }"
                         app:layout_constraintWidth_percent="0.375"
                         app:layout_constraintStart_toEndOf="@+id/problemContainer"
                         app:layout_constraintTop_toTopOf="parent"

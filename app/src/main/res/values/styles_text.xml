@@ -158,6 +158,10 @@
         <item name="android:fontFamily">@font/font_pretendard_semibold</item>
         <item name="android:textSize">@dimen/sp18</item>
     </style>
+    <style name="h4_r" parent="CustomFont">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">@dimen/sp18</item>
+    </style>
     <style name="h5" parent="CustomFont">
         <item name="android:fontFamily">@font/font_pretendard_bold</item>
         <item name="android:textSize">@dimen/sp16</item>
