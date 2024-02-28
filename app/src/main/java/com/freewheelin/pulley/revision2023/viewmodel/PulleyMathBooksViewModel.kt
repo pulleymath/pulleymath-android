@@ -59,7 +59,7 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
 
     var selectedFilterTypes: HashSet<LearningFilterType> = hashSetOf(
         LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.유형_전체,
-        if (schoolType.isMiddle) LearningFilterType.추천레벨_전체 else LearningFilterType.추천_전체
+        if (schoolType.isHigh) LearningFilterType.추천_전체 else LearningFilterType.추천레벨_전체
     )
 
     fun switchCheckedContainPin(isChecked: Boolean) {

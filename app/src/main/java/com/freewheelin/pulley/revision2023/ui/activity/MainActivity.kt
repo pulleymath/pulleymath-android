@@ -272,6 +272,7 @@ class MainActivity : PermissionActivity(),
             ServerStatusManager.setServerInspectionDialog(this@MainActivity)
         }
         showGuestWelcomeMessage()
+        viewModel.syncSchoolType()
     }
     private fun showGuestWelcomeMessage() {
         if (user?.serviceType?.isGuestUser == true) {

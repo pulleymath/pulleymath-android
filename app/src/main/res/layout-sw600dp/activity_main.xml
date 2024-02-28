@@ -9,7 +9,6 @@
         <import type="android.view.View" />
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel"/>
         <variable name="schoolSpinnerAdapter" type="android.widget.ArrayAdapter" />
-        <variable name="schoolSpinnerAdapter2" type="android.widget.ArrayAdapter" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout

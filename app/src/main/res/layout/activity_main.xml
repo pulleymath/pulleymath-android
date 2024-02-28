@@ -23,16 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/toolbarBackgroundCl"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="@dimen/dp56"-->
-<!--                app:background="@color/black_200"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent">-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/headerCl"
@@ -42,16 +32,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
-
-<!--                <com.freewheelin.pulley.revision2023.ui.view.SchoolSwitch-->
-<!--                    android:id="@+id/schoolSwitch"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    />-->
 
                 <com.freewheelin.pulley.revision2023.ui.view.SchoolSpinner
                     android:id="@+id/schoolSpinner"

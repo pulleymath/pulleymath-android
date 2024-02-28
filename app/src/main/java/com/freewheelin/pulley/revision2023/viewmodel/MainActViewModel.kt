@@ -141,4 +141,10 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     fun updateSchoolType(level: SchoolType) {
         userRepository.updateSchoolType(level)
     }
+    fun syncSchoolType() {
+        if (userRepository.schoolType.value?.mainSpinnerPosition != schoolSpinnerPosition.value) {
+            schoolSpinnerPosition.postValue(userRepository.schoolType.value?.mainSpinnerPosition)
+        }
+    }
+
 }

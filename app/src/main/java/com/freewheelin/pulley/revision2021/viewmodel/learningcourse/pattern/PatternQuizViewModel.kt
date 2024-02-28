@@ -27,7 +27,7 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
     var quizSize = -1
     val patternQuiz by lazy { MutableLiveData<LCPatternQuiz>() }
 
-    val currBaseConceptImage by lazy { MutableLiveData<String>() }
+//    val currBaseConceptImage by lazy { MutableLiveData<String>() }
     val currQuizImage by lazy { MutableLiveData<String>() }
 
     val isQuizMainConcept by lazy { MutableLiveData<Boolean>(false) }
@@ -50,7 +50,7 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
         this.quizSize = quizSize
         currQuizImage.postValue(quiz.quizImageUrl)
 
-        currBaseConceptImage.postValue(quiz.concepts[0].conceptImageUrl)
+//        currBaseConceptImage.postValue(quiz.concepts[0].conceptImageUrl)
         hintExist = quiz.hints.isNotEmpty()
         remainingHintSize.postValue(quiz.hints.size)
     }
