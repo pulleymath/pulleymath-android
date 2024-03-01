@@ -37,7 +37,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     val schoolType = userRepository.schoolType
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val showWholeLoading = MutableLiveData<Boolean>(false)
-    val schoolSpinnerPosition = MutableLiveData(0)
+    val schoolSpinnerPosition = MutableLiveData(2)
 
     var prevTab: Pair<MainTab, Int> = Pair(MainTab.메인, 0)
     val showDrawer = MutableLiveData<Boolean>(false)
@@ -142,8 +142,10 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         userRepository.updateSchoolType(level)
     }
     fun syncSchoolType() {
+        println("aspasp [syncSchoolType] sync repo schoolType : ${userRepository.schoolType.value}")
+        println("aspasp [syncSchoolType] schoolSpinnerPosition.value: ${schoolSpinnerPosition.value}")
         if (userRepository.schoolType.value?.mainSpinnerPosition != schoolSpinnerPosition.value) {
-            schoolSpinnerPosition.postValue(userRepository.schoolType.value?.mainSpinnerPosition)
+            schoolSpinnerPosition.postValue(userRepository.schoolType.value?.mainSpinnerPosition ?: 2)
         }
     }
 

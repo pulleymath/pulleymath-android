@@ -632,7 +632,10 @@ class MainActivity : PermissionActivity(),
                 updateHeaderColors(it)
             }
             schoolSpinnerPosition.observe(this@MainActivity) {
-                updateSchoolType(SchoolType.convertSwitchPositionToType(it))
+                println("aspasp schoolSpinner position observe : ${it}")
+                println("aspasp SchoolType.convertSwitchPositionToType(it) : ${SchoolType.convertSwitchPositionToType(it)}")
+                val convertedType = SchoolType.convertSwitchPositionToType(it)
+                viewModel.updateSchoolType(convertedType)
             }
         }
     }

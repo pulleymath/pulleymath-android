@@ -10,7 +10,6 @@ import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyRecommend
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyStudy
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailySummary
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
