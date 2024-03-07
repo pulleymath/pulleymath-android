@@ -1,11 +1,6 @@
 package com.freewheelin.pulley.legacy.activities.auth.signup
 
-import android.app.Application
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
-import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,10 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -40,22 +33,16 @@ import com.freewheelin.pulley.databinding.FragmentSignupBinding
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
 import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.viewmodel.SignupFragViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.editText.*
-import com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2
 import com.freewheelin.pulley.legacy.views.v2.PolicyLayoutV2Listener
-import com.freewheelin.pulley.legacy.views.v2.SpinnerV2
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -120,10 +107,23 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
         return (
             (binding.fullNameDet.text.isNotEmpty() && binding.fullNameDet.text.isValidName())
                 && (binding.emailDet.text.isValidEmail())
-                && (binding.pwDet.text.isNotEmpty() && binding.pwDet.text.isValidPW() && binding.pwDet.text == binding.pwConfirmDet.text)
+                && checkPwAvailable()
                 && binding.codeConfirmIv.visibility == View.VISIBLE
                 && isAllCheckedEssentialBox()
             )
+    }
+    private fun checkPwAvailable(): Boolean {
+        val condition1 = binding.pwDet.text.isNotEmpty()
+        val condition2 = binding.pwDet.text.isValidPW()
+
+        val emailPreString = binding.emailDet.text.split("@").first().lowercase()
+
+        val condition3 = !binding.pwDet.text.contains(emailPreString)
+        println("aspasp emailPreString: ${emailPreString}, pwDet.text : ${binding.pwDet.text}")
+        val condition4 = binding.pwDet.text == binding.pwConfirmDet.text
+        println("aspasp c1: ${condition1} c2: ${condition2} c3: ${condition3} c4: ${condition4}")
+
+        return condition1 && condition2 && condition3 && condition4
     }
 
     override fun onFieldFocusChanged(view: InputFieldV2, hasFocus: Boolean) {
@@ -140,13 +140,19 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             }
 
             if(view == emailDet && !hasFocus) {
-//                emailDet.text = emailDet.text.trim()
                 if(emailDet.text.isEmpty()) {
                     emailDet.showErrorMsg("이메일을 입력해주세요.")
                 } else if(emailDet.text.isValidEmail() == false) {
                     emailDet.showErrorMsg("이메일 형식을 확인해주세요.")
                 } else {
-                    checkEmail()
+                    val deniedWords = listOf("admin", "administrator", "administration", "root", "system")
+                    val emailPreString = emailDet.text.split("@").first().lowercase()
+                    val deniedWord = deniedWords.find { emailPreString.contains(it) }
+                    if (deniedWord != null) {
+                        emailDet.showErrorMsg("${deniedWord}단어가 포함된 이메일은 사용할 수 없습니다.")
+                    } else {
+                        checkEmail()
+                    }
                 }
             }
 
@@ -166,9 +172,14 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             if(view === pwDet) {
                 if (!hasFocus) {
                     if (!view.text.isValidPW()) {
-                        view.showErrorMsg(getString(R.string.text_please_input_6_between_15_eng_num_symbol))
+                        view.showErrorMsg(getString(R.string.text_please_input_above_9_eng_num_symbol))
                     } else {
-                        showPwErrorMsg()
+                        val emailPreString = emailDet.text.split("@").firstOrNull() ?: ""
+                        if (emailPreString.isNotEmpty() && view.text.contains(emailPreString)) {
+                            pwDet.showErrorMsg("이메일(아이디)는 비밀번호에 사용할 수 없습니다.")
+                        } else {
+                            showPwErrorMsg()
+                        }
                     }
                 }
             }
@@ -187,12 +198,15 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
     private fun showPwErrorMsg() {
         binding.apply {
             var score = 0
-            if (pwDet.text.isContainAlphabet()) score += 1
+            if (pwDet.text.isContainUppercaseAlphabet()) score += 1
+            if (pwDet.text.isContainLowercaseAlphabet()) score += 1
             if (pwDet.text.isContainDigit()) score += 1
             if (pwDet.text.isContainSpecial()) score += 1
 
-            if (score < 2) {
-                pwDet.showErrorMsg(getString(R.string.text_please_input_6_between_15_eng_num_symbol))
+            val length = pwDet.text.length
+
+            if (score < 3 || length < 9) {
+                pwDet.showErrorMsg(getString(R.string.text_please_input_above_9_eng_num_symbol))
             } else {
                 pwDet.isShownError = false
             }
@@ -405,6 +419,9 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             nextBtn.setOnClickListener{
 //            goNext()
                 if(nextBtn.isEnabled) onNextBtnClicked()
+
+
+
             }
 
             setPhoneRequest()
@@ -425,9 +442,15 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
 
     private fun setPhoneRequest() {
         binding.apply {
+            codeWithSMS.setOnClickListener {
+                if (BuildConfig.FLAVOR == "beta" && fullNameDet.text == "") {
+                    putDummyUserInfo()
+                }
+            }
             requestCodeBtn.setOnClickListener {
-                if(requestCodeBtn.isEnabled)
+                if(requestCodeBtn.isEnabled) {
                     onRequestCodeBtnClicked()
+                }
             }
 
             codeConfirmBtn.setOnClickListener {
@@ -451,6 +474,19 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
         signupInterface?.goStudentInfo()
     }
 
+    private fun putDummyUserInfo() {
+        binding.apply {
+            fullNameDet.text = "테스트"
+            emailDet.text = "test@test.com"
+            pwDet.text = "qwer1234!"
+            pwConfirmDet.text = "qwer1234!"
+            phoneNumDet.text = "01000000000"
+            allCb.checked = true
+            order14Cb.checked = true
+            serviceAgreeCb.checked = true
+            personalAgreeCb.checked = true
+        }
+    }
     private fun onRequestCodeBtnClicked() {
         binding.apply {
             codeConfirmIv.hideIfNeed()
@@ -607,15 +643,20 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
                     checkEmail()
                 }
 
+                val emailPreString = binding.emailDet.text.split("@").first().lowercase()
+                val isContainEmailPreString = binding.pwDet.text.contains(emailPreString)
+
                 if(pwDet.text.isEmpty()) {
                     pwDet.showErrorMsg("비밀번호를 입력해주세요.")
                 } else if(!pwDet.text.isValidPW()) {
                     showPwErrorMsg()
-                } else if(pwConfirmDet.text.isEmpty())
+                } else if (isContainEmailPreString) {
+                    pwDet.showErrorMsg("이메일(아이디)는 비밀번호에 사용할 수 없습니다.")
+                } else if(pwConfirmDet.text.isEmpty()) {
                     pwConfirmDet.showErrorMsg("비밀번호 확인이 필요합니다.")
-                else if(pwConfirmDet.text != pwDet.text)
+                } else if(pwConfirmDet.text != pwDet.text) {
                     pwConfirmDet.showErrorMsg("비밀번호가 일치하지 않습니다.")
-
+                }
             }
         }
     }

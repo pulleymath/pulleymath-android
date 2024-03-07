@@ -140,17 +140,6 @@ class MainProfile {
             return "연속달성 ${continuousGoalCount}일째\uD83D\uDD25"
     }
 
-    fun getProblemCountGuideText(user: UserV4): String {
-        val rating = user.initMoGrade
-
-        if(user.userGrade.isMiddle) {
-            return "더 나은 나를 위한 도전!\n하루 ${goalProblemCount}문제 꼬박꼬박"
-        } else {
-            val ratingText = if (rating <= 1) "1등급" else "${rating - 1}등급"
-            return "${ratingText}을 위하여\n하루 ${goalProblemCount}문제 꼬박꼬박"
-        }
-    }
-
     fun getFreeGuideText(): String {
         return "${numberOfUserText}명이 풀리수학으로 열공 중!\n${studentName}님도 할 수 있어요!"
     }

@@ -200,7 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="48dp"
-                        app:DaebakPasswordField_Hint="@string/text_please_input_6_between_15_eng_num_symbol"
+                        app:DaebakPasswordField_Hint="@string/text_please_input_above_9_eng_num_symbol"
                         app:DaebakPasswordField_Label="새 비밀번호" />
 
                     <com.freewheelin.pulley.legacy.views.editText.DaebakPasswordField

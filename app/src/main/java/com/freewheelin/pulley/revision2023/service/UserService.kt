@@ -8,6 +8,7 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.HighlightMessage
 import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import com.freewheelin.pulley.revision2023.model.response.MainWeeklyStudySummary
+import com.freewheelin.pulley.revision2023.model.response.Token
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.Body
@@ -26,6 +27,9 @@ interface UserService {
     suspend fun getUser(): ResponseBody<User>
     @GET("v4/me/app")
     suspend fun getUserV4(): ResponseBody<UserV4>
+    @POST("v1/auth/token/refresh")
+    fun refreshToken(): Observable<ResponseBody<Token>>
+
     @PATCH("v4/me/email")
     suspend fun changeEmail(
         @Body req: ChangeEmailRequest

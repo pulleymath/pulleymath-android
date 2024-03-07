@@ -48,9 +48,9 @@ class UserRepository() {
     fun updateUser(newUser: UserV4?) {
         _user.postValue(newUser)
     }
-    fun initSchoolType(level: SchoolType) {
+    fun initSchoolType(type: SchoolType) {
         if (_schoolType.value == null) {
-            _schoolType.postValue(level)
+            _schoolType.postValue(type)
         }
     }
     fun updateSchoolType(type: SchoolType) {
@@ -83,4 +83,5 @@ class UserRepository() {
         val date = todayDate.toString("yyyy-MM-dd")
         return api.getWeeklyStudySummary(date).data
     }
+    fun refreshToken() = api.refreshToken()
 }

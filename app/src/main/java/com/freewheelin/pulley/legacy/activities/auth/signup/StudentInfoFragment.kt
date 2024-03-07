@@ -259,14 +259,14 @@ class StudentInfoFragment : Fragment() {
                     val data = cityList.map { it.name }
                     val hint = "도시를 선택해주세요"
                     binding.selectCity.set(data, hint) { position ->
-                        if (position < 0) {
+                        if (position < 1) {
                             selectedCity = null
                             binding.layoutInfoOption.visibility = View.GONE
                         } else {
                             selectedCity = if(position >= cityList.size) {
                                 cityList.get(cityList.size - 1)
                             } else {
-                                cityList.get(position)
+                                cityList.get(position - 1)
                             }
                             binding.layoutInfoOption.visibility = View.VISIBLE
                             showServicesGrade(true)

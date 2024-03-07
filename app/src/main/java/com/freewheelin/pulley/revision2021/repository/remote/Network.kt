@@ -100,15 +100,20 @@ object Network {
                         Interceptor { chain ->
 
                             val token = user?.token ?: MyApplication.token
-                            val builder = chain.request().newBuilder()
-                                .header("Authorization", "Bearer $token")
-                                .header("DeviceUid", APHelper.deviceId())
-                                .header("DeviceName", APHelper.deviceName)
+                            val builder = if (token != null) {
+                                chain.request().newBuilder()
+                                    .header("Authorization", "Bearer $token")
+                                    .header("DeviceUid", APHelper.deviceId())
+                                    .header("DeviceName", APHelper.deviceName)
+                            } else {
+                                chain.request().newBuilder()
+                                    .header("DeviceUid", APHelper.deviceId())
+                                    .header("DeviceName", APHelper.deviceName)
+                            }
 //                                .header("Platform", "ANDROID")
                             val response = chain.proceed(builder.build())
 
                             val authorization = response.header("Authorization")
-//                            Log.d("Authorize", "Authorization=$authorization")
 
                             if (authorization?.isNotEmpty() == true) {
                                 user?.token = authorization

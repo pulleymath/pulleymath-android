@@ -17,6 +17,40 @@ import kotlinx.coroutines.CoroutineScope
 class LegacyV2Repository(val context: Context, private val applicationScope: CoroutineScope) {
     private val legacyV2Api: LegacyV2Service by lazy { LegacyV2Api.legacyV2Service() }
 
+    suspend fun postLoginLog(studentID: String? = null,
+                        email: String,
+                        itemName: String,
+                        isAutoLogin: Boolean? = null,
+    ): V2LogUserResponse {
+        val log = V2LogUser(
+            studentID = studentID,
+            eventName = PulleyEvent.LOGIN,
+            itemCategory = "APP",
+            itemName = itemName,
+            itemValue = email,
+            itemNote = if (isAutoLogin != null) "자동로그인" else null,
+            deviceModel = Build.MODEL,
+            versionSdk = "${Build.VERSION.SDK_INT}",
+            versionCode = VersionManager.appVersion,
+        )
+        return legacyV2Api.postLog(log).data
+    }
+    suspend fun postLogoutLog(
+                              studentID: String,
+                              email: String): V2LogUserResponse {
+        val log = V2LogUser(
+            studentID = studentID,
+            eventName = PulleyEvent.LOGOUT,
+            itemCategory = "APP",
+            itemName = null,
+            itemValue = email,
+            itemNote = null,
+            deviceModel = Build.MODEL,
+            versionSdk = "${Build.VERSION.SDK_INT}",
+            versionCode = VersionManager.appVersion,
+        )
+        return legacyV2Api.postLog(log).data
+    }
     suspend fun postLog(
             event: PulleyEvent,
             itemCategory: String? = null,

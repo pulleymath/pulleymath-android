@@ -19,6 +19,7 @@ import com.freewheelin.pulley.databinding.FragmentMyAppSettingBinding
 import com.freewheelin.pulley.databinding.FragmentMyVersionBinding
 import com.freewheelin.pulley.legacy.utils.IntentUtils
 import com.freewheelin.pulley.legacy.views.DaebakToast
+import io.channel.plugin.android.extension.join
 
 
 class MyVersionFragment : MyPageBaseFragment() {
@@ -33,13 +34,16 @@ class MyVersionFragment : MyPageBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            currentVersionTv.text = "V ${VersionManager.appVersion}"
-            latestVersionTv.text = "V ${VersionManager.info!!.version}"
+
+            val appVersionInGsValidation = VersionManager.appVersion.split(".").dropLast(1).joinTo(StringBuilder(), ".").toString()
+            val infoVersionInGsValidation = VersionManager.info!!.version.split(".").dropLast(1).joinTo(StringBuilder(), ".").toString()
+            currentVersionTv.text = "V $appVersionInGsValidation"
+            latestVersionTv.text = "V $infoVersionInGsValidation"
             backBtn.setOnClickListener { onBackBtnClicked() }
             if(VersionManager.isNeedToUpdate() == true) {
                 currentVersionTv.typeface = Theme.bold(requireContext())
                 currentVersionTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_800))
-                updateBtn.text = "업데이트하기"
+                updateBtn.text = "업데이트 확인하기"
                 updateBtn.isEnabled = true
                 updateBtn.setOnClickListener {
                     openAppMarket(requireContext())

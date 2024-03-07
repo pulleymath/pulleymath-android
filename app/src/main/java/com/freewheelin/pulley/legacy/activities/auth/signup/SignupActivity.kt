@@ -147,37 +147,37 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
             initMoGrade = rate
             majorType = if(major < 0) "" else Major.getValue(major)
 
-            val isHighSchoolUser = Grade.init(grade).isInitialSchoolTypeHigh
             if (isGuestUser) {
                 signup.studentId = user?.studentID
                 viewModel.requestGuestSignUp(signup) {
-                    signupSuccess(isHighSchoolUser)
+                    signupSuccess(grade)
                 }
             } else {
                 viewModel.requestUserSignUp(signup) {
-                    signupSuccess(isHighSchoolUser)
+                    signupSuccess(grade)
                 }
             }
         }
     }
 
-    private fun signupSuccess(isHighSchoolUser: Boolean) {
+    private fun signupSuccess(grade: Int) {
         CoroutineScope(Dispatchers.Main).launch {
             LogUtils.logSignUpEvent(this@SignupActivity, signup.email)
-            login(signup.email, signup.password, isHighSchoolUser)
+            login(signup.email, signup.password, grade)
         }
     }
 
-    private fun fetchUser(isHighSchoolUser: Boolean) {
+    private fun fetchUser(grade: Int, email: String, loginSuccess: Boolean) {
         viewModel.fetchUser {
             MyApplication.user = it
             MyApplication.token = it.token
             FirebaseCrashlytics.getInstance().setUserId(it.studentID)
             putFcmToken()
-            loginSuccess(isHighSchoolUser)
+            viewModel.sendLoginLog(null, email, loginSuccess)
+            loginSuccess(grade)
         }
     }
-    private fun login(email: String, pw: String, isHighSchoolUser: Boolean) {
+    private fun login(email: String, pw: String, grade: Int) {
         disposables += API_V3.getAppToken(RequestLogin(email, pw))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -187,9 +187,10 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
                 res.data?.let {
                     MyApplication.token = it.token
                 }
-                fetchUser(isHighSchoolUser)
+                fetchUser(grade, email, true)
             }, { error ->
                 viewModel.setLoading(false)
+                fetchUser(grade, email, false)
 
                 (error as? HttpException)?.response()?.errorBody()?.string()?.let {
                     val listType = object: TypeToken<ResponseBody<SignInAppToken>>(){}.type
@@ -219,9 +220,9 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
 //            }
 //        })
     }
-    private fun loginSuccess(isHighSchoolUser: Boolean) {
+    private fun loginSuccess(grade: Int) {
         viewModel.requestSignUpReward {
-            startActivity(InitSettingCompleteActivity.getIntent(this, isHighSchoolUser, isGuestUser))
+            startActivity(InitSettingCompleteActivity.getIntent(this, grade, isGuestUser))
             if (isGuestUser) {
                 finish()
             } else {

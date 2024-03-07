@@ -1,5 +1,7 @@
 package com.freewheelin.pulley.legacy.assets
 
+import com.freewheelin.pulley.revision2023.SchoolType
+
 enum class Grade(val value: Int) {
     Etc(0),
     High_1(1),
@@ -20,6 +22,11 @@ enum class Grade(val value: Int) {
     val isMiddle: Boolean
         get() = when (this) {
             Middle_1, Middle_2, Middle_3 -> true
+            else -> false
+        }
+    val isHigh: Boolean
+        get() = when (this) {
+            High_1, High_2, High_3, AfterHigh -> true
             else -> false
         }
     val text: String
@@ -98,6 +105,24 @@ enum class Grade(val value: Int) {
             Elementary_4,
             Elementary_5,
             Elementary_6 -> false
+        }
+    val schoolType: SchoolType
+        get() = when (this) {
+            Etc,
+            High_1,
+            High_2,
+            High_3,
+            AfterHigh,
+            Adult -> SchoolType.HIGH
+            Middle_1,
+            Middle_2,
+            Middle_3 -> SchoolType.MIDDLE
+            Elementary_1,
+            Elementary_2,
+            Elementary_3,
+            Elementary_4,
+            Elementary_5,
+            Elementary_6 -> SchoolType.ELEMENTARY
         }
 
     companion object {

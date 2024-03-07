@@ -37,7 +37,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     val schoolType = userRepository.schoolType
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val showWholeLoading = MutableLiveData<Boolean>(false)
-    val schoolSpinnerPosition = MutableLiveData(2)
+    val schoolSpinnerPosition = MutableLiveData<Int>(null)
 
     var prevTab: Pair<MainTab, Int> = Pair(MainTab.메인, 0)
     val showDrawer = MutableLiveData<Boolean>(false)
@@ -51,6 +51,8 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             initSchoolType(user.schoolType ?: SchoolType.HIGH)
+//            println("aspasp mainact user.schoolType : ${user.schoolType}")
+//            println("aspasp mainact fetchUser user.schoolType?.mainSpinnerPosition : ${user.schoolType?.mainSpinnerPosition}")
             schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
@@ -142,8 +144,6 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         userRepository.updateSchoolType(level)
     }
     fun syncSchoolType() {
-        println("aspasp [syncSchoolType] sync repo schoolType : ${userRepository.schoolType.value}")
-        println("aspasp [syncSchoolType] schoolSpinnerPosition.value: ${schoolSpinnerPosition.value}")
         if (userRepository.schoolType.value?.mainSpinnerPosition != schoolSpinnerPosition.value) {
             schoolSpinnerPosition.postValue(userRepository.schoolType.value?.mainSpinnerPosition ?: 2)
         }

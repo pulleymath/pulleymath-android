@@ -27,7 +27,7 @@
     <string name="text_cancel">취소</string>
 
     <string name="text_not_matched_member_info">일치하는 회원정보가 없습니다.</string>
-    <string name="text_please_input_6_between_15_eng_num_symbol">영문, 숫자, 기호를 2가지 이상 조합해서 6~15자로 입력해주세요.</string>
+    <string name="text_please_input_above_9_eng_num_symbol">비밀번호는 영문자, 숫자, 특수문자를 모두 사용해서 9자리 이상으로 입력해주세요.</string>
     <string name="text_this_email_is_not_registered">등록되지 않은 이메일 주소입니다.</string>
 
 </resources>

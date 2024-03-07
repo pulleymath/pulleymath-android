@@ -28,6 +28,8 @@ enum class PulleyEvent {
     DIALOG,
     ERROR,
     PROBLEM_NOT_EXIST,
+    LOGIN,
+    LOGOUT,
     LEARNING_CARD_CLICK; // 학습 관련 카드 클릭
 
     companion object {
@@ -42,6 +44,8 @@ enum class PulleyEvent {
                 "INDUCE" -> return INDUCE
                 "ERROR" -> return ERROR
                 "LEARNING_CARD_CLICK" -> return LEARNING_CARD_CLICK
+                "LOGIN" -> return LOGIN
+                "LOGOUT" -> return LOGOUT
                 "PROBLEM_NOT_EXIST" -> return PROBLEM_NOT_EXIST
                 else -> {
                     LogUtils.assert(false, "unexpected Case ${value}")

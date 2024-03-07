@@ -63,20 +63,28 @@ class OnBoardingActivity : AppCompatActivity() {
 
     fun moveNextActivity() {
         isNeedNewOnBoarding = false
-        if(MyApplication.user?.token?.isNotEmpty() == true) {
-            viewModel.fetchUser { user ->
-                MyApplication.isAppFirstLaunch = true
-                MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
-                viewModel.fetchMainProfile {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-//                    finish()
-                }
-            }
-        } else {
+        val goStartActivity = {
             val intent = Intent(this, StartActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        if(MyApplication.user?.token?.isNotEmpty() == true) {
+            viewModel.refreshAutoLoginToken(successCb = {
+                viewModel.fetchUser { user ->
+                    MyApplication.isAppFirstLaunch = true
+                    MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
+                    viewModel.sendLoginLog(user, user.accountEmail)
+                    viewModel.fetchMainProfile {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            },
+            expiredCb = goStartActivity)
+
+        } else {
+            goStartActivity()
         }
     }
     override fun onBackPressed() {

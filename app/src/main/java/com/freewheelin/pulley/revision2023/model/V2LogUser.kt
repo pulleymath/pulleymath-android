@@ -5,7 +5,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import java.io.Serializable
 
 data class V2LogUser(
-    val studentID: String,
+    val studentID: String?,
     val eventName: PulleyEvent,
     val itemCategory: String?,
     val itemName: String?,

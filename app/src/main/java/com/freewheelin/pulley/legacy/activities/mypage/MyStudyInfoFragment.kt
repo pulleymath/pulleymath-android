@@ -125,21 +125,18 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
 
             configureSchool(user)
 
-            if (user.userGrade.isMiddle) {
-                majorTv.text = "-"
-                ratingTv.text = "-"
-            } else {
+            if (user.userGrade.isHigh) {
                 majorTv.text = user.userMajor.title
                 val ratingText = when (user.initMoGrade) {
                     0 -> "모름"
                     in 1..9 -> "${user.initMoGrade}등급"
                     else -> null
-
                 }
                 ratingTv.text = ratingText
+            } else {
+                majorTv.text = "-"
+                ratingTv.text = "-"
             }
-
-//            configureStudy(user)
         }
     }
 

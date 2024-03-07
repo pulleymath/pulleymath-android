@@ -64,6 +64,7 @@ class StartActivity : BaseActivity(), LifecycleObserver {
                 binding.progressBar.visibleIf(false)
                 MyApplication.user = it
                 MyApplication.token = it.token
+                viewModel.sendLoginLog(it, it.accountEmail)
                 viewModel.fetchMainProfile {
                     startActivity(Intent(this, MainActivity::class.java))
                     finishAffinity()

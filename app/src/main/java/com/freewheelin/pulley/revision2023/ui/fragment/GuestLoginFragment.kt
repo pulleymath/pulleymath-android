@@ -186,21 +186,9 @@ class GuestLoginFragment : Fragment(),
         val errMsg = res.message
         binding.apply {
             when (error) {
-                LoginActivity.WRONG_LOGINID -> {
-                    emailField.showErrorMsg(errMsg ?: "")
-                    pwField.isShownError = false
-                }
-                LoginActivity.WRONG_LOGINPW, LoginActivity.NOT_MATCH_PW -> {
-                    emailField.isShownError = false
-                    pwField.showErrorMsg(errMsg ?: "")
-                }
-                LoginActivity.NOT_FOUND_DATA -> {
-                    pwField.isShownError = false
-                    emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
-                }
-                LoginActivity.LOGINID_INVALID -> {
-                    pwField.isShownError = false
-                    emailField.showErrorMsg(errMsg ?: "")
+                LoginActivity.WRONG_LOGINID, LoginActivity.WRONG_LOGINPW, LoginActivity.NOT_MATCH_PW, LoginActivity.NOT_FOUND_DATA, LoginActivity.LOGINID_INVALID, LoginActivity.INVALID_AUTH -> {
+                    emailField.showErrorBorder()
+                    pwField.showErrorMsg("아이디(이메일) 또는 비밀번호가 잘못되었습니다.")
                 }
                 LoginActivity.LOCK_ACCOUNT -> {
                     DialogUtils.lockAccountDialog(requireContext()) {
@@ -253,7 +241,7 @@ class GuestLoginFragment : Fragment(),
         when(httpCode) {
             200 -> {
                 when(statusCode) {
-                    LoginActivity.AVAILABLE -> binding.emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+//                    LoginActivity.AVAILABLE -> binding.emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
                     LoginActivity.LOGINID_INVALID -> binding.emailField.showErrorMsg("이메일 형식을 확인해주세요.")
                     LoginActivity.ALREADY_WITHDRAW, LoginActivity.LOGINID_EXIST -> binding.emailField.isShownError = false
                 }

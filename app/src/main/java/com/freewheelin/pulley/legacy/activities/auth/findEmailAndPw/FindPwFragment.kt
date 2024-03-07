@@ -299,14 +299,22 @@ class FindPwFragment : Fragment() {
     }
 
     private fun onSendResetClicked() {
+
+        val emailPreString = binding.emailDet.text.split("@").first().lowercase()
+        val isContainEmailPreString = binding.password.text.contains(emailPreString)
+
         binding.apply {
             if(password.text.isEmpty()){
                 password.isShownError = true
                 password.errorMsg = "비밀번호를 입력하세요."
                 return
+            } else if (isContainEmailPreString) {
+                password.isShownError = true
+                password.errorMsg = "이메일(아이디)는 비밀번호에 사용할 수 없습니다."
+                return
             } else if(!password.text.isValidPW()) {
                 password.isShownError = true
-                password.errorMsg = getString(R.string.text_please_input_6_between_15_eng_num_symbol)
+                password.errorMsg = getString(R.string.text_please_input_above_9_eng_num_symbol)
                 return
             } else if(password.text != passwordConfirm.text) {
                 password.isShownError = false

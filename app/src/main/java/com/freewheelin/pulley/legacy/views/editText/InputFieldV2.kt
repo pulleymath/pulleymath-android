@@ -21,6 +21,7 @@ import com.freewheelin.pulley.legacy.bases.vibrate
 import com.freewheelin.pulley.databinding.ViewInputV2Binding
 import com.freewheelin.pulley.legacy.utils.pxToSp
 import com.freewheelin.pulley.legacy.utils.setPaddingTop
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.ArduousSpinner
 import com.freewheelin.pulley.legacy.views.ArduousSpinnerListener
 import com.google.android.material.textfield.TextInputEditText
@@ -73,6 +74,13 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
         set(value) {
             val container = findViewById<LinearLayout>(R.id.errorContainerLl)
             container.visibility = if (value) View.VISIBLE else View.GONE
+            inputLayout.error = if (value) " " else null
+        }
+    var isShownBorder: Boolean
+        get() {
+            return inputLayout.error != null
+        }
+        set(value) {
             inputLayout.error = if (value) " " else null
         }
 
@@ -193,6 +201,9 @@ class InputFieldV2: LinearLayout, View.OnFocusChangeListener, ArduousSpinnerList
         }
     }
 
+    fun showErrorBorder() {
+        this.isShownBorder = true
+    }
     fun showErrorMsg(errorMsg: String) {
         this.errorMsg = errorMsg
         this.isShownError = true

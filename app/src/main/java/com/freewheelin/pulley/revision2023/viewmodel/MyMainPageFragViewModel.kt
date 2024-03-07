@@ -11,6 +11,7 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
+import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.request.ChangeEmailRequest
 import com.freewheelin.pulley.revision2023.model.request.ParentPhoneNumberRequest
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
@@ -154,5 +155,16 @@ class MyMainPageFragViewModel(application: Application): BaseAndroidViewModel(ap
                 }
             }
         }
+    }
+    fun sendLogoutLog(user: UserV4) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            postLog(user)
+        }
+    }
+    suspend fun postLog(user: UserV4): V2LogUserResponse {
+        return legacyV2Repository.postLogoutLog(
+            studentID = user.studentID,
+            email = user.accountEmail,
+        )
     }
 }

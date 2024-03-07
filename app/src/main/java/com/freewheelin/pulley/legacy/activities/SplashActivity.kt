@@ -19,16 +19,12 @@ import com.freewheelin.pulley.legacy.core.manage.ServerStatusManager
 import com.freewheelin.pulley.legacy.core.manage.VersionInfo
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
-import com.freewheelin.pulley.legacy.dialogs.DeviceManagerDialog
 import com.freewheelin.pulley.legacy.model.ServerStatus
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
-import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2023.model.OnBoardingItem
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.OnBoardingActivity
-import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -39,13 +35,10 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
-import org.jsoup.Jsoup
-import java.text.SimpleDateFormat
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
@@ -228,20 +221,26 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         checkTokenAndMoveActivity()
     }
     private fun checkTokenAndMoveActivity() {
-        if(MyApplication.user?.token?.isNotEmpty() == true) {
-            viewModel.fetchUser { user ->
-                MyApplication.isAppFirstLaunch = true
-                MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
-                toLogin()
-            }
-        } else {
+        val goStartActivity: () -> Unit = {
             startActivity(StartActivity::class.java)
             finish()
         }
+        if(MyApplication.user?.token?.isNotEmpty() == true) {
+            viewModel.refreshAutoLoginToken(successCb = {
+                viewModel.fetchUser { user ->
+                    MyApplication.isAppFirstLaunch = true
+                    MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
+                    toLogin(user)
+                }
+            }, expiredCb = goStartActivity)
+
+        } else {
+            goStartActivity()
+        }
     }
 
-    private fun toLogin() {
-        Log.d(javaClass.simpleName, "moveActivity() => user ${user?.token?.isEmpty() == true} =${user?.token}")
+    private fun toLogin(user: UserV4) {
+//        Log.d(javaClass.simpleName, "moveActivity() => user ${user.token.isEmpty() == true} =${user?.token}")
         user?.let { FirebaseCrashlytics.getInstance().setUserId(it.studentID) }
         println("온보딩 : toLogin : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
@@ -254,18 +253,19 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                         startActivity(intent)
                     },
                     deniedCb = {
-                        goMainActivity()
+                        goMainActivity(user)
                     }
                 )
             }
             else -> {
-                goMainActivity()
+                goMainActivity(user)
             }
         }
     }
-    private fun goMainActivity() {
+    private fun goMainActivity(user: UserV4) {
         loadAlimSetting(user)
         putFcmToken(user)
+        viewModel.sendLoginLog(user, user.accountEmail)
         viewModel.fetchMainProfile {
             finishAffinity()
             val intent = Intent(this, MainActivity::class.java)

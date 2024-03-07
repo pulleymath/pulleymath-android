@@ -144,19 +144,23 @@ val EMAIL_ADDRESS = Pattern.compile(
 )
 
 fun String.isValidPW(): Boolean {
-    val needAlphabet = "(?=.*[A-Za-z])"
-    val needSpecial = "(?=.*[^A-Za-z0-9])"
-    val needNumber = "(?=.*[0-9])"
-    val blockWhiteSpace = "(?=\\S+$)"
+//    val case = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()_+=-])[A-Za-z0-9~!@#$%^&*()_+=-]{9,25}$"
+    val case = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#\$%^&*()_+\\-=])[A-Za-z0-9~!@#\$%^&*()_+\\-=]{9,25}\$"
 
-    val digit_string = "$needNumber$needAlphabet$blockWhiteSpace.{6,25}"
-    val string_special = "$needAlphabet$needSpecial$blockWhiteSpace.{6,25}"
-    val special_digit = "$needNumber$needSpecial$blockWhiteSpace.{6,25}"
-    val digit_string_special = "$needNumber$needAlphabet$needSpecial$blockWhiteSpace.{6,25}"
+//    val needLowerCaseAlphabet = "(?=.*[a-z])"
+//    val needUpperCaseAlphabet = "(?=.*[A-Z])"
+//    val needSpecial = "(?=.*[^A-Za-z0-9])"
+//    val needNumber = "(?=.*[0-9])"
+//    val blockWhiteSpace = "(?=\\S+$)"
+
+//    val upperLowerSpecial = "$needUpperCaseAlphabet$needLowerCaseAlphabet$needSpecial$blockWhiteSpace.{9,25}"
+//    val upperLowerDigit = "$needUpperCaseAlphabet$needLowerCaseAlphabet$needNumber$blockWhiteSpace.{9,25}"
+//    val upperSpecialDigit = "$needUpperCaseAlphabet$needSpecial$needNumber$blockWhiteSpace.{9,25}"
+//    val lowerSpecialDigit = "$needLowerCaseAlphabet$needSpecial$needNumber$blockWhiteSpace.{9,25}"
+//    val upperLowerSpecialDigit = "$needUpperCaseAlphabet$needLowerCaseAlphabet$needSpecial$needNumber$blockWhiteSpace.{9,25}"
 
     return Pattern.compile(
-            "^$digit_string_special|$digit_string|$string_special|$special_digit\$"
-
+        case
     ).matcher(this).matches()
 }
 
@@ -168,7 +172,18 @@ fun String.isContainDigit(): Boolean {
 
 fun String.isContainAlphabet(): Boolean {
     return Pattern.compile(
-            "(?=.*[A-Za-z]).+"
+        "(?=.*[A-Za-z]).+"
+    ).matcher(this).matches()
+}
+fun String.isContainUppercaseAlphabet(): Boolean {
+    return Pattern.compile(
+        "(?=.*[A-Z]).+"
+    ).matcher(this).matches()
+}
+
+fun String.isContainLowercaseAlphabet(): Boolean {
+    return Pattern.compile(
+        "(?=.*[a-z]).+"
     ).matcher(this).matches()
 }
 

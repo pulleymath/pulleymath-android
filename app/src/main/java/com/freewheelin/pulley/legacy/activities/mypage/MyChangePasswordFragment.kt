@@ -69,11 +69,11 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
             }
 
             newPassword.inputEt.doAfterTextChanged { text ->
-                if(text?.length?:0 >= 6) enableRequestBtn()
+                if(text?.length?:0 >= 9) enableRequestBtn()
             }
 
             newPasswordConfirm.inputEt.doAfterTextChanged { text ->
-                if(text?.length?:0 >= 6) enableRequestBtn()
+                if(text?.length?:0 >= 9) enableRequestBtn()
             }
 
             changeBtn.isEnabled = false
@@ -124,20 +124,28 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
             val new = newPassword.text
             val confirm = newPasswordConfirm.text
 
+            val userEmail = user.accountEmail
+            val emailPreString = userEmail.split("@").first()
+            val isContainEmailPreString = new.contains(emailPreString)
+
             if(current.isEmpty()) {
                 currentPassword.errorMsg = "현재 비밀번호를 입력하세요."
                 return false
             }
-            else if(!current.isValidPW()) {
-                currentPassword.errorMsg = getString(R.string.text_please_input_6_between_15_eng_num_symbol)
-                return false
-            }
+//            else if(!current.isValidPW()) {
+//                currentPassword.errorMsg = getString(R.string.text_please_input_above_9_eng_num_symbol)
+//                return false
+//            }
             else if(new.isEmpty()) {
                 newPassword.errorMsg = "새 비밀번호를 입력하세요."
                 return false
             }
             else if(!new.isValidPW()) {
-                newPassword.errorMsg = "비밀번호가 형식에 맞지 않습니다."
+                newPassword.errorMsg = getString(R.string.text_please_input_above_9_eng_num_symbol)
+                return false
+            }
+            else if (isContainEmailPreString) {
+                newPassword.errorMsg = "이메일(아이디)는 비밀번호에 사용할 수 없습니다."
                 return false
             }
             else if(new != confirm) {

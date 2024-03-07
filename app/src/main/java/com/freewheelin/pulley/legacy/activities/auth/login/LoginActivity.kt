@@ -68,6 +68,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         const val LOCK_ACCOUNT = "LOCK_ACCOUNT"
         const val LOGINID_EXIST  = "LOGINID_EXIST" // 존재
         const val LOGINID_INVALID = "LOGINID_INVALID" // 이상함
+        const val INVALID_AUTH = "INVALID_AUTH" // 이상함
 
         const val NOT_FOUND_DATA = "NOT_FOUND_DATA"
         const val NOT_MATCH_PW = "NOT_MATCH_PW" // 패스워드 불일
@@ -185,8 +186,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             errorAction.observe(this@LoginActivity) { type ->
                 when(type) {
                     HttpException401 -> {
-                        DialogUtils.confirmV2(this@LoginActivity,
-                        "토큰 인증 에러", "문제가 계속되면 카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다.")
+//                        DialogUtils.confirmV2(this@LoginActivity,
+//                        "토큰 인증 에러", "문제가 계속되면 카카오톡(@풀리는수학) 이나 1670-2115 로 문의 바랍니다.")
+                        Log.e(javaClass.simpleName, "401 Auth Error Not Handled : ${type}")
                     }
                     NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : ${type}")}
@@ -227,7 +229,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             if (emailField.text.isEmpty() || pwField.text.isEmpty()) {
                 return false
             }
-            return email.isValidEmail() && pw.isValidPW()
+            return email.isValidEmail() && pw.length > 4
         }
     }
 
@@ -269,12 +271,15 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                             hideProgress()
                             requested = false
                         }
-                        handleResponse(res)
+                        handleResponse(res, email)
                     }, { error ->
 
                         hideProgress()
                         requested = false
 //                        DialogUtils.v2LoginErrDialog(this@LoginActivity)
+                        MyApplication.user = null
+                        MyApplication.token = null
+                        sendLoginFailLog(email)
                         (error as? HttpException)?.response()?.errorBody()?.string()?.let {
                             val listType = object: TypeToken<ResponseBody<SignInAppToken>>(){}.type
                             val response: ResponseBody<SignInAppToken> = Gson().fromJson(it, listType)
@@ -295,21 +300,9 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         val errMsg = res.message
         binding.apply {
             when (error) {
-                WRONG_LOGINID -> {
-                    emailField.showErrorMsg(errMsg ?: "")
-                    pwField.isShownError = false
-                }
-                WRONG_LOGINPW, NOT_MATCH_PW -> {
-                    emailField.isShownError = false
-                    pwField.showErrorMsg(errMsg ?: "")
-                }
-                NOT_FOUND_DATA -> {
-                    pwField.isShownError = false
-                    emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
-                }
-                LOGINID_INVALID -> {
-                    pwField.isShownError = false
-                    emailField.showErrorMsg(errMsg ?: "")
+                WRONG_LOGINID, WRONG_LOGINPW, NOT_MATCH_PW, NOT_FOUND_DATA, LOGINID_INVALID, INVALID_AUTH -> {
+                    emailField.showErrorBorder()
+                    pwField.showErrorMsg("아이디(이메일) 또는 비밀번호가 잘못되었습니다.")
                 }
                 LOCK_ACCOUNT -> {
                     DialogUtils.lockAccountDialog(this@LoginActivity) {
@@ -347,21 +340,22 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         startActivity(FindEmailAndPwActivity::class.java)
     }
 
-    fun handleResponse(res: ResponseBody<SignInAppToken>) {
+    fun handleResponse(res: ResponseBody<SignInAppToken>, email: String) {
         Log.d(javaClass.simpleName, "template=${res.error}")
 
         if (res.error == null) {
             when (res.data?.isValidPhone) {
                 false -> {
                     ConfirmPhoneDialog(this, successCB = {
-                        goLearningTab()
+                        goLearningTab(email)
                     }, failCB = { clearToken() }).show()
                 }
                 else -> {
-                    goLearningTab()
+                    goLearningTab(email)
                 }
             }
         } else {
+            sendLoginFailLog(email)
             clearToken()
             binding.apply {
                 errorHandle(res)
@@ -385,19 +379,27 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         MyApplication.user?.commit("LoginActivity")
     }
 
+    private fun sendLoginFailLog(attemptedEmail: String) {
+        viewModel.sendLoginLog(null, attemptedEmail)
+    }
+//    private fun sendLoginLog() {
+//        viewModel.sendLoginLog()
+//
+//    }
     private fun clearToken() {
         MyApplication.token = ""
         MyApplication.user?.token = ""
         MyApplication.user?.commit("LoginActivity")
     }
 
-    private fun goLearningTab() {
+    private fun goLearningTab(attemptedEmail: String) {
         viewModel.fetchUser {
             MyApplication.user = it
             MyApplication.token = it.token
             commitUser()
             putFcmToken()
             viewModel.fetchMainProfile {
+                viewModel.sendLoginLog(it, attemptedEmail)
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finishAffinity()
@@ -447,9 +449,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
         when(httpCode) {
             200 -> {
                 when(statusCode) {
-                    AVAILABLE -> binding.emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
+//                    AVAILABLE -> binding.emailField.showErrorMsg(getString(R.string.text_this_email_is_not_registered))
                     LOGINID_INVALID -> binding.emailField.showErrorMsg("이메일 형식을 확인해주세요.")
-                    ALREADY_WITHDRAW, LOGINID_EXIST -> binding.emailField.isShownError = false
+                    ALREADY_WITHDRAW, LOGINID_EXIST -> {
+                        binding.emailField.isShownError = false
+                    }
                 }
 
             }

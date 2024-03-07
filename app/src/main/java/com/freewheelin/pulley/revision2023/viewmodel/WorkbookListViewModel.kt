@@ -57,7 +57,7 @@ class WorkbookListViewModel(application: Application): BaseAndroidViewModel(appl
 
     var selectedFilterTypes: HashSet<LearningFilterType> = hashSetOf(
         LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.유형_전체,
-        if (MyApplication.schoolType.isMiddle) LearningFilterType.추천레벨_전체 else LearningFilterType.추천_전체
+        if (MyApplication.schoolType.isHigh) LearningFilterType.추천_전체 else LearningFilterType.추천레벨_전체
     )
 
     fun fetchCustomBook(filters: Set<LearningFilterType>) {

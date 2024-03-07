@@ -280,6 +280,7 @@ class MyMainPageFragment : Fragment() {
                     "로그아웃",
                     type = CommonDialog.DialogType.Alert,
                     successCb = {
+                        user?.let { viewModel.sendLogoutLog(it) }
                         val callback: (String?) -> Unit = {
                             viewModel.updateUser(MyApplication.user)
                             activity?.finishAffinity()
@@ -357,7 +358,7 @@ class MyMainPageFragment : Fragment() {
                     updateTag.visibility = View.VISIBLE
                 } else if (setting == Setting.Version && VersionManager.isNeedToUpdate() == true) {
                     titleTv.typeface = Theme.bold(requireContext())
-                    updateTag.visibility = View.VISIBLE
+//                    updateTag.visibility = View.VISIBLE // GS인증때문에 버전 업데이트정보관련 로직 따운
 
 //                } else if (setting == StagingAPI || setting == TestAPI || setting == ShowEventLogging || setting == SHOW_ALWAYS_COMPLETE_TOAST) {
 //                    updateTag.visibility = View.VISIBLE
@@ -395,7 +396,8 @@ class MyMainPageFragment : Fragment() {
                 Version -> {
                     val isNeedUpdate = VersionManager.isNeedToUpdate()
                     when (isNeedUpdate) {
-                        true -> "V ${VersionManager.appVersion}"
+//                        true -> "V ${VersionManager.appVersion}"
+                        true -> "업데이트 확인하기"
                         false -> "최신 버전입니다."
                         else -> ""
                     }

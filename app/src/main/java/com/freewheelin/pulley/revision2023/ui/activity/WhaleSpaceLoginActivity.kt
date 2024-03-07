@@ -101,6 +101,7 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
             MyApplication.user?.commit("WhaleSpaceLoginActivity")
 
             putFcmToken()
+            viewModel.sendLoginLog(it, it.accountEmail)
 
             val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
             LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
