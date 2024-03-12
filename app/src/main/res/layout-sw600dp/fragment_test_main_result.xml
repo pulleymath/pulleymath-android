@@ -293,6 +293,7 @@
             android:id="@+id/giftContainerCl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:visibility="gone"
             android:background="@color/white">
             <ImageView
                 android:id="@+id/giftIv"

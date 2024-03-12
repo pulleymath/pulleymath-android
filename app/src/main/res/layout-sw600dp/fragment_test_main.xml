@@ -50,7 +50,7 @@
             android:textSize="@dimen/sp18"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-
+            tools:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleTv" />
 
@@ -62,6 +62,7 @@
             android:layout_marginTop="@dimen/dp24"
             android:background="@drawable/bg_gray_100_stroke_gray_300_ripple"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/contentTv">
@@ -151,6 +152,7 @@
             android:text="이 시간이 지나면 풀 수 없어요!"
             android:textSize="@dimen/sp16"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
@@ -164,6 +166,7 @@
             android:layout_marginTop="@dimen/dp24"
             android:text="시작하기"
             android:visibility="invisible"
+            tools:visibility="visible"
             android:textSize="@dimen/sp18"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
