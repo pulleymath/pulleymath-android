@@ -401,9 +401,10 @@ class MainActivity : PermissionActivity(),
                 AnalysisFragment.newInstance()
             )
         }
-        if (user?.schoolType == SchoolType.UNIVERSITY) {
+        viewModel.fetchAffiliatedExamList {
             tabFragments.add(AffiliatedTestFragment.newInstance())
         }
+
     }
 
     fun initReceiver () {

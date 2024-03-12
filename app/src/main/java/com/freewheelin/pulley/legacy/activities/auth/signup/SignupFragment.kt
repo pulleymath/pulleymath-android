@@ -119,9 +119,7 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
         val emailPreString = binding.emailDet.text.split("@").first().lowercase()
 
         val condition3 = !binding.pwDet.text.contains(emailPreString)
-        println("aspasp emailPreString: ${emailPreString}, pwDet.text : ${binding.pwDet.text}")
         val condition4 = binding.pwDet.text == binding.pwConfirmDet.text
-        println("aspasp c1: ${condition1} c2: ${condition2} c3: ${condition3} c4: ${condition4}")
 
         return condition1 && condition2 && condition3 && condition4
     }

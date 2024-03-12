@@ -10,6 +10,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.isSPYMode
 import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.model.UserV4
+import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
 import com.freewheelin.pulley.revision2021.repository.AlarmRepository
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
@@ -25,6 +26,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class MainActViewModel(application: Application) : BaseAndroidViewModel(application), LifecycleObserver {
@@ -32,6 +34,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val alarmRepository by lazy { AlarmRepository() }
     private val userRepository by lazy { UserRepository.instance }
+    private val affiliatedRepository by lazy { AffiliatedTestRepository.instance }
     val user = userRepository.user
     val mainProfileV4 = userRepository.mainProfileV4
     val schoolType = userRepository.schoolType
@@ -149,4 +152,16 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         }
     }
 
+    fun fetchAffiliatedExamList (cb: () -> Unit) {
+        val studentId = user.value?.studentID ?: return
+        val schoolId = user.value?.schoolID ?: return
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val examGroup = affiliatedRepository.getGroupList(studentId, schoolId)
+            if (examGroup.group_list.isNotEmpty()) {
+                withContext(Dispatchers.Main) {
+                    cb()
+                }
+            }
+        }
+    }
 }

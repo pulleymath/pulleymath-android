@@ -27,6 +27,7 @@ import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +92,7 @@ class MainTabLayout: FrameLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
-
+    private val userRepository by lazy { UserRepository.instance }
     var listener: MainTabListener? = null
     lateinit var binding: ViewLayoutMainTabBinding
     var prevTabType = MainTab.메인
@@ -134,7 +135,8 @@ class MainTabLayout: FrameLayout {
                 setTabClickListener(view, index)
             }
             getTabletUnivTab().apply {
-                visibleIf(user?.schoolType == SchoolType.UNIVERSITY)
+                val mainProfile = userRepository.mainProfileV4.value
+                visibleIf(mainProfile?.isAffiliated == true)
                 text = getUnivTabText()
             }
         }
@@ -189,7 +191,8 @@ class MainTabLayout: FrameLayout {
             }
 
             getMobileUnivTab().apply {
-                visibleIf(user?.schoolType == SchoolType.UNIVERSITY)
+                val mainProfile = userRepository.mainProfileV4.value
+                visibleIf(mainProfile?.isAffiliated == true)
                 text = getUnivTabText()
             }
         }

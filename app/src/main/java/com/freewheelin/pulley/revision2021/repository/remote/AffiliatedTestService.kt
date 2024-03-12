@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
 import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.legacy.model.ResponseForceBody
+import com.freewheelin.pulley.legacy.model.ResponseListBody
 import com.freewheelin.pulley.revision2021.model.response.*
 import com.freewheelin.pulley.revision2021.model.response.base.BaseIntResponseNode
 import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
@@ -56,6 +58,9 @@ interface AffiliatedTestService {
     @GET("test/student/{student_id}/workbook/current")
     fun getGroupList2(@Path("student_id") studentId: String,
                       @Query("school_id") schoolId: Int) : Observable<AffiliatedGroupResponse>
+    @GET("test/student/{student_id}/workbook/current")
+    suspend fun getGroupList(@Path("student_id") studentId: String,
+                      @Query("school_id") schoolId: Int) : ResponseForceBody<AffiliatedGroup>
 
 
     @PATCH("test/student/{student_id}/workbook/{workbook_id}/finish")

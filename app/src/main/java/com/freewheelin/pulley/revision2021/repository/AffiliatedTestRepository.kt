@@ -3,6 +3,8 @@ package com.freewheelin.pulley.revision2021.repository
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Parameter
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedGroup
+import com.freewheelin.pulley.revision2021.model.response.AffiliatedGroupResponse
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedMediaLog
 import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseIntResponseNode
@@ -31,6 +33,9 @@ class AffiliatedTestRepository private constructor() {
     fun openWorkbook(studentId: String, workbookId: Int, version: Int) = affiliatedTestService.openWorkbook(studentId, workbookId, version)
     fun openProblem(studentId: String, workbookId: Int, problemNo: Int) = affiliatedTestService.openProblem(studentId, workbookId, problemNo)
     fun getTestAnswerList(studentId: String, workbookId: Int) = affiliatedTestService.getWorkbookAnswerList(studentId, workbookId)
+    suspend fun getGroupList(studentId: String, schoolId: Int): AffiliatedGroup {
+        return affiliatedTestService.getGroupList(studentId, schoolId).data
+    }
     fun getGroupList2(studentId: String, schoolId: Int) = affiliatedTestService.getGroupList2(studentId, schoolId)
     fun finishTest(studentId: String, workbookId: Int) = affiliatedTestService.finish(studentId, workbookId)
     fun insertAnswer(studentId: String, workbookId: Int, problemNo: Int, param: Parameter) = affiliatedTestService.insertAnswer(studentId, workbookId, problemNo, param)
