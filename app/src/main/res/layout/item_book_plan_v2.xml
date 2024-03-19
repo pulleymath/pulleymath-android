@@ -126,7 +126,7 @@
                     app:layout_constraintTop_toBottomOf="@id/bookTitleTv"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@{ item.itemBookPlanBookName, default=`기적의검운영진이사과드립니다죄송합니다저희의잘못입니다매번크게실수하는게아니었습니다하지만각성혜택을놓치는건진심으로안타까운일입니다` }"
+                    android:text="@{ item.itemBookPlanBookName, default=`두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 ` }"
                     />
 
                 <TextView
@@ -136,7 +136,7 @@
                     style="@style/h6"
                     android:textColor="@color/gray_800"
                     visibleIf="@{ !item.itemBookPlanSubject.isEmpty }"
-                    android:text="@{ item.itemBookPlanSubject, default=`기적의검운영진이사과드립니다죄송합니다저희의잘못입니다매번크게실수하는게아니었습니다하지만각성혜택을놓치는건진심으로안타까운일입니다` }"
+                    android:text="@{ item.itemBookPlanSubject, default=`두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 ` }"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="32dp"
                     app:layout_constraintTop_toBottomOf="@id/bookSubjectTv"
@@ -153,7 +153,7 @@
                     android:paddingEnd="20dp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="@{ item.chapter, default=`기적의검운영진이사과드립니다죄송합니다저희의잘못입니다매번크게실수하는게아니었습니다하지만각성혜택을놓치는건진심으로안타까운일입니다` }"
+                    android:text="@{ item.chapter, default=`두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 두줄넘으면 ` }"
                     android:layout_marginTop="4dp"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintTop_toBottomOf="@id/bookUnitTv"

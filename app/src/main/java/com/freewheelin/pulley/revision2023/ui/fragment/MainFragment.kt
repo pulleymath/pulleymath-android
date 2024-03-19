@@ -371,6 +371,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             WeeklyPlanTag.CUSTOM_WORKBOOK,
             WeeklyPlanTag.PRACTICE,
             WeeklyPlanTag.RECOMMEND,
+            WeeklyPlanTag.TEACHER,
             WeeklyPlanTag.NOTE -> {
                 val intent = SolveActivity.getIntent(requireContext(), Book()).apply {
                     putExtra(OPEN_PULLEY_WORKBOOK, it.workbookId)

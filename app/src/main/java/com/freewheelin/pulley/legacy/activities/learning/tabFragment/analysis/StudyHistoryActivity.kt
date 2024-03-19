@@ -53,7 +53,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                     2 -> filteredList.filter { it.pieceCategoryTag == BookType.CUSTOM_BOOK }
                     3 -> filteredList.filter { it.pieceCategoryTag == BookType.MO }
                     4 -> filteredList.filter { it.pieceCategoryTag == BookType.PRACTICE }
-                    5 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND || it.pieceCategoryTag == BookType.NOTE || it.pieceCategoryTag == BookType.TEST }
+                    5 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND || it.pieceCategoryTag == BookType.NOTE || it.pieceCategoryTag == BookType.TEST || it.pieceCategoryTag == BookType.TEACHER }
                     else -> filteredList
                 }
             } else {
@@ -61,7 +61,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                     1 -> filteredList.filter { it.pieceCategoryTag == BookType.BOOK }
                     2 -> filteredList.filter { it.pieceCategoryTag == BookType.CUSTOM_BOOK }
                     3 -> filteredList.filter { it.pieceCategoryTag == BookType.PRACTICE }
-                    4 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND || it.pieceCategoryTag == BookType.NOTE || it.pieceCategoryTag == BookType.TEST }
+                    4 -> filteredList.filter { it.pieceCategoryTag == BookType.RECOMMEND || it.pieceCategoryTag == BookType.NOTE || it.pieceCategoryTag == BookType.TEST || it.pieceCategoryTag == BookType.TEACHER }
                     else -> filteredList
                 }
             }

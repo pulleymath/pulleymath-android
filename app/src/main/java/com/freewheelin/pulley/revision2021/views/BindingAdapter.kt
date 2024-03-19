@@ -464,6 +464,7 @@ object BindingAdapter {
                 WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_400
                 WeeklyPlanTag.NOTE.inKorean -> R.color.red_300
                 WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_600
+                WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_300
                 else -> R.color.purple_300
             }
             val backgroundColor = when (it) {
@@ -473,6 +474,7 @@ object BindingAdapter {
                 WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_100
                 WeeklyPlanTag.NOTE.inKorean -> R.color.red_100
                 WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_200
+                WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_100
                 else -> R.color.purple_100
             }
 

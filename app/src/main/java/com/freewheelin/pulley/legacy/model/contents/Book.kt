@@ -20,6 +20,7 @@ enum class BookType {
     RECOMMEND,
     PRACTICE,
     TEST,
+    TEACHER,
     NOTE;
 
     val getTagTitle: String
@@ -33,6 +34,7 @@ enum class BookType {
             NOTE -> "오답학습"
             PRACTICE -> "연습문제"
             COMMERCIAL -> "풀리북스"
+            TEACHER -> "선생님"
         }
     }
 }
@@ -120,6 +122,7 @@ class Book: Content, BaseDiffItem {
                 BookType.CUSTOM_BOOK -> "워크북"
                 BookType.NOTE -> "오답학습"
                 BookType.RECOMMEND -> "추천학습"
+                BookType.TEACHER -> "선생님"
                 else -> ""
             }
         }

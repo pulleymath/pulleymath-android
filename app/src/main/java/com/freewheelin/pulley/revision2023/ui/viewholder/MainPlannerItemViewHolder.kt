@@ -53,6 +53,9 @@ class MainPlannerItemViewHolder(
             WeeklyPlanTag.RECOMMEND, WeeklyPlanTag.NOTE -> {
                 binding.rootView.setOnBasicPOrHigherClickListener(cb = cb, deniedCb = deniedCb)
             }
+            WeeklyPlanTag.TEACHER -> {
+                binding.rootView.setOnBasicPOrHigherClickListener(cb = cb, deniedCb = deniedCb)
+            }
             else -> {}
         }
     }

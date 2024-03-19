@@ -66,7 +66,7 @@ data class WeeklyPlanProgress(
 }
 
 enum class WeeklyPlanTag {
-    CONCEPT, PRACTICE, PULLEY_WORKBOOK, CUSTOM_WORKBOOK, MOCK, COMMERCIAL_BOOK, RECOMMEND, NOTE;
+    CONCEPT, PRACTICE, PULLEY_WORKBOOK, CUSTOM_WORKBOOK, MOCK, COMMERCIAL_BOOK, RECOMMEND, NOTE, TEACHER;
 
     val inKorean: String
         get() {
@@ -79,6 +79,7 @@ enum class WeeklyPlanTag {
                 COMMERCIAL_BOOK -> "풀리북스"
                 RECOMMEND -> "추천학습"
                 NOTE -> "오답노트"
+                TEACHER -> "선생님"
             }
         }
 }
