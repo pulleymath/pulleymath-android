@@ -68,6 +68,7 @@
             android:textSize="@dimen/sp18"
             android:text="이번주 주간 테스트를 완료했습니다!\n자세한 내용은 보고서에서 확인해주세요 :)"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/settingContainerCl" />
@@ -80,6 +81,7 @@
             android:layout_marginTop="@dimen/dp90"
             android:background="@drawable/bg_gray_100_stroke_gray_300_ripple"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/scoreTv"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
             app:layout_constraintVertical_chainStyle="packed">
@@ -155,6 +157,7 @@
             android:layout_marginTop="@dimen/dp56"
             android:text="시작하기"
             android:visibility="invisible"
+            tools:visibility="visible"
             android:textSize="@dimen/sp18"
             app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
             app:layout_constraintEnd_toEndOf="parent"
@@ -168,6 +171,7 @@
             android:layout_height="0dp"
             android:background="@color/gray_100"
             android:visibility="invisible"
+            tools:visibility="visible"
             app:layout_constraintTop_toTopOf="@+id/settingContainerCl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

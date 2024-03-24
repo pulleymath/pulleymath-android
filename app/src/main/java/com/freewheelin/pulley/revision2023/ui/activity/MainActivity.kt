@@ -220,7 +220,9 @@ class MainActivity : PermissionActivity(),
                 }
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(400)
-                    tabFragments[position].onFragmentSelected()
+                    if (tabFragments.size > position) {
+                        tabFragments[position].onFragmentSelected()
+                    }
                 }
             }
             mainTl.selectTap(0, MainTab.메인)

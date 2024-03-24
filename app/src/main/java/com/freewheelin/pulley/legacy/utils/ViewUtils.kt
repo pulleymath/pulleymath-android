@@ -643,11 +643,14 @@ fun ImageView.setCookingImageURL(url: String) {
     CoroutineScope(Dispatchers.IO).launch {
 //        val downloadedImage: Bitmap = Picasso.get().load(url).get()
         // 피카소 쓰는거보다 글라이드가좀더 빠름
-        val downloadedImage: Bitmap = Glide.with(this@setCookingImageURL.context)
-            .asBitmap()
-            .load(url)
+        val downloadedImage: Bitmap =
+            withContext(Dispatchers.IO) {
+                Glide.with(this@setCookingImageURL.context)
+                    .asBitmap()
+                    .load(url)
+                    .submit().get()
 //            .load("${url}?time=${Date().time}")
-            .submit().get()
+            }
 
 
         val originalWidth = downloadedImage.width

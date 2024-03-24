@@ -29,22 +29,22 @@ object TestManager {
     var isNeedToFullDailyResultInTab = false
 
     fun getTestList(context: Context, cb: (tests: List<Test>) -> Unit) {
-//        if (BuildConfig.FLAVOR == "beta") {
-//            API_V3.getAllTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
-//                override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
-//                    responseFailed(context, t)
-//                }
-//
-//                override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
-//                    val test = response.body()
-//                    if(test?.data != null && response.isSuccessful) {
-//                        cb(test.data)
-//                    } else {
-//                        responseError(context, response)
-//                    }
-//                }
-//            })
-//        } else {
+        if (BuildConfig.FLAVOR == "beta") {
+            API_V3.getAllTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
+                override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
+                    responseFailed(context, t)
+                }
+
+                override fun onResponse(call: Call<ResponseBody<List<Test>>>, response: Response<ResponseBody<List<Test>>>) {
+                    val test = response.body()
+                    if(test?.data != null && response.isSuccessful) {
+                        cb(test.data)
+                    } else {
+                        responseError(context, response)
+                    }
+                }
+            })
+        } else {
             API_V3.getTestList().enqueue(object: Callback<ResponseBody<List<Test>>> {
                 override fun onFailure(call: Call<ResponseBody<List<Test>>>, t: Throwable) {
                     responseFailed(context, t)
@@ -59,7 +59,7 @@ object TestManager {
                     }
                 }
             })
-//        }
+        }
     }
 
     fun getDailyTest(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
