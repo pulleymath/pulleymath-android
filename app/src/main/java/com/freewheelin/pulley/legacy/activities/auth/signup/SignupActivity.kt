@@ -31,6 +31,7 @@ import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SignUpActViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -149,9 +150,13 @@ class SignupActivity : BaseActivity(), StudentInfoInterface {
 
             if (isGuestUser) {
                 signup.studentId = user?.studentID
+//                if (signup.studentId == null) {
+//
+//                } else {
                 viewModel.requestGuestSignUp(signup) {
                     signupSuccess(grade)
                 }
+//                }
             } else {
                 viewModel.requestUserSignUp(signup) {
                     signupSuccess(grade)

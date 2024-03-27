@@ -21,6 +21,7 @@ import com.freewheelin.pulley.revision2023.utils.listeners.ChallengeMissionClick
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
+import com.freewheelin.pulley.revision2021.repository.AssessmentRepository
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
@@ -46,6 +47,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
     private val plannerRepository by lazy { PlannerRepository.instance }
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
     private val pdfRepository: PdfRepository by lazy { PdfRepository() }
+    private val assessmentRepository by lazy { AssessmentRepository.instance }
 
     lateinit var challengeListAdapter: ChallengeHeaderListAdapter
     lateinit var challengeDescAdapter: ChallengeMissionAdapter
@@ -336,5 +338,12 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
                 callback(null)
                 Log.e(javaClass.simpleName, "answer=${error.localizedMessage}")
             })
+    }
+    fun fetchAssessmentGroupMetadata() {
+        val schoolId = userInRepo.value?.schoolID ?: return println("error::fetchAssessmentGroupMetadata:: schoolId null")
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val assessmentMetadata = assessmentRepository.fetchAssessmentGroupMetadata(schoolId)
+            _errorAction.postValue(CoroutineExceptionType.NONE)
+        }
     }
 }

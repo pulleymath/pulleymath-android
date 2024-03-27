@@ -27,6 +27,7 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
 import com.google.gson.Gson
 import io.channel.plugin.android.util.lifecycleOwner
 //import dagger.hilt.android.HiltAndroidApp
@@ -41,6 +42,7 @@ class MyApplication: Application(), LifecycleObserver, LifecycleEventObserver {
 //        var user:User? = null
 
         var user:UserV4? = null
+        var assessmentDesignSkin: AssessmentDesignSkin? = null
         var schoolType: SchoolType = SchoolType.HIGH
         var token: String? = null
         var isAppFirstLaunch: Boolean = true

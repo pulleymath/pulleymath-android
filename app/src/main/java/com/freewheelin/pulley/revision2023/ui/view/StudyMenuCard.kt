@@ -3,11 +3,8 @@ package com.freewheelin.pulley.revision2023.ui.view
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.cardview.widget.CardView
-import androidx.core.view.doOnAttach
 import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.LifecycleOwner
 import com.freewheelin.pulley.R
@@ -15,10 +12,7 @@ import com.freewheelin.pulley.databinding.ViewStudyMenuCardBinding
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.utils.visibleIf
-import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2021.activity.PdfListActivity
-import com.freewheelin.pulley.revision2021.viewmodel.AffiliatedTestSolveViewModel
-import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.activity.PulleyMathBooksActivity

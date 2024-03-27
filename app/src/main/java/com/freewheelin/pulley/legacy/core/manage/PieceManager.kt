@@ -28,6 +28,7 @@ object PieceManager {
     // 탭 이동
     const val EVENT_MOVE_TAB = "EVENT_MOVE_TAB"
     const val EVENT_MOVE_TAB_INDEX = "EVENT_MOVE_TAB_INDEX"
+    const val EVENT_SCHOOL_CHANGE = "EVENT_SCHOOL_CHANGE"
     const val EVENT_ADDITIONAL_ACTION = "EVENT_ADDITIONAL_ACTION"
 
     // 탭 스크롤

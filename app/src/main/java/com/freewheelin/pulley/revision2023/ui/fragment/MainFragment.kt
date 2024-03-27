@@ -49,6 +49,7 @@ import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import org.joda.time.LocalDate
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.activities.OMRActivity
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.WHERE_ARE_YOU_FROM
@@ -437,12 +438,14 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         if (event == Lifecycle.Event.ON_START) {
             viewModel.fetchUserProfile()
+            viewModel.fetchAssessmentGroupMetadata()
         }
     }
 
     fun syncProfile() {
         Log.d("마케팅", "syncProfile() is called!!!")
         viewModel.fetchUserProfile()
+        viewModel.fetchAssessmentGroupMetadata()
     }
 
     private fun onDDayBtnClicked() {

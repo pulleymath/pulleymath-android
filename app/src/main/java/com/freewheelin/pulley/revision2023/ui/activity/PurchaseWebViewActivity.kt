@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.affiliatedTest.component.CommunityJavascriptInterface
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.assessment.component.CommunityJavascriptInterface
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityPurchaseWebViewBinding
 import com.freewheelin.pulley.revision2021.repository.remote.Network

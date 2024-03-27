@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
+
         android:background="@drawable/bg_purple_200_round_5"
         android:padding="@dimen/dp24"
         android:layout_marginTop="13dp"
@@ -504,9 +505,9 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ssuToolTipCl"
+        android:id="@+id/defaultToolTipCl"
         android:visibility="gone"
-        tools:visibility="gone"
+        tools:visibility="visible"
         android:background="@drawable/bg_purple_200_round_5"
         android:padding="@dimen/dp24"
         android:layout_marginTop="12dp"
@@ -516,7 +517,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/ssuContentTv"
+            android:id="@+id/defaultContentTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="내 점수에 해당하는 단계를 확인해보세요."
@@ -526,7 +527,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/ssuTitleTv"
+            android:id="@+id/defaultTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:text="진단평가 단계 구분 점수"
@@ -535,17 +536,17 @@
             android:layout_marginTop="24dp"
             android:textColor="@color/purple_200"
             style="@style/h6"
-            app:layout_constraintTop_toBottomOf="@id/ssuContentTv"
+            app:layout_constraintTop_toBottomOf="@id/defaultContentTv"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/bg_white_round_20"/>
 
         <LinearLayout
-            android:id="@+id/ssuTable1"
+            android:id="@+id/defaultTable1"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/dp14"
-            app:layout_constraintTop_toBottomOf="@+id/ssuTitleTv"
+            app:layout_constraintTop_toBottomOf="@+id/defaultTitleTv"
             app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout

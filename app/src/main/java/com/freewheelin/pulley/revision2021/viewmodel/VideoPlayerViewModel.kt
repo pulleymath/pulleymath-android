@@ -1,28 +1,22 @@
 package com.freewheelin.pulley.revision2021.viewmodel
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.CompoundButton
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.Parameter
-import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.revision2021.model.response.*
-import com.freewheelin.pulley.revision2021.repository.AffiliatedTestRepository
-import com.freewheelin.pulley.legacy.utils.DialogUtils
+import com.freewheelin.pulley.revision2021.repository.AssessmentRepository
 import io.reactivex.schedulers.Schedulers
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class VideoPlayerViewModel : BaseViewModel(), LifecycleObserver {
-    val affiliatedTestRepository: AffiliatedTestRepository by lazy { AffiliatedTestRepository.instance }
-    val currentProblem by lazy { affiliatedTestRepository.currentProblem }
-    var currentMedia: AffiliatedSolution? = null
+    val assessmentRepository: AssessmentRepository by lazy { AssessmentRepository.instance }
+    val currentProblem by lazy { assessmentRepository.currentProblem }
+    var currentMedia: AssessmentSolution? = null
 
     var isSubmitBtnActive = MutableLiveData(false)
     var responseMediaId: Int? = null
@@ -33,9 +27,9 @@ class VideoPlayerViewModel : BaseViewModel(), LifecycleObserver {
         val problemId = currentProblem.value?.id ?: return
         val studentId = user?.studentID ?: return
 
-        val mediaLog = AffiliatedMediaLog(problemId, media.id, media.media_file_id, studentId)
+        val mediaLog = AssessmentMediaLog(problemId, media.id, media.media_file_id, studentId)
         responseMediaId = null
-        affiliatedTestRepository.makeMediaLog(mediaLog)
+        assessmentRepository.makeMediaLog(mediaLog)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->
@@ -64,9 +58,9 @@ class VideoPlayerViewModel : BaseViewModel(), LifecycleObserver {
         val problemId = currentProblem.value?.id ?: return
         val studentId = user?.studentID ?: return
 
-        val mediaLog = AffiliatedMediaLog(problemId, media.id, media.media_file_id, studentId)
+        val mediaLog = AssessmentMediaLog(problemId, media.id, media.media_file_id, studentId)
 
-        affiliatedTestRepository.finishMediaLog(responseMediaId!!, mediaLog)
+        assessmentRepository.finishMediaLog(responseMediaId!!, mediaLog)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
             .subscribe({ res ->

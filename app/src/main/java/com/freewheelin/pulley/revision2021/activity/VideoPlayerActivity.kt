@@ -6,17 +6,13 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityVideoPlayerBinding
-import com.freewheelin.pulley.databinding.ExoPlaybackControlViewBinding
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
+import com.freewheelin.pulley.revision2021.model.response.AssessmentSolution
 import com.freewheelin.pulley.revision2021.viewmodel.VideoPlayerViewModel
-import com.freewheelin.pulley.legacy.utils.getSerializable
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -35,7 +31,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         val URI_STRING = "URI_STRING"
         val SOLUTION = "AFF_SOLUTION"
 
-        fun getIntent(context: Context, uriString: String, item: AffiliatedSolution): Intent {
+        fun getIntent(context: Context, uriString: String, item: AssessmentSolution): Intent {
             val intent = Intent(context, VideoPlayerActivity::class.java)
             intent.putExtra(URI_STRING, uriString)
             intent.putExtra(SOLUTION, item)
@@ -57,8 +53,7 @@ class VideoPlayerActivity : AppCompatActivity() {
     }
 
     private fun makeMediaLog() {
-//        val solution = getSerializable(this@VideoPlayerActivity, SOLUTION, AffiliatedSolution::class.java)
-        val solution = intent.getSerializableExtra(SOLUTION) as? AffiliatedSolution ?: return
+        val solution = intent.getSerializableExtra(SOLUTION) as? AssessmentSolution ?: return
         viewModel.let {
             it.currentMedia = solution
             it.makeMediaLog()

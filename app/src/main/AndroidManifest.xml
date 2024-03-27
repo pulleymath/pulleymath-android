@@ -57,7 +57,9 @@
         <package android:name="kr.co.shiftworks.vguardweb" /> <!-- V-Guard (삼성) -->
         <package android:name="com.ahnlab.v3mobileplus" /> <!-- V3 (NH, 현대) -->
     </queries>
-
+<!--    chrome os 관련 배포처리사항 -->
+<!--    <uses-feature android:name="android.hardware.touchscreen"-->
+<!--        android:required="false" />-->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -158,7 +160,7 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".revision2021.activity.AffiliatedTestSolveActivity"
+            android:name=".revision2021.activity.AssessmentSolveActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity

@@ -7,11 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.content.res.ColorStateList
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.TransitionDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,7 +25,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -51,6 +46,7 @@ import com.freewheelin.pulley.legacy.activities.lesson.LessonActivity
 import com.freewheelin.pulley.legacy.activities.mypage.MyMainPageFragment
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.legacy.bases.*
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.assessmentDesignSkin
 import com.freewheelin.pulley.legacy.core.manage.*
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.legacy.model.SignInChannel
@@ -64,13 +60,14 @@ import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.SchoolType
+import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
 import com.freewheelin.pulley.revision2023.model.challenge.OnceAppearInfoByStudentId
 import com.freewheelin.pulley.revision2023.ui.adapter.SchoolSpinnerAdapter
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.SpyDialog
-import com.freewheelin.pulley.revision2023.ui.fragment.AffiliatedTestFragment
+import com.freewheelin.pulley.revision2023.ui.fragment.AssessmentFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainLessonFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
@@ -268,6 +265,7 @@ class MainActivity : PermissionActivity(),
         super.onResume()
         AppUsageMonitor.startAppUsage()
         viewModel.fetchUserChallenges()
+        viewModel.fetchAssessmentGroupMetadata()
         binding.updateSignView.visibleIf(VersionManager.isNeedToUpdate() == true)
         checkNewAlarm()
         CoroutineScope(Dispatchers.IO).launch {
@@ -387,39 +385,38 @@ class MainActivity : PermissionActivity(),
     }
 
     private fun initTabFragment() {
+        viewModel.fetchAssessmentExamList()
         tabFragments = if (isTablet) {
             mutableListOf(
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
                 AnalysisFragment.newInstance(),
-                MainLessonFragment.newInstance()
+                MainLessonFragment.newInstance(),
+                AssessmentFragment.newInstance()
             )
         } else {
             mutableListOf(
                 MainFragment.newInstance(),
                 ConceptCourseFragment.newInstance(),
                 PatternStudyFragment.newInstance(),
-                AnalysisFragment.newInstance()
+                AnalysisFragment.newInstance(),
+                AssessmentFragment.newInstance()
             )
         }
-        viewModel.fetchAffiliatedExamList {
-            tabFragments.add(AffiliatedTestFragment.newInstance())
-        }
-
     }
 
     fun initReceiver () {
         tabMoveReceiver = object : BroadcastReceiver() {
-            override fun onReceive(p0: Context?, itt: Intent?) {
-                itt?.let { intent ->
+            override fun onReceive(p0: Context?, intent: Intent?) {
+                intent?.let { it ->
                     binding.headerCl.showExpandVertical(true)
-                    val tabIndex = intent.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
+                    val tabIndex = it.getIntExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 0)
                     tabMove(tabIndex)
                     when(tabIndex) {
                         MainTab.문제풀이.indexOnTablet -> {
                             if (isTablet) {
-                                val actionName = intent.getStringExtra(PieceManager.EVENT_ADDITIONAL_ACTION) ?: ""
+                                val actionName = it.getStringExtra(PieceManager.EVENT_ADDITIONAL_ACTION) ?: ""
                                 when (actionName) {
                                     "WRONG_NOTE" -> {
                                         p0?.let { ctx ->
@@ -435,6 +432,9 @@ class MainActivity : PermissionActivity(),
                                             }
                                         }
                                     }
+                                    SchoolType.HIGH.name -> viewModel.updateSchoolSpinnerPosition(SchoolType.HIGH)
+                                    SchoolType.MIDDLE.name -> viewModel.updateSchoolSpinnerPosition(SchoolType.MIDDLE)
+                                    SchoolType.ELEMENTARY.name -> viewModel.updateSchoolSpinnerPosition(SchoolType.ELEMENTARY)
                                 }
                             }
                         }
@@ -443,11 +443,11 @@ class MainActivity : PermissionActivity(),
                         }
                     }
 
-                    val wantScroll = intent.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
+                    val wantScroll = it.getBooleanExtra(PieceManager.EVENT_SCROLL, false)
                     if (!wantScroll) return
 
                     when {
-                        intent.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
+                        it.getBooleanExtra(PieceManager.EVENT_SCROLL_UNIT_TOTAL_LABEL, false) -> {
 //                            val subject = intent.getStringExtra(PieceManager.EVENT_FILTER) ?: return
                             // TODO scroll
 //                            (tabFragment[2] as? PatternStudyFragment)?.let {
@@ -518,7 +518,7 @@ class MainActivity : PermissionActivity(),
                         LocalBroadcastManager.getInstance(this@MainActivity).sendBroadcast(reConfigureReceiverIntent)
 
                         if (tabFragments.map { it.type }.contains(MainTab.대학).not()) {
-                            tabFragments.add(AffiliatedTestFragment.newInstance())
+                            tabFragments.add(AssessmentFragment.newInstance())
                         }
 
                         CoroutineScope(Dispatchers.Main).launch {
@@ -584,15 +584,15 @@ class MainActivity : PermissionActivity(),
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         viewModel.apply {
-//            mainProfileV4.observe(this@MainActivity) {
-//                if (it.isAffiliated) {
-//                    val exceptLessonFragments= tabFragments.filter { it.type != MainTab.과외 }
-//                    binding.vp.adapter = MainPagerAdapter(exceptLessonFragments, supportFragmentManager, lifecycle)
-//                }
-//                println("aspasp mainProfile V4 observe ")
-//                println("aspasp mainProfile V4 observe ${it.isAffiliated}")
-//                println("aspasp mainProfile V4 observe ${it.affiliationInfo?.institutionName}")
-//            }
+            assessmentMetadata.observe(this@MainActivity) {
+                val _skin = AssessmentDesignSkin.convertGroupCodeToSkin(it?.group_code)
+                assessmentDesignSkin = _skin
+                binding.mainTl.univTabName(_skin.univTabText)
+
+            }
+            assessmentExamGroup.observe(this@MainActivity) {
+                binding.mainTl.univTabVisibility(it.isNotEmpty())
+            }
             user.observe(this@MainActivity) { user ->
                 user?.let {
                     MyApplication.user = it
@@ -880,7 +880,7 @@ class MainActivity : PermissionActivity(),
         }
 
         val tabIndex = if (isTablet) MainTab.대학.indexOnTablet else MainTab.대학.indexOnMobile
-        (tabFragments[tabIndex] as? AffiliatedTestFragment)?.let { frag ->
+        (tabFragments[tabIndex] as? AssessmentFragment)?.let { frag ->
             val binding = frag.binding
 
             println("host check =========> ${binding.webView.url}")

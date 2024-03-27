@@ -16,7 +16,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogDaebakBinding
 import com.freewheelin.pulley.databinding.DialogDaebakTitleOnlyBinding
 import com.freewheelin.pulley.legacy.activities.SplashActivity
-import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.DaebakDialogV2
@@ -410,7 +409,7 @@ class DialogUtils {
             dialog.successCallback = callback
             showCommonDialog(context, dialog, "v2FinishTestDialog")
         }
-        fun v2AffiliatedTestStartWarningDialog (context: Context, callback:()->Unit = {}) {
+        fun v2AssessmentStartWarningDialog (context: Context, callback:()->Unit = {}) {
             val dialog = CommonDialog.newInstance(
                 title = "시험을 시작하시겠습니까?",
                 contents = "시험이 시작된 후에는 시험을 중단할 수 없습니다.",
@@ -419,7 +418,7 @@ class DialogUtils {
             )
             dialog.isCancelable = false
             dialog.successCallback = callback
-            showCommonDialog(context, dialog, "v2AffiliatedTestStartWarningDialog")
+            showCommonDialog(context, dialog, "v2AssessmentStartWarningDialog")
         }
         fun v2LoginErrDialog (context: Context, callback:()->Unit = {}) {
             val dialog = CommonDialog.newInstance(

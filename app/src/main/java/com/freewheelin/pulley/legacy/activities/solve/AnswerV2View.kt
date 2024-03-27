@@ -13,7 +13,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.model.ProblemType
 import com.freewheelin.pulley.legacy.model.Result
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestProblem
+import com.freewheelin.pulley.revision2021.model.response.AssessmentProblem
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 
@@ -21,7 +21,7 @@ import com.freewheelin.pulley.legacy.views.*
 interface AnswerV2Delegate {
     fun backPressed()
     fun getActivity(): Activity
-    fun onAnswerChanged(view: View, answer: String?, problem: AffiliatedTestProblem? = null)
+    fun onAnswerChanged(view: View, answer: String?, problem: AssessmentProblem? = null)
     fun onEnter()
     fun next()
     fun prev()
@@ -183,7 +183,7 @@ class AnswerV2View : ConstraintLayout,
         AnswerV2View.y = y
     }
 
-    fun configureUI(problem: AffiliatedTestProblem, requestFocus: Boolean) {
+    fun configureUI(problem: AssessmentProblem, requestFocus: Boolean) {
         if (problem.type == "주관식") {
             shortAnswerView.visibility = View.VISIBLE
             selectionAnswerView.visibility = View.INVISIBLE

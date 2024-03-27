@@ -16,16 +16,16 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2021.activity.LCWrongNoteActivity
-import com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment
+import com.freewheelin.pulley.revision2021.activity.fragments.AssessmentSolveSolutionFragment
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCCookingFragment
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteMapFragment
 import com.freewheelin.pulley.revision2021.model.*
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
+import com.freewheelin.pulley.revision2021.model.response.AssessmentSolution
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
 import com.freewheelin.pulley.revision2023.SchoolType
-import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
 import com.freewheelin.pulley.revision2023.model.MainUserPlannerItem
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.model.UserPlannerItem
@@ -232,10 +232,10 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("bind_solution_list")
-    fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AffiliatedSolution>?) {
+    fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AssessmentSolution>?) {
 //    Log.d("bind_solution_video_response", " size=${item?.size}")
         item?.let { workbookList ->
-            val adapter = recyclerView.adapter as AffiliatedSolveSolutionFragment.VideoSolutionAdapter
+            val adapter = recyclerView.adapter as AssessmentSolveSolutionFragment.VideoSolutionAdapter
             adapter.submitList(null)
             adapter.submitList(workbookList)
             adapter.notifyDataSetChanged()
@@ -386,36 +386,24 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("affiliated_card_background")
-    fun setAffiliatedCardBackground(view: View, univ: AffiliatedUniv?) {
-        univ?.let {
-            val imgRes = when (it) {
-                AffiliatedUniv.Konkuk -> R.drawable.bg_konkuk_primary_round
-                AffiliatedUniv.Soongsil -> R.drawable.bg_soongsil_primary_round
-            }
-            view.setBackgroundResource(imgRes)
+    @BindingAdapter("assessment_card_background")
+    fun setAssessmentCardBackground(view: View, skin: AssessmentDesignSkin?) {
+        skin?.let {
+            view.setBackgroundResource(skin.cardBackgroundSrc)
         }
     }
     @JvmStatic
-    @BindingAdapter("affiliated_card_character")
-    fun setAffiliatedCardCharactor(view: ImageView, univ: AffiliatedUniv?) {
-        univ?.let {
-            val imgRes = when (it) {
-                AffiliatedUniv.Konkuk -> R.mipmap.kudoctor
-                AffiliatedUniv.Soongsil -> R.drawable.soongsoong_disabled
-            }
-            view.setImageResource(imgRes)
+    @BindingAdapter("assessment_card_character")
+    fun setAssessmentCardCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
+        skin?.let {
+            view.setImageResource(it.cardCharacterSrc)
         }
     }
     @JvmStatic
-    @BindingAdapter("affiliated_test_completed_character")
-    fun setAffiliatedTestCompletedCharactor(view: ImageView, univ: AffiliatedUniv?) {
-        univ?.let {
-            val imgRes = when (it) {
-                AffiliatedUniv.Konkuk -> R.drawable.box_colorful_ku
-                AffiliatedUniv.Soongsil -> R.drawable.soongsoong_wink
-            }
-            view.setImageResource(imgRes)
+    @BindingAdapter("assessment_completed_character")
+    fun setAssessmentCompletedCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
+        skin?.let {
+            view.setImageResource(it.completedSrc)
         }
     }
 
@@ -432,7 +420,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("mainTabTextStyle")
     fun setMainTabTextStyle(view: TextView, type: MainTab?) {
-        type?.let {
+        type?.let { it ->
             val tabName = view.text.toString()
             val color = if (tabName in it.names) {
                 view.setTextAppearance(R.style.b1)

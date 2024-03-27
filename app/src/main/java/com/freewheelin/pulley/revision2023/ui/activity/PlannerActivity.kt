@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityPlannerBinding
-import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.revision2023.model.UserPlannerItem
 import com.freewheelin.pulley.revision2023.ui.adapter.StudyPlannerAdapter
 import com.freewheelin.pulley.revision2023.ui.adapter.UserPlannerAdapter
@@ -18,7 +17,6 @@ import com.freewheelin.pulley.revision2023.utils.listeners.UserPlannerItemClickL
 import com.freewheelin.pulley.revision2023.viewmodel.PlannerActViewModel
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.views.DaebakToast
-import com.freewheelin.pulley.revision2021.activity.AffiliatedTestSolveActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import org.joda.time.LocalDate
 

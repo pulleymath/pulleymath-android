@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedStudentWorkbookResponse
 import com.freewheelin.pulley.revision2021.model.response.AlarmReadResponse
 import com.freewheelin.pulley.revision2021.model.response.AlarmResponse
 import io.reactivex.Observable

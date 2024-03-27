@@ -1,11 +1,7 @@
 package com.freewheelin.pulley.revision2023.service
 
 import com.freewheelin.pulley.legacy.model.*
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution
-import com.freewheelin.pulley.revision2021.model.response.AffiliatedTestResponse
-import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseListResponse
-import com.freewheelin.pulley.revision2021.model.response.base.BaseResponse
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.request.UserPlanRequest
 import com.freewheelin.pulley.revision2023.model.response.UserPlanResponse

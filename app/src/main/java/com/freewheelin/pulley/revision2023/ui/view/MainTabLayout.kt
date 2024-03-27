@@ -18,15 +18,18 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ViewLayoutMainTabBinding
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.assessmentDesignSkin
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfileV4
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2021.repository.AssessmentRepository
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AffiliatedUniv
+import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +52,8 @@ enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: Li
 
     분석(3, 3, listOf("분석")),
     과외(4, -1, listOf("과외, 튜터")),
-    대학(5, 4, listOf("대학", "SSU진단", "KU진단"));
+//    대학(5, 4, listOf("진단", "SSU진단", "KU진단", "JNE진단"));
+    대학(5, 4, AssessmentDesignSkin.univTabTextList());
 
     companion object {
         fun convertMainTab(value: String): MainTab {
@@ -93,6 +97,7 @@ class MainTabLayout: FrameLayout {
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
     private val userRepository by lazy { UserRepository.instance }
+    private val assessmentRepository by lazy { AssessmentRepository.instance }
     var listener: MainTabListener? = null
     lateinit var binding: ViewLayoutMainTabBinding
     var prevTabType = MainTab.메인
@@ -134,12 +139,21 @@ class MainTabLayout: FrameLayout {
             tabletTabRootLl.children.forEachIndexed { index, view ->
                 setTabClickListener(view, index)
             }
-            getTabletUnivTab().apply {
-                val mainProfile = userRepository.mainProfileV4.value
-                visibleIf(mainProfile?.isAffiliated == true)
-                text = getUnivTabText()
-            }
+//            getTabletUnivTab().apply {
+//                val mainProfile = userRepository.mainProfileV4.value
+//                visibleIf(mainProfile?.isAffiliated == true)
+//                text = getUnivTabText()
+//            }
         }
+    }
+    fun univTabVisibility (visible: Boolean) {
+        if (context.isTablet) { getTabletUnivTab().visibleIf(visible) }
+        if (context.isMobile) { getMobileUnivTab().visibleIf(visible) }
+    }
+    fun univTabName (name: String) {
+        if (context.isTablet) { getTabletUnivTab().text = name }
+        if (context.isMobile) { getMobileUnivTab().text = name }
+
     }
 
     fun setTabClickListener(view: View, index: Int) {
@@ -190,11 +204,11 @@ class MainTabLayout: FrameLayout {
                 setTabClickListener(view, index)
             }
 
-            getMobileUnivTab().apply {
-                val mainProfile = userRepository.mainProfileV4.value
-                visibleIf(mainProfile?.isAffiliated == true)
-                text = getUnivTabText()
-            }
+//            getMobileUnivTab().apply {
+//                val mainProfile = userRepository.mainProfileV4.value
+//                visibleIf(mainProfile?.isAffiliated == true)
+//                text = getUnivTabText()
+//            }
         }
     }
 
@@ -210,11 +224,7 @@ class MainTabLayout: FrameLayout {
     }
 
     fun getUnivTabText(): String {
-        return when(user?.schoolID) {
-            AffiliatedUniv.Konkuk.schoolId -> "KU진단"
-            AffiliatedUniv.Soongsil.schoolId -> "SSU진단"
-            else -> "대학"
-        }
+        return assessmentDesignSkin?.univTabText ?: AssessmentDesignSkin.univTabText(user?.schoolID)
     }
 
 
@@ -271,19 +281,17 @@ class MainTabLayout: FrameLayout {
         }
     }
 
+    private fun getTextColorBySchoolType(type: SchoolType): Int {
+        return when (type) {
+            SchoolType.ELEMENTARY -> R.color.white
+            SchoolType.MIDDLE -> R.color.gray_800
+            SchoolType.HIGH -> R.color.white
+            SchoolType.UNIVERSITY -> R.color.white
+        }
+    }
     private fun setSelectedTabTextColor(textView: TextView) {
-        val fromTextColor = when (prevSchoolType) {
-            SchoolType.ELEMENTARY -> R.color.white
-            SchoolType.MIDDLE -> R.color.gray_800
-            SchoolType.HIGH -> R.color.white
-            SchoolType.UNIVERSITY -> R.color.white
-        }
-        val toTextColor = when (schoolType) {
-            SchoolType.ELEMENTARY -> R.color.white
-            SchoolType.MIDDLE -> R.color.gray_800
-            SchoolType.HIGH -> R.color.white
-            SchoolType.UNIVERSITY -> R.color.white
-        }
+        val fromTextColor = getTextColorBySchoolType(prevSchoolType)
+        val toTextColor = getTextColorBySchoolType(schoolType)
         val colorFrom = ContextCompat.getColor(context, fromTextColor)
         val colorTo = ContextCompat.getColor(context, toTextColor)
 

@@ -4,6 +4,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.user
 
 enum class AffiliatedUniv(val schoolId: Int) {
+
     Konkuk(6000),
     Soongsil(7000);
 
@@ -12,6 +13,8 @@ enum class AffiliatedUniv(val schoolId: Int) {
             return when (this) {
                 Konkuk -> "KU"
                 Soongsil -> "SSU"
+//                JNE -> TODO()
+//                DEFAULT -> TODO()
             }
         }
     val isKonkuk: Boolean
@@ -24,6 +27,8 @@ enum class AffiliatedUniv(val schoolId: Int) {
             return when(this) {
                 Konkuk -> true
                 Soongsil -> false
+//                JNE -> TODO()
+//                DEFAULT -> TODO()
             }
         }
 
@@ -161,7 +166,7 @@ enum class AffiliatedUniv(val schoolId: Int) {
         get() {
             return when (this) {
                 Konkuk -> R.id.kuToolTipCl
-                Soongsil -> R.id.ssuToolTipCl
+                Soongsil -> R.id.defaultToolTipCl
             }
         }
 

@@ -21,7 +21,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.affiliatedTest.component.CommunityJavascriptInterface
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.assessment.component.CommunityJavascriptInterface
 import com.freewheelin.pulley.legacy.bases.isMobile
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityPurchaseInduceWebViewBinding

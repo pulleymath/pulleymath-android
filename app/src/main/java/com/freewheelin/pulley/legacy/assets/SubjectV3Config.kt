@@ -181,6 +181,9 @@ enum class SubjectV3(val id: Int) {
             values()
                 .firstOrNull { it.id == id } ?: 기타
 
+        fun isMathticSubject(value: String): Boolean {
+            return SubjectV3.convertStrToSubject(value) !== 교육과정외
+        }
         fun convertStrToSubject(value: String): SubjectV3 {
             return when (value) {
                 교육과정외.name -> 교육과정외
@@ -211,7 +214,7 @@ enum class SubjectV3(val id: Int) {
                 확률과통계.name, "확률과 통계" -> 확률과통계
                 미적분.name -> 미적분
                 기하.name -> 기하
-                else -> { 수학_상 }
+                else -> { 교육과정외 }
             }
         }
         fun codeToSubject(code: Int): SubjectV3 {
@@ -245,6 +248,15 @@ enum class SubjectV3(val id: Int) {
                 else -> {
                     수학_상
                 }
+            }
+        }
+        fun nameToSchoolType(name: String): SchoolType {
+            val subject = convertStrToSubject(name)
+            return when (subject) {
+                수학_상, 수학_하, 수학I, 수학II, 확률과통계, 미적분, 기하 -> SchoolType.HIGH
+                중1_1, 중1_2, 중2_1, 중2_2, 중3_1, 중3_2 -> SchoolType.MIDDLE
+                초1_1, 초1_2, 초2_1, 초2_2, 초3_1, 초3_2, 초4_1, 초4_2, 초5_1, 초5_2, 초6_1, 초6_2 -> SchoolType.ELEMENTARY
+                else -> SchoolType.HIGH
             }
         }
         fun codeToSchoolType(code: Int): SchoolType {

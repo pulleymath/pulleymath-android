@@ -5,9 +5,9 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.AffiliatedSolveSolutionFragment.SolutionItemClickListener"/>
-        <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.AffiliatedSolution"/>
-        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.AffiliatedSolveSolutionViewModel"/>
+        <variable name="listener" type="com.freewheelin.pulley.revision2021.activity.fragments.AssessmentSolveSolutionFragment.SolutionItemClickListener"/>
+        <variable name="item" type="com.freewheelin.pulley.revision2021.model.response.AssessmentSolution"/>
+        <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.AssessmentSolveSolutionViewModel"/>
     </data>
     <LinearLayout
         android:layout_width="match_parent"
