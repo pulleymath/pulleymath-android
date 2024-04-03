@@ -46,10 +46,10 @@
                     <TextView
                         android:id="@+id/smallChapterTitleTv"
                         android:layout_width="210dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         style="@style/h5"
-                        android:text="하하하"
-                        android:maxLines="1"
+                        android:text="하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하하"
+                        android:maxLines="2"
                         android:ellipsize="end"
                         android:lineHeight="20dp"
                         android:textColor="@color/blue_black_200"

@@ -56,7 +56,7 @@ class AssessmentWorkbook: BaseDiffItem, Serializable {
     lateinit var updated_by: String
     var is_math: Boolean = false
     var pulley_workbook_id: Int = 0
-//    var is_fixed_time: Boolean = false // 있었는데 건국대에서 학생들이 시험을 너무 안보는바람에 한명이라도 더 보게하려고 없어졌습니다
+    var is_fixed_time: Boolean = false // 있었는데 건국대에서 학생들이 시험을 너무 안보는바람에 한명이라도 더 보게하려고 false로만 사용하기로 함. 추후에 변경될수 있으니 코드는 남겨놓음
     var version: Int = 0
 
     // ---

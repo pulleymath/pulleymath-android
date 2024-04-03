@@ -165,7 +165,6 @@ class LCCookingFragment() : Fragment(),
                     (activity as LearningCourseActivity).hidePenPanel()
                 }
 
-
                 when (item.type) {
                     CookingInfoItem.ItemType.Video -> {
                         videoContainerCl.visibility = View.VISIBLE

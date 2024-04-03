@@ -39,10 +39,16 @@ class AssessmentRepository private constructor() {
         return testGroup
     }
 
+    fun clearGroupList() {
+        _assessmentExamGroup.postValue(listOf())
+    }
     suspend fun fetchAssessmentGroupMetadata(schoolId: Int): AssessmentMetadata? {
         val metadata = assessmentService.fetchAssessmentGroupMetadata(schoolId).data
         _assessmentMetadata.postValue(metadata)
         return metadata
+    }
+    fun clearMetadata() {
+        _assessmentMetadata.postValue(null)
     }
     fun getGroupList2(studentId: String, schoolId: Int) = assessmentService.getGroupList2(studentId, schoolId)
     fun finishTest(studentId: String, workbookId: Int) = assessmentService.finish(studentId, workbookId)

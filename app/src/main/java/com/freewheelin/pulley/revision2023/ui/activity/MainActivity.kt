@@ -586,6 +586,7 @@ class MainActivity : PermissionActivity(),
         viewModel.apply {
             assessmentMetadata.observe(this@MainActivity) {
                 val _skin = AssessmentDesignSkin.convertGroupCodeToSkin(it?.group_code)
+                println("aspasp metadata ${_skin}")
                 assessmentDesignSkin = _skin
                 binding.mainTl.univTabName(_skin.univTabText)
 

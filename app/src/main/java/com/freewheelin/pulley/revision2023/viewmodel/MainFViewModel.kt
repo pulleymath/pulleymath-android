@@ -340,7 +340,7 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
             })
     }
     fun fetchAssessmentGroupMetadata() {
-        val schoolId = userInRepo.value?.schoolID ?: return println("error::fetchAssessmentGroupMetadata:: schoolId null")
+        val schoolId = userInRepo.value?.schoolID ?: return assessmentRepository.clearMetadata()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val assessmentMetadata = assessmentRepository.fetchAssessmentGroupMetadata(schoolId)
             _errorAction.postValue(CoroutineExceptionType.NONE)

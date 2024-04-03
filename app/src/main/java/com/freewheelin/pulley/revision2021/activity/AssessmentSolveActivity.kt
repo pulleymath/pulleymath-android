@@ -142,7 +142,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
                 version = it.version
                 testStartedAt = it.test_started_at
                 testFinishedAt = it.test_finished_at
-                isFixedStartTime.value = false // it.is_fixed_time
+                isFixedStartTime.value = it.is_fixed_time
                 showTimer = it.showTimer
                 testPeriodMinutes = it.test_period_minutes
                 workbookSeq = it.seq

@@ -55,7 +55,7 @@ enum class ClientBookType {
 }
 
 //@Entity(tableName = "plan_book_table")
-class Book: Content, BaseDiffItem {
+class Book: Content, BaseDiffItem { // 웹앱에서는 MyPractice로 사용하고잇음 이름 바꿔야겠다
 
     var description: String? = ""
     var bookTag: String? = null

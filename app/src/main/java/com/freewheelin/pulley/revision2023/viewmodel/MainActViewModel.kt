@@ -75,7 +75,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     }
 
     fun fetchAssessmentGroupMetadata() {
-        val schoolId = user.value?.schoolID ?: return println("error::fetchAssessmentGroupMetadata:: schoolId null")
+        val schoolId = user.value?.schoolID ?: return assessmentRepository.clearMetadata()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val assessmentMetadata = assessmentRepository.fetchAssessmentGroupMetadata(schoolId)
             _errorAction.postValue(CoroutineExceptionType.NONE)
@@ -164,8 +164,8 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     }
 
     fun fetchAssessmentExamList () {
-        val studentId = user.value?.studentID ?: return
-        val schoolId = user.value?.schoolID ?: return
+        val studentId = user.value?.studentID ?: return assessmentRepository.clearGroupList()
+        val schoolId = user.value?.schoolID ?: return assessmentRepository.clearGroupList()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             assessmentRepository.getGroupList(studentId, schoolId)
         }
