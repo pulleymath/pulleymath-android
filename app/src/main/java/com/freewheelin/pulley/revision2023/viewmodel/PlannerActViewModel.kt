@@ -127,10 +127,10 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
         }
     }
 
-    val isE3_1ItemExist = MutableLiveData<Boolean>()
-    val isE3_2ItemExist = MutableLiveData<Boolean>()
-    val isE4_1ItemExist = MutableLiveData<Boolean>()
-    val isE4_2ItemExist = MutableLiveData<Boolean>()
+//    val isE3_1ItemExist = MutableLiveData<Boolean>()
+//    val isE3_2ItemExist = MutableLiveData<Boolean>()
+//    val isE4_1ItemExist = MutableLiveData<Boolean>()
+//    val isE4_2ItemExist = MutableLiveData<Boolean>()
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     private fun fetchAvailableElementarySubjects() {
@@ -141,10 +141,10 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
                 Log.d(javaClass.simpleName, "fetchAvailableElementarySubjects =>${response.data}")
                 response.data?.let {
                     val availableSubjectIds = it.map { it.subjectId }
-                    isE3_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_1.id))
-                    isE3_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_2.id))
-                    isE4_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_1.id))
-                    isE4_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_2.id))
+//                    isE3_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_1.id))
+//                    isE3_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초3_2.id))
+//                    isE4_1ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_1.id))
+//                    isE4_2ItemExist.postValue(availableSubjectIds.contains(SubjectV3.초4_2.id))
                 }
             }, { error ->
                 Log.e(javaClass.simpleName, "fetchAvailableElementarySubjects fetch error=${error.localizedMessage}")
@@ -296,8 +296,8 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
         userRepository.updateSchoolType(type)
         val subjectId = when (type) {
             SchoolType.ELEMENTARY -> {
-                fetchAvailableElementarySubjects()
-                SubjectV3.초5_1.id
+//                fetchAvailableElementarySubjects()
+                SubjectV3.초3_1.id
             }
             SchoolType.MIDDLE -> SubjectV3.중1_1.id
             else -> SubjectV3.수학_상.id
