@@ -102,7 +102,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
             keypadView.setNumberKeypadListener(this@OMRActivity)
             timerView.setTimerViewListener(this@OMRActivity)
 
-            tvTitle.text = mockExam.getMockTitle()
+            tvTitle.text = mockExam.subject
 
             if(isSPYMode) {
                 spyBtn.visibility = View.VISIBLE

@@ -582,16 +582,14 @@ class SolveActivity : BaseActivity(),
 
             solutionPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.mainProfileV4.value?.let {
-                    if (it.isAffiliated && selectedProblem?.isUserAnswerInput() == false) {
+                    if (it.isAffiliated && selectedProblem?.isScoring() == false) {
                         DaebakToast.show(this@SolveActivity, "문제를 푼 뒤 확인 할 수 있습니다.")
-                        solutionPanelSwitch.isEnabled = false
                         solutionPanelSwitch.isChecked = false
-                        solutionPanelSwitch.isEnabled = true
+                        onShowSolutionCheckChanged(false)
                     } else {
                         onShowSolutionCheckChanged(isChecked)
                     }
                 }
-
             }
             quickScoringPanelSwitch.setOnCheckedChangeListener { _, isChecked ->
                 onSpeedyScoringCheckChanged(isChecked)
@@ -1735,7 +1733,7 @@ class SolveActivity : BaseActivity(),
             }
             is MockExam -> {
                 val mock = (content as MockExam)
-                mock.getMockTitle()
+                mock.subject
             }
             else -> {
                 ""

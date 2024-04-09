@@ -198,7 +198,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
                         scorePercentTv.text = "${it.correctRate}%"
                         scoreCountTv.text = "${it.correctCount}/${it.totalNumber}"
 
-                        binding.titleTv.text = mockExam.getMockTitle()
+                        binding.titleTv.text = mockExam.subject
                         binding.twinsSupportTv?.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
 
                         scoreTv.text = it.score.toString() + "점"
@@ -260,7 +260,7 @@ class MockReportActivity : AppCompatActivity(), ArduousSpinnerListener {
                     val totalCount = summaryAnalysis?.totalNumber ?: 0
                     val correctCount = summaryAnalysis?.correctCount ?: 0
 
-                    binding.titleTv.text = mockExam.getMockTitle()
+                    binding.titleTv.text = mockExam.subject
                     binding.twinsSupportTv?.visibility = if (mockExam.examType?.isTwins == true) View.VISIBLE else View.GONE
                     ratingGuideTv2.text = template.getSummaryP(correctRate)
 

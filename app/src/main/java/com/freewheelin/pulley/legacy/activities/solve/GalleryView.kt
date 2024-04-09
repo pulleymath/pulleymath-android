@@ -166,7 +166,7 @@ class GalleryView : ConstraintLayout {
                 "${content.subject}"
             }
             is MockExam -> {
-                content.getMockTitle()
+                content.subject
             }
             else -> {
                 ""

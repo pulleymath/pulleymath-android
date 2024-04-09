@@ -270,7 +270,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                             val intent = SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
                             startActivity(intent)
                         }
-                        BookType.BOOK -> {
+                        BookType.BOOK, BookType.TEACHER -> {
                             val intent = if(content.isCompleted())
 //                                SolveActivity.getReviewIntent(this@StudyHistoryActivity, Book(content))
                                 SolveActivity.getIntent(this@StudyHistoryActivity, Book(content))
@@ -295,7 +295,9 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                                 SolveActivity.getIntent(this@StudyHistoryActivity, Test(content))
                             startActivity(intent)
                         }
-                        else -> {}
+                        else -> {
+
+                        }
                     }
                 }
             }

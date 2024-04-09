@@ -191,6 +191,9 @@ open class Problem: Serializable {
     fun isUserAnswerInput(): Boolean {
         return userAnswer != null && userAnswer!!.isNotEmpty()
     }
+    fun isScoring(): Boolean {
+        return getResultByScoring() == Result.correct || getResultByScoring() == Result.incorrect
+    }
 
     fun isTodaySolved(): Boolean {
         if(updateDateTime == null)

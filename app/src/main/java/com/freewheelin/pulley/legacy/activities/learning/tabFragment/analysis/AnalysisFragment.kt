@@ -489,7 +489,7 @@ class AnalysisFragment : MainTabFragment(),
                     SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
-            BookType.BOOK, BookType.PRACTICE -> {
+            BookType.BOOK, BookType.PRACTICE, BookType.TEACHER -> {
                 val intent = SolveActivity.getIntent(requireContext(), Book(content))
                 startActivity(intent)
             }
