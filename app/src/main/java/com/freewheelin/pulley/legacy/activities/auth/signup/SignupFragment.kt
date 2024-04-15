@@ -362,7 +362,8 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             serviceAgreeCb.isClickable = true
             serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    if (user?.serviceType?.isGuestUser == true) {
+                    println("aspasp user? ${user}, ${user?.serviceType?.isGuestUser}")
+                    if (user == null || user?.serviceType?.isGuestUser == true) {
                         val targetUrl = URL.이용약관
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
                     } else {
@@ -379,7 +380,7 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             personalAgreeCb.isClickable = true
             personalAgreeCb.allDocuText = personalAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    if (user?.serviceType?.isGuestUser == true) {
+                    if (user == null || user?.serviceType?.isGuestUser == true) {
                         val targetUrl = URL.개인정보취급방침
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
                     } else {
@@ -396,7 +397,7 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             marketingAgreeCb.isClickable = true
             marketingAgreeCb.allDocuText = marketingAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    if (user?.serviceType?.isGuestUser == true) {
+                    if (user == null || user?.serviceType?.isGuestUser == true) {
                         val targetUrl = URL.개인정보취급방침
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)
                     } else {
