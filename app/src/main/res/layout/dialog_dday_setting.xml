@@ -94,7 +94,7 @@
                     android:src="@drawable/ic_exclamation_red" />
 
                 <TextView
-                    android:id="@+id/errorTv"
+                    android:id="@+id/dateErrorTv"
                     style="@style/TextRed_300.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

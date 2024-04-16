@@ -24,6 +24,7 @@ import android.text.InputFilter
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.legacy.bases.isMobile
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendar
 import com.freewheelin.pulley.legacy.views.calendarPickerViews.DaebakCalendarListener
 import com.freewheelin.pulley.legacy.views.editText.DaebakInputField
@@ -48,6 +49,7 @@ class DDaySettingDialog(context: Context, setOnSpyMode: () -> Unit): Dialog(cont
     val targetSpinner get() = findViewById<ArduousSpinner>(R.id.targetSpinner)
     val customField get() = findViewById<DaebakInputField>(R.id.customField)
     val errorContainer get() = findViewById<LinearLayout>(R.id.errorContainer)
+    val errorTv get() = findViewById<TextView>(R.id.dateErrorTv)
     val scrollView get() = findViewById<ScrollView>(R.id.scrollView)
     val selectCalendar get() = findViewById<DaebakCalendar>(R.id.selectCalendar)
 
@@ -191,12 +193,14 @@ class DDaySettingDialog(context: Context, setOnSpyMode: () -> Unit): Dialog(cont
         Log.d("테스트", "dDays=$dDays")
 
         if(dDays == null) {
-            if(customField.text.isEmpty()) {
-                customField.showErrorMsg("디데이의 이름을 입력해주세요.")
-            }
+
 
             if(selectedDate == null) {
+                errorTv.text = "날짜를 선택해주세요."
                 errorContainer.visibility = View.VISIBLE
+            }
+            if(customField.text.isEmpty()) {
+                customField.showErrorMsg("디데이의 이름을 입력해주세요.")
             }
 
             val title = customField.text
@@ -263,9 +267,22 @@ class DDaySettingDialog(context: Context, setOnSpyMode: () -> Unit): Dialog(cont
     }
 
     override fun onSelectDate(calendar: DaebakCalendar, date: LocalDate) {
-        selectedDate = date.toDate()
-        customField.visibility = View.VISIBLE
-        targetSpinner.defaultStr = customFieldText
-        targetSpinner.position = dDays.size
+        val today = Date()
+        if (date.toDate() < today) {
+//            DaebakToast.show(context, "오늘이나 지난 날로 설정할 수 없어요 :)")
+            selectedDate = null
+            errorTv.text = "오늘이나 지난 날로 설정할 수 없어요."
+            errorContainer.visibleIf(true)
+            customField.visibility = View.VISIBLE
+            targetSpinner.defaultStr = customFieldText
+            targetSpinner.position = dDays.size
+
+        } else {
+            selectedDate = date.toDate()
+            errorContainer.visibleIf(false)
+            customField.visibility = View.VISIBLE
+            targetSpinner.defaultStr = customFieldText
+            targetSpinner.position = dDays.size
+        }
     }
 }
