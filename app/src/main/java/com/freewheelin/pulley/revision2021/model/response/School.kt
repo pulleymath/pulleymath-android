@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2021.model.response
 
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
 import com.freewheelin.pulley.revision2021.model.response.base.BaseResponsePageable
+import com.freewheelin.pulley.revision2023.SchoolType
 
 class School (
     val address: String,
@@ -12,7 +13,7 @@ class School (
     val isDeleted: Boolean,
     val name: String,
     val regionID: Int,
-    val type: Type,
+    val type: SchoolType,
     val updateDate: String
 ) : BaseDiffItem {
     override fun equals(other: Any?): Boolean {
@@ -21,23 +22,23 @@ class School (
 
     override fun getId() = "$id"
 
-    enum class Type {
-        ELEMENTARY,
-        MIDDLE,
-        HIGH,
-        UNIVERSITY
-    }
+//    enum class Type {
+//        ELEMENTARY,
+//        MIDDLE,
+//        HIGH,
+//        UNIVERSITY
+//    }
     fun isElementary(): Boolean {
-        return type == Type.ELEMENTARY
+        return type == SchoolType.ELEMENTARY
     }
     fun isMiddle(): Boolean {
-        return type == Type.MIDDLE
+        return type == SchoolType.MIDDLE
     }
     fun isHigh(): Boolean {
-        return type == Type.HIGH
+        return type == SchoolType.HIGH
     }
     fun isUniversity(): Boolean {
-        return type == Type.UNIVERSITY
+        return type == SchoolType.UNIVERSITY
     }
 }
 

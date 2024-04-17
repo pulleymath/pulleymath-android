@@ -17,6 +17,7 @@ import com.freewheelin.pulley.revision2021.activity.dialog.FindSchoolDialog
 import com.freewheelin.pulley.revision2021.repository.FindCityRepository
 import com.freewheelin.pulley.revision2021.model.response.City
 import com.freewheelin.pulley.revision2021.model.response.School
+import com.freewheelin.pulley.revision2023.SchoolType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -155,7 +156,7 @@ class StudentInfoFragment : Fragment() {
         showEtcList(false)
     }
 
-    var selectedSchoolType: School.Type? = null
+    var selectedSchoolType: SchoolType? = null
     private fun openFindSchool() {
         val dialog = FindSchoolDialog.newInstance()
         dialog.callback = { selected ->
@@ -434,7 +435,7 @@ class StudentInfoFragment : Fragment() {
         disposables.clear()
     }
     private fun isElementarySchoolUser(): Boolean {
-        return selectedSchoolType == School.Type.ELEMENTARY
+        return selectedSchoolType == SchoolType.ELEMENTARY
     }
     private fun isMiddleSchoolUser(): Boolean {
         return binding.selectMiddleGrade.visibility == View.VISIBLE

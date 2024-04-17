@@ -120,10 +120,12 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
 
     private fun configureUI(user: UserV4) {
+        viewModel.updateUser(user)
         with(binding) {
             gradeTv.text = user.userGrade.text
 
             configureSchool(user)
+            Log.d(javaClass.simpleName, "user.schoolType=${user.schoolType} user.userGrade=${user.userGrade} user.userMajor=${user.userMajor} user.initMoGrade=${user.initMoGrade} user.schoolType=${user.schoolType}")
 
             if (user.userGrade.isHigh) {
                 majorTv.text = user.userMajor.title

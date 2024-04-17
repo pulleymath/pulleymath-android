@@ -22,7 +22,7 @@ import com.freewheelin.pulley.revision2021.repository.FindCityRepository
 import com.freewheelin.pulley.revision2021.model.response.City
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.visibleIf
-import com.freewheelin.pulley.revision2021.model.response.School
+import com.freewheelin.pulley.revision2023.SchoolType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -154,7 +154,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
         showEtcList(false)
     }
 
-    var selectedSchoolType: School.Type? = null
+    var selectedSchoolType: SchoolType? = null
     private fun openFindSchool() {
         val dialog = FindSchoolDialog.newInstance()
         dialog.callback = { selected ->
@@ -550,6 +550,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                     .subscribe({ response ->
                         Log.d("학업정보", "update response=$response")
                         MyApplication.user?.let { user ->
+                            user.schoolType = selectedSchoolType
                             user.schoolID = schoolID
                             user.schoolName = binding.selectSchool.text.toString()
                             user.regionID = regionID
@@ -573,7 +574,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
         disposables.clear()
     }
     private fun isElementarySchoolUser(): Boolean {
-        return selectedSchoolType == School.Type.ELEMENTARY
+        return selectedSchoolType == SchoolType.ELEMENTARY
     }
     private fun isMiddleSchoolUser(): Boolean {
         return binding.selectMiddleGrade.visibility == View.VISIBLE

@@ -35,7 +35,7 @@ data class UserV4(
     var email: String?,
     var parentNumber: String?,
     val serviceType: PaidServiceType,
-    val schoolType: SchoolType?,
+    var schoolType: SchoolType?,
     var majorType: String,
     var grade: Int,
     var initMoGrade: Int,
