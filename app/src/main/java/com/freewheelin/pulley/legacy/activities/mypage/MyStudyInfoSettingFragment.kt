@@ -82,7 +82,7 @@ class MyStudyInfoSettingFragment : MyPageBaseFragment() {
                 if(registBtn.isEnabled) {
                     val grade = getGradeFromSpinner()
                     val rate = selectRate.position - 1
-                    val major = selectMajor.position - 1
+                    val major = selectMajor.position
                     update(selectedSchoolID, selectedCityID, grade, rate, major)
                 }
             }
