@@ -103,7 +103,7 @@
 <!--        android:visibility="@{item.firstWorkbook.isFinished() ? View.INVISIBLE : View.VISIBLE }"-->
 
         <ImageView
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="75dp"
             assessment_card_character="@{ skin }"
             android:scaleType="fitEnd"
