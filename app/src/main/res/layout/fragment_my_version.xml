@@ -91,29 +91,56 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pulleyText1"
+                        style="@style/c1"
+                        android:textColor="@color/gray_500"
+                        android:layout_marginStart="@dimen/dp8"
+                        android:textSize="@dimen/sp16"
+                        android:text="풀리수학"
+                        app:layout_constraintStart_toEndOf="@+id/latestVersionLabel"
+                        app:layout_constraintEnd_toStartOf="@+id/latestVersionTv"
+                        app:layout_constraintTop_toTopOf="@+id/latestVersionLabel"
+                        />
+                    <TextView
                         style="@style/TextGray_500"
                         android:id="@+id/latestVersionTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/MyPage_page_contents_start_margin_71dp"
+                        android:layout_marginStart="4dp"
                         android:textSize="@dimen/sp16"
                         android:text="V 1.0.00"
                         app:layout_constraintTop_toTopOf="@+id/latestVersionLabel"
                         app:layout_constraintBottom_toBottomOf="@+id/latestVersionLabel"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toEndOf="@+id/pulleyText1" />
 
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pulleyText2"
+                        style="@style/c1"
+                        android:textColor="@color/gray_500"
+                        android:layout_marginStart="@dimen/dp8"
+                        android:textSize="@dimen/sp16"
+                        android:text="풀리수학"
+                        app:layout_constraintStart_toEndOf="@+id/currentVersionLabel"
+                        app:layout_constraintEnd_toStartOf="@+id/currentVersionTv"
+                        app:layout_constraintTop_toTopOf="@+id/currentVersionLabel"
+                        />
 
                     <TextView
                         style="@style/TextGray_500"
                         android:id="@+id/currentVersionTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/MyPage_page_contents_start_margin_71dp"
+                        android:layout_marginStart="4dp"
                         android:textSize="@dimen/sp16"
                         android:text="V 1.0.00"
                         app:layout_constraintTop_toTopOf="@+id/currentVersionLabel"
                         app:layout_constraintBottom_toBottomOf="@+id/currentVersionLabel"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toEndOf="@+id/pulleyText2" />
 
                     <com.freewheelin.pulley.revision2023.ui.view.CommonButton
                         android:id="@+id/updateBtn"
