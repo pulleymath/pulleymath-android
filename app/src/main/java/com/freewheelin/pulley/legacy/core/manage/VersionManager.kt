@@ -153,17 +153,33 @@ object VersionManager {
                         cb(isNeedToForceUpdate(storeVersion), null)
                     }
                     else -> {
-                        val dialog = if (!activity.isNetworkConnected) {
-                            DialogUtils.networkErrDialog(activity)
-                        } else {
-                            DialogUtils.serverErrDialog(activity)
+
+                        val successCallback = {
+                            activity.finishAndRemoveTask()
                         }
 
-                        dialog.isCancelable = false
-                        dialog.successCallback = { activity.finishAndRemoveTask() }
-                        if (activity is AppCompatActivity && !activity.isFinishing) {
-                            val fm = activity.supportFragmentManager
-                            fm.let { dialog.show(it, "errordialog") }
+                        if (activity.isNetworkConnected) {
+                            DialogUtils.confirmV2(
+                                context = activity,
+                                title = "데이터를 가져올 수 없습니다",
+                                contents = "인터넷 연결을 확인하고 다시 시도해주세요.\n문제가 지속되면\n카카오톡(@풀리는수학)으로 문의 바랍니다.",
+                                isOneBtn = true,
+                                isCancelable = false,
+                                rightBtnText = "확인",
+                                successCb = successCallback
+                            )
+                        } else {
+                            val title = "네트워크 연결이 필요합니다."
+                            val contents = "네트워크 연결에 실패했습니다.\n와이파이 설정을 확인해 주세요."
+                            DialogUtils.confirmV2(
+                                context = activity,
+                                title = title,
+                                contents = contents,
+                                isOneBtn = true,
+                                isCancelable = false,
+                                rightBtnText = "확인",
+                                successCb = successCallback
+                            )
                         }
                     }
                 }
