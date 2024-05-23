@@ -1,25 +1,22 @@
 package com.freewheelin.pulley.legacy.activities.learning.tabFragment.book
 
-import android.animation.ValueAnimator
+import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ItemBookPlanV2Binding
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.model.contents.Book
-import com.freewheelin.pulley.legacy.model.contents.BookType
-import com.freewheelin.pulley.legacy.model.contents.ClientBookType
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
-import com.squareup.picasso.Picasso
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.utils.PatternStudyLayoutUtils
+import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 
 enum class ActionType {
     pin,
@@ -48,7 +45,11 @@ class BookPlanV2Holder(
         this.item = item
         this.listener = planListener
 //        actionList = actions
-        cardContainer.layoutParams.width = if (isGridLayout) FrameLayout.LayoutParams.MATCH_PARENT else 195.toPx()
+
+        val layoutUtils = PatternStudyLayoutUtils.getInstance()
+        cardContainer.layoutParams.width = layoutUtils.planCardWidth(binding.root.context, isGridLayout)
+        cardContainer.layoutParams.height = layoutUtils.planCardHeight(binding.root.context, isGridLayout)
+
         itemView.setOnTouchListener(BoongthEffect())
         itemView.setOnClickListener {
             if (user?.serviceType?.isGuestUser == true) {

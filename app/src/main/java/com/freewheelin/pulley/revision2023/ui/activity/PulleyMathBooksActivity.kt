@@ -56,6 +56,7 @@ import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.SOLVE_RESULT
+import com.freewheelin.pulley.revision2023.utils.PatternStudyLayoutUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -230,7 +231,9 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     fun initAdapter() {
         binding.apply {
             planAdapter = PatternStudyMyPlanAdapter (this@PulleyMathBooksActivity, listOf(ActionType.pin), OriginType.PulleyMathTotal, viewModel = viewModel)
-            val planSpanCount = if(isTablet) 4 else 2
+            val utils = PatternStudyLayoutUtils.getInstance()
+            val planSpanCount = utils.spanSize(this@PulleyMathBooksActivity)
+
             totalRv.layoutManager = GridLayoutManager(this@PulleyMathBooksActivity, planSpanCount)
             totalRv.adapter = planAdapter
 
@@ -278,7 +281,8 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             }
             viewModel.planAdapter = planAdapter
             filterRv.adapter = filterAdapter
-            filterRv.minimumHeight = if (isTablet) 650.toPx() else 550.toPx()
+
+            filterRv.minimumHeight = utils.filterViewMinHeight(binding.root.context)
             viewModel.filterAdapter = filterAdapter
         }
     }
