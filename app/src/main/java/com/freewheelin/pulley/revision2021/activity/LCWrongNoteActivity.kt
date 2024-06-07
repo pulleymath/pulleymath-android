@@ -82,7 +82,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
             viewModel.init(noteCardList, noteCardItem, title, chapterId)
             val frags = noteCardList.map {
-                return@map LCWrongNoteFragment.newInstance(it)
+                return@map LCWrongNoteFragment.newInstance(it, chapterId)
             }
 
             tabFragments.addAll(frags)

@@ -328,9 +328,11 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
         removeAllBtn.setOnClickListener {
             memoViews.forEach {
                 it.undoAll()
+                it.clearBitmap()
+                it.memoListener?.onRemoveAllMemo()
+
                 if (isCookingMemo) {
                     it.erase()
-                    it.clearBitmap()
                 }
             }
         }
@@ -398,11 +400,11 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
                 val color = if (value == 0) R.color.gray_400 else R.color.gray_600
                 setColorFilter(ContextCompat.getColor(context, color))
             }
-            removeAllBtn.run {
-                val color = if (value == 0) R.color.gray_400 else R.color.red_250
-                setTextColor(ContextCompat.getColor(context, color))
-                isClickable = value != 0
-            }
+//            removeAllBtn.run {
+//                val color = if (value == 0) R.color.gray_400 else R.color.red_250
+//                setTextColor(ContextCompat.getColor(context, color))
+//                isClickable = value != 0
+//            }
         }
     var redoCount: Int = 0
         set(value) {
@@ -411,11 +413,11 @@ class PencilPanel(context: Context, attrs: AttributeSet) : ConstraintLayout(cont
                 val color = if (value == 0) R.color.gray_400 else R.color.gray_600
                 setColorFilter(ContextCompat.getColor(context, color))
             }
-            removeAllBtn.run {
-                val color = if (value == 0) R.color.gray_400 else R.color.red_250
-                setTextColor(ContextCompat.getColor(context, color))
-                isClickable = value != 0
-            }
+//            removeAllBtn.run {
+//                val color = if (value == 0) R.color.gray_400 else R.color.red_250
+//                setTextColor(ContextCompat.getColor(context, color))
+//                isClickable = value != 0
+//            }
         }
     private fun setThicknessIndicatorHeight(value: Int) {
         (thicknessIndicator.layoutParams as? LayoutParams)?.apply {

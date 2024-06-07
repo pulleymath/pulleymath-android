@@ -1,4 +1,4 @@
-package com.freewheelin.pulley.revision2023.room.patternstudy
+package com.freewheelin.pulley.revision2023.room.studymemo
 
 //import androidx.room.RoomDatabase
 //import androidx.sqlite.db.SupportSQLiteDatabase

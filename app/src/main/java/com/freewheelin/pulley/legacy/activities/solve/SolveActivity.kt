@@ -54,7 +54,9 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
@@ -74,6 +76,7 @@ class SolveActivity : BaseActivity(),
     ObservableHashSetListener<Problem>,
     LifecycleObserver,
     AppUsageMonitorListener,
+    MemoListener,
     PathRedoUndoCountChangeListener {
 
     private val binding: ActivitySolveBinding by lazy {
@@ -162,10 +165,12 @@ class SolveActivity : BaseActivity(),
         setContentView(binding.root)
         initReceiver()
         initObserve()
+        val content = intent.getSerializableExtra(ContentManager.ARG_CONTENT) as? Content
+//        initMemoLoad(content)
         initUI()
 //        val content = getSerializable(this@SolveActivity, ContentManager.ARG_CONTENT, Content::class.java)
-        val content = intent.getSerializableExtra(ContentManager.ARG_CONTENT) as? Content
 
+        // isReview와 initContent가 initMemoLoad 의 cb 하위로 빠지는걸 생각해봐야한다
         isReview = intent.getBooleanExtra(IS_REVIEW, false)
 
         if(isReview)
@@ -180,6 +185,10 @@ class SolveActivity : BaseActivity(),
 //        setSpen()
     }
 
+    private fun initMemoLoad(content: Content?) {
+        val assignId = content?.assignID ?: -1
+        viewModel.fetchMemos(assignId)
+    }
     override fun onResume() {
         Log.d("문제풀기", "onResume()")
         super.onResume()
@@ -648,6 +657,10 @@ class SolveActivity : BaseActivity(),
             penPanel.listener = this@SolveActivity
             problemMemoView.set(penPanel)
             solutionMemoView.set(penPanel)
+            problemMemoView.memoListener = this@SolveActivity
+            solutionMemoView.memoListener = this@SolveActivity
+            problemMemoView.memoCase = StudyMemoCase.PATTERN_LEARNING_PROBLEM
+            solutionMemoView.memoCase = StudyMemoCase.PATTERN_LEARNING_SOLUTION
             problemMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             solutionMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             problemMemoView.removePathRedoUndoCountChangeListener()
@@ -854,7 +867,6 @@ class SolveActivity : BaseActivity(),
     }
 
     fun onSubmitBtnClicked() {
-        saveMemo()
         when(content) {
             is Test -> {
                 val test = content as Test
@@ -1535,10 +1547,11 @@ class SolveActivity : BaseActivity(),
 
     override fun onProblemSelected(problem: Problem?, autoFocus: Boolean) {
         saveMemo()
+        val needToNewMemo = selectedProblem != problem
         selectedProblem = problem
         viewModel.selectedProblemOb.postValue(problem)
 
-        onSetProblem()
+        onSetProblem(needToNewMemo)
         if(problem != null) {
             binding.speedAnswerView.scrollTo(problem, "onProblemSelected")
             binding.galleryView.scrollTo(problem)
@@ -1635,7 +1648,7 @@ class SolveActivity : BaseActivity(),
         }
     }
 
-    fun onSetProblem() {
+    fun onSetProblem(needToNewMemo: Boolean) {
         val problem = selectedProblem
         binding.titleTv.text = getTitleText()
 
@@ -1675,8 +1688,32 @@ class SolveActivity : BaseActivity(),
             else
                 binding.totalCntTv.text = "/ ${content?.originCount}"
 
-            binding.problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p")
-            binding.solutionMemoView.load("${problem.id}_${content?.assignID ?: 0}_s")
+
+            if (needToNewMemo) {
+                binding.problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p") {
+                    val assignId = content?.assignID ?: -1
+                    viewModel.getMemoFromParams(assignId = assignId, problemId = problem.id, case = StudyMemoCase.PATTERN_LEARNING_PROBLEM) {
+                        println("aspasp problem memo exist? : ${it != null}")
+                        binding.problemMemoView.setMemo(it) {
+                            viewModel.isMemoDrawAStrokeAtLeastOnceAsProblem = false
+                            viewModel.isAllMemoRemovedOnProblem = false
+                        }
+                        viewModel.alreadyHaveMemoOnThisProblem = it != null
+                    }
+                }
+
+                binding.solutionMemoView.load("${problem.id}_${content?.assignID ?: 0}_p") {
+                    val assignId = content?.assignID ?: -1
+                    viewModel.getMemoFromParams(assignId = assignId, problemId = problem.id, case = StudyMemoCase.PATTERN_LEARNING_SOLUTION) {
+                        binding.solutionMemoView.setMemo(it) {
+                            viewModel.isMemoDrawAStrokeAtLeastOnceAsSolution = false
+                            viewModel.isAllMemoRemovedOnSolution = false
+                        }
+                        viewModel.alreadyHaveMemoOnThisSolution = it != null
+                    }
+                }
+            }
+
             binding.penPanel.resetMode()
             if(binding.galleryCloser.visibility != View.VISIBLE) {
                 var requestFocus = if(binding.speedAnswerView.visibility == View.GONE) binding.galleryCloser.visibility != View.VISIBLE else false
@@ -1785,8 +1822,17 @@ class SolveActivity : BaseActivity(),
     private fun saveMemo() {
         with(binding) {
             val problem = selectedProblem ?: return
-            problemMemoView.save("${problem.id}_${content?.assignID ?: 0}_p")
-            solutionMemoView.save("${problem.id}_${content?.assignID ?: 0}_s")
+//            problemMemoView.save("${problem.id}_${content?.assignID ?: 0}_p")
+//            solutionMemoView.save("${problem.id}_${content?.assignID ?: 0}_s")
+            val assignId = content?.assignID ?: return
+//            val page = problem.problemNum ?: return
+            problemMemoView.getMemoBase64()?.let {
+                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_PROBLEM)
+            }
+
+            solutionMemoView.getMemoBase64()?.let {
+                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_SOLUTION)
+            }
         }
     }
 
@@ -1999,6 +2045,23 @@ class SolveActivity : BaseActivity(),
         }.reduce { acc, next -> acc + next }
 
         binding.penPanel.redoCount = redoCount
+    }
+
+    override fun onDrawAStroke(memoCase: StudyMemoCase) {
+        if (memoCase == StudyMemoCase.PATTERN_LEARNING_PROBLEM) {
+            viewModel.isMemoDrawAStrokeAtLeastOnceAsProblem = true
+        } else if (memoCase == StudyMemoCase.PATTERN_LEARNING_SOLUTION){
+            viewModel.isMemoDrawAStrokeAtLeastOnceAsSolution = true
+        }
+    }
+    override fun onRemoveAllMemo() {
+        viewModel.apply {
+            isMemoDrawAStrokeAtLeastOnceAsProblem = false
+            isMemoDrawAStrokeAtLeastOnceAsSolution = false
+            isAllMemoRemovedOnProblem = true
+            isAllMemoRemovedOnSolution = true
+        }
+
     }
 }
 

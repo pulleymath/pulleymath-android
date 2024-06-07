@@ -24,6 +24,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.learningcourse.pattern.Patt
 import com.google.android.material.tabs.TabLayoutMediator
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.ChannelIoQuestionDialog
 import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
@@ -33,7 +34,9 @@ import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import kotlinx.coroutines.*
@@ -44,7 +47,7 @@ class PatternQuizFragment() : Fragment(),
 //    ProblemGestureListener,
     PatternScrollListener,
     PencilPanelListener,
-    PathRedoUndoCountChangeListener {
+    PathRedoUndoCountChangeListener, MemoListener {
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
     val screenHeight by lazy { DisplayUtils.getScreenHeight(requireContext()) }
@@ -116,12 +119,26 @@ class PatternQuizFragment() : Fragment(),
 
                     patternQuiz.observeOnce(this@PatternQuizFragment) {
                         val patternId = quiz.patternId
+                        memoView.memoListener = this@PatternQuizFragment
+                        memoView.memoCase = StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM
                         memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
-                        memoView.setPatternMemoId(patternId, it.patternQuizId)
+//                        memoView.setPatternMemoId(patternId, it.patternQuizId)
                         memoView.clearBitmap()
-                        memoView.load()
+                        val memoId = "patternmemo&&${user?.studentID}&&${patternId}&&${it.patternQuizId}"
+                        memoView.loadOnConceptStudy(memoId) {
+                            println("aspasp pattern 메모 없어서 새로운 db에서 찾으러감")
+                            val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
+
+                            viewModel.getMemoFromParams(chapterId, it.patternQuizId, StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
+                                memoView.setMemo(it) {
+                                    viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
+                                    viewModel.isAllMemoRemovedOnQuiz = false
+                                }
+                                viewModel.alreadyHaveMemoOnThisQuiz = it != null
+                            }
+                        }
                     }
                 }
 
@@ -443,6 +460,7 @@ class PatternQuizFragment() : Fragment(),
     private fun resumePencilcaseView() {
         (activity as? LearningCourseActivity)?.let { lcActivity ->
             lcActivity.binding.penPanel.listener = this@PatternQuizFragment
+            lcActivity.binding.penPanel.isCookingMemo = false
             binding.memoView.set(lcActivity.binding.penPanel)
 
             val pencilType = lcActivity.getPencilcaseType()
@@ -457,6 +475,7 @@ class PatternQuizFragment() : Fragment(),
                     binding.leftScrollView.isBlock = isBlocked
                     binding.leftScrollView.fingerDrawMode = fingerDrawMode
                     binding.memoView.fingerDrawMode = fingerDrawMode
+
                     (parentFragment as? LCPatternFragment)?.setPagerSwipeBlocked(isBlocked)
                     (parentFragment as? LCPatternFragment)?.setFingerDrawMode(fingerDrawMode)
 
@@ -538,10 +557,26 @@ class PatternQuizFragment() : Fragment(),
     override fun onScaleFactor(scale: Float) {
         (parentFragment as LCPatternFragment).setQuizImageScale(scale)
     }
-    override fun onStop() {
-        super.onStop()
+
+    override fun onPause() {
+        super.onPause()
+        println("aspasp PQF onPause")
+        saveMemo()
         viewModel.run {
             clearCompositeDisposable()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+    private fun saveMemo () {
+        with(binding) {
+            val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: return
+            println("qweqwe pattern 메모 저장하러옴")
+            memoView.getMemoBase64()?.let {
+                viewModel.saveMemo(it, chapterId, screenWidth)
+            }
         }
     }
 
@@ -551,6 +586,17 @@ class PatternQuizFragment() : Fragment(),
 
     override fun onRedoCountChanged(count: Int) {
         (activity as? LearningCourseActivity)?.setRedoCount(count)
+    }
+
+    override fun onDrawAStroke(memoCase: StudyMemoCase) {
+        if (memoCase == StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
+            viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = true
+        }
+    }
+
+    override fun onRemoveAllMemo() {
+        viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
+        viewModel.isAllMemoRemovedOnQuiz = true
     }
 }
 

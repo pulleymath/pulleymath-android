@@ -11,8 +11,8 @@ interface PulleyCookingMemoDao {
     @Query("select * from pulley_cooking_memo where id=:memoId limit 1")
     fun get(memoId:String): PulleyCookingMemo?
 
-//    @Query("select count(*) from pulley_cooking_memo where student_id=:studentId and pdf_id=:pdfId")
-//    fun countPdf(studentId:String, pdfId:Int): Int
+    @Query("select count(*) from pulley_cooking_memo where student_id=:studentId and type_id=:typeId")
+    fun countPdf(studentId:String, typeId:Int): Int // typeId 는 practice에서 assignId이다.
 
     @Query("select max(updated_at) from pulley_cooking_memo where student_id=:studentId")
     fun getLatestTimestamp(studentId:String): Long?

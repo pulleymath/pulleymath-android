@@ -142,6 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:visibility="gone"
+        tools:visibility="visible"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginTop="4dp"
@@ -163,9 +164,10 @@
                 android:layout_height="48dp"
                 android:text="모두 지우기"
                 android:gravity="center"
+                android:clickable="true"
                 style="@style/h6"
                 android:background="@null"
-                android:textColor="@color/gray_600"/>
+                android:textColor="@color/red_250"/>
 
 
         </LinearLayout>

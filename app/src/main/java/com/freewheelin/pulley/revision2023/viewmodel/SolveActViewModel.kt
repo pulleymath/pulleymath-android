@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.model.Problem
@@ -16,6 +17,11 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import com.freewheelin.pulley.revision2023.model.StudyMemo
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
+import com.freewheelin.pulley.revision2023.model.StudyMemoRequest
+import com.freewheelin.pulley.revision2023.repository.MemoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,6 +32,8 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
     private val solveActRepository = SolveActRepository(getApplication<Application>().applicationContext, viewModelScope)
     private val challengeRepository by lazy { ChallengeRepository.instance }
     private val userRepository by lazy { UserRepository.instance }
+//    private val pdfRepository: PdfRepository by lazy { PdfRepository() }
+    private val memoRepository: MemoRepository = MemoRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     val joinedChallengeList = challengeRepository.joinedChallengeList
     val userInRepo = userRepository.user
@@ -39,6 +47,12 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
     val selectedContent = MutableLiveData<Content>()
     val selectedProblemOb = MutableLiveData<Problem>()
 
+    var alreadyHaveMemoOnThisProblem = false
+    var alreadyHaveMemoOnThisSolution = false
+    var isMemoDrawAStrokeAtLeastOnceAsProblem = false
+    var isMemoDrawAStrokeAtLeastOnceAsSolution = false
+    var isAllMemoRemovedOnProblem = false
+    var isAllMemoRemovedOnSolution = false
     fun sendSubmitLog(pieceId: Int?, note: String, size: Int, callback: () -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             println("asoaso 채점 log [size:${size}]")
@@ -115,5 +129,61 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
             val summary = legacyV2Repository.fetchMockSummary(mockId, assignId ?: -999)
             cb(summary)
         }
+    }
+
+
+    fun fetchMemos(assignId: Int) {
+        val studentId = userInRepo.value?.studentID ?: return
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val memoCount = memoRepository.countMemo(studentId, assignId)
+//            val latest = if (memoCount < 1) null else memoRepository.getLatestTimestamp(studentId)
+//            memoRepository.fetchMemo(studentId = studentId, mainId = assignId,
+//                memoCase = StudyMemoCase.PATTERN_LEARNING_PROBLEM,
+//                subId = null, latest = latest)
+        }
+    }
+
+    fun getMemoFromParams(assignId: Int, problemId: Int, case: StudyMemoCase, cb: (StudyMemo?) -> Unit) {
+        val studentId = userInRepo.value?.studentID ?: return
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val memo = memoRepository.getFromParams(studentId, assignId, problemId, case)
+            withContext(Dispatchers.Main) {
+                cb(memo)
+            }
+        }
+    }
+
+    fun saveMemo(memoByteArray: ByteArray, assignId: Int, problemId: Int, screenWidth: Int, case: StudyMemoCase) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: return@launch
+            val req = StudyMemoRequest(case, assignId, problemId, screenWidth, memoBase64)
+
+            if (case == StudyMemoCase.PATTERN_LEARNING_PROBLEM) {
+                // 획이 존재하면 저장, 메모존재시 추가획 없지만 다 지워졌다면 저장
+                if (isMemoDrawAStrokeAtLeastOnceAsProblem) saveMemo(req)
+                else if (alreadyHaveMemoOnThisProblem && isAllMemoRemovedOnProblem) saveMemo(req)
+                else println("aspasp file problem에 메모가 없는상태로 추정 저장하지 않음.")
+
+
+            } else if (case == StudyMemoCase.PATTERN_LEARNING_SOLUTION) {
+                if (isMemoDrawAStrokeAtLeastOnceAsSolution) saveMemo(req)
+                else if (alreadyHaveMemoOnThisSolution && isAllMemoRemovedOnSolution) saveMemo(req)
+                else println("aspasp file solution에 메모가 없는상태로 추정 저장하지 않음.")
+            }
+        }
+    }
+    suspend fun saveMemo(req: StudyMemoRequest) {
+        val studentId = userInRepo.value?.studentID ?: return
+        val prevMemo = memoRepository.getFromParams(studentId, req.mainId, req.subId, req.memoCase)
+        if (prevMemo == null) {
+            val id = memoRepository.getMaxId() + 1
+            memoRepository.upsert(StudyMemo(id, studentId, req.mainId, req.subId, req.width, req.memoCase, req.os, req.file))
+        } else {
+            val newMemo = StudyMemo(prevMemo.id, studentId, req.mainId, req.subId, req.width, req.memoCase, req.os, req.file)
+            memoRepository.upsert(newMemo)
+        }
+        memoRepository.uploadMemo(req)
+        println("aspasp 메모 저장 완료")
+
     }
 }

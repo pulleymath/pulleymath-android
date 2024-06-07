@@ -30,6 +30,7 @@ import com.pulleymath.android.pdf.log.Network
 import com.pulleymath.android.pdf.log.PdfPageLog
 import com.pulleymath.android.pdf.log.PdfReadLog
 import com.pulleymath.android.pdf.memo.DrawType
+import com.pulleymath.android.pdf.memo.MemoView
 import com.pulleymath.android.pdf.memo.PathRedoUndoCountChangeListener
 import com.pulleymath.android.pdf.memo.PencilPanel
 import com.pulleymath.android.pdf.memo.PencilPanelListener
@@ -878,6 +879,7 @@ open class PdfViewerActivity : Activity(), PencilPanelListener {
         if (mDocView != null) {
             mDocView!!.applyToChildren(object : ViewMapper() {
                 public override fun applyToView(view: View) {
+                    println("aspasp view.${view.id}")
                     val pageView = view.findViewWithTag<PageView>(PageAdapter.TAG_PAGEVIEW)
                     pageView.releaseBitmaps()
                 }

@@ -29,22 +29,26 @@ import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LCWrongNoteFragment : Fragment(),
     WrongNoteScrollListener, PencilPanelListener, FloatingAnswerDelegate,
-    PathRedoUndoCountChangeListener {
+    PathRedoUndoCountChangeListener, MemoListener {
 
     companion object {
         val NOTECARD = "NOTE_CARD"
-        fun newInstance(noteCard: LCWrongNoteMapCard) : LCWrongNoteFragment {
+        val CHAPTER_ID = "CHAPTER_ID"
+        fun newInstance(noteCard: LCWrongNoteMapCard, chapterId: Int) : LCWrongNoteFragment {
             return LCWrongNoteFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(NOTECARD, noteCard)
+                    putInt(CHAPTER_ID, chapterId)
                 }
             }
         }
@@ -69,6 +73,7 @@ class LCWrongNoteFragment : Fragment(),
         viewModel = ViewModelProvider(this).get(LCWrongNoteFViewModel::class.java)
         arguments?.let {
             val noteCard = it.getSerializable(NOTECARD) as LCWrongNoteMapCard
+            val chapterId = it.getInt(CHAPTER_ID)
 
             binding.apply {
                 vm = viewModel
@@ -77,17 +82,27 @@ class LCWrongNoteFragment : Fragment(),
                 viewModel.noteCard.observeOnce(this@LCWrongNoteFragment) {
 
 //                    val patternId = (parentFragment as LCPatternFragment).viewModel.patternId
+                    memoView.memoListener = this@LCWrongNoteFragment
+                    memoView.memoCase = StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCWrongNoteFragment)
                     memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+                    memoView.clearBitmap()
                     val studentId = MyApplication.user?.studentID ?: ""
                     val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
-                    memoView.setMemoSavedName(it.userQuizSolvingHistoryId, it.refPatternQuizId, "lcwrongnotememo")
-                    memoView.clearBitmap()
-                    memoView.load(memoId)
+                    memoView.load(memoId) {
+                        viewModel.getMemoFromParams(chapterId, it.userQuizSolvingHistoryId, StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM) {
+                            println("aspasp 새로운디비 에서 찾으러옴 존재하나? : ${it != null}")
+                            memoView.setMemo(it) {
+                                viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
+                                viewModel.isAllMemoRemovedOnQuiz = false
+                            }
+                            viewModel.alreadyHaveMemoOnThisQuiz = it != null
+                        }
+                    }
                 }
 
-                viewModel.init(noteCard)
+                viewModel.init(noteCard, chapterId)
                 setConceptDrawer(false)
                 memoView.layoutParams.width = screenWidth
 
@@ -161,10 +176,8 @@ class LCWrongNoteFragment : Fragment(),
         resumePencilcaseView()
     }
     fun saveMemo() {
-        viewModel.noteCard.value?.let {
-            val studentId = MyApplication.user?.studentID ?: ""
-            val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
-            binding.memoView.save(memoId)
+        binding.memoView.getMemoBase64()?.let {
+            viewModel.saveMemo(it, StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM, screenWidth)
         }
     }
     fun hasMoreHint(): Boolean {
@@ -355,8 +368,9 @@ class LCWrongNoteFragment : Fragment(),
             return fragments[position]
         }
     }
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
+        println("aspasp LCWNF onPause")
         saveMemo()
         viewModel.run {
             clearCompositeDisposable()
@@ -369,5 +383,16 @@ class LCWrongNoteFragment : Fragment(),
 
     override fun onRedoCountChanged(count: Int) {
         (activity as? LCWrongNoteActivity)?.setRedoCount(count)
+    }
+
+    override fun onDrawAStroke(memoCase: StudyMemoCase) {
+        if (memoCase == StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM) {
+            viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = true
+        }
+    }
+
+    override fun onRemoveAllMemo() {
+        viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
+        viewModel.isAllMemoRemovedOnQuiz = true
     }
 }

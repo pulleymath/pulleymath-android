@@ -26,8 +26,10 @@ import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.MemoView
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 
@@ -35,6 +37,7 @@ class LCCookingFragment() : Fragment(),
     PencilPanelListener,
     PlusMinusEnterKeypadListener,
     PathRedoUndoCountChangeListener {
+//    MemoListener
     companion object {
         fun newInstance(courseId: Int) : LCCookingFragment {
             return LCCookingFragment().apply {
@@ -110,6 +113,7 @@ class LCCookingFragment() : Fragment(),
                 cookingInfo.observe(viewLifecycleOwner) {
                     val chapterId = it.chapterId
                     val cookingId = it.conceptCookingId
+//                    memoView.memoCase = StudyMemoCase.CONCEPT_COOKING_LEARNING
                     memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
@@ -500,7 +504,10 @@ class LCCookingFragment() : Fragment(),
     private fun resumePencilCaseView() {
         val lcActivity = (activity as LearningCourseActivity)
         lcActivity.binding.penPanel.listener = this@LCCookingFragment
+        lcActivity.binding.penPanel.isCookingMemo = true
         binding.memoView.set(lcActivity.binding.penPanel)
+//        binding.memoView.memoListener = this@LCCookingFragment
+
         viewModel.quizMemoViewList.forEach { it.set(lcActivity.binding.penPanel) }
 
         val pencilType = lcActivity.getPencilcaseType()
@@ -580,6 +587,7 @@ class LCCookingFragment() : Fragment(),
 
     override fun onStop() {
         super.onStop()
+        binding.memoView.memoListener = null
         viewModel.run {
             clearCompositeDisposable()
         }
@@ -592,4 +600,12 @@ class LCCookingFragment() : Fragment(),
     override fun onRedoCountChanged(redoCount: Int) {
         (activity as? LearningCourseActivity)?.setRedoCount(redoCount)
     }
+
+//    override fun onDrawAStroke(memoCase: StudyMemoCase) {
+//        TODO("Not yet implemented")
+//    }
+//
+//    override fun onRemoveAllMemo() {
+//        TODO("Not yet implemented")
+//    }
 }

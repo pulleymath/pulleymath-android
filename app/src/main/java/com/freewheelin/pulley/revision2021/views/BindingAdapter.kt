@@ -255,7 +255,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("cookingImgRes")
     fun loadImage(view: ImageView, imageUrl: String?) {
-        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
         if (imageUrl?.isEmpty() == true) return
         imageUrl?.let {
             view.setImageUrlGlide(it)
@@ -264,7 +264,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("cookingImgResOnPicasso")
     fun loadImagePicasso(view: ImageView, imageUrl: String?) {
-        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
         if (imageUrl?.isEmpty() == true) return
         imageUrl?.let {
             view.setImageUrlPicasso(it)
@@ -273,7 +273,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("cookingImgResOnPicassoDownScale")
     fun loadImagePicassoDownScale(view: ImageView, imageUrl: String?) {
-        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
         if (imageUrl?.isEmpty() == true) return
         imageUrl?.let {
             view.setImageUrlPicassoDownScale(it)
@@ -283,7 +283,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("imgResAtQuiz")
     fun loadImage2(view: ImageView, imageUrl: String?) {
-        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
         if (imageUrl?.isEmpty() == true) return
         imageUrl?.let {
             view.setCookingImageURL(it)

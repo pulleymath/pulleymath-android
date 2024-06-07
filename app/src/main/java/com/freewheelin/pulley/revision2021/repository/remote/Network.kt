@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.repository.remote
 
+import android.util.Log
 import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
@@ -8,11 +9,19 @@ import com.freewheelin.pulley.legacy.utils.APHelper
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
+import com.pulleymath.android.pdf.log.Network
+import com.pulleymath.android.pdf.log.PdfMemoPostResponse
+import com.pulleymath.android.pdf.log.PdfMemoService
 import com.zoyi.channel.plugin.android.global.PrefSupervisor
 import okhttp3.Interceptor
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Converter
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -186,6 +195,23 @@ object Network {
 
         }.build()
     }
+    private val pdfService = retrofit().create(PdfService::class.java)
+
+
+    fun uploadTestMemo(file: MultipartBody.Part,
+                       id: RequestBody, student_id: RequestBody,
+                       pdf_id: RequestBody, updated_at: RequestBody, page_no: RequestBody,
+                       callback: (() -> Unit)? = null) {
+        pdfService.uploadMemoByteArray(file, id, student_id, pdf_id, updated_at, page_no).enqueue(object: Callback<PdfMemoPostResponse>{
+            override fun onResponse(call: Call<PdfMemoPostResponse>, response: Response<PdfMemoPostResponse>) {
+                callback?.let{ it() }
+            }
+            override fun onFailure(call: Call<PdfMemoPostResponse>, t: Throwable) {
+                Log.e("uploadMemo", "${t.localizedMessage}")
+            }
+        })
+    }
+
 }
 class EnumConverterFactory : Converter.Factory() {
 

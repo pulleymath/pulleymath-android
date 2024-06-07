@@ -4,16 +4,28 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.BUTTON_STYLUS_PRIMARY
 import android.view.View
 import com.freewheelin.pulley.legacy.bases.MyApplication
+import com.freewheelin.pulley.revision2023.model.StudyMemo
+import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawPathType
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.IPencilPanel
+import com.freewheelin.pulley.revision2023.ui.view.PenAlphaType
+import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanel
+import com.pulleymath.android.pdf.utils.getImageToByteArray
+import com.pulleymath.android.pdf.utils.toBitmap
 
+
+interface MemoListener {
+    fun onDrawAStroke(memoCase: StudyMemoCase)
+    fun onRemoveAllMemo()
+}
 
 class MemoView: FreeDrawView {
     constructor(context: Context): super(context)
@@ -21,6 +33,8 @@ class MemoView: FreeDrawView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
     var pencilPanel: IPencilPanel? = null
+    var memoListener: MemoListener? = null
+    var memoCase: StudyMemoCase = StudyMemoCase.PATTERN_LEARNING_PROBLEM
     var fingerDrawMode = false
 
 //    private fun isPencilPanelVisible(): Boolean {
@@ -57,6 +71,7 @@ class MemoView: FreeDrawView {
         drawType = null
 
         if(pencilPanel?.drawType == DrawType.Pencil && buttonType != BUTTON_STYLUS_PRIMARY) {
+            memoListener?.onDrawAStroke(memoCase)
             drawType = DrawType.Pencil
             if (pencilPanel?.pathType == DrawPathType.Circle) {
                 pathType = DrawPathType.Circle
@@ -81,11 +96,13 @@ class MemoView: FreeDrawView {
             return false
 
         } else if(pencilPanel?.drawType == DrawType.Figure && buttonType != BUTTON_STYLUS_PRIMARY) {
+            memoListener?.onDrawAStroke(memoCase)
             drawType = DrawType.Figure
             pathType = pencilPanel?.pathType ?: DrawPathType.Curve
             super.onTouch(view, motionEvent)
             return true
         } else if(pencilPanel?.drawType == DrawType.Eraser || buttonType == BUTTON_STYLUS_PRIMARY) {
+            memoListener?.onDrawAStroke(memoCase)
             pathType = DrawPathType.Curve
             drawType = DrawType.Eraser
             parent.requestDisallowInterceptTouchEvent(true)
@@ -121,6 +138,12 @@ class MemoView: FreeDrawView {
 
     fun save(fileName: String) {
         FileHelper.saveStateIntoFile(context, currentViewStateAsSerializable, fileName, null)
+    }
+    fun getMemoBase64(): ByteArray? {
+        if (this.width > 0 && this.height > 0) {
+            return this.getImageToByteArray()
+        }
+        return null
     }
 
     private var isWaitingExecutionSignal = false
@@ -159,6 +182,24 @@ class MemoView: FreeDrawView {
         FileHelper.saveImagedMemo(context, memoId, this)
     }
 
+    fun load(fileName: String, errorCb: () -> Unit) {
+        println("aspasp load fileName:${fileName}")
+        clearBitmap()
+        FileHelper.getSavedStoreFromFile(context, fileName, object : FileHelper.StateExtractorInterface {
+            override fun onStateExtracted(state: FreeDrawSerializableState) {
+                println("aspasp fileName:${fileName}, memo loaded")
+                restoreStateFromSerializable(state)
+                FileHelper.deleteSavedStateFile(context, fileName)
+            }
+
+            override fun onStateExtractionError() {
+                println("aspasp fileName:${fileName}, memo load error")
+                undoAll()
+                errorCb()
+            }
+        })
+    }
+
     fun load(fileName: String) {
         FileHelper.getSavedStoreFromFile(context, fileName, object : FileHelper.StateExtractorInterface {
             override fun onStateExtracted(state: FreeDrawSerializableState) {
@@ -170,6 +211,15 @@ class MemoView: FreeDrawView {
             }
         })
     }
+    fun setMemo(memo: StudyMemo?, cb: () -> Unit) {
+        clearMemoState()
+        if (memo != null) {
+            val bm = Base64.decode(memo.file, Base64.DEFAULT).toBitmap()
+            loadedBitmap = bm
+            notifyRedoUndoCountSetting()
+        }
+        cb()
+    }
     fun load() {
         FileHelper.loadMemo(context, memoId, {
             Handler(Looper.getMainLooper()).post {
@@ -179,8 +229,27 @@ class MemoView: FreeDrawView {
             }
         }, { error ->
             Handler(Looper.getMainLooper()).post {
-                println("CookingMemoView Load Error!")
+                println("MemoView Load Error!")
                 undoAll()
+            }
+        })
+    }
+    fun loadOnConceptStudy(memoId: String, errorCb: () -> Unit) {
+//        println("aspasp pattern 메모 로드 하자")
+        FileHelper.loadMemo(context, memoId, {
+            Handler(Looper.getMainLooper()).post {
+//                println("aspasp pattern 메모 로드 성공!")
+                clearMemoState()
+                loadedBitmap = it
+                notifyRedoUndoCountSetting()
+                FileHelper.eraseMemo(context, memoId)
+            }
+        }, { error ->
+//            println("aspasp pattern 메모 없음!")
+            Handler(Looper.getMainLooper()).post {
+                println("MemoView Load Error!")
+                undoAll()
+                errorCb()
             }
         })
     }

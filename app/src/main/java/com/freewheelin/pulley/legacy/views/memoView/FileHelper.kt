@@ -10,13 +10,16 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.DatabaseHelper
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.PulleyCookingMemo
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.pulleymath.android.pdf.utils.getImageToByteArray
 import com.pulleymath.android.pdf.utils.toBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-//import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.*
 
 /**
@@ -109,6 +112,7 @@ public class FileHelper {
 //                val updated_at = RequestBody.create(MediaType.parse("multipart/form-data"), updatedAt.toString())
 
                 db.pulleyCookingWritingDao().delete(memo!!)
+                println("aspasp pattern 메모 삭제 성공!")
 //                Network.uploadTestMemo(body, id, student_id, pdf_id, updated_at, page_no) {}
             }
         }
@@ -137,7 +141,7 @@ public class FileHelper {
         fun saveImagedMemo(context: Context, fileName: String, view: View) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    var fileByteArray = withContext(Dispatchers.Main) {
+                    val fileByteArray = withContext(Dispatchers.Main) {
                         view.getImageToByteArray()
                     }
 
@@ -163,13 +167,15 @@ public class FileHelper {
 //                    val body = MultipartBody.Part.createFormData("image", "memo", requestFile)
 //                    val id = RequestBody.create(MediaType.parse("multipart/form-data"), fileName)
 //                    val student_id = RequestBody.create(MediaType.parse("multipart/form-data"), studentId)
-//                    val page_no = RequestBody.create(MediaType.parse("multipart/form-data"), pageNo.toString())
-//                    val pdf_id = RequestBody.create(MediaType.parse("multipart/form-data"), pdfId.toString())
+//                    val page_no = RequestBody.create(MediaType.parse("multipart/form-data"), subId.toString())
+//                    val pdf_id = RequestBody.create(MediaType.parse("multipart/form-data"), typeId.toString())
 //                    val updated_at = RequestBody.create(MediaType.parse("multipart/form-data"), updatedAt.toString())
 
                     db.pulleyCookingWritingDao().upsert(listOf(memo!!))
 
+//                    println("aspasp 저장되나? ")
 //                Network.uploadTestMemo(body, id, student_id, pdf_id, updated_at, page_no) {
+//                    println("aspasp 저장되나 2 ")
 //                    fileByteArray = null
 //                    fileB64 = null
 //                }
@@ -226,6 +232,8 @@ public class FileHelper {
                 mListener?.onStateExtracted(state)
             } catch (e:Exception) {
                 Log.e(javaClass.simpleName, "state Extractor error:${e.localizedMessage}")
+
+                mListener?.onStateExtractionError()
             }
         }
     }

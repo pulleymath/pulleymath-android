@@ -323,7 +323,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mCanceledPaths.add(mPaths.get(mPaths.size() - 1));
             mPaths.remove(mPaths.size() - 1);
 
-        } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+//        } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+        } else if (loadedBitmapAtWillRedo == null) {
             loadedBitmapAtWillRedo = loadedBitmap;
             loadedBitmap = null;
         }
@@ -336,7 +337,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Re-add the first removed path and redraw
      */
     public void redoLast() {
-        if (loadedBitmapAtWillRedo != null && isCookingMemo) {
+//        if (loadedBitmapAtWillRedo != null && isCookingMemo) {
+        if (loadedBitmapAtWillRedo != null) {
             loadedBitmap = loadedBitmapAtWillRedo;
             loadedBitmapAtWillRedo = null;
         } else if (mCanceledPaths.size() > 0) {
@@ -381,9 +383,11 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         if (mPaths.size() > 0) {
             return mPaths.size();
         } else {
-            if (isCookingMemo && loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+//            if (isCookingMemo && loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+            if (loadedBitmapAtWillRedo == null && loadedBitmap == null) {
                 return 0;
-            } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+//            } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+            } else if (loadedBitmapAtWillRedo == null) {
                 return 1;
             } else {
                 return 0;
@@ -395,7 +399,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * Get how many redo operations are available
      */
     public int getRedoCount() {
-        if (isCookingMemo && loadedBitmapAtWillRedo != null) {
+//        if (isCookingMemo && loadedBitmapAtWillRedo != null) {
+        if (loadedBitmapAtWillRedo != null) {
             return 1;
         }
         return mCanceledPaths.size();

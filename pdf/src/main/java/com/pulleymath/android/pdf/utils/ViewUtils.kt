@@ -20,6 +20,7 @@ fun View.getImageToBase64(): String {
 }
 
 fun View.getImageToByteArray(): ByteArray {
+    println("aspasp this.width :${this.width}, this.height: ${this.height}")
     val bm = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bm)
     canvas.drawColor(Color.TRANSPARENT);
