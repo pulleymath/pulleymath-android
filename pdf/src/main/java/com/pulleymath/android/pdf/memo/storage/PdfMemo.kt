@@ -1,6 +1,7 @@
 package com.pulleymath.android.pdf.memo.storage
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -14,6 +15,7 @@ data class PdfMemo (
     var file: String = "",
     var updated_at: Long = 0
 ) {
+    @Ignore constructor(): this("","",0,0,"",0)
     override fun hashCode(): Int {
         return id.hashCode()
     }

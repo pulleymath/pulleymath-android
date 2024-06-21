@@ -23,8 +23,8 @@ android {
         applicationId "com.freewheelin.pulley"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 504
-        versionName '1.6.84'
+        versionCode 505
+        versionName '1.6.85'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -86,11 +86,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
-    lintOptions {
-//        checkReleaseBuilds false
+    namespace 'com.freewheelin.pulley'
+    lint {
         abortOnError false
     }
+
 }
 
 repositories {
@@ -140,7 +140,7 @@ dependencies {
 
     implementation 'com.rm:freedrawview:1.1.2'
     implementation 'gun0912.ted:tedpermission:2.2.2'
-    implementation 'com.airbnb.android:lottie:3.1.0'
+    implementation 'com.airbnb.android:lottie:6.4.0'
 //    implementation 'com.github.hyuntae0117:android-BalloonWindow:0.2.4'
     implementation 'com.github.hyuntae0117:android-RecyclerAdapters:0.6'
 
@@ -203,12 +203,14 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+    kapt 'org.xerial:sqlite-jdbc:3.34.0'
 
     // 사용하던 custom view는 남아있으나 webview로 변경하여서 추후 삭제해야할것같음
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
 
     implementation 'io.channel:plugin-android:10.0.7'
     implementation 'io.channel:plugin-android-fcm:10.0.7'
+//    implementation "androidx.webkit:webkit:1.8.0"
 
     implementation 'androidx.browser:browser:1.5.0'
 //    implementation 'androidx.core:core-splashscreen:1.1.0-alpha01'

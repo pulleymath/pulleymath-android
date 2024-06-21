@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
@@ -19,7 +20,11 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebStorage
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,6 +52,7 @@ import com.freewheelin.pulley.legacy.activities.mypage.MyMainPageFragment
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.legacy.bases.*
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.assessmentDesignSkin
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.core.manage.*
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.legacy.model.SignInChannel
@@ -74,6 +80,8 @@ import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.utils.StringUtils
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
+import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -237,11 +245,58 @@ class MainActivity : PermissionActivity(),
             }
             setSchoolSpinner()
             setSpy()
+            initChatBot()
 //            val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
 //            anim.duration = 250
 //            schoolSwitch.startAnimation(anim)
 //            showTooltipIfNeedOnAnim(Tutor.TooltipType.middleIntroduceOpening, anim)
         }
+    }
+
+    fun initChatBot() {
+        binding.apply {
+            chatBotLottie?.playAnimation()
+            chatBotBtn?.setOnClickListener {
+                chatBotCv?.visibleIf(chatBotCv?.visibility !== View.VISIBLE)
+            }
+            webView?.let {
+
+                it.webViewClient = object : WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        println("aspasp onpagestart")
+                    }
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        println("aspasp onpage finish")
+                    }
+                }
+                it.addJavascriptInterface(ChatBotClientClickEventListener {
+                    println("aspasp webview Close")
+                    runOnUiThread {
+                        chatBotCv?.visibleIf(false)
+                    }
+                }, "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                    mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                }
+                if (token != null) {
+//                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot?initInfo={\"viewType\":\"SOLVE_PROBLEM\",\"images\":[{\"type\":\"SOLVE_PROBLEM\",\"seq\":0,\"urls\":[\"https://freewheelin-contents.s3.ap-northeast-2.amazonaws.com/problem/349040/f975e7e3/problem.png\"]}]}"
+//                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot"
+//                    val url = "http://192.168.0.22:3000" + "/ottway?token=${token}&uri=chat-bot?initInfo={\"viewType\":\"SOLVE_PROBLEM\",\"images\":[{\"type\":\"SOLVE_PROBLEM\",\"seq\":0,\"urls\":[\"https://freewheelin-contents.s3.ap-northeast-2.amazonaws.com/problem/349040/f975e7e3/problem.png\"]}]}"
+                    val url = "http://192.168.0.22:3000" + "/ottway?token=${token}&uri=chat-bot"
+                    println("aspasp , url : ${url}")
+                    it.loadUrl(url)
+                }
+            }
+
+        }
+
     }
 
     fun showTooltipIfNeedOnAnim(type: Tutor.TooltipType, anim: ScaleAnimation) {

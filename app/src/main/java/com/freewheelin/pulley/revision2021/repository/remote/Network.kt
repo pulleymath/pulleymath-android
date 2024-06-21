@@ -37,6 +37,13 @@ object Network {
         else -> "https://pdf-live.pulleymath.com"
     }
 
+    val webAppUrl = when (Preferences.onServerAPI.get()) {
+        Server.live.toString() -> "https://app.pulleymath.com"
+        Server.staging.toString() -> "https://app-staging.pulleymath.com"
+        Server.dev.toString() -> "https://app-staging.pulleymath.com"
+        else -> "https://app.pulleymath.com"
+    }
+
     val mockTestUrl = when (Preferences.onServerAPI.get()) {
         Server.live.toString() -> "https://mock-live.pulleymath.com"
         Server.staging.toString() -> "https://mock-staging.pulleymath.com"

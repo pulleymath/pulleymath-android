@@ -13,8 +13,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -40,6 +38,7 @@ android {
     viewBinding {
         enabled = true
     }
+    namespace 'com.pulleymath.android.pdf'
 }
 
 dependencies {
@@ -63,7 +62,7 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
-
+    kapt 'org.xerial:sqlite-jdbc:3.34.0'
     // Gson
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     

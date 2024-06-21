@@ -44,6 +44,13 @@ enum class Version {
         else -> URL.PULLEY_API
     }
 
+    val webApp = when (Preferences.onServerAPI.get()) {
+        Network.Server.live.toString() -> "https://app.pulleymath.com"
+        Network.Server.staging.toString() -> "https://app-staging.pulleymath.com"
+        Network.Server.dev.toString() -> "https://app-staging.pulleymath.com"
+        else -> "https://app.pulleymath.com"
+    }
+
     val url: String
     get() {
         return when(this) {
