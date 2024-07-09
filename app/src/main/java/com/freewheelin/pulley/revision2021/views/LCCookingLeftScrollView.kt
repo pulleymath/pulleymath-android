@@ -103,7 +103,7 @@ class LCCookingLeftScrollView: ScrollView,
 
     }
 
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, xDiff: Float, yDiff: Float): Boolean {
+    override fun onScroll(event1: MotionEvent?, event2: MotionEvent, xDiff: Float, yDiff: Float): Boolean {
         val minX = getMinX()
         val minY = getMinY()
 
@@ -156,7 +156,7 @@ class LCCookingLeftScrollView: ScrollView,
     override fun onShowPress(p0: MotionEvent) {}
     override fun onSingleTapUp(p0: MotionEvent): Boolean { return true }
     override fun onLongPress(p0: MotionEvent) {}
-    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         fling(-p3.toInt())
         return true
     }

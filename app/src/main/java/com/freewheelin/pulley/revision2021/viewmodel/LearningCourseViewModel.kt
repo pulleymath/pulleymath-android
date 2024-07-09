@@ -15,6 +15,7 @@ import com.freewheelin.pulley.revision2021.repository.ChannelTalkRepository
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.zoyi.channel.plugin.android.store.ChannelStore
@@ -67,6 +68,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     var currChannelIOImage: ChannelIOImageUploadRes? = null
 
+    var chatBotInfo: ChatBotInfo? = null
 
     fun fetchCourseList(chapterId: Int, callback: (List<SingleCourseDesc>) -> Unit) {
         selectedChapterId = chapterId

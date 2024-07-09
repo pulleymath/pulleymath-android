@@ -152,7 +152,7 @@ class PatternQuizScrollView: ScrollView,
         memoView.scaleY = scaleFactor
     }
 
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onScroll(event1: MotionEvent?, event2: MotionEvent, x: Float, y: Float): Boolean {
 
         val minX = getMinX()
         val minY = getMinY()
@@ -220,7 +220,7 @@ class PatternQuizScrollView: ScrollView,
     override fun onShowPress(p0: MotionEvent) {}
     override fun onSingleTapUp(p0: MotionEvent): Boolean { return true }
     override fun onLongPress(p0: MotionEvent) {}
-    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         fling(-p3.toInt())
         return true
     }

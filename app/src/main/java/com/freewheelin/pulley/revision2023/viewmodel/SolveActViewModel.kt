@@ -18,6 +18,10 @@ import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImageType
+import com.freewheelin.pulley.revision2023.model.ChatBotInitViewType
 import com.freewheelin.pulley.revision2023.model.StudyMemo
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.model.StudyMemoRequest
@@ -53,6 +57,9 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
     var isMemoDrawAStrokeAtLeastOnceAsSolution = false
     var isAllMemoRemovedOnProblem = false
     var isAllMemoRemovedOnSolution = false
+
+    var chatBotInfo: ChatBotInfo? = null
+
     fun sendSubmitLog(pieceId: Int?, note: String, size: Int, callback: () -> Unit = {}) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             println("asoaso 채점 log [size:${size}]")
@@ -185,5 +192,9 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
         memoRepository.uploadMemo(req)
         println("aspasp 메모 저장 완료")
 
+    }
+
+    fun makeChatBotInfo(problem: Problem) {
+        chatBotInfo = ChatBotInfo(ChatBotInitViewType.SOLVE_PROBLEM, listOf(ChatBotInfoImage(ChatBotInfoImageType.SOLVE_PROBLEM, 0, listOf(problem.getProblemUrl()))))
     }
 }

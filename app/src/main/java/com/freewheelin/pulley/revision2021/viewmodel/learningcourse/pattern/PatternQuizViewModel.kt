@@ -15,7 +15,12 @@ import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.revision2021.repository.PatternQuizRepository
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImageType
+import com.freewheelin.pulley.revision2023.model.ChatBotInitViewType
 import com.freewheelin.pulley.revision2023.model.StudyMemo
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.model.StudyMemoRequest
@@ -34,6 +39,8 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
     private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     private val userRepository by lazy { UserRepository.instance }
+    private val patternQuizRepository by lazy { PatternQuizRepository.instance }
+
     private val memoRepository: MemoRepository = MemoRepository(getApplication<Application>().applicationContext, viewModelScope)
     val userInRepo = userRepository.user
 
@@ -61,6 +68,9 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
     var isMemoDrawAStrokeAtLeastOnceAsQuiz = false
     var isAllMemoRemovedOnQuiz = false
 
+    var chatbotInfo: ChatBotInfo? = null
+    val floatingAnswerSheetLastLocation = patternQuizRepository.floatingAnswerSheetLastLocation
+
 
     fun initQuiz(quiz: LCPatternQuiz, currQuizIndex: Int, quizSize: Int) {
         patternQuiz.postValue(quiz)
@@ -71,6 +81,11 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
 //        currBaseConceptImage.postValue(quiz.concepts[0].conceptImageUrl)
         hintExist = quiz.hints.isNotEmpty()
         remainingHintSize.postValue(quiz.hints.size)
+        makeChatBotInfo(quiz)
+    }
+
+    private fun makeChatBotInfo(info: LCPatternQuiz) {
+        chatbotInfo = ChatBotInfo(ChatBotInitViewType.SOLVE_PROBLEM, listOf(ChatBotInfoImage(ChatBotInfoImageType.SOLVE_PROBLEM, 0, listOf(info.quizImageUrl))))
     }
 
     fun hasMoreHint(): Boolean {

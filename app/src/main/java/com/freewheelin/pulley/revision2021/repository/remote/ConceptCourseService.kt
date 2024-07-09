@@ -21,7 +21,7 @@ object ConceptCourseApi {
 }
 interface ConceptCourseService {
 
-    @GET("subjects")
+    @GET("subjects/v2")
     fun getAvailableSubject(
         @Query("schoolType") school: String? = MyApplication.schoolType.name,
     ): Observable<BaseCookingListResponse<LCSubject>>

@@ -22,12 +22,12 @@
         <item name="android:track">@drawable/switch_track_light</item>
         <item name="android:thumb">@drawable/switch_thumb_light</item>
     </style>
-<!--    <style name="Switch.ExtraLight" parent="Switch">-->
-<!--        <item name="android:textOff">""</item>-->
-<!--        <item name="android:textOn">""</item>-->
-<!--        <item name="android:track">@drawable/switch_track_extra_light</item>-->
-<!--        <item name="android:thumb">@drawable/switch_thumb_extra_light</item>-->
-<!--    </style>-->
+    <style name="Switch.ExtraLight" parent="Switch">
+        <item name="android:textOff">""</item>
+        <item name="android:textOn">""</item>
+        <item name="android:track">@drawable/switch_track_extra_light</item>
+        <item name="android:thumb">@drawable/switch_thumb_extra_light</item>
+    </style>
     <style name="Switch.Grey" parent="Switch">
         <item name="android:textOff">""</item>
         <item name="android:textOn">""</item>

@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.animation.ScaleAnimation
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebChromeClient
@@ -31,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.DialogFragment
@@ -246,10 +248,7 @@ class MainActivity : PermissionActivity(),
             setSchoolSpinner()
             setSpy()
             initChatBot()
-//            val anim = ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-//            anim.duration = 250
-//            schoolSwitch.startAnimation(anim)
-//            showTooltipIfNeedOnAnim(Tutor.TooltipType.middleIntroduceOpening, anim)
+
         }
     }
 
@@ -257,41 +256,31 @@ class MainActivity : PermissionActivity(),
         binding.apply {
             chatBotLottie?.playAnimation()
             chatBotBtn?.setOnClickListener {
-                chatBotCv?.visibleIf(chatBotCv?.visibility !== View.VISIBLE)
+                if (chatBotBgCl?.isVisible === true) {
+                    chatBotBgCl?.visibleIf(false)
+                } else {
+                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot"
+                    binding.webView?.loadUrl(url)
+                    chatBotBgCl?.visibleIf(true)
+                }
             }
             webView?.let {
-
-                it.webViewClient = object : WebViewClient() {
-                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                        super.onPageStarted(view, url, favicon)
-                        println("aspasp onpagestart")
+                it.addJavascriptInterface(ChatBotClientClickEventListener (
+                    onCloseListener = {
+                        runOnUiThread {
+                            chatBotBgCl?.visibleIf(false)
+                        }
+                    }, errorCloseListener = {
+                        runOnUiThread {
+                            chatBotBgCl?.visibleIf(false)
+                        }
                     }
-
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        super.onPageFinished(view, url)
-                        println("aspasp onpage finish")
-                    }
-                }
-                it.addJavascriptInterface(ChatBotClientClickEventListener {
-                    println("aspasp webview Close")
-                    runOnUiThread {
-                        chatBotCv?.visibleIf(false)
-                    }
-                }, "android")
+                ), "android")
 
                 it.settings.apply {
                     javaScriptEnabled = true
                     domStorageEnabled = true
                     databaseEnabled = true
-                    mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
-                }
-                if (token != null) {
-//                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot?initInfo={\"viewType\":\"SOLVE_PROBLEM\",\"images\":[{\"type\":\"SOLVE_PROBLEM\",\"seq\":0,\"urls\":[\"https://freewheelin-contents.s3.ap-northeast-2.amazonaws.com/problem/349040/f975e7e3/problem.png\"]}]}"
-//                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot"
-//                    val url = "http://192.168.0.22:3000" + "/ottway?token=${token}&uri=chat-bot?initInfo={\"viewType\":\"SOLVE_PROBLEM\",\"images\":[{\"type\":\"SOLVE_PROBLEM\",\"seq\":0,\"urls\":[\"https://freewheelin-contents.s3.ap-northeast-2.amazonaws.com/problem/349040/f975e7e3/problem.png\"]}]}"
-                    val url = "http://192.168.0.22:3000" + "/ottway?token=${token}&uri=chat-bot"
-                    println("aspasp , url : ${url}")
-                    it.loadUrl(url)
                 }
             }
 

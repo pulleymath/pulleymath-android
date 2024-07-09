@@ -11,7 +11,7 @@ import com.freewheelin.pulley.databinding.ViewTripleBarHorizontalBinding
 import com.freewheelin.pulley.legacy.utils.TextUtils
 
 class TripleBarHorizontalView: ConstraintLayout {
-    var secondBarColor: Int
+    var secondBarColor: Int = 0
         set(value) {
             field = value
             binding.secondBar.progressColor = value
@@ -19,7 +19,7 @@ class TripleBarHorizontalView: ConstraintLayout {
             binding.secondRateTv.setTextColor(value)
         }
 
-    var title: String?
+    var title: String? = ""
         get() {
             return binding.titleTv.text.toString()
         }

@@ -20,6 +20,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLcWrongNoteBinding
 import com.freewheelin.pulley.databinding.ItemLcWrongNoteSelectorBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.LCWrongNoteFragment
 //import com.freewheelin.pulley.revision2021.model.CourseType
@@ -30,8 +31,10 @@ import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
 import com.freewheelin.pulley.legacy.utils.getSerializable
 import com.freewheelin.pulley.legacy.utils.setMarginTop
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
@@ -86,7 +89,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
             }
 
             tabFragments.addAll(frags)
-
+            initChatBot()
             viewModel.currentCardIndex.observe(this@LCWrongNoteActivity) { index ->
                 CoroutineScope(Dispatchers.Main).launch {
                     val children = supportFragmentManager.fragments.filter { it.tag.equals("f" + binding.pagerWrapper.pager.adapter?.getItemId(index)) }
@@ -210,6 +213,40 @@ class LCWrongNoteActivity : AppCompatActivity() {
                     externalPenBtn.setImageResource(R.drawable.ic_pencil)
                 }
             }
+        }
+    }
+
+    fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                } else {
+                    val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                    onCloseListener = onClose,
+                    errorCloseListener = onClose
+                ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+
         }
     }
 

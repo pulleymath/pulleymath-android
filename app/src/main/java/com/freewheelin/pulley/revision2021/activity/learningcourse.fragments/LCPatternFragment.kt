@@ -158,17 +158,18 @@ class LCPatternFragment : Fragment(), LCTouchListener {
                     }
                 }
 
-                questionBtnLl.setOnClickListener {
-                    (activity as LearningCourseActivity).hidePenPanel()
-
-                    getChildrenPage().forEach {
-                        val quizFrag = (it as PatternQuizFragment)
-                        val patternName = viewModel.patternName.value ?: return@forEach
-                        val chapterName = (activity as LearningCourseActivity).viewModel.headerTitle.value ?: return@forEach
-                        val courseName = "[${chapterName}] : [${patternName}]"
-                        quizFrag.openChannelIoDialog(courseName)
-                    }
-                }
+                // ai 의 등장으로 일자리를 잃었다.
+//                questionBtnLl.setOnClickListener {
+//                    (activity as LearningCourseActivity).hidePenPanel()
+//
+//                    getChildrenPage().forEach {
+//                        val quizFrag = (it as PatternQuizFragment)
+//                        val patternName = viewModel.patternName.value ?: return@forEach
+//                        val chapterName = (activity as LearningCourseActivity).viewModel.headerTitle.value ?: return@forEach
+//                        val courseName = "[${chapterName}] : [${patternName}]"
+//                        quizFrag.openChannelIoDialog(courseName)
+//                    }
+//                }
 
                 pagerWrapper.pagerEnableCallback = {
                     (activity as LearningCourseActivity).setPagerUserInputEnable(it)

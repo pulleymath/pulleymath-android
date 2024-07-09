@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
@@ -31,6 +32,7 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.ActivityPdfListBinding
 import com.freewheelin.pulley.databinding.HeaderPdfListBinding
 import com.freewheelin.pulley.databinding.ItemPdfBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
@@ -44,6 +46,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.pulleymath.android.pdf.PdfViewerActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -76,6 +79,7 @@ class PdfListActivity : AppCompatActivity() {
         binding.apply {
             lifecycleOwner = this@PdfListActivity
             vm = viewModel
+            initChatBot()
             val adapter = PdfAdapter(viewModel)
             recyclerPdf.adapter = adapter
             val spanCount = if(isTablet) 5 else 3
@@ -102,6 +106,39 @@ class PdfListActivity : AppCompatActivity() {
 
         initUI()
         initActivityResult()
+    }
+
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+        }
     }
 
 

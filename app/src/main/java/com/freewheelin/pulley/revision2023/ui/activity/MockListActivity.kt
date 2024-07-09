@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -21,11 +22,15 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityMockListBinding
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MyMockFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.NewMockFragment
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.pxToSp
 import com.freewheelin.pulley.legacy.utils.showExpandVertical
+import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.freewheelin.pulley.revision2023.viewmodel.MockListActViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -84,6 +89,7 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
             vm = viewModel
             lifecycleOwner = this@MockListActivity
 
+            initChatBot()
             var count = 1
             tabFragments.forEach {
                 if (count == 1) {
@@ -128,6 +134,40 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
             }
         }
     }
+
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+        }
+    }
+
 }
 
 class ViewPagerAdapter(val fragments: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) :

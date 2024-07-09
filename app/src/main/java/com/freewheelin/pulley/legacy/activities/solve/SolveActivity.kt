@@ -37,6 +37,7 @@ import com.freewheelin.pulley.legacy.core.manage.MockExamManager.ARG_START_PROBL
 import com.freewheelin.pulley.legacy.core.manage.PieceManager.ARG_REVIEW_SYNC
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivitySolveBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.dialogs.*
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
@@ -56,12 +57,14 @@ import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.pow
@@ -548,6 +551,8 @@ class SolveActivity : BaseActivity(),
             solveCl.layoutParams.width = screenWidth
             galleryView.delegate = this@SolveActivity
 
+            initChatBot()
+
 //        var isSetScrollPosition: Boolean = false
 //        rootView.viewTreeObserver.addOnGlobalLayoutListener {
 //            if(isSetScrollPosition == false) {
@@ -690,14 +695,19 @@ class SolveActivity : BaseActivity(),
 
             solveCl.setOnDragListener { view, dragEvent ->
                 when(dragEvent.action) {
-                    DragEvent.ACTION_DRAG_LOCATION -> {
-
-                    }
                     DragEvent.ACTION_DRAG_STARTED -> {
                         val x = dragEvent.x
                         val y = dragEvent.y
                         Log.d("드래그", "Started x=$x, y=$y")
                     }
+                    DragEvent.ACTION_DRAG_LOCATION -> {
+                        val answerHeight = answerView.height
+
+                        var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        var y = dragEvent.y - answerHeight / 2f
+                        answerView.setPosition(x, y)
+                    }
+
                     DragEvent.ACTION_DRAG_ENDED -> {
                         var x = dragEvent.x
                         var y = dragEvent.y
@@ -773,6 +783,42 @@ class SolveActivity : BaseActivity(),
         }
     }
 
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                } else {
+                    val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
+                    webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                    onCloseListener = onClose,
+                    errorCloseListener = onClose
+                ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+
+        }
+
+    }
+
     private fun setInitPosition() {
         with(binding) {
             rootView.postDelayed({
@@ -839,6 +885,7 @@ class SolveActivity : BaseActivity(),
 //                binding.solutionSwitch.daebakSwitch.isChecked = !isYet && isSwitchChecked
                 val isSwitchChecked = binding.solutionPanelSwitch.isChecked
                 binding.solutionPanelSwitch.isChecked = !isYet && isSwitchChecked
+                viewModel.makeChatBotInfo(it)
             }
         }
     }
@@ -1550,6 +1597,7 @@ class SolveActivity : BaseActivity(),
         val needToNewMemo = selectedProblem != problem
         selectedProblem = problem
         viewModel.selectedProblemOb.postValue(problem)
+        binding.chatBotCv.visibleIf(false)
 
         onSetProblem(needToNewMemo)
         if(problem != null) {
@@ -2070,7 +2118,7 @@ class AnswerShadowBuilder(v: View): View.DragShadowBuilder(v) {
         val x = 40.toPx()/2 + view.resources.getDimension(R.dimen.dp16).toInt()
         val width: Int = view.width
         val height: Int = view.height
-        size.set(width, height)
+        size.set(150, height)
         touch.set(x, view.height / 2)
     }
 }

@@ -15,6 +15,7 @@ import android.view.animation.AnimationUtils
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -29,6 +30,7 @@ import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityPulleyMathBooksBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.FROM_PULLEYMATH_BOOKS
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity.Companion.WHERE_ARE_YOU_FROM
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialog
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.model.contents.Book
@@ -54,9 +56,11 @@ import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.SOLVE_RESULT
 import com.freewheelin.pulley.revision2023.utils.PatternStudyLayoutUtils
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,6 +113,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             initAdapter()
             initUI()
             initRecommend()
+            initChatBot()
             initActivityResult()
             btnBack.setOnClickListener {
                 finish()
@@ -191,6 +196,38 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                     HttpException403, GuestException -> showGuestJoinInduceDialog()
                     NONE -> {}
                     else -> { Log.e(javaClass.simpleName, "Error Not Handled : $type")}
+                }
+            }
+        }
+    }
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
                 }
             }
         }

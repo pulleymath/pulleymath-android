@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
@@ -35,9 +37,12 @@ import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -170,9 +175,46 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
             categoryTab.listener = this@StudyHistoryActivity
             ingTab.listener = this@StudyHistoryActivity
-
+            initChatBot()
         }
 
+
+    }
+
+    fun initChatBot() {
+        binding.apply {
+            chatBotLottie?.playAnimation()
+            chatBotBtn?.setOnClickListener {
+                if (chatBotBgCl?.isVisible === true) {
+                    chatBotBgCl?.visibleIf(false)
+                } else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView?.loadUrl(url)
+                    chatBotBgCl?.visibleIf(true)
+                    chatBotCv?.visibleIf(true)
+                }
+            }
+            webView?.let {
+                it.addJavascriptInterface(ChatBotClientClickEventListener (
+                    onCloseListener = {
+                        runOnUiThread {
+                            chatBotBgCl?.visibleIf(false)
+                        }
+                    }, errorCloseListener = {
+                        runOnUiThread {
+                            chatBotBgCl?.visibleIf(false)
+                        }
+                    }
+                ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+
+        }
 
     }
 

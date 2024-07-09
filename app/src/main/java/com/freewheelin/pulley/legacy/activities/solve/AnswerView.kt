@@ -1,8 +1,10 @@
 package com.freewheelin.pulley.legacy.activities.solve
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
@@ -28,6 +30,7 @@ interface AnswerDelegate {
     fun prev()
 }
 
+@SuppressLint("ClickableViewAccessibility")
 class AnswerView : ConstraintLayout,
         PlusMinusKeypadListener,
         AnswerSelectionListener {
@@ -78,6 +81,8 @@ class AnswerView : ConstraintLayout,
         val paddingStartEnd = resources.getDimension(R.dimen.dp16).toInt()
         setPadding(paddingStartEnd, 0, paddingStartEnd, 0)
         background = ContextCompat.getDrawable(context, R.drawable.bg_gray_200_round_32)
+
+
 
         shortAnswerView.removeKeyboard()
 
@@ -160,8 +165,12 @@ class AnswerView : ConstraintLayout,
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val data = ClipData.newPlainText("", "")
                 val shadowBuilder = AnswerShadowBuilder(this)
-                this.startDrag(data, shadowBuilder, view, 0)
-                this.visibility = View.INVISIBLE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    this.startDragAndDrop(data, shadowBuilder, view, 0)
+                } else {
+                    this.startDrag(data, shadowBuilder, view, 0)
+                }
+//                this.visibility = View.INVISIBLE
                 true
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 this.visibility = View.VISIBLE

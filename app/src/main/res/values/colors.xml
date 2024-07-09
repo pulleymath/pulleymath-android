@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Opacity Guide
+        100% — FF
+        95% — F2
+        90% — E6
+        85% — D9
+        80% — CC
+        75% — BF
+        70% — B3
+        65% — A6
+        60% — 99
+        55% — 8C
+        50% — 80
+        45% — 73
+        40% — 66
+        35% — 59
+        30% — 4D
+        25% — 40
+        20% — 33
+        15% — 26
+        10% — 1A
+        5% — 0D
+        0% — 00 -->
     <!--Daebak STYLE GUIDE-->
     <color name="white">#ffffff</color>
     <color name="dim_white">#4cffffff</color>
@@ -67,7 +90,9 @@
 
     <color name="black_100">#3d3d3d</color>
     <color name="black_200">#333333</color>
+    <color name="black_200_opa_30">#4D333333</color>
     <color name="black">#000000</color>
+
 
     <color name="mtrl_textinput_default_box_stroke_color">#c0c0c0</color>
 

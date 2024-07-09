@@ -21,7 +21,7 @@ data class CookingInfo(
     @PrimaryKey(autoGenerate = false) var conceptCookingId: Int,
     val chapterId: Int,
     val imageUrl: String,
-    val video: Video,
+    val video: Video?,
     val exerciseGroups: List<CookingExercise>
 ) {
 

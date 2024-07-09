@@ -141,6 +141,7 @@ class LCWrongNoteMapFragment : Fragment() {
         super.onResume()
         fetchLCWrongNote()
         (activity as LearningCourseActivity).run {
+            viewModel.chatBotInfo = null
             hideMainPenPanel()
             hidePenPanel()
         }

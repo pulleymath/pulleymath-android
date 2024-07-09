@@ -197,7 +197,7 @@ class DialogUtils {
 
             val dialog = CommonDialog.newInstance(
                 title = "로그아웃",
-                contents = "다른 기기에서 로그인이 되거나\n로그인 세션이 만료되어 로그아웃 되었습니다.",
+                contents = "로그인 세션이 만료되어 로그아웃 되었습니다.",
                 isOneBtn = true,
                 type = CommonDialog.DialogType.Alert,
                 successText = "확인"

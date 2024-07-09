@@ -17,6 +17,10 @@ import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteMapRepository
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteRepository
 import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImageType
+import com.freewheelin.pulley.revision2023.model.ChatBotInitViewType
 import com.freewheelin.pulley.revision2023.model.StudyMemo
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.model.StudyMemoRequest
@@ -53,14 +57,21 @@ class LCWrongNoteFViewModel(application: Application): BaseAndroidViewModel(appl
     var isAllMemoRemovedOnQuiz = false
 
     var currChapterId: Int = -1
+
+    var chatbotInfo: ChatBotInfo? = null
+
     fun init(item: LCWrongNoteMapCard, chapterId: Int) {
         noteCard.postValue(item)
         currChapterId = chapterId
         currQuizImage.postValue(item.quizImageUrl)
         remainingHintSize.value = item.hints.size
         hintExist = item.hints.isNotEmpty()
+        makeChatBotInfo(item)
     }
 
+    private fun makeChatBotInfo(info: LCWrongNoteMapCard) {
+        chatbotInfo = ChatBotInfo(ChatBotInitViewType.SOLVE_PROBLEM, listOf(ChatBotInfoImage(ChatBotInfoImageType.SOLVE_PROBLEM, 0, listOf(info.quizImageUrl))))
+    }
     fun hasMoreHint(): Boolean {
         noteCard.value?.let {
             if (it.hints.isEmpty()) return false

@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2021.views
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.os.Build
@@ -117,12 +118,22 @@ class FloatingAnswerSheet: CustomBaseView, AnswerSelectionListener {
         FloatingAnswerSheet.x = x
         FloatingAnswerSheet.y = y
     }
+    fun setLastPosition(location: String) {
+        location.split("&&").let {
+            if (it.size > 1) {
+                val x = it[0].toFloat()
+                val y = it[1].toFloat()
+                this.x = x
+                this.y = y
+                this.visibility = View.VISIBLE
+            }
+        }
+    }
+    @SuppressLint("ClickableViewAccessibility")
     fun setToucnEvent() {
         binding.dragIv.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    println("emform, dragIv Down")
-
                     val data = ClipData.newPlainText("", "")
                     val shadowBuilder = AnswerShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -130,11 +141,10 @@ class FloatingAnswerSheet: CustomBaseView, AnswerSelectionListener {
                     } else {
                         this.startDrag(data, shadowBuilder, view, 0)
                     }
-                    this.visibility = View.INVISIBLE
+//                    this.visibility = View.INVISIBLE
                     true
                 }
                 MotionEvent.ACTION_UP -> {
-                    println("emform, dragIv up")
                     this.visibility = View.VISIBLE
                     false
                 }

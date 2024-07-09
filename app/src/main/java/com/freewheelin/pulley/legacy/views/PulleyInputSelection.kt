@@ -27,12 +27,12 @@ class PulleyInputSelection: ConstraintLayout, View.OnClickListener {
             bigUnits = subject.bigUnits
         }
 
-    var bigUnits: List<BigUnitV3>
+    var bigUnits: List<BigUnitV3> = listOf(BigUnitV3.지수함수와_로그함수)
         set(value) {
             field = value
             buttonTitles = value.map { it.title }
         }
-    var buttonTitles: List<String>
+    var buttonTitles: List<String> = listOf("")
         set(value) {
             field = value
             val btnList = listOf(btn1, btn2, btn3, btn4)

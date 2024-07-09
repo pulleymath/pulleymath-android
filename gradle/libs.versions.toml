@@ -1,0 +1,118 @@
+[versions]
+agp = "8.5.0"
+androidJoda = "2.10.1.2"
+androidLibrary = "8.4.0"
+appUpdateKtx = "2.1.0"
+assetDeliveryKtx = "2.2.2"
+browser = "1.5.0"
+databinding-compiler = "3.1.4"
+exoplayer = "2.19.1"
+facebookAndroidSdk = "7.1.0"
+flexbox = "3.0.0"
+htAndroidRecycleradapters = "0.6"
+glide = "4.14.2"
+jsoup = "1.13.1"
+kotlin = "1.9.0"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+googleService = "4.4.2"
+constraintlayout = "2.1.4"
+lottie = "6.4.0"
+okhttp3 = "3.12.13"
+pagingRuntimeKtx = "3.1.1"
+picasso = "2.71828"
+channel-talk = "10.0.7"
+recyclerview = "1.3.2"
+firebaseBom = "33.1.1"
+androidXfragment = "1.8.1"
+androidXLifecycleExtension = "2.2.0"
+androidXLifecycle = "2.8.2"
+retrofit = "2.9.0"
+roomVersion = "2.6.1"
+rxbinding = "2.1.1"
+rxkotlin = "2.3.0"
+mpandroidchart = "v3.0.3"
+cardview = "1.0.0"
+material = "1.12.0"
+sqliteJdbc = "3.34.0"
+tedpermissionNormal = "3.3.0"
+viewpager2 = "1.1.0"
+
+[libraries]
+android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
+android-recycleradapters = { module = "com.github.hyuntae0117:android-RecyclerAdapters", version.ref = "htAndroidRecycleradapters" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-paging-rxjava2-ktx = { module = "androidx.paging:paging-rxjava2-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
+androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomVersion" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdateKtx" }
+asset-delivery-ktx = { module = "com.google.android.play:asset-delivery-ktx", version.ref = "assetDeliveryKtx" }
+databinding-compiler = { module = "com.android.databinding:compiler", version.ref = "databinding-compiler" }
+exoplayer-dash = { module = "com.google.android.exoplayer:exoplayer-dash", version.ref = "exoplayer" }
+exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayer" }
+exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version.ref = "exoplayer" }
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
+feature-delivery-ktx = { module = "com.google.android.play:feature-delivery-ktx", version.ref = "appUpdateKtx" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidXfragment" }
+androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "androidXLifecycleExtension" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidXLifecycle" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidXLifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidXLifecycle" }
+androidx-lifecycle-viewmodel-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidXLifecycle" }
+
+
+google-firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
+google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
+google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx"}
+
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+org-jetbrain-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin"}
+channel-talk-plugin-android = { module = "io.channel:plugin-android", version.ref = "channel-talk" }
+channel-talk-plugin-android-fcm = { module = "io.channel:plugin-android-fcm", version.ref = "channel-talk" }
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxbinding" }
+rxbinding-appcompat-v7-kotlin = { module = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin", version.ref = "rxbinding" }
+rxbinding-kotlin = { module = "com.jakewharton.rxbinding2:rxbinding-kotlin", version.ref = "rxbinding" }
+rxbinding-recyclerview-v7-kotlin = { module = "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin", version.ref = "rxbinding" }
+rxkotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rxkotlin" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
+okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
+okhttp3-urlconnection = { module = "com.squareup.okhttp3:okhttp-urlconnection", version.ref = "okhttp3" }
+
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+mp-androidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
+tedpermission-normal = { module = "io.github.ParkSangGwon:tedpermission-normal", version.ref = "tedpermissionNormal" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "androidLibrary" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-service = { id = "com.google.gms.google-services", version.ref = "googleService" }
+

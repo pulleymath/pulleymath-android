@@ -6,7 +6,6 @@ import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.request.ScoringReq
 import com.freewheelin.pulley.revision2021.repository.remote.LCPatternApi
 import com.freewheelin.pulley.revision2021.repository.remote.LCPatternService
-import com.freewheelin.pulley.revision2023.model.LCPatternMap
 import com.freewheelin.pulley.revision2023.room.pattern.PatternDao
 import com.freewheelin.pulley.revision2023.room.pattern.PatternDatabase
 import kotlinx.coroutines.CoroutineScope

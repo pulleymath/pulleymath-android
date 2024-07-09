@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
@@ -24,6 +25,7 @@ import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAnalysisTabBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialogListener
 import com.freewheelin.pulley.legacy.model.Analysis
@@ -34,6 +36,8 @@ import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.google.android.material.tabs.TabLayout
 import org.joda.time.LocalDate
 import com.freewheelin.pulley.legacy.views.balloonWindow.BalloonWindow
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 
 interface AnalysisTabDelegate {
     val tabTitle: String
@@ -127,6 +131,7 @@ class AnalysisTabActivity : BaseNavActivity(),
             val from = LocalDate.now().minusDays(6)
             configUI(from, to)
 
+            initChatBot()
             tabLayout.addOnTabSelectedListener(this@AnalysisTabActivity)
 
             monthContainerCl.setOnClickListener {
@@ -185,6 +190,39 @@ class AnalysisTabActivity : BaseNavActivity(),
                 if (Tutor.TooltipType.analysisMain.isNeedToShow())
                     showMyAnalysisGuide()
             }, 1000)
+        }
+    }
+
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie?.playAnimation()
+            chatBotBtn?.setOnClickListener {
+                if (chatBotBgCl?.isVisible === true) {
+                    chatBotBgCl?.visibleIf(false)
+                    chatBotCv?.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot"
+                    binding.webView?.loadUrl(url)
+                    chatBotBgCl?.visibleIf(true)
+                    chatBotCv?.visibleIf(false)
+                }
+            }
+            webView?.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl?.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
         }
     }
 

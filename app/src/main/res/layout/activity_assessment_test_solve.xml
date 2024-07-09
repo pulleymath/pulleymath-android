@@ -503,6 +503,91 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/chatBotBgCl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black_200_opa_30"
+                    android:focusable="true"
+                    android:clickable="true"
+                    tools:visibility="gone"
+                    android:visibility="gone"
+                    android:translationZ="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/chatBotCv"
+                        android:layout_width="500dp"
+                        android:layout_height="match_parent"
+                        android:maxHeight="736dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="1dp"
+                        android:layout_marginVertical="24dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.freewheelin.pulley.revision2021.views.CookingWebview
+                            android:id="@+id/webView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            />
+
+                    </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/chatBotBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginBottom="48dp"
+                    app:cardCornerRadius="999dp"
+                    app:cardElevation="1dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    >
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/chatBotLottie"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:lottie_speed="1"
+                        app:lottie_repeatMode="restart"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_fileName="ai_pulling_floating.json"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/chatBotIntroduceTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/h6"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    android:paddingVertical="12dp"
+                    android:paddingHorizontal="16dp"
+                    android:text="문제를 풀다가 모르는 게 있으면 언제든지 물어봐!"
+                    android:textColor="@color/purple_300"
+                    android:background="@drawable/bg_white_stroke_purple_250_round_10"
+                    app:layout_constraintStart_toEndOf="@+id/chatBotBtn"
+                    app:layout_constraintTop_toTopOf="@+id/chatBotBtn"
+                    app:layout_constraintBottom_toBottomOf="@+id/chatBotBtn"
+                    android:layout_marginStart="16dp"
+                    />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </com.freewheelin.pulley.legacy.views.DisableHorizontalScrollView>

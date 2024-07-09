@@ -172,6 +172,9 @@ class LCWrongNoteFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
+        (activity as LCWrongNoteActivity).run {
+            viewModel.chatBotInfo = this@LCWrongNoteFragment.viewModel.chatbotInfo
+        }
         resetMemoView()
         resumePencilcaseView()
     }
@@ -246,6 +249,15 @@ class LCWrongNoteFragment : Fragment(),
                     val x = dragEvent.x
                     val y = dragEvent.y
                 }
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    val answerHeight = floatingAnswerSheet.height
+
+                    var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                    var y = dragEvent.y - answerHeight / 2f
+
+                    floatingAnswerSheet.setPosition(x, y)
+                    floatingAnswerSheet.visibility = View.VISIBLE
+                }
                 DragEvent.ACTION_DRAG_ENDED -> {
                     var x = dragEvent.x
                     var y = dragEvent.y
@@ -254,8 +266,7 @@ class LCWrongNoteFragment : Fragment(),
                         val answerHeight = floatingAnswerSheet.height
                         val answerWidth = floatingAnswerSheet.width
 
-                        x =
-                            dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                         y = dragEvent.y - answerHeight / 2f
 
                         // 화면 밖으로 나가면 안으로 넣기
@@ -370,7 +381,6 @@ class LCWrongNoteFragment : Fragment(),
     }
     override fun onPause() {
         super.onPause()
-        println("aspasp LCWNF onPause")
         saveMemo()
         viewModel.run {
             clearCompositeDisposable()

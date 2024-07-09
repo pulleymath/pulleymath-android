@@ -55,7 +55,7 @@ class VerticalBarView : ConstraintLayout {
     private var barMaxHeight = 160.toPx()
 
     private val visibleDuration: Long = 250
-    var isSelectedDetailBtn: Boolean
+    var isSelectedDetailBtn: Boolean = false
         set(value) {
             field = value
             if(value) {

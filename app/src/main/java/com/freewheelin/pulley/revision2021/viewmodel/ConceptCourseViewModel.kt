@@ -41,8 +41,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
 
     val selectedSubjectId = MutableLiveData<Int>(-1)
-    val availableLastSubjectId = MutableLiveData<Int>(7)
-    var availableFirstSubjectId = LCSubject.SubjectIndicator.Elementary5_1.rawValue
     val showMobileHeader = MutableLiveData<Boolean>(false)
     val showTabletHeader = MutableLiveData<Boolean>(false)
     val joinedChallengeList = challengeRepository.joinedChallengeList
@@ -57,10 +55,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                     it.sortedBy { it.subjectId }.let {
                         subjectList.postValue(it)
                         availableSubjectIndicator.postValue(it.map { it.subjectIndicator })
-                        val firstId = it.first().subjectId
-                        val lastId = it.last().subjectId
-                        availableLastSubjectId.postValue(lastId)
-                        availableFirstSubjectId = firstId
                         cb()
                     }
                 }
@@ -145,9 +139,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
     fun getInitHeaderBySchoolType(): LCSubject.SubjectIndicator {
         return when (schoolType.value) {
-            SchoolType.ELEMENTARY -> {
-                LCSubject.SubjectIndicator.convertRawToSubject(availableFirstSubjectId)
-            }
+            SchoolType.ELEMENTARY -> LCSubject.SubjectIndicator.Elementary1_1
             SchoolType.MIDDLE -> LCSubject.SubjectIndicator.Middle1_1
             SchoolType.HIGH -> LCSubject.SubjectIndicator.MathSang
             else -> LCSubject.SubjectIndicator.MathSang

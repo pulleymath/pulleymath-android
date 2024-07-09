@@ -53,13 +53,14 @@ open class ProblemGestures(context: Context, val imageView: View, val memoView: 
         return true
     }
 
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         return true
     }
 
     override fun onLongPress(event: MotionEvent) {}
 
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+
+    override fun onScroll(event1: MotionEvent?, event2: MotionEvent, x: Float, y: Float): Boolean {
         val minX = getMinX()
         val minY = getMinY()
 

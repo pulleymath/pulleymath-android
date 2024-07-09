@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -27,6 +28,7 @@ import com.freewheelin.pulley.databinding.FragmentWrongNoteStudyBinding
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.PieceManager
@@ -40,6 +42,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.setPaddingBottom
 import com.freewheelin.pulley.legacy.utils.showExpandVertical
 import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.NoteStudyViewListener
 import com.freewheelin.pulley.legacy.views.WrongManageView
@@ -62,6 +65,8 @@ import org.joda.time.LocalDateTime
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 
 enum class OrderType(val rawValue: Int) {
     recent(0),
@@ -118,6 +123,7 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
             vm = viewModel
 //                init()
             initAdapter()
+            initChatBot()
 //            changeFilterAndFetchNotes(binding.tabLayout.selectedTabPosition)
             backBtn.setOnClickListener {
                 finish()
@@ -193,6 +199,39 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
                     }
                 }
 
+            }
+        }
+    }
+
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
             }
         }
     }

@@ -3,10 +3,16 @@ package com.freewheelin.pulley.revision2023.utils.listeners
 import android.webkit.JavascriptInterface
 
 class ChatBotClientClickEventListener(
-    private val listener: () -> Unit
+    private val onCloseListener: () -> Unit,
+    private val errorCloseListener: () -> Unit,
 ) {
     @JavascriptInterface
     fun onClose() {
-        listener()
+        onCloseListener()
+    }
+
+    @JavascriptInterface
+    fun errorClose() {
+        errorCloseListener()
     }
 }

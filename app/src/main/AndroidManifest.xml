@@ -44,7 +44,6 @@
         <package android:name="viva.republica.toss" /> <!-- 토스뱅크 -->
         <package android:name="com.nhnent.payapp" /> <!-- PAYCO -->
         <package android:name="com.ssg.serviceapp.android.egiftcertificate" /> <!-- SSGPAY -->
-        <package android:name="com.kakao.talk" /> <!-- 카카오페이 -->
         <package android:name="com.nhn.android.search" /> <!-- 네이버페이 -->
         <package android:name="com.lottemembers.android" /> <!-- L.POINT -->
         <package android:name="com.samsung.android.spay" /> <!-- 삼성페이 -->
@@ -85,15 +84,18 @@
         <activity
             android:name=".revision2023.ui.activity.MockListActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".revision2023.ui.activity.WrongNoteActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".revision2023.ui.activity.TestActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".revision2023.ui.activity.PlannerActivity"
             android:exported="false"
@@ -133,7 +135,8 @@
         <activity
             android:name=".revision2023.ui.activity.PulleyMathBooksActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".revision2021.activity.LCTutorialActivity"
             android:exported="false"
@@ -141,13 +144,14 @@
         <activity
             android:name=".revision2021.activity.LCWrongNoteActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2021.activity.AlarmActivity"
             android:exported="true"
@@ -161,7 +165,8 @@
         <activity
             android:name=".revision2021.activity.AssessmentSolveActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".legacy.activities.learning.tabFragment.usertest.StudentManagerActivity"
             android:exported="true" />
@@ -171,7 +176,8 @@
         <activity
             android:name=".legacy.activities.learning.tabFragment.analysis.StudyHistoryActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".legacy.activities.auth.InitSettingCompleteActivity"
             android:exported="true"
@@ -236,7 +242,8 @@
         <activity
             android:name=".legacy.activities.analysis.AnalysisTabActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".revision2021.activity.MockReportActivity"
             android:exported="true"
@@ -258,14 +265,19 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+<!--        adjustResize : 키보드 입력시 화면 리사이즈
+             adjustNothing|stateAlwaysHidden : solve 주관식 문제에서 input 포커싱 되었을때 안드 기본 키보드가 잠깐올라왔다가 사라지는 문제를 해결하는 방법 -->
         <activity
             android:name=".legacy.activities.solve.SolveActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize" />
+<!--            android:windowSoftInputMode="adjustResize" />-->
+
 
         <receiver
             android:name=".legacy.bases.UpdateReceiver"

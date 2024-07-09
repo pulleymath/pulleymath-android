@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
+import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.revision2021.model.response.AssessmentStudentWorkbook
 import com.freewheelin.pulley.revision2021.model.response.AssessmentProblem
 import com.freewheelin.pulley.revision2021.model.response.AssessmentWorkbook
@@ -15,6 +16,10 @@ import com.freewheelin.pulley.revision2021.repository.AssessmentRepository
 import com.freewheelin.pulley.revision2021.utils.replace
 import com.freewheelin.pulley.revision2021.views.adapters.AssessmentTestGalleryAdapter
 import com.freewheelin.pulley.legacy.utils.DialogUtils
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImageType
+import com.freewheelin.pulley.revision2023.model.ChatBotInitViewType
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +64,8 @@ class AssessmentSolveViewModel : BaseViewModel(), LifecycleObserver {
     var showTimer: Boolean = false
     var testPeriodMinutes: Int = 0
     var workbookSeq: Int = 0
+
+    var chatBotInfo: ChatBotInfo? = null
 
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
         println("buttonView = [$buttonView], isChecked = [$isChecked]")
@@ -269,4 +276,12 @@ class AssessmentSolveViewModel : BaseViewModel(), LifecycleObserver {
             sdf.format(cal.time)
         }
     }
+    fun makeChatBotInfo(problem: AssessmentProblem) {
+        chatBotInfo = ChatBotInfo(
+            ChatBotInitViewType.SOLVE_PROBLEM, listOf(
+                ChatBotInfoImage(
+                    ChatBotInfoImageType.SOLVE_PROBLEM, 0, listOf(problem.img_url))
+            ))
+    }
+
 }

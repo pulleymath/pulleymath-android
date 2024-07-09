@@ -36,8 +36,7 @@ abstract class CustomBaseView: ConstraintLayout, LifecycleOwner, LifecycleEventO
     }
     var lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
 
-    override fun getLifecycle(): Lifecycle = lifecycleRegistry
-
+    override val lifecycle: Lifecycle = lifecycleRegistry
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         lifecycleRegistry.handleLifecycleEvent(event)
     }

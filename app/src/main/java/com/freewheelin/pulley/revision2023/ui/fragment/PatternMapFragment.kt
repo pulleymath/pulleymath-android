@@ -83,6 +83,8 @@ class PatternMapFragment : Fragment() {
         val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
         viewModel.collectAllPatternMaps(chapterId)
         (activity as LearningCourseActivity).run {
+            println("aspasp chatBotInfo nulled")
+            viewModel.chatBotInfo = null
             hideMainPenPanel()
             hidePenPanel()
         }

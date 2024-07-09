@@ -107,17 +107,17 @@ class PatternQuizFragment() : Fragment(),
                 vm = viewModel
                 lifecycleOwner = viewLifecycleOwner
 
-                viewModel.apply {
-                    remainingHintSize.observe(viewLifecycleOwner) { size ->
+                viewModel.also { vm ->
+                    vm.remainingHintSize.observe(viewLifecycleOwner) { size ->
                         (parentFragment as LCPatternFragment).setHintBtnDisabled(size == 0)
                     }
 
-                    showConceptSolutionView.observe(viewLifecycleOwner) {
+                    vm.showConceptSolutionView.observe(viewLifecycleOwner) {
                         // ager 이동시 부모뷰에 텍스트 전달을 위해 observe 사용
                         (parentFragment as LCPatternFragment).setConceptSolutionToggleBtnText(it)
                     }
 
-                    patternQuiz.observeOnce(this@PatternQuizFragment) {
+                    vm.patternQuiz.observeOnce(this@PatternQuizFragment) {
                         val patternId = quiz.patternId
                         memoView.memoListener = this@PatternQuizFragment
                         memoView.memoCase = StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM
@@ -131,7 +131,7 @@ class PatternQuizFragment() : Fragment(),
                             println("aspasp pattern 메모 없어서 새로운 db에서 찾으러감")
                             val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
 
-                            viewModel.getMemoFromParams(chapterId, it.patternQuizId, StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
+                            vm.getMemoFromParams(chapterId, it.patternQuizId, StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
                                 memoView.setMemo(it) {
                                     viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
                                     viewModel.isAllMemoRemovedOnQuiz = false
@@ -365,6 +365,15 @@ class PatternQuizFragment() : Fragment(),
                     val x = dragEvent.x
                     val y = dragEvent.y
                 }
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    val answerHeight = floatingAnswerSheet.height
+
+                    var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                    var y = dragEvent.y - answerHeight / 2f
+
+                    floatingAnswerSheet.setPosition(x, y)
+                    floatingAnswerSheet.visibility = View.VISIBLE
+                }
                 DragEvent.ACTION_DRAG_ENDED -> {
                     var x = dragEvent.x
                     var y = dragEvent.y
@@ -388,6 +397,7 @@ class PatternQuizFragment() : Fragment(),
                         } else if (y < -answerHeight) {
                             y = (-answerHeight).toFloat()
                         }
+
                         floatingAnswerSheet.setPosition(x, y)
                         floatingAnswerSheet.visibility = View.VISIBLE
                     }
@@ -417,7 +427,12 @@ class PatternQuizFragment() : Fragment(),
                         y = (-answerHeight).toFloat()
                     }
 
-                    floatingAnswerSheet.setPosition(x, y)
+                    val aiChatBotBtnRightX = 270f
+                    val aiChatBotBtnTopY = 940f
+                    if (x < aiChatBotBtnRightX && y > aiChatBotBtnTopY) {
+                        x = aiChatBotBtnRightX
+                    }
+
                     Preferences.floatingAnswerSheetLastLocation.set("${x}&&${y}")
                     (activity as LearningCourseActivity).resumeLCPatternFloatingAnswerSheetLocation()
                 }
@@ -440,6 +455,10 @@ class PatternQuizFragment() : Fragment(),
     override fun onResume() {
         super.onResume()
 //        setHintBtn()
+        (activity as LearningCourseActivity).run {
+//            println("aspasp chatbot Info inIT from onresume")
+            viewModel.chatBotInfo = this@PatternQuizFragment.viewModel.chatbotInfo
+        }
         resetMemoView()
         resumePencilcaseView()
 
@@ -560,7 +579,7 @@ class PatternQuizFragment() : Fragment(),
 
     override fun onPause() {
         super.onPause()
-        println("aspasp PQF onPause")
+//        println("aspasp PQF onPause")
         saveMemo()
         viewModel.run {
             clearCompositeDisposable()
@@ -605,7 +624,7 @@ class AnswerShadowBuilder(v: View): View.DragShadowBuilder(v) {
         val x = 40.toPx()/2 + view.resources.getDimension(R.dimen.dp16).toInt()
         val width: Int = view.width
         val height: Int = view.height
-        size.set(width, height)
+        size.set(150, height)
         touch.set(x, view.height / 2)
     }
 }

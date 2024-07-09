@@ -27,6 +27,10 @@ class LCPatternViewPager: LinearLayout {
     var fingerDrawMode = false
     var listener: LCTouchListener? = null
 
+    private var touchSlop = 0
+    private var initialX = 0f
+    private var initialY = 0f
+
     init {
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
         this.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -48,10 +52,6 @@ class LCPatternViewPager: LinearLayout {
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         return super.onInterceptTouchEvent(ev)
     }
-
-    private var touchSlop = 0
-    private var initialX = 0f
-    private var initialY = 0f
 
     private fun handleInterceptTouchEvent(e: MotionEvent) {
 

@@ -57,7 +57,7 @@ class WrongManagementDialog : Dialog {
     }
 
     var cnt = 2
-    var type: Type
+    var type: Type = Type.wrongProblem
         set(value) {
             field = value
             configureUIByType()

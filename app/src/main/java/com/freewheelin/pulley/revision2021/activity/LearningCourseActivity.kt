@@ -27,6 +27,7 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
 import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
@@ -43,10 +44,12 @@ import com.freewheelin.pulley.revision2023.model.PriorConcept
 import com.freewheelin.pulley.revision2023.ui.fragment.PatternMapFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.PriorConceptFragment
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
 import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
 import com.zoyi.channel.plugin.android.open.model.PopupData
@@ -144,6 +147,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
 //            pencilcaseView.listener = this@LearningCourseActivity
 
+            initChatBot()
             backBtn.setOnClickListener {
 //                onBackPressed()
                 backBtnAction()
@@ -317,6 +321,42 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
             }
         }
     }
+
+    fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                } else {
+                    val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(ChatBotClientClickEventListener (
+                    onCloseListener = onClose,
+                    errorCloseListener = onClose
+                ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+
+        }
+
+    }
+
+
     private fun goCookingIfPriorConceptCourse(courseContentTable: List<SingleCourseDesc>, cookingId: Int) {
 
         val targetCookingIndex = courseContentTable.let { list ->

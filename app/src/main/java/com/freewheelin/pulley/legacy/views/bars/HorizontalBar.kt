@@ -12,7 +12,7 @@ class HorizontalBar: View {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
-    var value: Float
+    var value: Float = 0f
         set(value) {
             field = value
             invalidate()

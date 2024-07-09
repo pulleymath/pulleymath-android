@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleObserver
@@ -35,6 +36,7 @@ import com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.T
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.snackTest.TestPageBaseFragment
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageSettingDialogListener
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ProblemManager
@@ -45,8 +47,11 @@ import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.freewheelin.pulley.revision2023.viewmodel.TestActViewModel
 import java.util.Date
 import java.util.HashSet
@@ -85,10 +90,43 @@ class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListene
 
         init()
         initReceiver()
+        initChatBot()
         syncTestList()
         viewModel.apply {
             schoolTypeInRepo.observe(this@TestActivity) {
                 syncTestList()
+            }
+        }
+    }
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                }  else {
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
+                    binding.webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
             }
         }
     }

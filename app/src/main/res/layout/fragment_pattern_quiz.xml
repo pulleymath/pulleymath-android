@@ -19,7 +19,6 @@
         android:clipToPadding="false"
         >
 
-
         <com.freewheelin.pulley.revision2021.views.PatternQuizScrollView
             android:id="@+id/leftScrollView"
             android:layout_width="0dp"

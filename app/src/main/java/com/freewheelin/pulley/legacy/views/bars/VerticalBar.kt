@@ -20,7 +20,7 @@ class VerticalBar : View {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     var paint: Paint
-    var value: Float
+    var value: Float = 0f
         set(value) {
             field = value
             invalidate()

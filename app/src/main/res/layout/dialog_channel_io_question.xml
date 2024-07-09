@@ -98,10 +98,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageLl"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <!--            <com.freewheelin.pulley.revision2021.views.CustomYoutubePlayerView-->
-                    <!--                android:id="@+id/videoPlayerView"-->
-                    <!--                android:layout_width="match_parent"-->
-                    <!--                android:layout_height="wrap_content"/>-->
                     <ImageView
                         android:id="@+id/screenShotIv"
                         android:layout_width="wrap_content"

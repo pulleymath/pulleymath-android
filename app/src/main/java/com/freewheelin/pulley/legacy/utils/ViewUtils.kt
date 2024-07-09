@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -122,10 +123,14 @@ enum class ViewTransition {
     SlideFromDown,
     SlideFromUp,
     SlideFromLeft,
-    SlideFromRight
+    SlideFromRight,
+    SlideToDown,
+    SlideToUp,
+    SlideToLeft,
+    SlideToRight
 }
 
-fun View.showTransition(duration: Long = 500, transition: ViewTransition, cb:((view: View) -> Unit)? = null) {
+fun View.showTransition(duration: Long = 500, transition: ViewTransition, withAlpha: Boolean = false, cb:((view: View) -> Unit)? = null) {
     // https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
     visibility = View.VISIBLE
 
@@ -135,6 +140,7 @@ fun View.showTransition(duration: Long = 500, transition: ViewTransition, cb:((v
         ViewTransition.SlideFromUp -> TranslateAnimation(0f, 0f, -height.toFloat(), 0f)
         ViewTransition.SlideFromLeft -> TranslateAnimation(-width.toFloat(), 0f, 0f, 0f)
         ViewTransition.SlideFromRight -> TranslateAnimation(width.toFloat(), 0f, 0f, 0f)
+        else -> TranslateAnimation(0f, 0f, 0f, 0f)
     }
     anim.duration = duration
     anim.fillAfter = true
@@ -146,6 +152,49 @@ fun View.showTransition(duration: Long = 500, transition: ViewTransition, cb:((v
         }
     })
     startAnimation(anim)
+
+}
+
+// TODO 미완성임
+fun View.hideTransition(duration: Long = 500, transition: ViewTransition, cb:((view: View) -> Unit)? = null) {
+    // https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
+
+    this.visibility = View.GONE
+    if(this.visibility == View.INVISIBLE)
+        return
+
+    val anim = when(transition) {
+        ViewTransition.Instant -> TranslateAnimation(0f, 0f, 0f, 0f)
+        ViewTransition.SlideToDown -> TranslateAnimation(0f, 0f, 0f, height.toFloat())
+        ViewTransition.SlideToUp -> TranslateAnimation(0f, 0f, 0f, -height.toFloat())
+        ViewTransition.SlideToLeft -> TranslateAnimation(0f, -width.toFloat(), 0f, 0f)
+        ViewTransition.SlideToRight -> TranslateAnimation(0f, width.toFloat(), 0f, 0f)
+        else -> TranslateAnimation(0f, 0f, 0f, 0f)
+    }
+    anim.duration = duration
+    anim.fillAfter = false
+    anim.setAnimationListener(object: Animation.AnimationListener{
+        override fun onAnimationRepeat(p0: Animation?) {}
+        override fun onAnimationStart(p0: Animation?) {}
+        override fun onAnimationEnd(p0: Animation?) {
+            this@hideTransition.clearAnimation()
+            visibility = View.INVISIBLE
+            if(cb == null) return else cb(this@hideTransition)
+        }
+    })
+
+    val alphaAnim = AlphaAnimation(1f, 0f)
+    alphaAnim.duration = duration
+    alphaAnim.setAnimationListener(object: Animation.AnimationListener{
+        override fun onAnimationStart(p0: Animation?) { }
+
+        override fun onAnimationEnd(p0: Animation?) { }
+
+        override fun onAnimationRepeat(p0: Animation?) { }
+    })
+
+    startAnimation(anim)
+    startAnimation(alphaAnim)
 
 }
 

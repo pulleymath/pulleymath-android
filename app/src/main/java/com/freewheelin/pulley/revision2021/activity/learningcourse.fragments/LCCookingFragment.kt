@@ -111,6 +111,7 @@ class LCCookingFragment() : Fragment(),
             viewModel.apply {
                 adapter = cookingAdapter
                 cookingInfo.observe(viewLifecycleOwner) {
+                    this@LCCookingFragment.viewModel.makeChatBotInfo(it)
                     val chapterId = it.chapterId
                     val cookingId = it.conceptCookingId
 //                    memoView.memoCase = StudyMemoCase.CONCEPT_COOKING_LEARNING
@@ -172,13 +173,17 @@ class LCCookingFragment() : Fragment(),
                 when (item.type) {
                     CookingInfoItem.ItemType.Video -> {
                         videoContainerCl.visibility = View.VISIBLE
-                        viewModel.rightViewBinding = itemBinding
-                        webView.setOnTouchListener { view, motionEvent ->
-                            (activity as LearningCourseActivity).hidePenPanel()
-                            false
+                        if (item.video !== null) {
+                            webView.setOnTouchListener { view, motionEvent ->
+                                (activity as LearningCourseActivity).hidePenPanel()
+                                false
+                            }
+                            addVideo(item)
+                        } else {
+                            videoContainer.visibleIf(false)
                         }
 
-                        addVideo(item)
+                        viewModel.rightViewBinding = itemBinding
                         item.exerciseList?.let {
                             addExerciseBtn(it)
                         }
@@ -476,6 +481,13 @@ class LCCookingFragment() : Fragment(),
     }
     override fun onResume() {
         super.onResume()
+//        println("aspasp cookingfragment onresume")
+        viewModel.chatbotInfo?.let {
+            (activity as LearningCourseActivity).run {
+//                println("aspasp chatbot Info inIT from onresume")
+                viewModel.chatBotInfo = it
+            }
+        }
         resetMemoView()
         resumePencilCaseView()
         recoveryQuizSingleAnswer()

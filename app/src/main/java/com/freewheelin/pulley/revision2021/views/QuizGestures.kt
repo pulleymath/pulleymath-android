@@ -81,7 +81,7 @@ open class QuizGestures(context: Context, val scaleControlledView: View, val mem
         return true
     }
 
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onFling(event1: MotionEvent?, event2: MotionEvent, x: Float, y: Float): Boolean {
         return true
     }
 
@@ -100,7 +100,7 @@ open class QuizGestures(context: Context, val scaleControlledView: View, val mem
             }
         }
     }
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onScroll(event1: MotionEvent?, event2: MotionEvent, x: Float, y: Float): Boolean {
         yScrollControl(x, y)
 
         val minX = getMinX()

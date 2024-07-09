@@ -19,6 +19,10 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.views.memoView.MemoView
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
+import com.freewheelin.pulley.revision2023.model.ChatBotInfoImageType
+import com.freewheelin.pulley.revision2023.model.ChatBotInitViewType
 import com.squareup.picasso.Picasso
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -160,5 +164,16 @@ class LCCookingViewModel(application: Application) : BaseAndroidViewModel(applic
             }
 
         }
+    }
+
+    var chatbotInfo: ChatBotInfo? = null
+    fun makeChatBotInfo(info: CookingInfo) {
+        val clConcept = ChatBotInfoImage(ChatBotInfoImageType.CL_CONCEPT, 0, listOf(info.imageUrl))
+        val clExercise = info.exerciseGroups.mapIndexed { index, exercise ->
+            val exerciseMainImage = exercise.imageUrl
+            val exerciseQuizImage = exercise.exerciseQuizzes?.map { quiz -> quiz.quizImageUrl } ?: listOf()
+            return@mapIndexed ChatBotInfoImage(ChatBotInfoImageType.CL_EXERCISE, index + 1, listOf(exerciseMainImage) + exerciseQuizImage)
+        }
+        chatbotInfo = ChatBotInfo(ChatBotInitViewType.CONCEPT_LEARNING, listOf(clConcept) + clExercise)
     }
 }

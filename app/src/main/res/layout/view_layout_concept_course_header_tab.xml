@@ -828,97 +828,97 @@
                         imagebtn_tint="@{ vm.selectedSubjectId == SubjectIndicator.Tutorial.rawValue ? @color/white : @color/gray_500 }"/>
                 </LinearLayout>
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/elementaryMath1_1WrapperLl"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_marginStart="28dp"-->
-<!--                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_1) }"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/elementaryBookmarkWrapperLl"-->
-<!--                    app:layout_constraintEnd_toStartOf="@id/elementaryMath1_2WrapperLl">-->
-<!--                    <Button-->
-<!--                        android:id="@+id/elementaryMath1_1Btn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:minWidth="80dp"-->
-<!--                        style="@style/h5"-->
-<!--                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"-->
-<!--                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue }"-->
-<!--                        android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>-->
-<!--                    &lt;!&ndash;                        android:background="@drawable/shadow_main_page_tab_focused"&ndash;&gt;-->
-<!--                </LinearLayout>-->
+                <LinearLayout
+                    android:id="@+id/elementaryMath1_1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_1) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/elementaryBookmarkWrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/elementaryMath1_2WrapperLl">
+                    <Button
+                        android:id="@+id/elementaryMath1_1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minWidth="80dp"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue }"
+                        android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>
+                    <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                </LinearLayout>
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/elementaryMath1_2WrapperLl"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_marginStart="28dp"-->
-<!--                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_2) }"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/elementaryMath1_1WrapperLl"-->
-<!--                    app:layout_constraintEnd_toStartOf="@id/elementaryMath2_1WrapperLl">-->
-<!--                    <Button-->
-<!--                        android:id="@+id/elementaryMath1_2Btn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:minWidth="80dp"-->
-<!--                        style="@style/h5"-->
-<!--                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"-->
-<!--                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue }"-->
-<!--                        android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>-->
-<!--                </LinearLayout>-->
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/elementaryMath2_1WrapperLl"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_marginStart="28dp"-->
-<!--                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_1) }"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/elementaryMath1_2WrapperLl"-->
-<!--                    app:layout_constraintEnd_toStartOf="@id/elementaryMath2_2WrapperLl">-->
-<!--                    <Button-->
-<!--                        android:id="@+id/elementaryMath2_1Btn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:minWidth="80dp"-->
-<!--                        style="@style/h5"-->
-<!--                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"-->
-<!--                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue }"-->
-<!--                        android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>-->
-<!--                </LinearLayout>-->
+                <LinearLayout
+                    android:id="@+id/elementaryMath1_2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_2) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/elementaryMath1_1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/elementaryMath2_1WrapperLl">
+                    <Button
+                        android:id="@+id/elementaryMath1_2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minWidth="80dp"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue }"
+                        android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/elementaryMath2_1WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_1) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/elementaryMath1_2WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/elementaryMath2_2WrapperLl">
+                    <Button
+                        android:id="@+id/elementaryMath2_1Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minWidth="80dp"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue }"
+                        android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>
+                </LinearLayout>
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/elementaryMath2_2WrapperLl"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:layout_marginStart="28dp"-->
-<!--                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_2) }"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/elementaryMath2_1WrapperLl"-->
-<!--                    app:layout_constraintEnd_toStartOf="@id/elementaryMath3_1WrapperLl">-->
-<!--                    <Button-->
-<!--                        android:id="@+id/elementaryMath2_2Btn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:minWidth="80dp"-->
-<!--                        style="@style/h5"-->
-<!--                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"-->
-<!--                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue }"-->
-<!--                        android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>-->
-<!--                </LinearLayout>-->
+                <LinearLayout
+                    android:id="@+id/elementaryMath2_2WrapperLl"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="28dp"
+                    visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_2) }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/elementaryMath2_1WrapperLl"
+                    app:layout_constraintEnd_toStartOf="@id/elementaryMath3_1WrapperLl">
+                    <Button
+                        android:id="@+id/elementaryMath2_2Btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minWidth="80dp"
+                        style="@style/h5"
+                        android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"
+                        android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"
+                        commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue }"
+                        android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/elementaryMath3_1WrapperLl"
@@ -929,7 +929,7 @@
                     visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary3_1) }"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/elementaryBookmarkWrapperLl"
+                    app:layout_constraintStart_toEndOf="@+id/elementaryMath2_2WrapperLl"
                     app:layout_constraintEnd_toStartOf="@id/elementaryMath3_2WrapperLl">
                     <Button
                         android:id="@+id/elementaryMath3_1Btn"
@@ -1148,101 +1148,101 @@
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/elementaryScrollMath1_1WrapperLl"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="52dp"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_marginStart="28dp"-->
-<!--                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_1) }"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollBookmarkWrapperLl"-->
-<!--                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath1_2WrapperLl">-->
-<!--                        <Button-->
-<!--                            android:id="@+id/elementaryScrollMath1_1Btn"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:minWidth="80dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:paddingHorizontal="30dp"-->
-<!--                            style="@style/h5"-->
-<!--                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"-->
-<!--                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue  }"-->
-<!--                            android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>-->
-<!--                        &lt;!&ndash;                        android:background="@drawable/shadow_main_page_tab_focused"&ndash;&gt;-->
-<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:id="@+id/elementaryScrollMath1_1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_1) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollBookmarkWrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath1_2WrapperLl">
+                        <Button
+                            android:id="@+id/elementaryScrollMath1_1Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>
+                        <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
+                    </LinearLayout>
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/elementaryScrollMath1_2WrapperLl"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="52dp"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_marginStart="28dp"-->
-<!--                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_2) }"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath1_1WrapperLl"-->
-<!--                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath2_1WrapperLl">-->
-<!--                        <Button-->
-<!--                            android:id="@+id/elementaryScrollMath1_2Btn"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:minWidth="80dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:paddingHorizontal="30dp"-->
-<!--                            style="@style/h5"-->
-<!--                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"-->
-<!--                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue  }"-->
-<!--                            android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>-->
-<!--                    </LinearLayout>-->
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/elementaryScrollMath2_1WrapperLl"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="52dp"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_marginStart="28dp"-->
-<!--                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_1) }"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath1_2WrapperLl"-->
-<!--                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath2_2WrapperLl">-->
-<!--                        <Button-->
-<!--                            android:id="@+id/elementaryScrollMath2_1Btn"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:minWidth="80dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:paddingHorizontal="30dp"-->
-<!--                            style="@style/h5"-->
-<!--                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"-->
-<!--                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue  }"-->
-<!--                            android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>-->
-<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:id="@+id/elementaryScrollMath1_2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary1_2) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath1_1WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath2_1WrapperLl">
+                        <Button
+                            android:id="@+id/elementaryScrollMath1_2Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/elementaryScrollMath2_1WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_1) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath1_2WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath2_2WrapperLl">
+                        <Button
+                            android:id="@+id/elementaryScrollMath2_1Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue  }"
+                            android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>
+                    </LinearLayout>
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/elementaryScrollMath2_2WrapperLl"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="52dp"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_marginStart="28dp"-->
-<!--                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_2) }"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath2_1WrapperLl"-->
-<!--                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath3_1WrapperLl">-->
-<!--                        <Button-->
-<!--                            android:id="@+id/elementaryScrollMath2_2Btn"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:minWidth="80dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:paddingHorizontal="30dp"-->
-<!--                            style="@style/h5"-->
-<!--                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"-->
-<!--                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"-->
-<!--                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue  }"-->
-<!--                            android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>-->
-<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:id="@+id/elementaryScrollMath2_2WrapperLl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="28dp"
+                        visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary2_2) }"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath2_1WrapperLl"
+                        app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath3_1WrapperLl">
+                        <Button
+                            android:id="@+id/elementaryScrollMath2_2Btn"
+                            android:layout_width="wrap_content"
+                            android:minWidth="80dp"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="30dp"
+                            style="@style/h5"
+                            android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"
+                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"
+                            commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue  }"
+                            android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>
+                    </LinearLayout>
 
 
                     <LinearLayout
@@ -1254,7 +1254,7 @@
                         visibleIf="@{ vm.availableSubjectIndicator.contains(SubjectIndicator.Elementary3_1) }"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollBookmarkWrapperLl"
+                        app:layout_constraintStart_toEndOf="@+id/elementaryScrollMath2_2WrapperLl2"
                         app:layout_constraintEnd_toStartOf="@id/elementaryScrollMath3_2WrapperLl">
                         <Button
                             android:id="@+id/elementaryScrollMath3_1Btn"

@@ -25,7 +25,7 @@ class DaebakInputSelection: ConstraintLayout, View.OnClickListener {
         }
 
 
-    var buttonTitles: List<String>
+    var buttonTitles: List<String> = listOf("", "", "")
         set(value) {
             field = value
             btn1.text = value[0]

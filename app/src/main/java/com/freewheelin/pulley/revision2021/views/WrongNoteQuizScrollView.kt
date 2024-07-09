@@ -165,7 +165,7 @@ class WrongNoteQuizScrollView: ScrollView,
             }
         }
     }
-    override fun onScroll(event1: MotionEvent, event2: MotionEvent, x: Float, y: Float): Boolean {
+    override fun onScroll(event1: MotionEvent?, event2: MotionEvent, x: Float, y: Float): Boolean {
 
         yScrollControl(x, y)
 
@@ -235,7 +235,7 @@ class WrongNoteQuizScrollView: ScrollView,
     override fun onShowPress(p0: MotionEvent) {}
     override fun onSingleTapUp(p0: MotionEvent): Boolean { return true }
     override fun onLongPress(p0: MotionEvent) {}
-    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         fling(-p3.toInt())
         return true
     }

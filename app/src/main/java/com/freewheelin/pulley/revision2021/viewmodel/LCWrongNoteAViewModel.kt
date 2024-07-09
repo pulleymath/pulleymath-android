@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.revision2021.model.response.LCWrongNoteMapCard
 import com.freewheelin.pulley.revision2021.repository.LCWrongNoteRepository
+import com.freewheelin.pulley.revision2023.model.ChatBotInfo
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 
@@ -33,6 +34,7 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
     val isPagerFirstIndex by lazy { MutableLiveData(true) }
     val isPagerLastIndex by lazy { MutableLiveData(false) }
     var selectedChapterId: Int = -1
+    var chatBotInfo: ChatBotInfo? = null
 
     fun init(list: List<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String, chapterId: Int) {
         headerTitle.postValue(title)

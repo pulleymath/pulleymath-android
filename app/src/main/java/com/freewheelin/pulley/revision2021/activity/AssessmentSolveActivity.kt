@@ -14,6 +14,8 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -34,6 +36,7 @@ import com.freewheelin.pulley.legacy.bases.densityLevel
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.tutorial.Tutor
 import com.freewheelin.pulley.databinding.ActivityAssessmentTestSolveBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.legacy.model.ProblemType
 import com.freewheelin.pulley.legacy.model.Result
@@ -50,10 +53,16 @@ import com.freewheelin.pulley.revision2021.views.AssessmentGalleryView
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
@@ -177,10 +186,46 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
     fun observeLiveData() {
         viewModel.apply {
-            if (viewModel.isReview.value == true) return
+            if (viewModel.isReview.value == true) {
+                currentProblem.observe(this@AssessmentSolveActivity) {
+                    if (it == null) return@observe
+                    viewModel.makeChatBotInfo(it)
+                }
+                return
+            }
             problemIndex.observe(this@AssessmentSolveActivity) {
                 val problemNo = it + 1
                 openProblem(problemNo)
+            }
+            isReview.observe(this@AssessmentSolveActivity) {
+
+                if (it || viewModel.workbookSeq > 1) {
+                    binding.chatBotBtn.visibleIf(true)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(3000)
+                        val anim = AnimationUtils.loadAnimation(this@AssessmentSolveActivity, R.anim.slide_from_left_with_opacity)
+                        binding.chatBotIntroduceTv.startAnimation(anim)
+                        anim.setAnimationListener(object: Animation.AnimationListener {
+                            override fun onAnimationStart(p0: Animation?) {}
+                            override fun onAnimationRepeat(p0: Animation?) {}
+                            override fun onAnimationEnd(p0: Animation?) {
+                                binding.chatBotIntroduceTv.visibility = View.VISIBLE
+
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    val anim = AnimationUtils.loadAnimation(this@AssessmentSolveActivity, R.anim.slide_to_left_with_opacity)
+                                    anim.setAnimationListener(object: Animation.AnimationListener {
+                                        override fun onAnimationStart(p0: Animation?) {}
+                                        override fun onAnimationRepeat(p0: Animation?) {}
+                                        override fun onAnimationEnd(p0: Animation?) {
+                                            binding.chatBotIntroduceTv.visibility = View.INVISIBLE
+                                        }
+                                    })
+                                    binding.chatBotIntroduceTv.startAnimation(anim)
+                                }, 2000)
+                            }
+                        })
+                    }
+                }
             }
         }
     }
@@ -218,7 +263,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
             initGallery(viewModel.selectedWorkbook)
             setGalleryBtn()
-
+            initChatBot()
             pager.adapter = ViewPagerAdapter(tabFragments, supportFragmentManager, lifecycle)
             pager.isUserInputEnabled = false
             TabLayoutMediator(tabLayout, pager) { tab, position ->
@@ -297,6 +342,12 @@ class AssessmentSolveActivity : AppCompatActivity(),
             baseCl.setOnDragListener { view, dragEvent ->
                 when (dragEvent.action) {
                     DragEvent.ACTION_DRAG_LOCATION -> {
+                        val answerHeight = answerView.height
+                        val answerWidth = answerView.width
+
+                        var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        var y = dragEvent.y - answerHeight / 2f
+                        answerView.setPosition(x, y)
 
                     }
                     DragEvent.ACTION_DRAG_STARTED -> {
@@ -357,8 +408,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
                         val answerHeight = answerView.height
                         val answerWidth = answerView.width
 
-                        var x =
-                            dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
+                        var x = dragEvent.x - (40.toPx() / 2f + view.resources.getDimension(R.dimen.dp16))
                         var y = dragEvent.y - answerHeight / 2f
                         // 화면 밖으로 나가면 안으로 넣기
                         if (x > screenWidth - answerWidth) {
@@ -385,6 +435,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
             problemGesture?.listener = this@AssessmentSolveActivity
             problemContainer.setOnTouchListener(problemGesture)
             initPosition()
+
         }
     }
 
@@ -396,6 +447,44 @@ class AssessmentSolveActivity : AppCompatActivity(),
             }, 0)
         }
     }
+
+    private fun initChatBot() {
+        binding.apply {
+            chatBotLottie.playAnimation()
+            chatBotBtn.setOnClickListener {
+                if (chatBotBgCl.isVisible) {
+                    chatBotBgCl.visibleIf(false)
+                    chatBotCv.visibleIf(false)
+                } else {
+                    val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
+                    val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
+                    webView.loadUrl(url)
+                    chatBotBgCl.visibleIf(true)
+                    chatBotCv.visibleIf(true)
+                }
+            }
+            webView.let {
+                val onClose = {
+                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                }
+                it.addJavascriptInterface(
+                    ChatBotClientClickEventListener (
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose
+                    ), "android")
+
+                it.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                }
+            }
+
+        }
+
+    }
+
+
     fun setGalleryBtn() {
 
         var rotateAnim: ObjectAnimator? = null
