@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.ScoredStudentGoalInfo
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.StudentGoalInfo
 import com.freewheelin.pulley.legacy.core.API_V1
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.API_V3
@@ -117,13 +116,26 @@ object ContentManager {
         param["scoringProblemRequest"] = problems.map {
 
             // 멀티 선택 처리
-            if(it.userAnswer?.contains(",") == false && it.userAnswer?.contains("-") == false) { // - 주관식이나 선다형이 아닐때
-                try { // 숫자 변환 시 Exceptio 처리
-                    it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toFloat().toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
-                } catch (e:Exception) {
+            if(it.userAnswer?.contains(",") == false) { // - 주관식이나 선다형이 아닐때
+                try { // 숫자 변환 시 Exception 처리
+                    it.userAnswer = it.userAnswer?.let { userAnswer ->
+                        if (userAnswer.length > 18) {
+                            val former = userAnswer.substring(0, 18).toLongOrNull()?.toString()
+                            val latter = userAnswer.substring(18, userAnswer.length).toLongOrNull()?.toString()
+                            val result = former + latter
+                            // 둘중에 하나가 null일 경우
+                            println("aspasp result: ${result}")
+                            if (result.contains("null")) null
+                            else result
+                        } else {
+                            it.userAnswer?.toLongOrNull()?.toString()
+                        }
+                    }
+                } catch (e: Exception) {
                     LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
                     it.userAnswer = null
                 }
+
             }
 
             val problemParam = Parameter(
@@ -147,7 +159,7 @@ object ContentManager {
                 // 멀티 선택 아닐 경우만
                 if(it.userAnswer?.contains(",") == false) {
                     try { // 숫자 변환 시 Exceptio 처리
-                        it.userAnswer = if (it.userAnswer != null) it.userAnswer!!.toFloat().toInt().toString() else null // 답 앞에 0 들어가는 것 전처리
+                        it.userAnswer = it.userAnswer?.toLongOrNull()?.toString()
                     } catch (e:Exception) {
                         LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
                         it.userAnswer = null

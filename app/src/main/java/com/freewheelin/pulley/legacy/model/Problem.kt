@@ -333,10 +333,24 @@ open class Problem: Serializable {
     }
 
     fun mark() {
-        // 멀티선택 아닐경우
         try {
-            if (userAnswer?.contains(",") == false)
-                userAnswer = userAnswer?.let { it.toInt().toString() } // 앞에 0 있을 때 처리만
+            // 멀티선택 아닐경우
+            if (userAnswer?.contains(",") == false) {
+                userAnswer = userAnswer?.let {
+                    if (it.length > 18) {
+                        val former = it.substring(0, 18).toLongOrNull()?.toString()
+                        val latter = it.substring(18, it.length).toLongOrNull()?.toString()
+                        val result = former + latter
+                        // 둘중에 하나가 null일 경우
+                        println("aspasp result2: ${result}")
+                        if (result.contains("null")) null
+                        else result
+                    } else {
+                        it.toLongOrNull()?.toString()
+                    }
+                }
+//                userAnswer = userAnswer?.let { it.toLong().toString() } // 앞에 0 있을 때 처리만
+            }
 
             rawResult = if (userAnswer == answerData)
                 Result.correct.rawValue

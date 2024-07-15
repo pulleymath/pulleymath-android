@@ -91,7 +91,7 @@
                     android:hint="정답 입력"
                     android:textColorHint="@color/gray_400"
                     android:inputType="numberSigned"
-                    android:maxLength="9"
+                    android:maxLength="25"
                     android:paddingHorizontal="@dimen/dp16"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_black_4c4c4c_1dp"

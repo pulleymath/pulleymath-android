@@ -99,7 +99,7 @@ enum class CommercialSubject {
 
         val highSchoolArrays: Array<CommercialSubject>
             get() {
-                return arrayOf(MATH_TOP, MATH_BOTTOM, MATH_ONE, MATH_TOP, PROBABILITY_AND_STATISTICS, CALCULUS, GEOMETRY)
+                return arrayOf(MATH_TOP, MATH_BOTTOM, MATH_ONE, MATH_TWO, PROBABILITY_AND_STATISTICS, CALCULUS, GEOMETRY)
             }
         val middleSchoolArrays: Array<CommercialSubject>
             get() {
