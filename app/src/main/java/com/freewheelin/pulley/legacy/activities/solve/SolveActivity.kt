@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Base64
 import android.util.Log
 import android.view.*
 import android.view.animation.Animation
@@ -56,12 +57,14 @@ import com.freewheelin.pulley.revision2023.viewmodel.SolveActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
+import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment
 import com.freewheelin.pulley.revision2023.ui.fragment.MainFragment.Companion.OPEN_PULLEY_WORKBOOK
+import com.freewheelin.pulley.revision2023.ui.view.ChatBotFloatingBtn
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
@@ -182,7 +185,7 @@ class SolveActivity : BaseActivity(),
             initContent(content)
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
+        addBackBtnCallback()
         setInitPosition()
         initStartChallenge()
 //        setSpen()
@@ -217,7 +220,11 @@ class SolveActivity : BaseActivity(),
         Log.d("문제풀기", "onBackPressed()")
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "바로풀기화면", "뒤로가기", itemValue)
 
-        if(answeredSet.isNotEmpty()) {
+        if (binding.chatBotBgCl.isVisible) {
+            binding.chatBotBgCl.visibleIf(false)
+            binding.chatBotCv.visibleIf(false)
+            binding.chatBotBtn.startLongClickDescAnim()
+        } else if(answeredSet.isNotEmpty()) {
             val cancelCallback = {
                 if (content is Test) {
                     LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "테스트", "뒤로가기취소", "문제풀이직후")
@@ -693,7 +700,12 @@ class SolveActivity : BaseActivity(),
             solutionMemoView.layoutParams.width = screenWidth
             answerView.delegate = this@SolveActivity
 
+            chatBotBtn.removeDragListener()
             solveCl.setOnDragListener { view, dragEvent ->
+                val dragState = (dragEvent.localState as? View)?.id ?: -1
+                if (chatBotBtn.id == dragState) return@setOnDragListener binding.chatBotBtn.addDragListener(dragEvent)
+                if (answerView.id != dragState) return@setOnDragListener true
+
                 when(dragEvent.action) {
                     DragEvent.ACTION_DRAG_STARTED -> {
                         val x = dragEvent.x
@@ -785,11 +797,12 @@ class SolveActivity : BaseActivity(),
 
     private fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
+            chatBotBtn.setInitPosition()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
                     chatBotCv.visibleIf(false)
+                    chatBotBtn.startLongClickDescAnim()
                 } else {
                     val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
@@ -800,12 +813,25 @@ class SolveActivity : BaseActivity(),
             }
             webView.let {
                 val onClose = {
-                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                    runOnUiThread {
+                        chatBotBgCl.visibleIf(false)
+                        chatBotBtn.startLongClickDescAnim()
+                    }
+                }
+                val onMemoExist: () -> Boolean = {
+                    viewModel.alreadyHaveMemoOnThisProblem || viewModel.isMemoDrawAStrokeAtLeastOnceAsProblem
+                }
+                val onAnalyzedMemo: () -> String = {
+                    val memoByteArray = binding.problemMemoView.getMemoBase64()
+                    val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: ""
+                    memoBase64
                 }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
-                    onCloseListener = onClose,
-                    errorCloseListener = onClose
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose,
+                        analyzedMemoListener = onAnalyzedMemo,
+                        isMemoExistListener = onMemoExist
                 ), "android")
 
                 it.settings.apply {
@@ -1039,10 +1065,12 @@ class SolveActivity : BaseActivity(),
                 KeyEvent.KEYCODE_ENTER -> if (binding.speedAnswerView.visibility != View.VISIBLE) onEnter()
                 KeyEvent.KEYCODE_DEL -> if (binding.speedAnswerView.visibility != View.VISIBLE) inputBack()
                 KeyEvent.KEYCODE_TAB -> next()
-//                KeyEvent.KEYCODE_DPAD_DOWN -> next()
 //                KeyEvent.KEYCODE_DPAD_UP -> prev()
+//                KeyEvent.KEYCODE_DPAD_DOWN -> next()
             }
             return true
+        } else if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
+            backBtnAction()
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1741,7 +1769,6 @@ class SolveActivity : BaseActivity(),
                 binding.problemMemoView.load("${problem.id}_${content?.assignID ?: 0}_p") {
                     val assignId = content?.assignID ?: -1
                     viewModel.getMemoFromParams(assignId = assignId, problemId = problem.id, case = StudyMemoCase.PATTERN_LEARNING_PROBLEM) {
-                        println("aspasp problem memo exist? : ${it != null}")
                         binding.problemMemoView.setMemo(it) {
                             viewModel.isMemoDrawAStrokeAtLeastOnceAsProblem = false
                             viewModel.isAllMemoRemovedOnProblem = false

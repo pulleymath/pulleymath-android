@@ -112,7 +112,6 @@ public class FileHelper {
 //                val updated_at = RequestBody.create(MediaType.parse("multipart/form-data"), updatedAt.toString())
 
                 db.pulleyCookingWritingDao().delete(memo!!)
-                println("aspasp pattern 메모 삭제 성공!")
 //                Network.uploadTestMemo(body, id, student_id, pdf_id, updated_at, page_no) {}
             }
         }

@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -115,6 +116,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             initRecommend()
             initChatBot()
             initActivityResult()
+            addBackBtnCallback()
             btnBack.setOnClickListener {
                 finish()
             }
@@ -202,11 +204,11 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     }
     private fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
                     chatBotCv.visibleIf(false)
+                    chatBotBtn.startLongClickDescAnim()
                 }  else {
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
                     binding.webView.loadUrl(url)
@@ -216,7 +218,10 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
             }
             webView.let {
                 val onClose = {
-                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                    runOnUiThread {
+                        chatBotBgCl.visibleIf(false)
+                        chatBotBtn.startLongClickDescAnim()
+                    }
                 }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
@@ -233,6 +238,18 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
         }
     }
 
+    private fun addBackBtnCallback() {
+        onBackPressedDispatcher.addCallback(this) {
+            if (binding.chatBotBgCl.isVisible) {
+                binding.chatBotBgCl.visibleIf(false)
+                binding.chatBotCv.visibleIf(false)
+                binding.chatBotBtn.startLongClickDescAnim()
+                return@addCallback
+            } else {
+                finish()
+            }
+        }
+    }
     private fun initReceiver() {
         userUpdateReceiver = object: BroadcastReceiver() {
             override fun onReceive(ctx: Context?, intent: Intent?) {

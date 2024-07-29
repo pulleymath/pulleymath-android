@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pa
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.view.DragEvent
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -35,6 +36,7 @@ import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
+import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
@@ -47,6 +49,7 @@ class PatternQuizFragment() : Fragment(),
 //    ProblemGestureListener,
     PatternScrollListener,
     PencilPanelListener,
+    PathAndImageUndoCountListener,
     PathRedoUndoCountChangeListener, MemoListener {
 
     val screenWidth by lazy { DisplayUtils.getScreenWidth(requireContext()) }
@@ -124,14 +127,16 @@ class PatternQuizFragment() : Fragment(),
                         memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                         memoView.removePathRedoUndoCountChangeListener()
                         memoView.setPathRedoUndoCountChangeListener(this@PatternQuizFragment)
+                        memoView.removePathAndImageUndoCountListener()
+                        memoView.setPathAndImageUndoCountListener(this@PatternQuizFragment)
 //                        memoView.setPatternMemoId(patternId, it.patternQuizId)
                         memoView.clearBitmap()
                         val memoId = "patternmemo&&${user?.studentID}&&${patternId}&&${it.patternQuizId}"
                         memoView.loadOnConceptStudy(memoId) {
-                            println("aspasp pattern 메모 없어서 새로운 db에서 찾으러감")
                             val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
 
                             vm.getMemoFromParams(chapterId, it.patternQuizId, StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
+                                println("asoaso prev setmemo")
                                 memoView.setMemo(it) {
                                     viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
                                     viewModel.isAllMemoRemovedOnQuiz = false
@@ -187,9 +192,10 @@ class PatternQuizFragment() : Fragment(),
                     }.attach()
                     setConceptDrawer(false)
                 }
-
                 rootCl.setOnDragListener { view, dragEvent ->
                     // floating answer sheet 컨트롤
+                    val dragState = (dragEvent.localState as? View)?.id ?: -1
+                    if (floatingAnswerSheet.id != dragState) return@setOnDragListener (activity as? LearningCourseActivity)?.binding?.chatBotBtn?.addDragListener(dragEvent) == true
                     onFloatingAnswerSheetDragListener(view, dragEvent)
                 }
                 lifecycle.addObserver(floatingAnswerSheet)
@@ -451,13 +457,20 @@ class PatternQuizFragment() : Fragment(),
         sheet.binding.selectionAnswerView.setAnswerByRawString(quiz.userAnswer)
         quiz.userAnswer?.let { sheet.binding.shortAnswerView.setText(it, TextView.BufferType.EDITABLE) }
     }
+//    var isResumed = false
 
     override fun onResume() {
+//        isResumed = true
         super.onResume()
 //        setHintBtn()
         (activity as LearningCourseActivity).run {
-//            println("aspasp chatbot Info inIT from onresume")
             viewModel.chatBotInfo = this@PatternQuizFragment.viewModel.chatbotInfo
+
+            // resume 될때 loadedBitmap 메모가 존재하는지 판단
+            // onImageAndPathUndoCountChanged 를 통해서 첫 로드시 메모가 존재하는지 판단하고싶은데 어렵다
+            viewModel.isMemoSavedImageOrStrokeExist =
+                this@PatternQuizFragment.viewModel.alreadyHaveMemoOnThisQuiz || this@PatternQuizFragment.viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz
+
         }
         resetMemoView()
         resumePencilcaseView()
@@ -512,6 +525,14 @@ class PatternQuizFragment() : Fragment(),
         if (viewModel.currQuizIndex != 0) {
             binding.floatingAnswerSheet.setInitPosition()
         }
+    }
+    fun getResumedMemoOnBase64(): String? {
+        if (isResumed) {
+            val memoByteArray = binding.memoView.getMemoBase64()
+            val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: return null
+            return memoBase64
+        }
+        return null
     }
     fun toggleDrawer() {
         val value = viewModel.showConceptSolutionView.value?.not()
@@ -578,6 +599,7 @@ class PatternQuizFragment() : Fragment(),
     }
 
     override fun onPause() {
+//        isResumed = false
         super.onPause()
 //        println("aspasp PQF onPause")
         saveMemo()
@@ -588,6 +610,7 @@ class PatternQuizFragment() : Fragment(),
 
     override fun onStop() {
         super.onStop()
+//        binding.memoView.removePathAndImageUndoCountListener()
     }
     private fun saveMemo () {
         with(binding) {
@@ -616,6 +639,14 @@ class PatternQuizFragment() : Fragment(),
     override fun onRemoveAllMemo() {
         viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
         viewModel.isAllMemoRemovedOnQuiz = true
+    }
+
+    override fun onImageAndPathUndoCountChanged(undoCount: Int) {
+        // 첫 로드시 loadedBitmap 메모가 존재하는지 판단은 onResume에서 하고 그 이후 메모 존재여부는 undoCount로 한다.
+        if (isResumed) {
+            (activity as? LearningCourseActivity)?.setMemoImageAndPathUndoCountChanged(undoCount)
+        }
+
     }
 }
 

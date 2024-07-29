@@ -28,6 +28,7 @@ import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.MemoView
+import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
@@ -36,6 +37,7 @@ import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 class LCCookingFragment() : Fragment(),
     PencilPanelListener,
     PlusMinusEnterKeypadListener,
+//    PathAndImageUndoCountListener,
     PathRedoUndoCountChangeListener {
 //    MemoListener
     companion object {
@@ -118,6 +120,8 @@ class LCCookingFragment() : Fragment(),
                     memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
+//                    memoView.removePathAndImageUndoCountListener()
+//                    memoView.setPathAndImageUndoCountListener(this@LCCookingFragment)
                     memoView.setCookingMemoId(chapterId, cookingId)
                     memoView.clearBitmap()
                     memoView.load()
@@ -204,6 +208,8 @@ class LCCookingFragment() : Fragment(),
                                     cookingQuizzes.memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                                     cookingQuizzes.memoView.removePathRedoUndoCountChangeListener()
                                     cookingQuizzes.memoView.setPathRedoUndoCountChangeListener(this@LCCookingFragment)
+//                                    cookingQuizzes.memoView.removePathAndImageUndoCountListener()
+//                                    cookingQuizzes.memoView.setPathAndImageUndoCountListener(this@LCCookingFragment)
                                     cookingQuizzes.memoView.setMemoSavedName(chapterId,cookingId,"cooking_quiz_${selectedIndex}")
                                     cookingQuizzes.memoView.clearBitmap()
                                     cookingQuizzes.memoView.load()
@@ -291,16 +297,20 @@ class LCCookingFragment() : Fragment(),
                 lp.width = ViewGroup.LayoutParams.MATCH_PARENT
                 lp.height = vWidth
                 webView.layoutParams = lp
-
-                webView.webViewClient = CookingWebClient({ url ->
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    (activity as LearningCourseActivity).hidePenPanel()
-                },
-                {
-                    itemBinding.loadingContainer.hide(300)
-                })
+                webView.setOnDragListener { view, motionEvent ->
+                    (activity as? LearningCourseActivity)?.binding?.chatBotBtn?.addDragListenerFromYoutubeWebView(motionEvent)
+                    true
+                }
+                webView.webViewClient = CookingWebClient(
+                    urlLoadingCallback = { url ->
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        (activity as LearningCourseActivity).hidePenPanel()
+                     },
+                    pageFinishedCallback = {
+                        itemBinding.loadingContainer.hide(300)
+                    })
                 webView.webChromeClient = CookingChromeClient(requireActivity())
-                webView.addJavascriptInterface(CookingWebClientClickEventListener {
+                webView.addJavascriptInterface(CookingWebClientClickEventListener(listener = {
                     val cookingId = viewModel.cookingInfo.value?.conceptCookingId ?: -999
                     LogUtils.logEvent(
                         requireContext(),
@@ -310,7 +320,7 @@ class LCCookingFragment() : Fragment(),
                         "유튜브",
                         "conceptCookingId_$cookingId"
                     )
-                }, "androidInterface")
+                }), "androidInterface")
                 webView.settings.apply {
                     javaScriptEnabled = true
                     mediaPlaybackRequiresUserGesture = false
@@ -325,7 +335,8 @@ class LCCookingFragment() : Fragment(),
             val videoUUID = item.video!!.uuid
             val startTimeQuery = if(item.video!!.startTime == null) "" else "&start=${item.video!!.startTime}"
             val endTimeQuery = if(item.video!!.endTime == null) "" else "&end=${item.video!!.endTime}"
-            return "https://www.youtube.com/embed/${videoUUID}?${startTimeQuery}${endTimeQuery}"
+            val hideMoreVideos = "&rel=0"
+            return "https://www.youtube.com/embed/${videoUUID}?${startTimeQuery}${endTimeQuery}${hideMoreVideos}"
         }
         private fun setOnQuizView (quizBinding: FragmentCookingQuizBinding, excs: CookingExercise) {
             listOfNotNull(
@@ -612,6 +623,10 @@ class LCCookingFragment() : Fragment(),
     override fun onRedoCountChanged(redoCount: Int) {
         (activity as? LearningCourseActivity)?.setRedoCount(redoCount)
     }
+
+//    override fun onImageAndPathUndoCountChanged(undoCount: Int) {
+//        (activity as? LearningCourseActivity)?.setMemoImageAndPathUndoCountChanged(undoCount)
+//    }
 
 //    override fun onDrawAStroke(memoCase: StudyMemoCase) {
 //        TODO("Not yet implemented")

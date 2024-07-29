@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.ProblemType
 import com.freewheelin.pulley.legacy.model.Result
@@ -163,15 +164,15 @@ class AnswerView : ConstraintLayout,
         dragIv.extensionTouchArea(8.toPx())
         dragIv.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val data = ClipData.newPlainText("", "")
+                val data = ClipData.newPlainText("answerview", "")
                 val shadowBuilder = AnswerShadowBuilder(this)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    this.startDragAndDrop(data, shadowBuilder, view, 0)
+                    dragIv.startDragAndDrop(data, shadowBuilder, this, 0)
                 } else {
-                    this.startDrag(data, shadowBuilder, view, 0)
+                    dragIv.startDrag(data, shadowBuilder, this, 0)
                 }
 //                this.visibility = View.INVISIBLE
-                true
+                false
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 this.visibility = View.VISIBLE
                 false

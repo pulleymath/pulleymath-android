@@ -162,32 +162,15 @@
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/chatBotBtn"
+        <com.freewheelin.pulley.revision2023.ui.view.ChatBotFloatingBtn
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
+            android:id="@+id/chatBotBtn"
+            android:layout_marginStart="48dp"
             android:layout_marginBottom="48dp"
-            app:cardCornerRadius="999dp"
-            app:cardElevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/chatBotLottie"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:lottie_speed="1"
-                app:lottie_repeatMode="restart"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_fileName="ai_pulling_floating.json"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-        </androidx.cardview.widget.CardView>
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

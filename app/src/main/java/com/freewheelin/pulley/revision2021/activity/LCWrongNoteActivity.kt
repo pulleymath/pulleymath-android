@@ -218,7 +218,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
 
     fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
+            chatBotBtn.setInitPosition()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
@@ -234,10 +234,24 @@ class LCWrongNoteActivity : AppCompatActivity() {
                 val onClose = {
                     runOnUiThread { chatBotBgCl.visibleIf(false) }
                 }
+                val onMemoExist: () -> Boolean = {
+                    viewModel.isMemoSavedImageOrStrokeExist
+                }
+                val onAnalyzedMemo: () -> String = {
+                    val memoBase64 = supportFragmentManager.fragments.mapNotNull {
+                        (it as? LCWrongNoteFragment)?.run {
+                            return@mapNotNull getResumedMemoOnBase64()
+                        }
+                    }.firstOrNull() ?: ""
+
+                    memoBase64
+                }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
-                    onCloseListener = onClose,
-                    errorCloseListener = onClose
+                        onCloseListener = onClose,
+                        errorCloseListener = onClose,
+                        analyzedMemoListener = onAnalyzedMemo,
+                        isMemoExistListener = onMemoExist
                 ), "android")
 
                 it.settings.apply {
@@ -380,6 +394,9 @@ class LCWrongNoteActivity : AppCompatActivity() {
     }
     fun setRedoCount(count: Int) {
         binding.penPanel.redoCount = count
+    }
+    fun setMemoImageAndPathUndoCountChanged(undoCount: Int) {
+        viewModel.isMemoSavedImageOrStrokeExist = undoCount > 0
     }
     private fun hideSystemUI() {
 //        if (Build.VERSION.SDK_INT < 16) {

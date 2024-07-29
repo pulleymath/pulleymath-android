@@ -2,6 +2,7 @@ package com.freewheelin.pulley.revision2021.activity.learningcourse.fragments
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.view.DragEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
+import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
@@ -39,6 +41,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class LCWrongNoteFragment : Fragment(),
     WrongNoteScrollListener, PencilPanelListener, FloatingAnswerDelegate,
+    PathAndImageUndoCountListener,
     PathRedoUndoCountChangeListener, MemoListener {
 
     companion object {
@@ -86,13 +89,14 @@ class LCWrongNoteFragment : Fragment(),
                     memoView.memoCase = StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM
                     memoView.removePathRedoUndoCountChangeListener()
                     memoView.setPathRedoUndoCountChangeListener(this@LCWrongNoteFragment)
+                    memoView.removePathAndImageUndoCountListener()
+                    memoView.setPathAndImageUndoCountListener(this@LCWrongNoteFragment)
                     memoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
                     memoView.clearBitmap()
                     val studentId = MyApplication.user?.studentID ?: ""
                     val memoId = "lcwrongnotememo&&${studentId}&&${it.userQuizSolvingHistoryId}&&${it.refPatternQuizId}"
                     memoView.load(memoId) {
                         viewModel.getMemoFromParams(chapterId, it.userQuizSolvingHistoryId, StudyMemoCase.CONCEPT_LEARNING_WRONG_PROBLEM) {
-                            println("aspasp 새로운디비 에서 찾으러옴 존재하나? : ${it != null}")
                             memoView.setMemo(it) {
                                 viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
                                 viewModel.isAllMemoRemovedOnQuiz = false
@@ -134,9 +138,10 @@ class LCWrongNoteFragment : Fragment(),
                 }
                 leftScrollView.scrollEndCallback = quizUserInputDebounce
 
-
                 rootCl.setOnDragListener { view, dragEvent ->
+                    val dragState = (dragEvent.localState as? View)?.id ?: -1
                     // floating answer sheet 컨트롤
+                    if (floatingAnswerSheet.id != dragState) return@setOnDragListener (activity as? LCWrongNoteActivity)?.binding?.chatBotBtn?.addDragListener(dragEvent) == true
                     onFloatingAnswerSheetDragListener(view, dragEvent)
                 }
                 lifecycle.addObserver(floatingAnswerSheet)
@@ -174,6 +179,8 @@ class LCWrongNoteFragment : Fragment(),
         super.onResume()
         (activity as LCWrongNoteActivity).run {
             viewModel.chatBotInfo = this@LCWrongNoteFragment.viewModel.chatbotInfo
+            viewModel.isMemoSavedImageOrStrokeExist =
+                this@LCWrongNoteFragment.viewModel.alreadyHaveMemoOnThisQuiz || this@LCWrongNoteFragment.viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz
         }
         resetMemoView()
         resumePencilcaseView()
@@ -231,6 +238,14 @@ class LCWrongNoteFragment : Fragment(),
     }
     fun resumeFloatingAnswerSheetLocation() {
         binding.floatingAnswerSheet.setInitPosition()
+    }
+    fun getResumedMemoOnBase64(): String? {
+        if (isResumed) {
+            val memoByteArray = binding.memoView.getMemoBase64()
+            val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: return null
+            return memoBase64
+        }
+        return null
     }
     fun toggleDrawer() {
         val value = viewModel.showConceptSolutionView.value?.not()
@@ -404,5 +419,11 @@ class LCWrongNoteFragment : Fragment(),
     override fun onRemoveAllMemo() {
         viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
         viewModel.isAllMemoRemovedOnQuiz = true
+    }
+
+    override fun onImageAndPathUndoCountChanged(undoCount: Int) {
+        if (isResumed) {
+            (activity as? LCWrongNoteActivity)?.setMemoImageAndPathUndoCountChanged(undoCount)
+        }
     }
 }

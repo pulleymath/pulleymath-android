@@ -324,25 +324,49 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
     fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
+            chatBotBtn.setInitPosition()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
+//                    println("aspasp windowhasmemo ???")
+//                    webView.evaluateJavascript("window.hasMemo(true)", null)
+
                 } else {
                     val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
-                    binding.webView.loadUrl(url)
+                    webView.loadUrl(url)
                     chatBotBgCl.visibleIf(true)
                     chatBotCv.visibleIf(true)
                 }
+            }
+            chatBotBtn.removeDragListener()
+            rootView.setOnDragListener { view, dragEvent ->
+                val dragState = (dragEvent.localState as? View)?.id ?: -1
+                if (chatBotBtn.id == dragState) return@setOnDragListener binding.chatBotBtn.addDragListener(dragEvent)
+
+                true
             }
             webView.let {
                 val onClose = {
                     runOnUiThread { chatBotBgCl.visibleIf(false) }
                 }
+                val onMemoExist: () -> Boolean = {
+                    viewModel.isMemoSavedImageOrStrokeExist
+                }
+                val onAnalyzedMemo: () -> String = {
+                    val memoBase64 = supportFragmentManager.fragments.map {
+                        (it as? LCPatternFragment)?.run {
+                            return@map getResumedMemoOnBase64()
+                        }
+                    }.find { (it ?: "").isNotEmpty() } ?: ""
+
+                    memoBase64
+                }
                 it.addJavascriptInterface(ChatBotClientClickEventListener (
                     onCloseListener = onClose,
-                    errorCloseListener = onClose
+                    errorCloseListener = onClose,
+                    analyzedMemoListener = onAnalyzedMemo,
+                    isMemoExistListener = onMemoExist
                 ), "android")
 
                 it.settings.apply {
@@ -380,6 +404,10 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     private fun backBtnAction() {
         if (isChannelIoForeground) {
             beginBlackChannelIoFrame()
+        } else if (binding.chatBotBgCl.isVisible) {
+            binding.chatBotBgCl.visibleIf(false)
+            binding.chatBotCv.visibleIf(false)
+            binding.chatBotBtn.startLongClickDescAnim()
         } else {
             finishWithResult()
         }
@@ -653,6 +681,9 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         }.reduce { acc, next -> acc + next }
 
         binding.penPanel.redoCount = redoCount
+    }
+    fun setMemoImageAndPathUndoCountChanged(undoCount: Int) {
+        viewModel.isMemoSavedImageOrStrokeExist = undoCount > 0
     }
     override fun onDestroy() {
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)

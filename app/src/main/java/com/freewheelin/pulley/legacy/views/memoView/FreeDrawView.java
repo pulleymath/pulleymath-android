@@ -71,6 +71,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     private PathDrawnListener mPathDrawnListener;
     private PathRedoUndoCountChangeListener mPathRedoUndoCountChangeListener;
+    private PathAndImageUndoCountListener mPathAndImageUndoCountListener;
 
     public FreeDrawView(Context context) {
         this(context, null);
@@ -394,6 +395,24 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             }
         }
     }
+    public int getImageAndStrokeUndoCount() {
+        if (mPaths.size() > 0) {
+            return mPaths.size();
+        } else {
+            Log.d(TAG, "getImageAndStrokeUndoCount: mPath 0");
+//            if (isCookingMemo && loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+            if (loadedBitmapAtWillRedo == null && loadedBitmap == null) {
+                Log.d(TAG, "getImageAndStrokeUndoCount: mPath 0, null , null");
+                return 0;
+//            } else if (isCookingMemo && loadedBitmapAtWillRedo == null) {
+            } else if (loadedBitmapAtWillRedo == null || loadedBitmap != null) {
+                Log.d(TAG, "getImageAndStrokeUndoCount: mPath 0,loadedBitmapAtWillRedo  null or loadedBitmap != null");
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
 
     /**
      * Get how many redo operations are available
@@ -494,6 +513,19 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     public void removePathRedoUndoCountChangeListener() {
         mPathRedoUndoCountChangeListener = null;
     }
+    /**
+     * 이미지와 패스의 총 undo Count 리스너 추가
+     */
+    public void setPathAndImageUndoCountListener(PathAndImageUndoCountListener listener) {
+        mPathAndImageUndoCountListener = listener;
+    }
+
+    /**
+     * 이미지와 패스의 총 undo Count 리스너 지우기
+     */
+    public void removePathAndImageUndoCountListener() {
+        mPathAndImageUndoCountListener = null;
+    }
 
     /**
      * Get a serializable object with all the needed info about the current draw and state
@@ -588,6 +620,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         if (mPathRedoUndoCountChangeListener != null) {
             mPathRedoUndoCountChangeListener.onRedoCountChanged(getRedoCount());
             mPathRedoUndoCountChangeListener.onUndoCountChanged(getUndoCount());
+        }
+        if (mPathAndImageUndoCountListener != null) {
+            mPathAndImageUndoCountListener.onImageAndPathUndoCountChanged(getImageAndStrokeUndoCount());
         }
     }
     public void notifyRedoUndoCountSetting() {

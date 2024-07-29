@@ -88,7 +88,7 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@MockListActivity
-
+            addBackBtnCallback()
             initChatBot()
             var count = 1
             tabFragments.forEach {
@@ -137,11 +137,11 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
 
     private fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
                     chatBotCv.visibleIf(false)
+                    chatBotBtn.startLongClickDescAnim()
                 }  else {
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
                     binding.webView.loadUrl(url)
@@ -151,7 +151,10 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
             }
             webView.let {
                 val onClose = {
-                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                    runOnUiThread {
+                        chatBotBgCl.visibleIf(false)
+                        chatBotBtn.startLongClickDescAnim()
+                    }
                 }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (

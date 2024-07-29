@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.util.Base64
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -52,6 +53,7 @@ import com.freewheelin.pulley.revision2021.views.AssessmentGalleryViewDelegate
 import com.freewheelin.pulley.revision2021.views.AssessmentGalleryView
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.*
+import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
@@ -72,6 +74,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
     ProblemGestureListener,
     AssessmentGalleryViewDelegate,
     PencilPanelListener,
+    PathAndImageUndoCountListener,
     PathRedoUndoCountChangeListener {
 
     private val binding: ActivityAssessmentTestSolveBinding by lazy {
@@ -143,8 +146,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
     private fun getExtra() {
         with(viewModel) {
             selectedWorkbook = intent.getSerializableExtra(SELECTED_WORKBOOK) as? AssessmentWorkbook
-
-            isReview.value = intent.getBooleanExtra(IS_REVIEW, false)
+            isReview.postValue(intent.getBooleanExtra(IS_REVIEW, false))
 
             selectedWorkbook?.let {
                 workbookId = it.id
@@ -186,12 +188,9 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
     fun observeLiveData() {
         viewModel.apply {
-            if (viewModel.isReview.value == true) {
-                currentProblem.observe(this@AssessmentSolveActivity) {
-                    if (it == null) return@observe
-                    viewModel.makeChatBotInfo(it)
-                }
-                return
+            currentProblem.observe(this@AssessmentSolveActivity) {
+                if (it == null) return@observe
+                viewModel.makeChatBotInfo(it)
             }
             problemIndex.observe(this@AssessmentSolveActivity) {
                 val problemNo = it + 1
@@ -201,30 +200,9 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
                 if (it || viewModel.workbookSeq > 1) {
                     binding.chatBotBtn.visibleIf(true)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        delay(3000)
-                        val anim = AnimationUtils.loadAnimation(this@AssessmentSolveActivity, R.anim.slide_from_left_with_opacity)
-                        binding.chatBotIntroduceTv.startAnimation(anim)
-                        anim.setAnimationListener(object: Animation.AnimationListener {
-                            override fun onAnimationStart(p0: Animation?) {}
-                            override fun onAnimationRepeat(p0: Animation?) {}
-                            override fun onAnimationEnd(p0: Animation?) {
-                                binding.chatBotIntroduceTv.visibility = View.VISIBLE
-
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    val anim = AnimationUtils.loadAnimation(this@AssessmentSolveActivity, R.anim.slide_to_left_with_opacity)
-                                    anim.setAnimationListener(object: Animation.AnimationListener {
-                                        override fun onAnimationStart(p0: Animation?) {}
-                                        override fun onAnimationRepeat(p0: Animation?) {}
-                                        override fun onAnimationEnd(p0: Animation?) {
-                                            binding.chatBotIntroduceTv.visibility = View.INVISIBLE
-                                        }
-                                    })
-                                    binding.chatBotIntroduceTv.startAnimation(anim)
-                                }, 2000)
-                            }
-                        })
-                    }
+                    binding.chatBotBtn.startDescriptionAnim()
+                } else {
+                    binding.chatBotBtn.visibleIf(false)
                 }
             }
         }
@@ -232,7 +210,9 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
     private fun fetchProblem() {
         viewModel.let {
-            if (viewModel.isReview.value == true) {
+            val isReview = intent.getBooleanExtra(IS_REVIEW, false)
+
+            if (isReview) {
                 it.getTestResult { that ->
                     this@AssessmentSolveActivity.runOnUiThread {
                         onProblemSelected(that, false)
@@ -301,7 +281,8 @@ class AssessmentSolveActivity : AppCompatActivity(),
             problemMemoView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
             problemMemoView.removePathRedoUndoCountChangeListener()
             problemMemoView.setPathRedoUndoCountChangeListener(this@AssessmentSolveActivity)
-
+            problemMemoView.removePathAndImageUndoCountListener()
+            problemMemoView.setPathAndImageUndoCountListener(this@AssessmentSolveActivity)
 //            solutionMemoView.set(pencilcaseView)
 
             val imageWidth = when (this@AssessmentSolveActivity.densityLevel) {
@@ -339,7 +320,13 @@ class AssessmentSolveActivity : AppCompatActivity(),
                     }
                 }
             }
+            chatBotBtn.removeDragListener()
             baseCl.setOnDragListener { view, dragEvent ->
+                val dragState = (dragEvent.localState as? View)?.id ?: -1
+
+                if (chatBotBtn.id == dragState) return@setOnDragListener binding.chatBotBtn.addDragListener(dragEvent)
+                if (answerView.id != dragState) return@setOnDragListener true
+
                 when (dragEvent.action) {
                     DragEvent.ACTION_DRAG_LOCATION -> {
                         val answerHeight = answerView.height
@@ -450,11 +437,11 @@ class AssessmentSolveActivity : AppCompatActivity(),
 
     private fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
                     chatBotCv.visibleIf(false)
+                    chatBotBtn.startLongClickDescAnim()
                 } else {
                     val infoStr = if (viewModel.chatBotInfo == null) "" else viewModel.chatBotInfo.toString()
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot?initInfo=${infoStr}"
@@ -465,12 +452,25 @@ class AssessmentSolveActivity : AppCompatActivity(),
             }
             webView.let {
                 val onClose = {
-                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                    runOnUiThread {
+                        chatBotBgCl.visibleIf(false)
+                        chatBotBtn.startLongClickDescAnim()
+                    }
+                }
+                val onMemoExist: () -> Boolean = {
+                    viewModel.isMemoSavedImageOrStrokeExist
+                }
+                val onAnalyzedMemo: () -> String = {
+                    val memoByteArray = binding.problemMemoView.getMemoBase64()
+                    val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: ""
+                    memoBase64
                 }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,
-                        errorCloseListener = onClose
+                        errorCloseListener = onClose,
+                        analyzedMemoListener = onAnalyzedMemo,
+                        isMemoExistListener = onMemoExist
                     ), "android")
 
                 it.settings.apply {
@@ -596,12 +596,6 @@ class AssessmentSolveActivity : AppCompatActivity(),
                 binding.answerView.clearFocusOnShortAnswer()
             }
         }
-
-        // 리뷰중이고 틀린문제면 해설 표시
-        viewModel.apply {
-            val isWrongAnswer = problem?.is_correct == false
-            isEnableSolutionSwitch.postValue(isWrongAnswer)
-        }
     }
 
     var lastFiveMinTimer: CountDownTimer? = null
@@ -614,7 +608,9 @@ class AssessmentSolveActivity : AppCompatActivity(),
             Handler(Looper.getMainLooper()).postDelayed({
                 setScreenDimComeInBeforeTestStart(serverTimeNow)
             }, 800)
-            if (viewModel.isReview.value == true) return@getServerTime
+            val isReview = intent.getBooleanExtra(IS_REVIEW, false)
+
+            if (isReview) return@getServerTime
 
             Handler(Looper.getMainLooper()).postDelayed({
                 setRemainingTimer(serverTimeNow)
@@ -743,7 +739,9 @@ class AssessmentSolveActivity : AppCompatActivity(),
                     supportFragmentManager.findFragmentByTag("f" + pager.adapter?.getItemId(pager.currentItem)) as? AssessmentSolveConceptFragment
                 conceptFragment?.gestureInit()
 
-                problemMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p")
+                problemMemoView.loadFromAssessment("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_p") {
+                    viewModel.isMemoSavedImageOrStrokeExist = true
+                }
                 penPanel.resetMode()
 //                solutionMemoView.load("${user?.studentID}_${problem.id}_${problem.workbook_id ?: 0}_s")
                 answerView.configureUI(problem, false)
@@ -1069,6 +1067,10 @@ class AssessmentSolveActivity : AppCompatActivity(),
         }.reduce { acc, next -> acc + next }
 
         binding.penPanel.redoCount = redoCount
+    }
+
+    override fun onImageAndPathUndoCountChanged(undoCount: Int) {
+        viewModel.isMemoSavedImageOrStrokeExist = undoCount > 0
     }
 }
 

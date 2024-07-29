@@ -265,6 +265,15 @@ class LCPatternFragment : Fragment(), LCTouchListener {
             }
         }
     }
+    fun getResumedMemoOnBase64(): String? {
+        return childFragmentManager.fragments.map {
+            (it as PatternQuizFragment).run {
+                val memo = getResumedMemoOnBase64()
+//                println("aspasp memo :${memo}")
+                return@map memo
+            }
+        }.find { (it ?: "").isNotEmpty() }
+    }
 
     fun setQuizImageScale(scale: Float) {
         binding.pagerWrapper.scaleFactor = scale

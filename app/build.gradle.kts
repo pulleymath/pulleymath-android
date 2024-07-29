@@ -32,8 +32,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 35
-        versionCode = 513
-        versionName = "1.6.93"
+        versionCode = 516
+        versionName = "1.6.96"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

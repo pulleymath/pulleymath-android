@@ -124,7 +124,6 @@ object ContentManager {
                             val latter = userAnswer.substring(18, userAnswer.length).toLongOrNull()?.toString()
                             val result = former + latter
                             // 둘중에 하나가 null일 경우
-                            println("aspasp result: ${result}")
                             if (result.contains("null")) null
                             else result
                         } else {

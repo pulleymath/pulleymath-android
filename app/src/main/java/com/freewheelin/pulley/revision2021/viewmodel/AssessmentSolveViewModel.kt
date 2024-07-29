@@ -66,6 +66,7 @@ class AssessmentSolveViewModel : BaseViewModel(), LifecycleObserver {
     var workbookSeq: Int = 0
 
     var chatBotInfo: ChatBotInfo? = null
+    var isMemoSavedImageOrStrokeExist = false
 
     fun onCommentaryShowChanged(buttonView: CompoundButton, isChecked: Boolean) {
         println("buttonView = [$buttonView], isChecked = [$isChecked]")

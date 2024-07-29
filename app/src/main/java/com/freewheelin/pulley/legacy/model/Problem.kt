@@ -342,7 +342,6 @@ open class Problem: Serializable {
                         val latter = it.substring(18, it.length).toLongOrNull()?.toString()
                         val result = former + latter
                         // 둘중에 하나가 null일 경우
-                        println("aspasp result2: ${result}")
                         if (result.contains("null")) null
                         else result
                     } else {

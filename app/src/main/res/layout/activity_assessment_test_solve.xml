@@ -258,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:text="정답/해설 표시"
                         style="@style/b1"
-                        android:textColor="@{ vm.isEnableSolutionSwitch ? @color/gray_600 : @color/gray_800 }"
+                        android:textColor="@{ @color/gray_600 }"
                         visibleIf="@{vm.isReview }"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintTop_toTopOf="@+id/switchCl"
@@ -280,25 +280,12 @@
                             android:layout_height="24dp"
                             android:checked="@{ vm.showSolutionView }"
                             style="@style/Switch.ExtraLight"
-                            visibleIf="@{ vm.isReview &amp;&amp; vm.isEnableSolutionSwitch }"
+                            visibleIf="@{ vm.isReview }"
                             android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
-                            android:enabled="@{vm.isEnableSolutionSwitch}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                        <Switch
-                            android:id="@+id/solutionSwitchDisabled"
-                            android:layout_width="48dp"
-                            android:layout_height="24dp"
-                            android:checked="@{ vm.showSolutionView }"
-                            style="@style/Switch.ExtraLightDisabled"
-                            visibleIf="@{ vm.isReview &amp;&amp; !vm.isEnableSolutionSwitch }"
-                            android:onCheckedChanged="@{vm::onCommentaryShowChanged}"
-                            android:enabled="false"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -359,7 +346,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/bg_white_stroke_gray_300_left"
-                        android:visibility="@{vm.showSolutionView &amp;&amp; vm.currentProblem.is_correct == false ? View.VISIBLE : View.GONE }"
+                        visibleIf="@{ vm.showSolutionView }"
                         app:layout_constraintWidth_percent="0.375"
                         app:layout_constraintStart_toEndOf="@+id/problemContainer"
                         app:layout_constraintTop_toTopOf="parent"
@@ -541,51 +528,16 @@
                     </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/chatBotBtn"
+                <com.freewheelin.pulley.revision2023.ui.view.ChatBotFloatingBtn
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="48dp"
-                    android:layout_marginBottom="48dp"
-                    app:cardCornerRadius="999dp"
-                    app:cardElevation="1dp"
+                    android:id="@+id/chatBotBtn"
                     android:visibility="gone"
                     tools:visibility="visible"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginBottom="48dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    >
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/chatBotLottie"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        app:lottie_speed="1"
-                        app:lottie_repeatMode="restart"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_fileName="ai_pulling_floating.json"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/chatBotIntroduceTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/h6"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
-                    android:paddingVertical="12dp"
-                    android:paddingHorizontal="16dp"
-                    android:text="문제를 풀다가 모르는 게 있으면 언제든지 물어봐!"
-                    android:textColor="@color/purple_300"
-                    android:background="@drawable/bg_white_stroke_purple_250_round_10"
-                    app:layout_constraintStart_toEndOf="@+id/chatBotBtn"
-                    app:layout_constraintTop_toTopOf="@+id/chatBotBtn"
-                    app:layout_constraintBottom_toBottomOf="@+id/chatBotBtn"
-                    android:layout_marginStart="16dp"
                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

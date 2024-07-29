@@ -69,6 +69,8 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     var currChannelIOImage: ChannelIOImageUploadRes? = null
 
     var chatBotInfo: ChatBotInfo? = null
+    var isMemoSavedImageOrStrokeExist = false
+    var alreadyHaveMemoOnThisQuiz = false
 
     fun fetchCourseList(chapterId: Int, callback: (List<SingleCourseDesc>) -> Unit) {
         selectedChapterId = chapterId

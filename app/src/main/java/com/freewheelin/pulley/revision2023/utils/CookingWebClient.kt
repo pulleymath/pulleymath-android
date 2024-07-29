@@ -24,13 +24,38 @@ class CookingWebClient(
         pageFinishedCallback()
 //        binding.rightViewProgress.visibility = View.GONE
         view?.evaluateJavascript(addMyClickCallBackJs(), null)
+        view?.evaluateJavascript(addPauseListener(), null)
     }
-
+    fun addPauseListener(): String {
+//        아래에 있는 console.log('pauseListener'); 를 빼면 onpause가 동작하지 않는다. 이유를 모르겠음
+        val js = """
+            javascript:
+            console.log('pauseListener');
+            const videoQuery = document.querySelector('video');
+            videoQuery.onpause = () => {
+                const endScreen = document.getElementsByClassName('html5-endscreen')[0];
+                if (endScreen) { endScreen.style.display = 'none' }
+            }
+        """.trimMargin()
+        return js
+    }
     fun addMyClickCallBackJs(): String {
         var js = "javascript:"
         js += "function clickListener(event){" +
-            "if(event.target.className == null){androidInterface.clickListener(event.target.id)}" +
-            "else{androidInterface.clickListener(event.target.className)}}"
+                "if(event.target.className == null){androidInterface.clickListener(event.target.id)}" +
+                "else{androidInterface.clickListener(event.target.className)}" +
+                "const overlayElement = document.getElementsByClassName('ytp-pause-overlay-container')[0];" +
+                "setTimeout(() => { " +
+                    "if (overlayElement) { overlayElement.style.display = 'none' }" +
+                " }, 100);" +
+                "const videoElement = document.querySelector('video');" +
+                "videoElement.onended = (event) => {" +
+//                    "console.log('aspasp video ended');" +
+                    "const endScreen = document.getElementsByClassName('html5-endscreen')[0];" +
+                    "if (endScreen) { endScreen.style.display = 'none' }" +
+                "}" +
+                // 여기에 videoElement.onpause를 달면 동작하지 않아서 위에 addPauseListener로 뺌
+            "}"
         js += "document.addEventListener(\"click\",clickListener,true);"
         return js
     }

@@ -35,6 +35,7 @@ class LCWrongNoteAViewModel : BaseViewModel(), LifecycleObserver {
     val isPagerLastIndex by lazy { MutableLiveData(false) }
     var selectedChapterId: Int = -1
     var chatBotInfo: ChatBotInfo? = null
+    var isMemoSavedImageOrStrokeExist = false
 
     fun init(list: List<LCWrongNoteMapCard>, noteItem: LCWrongNoteMapCard, title: String, chapterId: Int) {
         headerTitle.postValue(title)

@@ -21,6 +21,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.ScaleAnimation
 import android.view.inputmethod.InputMethodManager
+import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebStorage
@@ -83,7 +84,6 @@ import com.freewheelin.pulley.revision2023.ui.fragment.PatternStudyFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
-import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.revision2023.viewmodel.MainActViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -135,6 +135,11 @@ class MainActivity : PermissionActivity(),
                 return@addCallback
             } else if (binding.rootDl.isDrawerOpen(GravityCompat.END)) {
                 viewModel.toggleDrawer()
+                return@addCallback
+            } else if (binding.chatBotBgCl?.isVisible == true) {
+                binding.chatBotBgCl?.visibleIf(false)
+                binding.chatBotCv?.visibleIf(false)
+                binding.chatBotBtn?.startLongClickDescAnim()
                 return@addCallback
             }
 
@@ -254,10 +259,11 @@ class MainActivity : PermissionActivity(),
 
     fun initChatBot() {
         binding.apply {
-            chatBotLottie?.playAnimation()
+            chatBotBtn?.setInitPosition()
             chatBotBtn?.setOnClickListener {
                 if (chatBotBgCl?.isVisible === true) {
                     chatBotBgCl?.visibleIf(false)
+                    chatBotBtn?.startLongClickDescAnim()
                 } else {
                     val url = Network.webAppUrl + "/ottway?token=${token}&uri=chat-bot"
                     binding.webView?.loadUrl(url)
@@ -269,6 +275,7 @@ class MainActivity : PermissionActivity(),
                     onCloseListener = {
                         runOnUiThread {
                             chatBotBgCl?.visibleIf(false)
+                            chatBotBtn?.startLongClickDescAnim()
                         }
                     }, errorCloseListener = {
                         runOnUiThread {
@@ -630,7 +637,6 @@ class MainActivity : PermissionActivity(),
         viewModel.apply {
             assessmentMetadata.observe(this@MainActivity) {
                 val _skin = AssessmentDesignSkin.convertGroupCodeToSkin(it?.group_code)
-                println("aspasp metadata ${_skin}")
                 assessmentDesignSkin = _skin
                 binding.mainTl.univTabName(_skin.univTabText)
 

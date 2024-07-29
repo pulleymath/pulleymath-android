@@ -42,6 +42,7 @@ object Network {
         Server.staging.toString() -> "https://app-staging.pulleymath.com"
         Server.dev.toString() -> "https://app-staging.pulleymath.com"
         else -> "https://app.pulleymath.com"
+//        else -> "http://192.168.0.54:3000"
     }
 
     val mockTestUrl = when (Preferences.onServerAPI.get()) {

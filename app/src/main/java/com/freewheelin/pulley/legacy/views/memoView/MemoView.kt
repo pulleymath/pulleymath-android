@@ -187,23 +187,21 @@ class MemoView: FreeDrawView {
         clearBitmap()
         FileHelper.getSavedStoreFromFile(context, fileName, object : FileHelper.StateExtractorInterface {
             override fun onStateExtracted(state: FreeDrawSerializableState) {
-                println("aspasp fileName:${fileName}, memo loaded")
                 restoreStateFromSerializable(state)
                 FileHelper.deleteSavedStateFile(context, fileName)
             }
 
             override fun onStateExtractionError() {
-                println("aspasp fileName:${fileName}, memo load error")
                 undoAll()
                 errorCb()
             }
         })
     }
-
-    fun load(fileName: String) {
+    fun loadFromAssessment(fileName: String, successCb: () -> Unit) {
         FileHelper.getSavedStoreFromFile(context, fileName, object : FileHelper.StateExtractorInterface {
             override fun onStateExtracted(state: FreeDrawSerializableState) {
                 restoreStateFromSerializable(state)
+                successCb()
             }
 
             override fun onStateExtractionError() {

@@ -28,3 +28,17 @@ fun Context.getStatusBarHeight(): Int {
     }
     return statusbar
 }
+
+
+fun Context.getBottomNavigationBarHeight(): Int {
+//    val screenSizeType = this.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
+    var statusbar = 0
+//    if (screenSizeType != Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+    val resourceId =
+        this.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        statusbar = this.resources.getDimensionPixelSize(resourceId)
+    }
+//    }
+    return statusbar
+}

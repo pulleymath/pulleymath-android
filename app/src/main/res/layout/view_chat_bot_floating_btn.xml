@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:clipToPadding="false"
+    android:padding="1dp"
+    android:layout_height="66dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/floatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="64dp"
+        app:cardElevation="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/chatBotLottie"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:lottie_speed="1"
+            app:lottie_repeatMode="restart"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_fileName="ai_pulling_floating.json"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/chatBotIntroduceTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/h6"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp"
+        android:text="문제를 풀다가 모르는 게 있으면 언제든지 물어봐!"
+        android:textColor="@color/purple_300"
+        android:background="@drawable/bg_white_stroke_purple_250_round_10"
+        app:layout_constraintStart_toEndOf="@+id/floatingButton"
+        app:layout_constraintTop_toTopOf="@+id/floatingButton"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingButton"
+        android:layout_marginStart="16dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

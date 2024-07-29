@@ -137,9 +137,9 @@ class FloatingAnswerSheet: CustomBaseView, AnswerSelectionListener {
                     val data = ClipData.newPlainText("", "")
                     val shadowBuilder = AnswerShadowBuilder(this)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        this.startDragAndDrop(data, shadowBuilder, view, 0)
+                        this.startDragAndDrop(data, shadowBuilder, this, 0)
                     } else {
-                        this.startDrag(data, shadowBuilder, view, 0)
+                        this.startDrag(data, shadowBuilder, this, 0)
                     }
 //                    this.visibility = View.INVISIBLE
                     true

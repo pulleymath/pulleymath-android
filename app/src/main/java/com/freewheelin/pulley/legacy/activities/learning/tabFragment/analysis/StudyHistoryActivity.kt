@@ -183,10 +183,10 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
 
     fun initChatBot() {
         binding.apply {
-            chatBotLottie?.playAnimation()
             chatBotBtn?.setOnClickListener {
                 if (chatBotBgCl?.isVisible === true) {
                     chatBotBgCl?.visibleIf(false)
+                    chatBotBtn?.startLongClickDescAnim()
                 } else {
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
                     binding.webView?.loadUrl(url)
@@ -199,6 +199,7 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                     onCloseListener = {
                         runOnUiThread {
                             chatBotBgCl?.visibleIf(false)
+                            chatBotBtn?.startLongClickDescAnim()
                         }
                     }, errorCloseListener = {
                         runOnUiThread {

@@ -21,7 +21,6 @@ import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.utils.CookingChromeClient
 import com.freewheelin.pulley.revision2023.utils.CookingWebClient
 import com.freewheelin.pulley.revision2023.utils.UnivAdditionalLearningWebClient
-import com.freewheelin.pulley.revision2023.utils.listeners.CookingWebClientClickEventListener
 import com.freewheelin.pulley.revision2023.utils.listeners.UnivAdditionalLearningWebClientClickEventListener
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.Preferences

@@ -175,7 +175,6 @@ class LCWrongNoteFViewModel(application: Application): BaseAndroidViewModel(appl
             memoRepository.upsert(newMemo)
         }
         memoRepository.uploadMemo(req)
-        println("aspasp subId: ${req.subId} : 메모 저장 완료")
 
     }
 

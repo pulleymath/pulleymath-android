@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -124,6 +125,7 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
 //                init()
             initAdapter()
             initChatBot()
+            addBackBtnCallback()
 //            changeFilterAndFetchNotes(binding.tabLayout.selectedTabPosition)
             backBtn.setOnClickListener {
                 finish()
@@ -203,13 +205,25 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
         }
     }
 
+    private fun addBackBtnCallback() {
+        onBackPressedDispatcher.addCallback(this) {
+            if (binding.chatBotBgCl.isVisible) {
+                binding.chatBotBgCl.visibleIf(false)
+                binding.chatBotCv.visibleIf(false)
+                binding.chatBotBtn.startLongClickDescAnim()
+                return@addCallback
+            } else {
+                finish()
+            }
+        }
+    }
     private fun initChatBot() {
         binding.apply {
-            chatBotLottie.playAnimation()
             chatBotBtn.setOnClickListener {
                 if (chatBotBgCl.isVisible) {
                     chatBotBgCl.visibleIf(false)
                     chatBotCv.visibleIf(false)
+                    chatBotBtn.startLongClickDescAnim()
                 }  else {
                     val url = Network.webAppUrl + "/ottway?token=$token&uri=chat-bot"
                     binding.webView.loadUrl(url)
@@ -219,7 +233,10 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
             }
             webView.let {
                 val onClose = {
-                    runOnUiThread { chatBotBgCl.visibleIf(false) }
+                    runOnUiThread {
+                        chatBotBgCl.visibleIf(false)
+                        chatBotBtn.startLongClickDescAnim()
+                    }
                 }
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (

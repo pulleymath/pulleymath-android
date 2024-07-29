@@ -5,6 +5,8 @@ import android.webkit.JavascriptInterface
 class ChatBotClientClickEventListener(
     private val onCloseListener: () -> Unit,
     private val errorCloseListener: () -> Unit,
+    private val analyzedMemoListener: () -> String = { "" },
+    private val isMemoExistListener: () -> Boolean = { false },
 ) {
     @JavascriptInterface
     fun onClose() {
@@ -14,5 +16,14 @@ class ChatBotClientClickEventListener(
     @JavascriptInterface
     fun errorClose() {
         errorCloseListener()
+    }
+
+    @JavascriptInterface
+    fun analyzedMemo(): String {
+        return analyzedMemoListener()
+    }
+    @JavascriptInterface
+    fun isMemoExist(): Boolean {
+        return isMemoExistListener()
     }
 }
