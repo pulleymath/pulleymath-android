@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleObserver
@@ -40,8 +41,9 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initTablet()
+        initUI()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        addBackPressed()
     }
 
     override fun onDestroy() {
@@ -49,11 +51,7 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         super.onDestroy()
     }
 
-    fun onLoginBtnClicked() {
-        startActivity(LoginActivity::class.java)
-    }
-
-    fun onStartBtnClicked() {
+    fun onGuestEnterBtnClicked() {
         binding.progressBar.visibleIf(true)
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "StartActivity", "시작하기", "게스트로그인")
 
@@ -61,7 +59,6 @@ class StartActivity : BaseActivity(), LifecycleObserver {
             user?.token = token
             MyApplication.token = token
             viewModel.fetchUser {
-                binding.progressBar.visibleIf(false)
                 MyApplication.user = it
                 MyApplication.token = it.token
                 viewModel.sendLoginLog(it, it.accountEmail)
@@ -69,23 +66,24 @@ class StartActivity : BaseActivity(), LifecycleObserver {
                     startActivity(Intent(this, MainActivity::class.java))
                     finishAffinity()
                 }
-
             }
         }
     }
 
-    private fun initTablet() {
+    private fun initUI() {
         with(binding) {
+            progressBar.visibleIf(false)
+            guestText.underline()
 
-            startBtn.setOnClickListener {
-                onStartBtnClicked()
+            loginBtn.setOnClickListener {
+                startActivity(LoginActivity::class.java)
             }
-
-            signupTv.setOnClickListener {
+            joinBtn.setOnClickListener {
                 startActivity(SignupActivity::class.java)
             }
-            loginTv.setOnClickListener {
-                startActivity(LoginActivity::class.java)
+
+            guestText.setOnClickListener {
+                onGuestEnterBtnClicked()
             }
 
             val animator = ValueAnimator.ofFloat(0f, 1f)
@@ -101,13 +99,16 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         }
     }
 
-    override fun onBackPressed() {
-        LogUtils.logEvent(this, user, PulleyEvent.DIALOG,"이탈방지", "가지마팝업", "가입화면")
-        DialogUtils.showReluctanceDialog(this, leftBtnCB = {
-            finish()
-        }, rightBtnCB = {
-            onStartBtnClicked()
-        })
+    fun addBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+
+            LogUtils.logEvent(this@StartActivity, user, PulleyEvent.DIALOG, "이탈방지", "가지마팝업", "가입화면")
+            DialogUtils.showReluctanceDialog(this@StartActivity, leftBtnCB = {
+                finish()
+            }, rightBtnCB = {
+                onGuestEnterBtnClicked()
+            })
+        }
     }
 
 }
