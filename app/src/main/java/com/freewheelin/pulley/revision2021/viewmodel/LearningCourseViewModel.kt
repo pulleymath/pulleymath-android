@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
+import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 //import com.freewheelin.pulley.revision2021.model.CourseContentTable
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.StudyChapter
@@ -74,6 +75,7 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     fun fetchCourseList(chapterId: Int, callback: (List<SingleCourseDesc>) -> Unit) {
         selectedChapterId = chapterId
+        ConceptLearningUsageMonitor.startConceptLearning(chapterId)
 
         compositeDisposable += courseRepository.fetchCourseList(chapterId)
             .subscribeOn(Schedulers.io())
