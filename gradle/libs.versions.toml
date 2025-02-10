@@ -40,6 +40,7 @@ material = "1.12.0"
 sqliteJdbc = "3.34.0"
 tedpermissionNormal = "3.3.0"
 viewpager2 = "1.1.0"
+activity = "1.9.1"
 
 [libraries]
 android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
@@ -108,6 +109,7 @@ androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "card
 material = { module = "com.google.android.material:material", version.ref = "material" }
 sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
 tedpermission-normal = { module = "io.github.ParkSangGwon:tedpermission-normal", version.ref = "tedpermissionNormal" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 
 [plugins]

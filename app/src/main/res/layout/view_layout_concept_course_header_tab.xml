@@ -419,7 +419,6 @@
             </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/middleSchoolCl"
             android:layout_width="0dp"
@@ -800,13 +799,12 @@
                 android:layout_marginTop="48dp"
                 android:layout_marginHorizontal="48dp"
                 android:orientation="horizontal"
-                visibleIf="@{ isTablet }"
+                visibleIf="@{ false }"
                 tools:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside">
-                <!--                visibleIf="@{ isTablet }"-->
 
 
                 <LinearLayout
@@ -817,7 +815,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/elementaryMath3_1WrapperLl">
+                    app:layout_constraintEnd_toStartOf="@id/elementaryMath1_1WrapperLl">
                     <ImageButton
                         android:id="@+id/elementaryBookmarkBtn"
                         android:layout_width="match_parent"
@@ -1112,8 +1110,8 @@
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
                 android:overScrollMode="never"
+                visibleIf="@{ true }"
                 android:scrollbars="none"
-                visibleIf="@{ !isTablet }"
                 tools:visibility="visible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -32,8 +32,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 35
-        versionCode = 519
-        versionName = "1.6.99"
+        versionCode = 525
+        versionName = "1.6.105"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -144,6 +144,7 @@ dependencies {
 
     implementation(libs.android.joda)
     implementation(libs.glide)
+    implementation(libs.androidx.activity)
     kapt(libs.glide.compiler)
 
     implementation(libs.androidx.viewpager2)

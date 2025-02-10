@@ -55,9 +55,9 @@
         <package android:name="kr.co.shiftworks.vguardweb" /> <!-- V-Guard (삼성) -->
         <package android:name="com.ahnlab.v3mobileplus" /> <!-- V3 (NH, 현대) -->
     </queries>
-<!--    chrome os 관련 배포처리사항 -->
-<!--    <uses-feature android:name="android.hardware.touchscreen"-->
-<!--        android:required="false" />-->
+    <!--    chrome os 관련 배포처리사항 -->
+    <!--    <uses-feature android:name="android.hardware.touchscreen"-->
+    <!--        android:required="false" />-->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -85,21 +85,54 @@
             android:name=".revision2023.ui.activity.MockListActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2023.ui.activity.WrongNoteActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2023.ui.activity.TestActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2023.ui.activity.PlannerActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".revision2023.ui.activity.TerminalActivity"
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="pulleymath.com" />
+                <data android:pathPattern="/link/app" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="dev.pulleymath.com" />
+                <data android:pathPattern="/link/app" />
+            </intent-filter>
+            <!--        <intent-filter>-->
+            <!--            <action android:name="android.intent.action.VIEW" />-->
+            <!--            <category android:name="android.intent.category.DEFAULT" />-->
+            <!--            <category android:name="android.intent.category.BROWSABLE" />-->
+            <!--            <data-->
+            <!--                android:scheme="pulleymath"-->
+            <!--                android:host="terminal" />-->
+            <!--        </intent-filter>-->
+
+        </activity>
         <activity
             android:name=".revision2023.ui.activity.WhaleSpaceLoginActivity"
             android:exported="true"
@@ -136,7 +169,7 @@
             android:name=".revision2023.ui.activity.PulleyMathBooksActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2021.activity.LCTutorialActivity"
             android:exported="false"
@@ -145,8 +178,7 @@
             android:name=".revision2021.activity.LCWrongNoteActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2021.activity.LearningCourseActivity"
             android:exported="false"
@@ -166,7 +198,7 @@
             android:name=".revision2021.activity.AssessmentSolveActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".legacy.activities.learning.tabFragment.usertest.StudentManagerActivity"
             android:exported="true" />
@@ -177,7 +209,7 @@
             android:name=".legacy.activities.learning.tabFragment.analysis.StudyHistoryActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".legacy.activities.auth.InitSettingCompleteActivity"
             android:exported="true"
@@ -243,7 +275,7 @@
             android:name=".legacy.activities.analysis.AnalysisTabActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".revision2021.activity.MockReportActivity"
             android:exported="true"
@@ -267,7 +299,7 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
-<!--        adjustResize : 키보드 입력시 화면 리사이즈
+        <!--        adjustResize : 키보드 입력시 화면 리사이즈
              adjustNothing|stateAlwaysHidden : solve 주관식 문제에서 input 포커싱 되었을때 안드 기본 키보드가 잠깐올라왔다가 사라지는 문제를 해결하는 방법 -->
         <activity
             android:name=".legacy.activities.solve.SolveActivity"
@@ -275,10 +307,7 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustResize" />
-<!--            android:windowSoftInputMode="adjustResize" />-->
-
-
+            android:windowSoftInputMode="adjustResize" /> <!-- android:windowSoftInputMode="adjustResize" /> -->
         <receiver
             android:name=".legacy.bases.UpdateReceiver"
             android:enabled="true"
