@@ -2,37 +2,36 @@ package com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.activity.MockReportActivity
+import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
 import com.freewheelin.pulley.legacy.activities.OMRActivity
 import com.freewheelin.pulley.legacy.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.legacy.activities.WrongTestReportActivity
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.StudyListViewHolder
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
-import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
-import com.freewheelin.pulley.legacy.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.ActivityStudyHistoryBinding
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API_V3
+import com.freewheelin.pulley.legacy.core.manage.MockExamManager
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.legacy.model.ResponseListBody
-import com.freewheelin.pulley.legacy.model.contents.*
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.freewheelin.pulley.legacy.utils.DialogUtils
+import com.freewheelin.pulley.legacy.model.contents.Book
+import com.freewheelin.pulley.legacy.model.contents.BookType
+import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.MockExam
+import com.freewheelin.pulley.legacy.model.contents.Piece
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
@@ -40,8 +39,10 @@ import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import retrofit2.Call
 import retrofit2.Callback
@@ -350,16 +351,8 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
         MockExamManager.getMockSummary(this, content, user!!) { mockExamSummery ->
-            val optionResult = mutableListOf<CommercialSubject>()
             mockExamSummery?.let {
-                val optionalSubjects = mockExamSummery.optionalSubjectSummary
-
-                for(subject in optionalSubjects?: arrayOf()) {
-                    if (subject.isSelected) {
-                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
-                    }
-                }
-                mock.selectOptional = optionResult
+                mock.selectOptionalSubjectSummary = mockExamSummery.optionalSubjectSummary.toList()
                 mock.examType = mockExamSummery.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }

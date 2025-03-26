@@ -14,19 +14,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ActivityTestReportWeeklyBinding
+import com.freewheelin.pulley.databinding.ItemTestReportScoringBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.core.manage.TestManager
-import com.freewheelin.pulley.databinding.ActivityTestReportWeeklyBinding
-import com.freewheelin.pulley.databinding.ItemTestReportScoringBinding
+import com.freewheelin.pulley.legacy.model.CurriculumSubject
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.legacy.model.curation.TestCuration
-import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.RoundChartRenderer
+import com.freewheelin.pulley.legacy.utils.extensionTouchArea
+import com.freewheelin.pulley.legacy.utils.pxToSp
+import com.freewheelin.pulley.legacy.utils.show
+import com.freewheelin.pulley.legacy.utils.toPx
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -60,11 +65,11 @@ class WeeklyTestReportActivity : AppCompatActivity() {
 //        val test = getSerializable(this@WeeklyTestReportActivity, TestManager.ARG_TEST, Test::class.java)
         val test = intent.getSerializableExtra(TestManager.ARG_TEST) as Test
         with(binding) {
-            TestManager.getTestReport(this@WeeklyTestReportActivity, user!!, test) {
-                this@WeeklyTestReportActivity.test = it
-                scoreTv.text = "${it.score}"
+            TestManager.getTestReport(this@WeeklyTestReportActivity, user!!, test) { testResponse ->
+                this@WeeklyTestReportActivity.test = testResponse
+                scoreTv.text = "${testResponse.score}"
                 scoringRv.adapter = ScoringAdapter()
-                scoreGuideTv.text = curation.getWeeklyReportGuideQ(it.getLastTimeScore(), it.problems, user!!.fullName)
+                scoreGuideTv.text = curation.getWeeklyReportGuideQ(testResponse.getLastTimeScore(), testResponse.problems, user!!.fullName)
                 setChartData()
 
                 scoreTv.show()
@@ -74,34 +79,46 @@ class WeeklyTestReportActivity : AppCompatActivity() {
                 historyChart.show()
                 correctRateGuideTv.show()
 
-                correctRateGuideTv.text = "* 정오 옆의 숫자는 ${it.studentRating}등급 평균 정답률입니다."
-                if(it.weakChapterAnalysis == null)
-                    lowestNothingGuideTv.show()
-                else {
-                    lowestSubjectTv.text = SubjectV3.codeToSubject(it.weakChapterAnalysis!!.code).filterText // Subject.init(it.weakChapterAnalysis!!.code).filterText
-                    lowestUnitTv.text = it.weakChapterAnalysis?.name
-                    lowestPenChart.setValues(it.weakChapterAnalysis!!.myRate, it.weakChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
-                    lowestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
-                    lowestSubjectTv.show()
-                    lowestUnitTv.show()
-                    lowestPenChart.show()
+                correctRateGuideTv.text = "* 정오 옆의 숫자는 ${testResponse.studentRating}등급 평균 정답률입니다."
+                TestManager.getAllSubjects(this@WeeklyTestReportActivity) { curriculumSubjects ->
+
+                    if(testResponse.weakChapterAnalysis == null)
+                        lowestNothingGuideTv.show()
+                    else {
+                        val lowestSubject = findSubjectNameBySubjectCode(curriculumSubjects, testResponse.weakChapterAnalysis!!.code)
+                        lowestSubjectTv.text = lowestSubject
+                        lowestUnitTv.text = testResponse.weakChapterAnalysis?.name
+                        lowestPenChart.setValues(testResponse.weakChapterAnalysis!!.myRate, testResponse.weakChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
+                        lowestPenChart.setLabels("내 정답률", "${testResponse.studentRating}등급 평균")
+                        lowestSubjectTv.show()
+                        lowestUnitTv.show()
+                        lowestPenChart.show()
+                    }
+
+                    if(testResponse.strongChapterAnalysis == null)
+                        highestNothingGuideTv.show()
+                    else {
+                        val highestSubject = findSubjectNameBySubjectCode(curriculumSubjects, testResponse.strongChapterAnalysis!!.code)
+                        highestSubjectTv.text = highestSubject
+                        highestUnitTv.text = testResponse.strongChapterAnalysis?.name
+                        highestPenChart.setValues(testResponse.strongChapterAnalysis!!.myRate, testResponse.strongChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
+                        highestPenChart.setLabels("내 정답률", "${testResponse.studentRating}등급 평균")
+                        highestSubjectTv.show()
+                        highestUnitTv.show()
+                        highestPenChart.show()
+                    }
                 }
 
-                if(it.strongChapterAnalysis == null)
-                    highestNothingGuideTv.show()
-                else {
-                    lowestSubjectTv.text = SubjectV3.codeToSubject(it.weakChapterAnalysis!!.code).filterText // Subject.init(it.weakChapterAnalysis!!.code).filterText
-                    highestUnitTv.text = it.strongChapterAnalysis?.name
-                    highestPenChart.setValues(it.strongChapterAnalysis!!.myRate, it.strongChapterAnalysis!!.belowRate, withAnim =  true, withRangeColor = true)
-                    highestPenChart.setLabels("내 정답률", "${it.studentRating}등급 평균")
-                    highestSubjectTv.show()
-                    highestUnitTv.show()
-                    highestPenChart.show()
-                }
+
             }
         }
     }
-
+    private fun findSubjectNameBySubjectCode(data: List<CurriculumSubject>, subjectCode: Int): String {
+        // 모든 과목을 순회하면서 해당 chapterId가 있는지 확인
+        return data.find { subject ->
+            subject.id == subjectCode
+        }?.name ?: ""
+    }
     private fun initUI() {
         with(binding) {
             scoringRv.layoutParams.height = resources.getDimensionPixelSize(R.dimen.dp48) * 4

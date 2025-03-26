@@ -23,6 +23,7 @@ import com.freewheelin.pulley.legacy.utils.GlideApp
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,9 +90,11 @@ class NoteDetailDialog: Dialog {
 
             binding.leftArrowIb.isEnabled = value != null
         }
+    var filters: List<BookFilterElement> = listOf()
 
-    constructor(context: Context, problem: Problem, user: UserV4): super(context) {
+    constructor(context: Context, problem: Problem, user: UserV4, filters: List<BookFilterElement>?): super(context) {
         this.user = user
+        this.filters = filters ?: listOf()
         setContentView(binding.root)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         binding.historyTv.movementMethod = ScrollingMovementMethod()
@@ -149,7 +152,9 @@ class NoteDetailDialog: Dialog {
                 if (problem == responseProblem) {
                     if (detail != null) {
                         intentionTv.visibility = View.VISIBLE
-                        val unitInfoText = "과목명 : ${this@NoteDetailDialog.problem.getSubject().filterText}" +
+                        val subjectName = filters.find { it.code == "${this@NoteDetailDialog.problem.subjectCode}" }?.name ?: ""
+                        println("aspasp ${this@NoteDetailDialog.problem.subjectCode}, subjectName : ${subjectName}")
+                        val unitInfoText = "과목명 : ${subjectName}" +
                             "\n대단원 : ${detail.chapterBig}" +
                             "\n중단원 : ${detail.chapterMiddle}" +
                             "\n소단원 : ${detail.chapterLittle}" +

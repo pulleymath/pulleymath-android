@@ -6,13 +6,14 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.model.CurriculumSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.UserPlannerItem
 import com.freewheelin.pulley.revision2023.model.UserPlannerItemType
 import com.freewheelin.pulley.revision2023.model.request.UserPlanRequest
 import com.freewheelin.pulley.revision2023.model.response.StudyPlannerItem
+import com.freewheelin.pulley.revision2023.repository.NotesRepository
 import com.freewheelin.pulley.revision2023.repository.PlannerRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.adapter.StudyPlannerAdapter
@@ -30,6 +31,7 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
 
     private val userRepository by lazy { UserRepository.instance }
     private val plannerRepository by lazy { PlannerRepository.instance }
+    private val notesRepository = NotesRepository(getApplication<Application>().applicationContext, viewModelScope)
     val user = userRepository.user
     val schoolType = userRepository.schoolType
 
@@ -43,12 +45,25 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     private val _userPlanItems = MutableLiveData<List<UserPlannerItem>>()
     val userPlanItems: LiveData<List<UserPlannerItem>> = _userPlanItems
 
+    private val _curriculumSubjects = MutableLiveData<List<CurriculumSubject>>()
+    val curriculumSubjects: LiveData<List<CurriculumSubject>> = _curriculumSubjects
+    val schoolTypedSubjects = MutableLiveData<List<CurriculumSubject>>()
+
     //size 0 으로 초기화가 필요함
     private val _studyPlanItems = MutableLiveData<List<StudyPlannerItem>>(listOf())
     val studyPlanItems: LiveData<List<StudyPlannerItem>> = _studyPlanItems
     val selectedUserPlan = MutableLiveData<UserPlannerItem>()
     val showEmptyText = MutableLiveData<Boolean>(true)
 
+    fun schoolRenew () {
+        userRepository.renewSchoolType()
+    }
+    fun fetchCurriculumSubjects() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val subjects = notesRepository.fetchCurriculumSubjects()
+            _curriculumSubjects.postValue(subjects)
+        }
+    }
     fun updateUserPlanList(monday: String? = null, sunday: String? = null) {
         val datePair = if (monday != null && sunday != null) {
             Pair(monday, sunday)
@@ -174,13 +189,16 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
             val workbookId = plan.workbookId
             val subjectId = chapter.subjectId
             val items = plannerRepository.fetchStudyPlanOnSubject(subjectId)
+            val subjects = notesRepository.fetchCurriculumSubjects()
+
 
             studyPlannerAdapter.clearItems()
             studyPlannerAdapter.setItems(items)
             println("expandSelectedPlan item size : ${studyPlannerAdapter.mItems.size}")
             withContext(Dispatchers.Main) {
-                val schoolType1 = SubjectV3.codeToSchoolType(subjectId)
-                userRepository.updateSchoolType(schoolType1)
+                val subjectIdToSchoolType = subjects.find { it.id == subjectId }?.schoolType
+                val subjectSchoolType = SchoolType.convertFromStr(subjectIdToSchoolType ?: "")
+                userRepository.updateSchoolType(subjectSchoolType)
                 selectedSubjectId.postValue(subjectId)
                 studyPlannerAdapter.notifyDataSetChanged()
                 showEmptyText.postValue(items.isEmpty())
@@ -294,14 +312,7 @@ class PlannerActViewModel(application: Application) : BaseAndroidViewModel(appli
     }
     fun updateSchoolType(type: SchoolType) {
         userRepository.updateSchoolType(type)
-        val subjectId = when (type) {
-            SchoolType.ELEMENTARY -> {
-//                fetchAvailableElementarySubjects()
-                SubjectV3.초3_1.id
-            }
-            SchoolType.MIDDLE -> SubjectV3.중1_1.id
-            else -> SubjectV3.수학_상.id
-        }
+        val subjectId = curriculumSubjects.value?.find { it.schoolType == type.name }?.id ?: 41
         onHeaderSubjectBtnClick(subjectId)
     }
     fun onHeaderSubjectBtnClick(subjectId: Int) {

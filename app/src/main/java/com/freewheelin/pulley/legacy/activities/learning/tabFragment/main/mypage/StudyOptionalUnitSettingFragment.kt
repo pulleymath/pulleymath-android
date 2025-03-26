@@ -13,18 +13,14 @@ import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.mypage.MyPageBaseFragment
 import com.freewheelin.pulley.legacy.activities.mypage.MyStudyInfoFragment
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.FragmentStudyUnitOptionalSettingBinding
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DaebakInputSelection
 import com.freewheelin.pulley.legacy.views.DaebakInputSelectionListener
-import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 
 class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelectionListener {
 
@@ -36,101 +32,37 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
         return binding.root
     }
 
-
+    private val selectionList by lazy {
+        listOf(
+            binding.selection1, binding.selection2, binding.selection3,
+            binding.selection4, binding.selection6, binding.selection6,
+        )
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpUI()
-        viewModel.apply {
-            fetchRecommendSubject()
-
-            recommendCommonSubjects.observe(viewLifecycleOwner) {
-
-            }
-            recommendOptionalSubjects.observe(viewLifecycleOwner) { optionalList ->
-                binding.apply {
-                    if (optionalList.isEmpty()) {
-                        noneSelection.isSelected = true
-                    } else {
-                        getOptionalBigUnitList(optionalList, SubjectV3.확률과통계)?.let { userUnits ->
-                            probAnsStatSelection.result = listOf(
-                                false,
-                                userUnits.contains(BigUnitV3.경우의_수.title),
-                                userUnits.contains(BigUnitV3.확률.title),
-                                userUnits.contains(BigUnitV3.통계.title)
-                            )
-                        }
-                        getOptionalBigUnitList(optionalList, SubjectV3.미적분)?.let { userUnits ->
-                            calculusSelection.result = listOf(
-                                false,
-                                userUnits.contains(BigUnitV3.수열의_극한.title),
-                                userUnits.contains(BigUnitV3.미분법.title),
-                                userUnits.contains(BigUnitV3.적분법.title)
-                            )
-                        }
-                        getOptionalBigUnitList(optionalList, SubjectV3.기하)?.let { userUnits ->
-                            geometrySelection.result = listOf(
-                                false,
-                                userUnits.contains(BigUnitV3.이차곡선.title),
-                                userUnits.contains(BigUnitV3.벡터.title),
-                                userUnits.contains(BigUnitV3.공간도형.title)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-    fun getOptionalBigUnitList (optionalList: List<RecommendSubject>, subject: SubjectV3): List<String>? {
-        return optionalList.find {
-            it.subjectId == subject.id
-        }?.chapters?.filter {
-            it.isSelected
-        }?.map {
-            it.chapterName
-        }
-    }
-
-    fun setUpUI() {
-        with(binding) {
-            probAnsStatSelection.listener = this@StudyOptionalUnitSettingFragment
-            calculusSelection.listener = this@StudyOptionalUnitSettingFragment
-            geometrySelection.listener = this@StudyOptionalUnitSettingFragment
-
-            probAnsStatSelection.buttonTitles =
-                listOf(BigUnitV3.경우의_수, BigUnitV3.확률, BigUnitV3.통계).map { it.title }
-            calculusSelection.buttonTitles =
-                listOf(BigUnitV3.수열의_극한, BigUnitV3.미분법, BigUnitV3.적분법).map { it.title }
-            geometrySelection.buttonTitles =
-                listOf(BigUnitV3.이차곡선, BigUnitV3.벡터, BigUnitV3.공간도형).map { it.title }
-
-
-//            val userUnits = user!!.optionalUnit
-//            if (userUnits.isEmpty()) {
-//                noneSelection.isSelected = true
-//            } else {
-//                probAnsStatSelection.result = listOf(
-//                    false,
-//                    userUnits.contains(BigUnitV3.경우의_수),
-//                    userUnits.contains(BigUnitV3.확률),
-//                    userUnits.contains(BigUnitV3.통계)
-//                )
-//                calculusSelection.result = listOf(
-//                    false,
-//                    userUnits.contains(BigUnitV3.수열의_극한),
-//                    userUnits.contains(BigUnitV3.미분법),
-//                    userUnits.contains(BigUnitV3.적분법)
-//                )
-//                geometrySelection.result = listOf(
-//                    false,
-//                    userUnits.contains(BigUnitV3.이차곡선),
-//                    userUnits.contains(BigUnitV3.벡터),
-//                    userUnits.contains(BigUnitV3.공간도형)
-//                )
-//            }
-
+        binding.apply {
             noneSelection.setOnClickListener { onNoneSelection() }
             modifyBtn.setOnClickListener { onModifyBtnClicked() }
             backBtn.setOnClickListener { onBackBtnClicked() }
+        }
+        viewModel.apply {
+            fetchRecommendSubject()
+            recommendOptionalSubjects.observe(viewLifecycleOwner) { subjects ->
+                subjects.forEachIndexed { index, recommendSubject ->
+                    selectionList.get(index).let {
+                        it.listener = this@StudyOptionalUnitSettingFragment
+                        it.label = recommendSubject.subjectName
+                        it.chapterList = recommendSubject.chapters
+                        it.buttonTitles = recommendSubject.chapters.map { chapter -> chapter.chapterName }
+                        it.result = listOf(false) + recommendSubject.chapters.map { chapter -> chapter.isSelected }
+                    }
+                }
+                selectionList.forEachIndexed { index,selection ->
+                    if (index >= subjects.size) {
+                        selection.visibleIf(false)
+                    }
+                }
+            }
         }
     }
 
@@ -138,40 +70,35 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
         with(binding) {
             noneSelection.isSelected = !noneSelection.isSelected
             if (noneSelection.isSelected) {
-                probAnsStatSelection.release()
-                calculusSelection.release()
-                geometrySelection.release()
+                selectionList.forEach {
+                    it.release()
+                }
             } else {
                 setModifyBtn()
             }
         }
     }
 
-    private fun getSelectedUnit(): Collection<BigUnitV3> {
-        val selectedBigUnits = hashSetOf<BigUnitV3>()
-        with(binding) {
-            selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, SubjectV3.확률과통계))
-            selectedBigUnits.addAll(getSelectedUnits(calculusSelection, SubjectV3.미적분))
-            selectedBigUnits.addAll(getSelectedUnits(geometrySelection, SubjectV3.기하))
+    private fun getSelectedUnit(): List<Int> {
+        val selectedChapterIds = selectionList.flatMap {
+            val isTotalClicked = it.result.first()
+            if (isTotalClicked) {
+                it.chapterList.map { chapter -> chapter.chapterId }
+            }
+            else {
+                it.result.subList(1, it.result.size).mapIndexedNotNull { index, bool ->
+                    if (bool) it.chapterList.get(index).chapterId
+                    else null
+                }
+            }
         }
-        return selectedBigUnits
-    }
-
-    private fun getSelectedUnits(view: DaebakInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
-        if(view.result.first())
-            return subject.bigUnits
-        else {
-            val selectionResult = view.result.subList(1, view.result.size)
-            val unitMap = subject.bigUnits.toList().zip(selectionResult)
-
-            return unitMap.filter { it.second }.map { it.first }
-        }
+        return selectedChapterIds
     }
 
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "선택과목", "변경하기")
         if (binding.modifyBtn.isEnabled) {
-            val selectedIds = getSelectedUnit().map { it.id }
+            val selectedIds = getSelectedUnit()
             viewModel.updateOptionalSubject(selectedIds) {
                 setFragmentResult(MyStudyInfoFragment.RELOAD, bundleOf())
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -189,7 +116,7 @@ class StudyOptionalUnitSettingFragment : MyPageBaseFragment(), DaebakInputSelect
         with(binding) {
             noneSelection.isSelected = getSelectedUnit().isEmpty()
 
-            if(getSelectedUnit().isEmpty() && noneSelection.isSelected == false) {
+            if(getSelectedUnit().isEmpty() && !noneSelection.isSelected) {
                 modifyBtn.isEnabled = false
             } else {
                 modifyBtn.isEnabled = true

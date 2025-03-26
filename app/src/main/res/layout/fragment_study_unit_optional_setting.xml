@@ -2,14 +2,21 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".legacy.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment">
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel"/>
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
         android:orientation="vertical"
         android:background="@color/gray_100"
-        android:clickable="true"
-        tools:context=".activities.mypage.MySignUpInfoFragment">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -105,25 +112,46 @@
                         android:textSize="@dimen/sp16" />
 
                     <com.freewheelin.pulley.legacy.views.DaebakInputSelection
-                        android:id="@+id/probAnsStatSelection"
+                        android:id="@+id/selection1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
                         app:DaebakInputSelection_Label="확률과 통계" />
 
                     <com.freewheelin.pulley.legacy.views.DaebakInputSelection
-                        android:id="@+id/calculusSelection"
+                        android:id="@+id/selection2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
                         app:DaebakInputSelection_Label="미적분" />
 
                     <com.freewheelin.pulley.legacy.views.DaebakInputSelection
-                        android:id="@+id/geometrySelection"
+                        android:id="@+id/selection3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
                         app:DaebakInputSelection_Label="기하" />
+                    <com.freewheelin.pulley.legacy.views.DaebakInputSelection
+                        android:id="@+id/selection4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:visibility="gone"
+                        app:DaebakInputSelection_Label="확률과 통계3" />
+                    <com.freewheelin.pulley.legacy.views.DaebakInputSelection
+                        android:id="@+id/selection5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:visibility="gone"
+                        app:DaebakInputSelection_Label="확률과 통계2" />
+                    <com.freewheelin.pulley.legacy.views.DaebakInputSelection
+                        android:id="@+id/selection6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp24"
+                        android:visibility="gone"
+                        app:DaebakInputSelection_Label="확률과 통계1" />
                 </LinearLayout>
 
                 <com.freewheelin.pulley.revision2023.ui.view.CommonButton

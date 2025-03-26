@@ -1,24 +1,23 @@
 package com.freewheelin.pulley.revision2023.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentSubjectExcludeModifyBinding
-import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
-import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.views.PulleyInputSelection
 import com.freewheelin.pulley.legacy.views.PulleyInputSelectionListener
+import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 
 class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionListener {
     private lateinit var binding: FragmentSubjectExcludeModifyBinding
@@ -39,51 +38,35 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             setScreen()
-            initSelection()
-
-            val recentSubjects = viewModel.getRecentStudyBigUnits(null)
-
-            initRecentUnit(recentSubjects)
-            initExcludedUnit(recentSubjects)
-
             modifyBtn.setOnClickListener { onModifyBtnClicked() }
             backBtn.setOnClickListener { onBackBtnClicked() }
 
         }
-
-        arguments?.let {
-//            val withPdfDesc = it.getBoolean("PDF_PURCHASE_DESC")
-        }
-    }
-
-    private fun initSelection() {
-        binding.apply {
-            val thisFragment = this@SnackTestSubjectExcludeModifyFragment
-            selectionWrapperLl.children.forEach {
-                (it as? PulleyInputSelection)?.let {
-                    it.listener = thisFragment
+        viewModel.apply {
+            userRecommendLiveData.observe(viewLifecycleOwner) { recommend ->
+                recommend.recentStudySubjects.let { subjects ->
+                    binding.selectionWrapperLl.let {
+                        it.removeAllViews()
+                        subjects.forEach { subject ->
+                            val pulleySelection = PulleyInputSelection(requireContext()).apply {
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                )
+                                init(subject.chapters)
+                                label = subject.subjectName
+                                listener = this@SnackTestSubjectExcludeModifyFragment
+                                val scale = resources.displayMetrics.density
+                                val paddingBottom = (24 * scale + 0.5f).toInt()
+                                setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
+                            }
+                            it.addView(pulleySelection)
+                        }
+                    }
                 }
             }
         }
-    }
-    private fun initRecentUnit(recentSubjects: List<SubjectChapter>) {
-        with(binding) {
-            selectionWrapperLl.children.forEach {
-                (it as? PulleyInputSelection)?.let {
-                    it.setSubject(recentSubjects)
-                }
-            }
-        }
-    }
 
-    private fun initExcludedUnit(includedSubjects: List<SubjectChapter>) { // recentUnits
-        with(binding) {
-            selectionWrapperLl.children.forEach {
-                (it as? PulleyInputSelection)?.let {
-                    it.excludeSubjects(includedSubjects)
-                }
-            }
-        }
     }
 
     private fun setScreen() {
@@ -92,91 +75,39 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
         lp.height = DisplayUtils.getScreenHeight(requireContext()) - topBottomMargin.toInt()
         binding.rootView.layoutParams = lp
     }
-    private fun getSelectedUnit(): Collection<BigUnitV3> {
-        val selectedBigUnits = hashSetOf<BigUnitV3>()
-        if (viewModel.schoolType.value?.isHigh == true) {
-            with(binding) {
-                selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, SubjectV3.수학_상))
-                selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, SubjectV3.수학_하))
-                selectedBigUnits.addAll(getSelectedUnits(math1Selection, SubjectV3.수학I))
-                selectedBigUnits.addAll(getSelectedUnits(math2Selection, SubjectV3.수학II))
-                selectedBigUnits.addAll(getSelectedUnits(probAnsStatSelection, SubjectV3.확률과통계))
-                selectedBigUnits.addAll(getSelectedUnits(calculusSelection, SubjectV3.미적분))
-                selectedBigUnits.addAll(getSelectedUnits(geometrySelection, SubjectV3.기하))
-            }
-        } else {
-            with(binding) {
-                selectedBigUnits.addAll(getExcludedUnits(m11Selection, SubjectV3.중1_1))
-                selectedBigUnits.addAll(getExcludedUnits(m12Selection, SubjectV3.중1_2))
-                selectedBigUnits.addAll(getExcludedUnits(m21Selection, SubjectV3.중2_1))
-                selectedBigUnits.addAll(getExcludedUnits(m22Selection, SubjectV3.중2_2))
-                selectedBigUnits.addAll(getExcludedUnits(m31Selection, SubjectV3.중3_1))
-                selectedBigUnits.addAll(getExcludedUnits(m32Selection, SubjectV3.중3_2))
-            }
-        }
-        return selectedBigUnits
-    }
-
-    private fun getExcludedUnits(view: PulleyInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
-        val unitMap = subject.bigUnits.toList().zip(view.getExcluded())
-        return unitMap.filter { it.second }.map { it.first }
-    }
-
-    private fun getSelectedUnits(view: PulleyInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
-        val unitMap = subject.bigUnits.toList().zip(view.result)
-        return unitMap.filter { it.second }.map { it.first }
-    }
 
     companion object {
         @JvmStatic
         fun newInstance(viewModel: RecommendSettingViewModel) =
             SnackTestSubjectExcludeModifyFragment().apply {
                 this.viewModel = viewModel
-                arguments = Bundle().apply {
-//                    putBoolean("PDF_PURCHASE_DESC", withPdfDesc)
-                }
             }
     }
 
     override fun onSelectionChanged(view: PulleyInputSelection) {
-        if(getSelectedUnit().isEmpty()) {
-            binding.modifyBtn.isEnabled = false
-        } else {
-            binding.modifyBtn.isEnabled = true
-        }
+        binding.modifyBtn.isEnabled = true
     }
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "수정하기", "단원")
         if(binding.modifyBtn.isEnabled) {
-            val units = getCalcExcludedUnits()
-            viewModel.excludeSubjects(units.map { it.id }) {
+            val ids = getExcludedUnits()
+            viewModel.excludeSubjects(ids) {
                 onBackBtnClicked()
             }
         }
     }
-    private fun getCalcExcludedUnits(): Collection<BigUnitV3> {
-        val excludedBigUnits = hashSetOf<BigUnitV3>()
-        if (viewModel.schoolType.value?.isHigh == true) {
-            with(binding) {
-                excludedBigUnits.addAll(getExcludedUnits(mathTopSelection, SubjectV3.수학_상))
-                excludedBigUnits.addAll(getExcludedUnits(mathBottomSelection, SubjectV3.수학_하))
-                excludedBigUnits.addAll(getExcludedUnits(math1Selection, SubjectV3.수학I))
-                excludedBigUnits.addAll(getExcludedUnits(math2Selection, SubjectV3.수학II))
-                excludedBigUnits.addAll(getExcludedUnits(probAnsStatSelection, SubjectV3.확률과통계))
-                excludedBigUnits.addAll(getExcludedUnits(calculusSelection, SubjectV3.미적분))
-                excludedBigUnits.addAll(getExcludedUnits(geometrySelection, SubjectV3.기하))
-            }
-        } else {
-            with(binding) {
-                excludedBigUnits.addAll(getExcludedUnits(m11Selection, SubjectV3.중1_1))
-                excludedBigUnits.addAll(getExcludedUnits(m12Selection, SubjectV3.중1_2))
-                excludedBigUnits.addAll(getExcludedUnits(m21Selection, SubjectV3.중2_1))
-                excludedBigUnits.addAll(getExcludedUnits(m22Selection, SubjectV3.중2_2))
-                excludedBigUnits.addAll(getExcludedUnits(m31Selection, SubjectV3.중3_1))
-                excludedBigUnits.addAll(getExcludedUnits(m32Selection, SubjectV3.중3_2))
+    private fun getExcludedUnits(): List<Int> {
+        val selectionList = binding.selectionWrapperLl.children
+            .filter { it.isVisible }
+            .filterIsInstance<PulleyInputSelection>()
+            .toList()
+        val excludedChapterIds = selectionList.flatMap {
+            it.btnList.mapIndexedNotNull { index, btn ->
+                if (!btn.isSelected) it.chapterList.get(index).chapterId
+                else null
             }
         }
-        return excludedBigUnits
+        return excludedChapterIds
     }
     private fun onBackBtnClicked() {
         viewModel.removeStep(this@SnackTestSubjectExcludeModifyFragment)

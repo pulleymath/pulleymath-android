@@ -161,7 +161,7 @@
                 android:textSize="@dimen/sp16"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/reportBtnCl"
+                app:layout_constraintEnd_toStartOf="@+id/reviewBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -282,8 +282,8 @@
                 android:visibility="gone"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/reviewBtnCl"
-                app:layout_constraintStart_toStartOf="@+id/reportBtnCl"
+                app:layout_constraintEnd_toEndOf="@+id/reviewBtn"
+                app:layout_constraintStart_toStartOf="@+id/reviewBtn"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView

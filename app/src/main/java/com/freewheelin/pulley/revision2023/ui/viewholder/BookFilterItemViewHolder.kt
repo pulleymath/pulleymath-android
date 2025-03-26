@@ -1,6 +1,8 @@
 package com.freewheelin.pulley.revision2023.ui.viewholder
 
 import androidx.core.view.doOnAttach
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.databinding.ItemBookFilterBinding
@@ -28,8 +30,13 @@ class BookFilterItemViewHolder(
         this.item = item
         this.listener = itemListener
 
+//        item.isSelected.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+//            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+//                println("aspasp item.${item.name}, (sender as ObservableBoolean).get() ${(sender as ObservableBoolean).get()}")
+//            }
+//        })
         filterBtn.setOnClickListener {
-            item.isSelected.set(item.isSelected.get().not())
+//            item.isSelected.set(item.isSelected.get().not())
             itemListener.onFilterItemClick(item)
         }
     }

@@ -4,18 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.freewheelin.pulley.databinding.*
-import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.databinding.ItemNoteStudyCardBinding
+import com.freewheelin.pulley.databinding.ItemNoteStudyGroupHeaderBinding
+import com.freewheelin.pulley.databinding.ItemNoteStudyHeaderBinding
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
-import com.freewheelin.pulley.revision2023.model.*
-import com.freewheelin.pulley.revision2023.ui.viewholder.*
-import com.freewheelin.pulley.revision2023.utils.PriorConceptDiffCallback
+import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
+import com.freewheelin.pulley.revision2023.model.NoteStudyType
+import com.freewheelin.pulley.revision2023.ui.viewholder.NoteStudyCardViewHolder
+import com.freewheelin.pulley.revision2023.ui.viewholder.NoteStudyGroupHeaderViewHolder
+import com.freewheelin.pulley.revision2023.ui.viewholder.NoteStudyHeaderViewHolder
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
-import com.freewheelin.pulley.revision2023.utils.listeners.PriorConceptClickListener
-import com.freewheelin.pulley.revision2023.utils.listeners.PurchaseGuideClickListener
-import com.freewheelin.pulley.revision2023.utils.listeners.PurchaseGuideCompareClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 
 class NoteStudyCardAdapter(
     val viewModel: WrongNoteActViewModel,

@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.isTablet
@@ -32,6 +33,7 @@ class ConceptCourseHeaderTab : FrameLayout {
         binding.apply {
             isTablet = context.isTablet
             schoolType = MyApplication.schoolType
+            lifecycleOwner = findViewTreeLifecycleOwner()
         }
     }
 

@@ -5,24 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentMyStartChallengeBinding
-
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyCommonUnitSettingFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyMiddleCommonUnitSettingFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.mypage.StudyOptionalUnitSettingFragment
-import com.freewheelin.pulley.legacy.bases.MyApplication
-import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.databinding.FragmentMyStudyInfoBinding
-import com.freewheelin.pulley.legacy.dialogs.CompleteDialog
-import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.views.DaebakToast
@@ -30,7 +19,6 @@ import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.StartChallengeInfoDialog
-import com.freewheelin.pulley.revision2023.ui.view.MissionStampView
 
 class MyStartChallengeFragment : MyPageBaseFragment() {
     lateinit var binding: FragmentMyStartChallengeBinding

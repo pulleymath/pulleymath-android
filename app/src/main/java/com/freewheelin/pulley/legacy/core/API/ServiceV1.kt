@@ -301,4 +301,7 @@ interface ServiceV1 {
 
     @POST("/log/user")
     fun logUser(@Body param: Parameter): Call<Void>
+
+    @GET("/api/subjects")
+    fun getAllSubjects(): Call<ResponseListBody<CurriculumSubject>>
 }

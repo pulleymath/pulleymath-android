@@ -52,20 +52,10 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
     }
     fun initObserve() {
         viewModel.apply {
-            schoolType.observe(viewLifecycleOwner) {
-                binding.apply {
-//                majorLabel.visibleIf(it.isHigh)
-
-                }
-            }
             recommendCommonSubjects.observe(viewLifecycleOwner) { subjects ->
                 val subjectNames = subjects
                     .filter {
-                        it.chapters
-                            .map { it.isSelected }
-                            .reduce { p1, p2 ->
-                                p1 || p2
-                            }
+                        it.chapters.any { chapter -> chapter.isSelected}
                     }
                     .map { it.subjectName }
                     .joinTo(StringBuilder(), ", ").toString()
@@ -77,11 +67,7 @@ class MyStudyInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
             recommendOptionalSubjects.observe(viewLifecycleOwner) { subjects ->
                 val subjectNames = subjects
                     .filter {
-                        it.chapters
-                            .map { it.isSelected }
-                            .reduce { p1, p2 ->
-                                p1 || p2
-                            }
+                        it.chapters.any { chapter -> chapter.isSelected}
                     }
                     .map { it.subjectName }
                     .joinTo(StringBuilder(), ", ").toString()

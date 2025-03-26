@@ -23,6 +23,7 @@ import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.databinding.ActivityWorkbookListBinding
+import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.dialogs.CustomizeBookDialog
 import com.freewheelin.pulley.legacy.dialogs.CustomizeBookDialogListener
@@ -47,6 +48,7 @@ import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
 import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,6 +101,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                     supportFragmentManager.let { dialog.show(it, "joinInduceDialog") }
                 } else {
                     val isStartChallengeInProgress = viewModel.showStartChallengeStamp.value == true
+                    val curriculumSubjects = viewModel.subjects.value ?: listOf()
                     CustomizeBookDialog(this@WorkbookListActivity, isStartChallengeInProgress, this@WorkbookListActivity).show()
                 }
             }
@@ -107,6 +110,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
         }
         viewModel.apply {
+            fetchCurriculumSubjects()
             playTotalLoadingView.observe(this@WorkbookListActivity) {
                 if (it) {
                     binding.totalLoadingView.playAnimation()
@@ -116,26 +120,24 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                 }
             }
             customBooks.observe(this@WorkbookListActivity) {
-                if (latestFilters == selectedFilterTypes) {
-                    planAdapter.submitList(it)
-                    if (it.isEmpty()) {
-                        binding.totalEmptyContainer.show(300)
-                        showEmptyContainer.postValue(true)
-                    } else {
-                        val rvAnimController = AnimationUtils.loadLayoutAnimation(
-                            this@WorkbookListActivity,
-                            R.anim.recyclerview_grid_layout_animation
-                        )
-                        binding.totalRv.layoutAnimation = rvAnimController
-                        binding.totalRv.scheduleLayoutAnimation()
-                        showEmptyContainer.postValue(false)
-                    }
-
-                    showDummyBottomView.postValue(it.size < 7)
-                    showTotalLoadingView.postValue(false)
-                    playTotalLoadingView.postValue(false)
-                    showTotalPlanCover.postValue(false)
+                planAdapter.submitList(it)
+                if (it.isEmpty()) {
+                    binding.totalEmptyContainer.show(300)
+                    showEmptyContainer.postValue(true)
+                } else {
+                    val rvAnimController = AnimationUtils.loadLayoutAnimation(
+                        this@WorkbookListActivity,
+                        R.anim.recyclerview_grid_layout_animation
+                    )
+                    binding.totalRv.layoutAnimation = rvAnimController
+                    binding.totalRv.scheduleLayoutAnimation()
+                    showEmptyContainer.postValue(false)
                 }
+
+                showDummyBottomView.postValue(it.size < 7)
+                showTotalLoadingView.postValue(false)
+                playTotalLoadingView.postValue(false)
+                showTotalPlanCover.postValue(false)
             }
             joinedChallengeList.observe(this@WorkbookListActivity) {
                 val isWorkbookStartChallengeInProgress = it.find { it.startChallenge?.isWorkbooksInProgress == true } != null
@@ -143,6 +145,8 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
             }
             filterElements.observe(this@WorkbookListActivity) {
                 this@WorkbookListActivity.filterAdapter.submitList(it)
+                fetchCustomBooksOnFilters(it)
+
             }
             checkActionOfStartChallenge {
                 val guideDialog = ChallengeGuideManager.getStartGuideMission4()
@@ -245,13 +249,20 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
                 override fun onCalendar() {}
             })
-            val filterSpanCount = if (isTablet) 2 else 3
+            val filterSpanCount = 6
             filterRv.layoutManager = GridLayoutManager(this@WorkbookListActivity, filterSpanCount).also {
                 it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
                         viewModel.filterElements.value?.let { list ->
+
                             return when (list[position].type) {
-                                BookFilterElement.Type.Item -> 1
+                                BookFilterElement.Type.Item -> {
+                                    if (list[position].name == "전체") {
+                                        6
+                                    } else {
+                                        3
+                                    }
+                                }
                                 else -> filterSpanCount
                             }
                         }
@@ -274,7 +285,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
             viewModel.playTotalLoadingView.postValue(true)
 
             initFilterView()
-            fetchCustomBook()
+//            fetchCustomBook()
         }
     }
 
@@ -288,8 +299,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
         viewModel.fetchBookFilter()
     }
     private fun fetchCustomBook() {
-        val filters = viewModel.selectedFilterTypes.toSet()
-        viewModel.fetchCustomBook(filters)
+        viewModel.fetchCustomBooks()
     }
 
     private fun setSnackBar() {
@@ -386,7 +396,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
 
     override fun filterFromTagOnCard(filterType: String) {
         val type = LearningFilterType.convertTagAtFilterType(filterType)
-        viewModel.updateFilterTypes(type)
+        viewModel.updateFilterTypes(filterType)
     }
     override fun onDestroy() {
         super.onDestroy()

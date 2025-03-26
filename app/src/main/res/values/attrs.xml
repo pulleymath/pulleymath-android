@@ -267,28 +267,28 @@
         <attr name="status" format="integer" />
     </declare-styleable>
 
-    <declare-styleable name="SchoolUnitSelection">
-        <attr name="unitType" format="enum">
-            <enum name="m1-1" value="50" />
-            <enum name="m1-2" value="51" />
-            <enum name="m2-1" value="52" />
-            <enum name="m2-2" value="53" />
-            <enum name="m3-1" value="54" />
-            <enum name="m3-2" value="55" />
+<!--    <declare-styleable name="SchoolUnitSelection">-->
+<!--        <attr name="unitType" format="enum">-->
+<!--            <enum name="m1-1" value="50" />-->
+<!--            <enum name="m1-2" value="51" />-->
+<!--            <enum name="m2-1" value="52" />-->
+<!--            <enum name="m2-2" value="53" />-->
+<!--            <enum name="m3-1" value="54" />-->
+<!--            <enum name="m3-2" value="55" />-->
 
-            <enum name="e1-1" value="56" />
-            <enum name="e1-2" value="57" />
-            <enum name="e2-1" value="58" />
-            <enum name="e2-2" value="59" />
-            <enum name="e3-1" value="60" />
-            <enum name="e3-2" value="61" />
+<!--            <enum name="e1-1" value="56" />-->
+<!--            <enum name="e1-2" value="57" />-->
+<!--            <enum name="e2-1" value="58" />-->
+<!--            <enum name="e2-2" value="59" />-->
+<!--            <enum name="e3-1" value="60" />-->
+<!--            <enum name="e3-2" value="61" />-->
 
-            <enum name="e4-1" value="62" />
-            <enum name="e4-2" value="63" />
-            <enum name="e5-1" value="64" />
-            <enum name="e5-2" value="65" />
-            <enum name="e6-1" value="66" />
-            <enum name="e6-2" value="67" />
-        </attr>
-    </declare-styleable>
+<!--            <enum name="e4-1" value="62" />-->
+<!--            <enum name="e4-2" value="63" />-->
+<!--            <enum name="e5-1" value="64" />-->
+<!--            <enum name="e5-2" value="65" />-->
+<!--            <enum name="e6-1" value="66" />-->
+<!--            <enum name="e6-2" value="67" />-->
+<!--        </attr>-->
+<!--    </declare-styleable>-->
 </resources>

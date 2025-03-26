@@ -34,6 +34,9 @@ class UserRepository() {
     private val _schoolType = MutableLiveData<SchoolType>()
     val schoolType: LiveData<SchoolType> = _schoolType
 
+    fun renewSchoolType() {
+        _schoolType.value = _schoolType.value
+    }
     suspend fun getUser(): UserV4 {
         return api.getUserV4().data!!.let {
             println("asoaso - - - - - getUser, ${it.token}")

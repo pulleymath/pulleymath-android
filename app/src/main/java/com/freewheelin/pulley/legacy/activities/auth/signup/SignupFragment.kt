@@ -362,7 +362,6 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             serviceAgreeCb.isClickable = true
             serviceAgreeCb.allDocuText = serviceAgreeCb.allDocuText
                 .partialUnderline("전문 보기") {
-                    println("aspasp user? ${user}, ${user?.serviceType?.isGuestUser}")
                     if (user == null || user?.serviceType?.isGuestUser == true) {
                         val targetUrl = URL.이용약관
                         IntentUtils.openWebLink(requireContext(), targetUrl, requireContext().packageManager)

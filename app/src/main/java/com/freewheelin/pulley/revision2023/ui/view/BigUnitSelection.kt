@@ -1,48 +1,35 @@
 package com.freewheelin.pulley.revision2023.ui.view
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.databinding.ViewMiddleSchoolUnitSelectionBinding
+import com.freewheelin.pulley.databinding.ViewElementarySchoolUnitSelectionBinding
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
 import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 
-interface MiddleSchoolUnitSelectionListener {
+interface BigUnitSelectionListener {
     fun onSelectionChanged(view: View)
 }
-class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
+class BigUnitSelection: ConstraintLayout, View.OnClickListener {
 
-    var listener: MiddleSchoolUnitSelectionListener? = null
+    var listener: BigUnitSelectionListener? = null
 
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
-        initUI()
+    constructor(context: Context): super(context) {
+
     }
-    var binding: ViewMiddleSchoolUnitSelectionBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_middle_school_unit_selection, this, true)
+    var binding: ViewElementarySchoolUnitSelectionBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_elementary_school_unit_selection, this, true)
 
-    fun initUI () {
-//        binding.apply {
-//
-//            unitTotal.setOnClickListener {
-//                it.isSelected = !it.isSelected
-//                if(it.isSelected) {
-//                    btnList.forEach { it.isSelected = false }
-//                }
-//                listener?.onSelectionChanged(it)
-//            }
-//            btnList.forEach { it.setOnClickListener(this@MiddleSchoolUnitSelection) }
-//        }
-    }
     var btnList = mutableListOf<SubjectSelectionButton>()
 
     var chapterList: List<SubjectChapter> = listOf()
         set(value) {
             field = value
+
             binding.apply {
                 val list = when (value.size) {
                     1 -> listOf(unit0)
@@ -54,11 +41,9 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
                     7 -> listOf(unit0, unit1, unit2, unit3, unit4, unit5, unit6)
                     8 -> listOf(unit0, unit1, unit2, unit3, unit4, unit5, unit6, unit7)
                     9 -> listOf(unit0, unit1, unit2, unit3, unit4, unit5, unit6, unit7, unit8)
-
                     else -> listOf()
                 }
                 btnList.addAll(list)
-
             }
         }
 
@@ -81,7 +66,6 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
         chapterList = subject.chapters
         binding.apply {
             unitTitleTv.text = subject.subjectName
-
             unitTotal.setOnClickListener {
                 it.isSelected = !it.isSelected
                 if(it.isSelected) {
@@ -89,7 +73,7 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
                 }
                 listener?.onSelectionChanged(it)
             }
-            btnList.forEach { it.setOnClickListener(this@MiddleSchoolUnitSelection) }
+            btnList.forEach { it.setOnClickListener(this@BigUnitSelection) }
 
             val isSelectedAll = subject.chapters
                 .map { it.isSelected }
@@ -112,4 +96,3 @@ class MiddleSchoolUnitSelection: ConstraintLayout, View.OnClickListener {
 
     }
 }
-

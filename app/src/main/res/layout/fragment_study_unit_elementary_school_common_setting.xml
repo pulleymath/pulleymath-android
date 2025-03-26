@@ -2,13 +2,11 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".legacy.activities.learning.tabFragment.main.mypage.StudyElementaryCommonUnitSettingFragment">
 
     <data>
         <import type="android.view.View" />
-        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
-        <import type="com.freewheelin.pulley.legacy.assets.SubjectV3"/>
-        <import type="com.freewheelin.pulley.revision2023.SchoolType"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel"/>
     </data>
 
@@ -17,8 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/gray_100"
-        android:clickable="true"
-        tools:context=".activities.mypage.MySignUpInfoFragment">
+        android:clickable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -89,68 +86,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guideBottomLabel">
-
-<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
-<!--                        android:id="@+id/elementary11Selection"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:unitType="e1-1" />-->
-
-<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
-<!--                        android:id="@+id/elementary12Selection"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:unitType="e1-2" />-->
-<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
-<!--                        android:id="@+id/elementary21Selection"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:unitType="e2-1" />-->
-<!--                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection-->
-<!--                        android:id="@+id/elementary22Selection"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:unitType="e2-2" />-->
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary31Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e3-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary32Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e3-2" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary41Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e4-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary42Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e4-2" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary51Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e5-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary52Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e5-2" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary61Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e6-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.ElementarySchoolUnitSelection
-                        android:id="@+id/elementary62Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="e6-2" />
 
                 </LinearLayout>
 

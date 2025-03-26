@@ -2,14 +2,21 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".legacy.activities.learning.tabFragment.main.mypage.StudyMiddleCommonUnitSettingFragment">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.MyMainPageFragViewModel"/>
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
         android:orientation="vertical"
         android:background="@color/gray_100"
-        android:clickable="true"
-        tools:context=".activities.mypage.MySignUpInfoFragment">
+        android:clickable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -81,37 +88,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guideBottomLabel">
 
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle11Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m1-1" />
-
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle12Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m1-2" />
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle21Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m2-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle22Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m2-2" />
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle31Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m3-1" />
-                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle32Selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:unitType="m3-2" />
 
                 </LinearLayout>
 

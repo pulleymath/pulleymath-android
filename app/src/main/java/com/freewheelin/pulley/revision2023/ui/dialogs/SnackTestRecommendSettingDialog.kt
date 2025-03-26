@@ -129,6 +129,8 @@ class SnackTestRecommendSettingDialog(): DialogFragment() {
     }
     fun getFragment(step: ViewType): Fragment {
         return when (step) {
+            // TODO 하나씩 BigUnit의 마수에서 빠져나와야함
+
             ViewType.출제범위선택 -> SnackTestSelectExamRangeFragment.newInstance(viewModel)
             ViewType.고등공통과목수정 -> SnackTestHighCommonSubjectModifyFragment.newInstance(viewModel)
             ViewType.고등선택과목수정 -> SnackTestHighOptionalSubjectModifyFragment.newInstance(viewModel)

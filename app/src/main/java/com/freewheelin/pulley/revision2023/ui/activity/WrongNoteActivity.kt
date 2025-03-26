@@ -5,18 +5,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -25,14 +22,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityWrongNoteBinding
-import com.freewheelin.pulley.databinding.FragmentWrongNoteStudyBinding
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterChangeListener
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.wrongNote.component.NoteFilterFragment
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.manage.PieceManager
 import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
@@ -41,20 +36,23 @@ import com.freewheelin.pulley.legacy.dialogs.WrongManagementDialog
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.setPaddingBottom
-import com.freewheelin.pulley.legacy.utils.showExpandVertical
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.NoteStudyViewListener
 import com.freewheelin.pulley.legacy.views.WrongManageView
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
+import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
+import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.adapter.NoteStudyCardAdapter
-import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.freewheelin.pulley.revision2023.utils.listeners.NoteStudyClickListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteActViewModel
-import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteStudyViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
@@ -63,11 +61,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
-import com.freewheelin.pulley.legacy.views.snackBar.SnackBar
-import com.freewheelin.pulley.legacy.views.snackBar.SnackBarView
-import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
-import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 
 enum class OrderType(val rawValue: Int) {
     recent(0),
@@ -112,13 +105,27 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
             }
         }
     }
+    private fun changeBookFilterAndFetchNotes(tabIndex: Int) {
+        val vm: WrongNoteActViewModel by viewModels()
+        if (tabIndex == 0) {
+            if (tabFragments[0] is NoteFilterFragment) {
+                (tabFragments[0] as NoteFilterFragment).updateBookFilters()
+
+                vm.fetchWrongNotes()
+            }
+        } else {
+            if (tabFragments[1] is NoteFilterFragment) {
+                (tabFragments[1] as NoteFilterFragment).updateBookFilters()
+                vm.fetchScrapNotes()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initReceiver()
-
         binding.apply {
             lifecycleOwner = this@WrongNoteActivity
             vm = viewModel
@@ -136,14 +143,15 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     val tabPosition = tab?.position ?: 0
                     viewModel.tabPosition = tabPosition
-
                     changeFilterAndFetchNotes(tabPosition)
+                    changeBookFilterAndFetchNotes(tabPosition)
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
         }
         viewModel.apply {
+            fetchCurriculumSubjects()
             errorAction.observe(this@WrongNoteActivity) {
                 dialog?.let {
                     it.dismiss()
@@ -201,6 +209,16 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
                     }
                 }
 
+            }
+            filterElements.observe(this@WrongNoteActivity) { filter ->
+                setGroupedProblem() {}
+//                println("aspasp filterElement changed! observer, length : ${filter.size}")
+//                filter.forEach { it -> println("isSelected? ${it.name}, ${it.isSelected.get()}")}
+//                filter.forEach {
+//                    if (it.isSelected.get()) {
+//                        println("isSelected? true = ${it.value}")
+//                    }
+//                }
             }
         }
     }
@@ -320,16 +338,14 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
     fun updateFilter(filters: Set<LearningFilterType>) {
         viewModel.selectedFilterTypes = filters
     }
-    override fun onFilterTypeChanged(
-        fragment: NoteFilterFragment,
-        filters: Set<LearningFilterType>
-    ) {
-        viewModel.selectedFilterTypes = filters
-        viewModel.setGroupedProblem() {
-            binding.notesRv.scrollToPosition(0)
-        }
+    fun updateBookFilter(filterElements: List<BookFilterElement>) {
+        viewModel.filterElements.postValue(filterElements)
     }
 
+    override fun onUpdateFilter(filterElements: List<BookFilterElement>) {
+        viewModel.filterElements.postValue(filterElements)
+
+    }
 
     override fun onDateChanged(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type) {
         viewModel.from = from
@@ -352,7 +368,7 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
 
     override fun onCardItemDetail(item: NoteStudyProblemWrapper) {
         val problem = item.problem ?: return
-        val dialog = NoteDetailDialog(this, problem, user!!)
+        val dialog = NoteDetailDialog(this, problem, user!!, viewModel.filterElements.value)
         dialog.nextProblem = viewModel.getNextProblem(problem)
         dialog.prevProblem = viewModel.getPrevProblem(problem)
         dialog.show()

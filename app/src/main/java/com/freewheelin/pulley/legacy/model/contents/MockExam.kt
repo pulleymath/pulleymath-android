@@ -1,11 +1,7 @@
 package com.freewheelin.pulley.legacy.model.contents
 
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
-import java.net.URLEncoder
-import java.util.*
+import java.util.Date
 
 
 class MockExam: Content, BaseDiffItem {
@@ -43,7 +39,7 @@ class MockExam: Content, BaseDiffItem {
     var personalData:PersonalData? = null
     var createDate: Date = Date()
     var isRestart = false
-    var selectOptional = mutableListOf<CommercialSubject>()
+    var selectOptionalSubjectSummary = listOf<SubjectSummary>()
     var needPulleyPlus: Boolean = false
 
     enum class ExamType {

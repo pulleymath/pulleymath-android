@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
@@ -36,7 +37,15 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
 
     val userInRepo = userRepository.user
     val schoolType = userRepository.schoolType
-    val subjectList by lazy { MutableLiveData<List<LCSubject>>() }
+
+    private val _subjectNames = MutableLiveData<Map<Int, String>>()
+    val subjectNames: LiveData<Map<Int, String>> = _subjectNames
+
+    fun updateSubjectNames(newNames: Map<Int, String>) {
+        _subjectNames.postValue(newNames)
+    }
+
+
     val availableSubjectIndicator by lazy { MutableLiveData<List<LCSubject.SubjectIndicator>>() }
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
 
@@ -53,7 +62,9 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                 Log.d(javaClass.simpleName, "fetchAvailableSubjects =>${response.data}")
                 response.data?.let {
                     it.sortedBy { it.subjectId }.let {
-                        subjectList.postValue(it)
+                        updateSubjectNames(it.associate { subject ->
+                            subject.subjectId to subject.name
+                        })
                         availableSubjectIndicator.postValue(it.map { it.subjectIndicator })
                         cb()
                     }
@@ -161,7 +172,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
         chapterList.postValue(listWithHeaderAndFooter)
     }
     fun chapterReset() {
-        chapterList.postValue(null)
+        chapterList.postValue(listOf())
     }
 
 

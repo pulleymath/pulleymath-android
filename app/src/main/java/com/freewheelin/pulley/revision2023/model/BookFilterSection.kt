@@ -2,12 +2,7 @@ package com.freewheelin.pulley.revision2023.model
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.recyclerview.widget.DiffUtil
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.revision2021.activity.base.BaseDiffItem
-import com.freewheelin.pulley.revision2023.SchoolType
-
 
 
 data class BookFilterElement(
@@ -15,7 +10,8 @@ data class BookFilterElement(
     val name: String,
     val parentTitle: String? = null,
     var value: String? = null,
-    val seq: Int? = null
+    val seq: Int? = null,
+    val code: String? = null,
 ): BaseDiffItem {
     var isSelected: ObservableBoolean = ObservableBoolean(false)
     var calendarValue: ObservableField<String> = ObservableField(value)
@@ -49,7 +45,8 @@ data class BookFilterSection(
 data class BookFilterItem (
     val name: String,
     val value: String,
-    val seq: Int
+    val seq: Int,
+    val code: String
 )
 
 enum class BookFilterParent {
@@ -174,113 +171,5 @@ enum class LearningFilterType(val title: String, val displayedName: String) {
                 values().firstOrNull { it.name == value } ?: 기타
             } ?: 기타
     }
-    val toSubjectV3: SubjectV3
-        get() {
-            return when(this) {
-                과목_수학_상 -> SubjectV3.수학_상
-                과목_수학_하 -> SubjectV3.수학_하
-                과목_수학1 -> SubjectV3.수학I
-                과목_수학2 -> SubjectV3.수학II
-                과목_확통 -> SubjectV3.확률과통계
-                과목_미적분 -> SubjectV3.미적분
-                과목_기하 -> SubjectV3.기하
-                과목_중1_1 -> SubjectV3.중1_1
-                과목_중1_2 -> SubjectV3.중1_2
-                과목_중2_1 -> SubjectV3.중2_1
-                과목_중2_2 -> SubjectV3.중2_2
-                과목_중3_1 -> SubjectV3.중3_1
-                과목_중3_2 -> SubjectV3.중3_2
-                과목_초1_1 -> SubjectV3.초1_1
-                과목_초1_2 -> SubjectV3.초1_2
-                과목_초2_1 -> SubjectV3.초2_1
-                과목_초2_2 -> SubjectV3.초2_2
-                과목_초3_1 -> SubjectV3.초3_1
-                과목_초3_2 -> SubjectV3.초3_2
-                과목_초4_1 -> SubjectV3.초4_1
-                과목_초4_2 -> SubjectV3.초4_2
-                과목_초5_1 -> SubjectV3.초5_1
-                과목_초5_2 -> SubjectV3.초5_2
-                과목_초6_1 -> SubjectV3.초6_1
-                과목_초6_2 -> SubjectV3.초6_2
-                else -> SubjectV3.기타
-            }
-        }
-
-    val exclusiveSet: Set<LearningFilterType>
-        get() {
-            return when(this) {
-                과목_전체 -> when(schoolType) {
-                    SchoolType.MIDDLE -> setOf(과목_중1_1, 과목_중1_2, 과목_중2_1, 과목_중2_2, 과목_중3_1, 과목_중3_2)
-                    SchoolType.ELEMENTARY -> setOf(과목_초1_1, 과목_초1_2, 과목_초2_1, 과목_초2_2, 과목_초3_1, 과목_초3_2, 과목_초4_1, 과목_초4_2, 과목_초5_1, 과목_초5_2, 과목_초6_1, 과목_초6_2)
-                    else -> setOf(과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)
-                }
-                과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하 -> setOf(과목_전체)
-                과목_중1_1, 과목_중1_2, 과목_중2_1, 과목_중2_2, 과목_중3_1, 과목_중3_2 -> setOf(과목_전체)
-                과목_초1_1, 과목_초1_2, 과목_초2_1, 과목_초2_2, 과목_초3_1, 과목_초3_2, 과목_초4_1, 과목_초4_2, 과목_초5_1, 과목_초5_2, 과목_초6_1, 과목_초6_2 -> setOf(과목_전체)
-                유형_전체 -> setOf(유형_유형서, 유형_내신서, 유형_기출서)
-                유형_유형서, 유형_내신서, 유형_기출서 -> setOf(유형_전체)
-
-                추천_전체 -> setOf(추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하)
-                추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하 -> setOf(추천_전체)
-
-                추천레벨_전체 -> setOf(추천레벨_상, 추천레벨_중, 추천레벨_하)
-                추천레벨_상, 추천레벨_중, 추천레벨_하 -> setOf(추천레벨_전체)
-
-                학습유형_전체 -> setOf(학습유형_유형학습, 학습유형_워크북, 학습유형_오답학습, 학습유형_추천학습, 학습유형_모의고사, 학습유형_테스트)
-                학습유형_유형학습, 학습유형_워크북, 학습유형_오답학습, 학습유형_추천학습, 학습유형_모의고사, 학습유형_테스트 -> setOf(학습유형_전체)
-
-                난이도_전체 -> setOf(난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)
-                난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상 -> setOf(난이도_전체)
-
-                보기설정_전체 -> setOf(보기설정_맞은문제, 보기설정_틀린문제, 보기설정_안_푼_문제)
-                보기설정_맞은문제, 보기설정_틀린문제, 보기설정_안_푼_문제 -> setOf(보기설정_전체)
-                보기설정_클리어_미포함 -> setOf(보기설정_클리어_포함)
-                보기설정_클리어_포함 -> setOf(보기설정_클리어_미포함)
-
-                핀_미포함 -> setOf(핀_포함)
-                핀_포함 -> setOf(핀_미포함)
-                else -> setOf()
-            }
-        }
-    val sectionList: List<LearningFilterType>
-        get() {
-            return when(this) {
-                과목_전체 -> when(schoolType) {
-                    SchoolType.MIDDLE -> listOf(과목_중1_1, 과목_중1_2, 과목_중2_1, 과목_중2_2, 과목_중3_1, 과목_중3_2)
-                    SchoolType.ELEMENTARY -> listOf(과목_초1_1, 과목_초1_2, 과목_초2_1, 과목_초2_2, 과목_초3_1, 과목_초3_2, 과목_초4_1, 과목_초4_2, 과목_초5_1, 과목_초5_2, 과목_초6_1, 과목_초6_2)
-                    else -> listOf(과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)
-                }
-                과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하 ->
-                    listOf(과목_전체, 과목_수학_상, 과목_수학_하, 과목_수학1, 과목_수학2, 과목_확통, 과목_미적분, 과목_기하)
-                과목_중1_1, 과목_중1_2, 과목_중2_1, 과목_중2_2, 과목_중3_1, 과목_중3_2 ->
-                    listOf(과목_전체, 과목_중1_1, 과목_중1_2, 과목_중2_1, 과목_중2_2, 과목_중3_1, 과목_중3_2)
-                과목_초1_1, 과목_초1_2, 과목_초2_1, 과목_초2_2, 과목_초3_1, 과목_초3_2, 과목_초4_1, 과목_초4_2, 과목_초5_1, 과목_초5_2, 과목_초6_1, 과목_초6_2 ->
-                    listOf(과목_전체, 과목_초1_1, 과목_초1_2, 과목_초2_1, 과목_초2_2, 과목_초3_1, 과목_초3_2, 과목_초4_1, 과목_초4_2, 과목_초5_1, 과목_초5_2, 과목_초6_1, 과목_초6_2)
-
-                유형_전체, 유형_유형서, 유형_내신서, 유형_기출서 ->
-                    listOf(유형_전체, 유형_유형서, 유형_내신서, 유형_기출서)
-
-                추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하 ->
-                    listOf(추천_전체, 추천_1등급, 추천_2_3등급, 추천_3_4등급, 추천_4등급이하)
-
-                추천레벨_전체, 추천레벨_상, 추천레벨_중, 추천레벨_하 ->
-                    listOf(추천레벨_전체, 추천레벨_상, 추천레벨_중, 추천레벨_하)
-
-                학습유형_전체, 학습유형_유형학습, 학습유형_워크북, 학습유형_오답학습, 학습유형_추천학습 ->
-                    listOf(학습유형_전체, 학습유형_유형학습, 학습유형_워크북, 학습유형_오답학습, 학습유형_추천학습)
-
-                난이도_전체, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상 ->
-                    listOf(난이도_전체, 난이도_하, 난이도_중하, 난이도_중, 난이도_상, 난이도_최상)
-
-                보기설정_전체, 보기설정_맞은문제, 보기설정_틀린문제, 보기설정_안_푼_문제 ->
-                    listOf(보기설정_전체, 보기설정_맞은문제, 보기설정_틀린문제, 보기설정_안_푼_문제)
-
-                보기설정_클리어_미포함, 보기설정_클리어_포함 ->
-                    listOf(보기설정_클리어_미포함, 보기설정_클리어_포함)
-
-                else -> { listOf() }
-
-            }
-        }
 
 }

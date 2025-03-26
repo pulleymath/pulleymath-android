@@ -2,25 +2,21 @@ package com.freewheelin.pulley.revision2023.service
 
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterCategory
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterOrder
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialBook
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.RecommendBookList
-import com.freewheelin.pulley.legacy.core.manage.ResponseBookList
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.ResponseListBody
 import com.freewheelin.pulley.legacy.model.contents.Book
 import com.freewheelin.pulley.revision2021.repository.remote.Network
-import com.freewheelin.pulley.revision2023.SchoolType
-import com.freewheelin.pulley.revision2023.model.BookFilterItem
 import com.freewheelin.pulley.revision2023.model.BookFilterSection
-import com.freewheelin.pulley.revision2023.model.PriorConceptWrapper
 import io.reactivex.Completable
-import io.reactivex.Observable
-import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 object PatternStudyApi {
     fun patternStudyService(): PatternStudyService = Network.retrofit(Network.Type.spring).create(
@@ -66,13 +62,6 @@ interface PatternStudyService {
         @Path("studentID") studentID: String = user?.studentID!!,
     ): Completable
 
-
-    // CustomizeBookDialog - 워크북 api
-    @GET("v3/commercials")
-    suspend fun getCommercials(
-        @Query("subject") subject: CommercialSubject?,
-        @Query("schoolType") school: String? = schoolType.name
-    ): List<CommercialBook>
 
     // CustomizeBookDialog - 워크북 api
     @GET("v1/filters")

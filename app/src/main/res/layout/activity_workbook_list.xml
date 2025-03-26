@@ -218,8 +218,8 @@
                         android:layout_height="wrap_content"
                         android:minHeight="600dp"
                         android:nestedScrollingEnabled="false"
-                        android:paddingStart="@dimen/dp32"
-                        android:paddingEnd="@dimen/dp32"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
                         android:paddingBottom="@dimen/dp24"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/workbookLabelTv" />
@@ -356,6 +356,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/chatBotBtn"
+            tools:visibility="gone"
             android:layout_marginStart="32dp"
             android:layout_marginBottom="28dp"
             app:layout_constraintStart_toStartOf="parent"

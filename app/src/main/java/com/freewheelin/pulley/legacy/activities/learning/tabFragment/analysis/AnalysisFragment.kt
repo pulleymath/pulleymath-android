@@ -1,11 +1,10 @@
 package com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis
 
-import android.Manifest
+
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
@@ -18,48 +17,67 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
 import android.widget.ScrollView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.activity.MockReportActivity
+import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
 import com.freewheelin.pulley.legacy.activities.OMRActivity
 import com.freewheelin.pulley.legacy.activities.WeeklyTestReportActivity
 import com.freewheelin.pulley.legacy.activities.WrongTestReportActivity
 import com.freewheelin.pulley.legacy.activities.analysis.AnalysisTabActivity
-
-
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
-import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.*
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisRecommendStudyView
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisRecommendStudyViewListener
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisStudyRateView
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisStudyRateViewListener
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListView
+import com.freewheelin.pulley.legacy.activities.learning.tabFragment.analysis.component.AnalysisTodayStudyListViewListener
 import com.freewheelin.pulley.legacy.activities.solve.CustomBarChartRender
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.*
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyRecommend
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyStudy
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailySummary
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.WeekStudyData
+import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.core.manage.ContentManager
-import com.freewheelin.pulley.legacy.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.FragmentAnalysisBinding
-import com.freewheelin.pulley.legacy.core.API_V3
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.ResponseListBody
-import com.freewheelin.pulley.legacy.model.contents.*
-import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel
-import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.model.contents.Book
+import com.freewheelin.pulley.legacy.model.contents.BookType
+import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.MockExam
+import com.freewheelin.pulley.legacy.model.contents.Piece
+import com.freewheelin.pulley.legacy.model.contents.Test
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.dayOfWeek
+import com.freewheelin.pulley.legacy.utils.pxToSp
+import com.freewheelin.pulley.legacy.utils.responseError
+import com.freewheelin.pulley.legacy.utils.responseFailed
+import com.freewheelin.pulley.legacy.utils.setOnBasicPOrHigherClickListener
+import com.freewheelin.pulley.legacy.utils.showIfNeed
+import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DaebakToast
-import com.freewheelin.pulley.legacy.views.textViews.UpDownTextView.Change.*
+import com.freewheelin.pulley.legacy.views.textViews.UpDownTextView.Change.decrease
+import com.freewheelin.pulley.legacy.views.textViews.UpDownTextView.Change.increase
+import com.freewheelin.pulley.legacy.views.textViews.UpDownTextView.Change.noChange
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.freewheelin.pulley.revision2023.viewmodel.AnalysisFViewModel
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -72,7 +90,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Math.abs
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 
 class AnalysisFragment : MainTabFragment(),
@@ -649,16 +668,8 @@ class AnalysisFragment : MainTabFragment(),
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
         viewModel.fetchMockSummary(content.mockID, content.assignID) { mockExamSummary ->
-            val optionResult = mutableListOf<CommercialSubject>()
             mockExamSummary?.let {
-                val optionalSubjects = mockExamSummary.optionalSubjectSummary
-
-                for(subject in optionalSubjects) {
-                    if (subject.isSelected) {
-                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
-                    }
-                }
-                mock.selectOptional = optionResult
+                mock.selectOptionalSubjectSummary = mockExamSummary.optionalSubjectSummary.toList()
                 mock.examType = mockExamSummary.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }

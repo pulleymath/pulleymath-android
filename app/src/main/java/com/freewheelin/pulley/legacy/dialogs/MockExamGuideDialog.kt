@@ -15,13 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.DialogMockExamGuideBinding
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.DialogMockExamGuideBinding
-import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
 import com.freewheelin.pulley.legacy.model.contents.SubjectSummary
@@ -52,9 +50,9 @@ class MockExamGuideDialog(
 
     var mockSummary:MockExamSummary? = null
 
-    val option1 = CommercialSubject.PROBABILITY_AND_STATISTICS// 확통
-    val option2 = CommercialSubject.CALCULUS // 미적
-    val option3 = CommercialSubject.GEOMETRY // 기하
+    val option1 = "PROBABILITY_AND_STATISTICS"// 확통
+    val option2 = "CALCULUS" // 미적
+    val option3 = "GEOMETRY" // 기하
 
     val checkBoxes : Array<CheckBox> by lazy { arrayOf(binding.checkSelectOne, binding.checkSelectTwo, binding.checkSelectThree) }
 
@@ -139,9 +137,9 @@ class MockExamGuideDialog(
                 selectRadioContainer.setOnCheckedChangeListener { radioGroup, checkedId ->
                     mockSummary?.let { mock ->
                         when (checkedId) {
-                            R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option1.name }
-                            R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option2.name }
-                            R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option3.name }
+                            R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option1 }
+                            R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option2 }
+                            R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == option3 }
                         }
                     }
                     setSubjectsUi()
@@ -276,9 +274,9 @@ class MockExamGuideDialog(
                             checkBoxes[idx].isChecked = true
                             // 라디오 버튼 선택처리 - 라디오일 경우는 셋 중에 하나만 선택됨
                             when(subject.subjectCodeType) {
-                                option1.name -> radioSelectOne.isChecked = true
-                                option2.name -> radioSelectTwo.isChecked = true
-                                option3.name -> radioSelectThree.isChecked = true
+                                option1 -> radioSelectOne.isChecked = true
+                                option2 -> radioSelectTwo.isChecked = true
+                                option3 -> radioSelectThree.isChecked = true
                             }
                         }else{
                             checkBoxes[idx].isChecked = false
@@ -379,23 +377,43 @@ class MockExamGuideDialog(
 
     fun setOptionToMockExam() {
 
-        val optionResult = mutableListOf<CommercialSubject>()
+        val optionResult = mutableListOf<SubjectSummary>()
 
         mockExam.isRestart = isRestart()
 
         if(binding.selectCheckContainer.visibility == View.VISIBLE) {
             for((idx, subject) in selectedOptions.withIndex()) {
                 if(idx >= 3) break
-                if(checkBoxes[idx].isChecked) optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
+                if(checkBoxes[idx].isChecked){
+                    optionResult.add(subject)
+                }
             }
         } else if(binding.selectRadioContainer.visibility == View.VISIBLE) {
             when(binding.selectRadioContainer.checkedRadioButtonId) {
-                R.id.radioSelectOne -> optionResult.add(option1)
-                R.id.radioSelectTwo -> optionResult.add(option2)
-                R.id.radioSelectThree -> optionResult.add(option3)
+                R.id.radioSelectOne -> {
+                    for((idx, subject) in selectedOptions.withIndex()) {
+                        if (idx == 0) {
+                            optionResult.add(subject)
+                        }
+                    }
+                }
+                R.id.radioSelectTwo -> {
+                    for((idx, subject) in selectedOptions.withIndex()) {
+                        if (idx == 1) {
+                            optionResult.add(subject)
+                        }
+                    }
+                }
+                R.id.radioSelectThree -> {
+                    for((idx, subject) in selectedOptions.withIndex()) {
+                        if (idx == 2) {
+                            optionResult.add(subject)
+                        }
+                    }
+                }
             }
         }
-        mockExam.selectOptional = optionResult
+        mockExam.selectOptionalSubjectSummary = optionResult
     }
 
     private fun progress(run: Boolean) {

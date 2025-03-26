@@ -1,31 +1,12 @@
 package com.freewheelin.pulley.legacy.model
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.freewheelin.pulley.legacy.assets.*
-import com.freewheelin.pulley.legacy.bases.MyApplication
-import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyRecommend
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyStudy
-import com.freewheelin.pulley.legacy.core.API_V1
-import com.freewheelin.pulley.legacy.core.API_V2
-import com.freewheelin.pulley.legacy.core.API_V3
-import com.freewheelin.pulley.legacy.core.Parameter
-import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.assets.Grade
+import com.freewheelin.pulley.legacy.assets.Major
+import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.legacy.utils.*
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 
 data class UserV4(
     var fullName: String,
@@ -65,13 +46,6 @@ data class UserV4(
         }
     val userMajor: Major
         get() = Major.init(majorType)
-
-    val studiedUnit: Set<BigUnitV3>
-        get() {
-            val ids = initStudied.split(",").map { it.trim().toIntOrNull() }.filterNotNull()
-            return ids.mapNotNull { BigUnitV3.initOrNull(it) }
-                .toSet()
-        }
 
     fun commit(from:String) {
         val gson = Gson()

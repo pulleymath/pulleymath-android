@@ -93,13 +93,16 @@ class DaebakTabRadio: LinearLayout, View.OnClickListener {
             addView(button)
 
             button.layoutParams.height = LayoutParams.MATCH_PARENT
-            if(tabSize > 0) {
-                button.layoutParams.width = tabSize
-            } else {
-                val padding = resources.getDimension(R.dimen.sp16)
-                button.setPadding(padding.toInt(), 0, padding.toInt(), 0)
-                button.layoutParams.width = LayoutParams.WRAP_CONTENT
-            }
+            val padding = resources.getDimension(R.dimen.sp16)
+            button.setPadding(padding.toInt(), 0, padding.toInt(), 0)
+            button.layoutParams.width = LayoutParams.WRAP_CONTENT
+//            if(tabSize > 0) {
+//                button.layoutParams.width = tabSize
+//            } else {
+//                val padding = resources.getDimension(R.dimen.sp16)
+//                button.setPadding(padding.toInt(), 0, padding.toInt(), 0)
+//                button.layoutParams.width = LayoutParams.WRAP_CONTENT
+//            }
 
             if(i < labels.size - 1)
                 addBorderView()

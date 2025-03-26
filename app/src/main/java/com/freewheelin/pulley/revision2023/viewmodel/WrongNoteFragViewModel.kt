@@ -29,26 +29,26 @@ class WrongNoteFragViewModel(application: Application): BaseAndroidViewModel(app
     private val userRepository by lazy { UserRepository.instance }
     val user = userRepository.user
 
-    var afterFetch = false
+//    var afterFetch = false
 
-    private val _priorConcepts = MutableLiveData<List<PriorConcept>>()
-    val priorConcepts: LiveData<List<PriorConcept>> = _priorConcepts
+//    private val _priorConcepts = MutableLiveData<List<PriorConcept>>()
+//    val priorConcepts: LiveData<List<PriorConcept>> = _priorConcepts
     private val _filterElements = MutableLiveData<List<BookFilterElement>>()
     val filterElements: LiveData<List<BookFilterElement>> = _filterElements
 
-    private val _wrongProblem = MutableLiveData<List<Problem>>()
-    val wrongProblem: LiveData<List<Problem>> = _wrongProblem
+//    private val _wrongProblem = MutableLiveData<List<Problem>>()
+//    val wrongProblem: LiveData<List<Problem>> = _wrongProblem
+//
+//    private val _scrapProblem = MutableLiveData<List<Problem>>()
+//    val scrapProblem: LiveData<List<Problem>> = _scrapProblem
+//    val updateNotes = MutableLiveData<Unit>()
 
-    private val _scrapProblem = MutableLiveData<List<Problem>>()
-    val scrapProblem: LiveData<List<Problem>> = _scrapProblem
-    val updateNotes = MutableLiveData<Unit>()
-
-    val showLockIcon = MutableLiveData<Boolean>()
+//    val showLockIcon = MutableLiveData<Boolean>()
 
     var from: LocalDate = LocalDate.now().minusDays(6)
     var to: LocalDate = LocalDate.now()
     var datePickerType = DateRangePickerDialog.Type.RECENT7
-    var selectedFilterTabPosition = 0
+//    var selectedFilterTabPosition = 0
 
     lateinit var bookFilterParent: BookFilterParent
     val selectedFilterTypes : HashSet<LearningFilterType> by lazy {
@@ -92,54 +92,136 @@ class WrongNoteFragViewModel(application: Application): BaseAndroidViewModel(app
             it.isSelected.set(it.isSelected.get().not())
         }
     }
-    fun syncSelectedFilterType() {
-        filterElements.value?.forEach {
-            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
-        }
-    }
+
     private fun syncSelectedFilterType(filters: List<BookFilterElement>): List<BookFilterElement> {
         return filters.map {
             it.isSelected.set(selectedFilterTypes.contains(it.filterType))
             it
         }
     }
-    fun onFilterItemClick(item: BookFilterElement, cb: (Set<LearningFilterType>) -> Unit) {
-        val type = item.filterType
-        val isContained = selectedFilterTypes.contains(type)
-        if (isContained) {
-            selectedFilterTypes.remove(type)
-        } else {
-            updateFilterTypes(type)
+
+    fun onFilterItemClick(item: BookFilterElement, cb: () -> Unit) {
+        println("qwpqwp item : ${item}")
+
+        // 같은 parentTitle을 가진 항목들 찾기
+        val itemsWithSameParent = _filterElements.value?.filter { it.parentTitle == item.parentTitle } ?: emptyList()
+        val nonAllItems = itemsWithSameParent.filter { it.name != "전체" }
+        val allItem = itemsWithSameParent.find { it.name == "전체" }
+        val hasAllItem = allItem != null
+
+        // "보기 설정" 특별 처리
+        if (item.parentTitle == "보기 설정") {
+            handleViewSettingsFilter(item, itemsWithSameParent, hasAllItem)
+            _filterElements.value = _filterElements.value
+            return cb()
         }
-        checkFiltersWhenRemoveSelfs(type)
-        syncSelectedFilterType()
 
-        val filters = selectedFilterTypes.toSet()
-        cb(filters)
-//        updateNotes(filters)
+        // 일반 필터 처리
+        handleRegularFilter(item, nonAllItems, allItem)
 
+        // LiveData 업데이트하여 UI 갱신
+        _filterElements.value = _filterElements.value
+        cb()
     }
-    fun updateFilterTypes(type: LearningFilterType) {
-        selectedFilterTypes.add(type)
-        selectedFilterTypes.removeAll(type.exclusiveSet)
-    }
-    private fun checkFiltersWhenRemoveSelfs(type: LearningFilterType) {
-        val sectionListWithoutSelected = type.sectionList.filter { it != type }
-        for (item in sectionListWithoutSelected) {
-            if (selectedFilterTypes.contains(item)) {
-                return
+
+    // "보기 설정" 필터 처리 함수
+    private fun handleViewSettingsFilter(
+        item: BookFilterElement,
+        itemsWithSameParent: List<BookFilterElement>,
+        hasAllItem: Boolean
+    ) {
+        if (hasAllItem) {
+            if (item.name == "전체") {
+                // "전체"가 이미 선택된 상태에서 다시 클릭된 경우 - 선택 해제하지 않음
+                if (item.isSelected.get()) return
+
+                // "전체" 선택 시 다른 항목들 선택 해제
+                item.isSelected.set(true)
+                itemsWithSameParent.filter { it.name != "전체" }.forEach { it.isSelected.set(false) }
+            } else {
+                // "전체"가 아닌 항목 토글
+                item.isSelected.set(!item.isSelected.get())
+
+                if (item.isSelected.get()) {
+                    // 개별 항목 선택 시 "전체" 선택 해제
+                    itemsWithSameParent.find { it.name == "전체" }?.isSelected?.set(false)
+                } else {
+                    // 모든 항목이 선택 해제되었으면 "전체" 선택
+                    val anyItemSelected = itemsWithSameParent.filter { it.name != "전체" }.any { it.isSelected.get() }
+                    if (!anyItemSelected) {
+                        itemsWithSameParent.find { it.name == "전체" }?.isSelected?.set(true)
+                    }
+                }
+            }
+        } else {
+            // "전체" 항목이 없는 경우 - 라디오 버튼 로직 적용
+            _filterElements.value?.forEach { element ->
+                if (element.parentTitle == "보기 설정") {
+                    element.isSelected.set(element == item)
+                }
             }
         }
-        selectedFilterTypes.add(type)
     }
-    fun updateNotes(filters: Set<LearningFilterType>) {
-        updateNotes.postValue(Unit)
-    }
-    fun getSelectedFilterProblem(): List<Problem>? {
-        return if (selectedFilterTabPosition == 0) {
-            wrongProblem.value
+
+    // 일반 필터 처리 함수
+    private fun handleRegularFilter(
+        item: BookFilterElement,
+        nonAllItems: List<BookFilterElement>,
+        allItem: BookFilterElement?
+    ) {
+        if (item.name == "전체") {
+            // "전체"가 이미 선택된 상태에서 다시 클릭된 경우 - 선택 해제하지 않음
+            if (item.isSelected.get()) return
+
+            // "전체" 선택 시 다른 항목들 선택 해제
+            item.isSelected.set(true)
+            nonAllItems.forEach { it.isSelected.set(false) }
         } else {
-            scrapProblem.value
+            // 현재 아이템의 선택 상태 토글
+            item.isSelected.set(!item.isSelected.get())
+
+            if (item.isSelected.get()) {
+                // 개별 항목 선택 시 "전체" 선택 해제
+                allItem?.isSelected?.set(false)
+
+                // 모든 개별 항목이 선택되었으면 "전체"만 선택하고 나머지는 해제
+                val allNonAllItemsSelected = nonAllItems.all { it.isSelected.get() }
+                if (allNonAllItemsSelected) {
+                    nonAllItems.forEach { it.isSelected.set(false) }
+                    allItem?.isSelected?.set(true)
+                }
+            } else {
+                // 항목이 선택 해제된 경우, 다른 항목이 하나도 선택되지 않았으면 "전체" 선택
+                val anyItemSelected = nonAllItems.any { it.isSelected.get() }
+                if (!anyItemSelected) {
+                    allItem?.isSelected?.set(true)
+                }
+            }
         }
     }
+
+
+//    fun updateFilterTypes(type: LearningFilterType) {
+//        selectedFilterTypes.add(type)
+//        selectedFilterTypes.removeAll(type.exclusiveSet)
+//    }
+//    private fun checkFiltersWhenRemoveSelfs(type: LearningFilterType) {
+//        val sectionListWithoutSelected = type.sectionList.filter { it != type }
+//        for (item in sectionListWithoutSelected) {
+//            if (selectedFilterTypes.contains(item)) {
+//                return
+//            }
+//        }
+//        selectedFilterTypes.add(type)
+//    }
+//    fun updateNotes(filters: Set<LearningFilterType>) {
+//        updateNotes.postValue(Unit)
+//    }
+//    fun getSelectedFilterProblem(): List<Problem>? {
+//        return if (selectedFilterTabPosition == 0) {
+//            wrongProblem.value
+//        } else {
+//            scrapProblem.value
+//        }
+//    }
 }

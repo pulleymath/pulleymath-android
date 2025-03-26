@@ -6,37 +6,52 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
+import com.freewheelin.pulley.databinding.ItemCommercialListBinding
+import com.freewheelin.pulley.databinding.ItemCommercialPageBinding
+import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
+import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialBook
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialBookPage
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.BookManager
-import com.freewheelin.pulley.databinding.ItemCommercialListBinding
-import com.freewheelin.pulley.databinding.ItemCommercialPageBinding
-import com.freewheelin.pulley.databinding.ItemCommercialPageProblemBinding
-import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.isMobile
+import com.freewheelin.pulley.legacy.core.manage.TestManager
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
 import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
+import com.freewheelin.pulley.legacy.model.CurriculumSubject
 import com.freewheelin.pulley.legacy.model.contents.Book
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.hide
+import com.freewheelin.pulley.legacy.utils.setOnPremiumClickListener
+import com.freewheelin.pulley.legacy.utils.show
+import com.freewheelin.pulley.legacy.utils.toPx
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.textViews.SortableListener
 import com.freewheelin.pulley.legacy.views.textViews.SortableTextView
+import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
 import com.freewheelin.pulley.revision2023.ui.view.TertiaryButton
 
@@ -101,6 +116,7 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
     var autoDecrement = false
     var delayHandler = Handler()
     var listener: CustomizeBookDialogListener? = null
+    var curriculumSubjects: List<CurriculumSubject> = listOf()
 
     // 체크박스 사용 막
     var blockCheck = false
@@ -117,28 +133,37 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
         }
         isWorkbookStartChallengeInProgress = isStartChallengeInProgress
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        initUI()
-        this.listener = listener
-        step = 1
+        TestManager.getAllSubjects(context) { curriculumSubjects ->
+            this.curriculumSubjects = curriculumSubjects
+            initUI()
+            this.listener = listener
+            step = 1
+        }
     }
 
     constructor(context: Context, listener: CustomizeBookDialogListener?, book: Book): super(context) {
         setContentView(R.layout.dialog_book_customize)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        initUI()
-        selectedBook = CommercialBook(book)
-        step1Container.visibility = View.INVISIBLE
-        step2Container.visibility = View.VISIBLE
-        initStep2()
-        step = 1
-        this.listener = listener
+        TestManager.getAllSubjects(context) { curriculumSubjects ->
+            this.curriculumSubjects = curriculumSubjects
+            initUI()
+            selectedBook = CommercialBook(book)
+            step1Container.visibility = View.INVISIBLE
+            step2Container.visibility = View.VISIBLE
+            initStep2()
+            step = 1
+            this.listener = listener
+        }
     }
 
     override fun onTabSelected(radio: DaebakTabRadio, index: Int) {
-        val subjects = CommercialSubject.arrayOnSchool
-        val subject = if(index == 0) null else subjects[index - 1]
+        val subjects = listOf("전체") + curriculumSubjects
+            .filter { it.schoolType == schoolType.toString() }
+            .sortedBy { it.seq }
+            .map { it.name }
+        val subject = if(index == 0) null else subjects[index]
 
-        LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-과목선택",  subject?.text ?: "전체")
+        LogUtils.logEvent(context, user!!, PulleyEvent.BUTTON_CLICK, "유형학습", "시중교재-과목선택",  subject ?: "전체")
         sync(subject)
     }
 
@@ -155,16 +180,17 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
     private fun sort() {
         var list = commercialBooks
         if(subjectSl.isSelected) {
-            val subjectList = SubjectV3.listOnSchoolType
+            val subjectNameList = curriculumSubjects
+                .sortedBy { it.seq }
+                .map { it.name }
             val indexComparatorAscend =
                 Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
-                    subjectList.indexOf(cbook1.subject) - subjectList.indexOf(cbook2.subject)
+                    subjectNameList.indexOf(cbook1.subject) - subjectNameList.indexOf(cbook2.subject)
                 }
             val indexComparatorDescend =
                 Comparator { cbook1: CommercialBook, cbook2: CommercialBook ->
-                    subjectList.indexOf(cbook2.subject) - subjectList.indexOf(cbook1.subject)
+                    subjectNameList.indexOf(cbook2.subject) - subjectNameList.indexOf(cbook1.subject)
                 }
-
 
             list = when (subjectSl.order) {
                 SortableTextView.Order.ascend -> list?.sortedWith(indexComparatorAscend)
@@ -204,7 +230,12 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
 //        setCancelable(false)
         initComponents()
         step = 1
-        subjectTab.labels = SubjectV3.totalListOnSchoolType
+        val subjectNames = listOf("전체") + curriculumSubjects
+            .filter { it.schoolType == schoolType.toString() }
+            .sortedBy { it.seq }
+            .map { it.name }
+
+        subjectTab.labels = subjectNames
         subjectTab.listener = this
         step2Container.visibility = View.GONE
         nowCheckbox.visibility = View.GONE
@@ -257,9 +288,13 @@ class CustomizeBookDialog : Dialog, DabakTabRadioListener, SortableListener,
         sync(null)
     }
 
-    private fun sync(subject: CommercialSubject?) {
-        BookManager.getCommercialBook(context, subject) {
-            this.commercialBooks = it
+    private fun sync(subject: String?) {
+        BookManager.getCommercialBook(context) {
+            if (subject != null) {
+                this.commercialBooks = it?.filter { it.subject == subject }
+            } else {
+                this.commercialBooks = it
+            }
             sort()
             bookListRv.adapter?.notifyDataSetChanged()
 

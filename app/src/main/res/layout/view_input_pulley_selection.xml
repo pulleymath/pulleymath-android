@@ -68,6 +68,52 @@
             android:text="다항식의 곱셈과 인수분해"
             android:textSize="@dimen/sp16" />
 
+        <com.freewheelin.pulley.legacy.views.SelectionButton
+            android:id="@+id/btn5"
+            style="@style/TextGray_800.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_white_stroke_gray_300_round_24"
+            android:text="다항식의 곱셈과 인수분해"
+            android:textSize="@dimen/sp16" />
+        <com.freewheelin.pulley.legacy.views.SelectionButton
+            android:id="@+id/btn6"
+            style="@style/TextGray_800.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_white_stroke_gray_300_round_24"
+            android:text="다항식의 곱셈과 인수분해"
+            android:textSize="@dimen/sp16" />
+        <com.freewheelin.pulley.legacy.views.SelectionButton
+            android:id="@+id/btn7"
+            style="@style/TextGray_800.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_white_stroke_gray_300_round_24"
+            android:text="다항식의 곱셈과 인수분해"
+            android:textSize="@dimen/sp16" />
+        <com.freewheelin.pulley.legacy.views.SelectionButton
+            android:id="@+id/btn8"
+            style="@style/TextGray_800.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_white_stroke_gray_300_round_24"
+            android:text="다항식의 곱셈과 인수분해"
+            android:textSize="@dimen/sp16" />
+        <com.freewheelin.pulley.legacy.views.SelectionButton
+            android:id="@+id/btn9"
+            style="@style/TextGray_800.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp48"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_white_stroke_gray_300_round_24"
+            android:text="다항식의 곱셈과 인수분해"
+            android:textSize="@dimen/sp16" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

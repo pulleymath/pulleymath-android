@@ -121,6 +121,26 @@ object TestManager {
         })
     }
 
+    fun getAllSubjects(context: Context, successCB: (List<CurriculumSubject>) -> Unit) {
+        API_V1.getAllSubjects().enqueue(object : Callback<ResponseListBody<CurriculumSubject>> {
+            override fun onResponse(
+                call: Call<ResponseListBody<CurriculumSubject>>,
+                response: Response<ResponseListBody<CurriculumSubject>>
+            ) {
+                val curriculumSubjects = response.body()?.data
+                if(response.isSuccessful && curriculumSubjects != null)
+                    successCB(curriculumSubjects)
+                else {
+                    responseError(context, response)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseListBody<CurriculumSubject>>, t: Throwable) {
+
+            }
+
+        })
+    }
     fun getTestReport(context: Context, user: UserV4, test: Test, successCB: (test: Test) -> Unit) {
         val param: Parameter = Parameter(
                 "assignID" to test.assignID!!,

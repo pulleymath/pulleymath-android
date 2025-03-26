@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.core.Theme
+import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 
 interface DaebakInputSelectionListener {
     fun onSelectionChanged(view:DaebakInputSelection)
@@ -25,6 +26,10 @@ class DaebakInputSelection: ConstraintLayout, View.OnClickListener {
         }
 
 
+    var chapterList: List<SubjectChapter> = listOf()
+        set(value) {
+            field = value
+        }
     var buttonTitles: List<String> = listOf("", "", "")
         set(value) {
             field = value

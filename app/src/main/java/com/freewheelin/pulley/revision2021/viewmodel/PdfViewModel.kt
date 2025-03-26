@@ -7,13 +7,13 @@ import android.widget.SearchView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.revision2021.model.response.EventBook
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.BookFilterSection
-import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
@@ -22,7 +22,6 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.PatternStudyRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -297,9 +296,7 @@ class PdfViewModel(application: Application): BaseAndroidViewModel(application) 
                 section?.filterItems
                     ?.filter { it.name != "전체" }
                     ?.forEach { item ->
-                        val filterType = LearningFilterType.valueOfNonNull(item.value)
-                        val subjectId = filterType.toSubjectV3.id.toString()
-                        subject.put(subjectId, filterType.displayedName)
+                        subject.put(item.code, item.name)
                     }
             }
     }

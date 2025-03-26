@@ -1,7 +1,6 @@
 package com.freewheelin.pulley.legacy.model
 
 import android.content.Context
-import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.core.API_V2
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.contents.Content
@@ -18,8 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.Serializable
-import java.util.*
-import kotlin.collections.HashSet
+import java.util.Date
 
 enum class ProblemType {
     single,
@@ -273,9 +271,9 @@ open class Problem: Serializable {
         })
     }
 
-    fun getSubject(): SubjectV3 {
-        return SubjectV3.codeToSubject(subjectCode)
-    }
+//    fun getSubject(): SubjectV3 {
+//        return SubjectV3.codeToSubject(subjectCode)
+//    }
 
     fun isAllAnswered() : Boolean {
         for(similar in similarProblems) {

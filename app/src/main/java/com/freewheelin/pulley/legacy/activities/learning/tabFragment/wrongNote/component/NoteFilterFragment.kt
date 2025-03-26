@@ -18,24 +18,18 @@ import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.ui.activity.WrongNoteActivity
 import com.freewheelin.pulley.revision2023.ui.adapter.BookFilterAdapter
-import com.freewheelin.pulley.revision2023.ui.fragment.WrongNoteStudyFragment
 import com.freewheelin.pulley.revision2023.utils.listeners.BookFilterItemListener
 import com.freewheelin.pulley.revision2023.viewmodel.WrongNoteFragViewModel
 import org.joda.time.LocalDate
 import java.io.Serializable
 
-interface NoteFilterFragmentListener : Serializable {
-    fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<LearningFilterType>)
-    fun onDateSet(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type)
-}
-
 interface NoteFilterChangeListener : Serializable {
-    fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<LearningFilterType>)
+//    fun onFilterTypeChanged(fragment: NoteFilterFragment, filters: Set<LearningFilterType>)
+    fun onUpdateFilter(filterElements: List<BookFilterElement>)
     fun onDateChanged(from: LocalDate, to: LocalDate, type: DateRangePickerDialog.Type)
 }
 
 class NoteFilterFragment : Fragment() {
-    var listener: NoteFilterFragmentListener? = null
     var changeListener: NoteFilterChangeListener? = null
     val viewModel: WrongNoteFragViewModel by viewModels()
 
@@ -104,6 +98,11 @@ class NoteFilterFragment : Fragment() {
             (activity as? WrongNoteActivity)?.updateFilter(viewModel.selectedFilterTypes)
         }
     }
+    fun updateBookFilters() {
+        if (isViewCreated) {
+            (activity as? WrongNoteActivity)?.updateBookFilter(viewModel.filterElements.value ?: listOf())
+        }
+    }
     private fun initUI() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -112,8 +111,9 @@ class NoteFilterFragment : Fragment() {
                 override fun onToggle(isChecked: Boolean) {}
 
                 override fun onFilterItemClick(item: BookFilterElement) {
-                    viewModel.onFilterItemClick(item) { filters ->
-                        changeListener?.onFilterTypeChanged(this@NoteFilterFragment, filters)
+                    viewModel.onFilterItemClick(item) {
+                        changeListener?.onUpdateFilter(viewModel.filterElements.value ?: listOf())
+//                        updateBookFilters()
                     }
                 }
 
@@ -130,6 +130,12 @@ class NoteFilterFragment : Fragment() {
                                     if (list[position].filterType == LearningFilterType.보기설정_클리어_미포함 ||
                                         list[position].filterType == LearningFilterType.보기설정_클리어_포함) {
                                         3
+                                    } else if (list[position].parentTitle == "과목") {
+                                        if (list[position].name == "전체") {
+                                            6
+                                        } else {
+                                            3
+                                        }
                                     } else {
                                         2
                                     }
@@ -149,6 +155,7 @@ class NoteFilterFragment : Fragment() {
         viewModel.apply {
             filterElements.observe(viewLifecycleOwner) {
                 filterAdapter.submitList(it)
+                changeListener?.onUpdateFilter(it)
             }
 
         }

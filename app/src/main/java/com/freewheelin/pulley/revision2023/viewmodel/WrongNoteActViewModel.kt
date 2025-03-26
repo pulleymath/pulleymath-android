@@ -7,11 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.dialogs.DateRangePickerDialog
+import com.freewheelin.pulley.legacy.model.CurriculumSubject
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.legacy.model.contents.Piece
 import com.freewheelin.pulley.legacy.model.contents.PieceCategory
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType
 import com.freewheelin.pulley.revision2023.model.LearningFilterType
 import com.freewheelin.pulley.revision2023.model.NoteStudyProblemWrapper
@@ -55,9 +57,12 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
     private val _scrapProblem = MutableLiveData<List<Problem>>()
     val scrapProblem: LiveData<List<Problem>> = _scrapProblem
 
+    private val _subjects = MutableLiveData<List<CurriculumSubject>>()
+    val subjects: LiveData<List<CurriculumSubject>> = _subjects
+
     var tabPosition = 0
 
-//    var selectedFilterTypes = setOf<LearningFilterType>()
+    val filterElements = MutableLiveData<List<BookFilterElement>>()
 
     var selectedFilterTypes : Set<LearningFilterType> = setOf(
         LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.학습유형_전체, LearningFilterType.난이도_전체, LearningFilterType.보기설정_클리어_미포함
@@ -79,6 +84,12 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
         }
     }
 
+    fun fetchCurriculumSubjects() {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
+            val subjects = notesRepository.fetchCurriculumSubjects()
+            _subjects.postValue(subjects)
+        }
+    }
     fun fetchWrongNotes(cb: () -> Unit = {}) {
         val startDate = DateTimeUtils.yyyy_MM_dd.format(from.toDate())
         val endDate = DateTimeUtils.yyyy_MM_dd.format(to.toDate())
@@ -116,7 +127,10 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
         val newNotesResult2 = when(selectedOrder) {
             OrderType.recent -> newNotesResult1.groupBy { if (isWrongNote) it.updateDateTime_yyyyMMdd else it.scrapDateTime_yyyyMMdd }
             OrderType.old -> newNotesResult1.groupBy { if (isWrongNote) it.updateDateTime_yyyyMMdd else it.scrapDateTime_yyyyMMdd }
-            OrderType.subject -> newNotesResult1.groupBy { it.getSubject().filterText }
+            OrderType.subject -> newNotesResult1.groupBy { note ->
+                val subjectName = filterElements.value?.find { it.code == "${note.subjectCode}" }?.name ?: ""
+                subjectName
+            }
             OrderType.level -> newNotesResult1.groupBy { it.getProblemLevel() }
         }
 
@@ -237,133 +251,219 @@ class WrongNoteActViewModel(application: Application) : BaseAndroidViewModel(app
         return null
     }
     fun setGroupedProblem(withSelectedClear: Boolean = true, cb: () -> Unit) {
-        if (selectedFilterTypes.isEmpty()) return
+//        if (selectedFilterTypes.isEmpty()) return
 
         val noteProblems = originalNoteProblem
-        var notes = filterProblems(noteProblems, tabPosition)
-        val result = makeNotesWrappers(notes, tabPosition == 0, withSelectedClear)
+        val filteredProblems = wrongNoteFilter(noteProblems, tabPosition)
+//        var notes = filterProblems(noteProblems, tabPosition)
+//        val result = makeNotesWrappers(notes, tabPosition == 0, withSelectedClear)
+        val result = makeNotesWrappers(filteredProblems, tabPosition == 0, withSelectedClear)
         updateNoteWrapper(result)
         cb()
     }
 
-    private fun filterProblems(originalProblems: List<Problem>, tabPosition: Int): List<Problem> {
-        var filteredProblem = originalProblems
-        val filters = selectedFilterTypes
+    private fun getFilterByTitle(title: String): List<BookFilterElement> {
+        return filterElements.value?.let { filters ->
+            return@let filters
+                .filter { it.parentTitle == title }
+                .sortedBy { it.seq }
 
-        if(tabPosition == 0) {
-            filteredProblem = filteredProblem
-                .filter { LocalDate(it.updateDateTime) in from..to }
-                .filter {
-                    var clearCondition = false
-                    if(filters.contains(LearningFilterType.보기설정_클리어_미포함))
-                        clearCondition = clearCondition || it.isClear == false
+        } ?: listOf()
+    }
+    private fun getFilterByTitleWithoutTotal(title: String): List<BookFilterElement> {
+        return filterElements.value?.let { filters ->
+            return@let filters
+                .filter { it.parentTitle == title && it.name != "전체" }
+        } ?: listOf()
+    }
+    private fun getSelectedFilterByTitle(title: String): List<BookFilterElement> {
+        return filterElements.value?.let { filters ->
+            return@let filters
+                .filter { it.parentTitle == title && it.isSelected.get() }
+        } ?: listOf()
+    }
+    private fun getFilteredSubjectCode (): List<Int> {
+        val selectedFilters = getSelectedFilterByTitle("과목")
+        val filterNames = selectedFilters.map { it.name }
+        val allSubjectFilters = getFilterByTitleWithoutTotal("과목")
+        val allSubjectCodes = allSubjectFilters.mapNotNull { it.code?.toIntOrNull() }
+        if (filterNames.contains("전체")) return allSubjectCodes
 
-                    if(filters.contains(LearningFilterType.보기설정_클리어_포함))
-                        clearCondition = true
+        return selectedFilters.mapNotNull { it.code?.toIntOrNull() }
+    }
+    private fun getFilteredLevel () : List<String> {
+        val selectedSubjectFilterNames = getSelectedFilterByTitle("난이도").map { it.name }
+        if (selectedSubjectFilterNames.contains("전체")) {
+            val allLevelFilters = getFilterByTitleWithoutTotal("난이도")
+            return allLevelFilters.map { it.name }
+        }
+        return selectedSubjectFilterNames
+    }
+    private fun getFilteredCategory () : List<String> {
+        val selectedFilters = getSelectedFilterByTitle("학습 유형")
+        val selectedSubjectFilterNames = selectedFilters.map { it.name }
+        if (selectedSubjectFilterNames.contains("전체")) {
+            val allCategoryFilters = getFilterByTitleWithoutTotal("학습 유형")
+            return allCategoryFilters.mapNotNull { it.code }
+        }
+        return selectedFilters.mapNotNull { it.code }
+    }
+    private fun getFilteredClear () : List<String> {
+        val selectedFilters = getSelectedFilterByTitle("보기 설정")
+        val selectedSubjectFilterNames = selectedFilters.map { it.name }
+        if (selectedSubjectFilterNames.contains("전체")) {
+            val allCategoryFilters = getFilterByTitleWithoutTotal("학습 유형")
+            return allCategoryFilters.mapNotNull { it.code }
+        }
+        return selectedFilters.mapNotNull { it.code }
+    }
+    private fun wrongNoteFilter(originalProblems: List<Problem>, tabPosition: Int): List<Problem> {
+        var filteredProblems = originalProblems
+        val filterSubjectCodes = getFilteredSubjectCode()
+        val filterLvl = getFilteredLevel()
+        val filterCategory = getFilteredCategory()
+        val filterClearType = getSelectedFilterByTitle("보기 설정").map { it.name }
 
-                    clearCondition
-                }
-            //스크랩 필터는 초기화
-//            scrapNoteFilterFragment.setFiltersStatus(filters) // TODO 이걸왜함?  동기화작업
-        } else {
-            filteredProblem = filteredProblem
-                .filter {
-                    LocalDate(it.scrapDateTime) in from..to
-                }
-                .filter {
-                    var correctCondition = false
-
-                    if(filters.contains(LearningFilterType.보기설정_전체)) {
-                        correctCondition = true
+        filteredProblems = filteredProblems
+            .filter { filterSubjectCodes.contains(it.subjectCode) }
+            .filter { filterLvl.contains(it.getProblemLevel()) }
+            .filter {
+                if (tabPosition == 0) {
+                    if (filterClearType.contains("클리어 미포함")) {
+                        !it.isClear
+                    } else {
+                        true
                     }
-
-                    if(filters.contains(LearningFilterType.보기설정_맞은문제))
-                        correctCondition = (correctCondition || it.getResultByScoring() == Result.correct)
-
-                    if(filters.contains(LearningFilterType.보기설정_틀린문제))
-                        correctCondition = (correctCondition || it.getResultByScoring() == Result.incorrect)
-
-                    if(filters.contains(LearningFilterType.보기설정_안_푼_문제))
-                        correctCondition = (correctCondition || it.getResultByScoring() == Result.yet)
-
-                    correctCondition
+                } else {
+                    true
                 }
-//            wrongNoteFilterFragment.setFiltersStatus(filters) // 동기화
-        }
+            }
+            .filter {
+                val problemCategory = it.rawPieceCategory.firstOrNull()
+                if (problemCategory == null) false
+                else filterCategory.contains(problemCategory)
+            }
+        return filteredProblems
 
-        filteredProblem = filteredProblem.filter {
-
-            val subjectCondition = filterSubjectCondition(it, filters)
-            val levelCondition = filterLevelCondition(it, filters)
-            val pieceCategoryCondition = filterPieceCategoryCondition(it, filters)
-
-            subjectCondition && levelCondition && pieceCategoryCondition
-        }
-
-        return filteredProblem
     }
-    fun filterSubjectCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
-
-        if(filters.contains(LearningFilterType.과목_전체))
-            return true
-
-        val subject = problem.getSubject()
-        var subjectCondition = false
-        if(filters.contains(LearningFilterType.과목_수학_상)) subjectCondition = (subjectCondition || subject.isMathSang)
-        if(filters.contains(LearningFilterType.과목_수학_하)) subjectCondition = (subjectCondition || subject.isMathHa)
-        if(filters.contains(LearningFilterType.과목_수학1)) subjectCondition = (subjectCondition || subject.isMath1)
-        if(filters.contains(LearningFilterType.과목_수학2)) subjectCondition = (subjectCondition || subject.isMath2)
-        if(filters.contains(LearningFilterType.과목_확통)) subjectCondition = (subjectCondition || subject.isProbabilityAndStatistics)
-        if(filters.contains(LearningFilterType.과목_미적분)) subjectCondition = (subjectCondition || subject.isCalculus)
-        if(filters.contains(LearningFilterType.과목_기하)) subjectCondition = (subjectCondition || subject.isGeometry)
-        if(filters.contains(LearningFilterType.과목_중1_1)) subjectCondition = (subjectCondition || subject.isMiddle1_1)
-        if(filters.contains(LearningFilterType.과목_중1_2)) subjectCondition = (subjectCondition || subject.isMiddle1_2)
-        if(filters.contains(LearningFilterType.과목_중2_1)) subjectCondition = (subjectCondition || subject.isMiddle2_1)
-        if(filters.contains(LearningFilterType.과목_중2_2)) subjectCondition = (subjectCondition || subject.isMiddle2_2)
-        if(filters.contains(LearningFilterType.과목_중3_1)) subjectCondition = (subjectCondition || subject.isMiddle3_1)
-        if(filters.contains(LearningFilterType.과목_중3_2)) subjectCondition = (subjectCondition || subject.isMiddle3_2)
-
-        return subjectCondition
-    }
-    fun filterLevelCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
-        if(filters.contains(LearningFilterType.난이도_전체))
-            return true
-
-        var levelCondition = false
-        if(filters.contains(LearningFilterType.난이도_하)) levelCondition = (levelCondition || problem.problemLevel == 1)
-        if(filters.contains(LearningFilterType.난이도_중하)) levelCondition = (levelCondition || problem.problemLevel == 2)
-        if(filters.contains(LearningFilterType.난이도_중)) levelCondition = (levelCondition || problem.problemLevel == 3)
-        if(filters.contains(LearningFilterType.난이도_상)) levelCondition = (levelCondition || problem.problemLevel == 4)
-        if(filters.contains(LearningFilterType.난이도_최상)) levelCondition = (levelCondition || problem.problemLevel == 5)
-
-        return levelCondition
-    }
-    fun filterPieceCategoryCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
-        if(filters.contains(LearningFilterType.학습유형_전체))
-            return true
-
-        var pieceCategoryCondition = false
-        if (filters.contains(LearningFilterType.학습유형_유형학습))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.book))
-        if (filters.contains(LearningFilterType.학습유형_워크북))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.workbook))
-        if (filters.contains(LearningFilterType.학습유형_모의고사))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.mockExam))
-        if (filters.contains(LearningFilterType.학습유형_오답학습))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.note) || problem.getPieceCategory().contains(PieceCategory.reference))
-        if (filters.contains(LearningFilterType.학습유형_테스트))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.dailyTest))
-        if (filters.contains(LearningFilterType.학습유형_추천학습))
-            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
-                PieceCategory.recommned))
-
-        return pieceCategoryCondition
-    }
+//    private fun filterProblems(originalProblems: List<Problem>, tabPosition: Int): List<Problem> {
+//        var filteredProblem = originalProblems
+//        val filters = selectedFilterTypes
+//
+//        if(tabPosition == 0) {
+//            filteredProblem = filteredProblem
+//                .filter { LocalDate(it.updateDateTime) in from..to }
+//                .filter {
+//                    var clearCondition = false
+//                    if(filters.contains(LearningFilterType.보기설정_클리어_미포함))
+//                        clearCondition = clearCondition || it.isClear == false
+//
+//                    if(filters.contains(LearningFilterType.보기설정_클리어_포함))
+//                        clearCondition = true
+//
+//                    clearCondition
+//                }
+//            //스크랩 필터는 초기화
+////            scrapNoteFilterFragment.setFiltersStatus(filters) // TODO 이걸왜함?  동기화작업
+//        } else {
+//            filteredProblem = filteredProblem
+//                .filter {
+//                    LocalDate(it.scrapDateTime) in from..to
+//                }
+//                .filter {
+//                    var correctCondition = false
+//
+//                    if(filters.contains(LearningFilterType.보기설정_전체)) {
+//                        correctCondition = true
+//                    }
+//
+//                    if(filters.contains(LearningFilterType.보기설정_맞은문제))
+//                        correctCondition = (correctCondition || it.getResultByScoring() == Result.correct)
+//
+//                    if(filters.contains(LearningFilterType.보기설정_틀린문제))
+//                        correctCondition = (correctCondition || it.getResultByScoring() == Result.incorrect)
+//
+//                    if(filters.contains(LearningFilterType.보기설정_안_푼_문제))
+//                        correctCondition = (correctCondition || it.getResultByScoring() == Result.yet)
+//
+//                    correctCondition
+//                }
+////            wrongNoteFilterFragment.setFiltersStatus(filters) // 동기화
+//        }
+//
+//        filteredProblem = filteredProblem.filter {
+//
+//            val subjectCondition = filterSubjectCondition(it, filters)
+//            val levelCondition = filterLevelCondition(it, filters)
+//            val pieceCategoryCondition = filterPieceCategoryCondition(it, filters)
+//
+//            subjectCondition && levelCondition && pieceCategoryCondition
+//        }
+//
+//        return filteredProblem
+//    }
+//    fun filterSubjectCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
+//
+//        if(filters.contains(LearningFilterType.과목_전체))
+//            return true
+//
+//        val subject = problem.getSubject()
+//        var subjectCondition = false
+//        if(filters.contains(LearningFilterType.과목_수학_상)) subjectCondition = (subjectCondition || subject.isMathSang)
+//        if(filters.contains(LearningFilterType.과목_수학_하)) subjectCondition = (subjectCondition || subject.isMathHa)
+//        if(filters.contains(LearningFilterType.과목_수학1)) subjectCondition = (subjectCondition || subject.isMath1)
+//        if(filters.contains(LearningFilterType.과목_수학2)) subjectCondition = (subjectCondition || subject.isMath2)
+//        if(filters.contains(LearningFilterType.과목_확통)) subjectCondition = (subjectCondition || subject.isProbabilityAndStatistics)
+//        if(filters.contains(LearningFilterType.과목_미적분)) subjectCondition = (subjectCondition || subject.isCalculus)
+//        if(filters.contains(LearningFilterType.과목_기하)) subjectCondition = (subjectCondition || subject.isGeometry)
+//        if(filters.contains(LearningFilterType.과목_중1_1)) subjectCondition = (subjectCondition || subject.isMiddle1_1)
+//        if(filters.contains(LearningFilterType.과목_중1_2)) subjectCondition = (subjectCondition || subject.isMiddle1_2)
+//        if(filters.contains(LearningFilterType.과목_중2_1)) subjectCondition = (subjectCondition || subject.isMiddle2_1)
+//        if(filters.contains(LearningFilterType.과목_중2_2)) subjectCondition = (subjectCondition || subject.isMiddle2_2)
+//        if(filters.contains(LearningFilterType.과목_중3_1)) subjectCondition = (subjectCondition || subject.isMiddle3_1)
+//        if(filters.contains(LearningFilterType.과목_중3_2)) subjectCondition = (subjectCondition || subject.isMiddle3_2)
+//
+//        return subjectCondition
+//    }
+//    fun filterLevelCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
+//        if(filters.contains(LearningFilterType.난이도_전체))
+//            return true
+//
+//        var levelCondition = false
+//        if(filters.contains(LearningFilterType.난이도_하)) levelCondition = (levelCondition || problem.problemLevel == 1)
+//        if(filters.contains(LearningFilterType.난이도_중하)) levelCondition = (levelCondition || problem.problemLevel == 2)
+//        if(filters.contains(LearningFilterType.난이도_중)) levelCondition = (levelCondition || problem.problemLevel == 3)
+//        if(filters.contains(LearningFilterType.난이도_상)) levelCondition = (levelCondition || problem.problemLevel == 4)
+//        if(filters.contains(LearningFilterType.난이도_최상)) levelCondition = (levelCondition || problem.problemLevel == 5)
+//
+//        return levelCondition
+//    }
+//    fun filterPieceCategoryCondition(problem: Problem, filters: Set<LearningFilterType>): Boolean {
+//        if(filters.contains(LearningFilterType.학습유형_전체))
+//            return true
+//
+//        var pieceCategoryCondition = false
+//        if (filters.contains(LearningFilterType.학습유형_유형학습))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.book))
+//        if (filters.contains(LearningFilterType.학습유형_워크북))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.workbook))
+//        if (filters.contains(LearningFilterType.학습유형_모의고사))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.mockExam))
+//        if (filters.contains(LearningFilterType.학습유형_오답학습))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.note) || problem.getPieceCategory().contains(PieceCategory.reference))
+//        if (filters.contains(LearningFilterType.학습유형_테스트))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.dailyTest))
+//        if (filters.contains(LearningFilterType.학습유형_추천학습))
+//            pieceCategoryCondition = (pieceCategoryCondition || problem.getPieceCategory().contains(
+//                PieceCategory.recommned))
+//
+//        return pieceCategoryCondition
+//    }
 
     fun makeAdvancedLearning (problems: List<Problem>,
                               similarStr: String, difficulty: String,

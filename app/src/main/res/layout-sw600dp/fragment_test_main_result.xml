@@ -142,15 +142,34 @@
             <TextView
                 android:id="@+id/subjectTv"
                 style="@style/TextGray_600.Bold"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
+                android:layout_marginEnd="24dp"
                 android:text="여기 과목 표시"
                 android:textSize="@dimen/sp16"
+                android:maxLines="2"
+                android:ellipsize="end"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/rangeTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintTop_toBottomOf="@+id/rangeTv" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/subjectTv"-->
+<!--                style="@style/TextGray_600.Bold"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:layout_marginBottom="24dp"-->
+<!--                android:text="여기 과목 표시"-->
+<!--                android:textSize="@dimen/sp16"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/rangeTv"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/rangeTv" />-->
 
 
             <ImageButton
@@ -175,7 +194,7 @@
             android:layout_marginTop="@dimen/dp56"
             android:text="시작하기"
             android:visibility="invisible"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:textSize="@dimen/sp18"
             app:layout_constraintTop_toBottomOf="@+id/settingContainerCl"
             app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +208,7 @@
             android:layout_height="0dp"
             android:background="@color/gray_100"
             android:visibility="invisible"
-            tools:visibility="visible"
+            tools:visibility="gone"
             app:layout_constraintTop_toTopOf="@+id/settingContainerCl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

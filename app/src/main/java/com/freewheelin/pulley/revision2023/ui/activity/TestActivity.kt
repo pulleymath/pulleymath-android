@@ -323,7 +323,7 @@ class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListene
                     val test = tests.first()
                     when (test.getTestType()) {
                         Test.TestType.daily -> onSelectorContainerClicked(dailyContainer)
-//                            Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
+                        Test.TestType.weekly -> onSelectorContainerClicked(weeklyContainer)
                         Test.TestType.wrong -> onSelectorContainerClicked(wrongContainer)
                         else -> {}
                     }
@@ -386,7 +386,7 @@ class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListene
                     val test =
                         tests.filter { it.getTestType() == Test.TestType.daily }.firstOrNull()
                     // set test info to
-                    setUserRecentSubject(test)
+//                    setUserRecentSubject(test)
 
                     setMainFragment(test, Test.TestType.daily)
                     LogUtils.logEvent(

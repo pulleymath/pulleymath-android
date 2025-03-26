@@ -407,8 +407,8 @@ object BookManager {
         })
     }
 
-    fun getCommercialBook(context: Context, subject: CommercialSubject?, cb:(list: List<CommercialBook>?) -> Unit) {
-        API_V3.getCommercials(subject).enqueue(object: Callback<ResponseBody<List<CommercialBook>>> {
+    fun getCommercialBook(context: Context, cb:(list: List<CommercialBook>?) -> Unit) {
+        API_V3.getCommercials().enqueue(object: Callback<ResponseBody<List<CommercialBook>>> {
             override fun onFailure(call: Call<ResponseBody<List<CommercialBook>>>, t: Throwable) {
                 responseFailed(context, t)
             }

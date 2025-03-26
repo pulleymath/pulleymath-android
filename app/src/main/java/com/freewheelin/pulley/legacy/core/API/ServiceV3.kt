@@ -123,7 +123,7 @@ interface  ServiceV3 {
 
     @GET("commercials")
     fun getCommercials(
-        @Query("subject") subject: CommercialSubject?,
+//        @Query("subject") subject: CommercialSubject?,
         @Query("schoolType") school: String? = schoolType.name
     ): Call<ResponseBody<List<CommercialBook>>>
 

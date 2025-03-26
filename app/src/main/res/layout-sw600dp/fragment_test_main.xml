@@ -131,14 +131,20 @@
             <TextView
                 android:id="@+id/subjectTv"
                 style="@style/TextGray_600.Bold"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
-                android:text="여기 과목 표시"
+                android:layout_marginEnd="24dp"
+                android:text="여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 여기 과목 표시 "
                 android:textSize="@dimen/sp16"
+                android:maxLines="2"
+                android:ellipsize="end"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/rangeTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintTop_toBottomOf="@+id/rangeTv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

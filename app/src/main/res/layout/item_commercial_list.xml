@@ -14,9 +14,10 @@
 
         <TextView
             android:id="@+id/subjectTv"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="0dp"
-            android:padding="@dimen/dp16"
+            android:paddingVertical="@dimen/dp16"
+            android:paddingHorizontal="@dimen/dp32"
             android:textSize="@dimen/sp14"
             android:text="과목"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,8 +104,7 @@
             android:layout_width="1dp"
             android:layout_height="16dp"
             android:background="@color/gray_300"
-            android:layout_marginStart="@dimen/dp104"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/subjectTv"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/horizontalBorder"/>
 

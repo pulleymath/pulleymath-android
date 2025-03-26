@@ -125,9 +125,10 @@ object MockExamManager {
 
     fun getMockProblems(context: Context, orgExam: MockExam, user: UserV4, successCB: (exam: MockExam) -> Unit) {
 
-        Log.d("MockManager", "mockID=${orgExam.mockID}, optional=${orgExam.selectOptional}, isRestart=${orgExam.isRestart}")
+        Log.d("MockManager", "mockID=${orgExam.mockID}, optional=${orgExam.selectOptionalSubjectSummary}, isRestart=${orgExam.isRestart}")
 
-        API_V3.getMock(orgExam.mockID, user.studentID, orgExam.selectOptional.joinToString(","), orgExam.isRestart).enqueue(object: Callback<MockExam> {
+        val selectOptionalString = orgExam.selectOptionalSubjectSummary.map { it.subjectCodeType }.joinToString(",")
+        API_V3.getMock(orgExam.mockID, user.studentID, selectOptionalString, orgExam.isRestart).enqueue(object: Callback<MockExam> {
             override fun onFailure(call: Call<MockExam>, t: Throwable) {
                 responseFailed(context, t)
             }
@@ -160,7 +161,7 @@ object MockExamManager {
             override fun onResponse(call: Call<Template<MockExam>>, response: Response<Template<MockExam>>) {
                 if(response.isSuccessful) {
                     response.body()?.data?.apply {
-                        selectOptional = exam.selectOptional
+                        selectOptionalSubjectSummary = exam.selectOptionalSubjectSummary
                         majorType = exam.majorType
                         grade = exam.grade
                         arrangeProblem()
@@ -314,7 +315,7 @@ object MockExamManager {
     }
 
     fun sendEmail(context: Context, mockExam: MockExam, user: UserV4, email: String, cb:() -> Unit) {
-        val request = MockEmailRequest(user.studentID, mockExam.selectOptional.map { it.name }, mockExam.isRestart, email)
+        val request = MockEmailRequest(user.studentID, mockExam.selectOptionalSubjectSummary.map { it.subjectCodeType }, mockExam.isRestart, email)
 
         API_V3.sendMockMail(mockExam.mockID, request).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {

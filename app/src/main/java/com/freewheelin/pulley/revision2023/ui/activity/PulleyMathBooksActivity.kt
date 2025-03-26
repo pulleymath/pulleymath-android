@@ -92,8 +92,6 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
     var resumeCount = 0
     override fun onResume() {
         super.onResume()
-        val filters = viewModel.selectedFilterTypes.toSet()
-        viewModel.fetchTotalBooks(filters)
         if (resumeCount > 0) {
             viewModel.collectRecommendList(false) {}
         }
@@ -136,31 +134,30 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                 }
             }
             books.observe(this@PulleyMathBooksActivity) {
-                if (latestFilters == selectedFilterTypes) {
-                    planAdapter.submitList(it) {
-                        Handler(Looper.getMainLooper()).post {
-                            binding.totalRv.invalidateItemDecorations()
-                        }
+                planAdapter.submitList(it) {
+                    Handler(Looper.getMainLooper()).post {
+                        binding.totalRv.invalidateItemDecorations()
                     }
-                    binding.totalRv.scrollToPosition(0)
-                    if (it.isEmpty()) {
-                        binding.totalEmptyContainer.show(300)
-                    } else {
-                        val rvAnimController = AnimationUtils.loadLayoutAnimation(
-                            this@PulleyMathBooksActivity,
-                            R.anim.recyclerview_grid_layout_animation
-                        )
-                        binding.totalRv.layoutAnimation = rvAnimController
-                        binding.totalRv.scheduleLayoutAnimation()
-                    }
-                    showDummyBottomView.postValue(it.size < 7)
-                    showTotalLoadingView.postValue(false)
-                    playTotalLoadingView.postValue(false)
-                    showTotalPlanCover.postValue(false)
                 }
+                binding.totalRv.scrollToPosition(0)
+                if (it.isEmpty()) {
+                    binding.totalEmptyContainer.show(300)
+                } else {
+                    val rvAnimController = AnimationUtils.loadLayoutAnimation(
+                        this@PulleyMathBooksActivity,
+                        R.anim.recyclerview_grid_layout_animation
+                    )
+                    binding.totalRv.layoutAnimation = rvAnimController
+                    binding.totalRv.scheduleLayoutAnimation()
+                }
+                showDummyBottomView.postValue(it.size < 7)
+                showTotalLoadingView.postValue(false)
+                playTotalLoadingView.postValue(false)
+                showTotalPlanCover.postValue(false)
             }
             filterElements.observe(this@PulleyMathBooksActivity) {
                 this@PulleyMathBooksActivity.filterAdapter.submitList(it)
+                fetchTotalBooksOnFilters(it)
             }
             initPositionSettingFlag.observeOnce(this@PulleyMathBooksActivity) {
                 if (!isFocusingOnTotalLabel) return@observeOnce
@@ -416,21 +413,9 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
 
     override fun filterFromTagOnCard(filterType: String) {
         LogUtils.logEvent(this, user, PulleyEvent.BUTTON_CLICK, "유형카드", "태그", filterType)
-        val type = LearningFilterType.convertTagAtFilterType(filterType)
-        viewModel.updateFilterTypes(type)
-        viewModel.syncSelectedFilterType()
-        getTotalListWithoutRefresh()
+        viewModel.updateFilterTypes(filterType)
     }
-    private fun getTotalListWithoutRefresh() {
-        binding.apply {
-            viewModel.showTotalPlanCover.postValue(true)
-            viewModel.showTotalLoadingView.postValue(true)
-            viewModel.playTotalLoadingView.postValue(true)
-            val filters = viewModel.selectedFilterTypes.toSet()
 
-            viewModel.fetchTotalBooks(filters)
-        }
-    }
 
     override fun onSentEmail() {
         DaebakToast.show(this, "메일이 발송되었습니다. 네트워크 환경에 따라 시간이 다소 소요될 수 있습니다.")

@@ -1,14 +1,11 @@
 package com.freewheelin.pulley.legacy.model.contents
 
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
 import com.freewheelin.pulley.legacy.model.ChapterAnalysis
 import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.day
+import com.freewheelin.pulley.legacy.utils.month
 import java.io.Serializable
-import java.util.*
-import com.freewheelin.pulley.legacy.utils.*
-import com.google.gson.Gson
-import org.json.JSONObject
-import java.text.SimpleDateFormat
+import java.util.Date
 
 class Test: Content {
     enum class TestLevel(val title: String) {

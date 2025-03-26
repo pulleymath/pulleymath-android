@@ -21,17 +21,18 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2023.ui.fragment.AssessmentFragment.Companion.SHOW_ADDITIONAL_LEARNING
+import com.freewheelin.pulley.databinding.DialogAssessmentReportDialogBinding
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.PieceManager
-import com.freewheelin.pulley.databinding.DialogAssessmentReportDialogBinding
-import com.freewheelin.pulley.legacy.assets.SubjectV3
+import com.freewheelin.pulley.legacy.core.manage.TestManager
+import com.freewheelin.pulley.legacy.model.CurriculumSubject
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2021.activity.AssessmentSolveActivity
 import com.freewheelin.pulley.revision2021.model.response.AssessmentProblem
 import com.freewheelin.pulley.revision2021.model.response.AssessmentWorkbook
 import com.freewheelin.pulley.revision2021.repository.AssessmentRepository
 import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
+import com.freewheelin.pulley.revision2023.ui.fragment.AssessmentFragment.Companion.SHOW_ADDITIONAL_LEARNING
 import com.freewheelin.pulley.revision2023.ui.view.CommonButton
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import io.reactivex.schedulers.Schedulers
@@ -51,6 +52,7 @@ class AssessmentReportDialog(context: Context, workbookId: Int, version: Int, sk
     lateinit var assessmentRepository: AssessmentRepository
     var workbook: AssessmentWorkbook?
     var skin: AssessmentDesignSkin
+    var curriculumSubjects: List<CurriculumSubject> = listOf()
     lateinit var subject: String
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -65,6 +67,11 @@ class AssessmentReportDialog(context: Context, workbookId: Int, version: Int, sk
     @SuppressLint("CheckResult")
     private fun initData(workbookId: Int, version: Int) {
         val studentId = user?.studentID ?: return
+
+        TestManager.getAllSubjects(context) { curriculumSubjects ->
+            this.curriculumSubjects = curriculumSubjects
+        }
+
         assessmentRepository.fetchScoringResult(studentId, workbookId, version)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
@@ -224,12 +231,12 @@ class AssessmentReportDialog(context: Context, workbookId: Int, version: Int, sk
                 context.startActivity(intent)
             }
             additionalLearningBtn.setOnClickListener {
-
-                if (SubjectV3.isMathticSubject(subject)) {
+                val isMathticSubjectExist = curriculumSubjects.find { it.name == subject }
+                if (isMathticSubjectExist != null) {
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB).apply {
                         putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.문제풀이.indexOnTablet)
-                        val schoolTypeAsSubject = SubjectV3.nameToSchoolType(subject)
-                        putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, schoolTypeAsSubject.name)
+                        val subjectSchoolType = curriculumSubjects.find { it.name == subject }?.schoolType ?: "HIGH"
+                        putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, subjectSchoolType)
                     }
 
 //                    intent.putExtra(PieceManager.EVENT_ADDITIONAL_ACTION, "WRONG_NOTE")
@@ -306,7 +313,8 @@ class AssessmentReportDialog(context: Context, workbookId: Int, version: Int, sk
         }
         private fun setSubjectView(problem: AssessmentProblem) {
             subject = problem.subject.toString()
-            if (SubjectV3.isMathticSubject(subject)) {
+            val isMathticSubjectExist = curriculumSubjects.find { it.name == subject }
+            if (isMathticSubjectExist != null) {
                 binding.apply {
                     label2Tv.visibleIf(true)
                     supportLearnCl.visibleIf(true)

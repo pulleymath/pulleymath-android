@@ -3,9 +3,6 @@ package com.freewheelin.pulley.revision2023.repository
 import android.content.Context
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterCategory
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.book.FilterOrder
-import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.schoolType
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialBook
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.MyBookList
 import com.freewheelin.pulley.legacy.core.API.ResponseModel.RecommendBookList
 import com.freewheelin.pulley.legacy.model.contents.Book
@@ -14,11 +11,8 @@ import com.freewheelin.pulley.revision2023.model.BookFilterElement
 import com.freewheelin.pulley.revision2023.model.BookFilterElement.Type
 import com.freewheelin.pulley.revision2023.model.BookFilterParent
 import com.freewheelin.pulley.revision2023.model.BookFilterSection
-//import com.freewheelin.pulley.revision2023.room.patternstudy.PatternStudyDao
-//import com.freewheelin.pulley.revision2023.room.patternstudy.PatternStudyDatabase
 import com.freewheelin.pulley.revision2023.service.PatternStudyApi
 import com.freewheelin.pulley.revision2023.service.PatternStudyService
-import com.google.gson.Gson
 import io.reactivex.Completable
 import kotlinx.coroutines.CoroutineScope
 
@@ -66,19 +60,17 @@ class PatternStudyRepository(val context: Context, private val applicationScope:
         return patternStudyApi.deleteFromMyBook(pieceId)
     }
 
-    suspend fun fetchWorkbook(subject: CommercialSubject?): List<CommercialBook> {
-        return patternStudyApi.getCommercials(subject)
-    }
     suspend fun fetchBookFilter(filter: BookFilterParent, topElement: BookFilterElement): List<BookFilterElement> {
         val filterList = mutableListOf(topElement)
 
         patternStudyApi.fetchBookFilter(filter.name).data.forEach {
             val filterTitle = it.filterTitle
             val header = BookFilterElement(Type.Header, filterTitle, null, null, null)
-            val items = it.filterItems.map { item ->
-                BookFilterElement(Type.Item, item.name, it.filterTitle, item.value, item.seq)
-            }
+            val items = it.filterItems
                 .sortedBy { it.seq }
+                .map { item ->
+                    BookFilterElement(Type.Item, item.name, it.filterTitle, item.value, item.seq, item.code)
+                }
             filterList.add(header)
             filterList += items
         }

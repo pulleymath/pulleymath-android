@@ -7,6 +7,7 @@
 
     <data>
         <import type="android.view.View" />
+        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject"/>
         <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
         <variable name="isTablet" type="Boolean"/>
@@ -82,7 +83,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
-                        android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.MathSang.rawValue] }" />
                     <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                 </LinearLayout>
 
@@ -104,7 +105,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
-                        android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.MathHa.rawValue] }"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/math1WrapperLl"
@@ -124,7 +125,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue }"
-                        android:text="@{ SubjectIndicator.Math1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Math1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -145,7 +146,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue }"
-                        android:text="@{ SubjectIndicator.Math2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Math2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -166,7 +167,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue }"
-                        android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.MathProbabilityAndStatistics.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,7 +188,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue }"
-                        android:text="@{ SubjectIndicator.MathCalculus.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.MathCalculus.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,7 +209,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue }"
-                        android:text="@{ SubjectIndicator.MathKiha.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.MathKiha.rawValue] }"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <HorizontalScrollView
@@ -273,7 +274,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathSang.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathSang.rawValue }"
-                            android:text="@{ SubjectIndicator.MathSang.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.MathSang.rawValue] }"/>
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
@@ -297,7 +298,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathHa.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathHa.rawValue }"
-                            android:text="@{ SubjectIndicator.MathHa.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.MathHa.rawValue] }"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/scrollMath1WrapperLl"
@@ -319,7 +320,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Math1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Math1.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -342,7 +343,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Math2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Math2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Math2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Math2.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -365,7 +366,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathProbabilityAndStatistics.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathProbabilityAndStatistics.rawValue  }"
-                            android:text="@{ SubjectIndicator.MathProbabilityAndStatistics.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.MathProbabilityAndStatistics.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -388,7 +389,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathCalculus.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathCalculus.rawValue  }"
-                            android:text="@{ SubjectIndicator.MathCalculus.inKorean }" />
+                            android:text="@{ vm.subjectNames[SubjectIndicator.MathCalculus.rawValue] }" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -412,7 +413,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.MathKiha.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.MathKiha.rawValue  }"
-                            android:text="@{ SubjectIndicator.MathKiha.inKorean }" />
+                            android:text="@{ vm.subjectNames[SubjectIndicator.MathKiha.rawValue] }" />
                         <!--                    android:visibility="@{ vm.availableLastSubjectId >= SubjectIndicator.MathKiha.rawValue ? View.VISIBLE : View.GONE }"-->
                     </LinearLayout>
                 </LinearLayout>
@@ -482,7 +483,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle1_1.rawValue] }"/>
                     <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                 </LinearLayout>
 
@@ -505,7 +506,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle1_2.rawValue] }"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/middleMath2_1WrapperLl"
@@ -526,7 +527,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle2_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -548,7 +549,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle2_2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -570,7 +571,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle3_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -593,7 +594,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Middle3_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Middle3_2.rawValue] }"/>
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -659,7 +660,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle1_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle1_1.rawValue] }"/>
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
@@ -683,7 +684,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle1_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle1_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle1_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle1_2.rawValue] }"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/middleScrollMath2_1WrapperLl"
@@ -705,7 +706,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle2_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle2_1.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -728,7 +729,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle2_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle2_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle2_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle2_2.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -751,7 +752,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle3_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle3_1.rawValue] }"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -775,7 +776,7 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Middle3_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Middle3_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Middle3_2.inKorean }" />
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Middle3_2.rawValue] }" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -846,7 +847,8 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary1_1.rawValue] }"
+                        />
                     <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                 </LinearLayout>
 
@@ -870,7 +872,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary1_2.rawValue] }"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/elementaryMath2_1WrapperLl"
@@ -892,7 +894,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()-> vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary2_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -915,7 +917,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary2_2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -938,7 +940,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary3_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary3_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary3_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -961,7 +963,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary3_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary3_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary3_2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -984,7 +986,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary4_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary4_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary4_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -1007,7 +1009,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary4_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary4_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary4_2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -1030,7 +1032,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary5_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary5_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary5_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -1053,7 +1055,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary5_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary5_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary5_2.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -1076,7 +1078,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_1.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary6_1.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_1.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary6_1.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary6_1.rawValue] }"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -1100,7 +1102,7 @@
                         android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_2.rawValue ? @color/white : @color/gray_600 }"
                         android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary6_2.rawValue)}"
                         commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_2.rawValue }"
-                        android:text="@{ SubjectIndicator.Elementary6_2.inKorean }"/>
+                        android:text="@{ vm.subjectNames[SubjectIndicator.Elementary6_2.rawValue] }"/>
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1167,7 +1169,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary1_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary1_1.rawValue] }"
+                            />
                         <!--                        android:background="@drawable/shadow_main_page_tab_focused"-->
                     </LinearLayout>
 
@@ -1192,7 +1195,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary1_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary1_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary1_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary1_2.rawValue] }"
+                            />
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/elementaryScrollMath2_1WrapperLl"
@@ -1215,7 +1219,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary2_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary2_1.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1239,7 +1244,9 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary2_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary2_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary2_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary2_2.rawValue] }"
+
+                            />
                     </LinearLayout>
 
 
@@ -1264,7 +1271,9 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary3_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary3_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary3_1.rawValue] }"
+
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1288,7 +1297,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary3_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary3_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary3_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary3_2.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1312,7 +1322,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary4_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary4_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary4_1.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1336,7 +1347,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary4_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary4_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary4_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary4_2.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1360,7 +1372,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary5_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary5_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary5_1.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1384,7 +1397,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary5_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary5_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary5_2.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary5_2.rawValue] }"
+                            />
                     </LinearLayout>
 
 
@@ -1412,7 +1426,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_1.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary6_1.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_1.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary6_1.inKorean }"/>
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary6_1.rawValue] }"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1437,7 +1452,8 @@
                             android:textColor="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_2.rawValue ? @color/white : @color/gray_600 }"
                             android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectIndicator.Elementary6_2.rawValue)}"
                             commonBackgroundIf="@{ vm.selectedSubjectId == SubjectIndicator.Elementary6_2.rawValue  }"
-                            android:text="@{ SubjectIndicator.Elementary6_2.inKorean }" />
+                            android:text="@{ vm.subjectNames[SubjectIndicator.Elementary6_2.rawValue] }"
+                            />
                     </LinearLayout>
 
                 </LinearLayout>

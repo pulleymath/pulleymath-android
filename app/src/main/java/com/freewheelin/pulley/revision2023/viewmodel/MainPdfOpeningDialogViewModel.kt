@@ -2,29 +2,18 @@ package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.core.Parameter
-import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
-import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
-import com.freewheelin.pulley.revision2023.repository.MyPageRepository
-import com.freewheelin.pulley.revision2023.repository.UserRepository
-import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
-import com.freewheelin.pulley.revision2023.ui.fragment.SnackTestSelectExamRangeFragment.*
-import com.freewheelin.pulley.legacy.views.DaebakInputSelection
 import com.freewheelin.pulley.revision2021.model.response.Pdf
 import com.freewheelin.pulley.revision2021.model.response.PdfLinkAnswerItem
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
-import com.freewheelin.pulley.revision2023.SchoolType
+import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
+import com.freewheelin.pulley.revision2023.repository.MyPageRepository
+import com.freewheelin.pulley.revision2023.repository.UserRepository
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class MainPdfOpeningDialogViewModel(application: Application): BaseAndroidViewModel(application) {

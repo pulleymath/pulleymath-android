@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.response.DailyTestRecommendResponse
@@ -15,8 +13,7 @@ import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 import com.freewheelin.pulley.revision2023.repository.MyPageRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
-import com.freewheelin.pulley.revision2023.ui.fragment.SnackTestSelectExamRangeFragment.*
-import com.freewheelin.pulley.legacy.views.DaebakInputSelection
+import com.freewheelin.pulley.revision2023.ui.fragment.SnackTestSelectExamRangeFragment.TestRangeType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -52,29 +49,28 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
         testRangeType.postValue(type)
     }
 
-    fun getRecentStudySubjects(info: DailyTestRecommendResponse? = null): List<SubjectV3> {
+    fun getRecentStudySubjects(info: DailyTestRecommendResponse? = null): List<RecommendSubject> {
         val recommendInfo = info ?: userRecommendInfo
         val recentStudiedSubjects = recommendInfo?.let {
-            return@let it.recentStudySubjects.map { it.chapters }
-                .reduceOrNull { prev, next ->
-                    prev + next
-                }
-                ?.map { BigUnitV3.idOfNonNull(it.chapterId).subject }
+            return@let it.recentStudySubjects
         }
         return recentStudiedSubjects ?: listOf()
     }
-    fun getUserSelectedCommonSubjects(info: DailyTestRecommendResponse? = null): List<SubjectV3> {
+    fun getUserSelectedCommonSubjects(info: DailyTestRecommendResponse? = null): List<RecommendSubject> {
         val recommendInfo = info ?: userRecommendInfo
         val userSelectedSubjects = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedSubject(it.userSubjects.commonSubjects)
-
+            return@let it.userSubjects.commonSubjects.filter { subject ->
+                subject.chapters.any { chapter -> chapter.isSelected }
+            }
         }
         return userSelectedSubjects ?: listOf()
     }
-    fun getUserSelectedOptionalSubjects(info: DailyTestRecommendResponse? = null): List<SubjectV3> {
+    fun getUserSelectedOptionalSubjects(info: DailyTestRecommendResponse? = null): List<RecommendSubject> {
         val recommendInfo = info ?: userRecommendInfo
         val userSelectedSubjects = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedSubject(it.userSubjects.optionalSubjects)
+            return@let it.userSubjects.optionalSubjects.filter { subject ->
+                subject.chapters.any { chapter -> chapter.isSelected }
+            }
         }
         return userSelectedSubjects ?: listOf()
     }
@@ -90,40 +86,7 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
         return recentStudiedBigUnits ?: listOf()
     }
 
-    fun getUserSelectedCommonBigUnits(info: DailyTestRecommendResponse? = null): List<BigUnitV3> {
-        val recommendInfo = info ?: userRecommendInfo
-        val userSelectedUnits = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedBigUnit(it.userSubjects.commonSubjects)
-        }
-        return userSelectedUnits ?: listOf()
-    }
-    fun getUserSelectedOptionalBigUnits(info: DailyTestRecommendResponse? = null): List<BigUnitV3> {
-        val recommendInfo = info ?: userRecommendInfo
-        val userSelectedUnits = recommendInfo?.let {
-            return@let convertRecommendSubjectToSelectedBigUnit(it.userSubjects.optionalSubjects)
-        }
-        return userSelectedUnits ?: listOf()
-    }
 
-
-    fun convertRecommendSubjectToSelectedSubject(list: List<RecommendSubject>): List<SubjectV3>? {
-        return list
-            .map { it.chapters }
-            .reduceOrNull { prev, next ->
-                prev + next
-            }
-            ?.filter { it.isSelected }
-            ?.map { BigUnitV3.idOfNonNull(it.chapterId).subject }
-    }
-    fun convertRecommendSubjectToSelectedBigUnit(list: List<RecommendSubject>): List<BigUnitV3>? {
-        return list
-            .map { it.chapters }
-            .reduceOrNull { prev, next ->
-                prev + next
-            }
-            ?.filter { it.isSelected }
-            ?.map { BigUnitV3.idOfNonNull(it.chapterId) }
-    }
     fun fetchDailyTestRecommend(cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val res = myPageRepository.fetchDailyTestRecommend()
@@ -175,17 +138,6 @@ class RecommendSettingViewModel(application: Application): BaseAndroidViewModel(
             withContext(Dispatchers.Main) {
                 cb()
             }
-        }
-    }
-
-    val getSelectedUnits = fun (view: DaebakInputSelection, subject: SubjectV3): Collection<BigUnitV3> {
-        return if(view.result.first())
-            subject.bigUnits
-        else {
-            val selectionResult = view.result.subList(1, view.result.size)
-            val unitMap = subject.bigUnits.toList().zip(selectionResult)
-
-            unitMap.filter { it.second }.map { it.first }
         }
     }
     fun exitBtn() {

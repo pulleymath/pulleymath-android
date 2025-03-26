@@ -31,7 +31,6 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.*
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.*
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager.ARG_MOCK_IS_RESTART
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager.ARG_START_PROBLEM
@@ -2068,16 +2067,8 @@ class SolveActivity : BaseActivity(),
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
         viewModel.fetchMockSummary(content.mockID, content.assignID) { mockExamSummary ->
-            val optionResult = mutableListOf<CommercialSubject>()
             mockExamSummary?.let {
-                val optionalSubjects = mockExamSummary.optionalSubjectSummary
-
-                for(subject in optionalSubjects) {
-                    if (subject.isSelected) {
-                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
-                    }
-                }
-                mock.selectOptional = optionResult
+                mock.selectOptionalSubjectSummary = mockExamSummary.optionalSubjectSummary.toList()
                 mock.examType = mockExamSummary.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }

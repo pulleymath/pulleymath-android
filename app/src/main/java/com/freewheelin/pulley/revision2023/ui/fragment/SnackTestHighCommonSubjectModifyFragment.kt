@@ -1,24 +1,25 @@
 package com.freewheelin.pulley.revision2023.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.databinding.FragmentHighCommonSubjectModifyBinding
-import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
+import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.utils.DisplayUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
-import com.freewheelin.pulley.legacy.views.DaebakInputSelection
-import com.freewheelin.pulley.legacy.views.DaebakInputSelectionListener
+import com.freewheelin.pulley.revision2023.ui.view.BigUnitSelection
+import com.freewheelin.pulley.revision2023.ui.view.BigUnitSelectionListener
+import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
 
-class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectionListener {
+class SnackTestHighCommonSubjectModifyFragment : Fragment(), BigUnitSelectionListener {
     private lateinit var binding: FragmentHighCommonSubjectModifyBinding
 //    var viewModel: RecommendSettingViewModel? = null
     lateinit var viewModel: RecommendSettingViewModel
@@ -38,94 +39,64 @@ class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectio
             lifecycleOwner = viewLifecycleOwner
             setScreen()
 
-            initSelection()
             modifyBtn.setOnClickListener { onModifyBtnClicked() }
             backBtn.setOnClickListener { onBackBtnClicked() }
         }
+        viewModel.apply {
+            userRecommendLiveData.observe(viewLifecycleOwner) { recommend ->
+                recommend.userSubjects.commonSubjects.let { subjects ->
+                    binding.selectionContainer.let {
+                        it.removeAllViews()
+                        subjects.forEach { subject ->
+                            val unitSelection = BigUnitSelection(requireContext()).apply {
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                )
+                                initSelected(subject)
+                                listener = this@SnackTestHighCommonSubjectModifyFragment
+                            }
 
-        arguments?.let {
-//            val withPdfDesc = it.getBoolean("PDF_PURCHASE_DESC")
+                            it.addView(unitSelection)
+                        }
+                    }
+                }
+            }
         }
-    }
-    private fun initSelection() {
-        binding.apply {
-            val thisFragment = this@SnackTestHighCommonSubjectModifyFragment
-            mathTopSelection.listener = thisFragment
-            mathBottomSelection.listener = thisFragment
-            math1Selection.listener = thisFragment
-            math2Selection.listener = thisFragment
 
-            mathTopSelection.buttonTitles =
-                listOf(BigUnitV3.다항식, BigUnitV3.방정식과_부등식, BigUnitV3.도형의_방정식).map { it.title }
-            mathBottomSelection.buttonTitles =
-                listOf(BigUnitV3.집합과_명제, BigUnitV3.함수, BigUnitV3.순열과_조합).map { it.title }
-            math1Selection.buttonTitles =
-                listOf(BigUnitV3.지수함수와_로그함수, BigUnitV3.삼각함수, BigUnitV3.수열).map { it.title }
-            math2Selection.buttonTitles =
-                listOf(BigUnitV3.함수의_극한과_연속, BigUnitV3.미분, BigUnitV3.적분).map { it.title }
-
-            val selectedUnits = viewModel.getUserSelectedCommonBigUnits(null)
-            setCommonUnit(selectedUnits)
-
-        }
     }
 
     private fun onBackBtnClicked() {
         viewModel.removeStep(this@SnackTestHighCommonSubjectModifyFragment)
     }
 
-    private fun setCommonUnit(selectedUnits: List<BigUnitV3>) {
-        with(binding) {
-            mathTopSelection.result = listOf(
-                false,
-                selectedUnits.contains(BigUnitV3.다항식),
-                selectedUnits.contains(BigUnitV3.방정식과_부등식),
-                selectedUnits.contains(BigUnitV3.도형의_방정식)
-            )
-
-            mathBottomSelection.result = listOf(
-                false,
-                selectedUnits.contains(BigUnitV3.집합과_명제),
-                selectedUnits.contains(BigUnitV3.함수),
-                selectedUnits.contains(BigUnitV3.순열과_조합)
-            )
-
-            math1Selection.result = listOf(
-                false,
-                selectedUnits.contains(BigUnitV3.지수함수와_로그함수),
-                selectedUnits.contains(BigUnitV3.삼각함수),
-                selectedUnits.contains(BigUnitV3.수열)
-            )
-
-            math2Selection.result = listOf(
-                false,
-                selectedUnits.contains(BigUnitV3.함수의_극한과_연속),
-                selectedUnits.contains(BigUnitV3.미분),
-                selectedUnits.contains(BigUnitV3.적분)
-            )
-        }
-    }
-
     private fun onModifyBtnClicked() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "마이페이지", "공통과목", "변경하기")
         if (binding.modifyBtn.isEnabled) {
-            val selectedIds = getSelectedUnit().map { it.id }
-            viewModel.updateCommonSubject(selectedIds) {
+            val selectedBitUnitIds = getSelectedUnit()
+            viewModel.updateCommonSubject(selectedBitUnitIds) {
                 onBackBtnClicked()
             }
         }
-
     }
-    private fun getSelectedUnit(): Collection<BigUnitV3> {
-        val selectedBigUnits = hashSetOf<BigUnitV3>()
-        val getSelectedUnits = viewModel.getSelectedUnits
-        with(binding) {
-            selectedBigUnits.addAll(getSelectedUnits(mathTopSelection, SubjectV3.수학_상))
-            selectedBigUnits.addAll(getSelectedUnits(mathBottomSelection, SubjectV3.수학_하))
-            selectedBigUnits.addAll(getSelectedUnits(math1Selection, SubjectV3.수학I))
-            selectedBigUnits.addAll(getSelectedUnits(math2Selection, SubjectV3.수학II))
+    private fun getSelectedUnit(): List<Int> {
+        val selectionList = binding.selectionContainer.children
+            .filter { it.isVisible }
+            .filterIsInstance<BigUnitSelection>()
+            .toList()
+        val selectedChapterIds = selectionList.flatMap {
+            val isTotalClicked = it.binding.unitTotal.isSelected
+            if (isTotalClicked) {
+                it.chapterList.map { chapter -> chapter.chapterId }
+            }
+            else {
+                it.btnList.mapIndexedNotNull { index, btn ->
+                    if (btn.isSelected) it.chapterList.get(index).chapterId
+                    else null
+                }
+            }
         }
-        return selectedBigUnits
+        return selectedChapterIds
     }
 
     private fun setScreen() {
@@ -140,13 +111,10 @@ class SnackTestHighCommonSubjectModifyFragment : Fragment(), DaebakInputSelectio
         fun newInstance(viewModel: RecommendSettingViewModel) =
             SnackTestHighCommonSubjectModifyFragment().apply {
                 this.viewModel = viewModel
-                arguments = Bundle().apply {
-//                    putBoolean("PDF_PURCHASE_DESC", withPdfDesc)
-                }
             }
     }
 
-    override fun onSelectionChanged(view: DaebakInputSelection) {
+    override fun onSelectionChanged(view: View) {
         if(getSelectedUnit().isEmpty()) {
             binding.modifyBtn.isEnabled = false
         } else {

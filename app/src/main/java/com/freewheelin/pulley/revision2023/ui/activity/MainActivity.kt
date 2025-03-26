@@ -658,6 +658,7 @@ class MainActivity : PermissionActivity(),
                 binding.apply {
                     if (show) {
                         rootDl.openDrawer(GravityCompat.END)
+                        binding.rootDl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN)
                     } else if (rootDl.isDrawerOpen(GravityCompat.END)) {
                         rootDl.closeDrawer(GravityCompat.END)
                     }
@@ -724,6 +725,13 @@ class MainActivity : PermissionActivity(),
             add(R.id.drawerContainerFl, frag)
             addToBackStack(null)
             commit()
+        }
+    }
+    fun setDrawerLockMode(flag: Boolean) {
+        if (flag) {
+            binding.rootDl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+        } else {
+            binding.rootDl.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
     }
     fun backMyPage(frag: Fragment, withAnim: Boolean = true) {

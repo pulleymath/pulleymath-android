@@ -1,16 +1,13 @@
 package com.freewheelin.pulley.legacy.views
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.revision2023.model.response.SubjectChapter
 
 interface PulleyInputSelectionListener {
     fun onSelectionChanged(view:PulleyInputSelection)
@@ -23,47 +20,58 @@ class PulleyInputSelection: ConstraintLayout, View.OnClickListener {
         }
         set(value) {
             labelTv.text = value
-            val subject = SubjectV3.convertStrToSubject(value)
-            bigUnits = subject.bigUnits
         }
 
-    var bigUnits: List<BigUnitV3> = listOf(BigUnitV3.지수함수와_로그함수)
+    var btnList = mutableListOf<SelectionButton>()
+
+    var chapterList: List<SubjectChapter> = listOf()
         set(value) {
             field = value
-            buttonTitles = value.map { it.title }
+
+            val list = when (value.size) {
+                1 -> listOf(btn1)
+                2 -> listOf(btn1, btn2)
+                3 -> listOf(btn1, btn2, btn3)
+                4 -> listOf(btn1, btn2, btn3, btn4)
+                5 -> listOf(btn1, btn2, btn3, btn4, btn5)
+                6 -> listOf(btn1, btn2, btn3, btn4, btn5, btn6)
+                7 -> listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7)
+                8 -> listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
+                9 -> listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9)
+                else -> listOf()
+            }
+            btnList.addAll(list)
+
+            value.forEachIndexed { index, subjectChapter ->
+                btnList[index].isSelected = subjectChapter.isSelected
+                btnList[index].visibleIf(true)
+            }
+
         }
+
+
     var buttonTitles: List<String> = listOf("")
         set(value) {
             field = value
-            val btnList = listOf(btn1, btn2, btn3, btn4)
+            val btnList = listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9)
             value.forEachIndexed { index, text ->
                 btnList[index].text = text
             }
         }
 
-    var result: List<Boolean>
-        get() = listOf(btn1.isSelected, btn2.isSelected, btn3.isSelected, btn4.isSelected)
-        set(value) {
-            val btnList = listOf(btn1, btn2, btn3, btn4)
-            value.forEachIndexed { index, isSelected ->
-                btnList[index].isSelected = isSelected
-            }
-        }
-
-    var excludedViews = mutableListOf<View>()
-
     var listener: PulleyInputSelectionListener? = null
 
-
     constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
-        setTypedArray(attrs)
-    }
 
     var btn1: SelectionButton
     var btn2: SelectionButton
     var btn3: SelectionButton
     var btn4: SelectionButton
+    var btn5: SelectionButton
+    var btn6: SelectionButton
+    var btn7: SelectionButton
+    var btn8: SelectionButton
+    var btn9: SelectionButton
     var labelTv: TextView
 
     init {
@@ -72,81 +80,29 @@ class PulleyInputSelection: ConstraintLayout, View.OnClickListener {
         btn2 = findViewById(R.id.btn2)
         btn3 = findViewById(R.id.btn3)
         btn4 = findViewById(R.id.btn4)
+
+        btn5 = findViewById(R.id.btn5)
+        btn6 = findViewById(R.id.btn6)
+        btn7 = findViewById(R.id.btn7)
+        btn8 = findViewById(R.id.btn8)
+        btn9 = findViewById(R.id.btn9)
+
         labelTv = findViewById(R.id.labelTv)
-        bigUnits = listOf()
-        buttonTitles = listOf("A","B","C","D")
-
-        listOf(btn1, btn2, btn3, btn4).forEach {
-            it.setOnClickListener(this)
-            it.visibleIf(false)
-        }
     }
-
-    private fun setTypedArray(attrs: AttributeSet) {
-        val array = context.obtainStyledAttributes(attrs, R.styleable.DaebakInputSelection)
-        this.label = array.getString(R.styleable.DaebakInputSelection_DaebakInputSelection_Label) ?: "교육과정 외"
-        array.recycle()
-    }
-
     override fun onClick(view: View) {
         view.isSelected = !view.isSelected
-
-        if(!view.isSelected) excludedViews.add(view)
-        else excludedViews.remove(view)
-
         listener?.onSelectionChanged(this)
     }
 
-    fun getExcluded() : List<Boolean> {
-        return listOf(excludedViews.contains(btn1), excludedViews.contains(btn2), excludedViews.contains(btn3), excludedViews.contains(btn4))
-    }
-
-    fun setSubject(list: List<SubjectChapter>) {
-        val bigUnitList = list.map { BigUnitV3.idOfNonNull(it.chapterId) }
-
-        val includedFlagList = bigUnits.map { bigUnitList.contains(it) }
-        set(includedFlagList)
-    }
-
-    fun set(list:List<Boolean>) {
-        list.forEachIndexed { index, flag ->
-            val btnList = listOf(btn1, btn2, btn3, btn4)
-            btnList[index].isSelected = flag
-            btnList[index].visibleIf(flag)
-
+    fun init(list: List<SubjectChapter>) {
+        val btnList = listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9)
+        btnList.forEach {
+            it.setOnClickListener(this)
+            it.visibleIf(false)
         }
-
-        setHide()
-    }
-
-    fun excludeSubjects(list: List<SubjectChapter>) {
-        val bigUnitList = list.filter { !it.isSelected }
-            .map { BigUnitV3.idOfNonNull(it.chapterId) }
-        val excludedFlagList = bigUnits.map { bigUnitList.contains(it) }
-
-        exclude(excludedFlagList)
-    }
-    fun excludeBigUnit(includedUnits: List<BigUnitV3>) {
-        val excludedFlagList = bigUnits.map { !includedUnits.contains(it) }
-        exclude(excludedFlagList)
+        chapterList = list
+        buttonTitles = list.map { it.chapterName }
 
     }
-    fun exclude(list:List<Boolean>) {
-        val btnList = listOf(btn1, btn2, btn3, btn4)
-        list.forEachIndexed { index, flag ->
-            val btn = btnList[index]
-            if (flag) {
-                btn.isSelected = false
-                excludedViews.add(btn)
-            }
-        }
-    }
-
-    fun setHide() {
-        if(!btn1.isSelected && !btn2.isSelected && !btn3.isSelected && !btn4.isSelected) {
-            visibility = View.GONE
-        }
-    }
-
 }
 

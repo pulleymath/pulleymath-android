@@ -14,12 +14,12 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.DialogMockExamOptionalSubjectSelectBinding
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.legacy.bases.isTablet
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.Theme
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialog
 import com.freewheelin.pulley.legacy.dialogs.EmailInputDialogListener
 import com.freewheelin.pulley.legacy.model.contents.MockExam
 import com.freewheelin.pulley.legacy.model.contents.MockExamSummary
+import com.freewheelin.pulley.legacy.model.contents.SubjectSummary
 import com.freewheelin.pulley.legacy.utils.DialogType
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
@@ -33,9 +33,9 @@ class MockExamOptionalSubjectSelectDialog(): DialogFragment() {
     var goSolveCb: (MockExam) -> Unit = {}
     var goOMRCb: (MockExam) -> Unit = {}
 
-    val subjectPAS = CommercialSubject.PROBABILITY_AND_STATISTICS// 확통
-    val subjectCalculus = CommercialSubject.CALCULUS // 미적
-    val subjectGeometry = CommercialSubject.GEOMETRY // 기하
+    val subjectPAS = "PROBABILITY_AND_STATISTICS"// 확통
+    val subjectCalculus = "CALCULUS" // 미적
+    val subjectGeometry = "GEOMETRY" // 기하
 
     companion object {
         const val MOCK_ID = "MOCK_ID"
@@ -114,9 +114,9 @@ class MockExamOptionalSubjectSelectDialog(): DialogFragment() {
                 viewModel.mockSummary.value?.let { mockSummary ->
                     val selectedOptions = mockSummary.optionalSubjectSummary.toMutableList()
                     when (checkedId) {
-                        R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectPAS.name }
-                        R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectCalculus.name }
-                        R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectGeometry.name }
+                        R.id.radioSelectOne -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectPAS }
+                        R.id.radioSelectTwo -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectCalculus }
+                        R.id.radioSelectThree -> selectedOptions.forEach { it.isSelected = it.subjectCodeType == subjectGeometry }
                     }
                     mockSummary.optionalSubjectSummary = selectedOptions.toTypedArray()
                     setSubjectsUI(mockSummary)
@@ -164,19 +164,31 @@ class MockExamOptionalSubjectSelectDialog(): DialogFragment() {
     }
 
     private fun setMockExamToSolve(): MockExam {
-        val optionResult = mutableListOf<CommercialSubject>()
+        val optionResult = mutableListOf<SubjectSummary>()
 
         if(binding.selectCheckContainer.visibility == View.VISIBLE) {
             val checkBoxes = listOf(binding.checkSelectOne, binding.checkSelectTwo, binding.checkSelectThree)
             viewModel.mockSummary.value?.optionalSubjectSummary?.forEachIndexed { index, subjectSummary ->
                 if (index > 2) return@forEachIndexed
-                if (checkBoxes[index].isChecked) optionResult.add(CommercialSubject.valueOf(subjectSummary.subjectCodeType))
+                if (checkBoxes[index].isChecked) optionResult.add(subjectSummary)
             }
         } else if(binding.selectRadioContainer.visibility == View.VISIBLE) {
             when(binding.selectRadioContainer.checkedRadioButtonId) {
-                R.id.radioSelectOne -> optionResult.add(subjectPAS)
-                R.id.radioSelectTwo -> optionResult.add(subjectCalculus)
-                R.id.radioSelectThree -> optionResult.add(subjectGeometry)
+                R.id.radioSelectOne -> {
+                    viewModel.mockSummary.value?.optionalSubjectSummary?.get(0)?.let { subject ->
+                        optionResult.add(subject)
+                    }
+                }
+                R.id.radioSelectTwo -> {
+                    viewModel.mockSummary.value?.optionalSubjectSummary?.get(1)?.let { subject ->
+                        optionResult.add(subject)
+                    }
+                }
+                R.id.radioSelectThree -> {
+                    viewModel.mockSummary.value?.optionalSubjectSummary?.get(2)?.let { subject ->
+                        optionResult.add(subject)
+                    }
+                }
             }
         }
 
@@ -184,7 +196,7 @@ class MockExamOptionalSubjectSelectDialog(): DialogFragment() {
             it.mockID = viewModel.mockId!!
             it.assignID = viewModel.assignId
             it.isRestart = binding.checkRestart.isChecked
-            it.selectOptional = optionResult
+            it.selectOptionalSubjectSummary = optionResult
         }
 
         return mockExam
@@ -225,9 +237,9 @@ class MockExamOptionalSubjectSelectDialog(): DialogFragment() {
 
                 if (subject.isSelected) {
                     when (subject.subjectCodeType) {
-                        subjectPAS.name -> radioSelectOne.isChecked = true
-                        subjectCalculus.name -> radioSelectTwo.isChecked = true
-                        subjectGeometry.name -> radioSelectThree.isChecked = true
+                        subjectPAS -> radioSelectOne.isChecked = true
+                        subjectCalculus -> radioSelectTwo.isChecked = true
+                        subjectGeometry -> radioSelectThree.isChecked = true
                     }
                 }
             }

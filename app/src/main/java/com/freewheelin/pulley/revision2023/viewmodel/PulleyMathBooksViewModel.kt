@@ -57,65 +57,17 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
     lateinit var planAdapter: PatternStudyMyPlanAdapter
     lateinit var filterAdapter: BookFilterAdapter
 
-    var selectedFilterTypes: HashSet<LearningFilterType> = hashSetOf(
-        LearningFilterType.핀_포함, LearningFilterType.과목_전체, LearningFilterType.유형_전체,
-        if (schoolType.isHigh) LearningFilterType.추천_전체 else LearningFilterType.추천레벨_전체
+    val initialFilterType: List<String> = listOf(
+        "핀_포함", "과목_전체", "유형_전체", "추천_전체", "추천레벨_전체"
     )
 
-    fun switchCheckedContainPin(isChecked: Boolean) {
-        val addFilter = if (isChecked) LearningFilterType.핀_미포함 else LearningFilterType.핀_포함
-        updateFilterTypes(addFilter)
+    fun fetchTotalBooksOnFilters(filters: List<BookFilterElement>, additionalFilter: LearningFilterType? = LearningFilterType.핀_포함) {
+        val selectedFilters = filters
+            .filter { it.isSelected.get() }
+        val filterString = selectedFilters
+            .mapNotNull { it.value }
+            .joinToString(",") + ",${additionalFilter.toString()}"
 
-        val filters = selectedFilterTypes.toSet()
-        fetchTotalBooks(filters)
-    }
-    fun updateFilterTypes(type: LearningFilterType) {
-        selectedFilterTypes.add(type)
-        selectedFilterTypes.removeAll(type.exclusiveSet)
-    }
-    fun onFilterItemClick(item: BookFilterElement) {
-        val type = item.filterType
-        val isContained = selectedFilterTypes.contains(type)
-        if (isContained) {
-            selectedFilterTypes.remove(type)
-        } else {
-            updateFilterTypes(type)
-        }
-        checkFiltersWhenRemoveSelfs(type)
-        syncSelectedFilterType()
-
-        val filters = selectedFilterTypes.toSet()
-        fetchTotalBooks(filters)
-
-    }
-    private fun checkFiltersWhenRemoveSelfs(type: LearningFilterType) {
-        // 자기자신이 제거될때
-        // 1. 섹션내에서 자기자신만 선택되어져있던 경우 : 필터에서 아예 없어지면 안됨
-        // 2. 같은 섹션 내에 다른 필터가 같이 선택되어져있는 경우 : 없어져야함
-        val sectionListWithoutSelected = type.sectionList.filter { it != type }
-        for (item in sectionListWithoutSelected) {
-            if (selectedFilterTypes.contains(item)) {
-                return
-            }
-        }
-        selectedFilterTypes.add(type)
-    }
-    fun syncSelectedFilterType() {
-        filterElements.value?.forEach {
-            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
-        }
-    }
-    private fun syncSelectedFilterType(filters: List<BookFilterElement>): List<BookFilterElement> {
-        return filters.map {
-            it.isSelected.set(selectedFilterTypes.contains(it.filterType))
-            it
-        }
-    }
-
-    var latestFilters: Set<LearningFilterType>? = null
-    fun fetchTotalBooks(filters: Set<LearningFilterType>) {
-        latestFilters = filters
-        val filterString = filters.joinTo(StringBuilder(), separator = ",").toString()
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             patternStudyRepository.fetchAllBookList(filterString)?.let { newBookList ->
                 showTotalLoadingView.postValue(false)
@@ -128,6 +80,72 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
             }
         }
     }
+
+    fun switchCheckedContainPin(isChecked: Boolean) {
+        val addFilter = if (isChecked) LearningFilterType.핀_미포함 else LearningFilterType.핀_포함
+        fetchTotalBooksOnFilters(_filterElements.value ?: emptyList(), addFilter)
+    }
+    fun updateFilterTypes(filterType: String) {
+        _filterElements.value?.find { it.name == filterType }?.let {
+            // TODO
+//            onFilterItemClick()
+        }
+    }
+    fun onFilterItemClick(item: BookFilterElement) {
+
+        val itemsWithSameParent = _filterElements.value?.filter { it.parentTitle == item.parentTitle } ?: emptyList()
+        val nonAllItems = itemsWithSameParent.filter { it.name != "전체" }
+        val allItem = itemsWithSameParent.find { it.name == "전체" }
+        val hasAllItem = allItem != null
+
+        handleRegularFilter(item, nonAllItems, allItem)
+
+        // LiveData 업데이트하여 UI 갱신
+        _filterElements.value = _filterElements.value
+
+    }
+    private fun handleRegularFilter(
+        item: BookFilterElement,
+        nonAllItems: List<BookFilterElement>,
+        allItem: BookFilterElement?
+    ) {
+        if (item.name == "전체") {
+            // "전체"가 이미 선택된 상태에서 다시 클릭된 경우 - 선택 해제하지 않음
+            if (item.isSelected.get()) return
+
+            // "전체" 선택 시 다른 항목들 선택 해제
+            item.isSelected.set(true)
+            nonAllItems.forEach { it.isSelected.set(false) }
+        } else {
+            // 현재 아이템의 선택 상태 토글
+            item.isSelected.set(!item.isSelected.get())
+
+            if (item.isSelected.get()) {
+                // 개별 항목 선택 시 "전체" 선택 해제
+                allItem?.isSelected?.set(false)
+
+                // 모든 개별 항목이 선택되었으면 "전체"만 선택하고 나머지는 해제
+                val allNonAllItemsSelected = nonAllItems.all { it.isSelected.get() }
+                if (allNonAllItemsSelected) {
+                    nonAllItems.forEach { it.isSelected.set(false) }
+                    allItem?.isSelected?.set(true)
+                }
+            } else {
+                // 항목이 선택 해제된 경우, 다른 항목이 하나도 선택되지 않았으면 "전체" 선택
+                val anyItemSelected = nonAllItems.any { it.isSelected.get() }
+                if (!anyItemSelected) {
+                    allItem?.isSelected?.set(true)
+                }
+            }
+        }
+    }
+    private fun syncSelectedFilterType(filters: List<BookFilterElement>): List<BookFilterElement> {
+        return filters.map {
+            it.isSelected.set(initialFilterType.contains(it.value))
+            it
+        }
+    }
+
     fun fetchBookFilter() {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val filter = BookFilterParent.PULLEY_WORKBOOK

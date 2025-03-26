@@ -38,9 +38,7 @@ class TerminalActivity : AppCompatActivity() {
         val intent = intent
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             intent.data?.let {
-                println("aspasp datastring : ${it}")
                 val token = it.getQueryParameter("token")
-                println("aspasp token = ${token}")
                 if (token == null) {
                     unauthorizedAccess(401)
                     return

@@ -1,17 +1,52 @@
 package com.freewheelin.pulley.legacy.core.API
 
 import com.freewheelin.pulley.legacy.bases.MyApplication
-import com.freewheelin.pulley.legacy.core.API.RequestModel.*
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.*
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestAgreeInfo
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestChangeEmail
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestChangePassword
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestChangePhone
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestCheckCode
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestLogin
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestReset
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestResetPassword
+import com.freewheelin.pulley.legacy.core.API.RequestModel.RequestSignup
+import com.freewheelin.pulley.legacy.core.API.RequestModel.SchoolInfo
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialBookPageResponse
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DDay
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyRecommend
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailyStudy
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.DailySummary
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MainProfile
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.MyBookList
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.RecommendBookList
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.ResponseDevice
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.ScoredStudentGoalInfo
 import com.freewheelin.pulley.legacy.core.Parameter
-import com.freewheelin.pulley.legacy.core.manage.*
-import com.freewheelin.pulley.legacy.model.*
-import com.freewheelin.pulley.legacy.model.contents.*
+import com.freewheelin.pulley.legacy.core.manage.ResponseBookInfo
+import com.freewheelin.pulley.legacy.core.manage.ResponseBookInfo2
+import com.freewheelin.pulley.legacy.core.manage.ResponseBookList
+import com.freewheelin.pulley.legacy.core.manage.VersionInfo
+import com.freewheelin.pulley.legacy.model.Problem
+import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.model.ResponseForceBody
+import com.freewheelin.pulley.legacy.model.Template
+import com.freewheelin.pulley.legacy.model.User
+import com.freewheelin.pulley.legacy.model.contents.Book
+import com.freewheelin.pulley.legacy.model.contents.Content
+import com.freewheelin.pulley.legacy.model.contents.MockExam
+import com.freewheelin.pulley.legacy.model.contents.Piece
+import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.revision2023.model.response.NoteStudyDetailResponse
-import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface  ServiceV2 {
 
@@ -120,9 +155,6 @@ interface  ServiceV2 {
 
     @POST("scoring")
     fun score(@Body params: Parameter): Call<ScoredStudentGoalInfo>
-
-    @GET("commercials")
-    fun getCommercials(@Query("subject") subject: CommercialSubject?): Call<List<CommercialBook>>
 
     // deprecated
     @GET("commercials/{pieceID}/pages")

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.assets.BigUnitV3
 import com.freewheelin.pulley.legacy.core.Theme
 
 class SubjectSelectionButton: androidx.appcompat.widget.AppCompatButton {
@@ -13,7 +12,6 @@ class SubjectSelectionButton: androidx.appcompat.widget.AppCompatButton {
     init {
 
     }
-    var bigUnits: MutableList<BigUnitV3> = mutableListOf()
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
         if(isSelected) {

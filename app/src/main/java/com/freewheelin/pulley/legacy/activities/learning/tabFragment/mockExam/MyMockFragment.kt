@@ -18,17 +18,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.revision2021.activity.MockReportActivity
+import com.freewheelin.pulley.databinding.FragmentMyMockBinding
+import com.freewheelin.pulley.databinding.ItemMyMockHeaderBinding
+import com.freewheelin.pulley.databinding.ItemMyMockListBinding
 import com.freewheelin.pulley.legacy.activities.OMRActivity
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.is10InchUI
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.CommercialSubject
 import com.freewheelin.pulley.legacy.core.manage.MockExamManager
-import com.freewheelin.pulley.databinding.FragmentMyMockBinding
-import com.freewheelin.pulley.databinding.ItemMyMockHeaderBinding
-import com.freewheelin.pulley.databinding.ItemMyMockListBinding
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialog
 import com.freewheelin.pulley.legacy.dialogs.MockExamGuideDialogListener
 import com.freewheelin.pulley.legacy.lib.ObservableHashSet
@@ -36,18 +34,20 @@ import com.freewheelin.pulley.legacy.lib.ObservableHashSetListener
 import com.freewheelin.pulley.legacy.model.contents.Content
 import com.freewheelin.pulley.legacy.model.contents.MarkingState
 import com.freewheelin.pulley.legacy.model.contents.MockExam
-import com.freewheelin.pulley.revision2023.model.PaidServiceType
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
-import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.utils.DateTimeUtils
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.setOnPaidUserClickListener
+import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.views.textViews.SortableListener
 import com.freewheelin.pulley.legacy.views.textViews.SortableTextView
+import com.freewheelin.pulley.revision2021.activity.MockReportActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.REQUEST_MOCK_TEST
 import com.freewheelin.pulley.revision2023.ui.activity.MockListActivity.Companion.RESULT_MOCK_FINISH
 import com.freewheelin.pulley.revision2023.ui.activity.MockTabListener
+import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
+import com.freewheelin.pulley.revision2023.viewmodel.MockFViewModel
 import com.github.mikephil.charting.data.Entry
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExamGuideDialogListener {
 
@@ -98,7 +98,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
                         selectedPercentageEntries.clear()
                         selectedScoreEntries.clear()
                     }
-                    it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
+                    it?.map { it.selectOptionalSubjectSummary = it.personalData?.optionalSubjectList?.toList() ?: listOf() }
                     this@MyMockFragment.exams = it
                     this@MyMockFragment.sortedExams = sortExamList()
                     binding.myExamRv.adapter?.notifyDataSetChanged()
@@ -191,7 +191,7 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
             }
 
             MockExamManager.getMyMockExamList(requireContext(), user!!) {
-                it?.map { it.selectOptional = it.personalData?.optionalSubjectList?.map { CommercialSubject.valueOf(it.subjectCodeType) }?.toMutableList() ?: mutableListOf() }
+                it?.map { it.selectOptionalSubjectSummary = it.personalData?.optionalSubjectList?.toList() ?: listOf() }
                 this@MyMockFragment.exams = it
                 this@MyMockFragment.sortedExams = exams
                 myExamRv.adapter?.notifyDataSetChanged()
@@ -389,16 +389,8 @@ class MyMockFragment : Fragment(), ObservableHashSetListener<MockExam>, MockExam
     private fun getMockWithOptionalSubjects(content: Content, cb: (summary: MockExam) -> Unit) {
         val mock = MockExam(content)
         viewModel.fetchMockSummary(content.mockID, content.assignID) { mockExamSummary ->
-            val optionResult = mutableListOf<CommercialSubject>()
             mockExamSummary?.let {
-                val optionalSubjects = mockExamSummary.optionalSubjectSummary
-
-                for(subject in optionalSubjects) {
-                    if (subject.isSelected) {
-                        optionResult.add(CommercialSubject.valueOf(subject.subjectCodeType))
-                    }
-                }
-                mock.selectOptional = optionResult
+                mock.selectOptionalSubjectSummary = mockExamSummary.optionalSubjectSummary.toList()
                 mock.examType = mockExamSummary.examType.let {
                     MockExam.ExamType.valueOnString(it)
                 }

@@ -81,6 +81,56 @@
                     android:paddingVertical="8dp"
                     android:visibility="gone"
                     />
+                <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
+                    android:id="@+id/unit4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingHorizontal="18dp"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
+                    android:layout_marginEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:visibility="gone"
+                    />
+                <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
+                    android:id="@+id/unit5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingHorizontal="18dp"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
+                    android:layout_marginEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:visibility="gone"
+                    />
+                <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
+                    android:id="@+id/unit6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingHorizontal="18dp"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
+                    android:layout_marginEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:visibility="gone"
+                    />
+                <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
+                    android:id="@+id/unit7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingHorizontal="18dp"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
+                    android:layout_marginEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:visibility="gone"
+                    />
+                <com.freewheelin.pulley.revision2023.ui.view.SubjectSelectionButton
+                    android:id="@+id/unit8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp48"
+                    android:paddingHorizontal="18dp"
+                    android:background="@drawable/bg_white_stroke_gray_300_round_24"
+                    android:layout_marginEnd="8dp"
+                    android:paddingVertical="8dp"
+                    android:visibility="gone"
+                    />
             </LinearLayout>
         </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,36 +88,65 @@
                     app:layout_constraintTop_toBottomOf="@+id/guideBottomLabel">
 
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle11Selection"
+                        android:id="@+id/selection1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:unitType="m1-1" />
+                        android:layout_height="wrap_content" />
 
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle12Selection"
+                        android:id="@+id/selection2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:unitType="m1-2" />
+                        />
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle21Selection"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:unitType="m2-1" />
+                    android:id="@+id/selection3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle22Selection"
+                        android:id="@+id/selection4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:unitType="m2-2" />
+                        />
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle31Selection"
+                        android:id="@+id/selection5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:unitType="m3-1" />
+                        />
                     <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
-                        android:id="@+id/middle32Selection"
+                        android:id="@+id/selection6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:unitType="m3-2" />
+                        />
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                    />
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.freewheelin.pulley.revision2023.ui.view.MiddleSchoolUnitSelection
+                        android:id="@+id/selection12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
 
                 </LinearLayout>
 

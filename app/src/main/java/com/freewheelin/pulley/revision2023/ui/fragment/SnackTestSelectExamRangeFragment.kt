@@ -2,23 +2,21 @@ package com.freewheelin.pulley.revision2023.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.assets.SubjectV3
-import com.freewheelin.pulley.legacy.bases.user
+import com.freewheelin.pulley.databinding.FragmentTestExamRangeBinding
 import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.core.manage.TestManager
-import com.freewheelin.pulley.databinding.FragmentTestExamRangeBinding
 import com.freewheelin.pulley.legacy.model.contents.Test
-import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog.*
+import com.freewheelin.pulley.legacy.utils.DisplayUtils
+import com.freewheelin.pulley.revision2023.model.response.RecommendSubject
+import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog.ViewType
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
-import com.freewheelin.pulley.legacy.utils.*
-import com.freewheelin.pulley.legacy.views.DaebakToast
 
 class SnackTestSelectExamRangeFragment() : Fragment() {
     private lateinit var binding: FragmentTestExamRangeBinding
@@ -55,24 +53,21 @@ class SnackTestSelectExamRangeFragment() : Fragment() {
                     sameMyText.text = filteredSubjects
                     isRecentStudiedRangeEmpty.postValue(filteredSubjects == "없음")
 
+                    val filteredCommonSubjects = getReducedFilterTextFromSubject(selectedCommonSubjects)
+                    myChoiceCommonText.text = filteredCommonSubjects
+                    myChoiceMiddleSubjectText.text = filteredCommonSubjects
+                    myChoiceElementarySubjectText.text = filteredCommonSubjects
 
-                    myChoiceCommonText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
-                    myChoiceMiddleSubjectText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
-                    myChoiceElementarySubjectText.text = getReducedFilterTextFromSubject(selectedCommonSubjects)
-
-                    satOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
-                    myChoiceOptionalText.text = getReducedFilterTextFromSubject(selectedOptionalSubjects)
+                    val filteredOptionalSubjects = getReducedFilterTextFromSubject(selectedOptionalSubjects)
+                    satOptionalText.text = filteredOptionalSubjects
+                    myChoiceOptionalText.text = filteredOptionalSubjects
                 }
             }
         }
-
-        arguments?.let {
-
-        }
     }
 
-    private fun getReducedFilterTextFromSubject(list: List<SubjectV3>): String {
-        val result = list.map { it.filterText }.distinct().reduceOrNull { prev, next -> "$prev ,$next" }
+    private fun getReducedFilterTextFromSubject(list: List<RecommendSubject>): String {
+        val result = list.map { it.subjectName }.distinct().reduceOrNull { prev, next -> "$prev ,$next" }
         return result ?: "없음"
     }
     private fun setModifyBtnClickListener() {

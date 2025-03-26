@@ -79,7 +79,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
             mockExam = it
             problems = it.problems
 
-            if (mockExam.year < 2021 || mockExam.selectOptional.isEmpty()) {
+            if (mockExam.year < 2021 || mockExam.selectOptionalSubjectSummary.isEmpty()) {
                 showOmrViewTopLabel(false)
                 binding.omrViewLeft.setAnswer(it.problems.filter { problem -> problem.problemType != ProblemType.short }, OMRViewType.LEFT)
                 binding.omrViewRight.setAnswer(it.problems.filter { problem -> problem.problemType == ProblemType.short }, OMRViewType.RIGHT)
@@ -158,7 +158,7 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
             (dividerSecondOmrLeft.layoutParams as? ConstraintLayout.LayoutParams)?.setMargins(0, if (isShow) 32.toPx() else 0, 0, 0)
 
             // 선택과목 없을 시 공통 레이블 숨기기
-            val labelHide = if(mockExam.selectOptional.isEmpty()) View.GONE else View.VISIBLE
+            val labelHide = if(mockExam.selectOptionalSubjectSummary.isEmpty()) View.GONE else View.VISIBLE
 
             lbCommonSubject.visibility = labelHide
             lbSelectedSubject.visibility = labelHide

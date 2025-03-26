@@ -6,8 +6,6 @@
     tools:context=".revision2023.ui.activity.PlannerActivity">
     <data>
         <import type="android.view.View" />
-        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
-        <import type="com.freewheelin.pulley.legacy.assets.SubjectV3"/>
         <import type="com.freewheelin.pulley.revision2023.SchoolType"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2023.viewmodel.PlannerActViewModel"/>
     </data>
@@ -264,108 +262,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             visibleIf="@{ vm.schoolType.isHigh }"
-                            tools:visibility="gone"
+                            tools:visibility="visible"
                             android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.수학_상.plannerText }"
-                                tools:text="수학(상)"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.수학_상.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/purple_300"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.수학_상.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.수학_상.id }"
-                                tools:background="@drawable/bg_purple_100_round_28_ripple"
-                                android:layout_marginStart="16dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.수학_하.plannerText }"
-                                tools:text="수학(하)"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.수학_하.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.수학_하.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.수학_하.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.수학I.plannerText }"
-                                tools:text="수학 1"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.수학I.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.수학I.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.수학I.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.수학II.plannerText }"
-                                tools:text="수학 2"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.수학II.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.수학II.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.수학II.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.확률과통계.plannerText }"
-                                tools:text="확률과 통계"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.확률과통계.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.확률과통계.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.확률과통계.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.미적분.plannerText }"
-                                tools:text="미적분"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.미적분.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.미적분.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.미적분.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.기하.plannerText }"
-                                tools:text="기하"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.기하.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.기하.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.기하.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/middleSchoolSubjectLl"
@@ -375,91 +274,6 @@
                             tools:visibility="gone"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중1_1.plannerText }"
-                                tools:text="1-1"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중1_1.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중1_1.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중1_1.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="16dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중1_2.plannerText }"
-                                tools:text="1-2"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중1_2.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중1_2.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중1_2.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중2_1.plannerText }"
-                                tools:text="2-1"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중2_1.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중2_1.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중2_1.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중2_2.plannerText }"
-                                tools:text="2-2"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중2_2.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중2_2.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중2_2.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중3_1.plannerText }"
-                                tools:text="3-1"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중3_1.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/gray_600"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중3_1.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중3_1.id }"
-                                tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                                android:layout_marginStart="8dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/b1"
-                                android:text="@{ SubjectV3.중3_2.plannerText }"
-                                tools:text="3-2"
-                                android:textColor="@{ vm.selectedSubjectId == SubjectV3.중3_2.id ? @color/purple_300 : @color/gray_600 }"
-                                tools:textColor="@color/purple_300"
-                                android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.중3_2.id)}"
-                                secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.중3_2.id }"
-                                tools:background="@drawable/bg_purple_100_round_28_ripple"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:paddingHorizontal="16dp"
-                                android:paddingVertical="6dp"/>
                         </LinearLayout>
 
                     <LinearLayout
@@ -467,128 +281,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         visibleIf="@{ vm.schoolType.isElementary }"
+                        tools:visibility="gone"
                         android:orientation="horizontal"
                         android:paddingStart="8dp"
                         >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초3_1.plannerText }"
-                            tools:text="3-1"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초3_1.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초3_1.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초3_1.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초3_2.plannerText }"
-                            tools:text="3-2"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초3_2.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초3_2.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초3_2.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초4_1.plannerText }"
-                            tools:text="4-1"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초4_1.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초4_1.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초4_1.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초4_2.plannerText }"
-                            tools:text="4-2"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초4_2.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초4_2.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초4_2.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초5_1.plannerText }"
-                            tools:text="5-1"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초5_1.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초5_1.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초5_1.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초5_2.plannerText }"
-                            tools:text="5-2"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초5_2.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초5_2.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초5_2.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초6_1.plannerText }"
-                            tools:text="6-1"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초6_1.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/gray_600"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초6_1.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초6_1.id }"
-                            tools:background="@drawable/bg_white_round_28_ripple_gray200"
-                            android:layout_marginStart="8dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/b1"
-                            android:text="@{ SubjectV3.초6_2.plannerText }"
-                            tools:text="6-2"
-                            android:textColor="@{ vm.selectedSubjectId == SubjectV3.초6_2.id ? @color/purple_300 : @color/gray_600 }"
-                            tools:textColor="@color/purple_300"
-                            android:onClick="@{()->vm.onHeaderSubjectBtnClick(SubjectV3.초6_2.id)}"
-                            secondaryBackgroundIf="@{ vm.selectedSubjectId == SubjectV3.초6_2.id }"
-                            tools:background="@drawable/bg_purple_100_round_28_ripple"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="6dp"/>
 
                     </LinearLayout>
                     </LinearLayout>
@@ -611,7 +307,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/b1"
-                    android:text="@{ vm.schoolType.isElementary ? `초등 문제집은 준비 중이에요.` : `원하는 과목을 선택해주세요` }"
+                    android:text="@{ vm.schoolType.isElementary ? `초등 문제집은 준비 중이에요.` : `과목을 준비중이에요.` }"
                     visibleIf="@{ vm.showEmptyText }"
                     android:textColor="@color/gray_500"
                     tools:visibility="gone"

@@ -222,9 +222,13 @@ class MyMainPageFragment : Fragment() {
 
 
     fun onSettingClicked(setting: Setting) {
+//        setDrawerLock(false)
         when (setting) {
             SignUpInfo -> moveTo(MySignUpInfoFragment())
-            StudyInfo -> moveTo(MyStudyInfoFragment())
+            StudyInfo -> {
+                moveTo(MyStudyInfoFragment())
+                setDrawerLock(true)
+            }
             StartChallenge -> moveTo(MyStartChallengeFragment())
 
             PulleyPlus   -> moveTo(MyPulleyPlusFragment())
@@ -314,6 +318,9 @@ class MyMainPageFragment : Fragment() {
 
     fun moveTo(frag: Fragment) {
         (activity as MainActivity).addMyPage(frag)
+    }
+    fun setDrawerLock(flag: Boolean) {
+        (activity as MainActivity).setDrawerLockMode(flag)
     }
 
     inner class MenuAdapter : SectionAdapter<RecyclerView.ViewHolder>() {
