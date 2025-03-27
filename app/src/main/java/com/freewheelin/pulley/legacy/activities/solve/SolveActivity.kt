@@ -911,6 +911,14 @@ class SolveActivity : BaseActivity(),
                 val isSwitchChecked = binding.solutionPanelSwitch.isChecked
                 binding.solutionPanelSwitch.isChecked = !isYet && isSwitchChecked
                 viewModel.makeChatBotInfo(it)
+
+                mainProfileV4.value?.let { profile ->
+                    if (profile.isAffiliated && !it.isScoring()) {
+                        binding.chatBotBtn.visibleIf(false)
+                    } else {
+                        binding.chatBotBtn.visibleIf(true)
+                    }
+                }
             }
         }
     }

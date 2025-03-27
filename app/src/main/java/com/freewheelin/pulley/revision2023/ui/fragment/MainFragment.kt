@@ -302,24 +302,17 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
             }
 
             currentMission.observe(viewLifecycleOwner) {
-                println("currentMission update 1")
                 if (!it.isStartChallenge) return@observe
-                println("currentMission update 2 게스트입니까?=${user?.serviceType?.isGuestUser}")
                 blurTitle.postValue("${user?.fullName}님 ${it.challengeName}에 참여해\n${it.reward?.name}을 받아보세요!")
                 if (user?.serviceType?.isGuestUser == true) return@observe
-                println("currentMission update 3")
                 val scInfo = Preferences.startChallengeAlreadyAppeared
                 val appearedIds = scInfo.studentIds
-                println("currentMission update 4 ${appearedIds}, studentId : ${user?.studentID}")
                 val isAlreadyAppearedUser = appearedIds.contains(user?.studentID)
-                println("currentMission update 4-최초 접속시 startChallenge 권유가 이미 동작하였습니까?=${isAlreadyAppearedUser}")
 
                 if (isAlreadyAppearedUser) return@observe
-                println("currentMission update 5 it.userStatus : ${it.userStatus}")
                 if (it.userStatus == ChallengeUserStatus.YET) {
                     // 강제참여
                     this@MainFragment.joinChallenge(it.challengeId) {
-                        println("currentMission update 6 after join")
                         val studentId = user?.studentID ?: ""
                         val newList = scInfo.studentIds + listOf(studentId)
                         scInfo.studentIds = newList.toSet().toList()
