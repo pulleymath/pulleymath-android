@@ -240,15 +240,9 @@ class MainActivity : PermissionActivity(),
             mainTl.selectTap(0, MainTab.메인)
 
             alarmBtn.setOnClickListener {
-//                val intent = Intent(this@MainActivity, WhaleSpaceLoginActivity::class.java)
-//                startActivity(intent)
 
                 val intent = AlarmActivity.getIntent(this@MainActivity)
                 startActivity(intent)
-//                SpyDialog().apply {
-//
-//                }.show(supportFragmentManager, "SpyDialog")
-//                Preferences._checkPlanMakeBtnClicked.set("")
             }
             setSchoolSpinner()
             setSpy()
@@ -705,10 +699,7 @@ class MainActivity : PermissionActivity(),
             alarmBtn.setColorFilter(ContextCompat.getColor(this@MainActivity, alarmBtnColor))
         }
     }
-    fun moveConceptCourseSubject(id: Int) {
-        val conceptFragment = tabFragments.find { it.type == MainTab.개념 } as ConceptCourseFragment?
-        conceptFragment?.moveSubjectId(id)
-    }
+
     private fun updateHeaderColors(type: SchoolType) {
         binding.mainTl.setTabTextColorsBySchoolType()
         val transitionDrawable = binding.mainTl.makeHeaderTransitionDrawable(type)
@@ -853,9 +844,9 @@ class MainActivity : PermissionActivity(),
     fun hideSnackBar() {
         this.snackBar?.dismiss()
     }
-    fun setConceptCourseSubjectId(index: Int) {
+    fun setConceptCourseTutorial() {
         tabFragments.find { it.type == MainTab.개념 }?.let { frag ->
-            (frag as ConceptCourseFragment).moveSubjectId(index)
+            (frag as ConceptCourseFragment).moveTutorial()
         }
     }
     fun spyOff() {

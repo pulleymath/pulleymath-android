@@ -100,8 +100,11 @@ class SnackTestMiddleSubjectModifyFragment : Fragment(), MiddleSchoolUnitSelecti
             }
             else {
                 it.btnList.mapIndexedNotNull { index, btn ->
-                    if (btn.isSelected) it.chapterList.get(index).chapterId
-                    else null
+                    if (btn.isSelected) {
+                        if (it.chapterList.size > index ) {
+                            it.chapterList[index].chapterId
+                        } else null
+                    } else null
                 }
             }
         }

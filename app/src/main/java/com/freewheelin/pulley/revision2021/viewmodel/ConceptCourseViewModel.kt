@@ -12,7 +12,6 @@ import com.freewheelin.pulley.revision2021.model.StudyChapter
 import com.freewheelin.pulley.revision2021.model.StudyChapter.Companion.TUTORIAL_SEQUENCE
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
-import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
 import com.freewheelin.pulley.revision2023.model.challenge.Challenge
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeUserStatus
@@ -23,9 +22,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -38,18 +35,12 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     val userInRepo = userRepository.user
     val schoolType = userRepository.schoolType
 
-    private val _subjectNames = MutableLiveData<Map<Int, String>>()
-    val subjectNames: LiveData<Map<Int, String>> = _subjectNames
+    private val _lcSubjects = MutableLiveData<List<LCSubject>>()
+    val lcSubjects: LiveData<List<LCSubject>> = _lcSubjects
+    val selectedLcSubject = MutableLiveData<LCSubject>()
 
-    fun updateSubjectNames(newNames: Map<Int, String>) {
-        _subjectNames.postValue(newNames)
-    }
-
-
-    val availableSubjectIndicator by lazy { MutableLiveData<List<LCSubject.SubjectIndicator>>() }
     val chapterList by lazy { MutableLiveData<List<StudyChapter>>() }
 
-    val selectedSubjectId = MutableLiveData<Int>(-1)
     val showMobileHeader = MutableLiveData<Boolean>(false)
     val showTabletHeader = MutableLiveData<Boolean>(false)
     val joinedChallengeList = challengeRepository.joinedChallengeList
@@ -61,11 +52,8 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "fetchAvailableSubjects =>${response.data}")
                 response.data?.let {
-                    it.sortedBy { it.subjectId }.let {
-                        updateSubjectNames(it.associate { subject ->
-                            subject.subjectId to subject.name
-                        })
-                        availableSubjectIndicator.postValue(it.map { it.subjectIndicator })
+                    it.sortedBy { it.seq }.let {
+                        _lcSubjects.postValue(it)
                         cb()
                     }
                 }
@@ -78,6 +66,7 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
         _isLoading.postValue(value)
     }
     fun fetch(subjectId: Int) {
+        val isTutorial = subjectId == 0 // 앱 내에서 tutorialSubjectId는 이렇게 정함.
         val studentId = user?.studentID ?: return
         compositeDisposable += studyRepository.getChapterOnSubject(subjectId, studentId)
             .subscribeOn(Schedulers.io())
@@ -95,14 +84,13 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
                 response.data?.let {
                     val cList = mutableListOf<StudyChapter>()
-
                     it.forEachIndexed { largeIndex, largeChapter ->
                         largeChapter.children.forEachIndexed { index, middleChapter ->
-                            val parentSequence = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) TUTORIAL_SEQUENCE else largeChapter.sequence
-                            val sequence = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) TUTORIAL_SEQUENCE else middleChapter.sequence
-                            val parentName = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) "" else largeChapter.name
-                            val isParentChapterLast = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) true else it.size - 1 == largeIndex
-                            val isFirstMiddleChapter = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) false else index == 0
+                            val parentSequence = if (isTutorial) TUTORIAL_SEQUENCE else largeChapter.sequence
+                            val sequence = if (isTutorial) TUTORIAL_SEQUENCE else middleChapter.sequence
+                            val parentName = if (isTutorial) "" else largeChapter.name
+                            val isParentChapterLast = if (isTutorial) true else it.size - 1 == largeIndex
+                            val isFirstMiddleChapter = if (isTutorial) false else index == 0
 
                             middleChapter.isParentChapterLast = isParentChapterLast
                             middleChapter.parentSequence = parentSequence
@@ -112,9 +100,9 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                             middleChapter.isLastMiddleChapter = (largeChapter.children.size - 1) == index
                             middleChapter.setNextItemExist(largeChapter)
                             middleChapter.children.forEach { smallChapter ->
-                                val parentName = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) "" else middleChapter.name
-                                val name = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) "개념학습 튜토리얼" else smallChapter.name
-                                val sequence = if (subjectId == LCSubject.SubjectIndicator.Tutorial.rawValue) TUTORIAL_SEQUENCE else smallChapter.sequence
+                                val parentName = if (isTutorial) "" else middleChapter.name
+                                val name = if (isTutorial) "개념학습 튜토리얼" else smallChapter.name
+                                val sequence = if (isTutorial) TUTORIAL_SEQUENCE else smallChapter.sequence
 
                                 smallChapter.parentName = parentName
                                 smallChapter.setNextItemExist(middleChapter)
@@ -125,9 +113,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                             cList.add(middleChapter)
                         }
                     }
-
-//                    val listWithHeaderAndFooter = listOf(studyChapterHeader!!) + cList + listOf(studyChapterFooter!!)
-//                    val listWithHeaderAndFooter = cList
 
                     chapterList.postValue(cList)
                 }
@@ -148,29 +133,10 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
             }.subscribe()
     }
 
-    fun getInitHeaderBySchoolType(): LCSubject.SubjectIndicator {
-        return when (schoolType.value) {
-            SchoolType.ELEMENTARY -> LCSubject.SubjectIndicator.Elementary1_1
-            SchoolType.MIDDLE -> LCSubject.SubjectIndicator.Middle1_1
-            SchoolType.HIGH -> LCSubject.SubjectIndicator.MathSang
-            else -> LCSubject.SubjectIndicator.MathSang
-        }
-    }
-    fun initHeaderSubject() {
-        val subject = getInitHeaderBySchoolType()
-        onHeaderSubjectBtnClick(subject.rawValue)
-    }
-    fun onHeaderSubjectBtnClick(subjectId: Int) {
-        if (this.selectedSubjectId.value == subjectId) return
-        this.selectedSubjectId.postValue(subjectId)
+    fun onHeaderSubjectBtnClick2(subject: LCSubject) {
+        this.selectedLcSubject.postValue(subject)
     }
 
-    fun setTutorialList() {
-        val tutorialChapter = StudyChapter.createTutorial()
-        val listWithHeaderAndFooter = listOf(tutorialChapter)
-
-        chapterList.postValue(listWithHeaderAndFooter)
-    }
     fun chapterReset() {
         chapterList.postValue(listOf())
     }
@@ -179,7 +145,6 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
     fun completedTutorial(callback: (Challenge) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val logResponse = postLog()
-            println("asoaso logRes : ${logResponse.isChallengeCourse}")
             if (logResponse.isChallengeCourse.not()) return@launch
 //            val challengeId = getStartChallengeId()
             val startChallenge = logResponse.challengeStatus.find { it.isStartChallenge } ?: return@launch
@@ -202,17 +167,18 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
         joinedChallengeList.value
             ?.filter { it.userStatus == ChallengeUserStatus.ING }
             ?.filter { it.startChallenge?.isConceptCourseInProgress == true }
-            ?.forEach { _ -> onHeaderSubjectBtnClick(LCSubject.SubjectIndicator.Tutorial.rawValue) }
-    }
-    fun getStartChallengeId(): Int? {
-        val sc = joinedChallengeList.value?.find { it.isStartChallenge }
-        return sc?.challengeId
+            ?.forEach { _ ->
+                val tutorialLCSubject = LCSubject().apply {
+                    subjectId = 0
+                    name = "튜토리얼"
+                    unitcode = "0"
+                }
+                onHeaderSubjectBtnClick2(tutorialLCSubject)
+            }
     }
 
     fun updateChallenge (challenge: Challenge) {
         challengeRepository.updateChallengeList(challenge)
     }
-//    fun moveAvailableFirstSubject() {
-//        selectedSubjectId.postValue(availableFirstSubjectId)
-//    }
+
 }

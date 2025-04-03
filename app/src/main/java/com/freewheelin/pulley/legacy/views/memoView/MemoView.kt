@@ -233,17 +233,14 @@ class MemoView: FreeDrawView {
         })
     }
     fun loadOnConceptStudy(memoId: String, errorCb: () -> Unit) {
-//        println("aspasp pattern 메모 로드 하자")
         FileHelper.loadMemo(context, memoId, {
             Handler(Looper.getMainLooper()).post {
-//                println("aspasp pattern 메모 로드 성공!")
                 clearMemoState()
                 loadedBitmap = it
                 notifyRedoUndoCountSetting()
                 FileHelper.eraseMemo(context, memoId)
             }
         }, { error ->
-//            println("aspasp pattern 메모 없음!")
             Handler(Looper.getMainLooper()).post {
                 println("MemoView Load Error!")
                 undoAll()

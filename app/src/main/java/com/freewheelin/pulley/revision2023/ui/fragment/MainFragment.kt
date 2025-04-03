@@ -508,7 +508,7 @@ class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObse
     private fun joinChallenge(challengeId: Int, cb: () -> Unit = {}) {
         val nextEvent = {
             (activity as MainActivity).tabMove(1)
-            (activity as MainActivity).setConceptCourseSubjectId(0)
+            (activity as MainActivity).setConceptCourseTutorial()
             (activity as MainActivity).launchConceptCourseTutorial()
         }
         viewModel.joinChallengeById(challengeId) {

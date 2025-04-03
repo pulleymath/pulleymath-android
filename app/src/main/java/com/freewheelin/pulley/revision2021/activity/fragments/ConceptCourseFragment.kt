@@ -1,13 +1,20 @@
 package com.freewheelin.pulley.revision2021.activity.fragments
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -15,36 +22,41 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.freewheelin.pulley.R
-import com.freewheelin.pulley.legacy.bases.isTablet
+import com.freewheelin.pulley.databinding.FragmentConceptCourseBinding
+import com.freewheelin.pulley.databinding.ItemStudyChapterBinding
 import com.freewheelin.pulley.legacy.bases.isMobile
+import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.UserManager.RE_CONFIGURE_UI
-import com.freewheelin.pulley.databinding.*
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.utils.hide
+import com.freewheelin.pulley.legacy.utils.setMarginTop
+import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.revision2021.activity.LCTutorialActivity
+import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
 import com.freewheelin.pulley.revision2021.activity.base.DiffCallback
 import com.freewheelin.pulley.revision2021.model.StudyChapter
-import com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator
+import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.ui.adapter.ConceptCourseSmallAdapter
+import com.freewheelin.pulley.revision2021.utils.observeThrottle
 import com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel
-import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.GuestException
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.HttpException403
+import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.NONE
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeCourse
 import com.freewheelin.pulley.revision2023.model.challenge.ChallengeManager
-import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
-import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
-import com.freewheelin.pulley.legacy.utils.*
-import com.freewheelin.pulley.revision2021.utils.observeThrottle
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
+import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
+import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.freewheelin.pulley.legacy.bases.isMobile
-import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity.Companion.FROM_CONCEPT_TAB
-import com.freewheelin.pulley.revision2023.ui.dialogs.PurchaseGuideDialog
-import kotlinx.coroutines.withContext
 
 class ConceptCourseFragment : MainTabFragment() {
     companion object {
@@ -56,7 +68,6 @@ class ConceptCourseFragment : MainTabFragment() {
     lateinit var binding: FragmentConceptCourseBinding
     private var isViewCreated = false
     val viewModel: ConceptCourseViewModel by viewModels()
-//    private lateinit var getResult: ActivityResultLauncher<Intent>
     lateinit var challengeReceiver: BroadcastReceiver
     lateinit var reconfigureReceiver: BroadcastReceiver
 
@@ -64,7 +75,7 @@ class ConceptCourseFragment : MainTabFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.selectedSubjectId.value?.let { moveSubjectId(it) }
+        viewModel.selectedLcSubject.value?.let { moveSubjectId(it) }
     }
 
     override fun onStop() {
@@ -103,7 +114,6 @@ class ConceptCourseFragment : MainTabFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        initActivityResult()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_concept_course, container, false)
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(challengeReceiver, IntentFilter(ChallengeManager.CONCEPT_STUDY_MOVE_EVENT))
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(reconfigureReceiver, IntentFilter(RE_CONFIGURE_UI))
@@ -122,11 +132,6 @@ class ConceptCourseFragment : MainTabFragment() {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
             studyRv.adapter = ChapterAdapter()
-            courseHeader.apply {
-                setViewModel(viewModel)
-                setLifecycleOwner(viewLifecycleOwner)
-            }
-
             if (requireContext().isMobile) {
                 studyRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -150,21 +155,19 @@ class ConceptCourseFragment : MainTabFragment() {
             }
         }
         viewModel.apply {
-            initHeaderSubject()
-            selectedSubjectId.observe(viewLifecycleOwner) {
+//            initHeaderSubject()
+            selectedLcSubject.observe(viewLifecycleOwner) {
                 showLoading(true)
                 if (!isShowMainTab) {
                     binding.studyRv.scrollToPosition(0)
                     isSubjectHeaderChangedWhenMainTabIsNotShow = true
                 }
             }
-            selectedSubjectId.observeThrottle(viewLifecycleOwner) { subjectId ->
-                if (subjectId > -1) {
-                    val subject = SubjectIndicator.convertRawToSubject(subjectId)
-
-                    fetch(subjectId)
+            selectedLcSubject.observeThrottle(viewLifecycleOwner) { subject ->
+                if (subject.subjectId > -1) {
+                    fetch(subject.subjectId)
                     CoroutineScope(Dispatchers.Main).launch {
-                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.inKorean)
+                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.name)
                     }
                 }
             }
@@ -187,11 +190,89 @@ class ConceptCourseFragment : MainTabFragment() {
             }
             schoolType.observe(viewLifecycleOwner) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    binding.courseHeader.changeSchoolType(it)
                     viewModel.fetchAvailableSubjects() {
-                        initHeaderSubject()
                     }
                 }
+            }
+            lcSubjects.observe(viewLifecycleOwner) { subjects ->
+
+                binding.headerTabContainer2.let { container ->
+                    container.removeAllViews()
+
+                    val bookmarkButton = ImageButton(requireContext()).apply {
+                        val tutorialLCSubject = LCSubject().apply {
+                            subjectId = 0
+                            name = "튜토리얼"
+                            unitcode = "0"
+                        }
+                        layoutParams = LinearLayout.LayoutParams(
+                            resources.getDimensionPixelSize(R.dimen.dp80),
+                            resources.getDimensionPixelSize(R.dimen.dp52)
+                        ).apply {
+                            marginEnd = resources.getDimensionPixelSize(R.dimen.dp16)
+                        }
+                        val horizontalPadding = resources.getDimensionPixelSize(R.dimen.dp30)
+                        setPadding(horizontalPadding, paddingTop, horizontalPadding, paddingBottom)
+
+                        setImageResource(R.drawable.ic_course_star)
+                        setBackgroundResource(R.drawable.bg_white_round_28_ripple_gray200)
+                        setColorFilter(ContextCompat.getColor(context, R.color.gray_500))
+                        setOnClickListener {
+                            // 북마크 버튼 클릭 이벤트 처리
+                            resetAllButtonStates(container)
+                            setBackgroundResource(R.drawable.bg_purple_300_round_28_ripple)
+                            setColorFilter(ContextCompat.getColor(context, R.color.white))
+                            viewModel.onHeaderSubjectBtnClick2(tutorialLCSubject)
+
+                        }
+                    }
+                    container.addView(bookmarkButton)
+
+                    subjects.forEachIndexed { index, subject ->
+                        val tabButton = Button(requireContext()).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                resources.getDimensionPixelSize(R.dimen.dp52)
+                            ).apply {
+                                marginEnd = if (index == subjects.size - 1) 0
+                                else resources.getDimensionPixelSize(R.dimen.dp16)
+                            }
+                            text = subject.name
+                            setBackgroundResource(R.drawable.bg_white_round_28_ripple_gray200)
+                            val horizontalPadding = resources.getDimensionPixelSize(R.dimen.dp30)
+                            setPadding(horizontalPadding, paddingTop, horizontalPadding, paddingBottom)
+
+                            setTextColor(
+                                ContextCompat.getColorStateList(
+                                    context,
+                                    R.color.gray_600
+                                )
+                            )
+                            setOnClickListener {
+                                // 각 과목 버튼 클릭 이벤트 처리
+                                resetAllButtonStates(container)
+                                setBackgroundResource(R.drawable.bg_purple_300_round_28_ripple)
+                                setTextColor(
+                                    ContextCompat.getColorStateList(
+                                        context,
+                                        R.color.white
+                                    )
+                                )
+                                viewModel.onHeaderSubjectBtnClick2(subject)
+                            }
+                        }
+
+                        container.addView(tabButton)
+                    }
+
+                }
+                binding.headerTabContainer2.children.forEachIndexed { index, view ->
+                    if (index == 1) view.performClick()
+                }
+                selectedLcSubject.postValue(subjects.first())
+            }
+            selectedLcSubject.observe(viewLifecycleOwner) {
+                binding.headerTabContainer2.children
             }
             errorAction.observe(viewLifecycleOwner) { type ->
                 when(type) {
@@ -202,6 +283,22 @@ class ConceptCourseFragment : MainTabFragment() {
             }
         }
     }
+    private fun resetAllButtonStates(container: ViewGroup) {
+        for (i in 0 until container.childCount) {
+            val child = container.getChildAt(i)
+            when (child) {
+                is Button -> {
+                    child.setBackgroundResource(R.drawable.bg_white_round_28_ripple_gray200)
+                    child.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.gray_600))
+                }
+                is ImageButton -> {
+                    child.setBackgroundResource(R.drawable.bg_white_round_28_ripple_gray200)
+                    child.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                }
+            }
+        }
+    }
+
     private fun showGuestJoinInduceDialog() {
         LogUtils.logEvent(requireContext(), user!!, PulleyEvent.INDUCE, "개념", "가입유도")
         (activity as? MainActivity)?.showGuestJoinInduceDialog {
@@ -212,22 +309,29 @@ class ConceptCourseFragment : MainTabFragment() {
         LogUtils.logEvent(requireContext(), user, PulleyEvent.BUTTON_CLICK, "튜토리얼", "개념학습유도", "${seq}")
     }
 
-    fun moveSubjectId(id : Int) { // SubjectIndicator
+    fun moveTutorial() {
         if (isViewCreated) {
-            viewModel.selectedSubjectId.postValue(id)
+            val tutorialLCSubject = LCSubject().apply {
+                subjectId = 0
+                name = "튜토리얼"
+                unitcode = "0"
+            }
+            viewModel.selectedLcSubject.postValue(tutorialLCSubject)
+        }
+    }
+    fun moveSubjectId(subject : LCSubject) {
+        if (isViewCreated) {
+            viewModel.selectedLcSubject.postValue(subject)
         }
     }
 
-//    fun moveAvailableFirstSubject() {
-//        viewModel.moveAvailableFirstSubject()
-//    }
     fun fetch (subjectId: Int? = null) {
         if (subjectId != null) {
             viewModel.fetch(subjectId)
             return
         }
-        viewModel.selectedSubjectId.value?.let {
-            if (it != -1) { viewModel.fetch(it) }
+        viewModel.selectedLcSubject.value?.let {
+            if (it.subjectId != -1) { viewModel.fetch(it.subjectId) }
         }
     }
     fun actionOnStartChallenge() {
@@ -282,9 +386,7 @@ class ConceptCourseFragment : MainTabFragment() {
             CHALLENGE_TUTORIAL_FINISH -> {
                 viewModel.completedTutorial { startChallenge ->
                     // TODO 챌린지 완료 후
-                    viewModel.initHeaderSubject()
                     viewModel.updateChallenge(startChallenge)
-//                        fetch(viewModel.getInitHeaderBySchoolType().rawValue)
                     val turnOnCompletedDialog = {
                         val moveEvent: (ChallengeCourse?) -> Unit = { it ->
                             ChallengeManager.getMainTabMoveIntent(it).let {
@@ -298,10 +400,6 @@ class ConceptCourseFragment : MainTabFragment() {
                             isDelayedShowNextBtn = true
                         )
                         completedDialog.moveEvent = moveEvent
-//                            completedDialog.useCouponEvent = {
-//                                val pgDialog = PurchaseGuideDialog.newInstance(2)
-//                                childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
-//                            }
                         childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
                     }
 
@@ -311,45 +409,6 @@ class ConceptCourseFragment : MainTabFragment() {
                 }
             }
         }
-    }
-
-    private fun initActivityResult() {
-//        getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//            when (it.resultCode) {
-//                FROM_CONCEPT_TAB -> ConceptLearningUsageMonitor.finishConceptLearning()
-//                CHALLENGE_TUTORIAL_FINISH -> {
-//                    viewModel.completedTutorial { startChallenge ->
-//                        // TODO 챌린지 완료 후
-//                        viewModel.initHeaderSubject()
-//                        viewModel.updateChallenge(startChallenge)
-////                        fetch(viewModel.getInitHeaderBySchoolType().rawValue)
-//                        val turnOnCompletedDialog = {
-//                            val moveEvent: (ChallengeCourse?) -> Unit = { it ->
-//                                ChallengeManager.getMainTabMoveIntent(it).let {
-//                                    LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(it)
-//                                }
-//                            }
-//
-//                            val completedDialog = ChallengeCompletedDialog.newInstance(
-//                                challenge = startChallenge,
-//                                completedCourseId = ChallengeManager.CourseName.스타트챌린지_개념.id,
-//                                isDelayedShowNextBtn = true
-//                            )
-//                            completedDialog.moveEvent = moveEvent
-////                            completedDialog.useCouponEvent = {
-////                                val pgDialog = PurchaseGuideDialog.newInstance(2)
-////                                childFragmentManager.let { pgDialog.show(it, "purchaseGuideDialog") }
-////                            }
-//                            childFragmentManager.let { completedDialog.show(it, "ChallengeCompletedDialog1") }
-//                        }
-//
-//                        val finishGuideDialog = ChallengeGuideManager
-//                            .getFinishGuideFromMission1(nextEvent = turnOnCompletedDialog)
-//                        childFragmentManager.let { finishGuideDialog.show(it, "finishGuideDialog") }
-//                    }
-//                }
-//            }
-//        }
     }
 
     interface ChapterItemClickListener {

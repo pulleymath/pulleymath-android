@@ -133,10 +133,10 @@ class PatternQuizFragment() : Fragment(),
                         memoView.clearBitmap()
                         val memoId = "patternmemo&&${user?.studentID}&&${patternId}&&${it.patternQuizId}"
                         memoView.loadOnConceptStudy(memoId) {
-                            val chapterId = (activity as LearningCourseActivity).viewModel.selectedChapterId ?: -1
-
+                            val activity = activity as? LearningCourseActivity
+                            val chapterId = activity?.viewModel?.selectedChapterId ?: -1
+                            if (chapterId == -1) return@loadOnConceptStudy
                             vm.getMemoFromParams(chapterId, it.patternQuizId, StudyMemoCase.CONCEPT_LEARNING_TYPE_PROBLEM) {
-                                println("asoaso prev setmemo")
                                 memoView.setMemo(it) {
                                     viewModel.isMemoDrawAStrokeAtLeastOnceAsQuiz = false
                                     viewModel.isAllMemoRemovedOnQuiz = false

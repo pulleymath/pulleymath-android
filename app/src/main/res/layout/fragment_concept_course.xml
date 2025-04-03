@@ -7,7 +7,6 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.freewheelin.pulley.revision2021.model.response.LCSubject.SubjectIndicator"/>
         <variable name="vm" type="com.freewheelin.pulley.revision2021.viewmodel.ConceptCourseViewModel"/>
     </data>
 
@@ -17,14 +16,40 @@
         android:background="@color/gray_200">
 
 
-        <com.freewheelin.pulley.revision2023.ui.view.ConceptCourseHeaderTab
-            android:id="@+id/courseHeader"
+<!--            android:layout_marginTop="@dimen/dp24"-->
+        <HorizontalScrollView
+            android:id="@+id/horizontalTabSv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:background="@color/gray_200"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <LinearLayout
+                android:id="@+id/headerTabContainer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp24"
+                android:paddingHorizontal="@dimen/dp48"
+                />
+<!--                android:layout_marginStart="@dimen/dp48"-->
+<!--                android:layout_marginEnd="@dimen/dp48"-->
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/gradationView"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalTabSv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/gradient_shadow_concept_course_header"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/studyRv"
             android:layout_width="0dp"
@@ -37,17 +62,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-<!--            android:minHeight="700dp"-->
 
-        <View
-            android:id="@+id/gradationView"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/courseHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/gradient_shadow_concept_course_header"/>
+<!--            android:minHeight="700dp"-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conceptFragProgressCl"
@@ -55,7 +71,7 @@
             android:layout_height="0dp"
             android:background="@color/gray_200"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseHeader"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalTabSv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 <!--            android:visibility="@{ vm.isLoading ? View.VISIBLE : View.GONE }"-->
