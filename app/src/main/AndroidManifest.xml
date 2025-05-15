@@ -103,6 +103,16 @@
         <activity
             android:name=".revision2023.ui.activity.TerminalActivity"
             android:exported="true">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="pulleymath"
+                    android:host="terminal" />
+            </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -123,14 +133,27 @@
                 <data android:host="dev.pulleymath.com" />
                 <data android:pathPattern="/link/app" />
             </intent-filter>
-            <!--        <intent-filter>-->
-            <!--            <action android:name="android.intent.action.VIEW" />-->
-            <!--            <category android:name="android.intent.category.DEFAULT" />-->
-            <!--            <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--            <data-->
-            <!--                android:scheme="pulleymath"-->
-            <!--                android:host="terminal" />-->
-            <!--        </intent-filter>-->
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="pulleymath.com" />
+                <data android:pathPattern="/link/whalespace" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="dev.pulleymath.com" />
+                <data android:pathPattern="/link/whalespace" />
+            </intent-filter>
 
         </activity>
         <activity

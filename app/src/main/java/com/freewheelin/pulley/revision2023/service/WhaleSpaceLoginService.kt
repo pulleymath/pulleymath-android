@@ -12,9 +12,10 @@ object WhaleSpaceLoginApi {
 }
 interface WhaleSpaceLoginService {
 
-    @POST("v1/signin/oauth2/whalespace")
+    @POST("v2/signin/oauth2/whalespace")
     suspend fun sendCode(
-        @Query("code") code: String
+        @Query("code") code: String,
+        @Query("isAndroid") isAndroid: Boolean
     ): ResponseBody<SignInAppToken>
 
 }

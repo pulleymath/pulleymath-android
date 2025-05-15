@@ -4,12 +4,16 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.RemoteException
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
+import com.android.installreferrer.api.ReferrerDetails
 import com.freewheelin.pulley.R
 
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.main.serverInspection.ServerInspectionDialog
@@ -25,6 +29,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.OnBoardingActivity
+import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -50,6 +55,10 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_splash,null,false)
     }
 
+
+    private lateinit var referrerClient: InstallReferrerClient
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -57,6 +66,10 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
         requestedOrientation = if(isMobileUI) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
+
+
+
 
         viewModel.goLoginActCallback = {
             startActivity(StartActivity::class.java)
@@ -68,14 +81,85 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
 //        splashLottie.playAnimation()
 
+        // 클라이언트 인스턴스 생성
+        referrerClient = InstallReferrerClient.newBuilder(this).build()
+
+        // Google Play와 연결 시작
+        referrerClient.startConnection(object : InstallReferrerStateListener {
+            override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                when (responseCode) {
+                    InstallReferrerClient.InstallReferrerResponse.OK -> {
+                        // 연결 성공, 이제 설치 리퍼러 정보를 가져올 수 있습니다
+                        getInstallReferrerData()
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
+                        // 현재 Play 스토어 앱에서 API를 사용할 수 없음
+                        serverCheckAndStart()
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> {
+                        // 연결을 설정할 수 없음
+                        serverCheckAndStart()
+                    }
+                }
+            }
+
+            override fun onInstallReferrerServiceDisconnected() {
+                // 연결이 끊어진 경우 다시 연결 시도
+                // 다음 요청 시 startConnection() 메서드를 호출하여 재연결
+                serverCheckAndStart()
+            }
+        })
+
+    }
+
+    private fun serverCheckAndStart () {
         CoroutineScope(Dispatchers.Main).launch {
             val isServerUnderInspection = checkServerInspection()
             if (isServerUnderInspection.not()) {
-                start()
+                start(false)
             }
         }
-
     }
+    private fun getInstallReferrerData() {
+        try {
+            val response: ReferrerDetails = referrerClient.installReferrer
+
+            val referrerUrl: String = response.installReferrer
+
+            val referrerClickTime: Long = response.referrerClickTimestampSeconds
+
+            val appInstallTime: Long = response.installBeginTimestampSeconds
+
+//            val currentTime = System.currentTimeMillis() / 1000
+//            val isInstalledWithInOneHour = (currentTime - appInstallTime) < 3600
+            val referrerParams = parseReferrerString(referrerUrl)
+            val isWhaleSpaceTarget = referrerParams["target"] == "whalespace"
+//            val whaleSpaceStart = isInstalledWithInOneHour && isWhaleSpaceTarget
+
+            // Google Play 인스턴트 경험 실행 여부
+//            val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
+
+
+            // 사용 후 연결 종료
+            referrerClient.endConnection()
+
+            // 여기서 리퍼러 데이터를 처리하는 로직 구현
+            Log.d("InstallReferrer", "Referrer URL: $referrerUrl")
+            Log.d("InstallReferrer", "Click time: $referrerClickTime")
+            Log.d("InstallReferrer", "Install time: $appInstallTime")
+            Log.d("InstallReferrer", "isWhaleSpaceTarget: $isWhaleSpaceTarget")
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val isServerUnderInspection = checkServerInspection()
+                if (isServerUnderInspection.not()) {
+                    start(isWhaleSpaceTarget)
+                }
+            }
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+    }
+
     suspend fun checkServerInspection(): Boolean {
         var status: ServerStatus? = null
         val inspectionJob = CoroutineScope(Dispatchers.IO).async {
@@ -95,7 +179,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         return status != null
     }
 
-    fun start() {
+    fun start(whaleSpaceStart: Boolean) {
 
         Log.d("테스트", "start()")
 
@@ -107,17 +191,17 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         VersionManager.requestVersionInfo(this) { required, info ->
             Log.d("테스트", "Required=${required}")
             when (required) {
-                VersionManager.Required.NOT -> checkSign()
-                VersionManager.Required.MINOR -> checkSign() //requestAppUpdate(AppUpdateType.FLEXIBLE) 일단 안쓰기로...
-                VersionManager.Required.MAJOR -> updateDialog(info)
+                VersionManager.Required.NOT -> checkSign(whaleSpaceStart)
+                VersionManager.Required.MINOR -> checkSign(whaleSpaceStart) //requestAppUpdate(AppUpdateType.FLEXIBLE) 일단 안쓰기로...
+                VersionManager.Required.MAJOR -> updateDialog(info, whaleSpaceStart)
             }
         }
     }
 
 
-    private fun updateDialog(info:VersionInfo?) {
+    private fun updateDialog(info:VersionInfo?, whaleSpaceStart: Boolean) {
         if (info == null) {
-            checkSign()
+            checkSign(whaleSpaceStart)
         } else {
             val dialogTitle = info.updateTitle ?: "보다 나은 풀리수학 이용을 위해 지금 업데이트 해주세요 :)"
             var dialogContents = info.updateContent ?: "서비스 안정화"
@@ -197,13 +281,14 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         }
     }
 
-    private fun checkSign() {
+    private fun checkSign(whaleSpaceStart: Boolean) {
         Preferences.forceUpdateDialogCount.set(0)
         Preferences.initTestData.set("")
         Log.d(javaClass.simpleName, "checkSign user=${MyApplication.user}")
         println("온보딩 :checkSign : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
-        if (isNeedNewOnBoarding) {
+        if (isNeedNewOnBoarding && !whaleSpaceStart) {
+            println("aspasp 1")
             viewModel.getOnBoardItems (
                 successCb = { images ->
                     finishAffinity()
@@ -211,41 +296,52 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                     startActivity(intent)
                 },
                 deniedCb = {
-                    checkTokenAndMoveActivity()
+                    checkTokenAndMoveActivity(whaleSpaceStart)
                 }
             )
             return
         }
         println("asoaso SplashACt : MyApplication.user?.token : ${MyApplication.user?.token}")
         println("asoaso SplashACt : MyApplication.token : ${MyApplication.token}")
-        checkTokenAndMoveActivity()
+        checkTokenAndMoveActivity(whaleSpaceStart)
     }
-    private fun checkTokenAndMoveActivity() {
+    private fun checkTokenAndMoveActivity(whaleSpaceStart: Boolean) {
+        println("aspasp 2 ${whaleSpaceStart}")
         val goStartActivity: () -> Unit = {
-            startActivity(StartActivity::class.java)
+            if (whaleSpaceStart) {
+                println("aspasp 5")
+                val intent = Intent(this@SplashActivity, WhaleSpaceLoginActivity::class.java)
+                intent.putExtra("AUTO_ACTION", true)
+                startActivity(intent)
+            } else {
+                println("aspasp 6")
+                startActivity(StartActivity::class.java)
+            }
             finish()
         }
         if(MyApplication.user?.token?.isNotEmpty() == true) {
+            println("aspasp 3")
             viewModel.refreshAutoLoginToken(successCb = {
                 viewModel.fetchUser { user ->
                     MyApplication.isAppFirstLaunch = true
                     MyApplication.user!!.commit("SplashActivity.isExceedDevice = true, after delete device [success]")
-                    toLogin(user)
+                    toLogin(user, whaleSpaceStart)
                 }
             }, expiredCb = goStartActivity)
 
         } else {
+            println("aspasp 4")
             goStartActivity()
         }
     }
 
-    private fun toLogin(user: UserV4) {
+    private fun toLogin(user: UserV4, whaleSpaceStart: Boolean) {
 //        Log.d(javaClass.simpleName, "moveActivity() => user ${user.token.isEmpty() == true} =${user?.token}")
         user?.let { FirebaseCrashlytics.getInstance().setUserId(it.studentID) }
         println("온보딩 : toLogin : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
         when {
-            isNeedNewOnBoarding -> {
+            isNeedNewOnBoarding && !whaleSpaceStart -> {
                 viewModel.getOnBoardItems (
                     successCb = { images ->
                         finishAffinity()
@@ -318,6 +414,24 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                 /* do nothing */
             })
     }
+    fun parseReferrerString(referrerString: String): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+
+        val pairs = referrerString.split("&")
+
+        pairs.forEach { pair ->
+            val keyValue = pair.split("=", limit = 2)
+            if (keyValue.size == 2) {
+                val key = keyValue[0].trim()
+                val value = keyValue[1].trim()
+
+                val decodedValue = java.net.URLDecoder.decode(value, "UTF-8")
+                result[key] = decodedValue
+            }
+        }
+
+        return result
+    }
     override fun onStop() {
         super.onStop()
         disposables.clear()
@@ -329,7 +443,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             appUpdateManager?.completeUpdate()
         else {
             when(requestCode) {
-                UPDATE_FLEXIBLE -> checkSign()
+                UPDATE_FLEXIBLE -> checkSign(false)
                 UPDATE_IMMEDIATE -> {
                     Toast.makeText(this, "필수 업데이트입니다. 업데이트를 하지 않으면 앱이 강제 종료됩니다.", Toast.LENGTH_LONG).show()
                     finishAndRemoveTask()
@@ -344,4 +458,5 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             super.onBackPressed()
         }
     }
+
 }

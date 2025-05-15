@@ -12,7 +12,7 @@ class WhaleSpaceLoginRepository(val context: Context, private val applicationSco
 
 
     suspend fun sendCode(code: String): ResponseBody<SignInAppToken> {
-        return whaleSpaceLoginApi.sendCode(code)
+        return whaleSpaceLoginApi.sendCode(code, true)
     }
 
 

@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.API_APP
+import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.HttpException401
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.NONE
@@ -21,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import com.google.android.gms.tasks.OnCompleteListener
+import io.reactivex.disposables.CompositeDisposable
 
 class TerminalActivity : AppCompatActivity() {
     val viewModel: TerminalViewModel by viewModels()
@@ -38,6 +40,11 @@ class TerminalActivity : AppCompatActivity() {
         val intent = intent
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             intent.data?.let {
+                val target = it.getQueryParameter("target")
+                if (target == "whalespace") {
+                    whalespace()
+                    return
+                }
                 val token = it.getQueryParameter("token")
                 if (token == null) {
                     unauthorizedAccess(401)
@@ -74,6 +81,35 @@ class TerminalActivity : AppCompatActivity() {
         }
     }
 
+    private fun whalespace() {
+        println("aspasp terminal whalespace 1")
+        if(MyApplication.user?.token?.isNotEmpty() == true) {
+            println("aspasp terminal whalespace 2")
+            viewModel.refreshAutoLoginToken(successCb = {
+                println("aspasp terminal whalespace 4")
+                viewModel.fetchUser { user ->
+                    println("aspasp terminal whalespace 5")
+                    MyApplication.user!!.commit("TerminalActivity.whalespace")
+                    putFcmToken()
+                    finishAffinity()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }, expiredCb = {
+                goWhaleSpaceLogin()
+            })
+
+        } else {
+            println("aspasp terminal whalespace 3")
+            goWhaleSpaceLogin()
+        }
+    }
+    private fun goWhaleSpaceLogin() {
+        val intent = Intent(this@TerminalActivity, WhaleSpaceLoginActivity::class.java)
+        intent.putExtra("AUTO_ACTION", true)
+        startActivity(intent)
+        finishAffinity()
+    }
     private fun unauthorizedAccess(error: Int) {
         DialogUtils.confirmV2(this,
             "확인되지 않은 접근입니다.",
@@ -103,4 +139,5 @@ class TerminalActivity : AppCompatActivity() {
             })
         }
     }
+
 }

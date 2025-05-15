@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityWhaleSpaceLoginBinding
+import com.freewheelin.pulley.legacy.activities.StartActivity
 import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.UserManager
@@ -36,8 +37,8 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
     val viewModel: WhaleSpaceLoginViewModel by viewModels()
 
 
-    val endpoint = "https://auth.whalespace.io/oauth2/v1.1/authorize"
-    val clientId = "HGooZch3UpTdhnKgH_5o"
+    val endpoint = "https://authn.whalespace.io/oauth2/v2.0/authorize"
+    val clientId = "_R0zU6c0PFjN_mm658N9"
     val redirectUri = "${Network.homePageUrl}/signin/complete/whalespace/android"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +48,8 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
         binding.apply {
             loadingLottie.playAnimation()
             reTryBtn.setOnClickListener {
+                val intent = Intent(this@WhaleSpaceLoginActivity, StartActivity::class.java)
+                startActivity(intent)
                 finish()
             }
         }
@@ -109,6 +112,7 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
+                finishAffinity()
             }
         }
     }
@@ -138,7 +142,10 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
             .appendQueryParameter("response_type", "code")
             .appendQueryParameter("client_id", clientId)
             .appendQueryParameter("redirect_uri", redirectUri)
-            .appendQueryParameter("scope", "")
+            .appendQueryParameter("scope", "openid")
+            .appendQueryParameter("scope", "email")
+            .appendQueryParameter("scope", "profile")
+            .appendQueryParameter("scope", "user.whalespace.read")
             .appendQueryParameter("state", state)
             .build()
 

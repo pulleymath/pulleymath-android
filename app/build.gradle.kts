@@ -32,8 +32,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 35
-        versionCode = 531
-        versionName = "1.6.111"
+        versionCode = 539
+        versionName = "1.6.119"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -212,6 +212,9 @@ dependencies {
     implementation(libs.channel.talk.plugin.android.fcm)
 
     implementation(libs.androidx.browser)
+
+    implementation(libs.installreferrer)
+
 //    implementation("androidx.core:core-splashscreen:1.1.0-alpha01"
     // lesson pagecall
     // host 처리 문제로 사용안함

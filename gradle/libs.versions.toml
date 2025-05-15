@@ -11,6 +11,7 @@ facebookAndroidSdk = "7.1.0"
 flexbox = "3.0.0"
 htAndroidRecycleradapters = "0.6"
 glide = "4.14.2"
+installreferrerVersion = "2.2"
 jsoup = "1.13.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -66,6 +67,9 @@ feature-delivery-ktx = { module = "com.google.android.play:feature-delivery-ktx"
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+installreferrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installreferrerVersion" }
+
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
