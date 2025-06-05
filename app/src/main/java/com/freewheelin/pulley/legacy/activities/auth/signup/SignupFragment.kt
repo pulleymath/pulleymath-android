@@ -296,7 +296,9 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             .subscribe({ result ->
                 countryCodes = result.data
                 setSpinner()
-            }, { /* */ })
+            }, { error ->
+                Log.e(javaClass.simpleName, "signup load error=${error.localizedMessage}")
+            })
 
     }
 

@@ -3,6 +3,7 @@ package com.freewheelin.pulley.revision2021.channelio.channel.view.custom
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,9 +82,12 @@ abstract class CBBaseFragment : Fragment(), BaseView, BinderController,
             this.finish()
         } else {
             if (onCreateCall()) {
-                actionSubscription = Action.observable().subscribe { actionType: ActionType? ->
+                actionSubscription = Action.observable().subscribe ({ actionType: ActionType? ->
                     this.handleBaseActions(actionType)
-                }
+                }, { error ->
+                    Log.e(javaClass.simpleName, "CBBF error=${error.localizedMessage}")
+                })
+
                 return getCreatedView()
             } else {
                 this.finish()

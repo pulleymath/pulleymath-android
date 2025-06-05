@@ -58,9 +58,9 @@ class TerminalViewModel(application: Application) : BaseAndroidViewModel(applica
         compositeDisposable += API_APP.putToken(token)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
+            .subscribe ({ _ ->
                 Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-            }
+            }, { /* error */ })
     }
 
     fun refreshAutoLoginToken(successCb: () -> Unit, expiredCb: () -> Unit) {

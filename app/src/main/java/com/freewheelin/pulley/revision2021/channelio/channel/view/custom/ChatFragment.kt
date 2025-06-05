@@ -214,9 +214,9 @@ class ChatFragment: Fragment(), ChatContract.View, ChatInteractionActionListener
             toastPublishSubject.throttleLast(250L, TimeUnit.MILLISECONDS).onBackpressureLatest()
                 .observeOn(
                     AndroidSchedulers.mainThread()
-                ).subscribe { integer: Int? ->
+                ).subscribe ({ integer: Int? ->
                     this.showFirstMessageDate(adapter!!.getItem(integer!!))
-                }
+                }, { /* error */ })
 //        focusSubscription = Observable.combineLatest(
 //            bottomPaddingPublishSubject, focusedViewPublishSubject
 //        ) { first: Int?, second: Int? ->

@@ -167,11 +167,11 @@ class LoungeFragment: CBBaseFragment(), LoungeContract.View, OnChatClickListener
                     Pair(first, second)
                 }.subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
+                    .subscribe ({
                         val params = viewError!!.layoutParams
                         params.height = it.first as Int - it.second as Int
                         viewError!!.layoutParams = params
-                    })
+                    }, { /* error */ }))
             )
             appMessengersBinder = AppMessengerSelector.bindIntegrations(requireContext(),
                 Action1 { contacts: List<Contact> ->

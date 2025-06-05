@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.pattern.PatternQuizFragment
@@ -21,6 +22,8 @@ import com.freewheelin.pulley.revision2021.model.LCPatternScoring
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeListOnce
 import com.freewheelin.pulley.revision2021.views.LCTouchListener
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import kotlinx.coroutines.*
 
 
@@ -81,18 +84,32 @@ class LCPatternFragment : Fragment(), LCTouchListener {
                     }
                 }
                 viewModel.selectedQuizIndex.observe(viewLifecycleOwner) { index ->
-                    CoroutineScope(Dispatchers.Main).launch {
+                    viewLifecycleOwner.lifecycleScope.launch {
                         delay(100)
-                        val children = childFragmentManager.fragments.filter { it.tag.equals("f" + pagerWrapper.pager.adapter?.getItemId(index)) }
-                        children.forEach {
-                            (it as PatternQuizFragment).run {
-                                setHintBtn()
-                                setTempConceptSolutionViewFlag()
-                                resumeFloatingAnswerSheetLocation()
+                        if (isAdded) {
+                            try {
+                                val adapter = pagerWrapper.pager.adapter
+                                if (adapter != null) {
+                                    val itemId = adapter.getItemId(index)
+                                    val children = childFragmentManager.fragments.filter { childFragment ->
+                                        childFragment.tag == "f$itemId"
+                                    }
+                                    children.forEach { childFragment ->
+                                        if (childFragment is PatternQuizFragment && childFragment.isAdded) { // 자식 프래그먼트도 isAdded 체크
+                                            childFragment.setHintBtn()
+                                            childFragment.setTempConceptSolutionViewFlag()
+                                            childFragment.resumeFloatingAnswerSheetLocation()
+                                        }
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Firebase.crashlytics.log("Error in selectedQuizIndex observer coroutine: ${e.message}, Index: $index")
+                                Firebase.crashlytics.recordException(e)
                             }
                         }
                     }
                 }
+
 
                 viewModel.patternQuizList.observeListOnce(this@LCPatternFragment) {
                     val frags = it.mapIndexed { index, quiz ->
@@ -158,18 +175,6 @@ class LCPatternFragment : Fragment(), LCTouchListener {
                     }
                 }
 
-                // ai 의 등장으로 일자리를 잃었다.
-//                questionBtnLl.setOnClickListener {
-//                    (activity as LearningCourseActivity).hidePenPanel()
-//
-//                    getChildrenPage().forEach {
-//                        val quizFrag = (it as PatternQuizFragment)
-//                        val patternName = viewModel.patternName.value ?: return@forEach
-//                        val chapterName = (activity as LearningCourseActivity).viewModel.headerTitle.value ?: return@forEach
-//                        val courseName = "[${chapterName}] : [${patternName}]"
-//                        quizFrag.openChannelIoDialog(courseName)
-//                    }
-//                }
 
                 pagerWrapper.pagerEnableCallback = {
                     (activity as LearningCourseActivity).setPagerUserInputEnable(it)
@@ -202,14 +207,43 @@ class LCPatternFragment : Fragment(), LCTouchListener {
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(tabFragments[0].isAdded)
-            childFragmentManager.putFragment(outState, "LC1", tabFragments[0])
-        if(tabFragments[1].isAdded)
-            childFragmentManager.putFragment(outState, "LC2", tabFragments[1])
-        if(tabFragments[2].isAdded)
-            childFragmentManager.putFragment(outState, "LC3", tabFragments[2])
-        if(tabFragments[3].isAdded)
-            childFragmentManager.putFragment(outState, "LC4", tabFragments[3])
+
+        if (tabFragments.isNotEmpty()) {
+            if (tabFragments.size > 0 && tabFragments[0].isAdded) {
+                try {
+                    childFragmentManager.putFragment(outState, "LC1", tabFragments[0])
+                } catch (e: IllegalStateException) {
+                    Firebase.crashlytics.log("Error putting fragment LC1 in onSaveInstanceState: ${e.message}")
+                    Firebase.crashlytics.recordException(e)
+                }
+            }
+            if (tabFragments.size > 1 && tabFragments[1].isAdded) {
+                try {
+                    childFragmentManager.putFragment(outState, "LC2", tabFragments[1])
+                } catch (e: IllegalStateException) {
+                    Firebase.crashlytics.log("Error putting fragment LC2 in onSaveInstanceState: ${e.message}")
+                    Firebase.crashlytics.recordException(e)
+                }
+            }
+            if (tabFragments.size > 2 && tabFragments[2].isAdded) {
+                try {
+                    childFragmentManager.putFragment(outState, "LC3", tabFragments[2])
+                } catch (e: IllegalStateException) {
+                    Firebase.crashlytics.log("Error putting fragment LC3 in onSaveInstanceState: ${e.message}")
+                    Firebase.crashlytics.recordException(e)
+                }
+            }
+            if (tabFragments.size > 3 && tabFragments[3].isAdded) {
+                try {
+                    childFragmentManager.putFragment(outState, "LC4", tabFragments[3])
+                } catch (e: IllegalStateException) {
+                    Firebase.crashlytics.log("Error putting fragment LC4 in onSaveInstanceState: ${e.message}")
+                    Firebase.crashlytics.recordException(e)
+                }
+            }
+        } else {
+            Firebase.crashlytics.log("LCPatternFragment: tabFragments is empty during onSaveInstanceState.")
+        }
     }
 
     fun setHintBtn(flag: Boolean?, size: Int?, hintExist: Boolean) {

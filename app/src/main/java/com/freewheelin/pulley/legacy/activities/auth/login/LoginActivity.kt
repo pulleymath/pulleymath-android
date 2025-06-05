@@ -328,9 +328,11 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                     disposables += API_APP.putToken(token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { _ ->
+                        .subscribe ({ _ ->
                             Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-                        }
+                        },{ error ->
+                            Log.e(javaClass.simpleName, "loginactivity putfcm token error=${error.localizedMessage}")
+                        })
                 }
             })
         }

@@ -76,9 +76,9 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
                 compositeDisposable += Observable
                     .timer(200, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
-                    .subscribe {
+                    .subscribe ({
                         _isLoading.postValue(false)
-                    }
+                    }, { /* error */ })
             }
             .subscribe({ response ->
                 Log.d(javaClass.simpleName, "getChapterOnSubject =>${response.data}")
@@ -127,10 +127,11 @@ class ConceptCourseViewModel(application: Application) : BaseAndroidViewModel(ap
         compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                callback()
+            },   { error ->
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
+            })
     }
 
     fun onHeaderSubjectBtnClick2(subject: LCSubject) {

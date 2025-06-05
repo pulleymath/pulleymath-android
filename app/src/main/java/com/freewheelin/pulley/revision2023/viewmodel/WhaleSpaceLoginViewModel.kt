@@ -53,9 +53,9 @@ class WhaleSpaceLoginViewModel(application: Application): BaseAndroidViewModel(a
         compositeDisposable += API_APP.putToken(token)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
+            .subscribe ({ _ ->
                 Log.d(javaClass.simpleName, "토큰이 등록되었습니다.")
-            }
+            }, { /* error */ })
     }
     fun sendLoginLog(user: UserV4?, attemptedEmail: String) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

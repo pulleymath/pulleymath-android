@@ -396,7 +396,10 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ _ ->
                             Log.d(javaClass.simpleName, "토큰등록=$token")
-                        }, { })
+                        }, { error ->
+                            Log.e(javaClass.simpleName, "splash putFcmToken error=${error.localizedMessage}")
+                        })
+
                 }
             })
         }

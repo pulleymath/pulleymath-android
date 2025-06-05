@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
@@ -47,7 +48,9 @@ class ConfirmPhoneDialog(val activity: Activity, val successCB: () -> Unit, val 
             .subscribe({ result ->
                 countryCodes = result.data
                 setSpinner()
-            }, { /* */ })
+            }, { error ->
+                Log.e(javaClass.simpleName, "confirm phone dialog load error=${error.localizedMessage}")
+            })
     }
 
     private fun setSpinner() {

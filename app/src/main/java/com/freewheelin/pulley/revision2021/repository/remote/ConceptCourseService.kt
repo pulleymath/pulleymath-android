@@ -7,7 +7,6 @@ import com.freewheelin.pulley.revision2021.model.response.CourseSummary
 import com.freewheelin.pulley.revision2021.model.response.LCSubject
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingListResponse
 import com.freewheelin.pulley.revision2021.model.response.base.BaseCookingResponse
-import com.freewheelin.pulley.revision2021.model.response.base.BaseSingleResponseNode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.http.GET

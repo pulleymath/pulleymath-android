@@ -1,14 +1,21 @@
 package com.freewheelin.pulley.legacy.core.API
 
 import com.freewheelin.pulley.legacy.core.API.RequestModel.mypage.NotificationSettingRequest
-import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.*
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.CouponItem
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.NotificationResponse
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.SummaryBooksResponse
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.SummaryLessonResponse
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.SummaryPlusResponse
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.mypage.UseCouponResponse
 import com.freewheelin.pulley.legacy.model.ResponseBody
-import com.freewheelin.pulley.legacy.model.ResponseForceBody
 import com.freewheelin.pulley.legacy.model.ResponseListBody
 import com.freewheelin.pulley.legacy.model.coupon.NewCoupon
-import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 
 interface  AppService {
 

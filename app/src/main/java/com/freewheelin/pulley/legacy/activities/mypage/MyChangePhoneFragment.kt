@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.legacy.activities.mypage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +65,9 @@ class MyChangePhoneFragment : MyPageBaseFragment(), CodeConfirmView.CodeConfirmI
             .subscribe({ result ->
                 countryCodes = result.data
                 setSpinner()
-            }, { /* */ })
+            }, { error ->
+                Log.e(javaClass.simpleName, "mychangephone f load error=${error.localizedMessage}")
+            })
     }
 
     private fun setSpinner() {

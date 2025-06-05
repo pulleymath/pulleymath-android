@@ -316,10 +316,12 @@ class MainFViewModel(application: Application): BaseAndroidViewModel(application
         compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                callback()
+            },   { error -> // onError: 에러 발생 시 호출될 람다
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
+                // 여기에 추가적인 에러 처리 로직 (예: 사용자에게 알림 표시)
+            })
     }
 
     fun fetchPdfOnId(pdfId: Int, cb: (Pdf?) -> Unit) {

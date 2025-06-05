@@ -1,5 +1,6 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
@@ -63,13 +64,15 @@ class PriorConceptViewModel(application: Application): BaseAndroidViewModel(appl
         priorConceptRepository.deletePriorConcept(concept)
     }
 
+    @SuppressLint("CheckResult")
     fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {
         priorConceptRepository.createLearningCourse(chapterId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                callback()
+            },   { error ->
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
+            })
     }
 }

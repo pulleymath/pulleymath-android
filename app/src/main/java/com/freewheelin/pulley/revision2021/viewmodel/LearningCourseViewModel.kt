@@ -301,10 +301,11 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
         compositeDisposable += studyRepository.createLearningCourse(chapterId, studentId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                callback()
+            },   { error ->
+                Log.e(javaClass.simpleName, "createLearningCourseOnStudentId error=${error.localizedMessage}")
+            })
     }
     fun naviViewDismiss() {
         showHeaderNaviDialog.postValue(false)

@@ -160,22 +160,22 @@ class PulleyMathBooksViewModel(application: Application): BaseAndroidViewModel(a
         compositeDisposable += patternStudyRepository.setPin(pieceId, isPinned)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete { callback() }
-            .doOnError {
-                Log.e(javaClass.simpleName, "togglePin error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                callback()
+            },   { error ->
+                Log.e(javaClass.simpleName, "togglePin error=${error.localizedMessage}")
+            })
     }
     fun removeFromMyPlan(book: Book) {
         val pieceId = if(book.assignID == null) book.pieceID else book.assignID!!
         compositeDisposable += patternStudyRepository.deleteFromMyBook(pieceId)
             .subscribeOn(Schedulers.io())
             .timeout(3, TimeUnit.SECONDS)
-            .doOnComplete {
-
-            }
-            .doOnError {
-                Log.e(javaClass.simpleName, "removeFromMyPlan error=${it.localizedMessage}")
-            }.subscribe()
+            .subscribe({
+                // 비어있음
+            },   { error ->
+                Log.e(javaClass.simpleName, "removeFromMyPlan error=${error.localizedMessage}")
+            })
     }
     fun collectRecommendList(isInit: Boolean = true, cb: () -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {

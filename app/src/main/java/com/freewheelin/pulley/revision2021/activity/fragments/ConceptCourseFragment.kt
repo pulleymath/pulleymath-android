@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -52,6 +53,8 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.ChallengeCompletedDialog
 import com.freewheelin.pulley.revision2023.ui.fragment.MainTabFragment
 import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -166,11 +169,22 @@ class ConceptCourseFragment : MainTabFragment() {
             selectedLcSubject.observeThrottle(viewLifecycleOwner) { subject ->
                 if (subject.subjectId > -1) {
                     fetch(subject.subjectId)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.name)
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        if (isAdded && user != null) {
+                            try {
+                                LogUtils.logEvent(requireContext(), user!!, PulleyEvent.MENU_CLICK, "개념", subject.name)
+                            } catch (e: IllegalStateException) {
+                                Firebase.crashlytics.log("Error in LogUtils.logEvent even after isAdded check: ${e.message}")
+                                Firebase.crashlytics.recordException(e)
+                            }
+                        } else {
+                            Firebase.crashlytics.log("Fragment not added or user is null when trying to log event. Subject: ${subject.name}")
+                        }
                     }
+
                 }
             }
+
 
             showMobileHeader.postValue(requireContext().isTablet.not())
             showTabletHeader.postValue(requireContext().isTablet)
