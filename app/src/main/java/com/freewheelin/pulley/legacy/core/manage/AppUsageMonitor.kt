@@ -29,7 +29,7 @@ object AppUsageMonitor {
 
     val saveDuration: Long = 15 * 1000
 
-    val saveDuration10Sec: Long = 10 * 1000
+    val saveDuration30Sec: Long = 30 * 1000
 
     var lastSaveDuration = Date()
 
@@ -50,7 +50,7 @@ object AppUsageMonitor {
                 if(isStudying)
                     accumulatedStudyTime += 1
             }
-            if (lastSaveDuration.time + saveDuration10Sec < Date().time) {
+            if (lastSaveDuration.time + saveDuration30Sec < Date().time) {
                 postUsageTime()
             }
             listeners.forEach { it.monitoringTick() }
