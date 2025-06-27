@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.revision2023.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.repository.SolveActRepository
 import com.freewheelin.pulley.revision2023.repository.UserRepository
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.repository.PdfRepository
 import com.freewheelin.pulley.revision2023.model.ChatBotInfo
 import com.freewheelin.pulley.revision2023.model.ChatBotInfoImage
@@ -57,6 +59,7 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
     var isMemoDrawAStrokeAtLeastOnceAsSolution = false
     var isAllMemoRemovedOnProblem = false
     var isAllMemoRemovedOnSolution = false
+    var memoDebugViewCount = 0
 
     var chatBotInfo: ChatBotInfo? = null
 
@@ -79,7 +82,6 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
             itemName = "채점",
             itemValue = "pieceID=${pieceId}",
             itemNote = "${note},${size}",
-
         )
     }
 
@@ -160,16 +162,51 @@ class SolveActViewModel(application: Application): BaseAndroidViewModel(applicat
         }
     }
 
-    fun saveMemo(memoByteArray: ByteArray, assignId: Int, problemId: Int, screenWidth: Int, case: StudyMemoCase) {
+
+    suspend fun memoDebugger(assignId: Int, problemId: Int, size: Int): V2LogUserResponse {
+        return legacyV2Repository.postLog(
+            event = PulleyEvent.MEMO,
+            itemCategory = "문제풀이뷰",
+            itemName = "assignId=${assignId}",
+            itemValue = "problemId=${problemId}",
+            itemNote = "size=${size}",
+        )
+    }
+
+    fun saveMemo(memoByteArray: ByteArray, assignId: Int, problemId: Int, screenWidth: Int, case: StudyMemoCase, context: Context) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val memoBase64: String = Base64.encodeToString(memoByteArray, Base64.DEFAULT) ?: return@launch
             val req = StudyMemoRequest(case, assignId, problemId, screenWidth, memoBase64)
 
             if (case == StudyMemoCase.PATTERN_LEARNING_PROBLEM) {
                 // 획이 존재하면 저장, 메모존재시 추가획 없지만 다 지워졌다면 저장
-                if (isMemoDrawAStrokeAtLeastOnceAsProblem) saveMemo(req)
-                else if (alreadyHaveMemoOnThisProblem && isAllMemoRemovedOnProblem) saveMemo(req)
-                else println("aspasp file problem에 메모가 없는상태로 추정 저장하지 않음.")
+                if (isMemoDrawAStrokeAtLeastOnceAsProblem) {
+                    saveMemo(req)
+                    memoDebugger(assignId, problemId, memoByteArray.size)
+                    if (memoDebugViewCount > 10) {
+                        withContext(Dispatchers.Main) {
+                            DaebakToast.show(context, "저장 완료 type1")
+                        }
+                    }
+                } else if (alreadyHaveMemoOnThisProblem && isAllMemoRemovedOnProblem) {
+                    saveMemo(req)
+                    memoDebugger(assignId, problemId, memoByteArray.size)
+                    if (memoDebugViewCount > 10) {
+                        withContext(Dispatchers.Main) {
+                            DaebakToast.show(context, "저장 완료 type2")
+
+                        }
+                    }
+                } else {
+                    println("추가된 메모가 없음. 저장하지 않음. type3")
+                    memoDebugger(assignId, problemId, memoByteArray.size)
+                    if (memoDebugViewCount > 10) {
+                        withContext(Dispatchers.Main) {
+                            DaebakToast.show(context, "추가된 메모가 없음. 저장하지 않음. type3")
+
+                        }
+                    }
+                }
 
 
             } else if (case == StudyMemoCase.PATTERN_LEARNING_SOLUTION) {

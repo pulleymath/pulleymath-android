@@ -646,6 +646,7 @@
 
                                 <TextView
                                     style="@style/h6"
+                                    android:id="@+id/correctAnswerViewText"
                                     android:layout_width="88dp"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/gray_600"
@@ -671,6 +672,7 @@
 
                                 <TextView
                                     style="@style/h6"
+                                    android:id="@+id/quickScoringText"
                                     android:layout_width="88dp"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/gray_600"

@@ -791,6 +791,21 @@ class SolveActivity : BaseActivity(),
             solutionGesture?.listener = this@SolveActivity
             solutionContainer.setOnTouchListener(solutionGesture)
             highlightGalleryBtnIfNeed()
+
+            correctAnswerViewText.setOnClickListener {
+                viewModel.memoDebugViewCount--
+                println("aspasp viewModel.memoDebugViewCount: ${viewModel.memoDebugViewCount}")
+                if (viewModel.memoDebugViewCount <= 10) {
+                    DaebakToast.show(this@SolveActivity, "디버그 비활성")
+                }
+            }
+            quickScoringText.setOnClickListener {
+                viewModel.memoDebugViewCount++
+                println("aspasp viewModel.memoDebugViewCount: ${viewModel.memoDebugViewCount}")
+                if (viewModel.memoDebugViewCount > 10) {
+                    DaebakToast.show(this@SolveActivity, "디버그 활성")
+                }
+            }
         }
     }
 
@@ -1903,17 +1918,29 @@ class SolveActivity : BaseActivity(),
 
     private fun saveMemo() {
         with(binding) {
+            if (viewModel.memoDebugViewCount > 10) {
+                if (selectedProblem == null) {
+                    DaebakToast.show(this@SolveActivity, "selectedProblem 없음, 학습지 오픈시 or 저장 실패 type1")
+                }
+                if (content?.assignID == null) {
+                    DaebakToast.show(this@SolveActivity, "저장 실패 type2")
+                }
+                if (problemMemoView.getMemoBase64() == null) {
+                    DaebakToast.show(this@SolveActivity, "problem memo 실패 type3")
+                }
+            }
+
+//            if (solutionMemoView.getMemoBase64() == null) {
+//                DaebakToast.show(this@SolveActivity, "solution memo 저장 실패 type2")
+//            }
             val problem = selectedProblem ?: return
-//            problemMemoView.save("${problem.id}_${content?.assignID ?: 0}_p")
-//            solutionMemoView.save("${problem.id}_${content?.assignID ?: 0}_s")
             val assignId = content?.assignID ?: return
-//            val page = problem.problemNum ?: return
             problemMemoView.getMemoBase64()?.let {
-                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_PROBLEM)
+                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_PROBLEM,this@SolveActivity)
             }
 
             solutionMemoView.getMemoBase64()?.let {
-                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_SOLUTION)
+                viewModel.saveMemo(it, assignId, problem.id, screenWidth, StudyMemoCase.PATTERN_LEARNING_SOLUTION, this@SolveActivity)
             }
         }
     }
