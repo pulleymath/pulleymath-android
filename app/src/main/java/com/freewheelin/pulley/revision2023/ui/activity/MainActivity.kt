@@ -244,7 +244,6 @@ class MainActivity : PermissionActivity(),
                 val intent = AlarmActivity.getIntent(this@MainActivity)
                 startActivity(intent)
             }
-            setSchoolSpinner()
             setSpy()
             initChatBot()
 
@@ -378,10 +377,27 @@ class MainActivity : PermissionActivity(),
     }
     private fun setSchoolSpinner() {
         binding.apply {
-            val items = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
-            schoolSpinnerAdapter = SchoolSpinnerAdapter(this@MainActivity, R.layout.item_school_spinner_textview, items)
+            val currentUser = viewModel.user.value
+            var spinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
+            schoolSpinner.visibility = View.VISIBLE
+
+            if (currentUser?.affiliationInfo?.showUiBySchoolLevel == true) {
+                when (currentUser.affiliationInfo.institutionType) {
+                    "ELEMENTARY" -> {
+                        schoolSpinner.visibility = View.GONE
+                        return
+                    }
+                    "MIDDLE" -> {
+                        spinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean)
+                    }
+                    else -> { }
+                }
+            }
+
+            schoolSpinnerAdapter = SchoolSpinnerAdapter(this@MainActivity, R.layout.item_school_spinner_textview, spinnerItems)
         }
     }
+
     private fun initActivityResult() {
         getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
@@ -646,6 +662,7 @@ class MainActivity : PermissionActivity(),
                         MyApplication.token = it.token
                     }
                     it.commit("LearningTabAct observe")
+                    setSchoolSpinner()
                 }
             }
             showDrawer.observe(this@MainActivity) { show ->

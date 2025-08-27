@@ -54,8 +54,6 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             initSchoolType(user.schoolType ?: SchoolType.HIGH)
-//            println("aspasp mainact user.schoolType : ${user.schoolType}")
-//            println("aspasp mainact fetchUser user.schoolType?.mainSpinnerPosition : ${user.schoolType?.mainSpinnerPosition}")
             schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)

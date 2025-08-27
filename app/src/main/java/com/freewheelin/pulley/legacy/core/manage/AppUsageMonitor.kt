@@ -46,9 +46,9 @@ object AppUsageMonitor {
         val task = timerTask {
             if(isForeground) {
                 accumulatedUsageTime += 1
-
-                if(isStudying)
+                if(isStudying) {
                     accumulatedStudyTime += 1
+                }
             }
             if (lastSaveDuration.time + saveDuration30Sec < Date().time) {
                 postUsageTime()

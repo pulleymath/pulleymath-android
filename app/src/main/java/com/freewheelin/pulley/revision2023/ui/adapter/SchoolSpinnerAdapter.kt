@@ -41,7 +41,6 @@ class SchoolSpinnerAdapter (context: Context, @LayoutRes private val resId: Int,
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-//        return super.getDropDownView(position, convertView, parent)
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_school_spinner_dropdown, parent, false)
 
         val content: TextView? = view?.findViewById(R.id.content)
@@ -62,21 +61,4 @@ class SchoolSpinnerAdapter (context: Context, @LayoutRes private val resId: Int,
 
         return view!!
     }
-// 드롭다운하지 않은 상태의 Spinner 항목의 뷰
-//    override fun getView(position: Int, converView: View?, parent: ViewGroup): View {
-//        val binding = ItemSpinnerBuyOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        binding.tvSpinner.text = menuList[position]
-//
-//        return binding.root
-//    }
-//
-//    // 드롭다운된 항목들 리스트의 뷰
-//    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-//        val binding = ItemSpinnerBuyOptionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        binding.tvSpinner.text = menuList[position]
-//
-//        return binding.root
-//    }
-//
-//    override fun getCount() = menuList.size
 }

@@ -43,12 +43,12 @@ class PatternQuizViewModel(application: Application): BaseAndroidViewModel(appli
 
     private val memoRepository: MemoRepository = MemoRepository(getApplication<Application>().applicationContext, viewModelScope)
     val userInRepo = userRepository.user
+    val mainProfileV4 = userRepository.mainProfileV4
 
     var currQuizIndex = -1
     var quizSize = -1
     val patternQuiz by lazy { MutableLiveData<LCPatternQuiz>() }
 
-//    val currBaseConceptImage by lazy { MutableLiveData<String>() }
     val currQuizImage by lazy { MutableLiveData<String>() }
 
     val isQuizMainConcept by lazy { MutableLiveData<Boolean>(false) }

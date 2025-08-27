@@ -241,7 +241,7 @@
                     android:layout_marginVertical="10dp"
                     android:layout_marginEnd="16dp"
                     android:paddingHorizontal="12dp"
-                    android:visibility="@{ vm.selectedQuizIndex == 0  ? View.GONE : View.VISIBLE }"
+                    android:visibility="@{ vm.selectedQuizIndex == 0 ? View.GONE : View.VISIBLE }"
                     android:background="@drawable/bg_pattern_index_btn"
                     android:text="개념 | 정답 보기"/>
 <!--                    android:text="@{ vm.isDrawerOpened ? `개념/정답 닫기` : `개념/정답 보기` }"/>-->

@@ -530,7 +530,7 @@
                                     style="@style/h4"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{ vm.mainProfile.studentName }"
+                                    android:text="@{ vm.mainProfileV4.studentName }"
                                     android:textColor="@color/purple_300"
                                     tools:text="행복한 복숭아" />
 

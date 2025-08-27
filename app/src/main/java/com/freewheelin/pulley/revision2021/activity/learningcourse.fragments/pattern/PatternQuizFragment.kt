@@ -35,6 +35,7 @@ import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.utils.observeOnce
 import com.freewheelin.pulley.revision2021.views.*
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.memoView.MemoListener
 import com.freewheelin.pulley.legacy.views.memoView.PathAndImageUndoCountListener
 import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListener
@@ -535,6 +536,11 @@ class PatternQuizFragment() : Fragment(),
         return null
     }
     fun toggleDrawer() {
+        if (viewModel.mainProfileV4.value?.isAffiliated == true && viewModel.patternQuiz.value?.isCorrect == null) {
+            DaebakToast.show(requireContext(), "채점하면 확인할 수 있어요!")
+            return
+        }
+
         val value = viewModel.showConceptSolutionView.value?.not()
         viewModel.showConceptSolutionView.postValue(value)
         viewModel.tempConceptSolutionViewFlag = value

@@ -108,10 +108,11 @@ class AnswerView : ConstraintLayout,
                     KeyEvent.KEYCODE_7 -> enterNumberBtnClicked("7")
                     KeyEvent.KEYCODE_8 -> enterNumberBtnClicked("8")
                     KeyEvent.KEYCODE_9 -> enterNumberBtnClicked("9")
-//                    KeyEvent.KEYCODE_NUMPAD_0,KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
-//                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
-//                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
-//                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
+                    KeyEvent.KEYCODE_NUMPAD_0, KeyEvent.KEYCODE_NUMPAD_1,KeyEvent.KEYCODE_NUMPAD_2,KeyEvent.KEYCODE_NUMPAD_3,KeyEvent.KEYCODE_NUMPAD_4
+                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9 -> {
+                        val number = (event.keyCode - KeyEvent.KEYCODE_NUMPAD_0).toString()
+                        enterNumberBtnClicked(number)
+                    }
                     KeyEvent.KEYCODE_DPAD_LEFT -> {
                         delegate?.prev()
                     }
@@ -189,7 +190,7 @@ class AnswerView : ConstraintLayout,
                 shortAnswerView.isFocusableInTouchMode = true
             }
             View.INVISIBLE, View.GONE -> {
-                shortAnswerView.isFocusableInTouchMode = false
+//                shortAnswerView.isFocusableInTouchMode = false
             }
         }
     }
@@ -262,7 +263,8 @@ class AnswerView : ConstraintLayout,
     }
 
     fun getShortAnswerText() : String {
-        return shortAnswerView.text.toString() ?: ""
+        val currentText = shortAnswerView.text.toString()
+        return currentText ?: ""
     }
 
     fun disableMarking() {

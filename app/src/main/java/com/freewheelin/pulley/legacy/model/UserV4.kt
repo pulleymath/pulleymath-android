@@ -3,6 +3,7 @@ package com.freewheelin.pulley.legacy.model
 import android.util.Log
 import com.freewheelin.pulley.legacy.assets.Grade
 import com.freewheelin.pulley.legacy.assets.Major
+import com.freewheelin.pulley.legacy.core.API.ResponseModel.AffiliationInfo
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
@@ -35,6 +36,7 @@ data class UserV4(
     val isExceedDevice: Boolean,
     var isValidPhone: Boolean,
     var isValidEmail: Boolean,
+    var affiliationInfo: AffiliationInfo
 ) {
     var token:String = ""
 

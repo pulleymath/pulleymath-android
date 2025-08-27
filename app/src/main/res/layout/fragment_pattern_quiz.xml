@@ -83,6 +83,7 @@
                         android:layout_marginTop="24dp"
                         imgResAtQuiz="@{ vm.currQuizImage }"
                         android:visibility="@{ vm.isQuizMainConcept ? View.GONE : View.VISIBLE }"
+                        tools:visibility="visible"
                         android:layout_marginStart="24dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -105,6 +106,7 @@
                             android:background="@drawable/bg_white_round_10"
                             android:padding="24dp"
                             android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
+                            tools:visibility="visible"
                             android:layout_margin="24dp"
                             >
 
@@ -129,6 +131,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:visibility="@{ vm.isQuizMainConcept ? View.VISIBLE : View.GONE }"
+                        tools:visibility="visible"
                         app:layout_constraintStart_toEndOf="@+id/mainQuizWrapperLl"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">

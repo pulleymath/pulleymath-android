@@ -1,9 +1,7 @@
 package com.freewheelin.pulley.revision2021.viewmodel.learningcourse
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,15 +9,8 @@ import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.repository.LCPatternRepository
-import com.freewheelin.pulley.revision2021.viewmodel.BaseViewModel
-import com.freewheelin.pulley.revision2021.views.DisallowTouchEventViewPager
 import com.freewheelin.pulley.revision2021.views.LCPatternViewPager
-import com.freewheelin.pulley.revision2023.model.LCPatternMap
-import com.freewheelin.pulley.revision2023.model.V2LogUserResponse
-import com.freewheelin.pulley.revision2023.repository.LegacyV2Repository
 import com.freewheelin.pulley.revision2023.viewmodel.BaseAndroidViewModel
-import com.freewheelin.pulley.legacy.utils.PulleyEvent
-import com.google.gson.Gson
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -27,11 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class LCPatternViewModel(application: Application): BaseAndroidViewModel(application) {
-    private val legacyV2Repository = LegacyV2Repository(getApplication<Application>().applicationContext, viewModelScope)
     private val patternRepository = LCPatternRepository(getApplication<Application>().applicationContext, viewModelScope)
 
     val patternName by lazy { MutableLiveData<String>() }

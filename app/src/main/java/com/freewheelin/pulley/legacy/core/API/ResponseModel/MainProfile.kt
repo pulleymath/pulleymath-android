@@ -6,6 +6,7 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.model.PaidServiceType
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2023.SchoolType
 import java.lang.Math.abs
 import java.util.*
 
@@ -51,7 +52,9 @@ data class MainProfileV4 (
         }
 }
 data class AffiliationInfo(
-    val institutionName: String
+    val institutionName: String,
+    val showUiBySchoolLevel: Boolean,
+    val institutionType: String
 )
 class MainProfile {
     var studentName: String = ""
