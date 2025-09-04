@@ -16,7 +16,7 @@ class MockTestFragmentTest : ContextTest() {
 
     @Before
     fun prepare() {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, null)
+//        val view = LayoutInflater.from(context).inflate(R.layout.item_my_mock_list, null)
 //        lastHolder = MyMockHolder(view)
     }
 

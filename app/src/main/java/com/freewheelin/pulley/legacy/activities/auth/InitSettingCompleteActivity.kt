@@ -63,11 +63,6 @@ class InitSettingCompleteActivity : AppCompatActivity() {
             binding.guideTv.text = changedMessage
         }
         binding.startBtn.setOnClickListener {
-            val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE).apply {
-                val schoolType = Grade.init(initUserGrade).schoolType
-                putExtra(UserManager.SCHOOL_TYPE, schoolType.name)
-            }
-            LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
             moveToMain()
         }
     }

@@ -53,8 +53,14 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     fun fetchUser(cb: (UserV4) -> Unit) {
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
-            initSchoolType(user.schoolType ?: SchoolType.HIGH)
-            schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
+            if (user.affiliationInfo.showUiBySchoolLevel) {
+                val fetchedSchoolType = SchoolType.convertFromStr(user.affiliationInfo.institutionType)
+                initSchoolType(fetchedSchoolType)
+                schoolSpinnerPosition.postValue(fetchedSchoolType.mainSpinnerPosition)
+            } else {
+                initSchoolType(user.schoolType ?: SchoolType.HIGH)
+                schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
+            }
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)
         }

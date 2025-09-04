@@ -32,8 +32,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 35
-        versionCode = 547
-        versionName = "1.6.127"
+        versionCode = 548
+        versionName = "1.6.128"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -223,7 +223,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
     testImplementation("org.mockito:mockito-core:3.9.0")
-//    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test:core:1.5.0")
     testImplementation("org.robolectric:robolectric:4.1")
     testImplementation("joda-time:joda-time:2.10.1")
     testImplementation("org.mockito:mockito-inline:2.13.0")

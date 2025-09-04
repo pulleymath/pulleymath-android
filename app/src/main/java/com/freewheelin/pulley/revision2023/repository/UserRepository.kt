@@ -39,7 +39,6 @@ class UserRepository() {
     }
     suspend fun getUser(): UserV4 {
         return api.getUserV4().data!!.let {
-            println("asoaso - - - - - getUser, ${it.token}")
             _user.postValue(it)
             MyApplication.user = it
             it

@@ -240,8 +240,8 @@ class MainTabLayout: FrameLayout {
 
     fun getMobileUnivTab(): TextView = binding.mobileTab4
 
-    fun updateSchoolType() {
-        prevSchoolType = when (binding.schoolType) {
+    fun updateSchoolType(type: SchoolType) {
+        prevSchoolType = when (type) {
             SchoolType.ELEMENTARY -> SchoolType.ELEMENTARY
             SchoolType.MIDDLE -> SchoolType.MIDDLE
             SchoolType.HIGH -> SchoolType.HIGH
@@ -249,7 +249,7 @@ class MainTabLayout: FrameLayout {
             null -> SchoolType.HIGH
         }
 
-        binding.schoolType = schoolType
+        binding.schoolType = type
     }
 
     private fun setTextColorWithAnim(textView: TextView) {
@@ -289,9 +289,9 @@ class MainTabLayout: FrameLayout {
             SchoolType.UNIVERSITY -> R.color.white
         }
     }
-    private fun setSelectedTabTextColor(textView: TextView) {
+    private fun setSelectedTabTextColor(textView: TextView, type: SchoolType) {
         val fromTextColor = getTextColorBySchoolType(prevSchoolType)
-        val toTextColor = getTextColorBySchoolType(schoolType)
+        val toTextColor = getTextColorBySchoolType(type)
         val colorFrom = ContextCompat.getColor(context, fromTextColor)
         val colorTo = ContextCompat.getColor(context, toTextColor)
 
@@ -302,12 +302,12 @@ class MainTabLayout: FrameLayout {
         }
         colorAnimation.start()
     }
-    private fun setUnSelectedTabTextColor(textView: TextView) {
+    private fun setUnSelectedTabTextColor(textView: TextView, type: SchoolType) {
         val fromTextColor = when (prevSchoolType) {
             SchoolType.ELEMENTARY -> R.color.purple_150
             else -> R.color.gray_700
         }
-        val toTextColor = when (schoolType) {
+        val toTextColor = when (type) {
             SchoolType.ELEMENTARY -> R.color.purple_150
             else -> R.color.gray_700
         }
@@ -322,7 +322,7 @@ class MainTabLayout: FrameLayout {
         colorAnimation.start()
     }
 
-    fun setTabTextColorsBySchoolType() {
+    fun setTabTextColorsBySchoolType(type: SchoolType) {
         binding.apply {
             currentTab?.let { selectedTab ->
                 getTabParentView().children.forEach {
@@ -330,12 +330,12 @@ class MainTabLayout: FrameLayout {
                         val tabName = it.text.toString()
                         if (tabName in selectedTab.names) {
 //                            setSelectedTabTextAppearance(it)
-                            setSelectedTabTextColor(it)
+                            setSelectedTabTextColor(it, type)
                         } else {
                             // TODO
 //                            println("aspasp tabName : ${tabName} 선택되지 않은것인가? ")
 //                            setUnSelectedTabTextAppearance(it)
-                            setUnSelectedTabTextColor(it)
+                            setUnSelectedTabTextColor(it, type)
                         }
                     }
                 }

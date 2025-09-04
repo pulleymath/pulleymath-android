@@ -102,7 +102,7 @@ class MyPulleyCouponFragment : MyPageBaseFragment() {
                 Log.d(javaClass.simpleName, "$result")
                 setList(result.data.sortedByDescending { it.couponDetailID })
             }, {
-                println("asoaso ")
+
             })
     }
 

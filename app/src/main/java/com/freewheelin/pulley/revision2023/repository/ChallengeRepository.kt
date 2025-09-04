@@ -29,9 +29,7 @@ class ChallengeRepository() {
         }
     }
     fun updateChallengeList(newChallenge: Challenge) {
-        println("asoaso updateChallengeList  size : ${_joinedChallengeList.value?.size}")
         _joinedChallengeList.value?.let { list ->
-            println("asoaso ---- updateChallengeList --- ")
             val challengeList = list.map {
                 if (it.challengeId == newChallenge.challengeId) {
                     newChallenge
@@ -40,15 +38,6 @@ class ChallengeRepository() {
                 }
             }
 
-            challengeList.forEach {
-                println("asoaso --- ${it.challengeId} / ${it.challengeName} / ${it.userStatus}")
-                it.courses.forEach {
-                    println("asoaso --- ${it.courseName} / ${it.status}")
-                }
-                println("asoaso --------------")
-            }
-
-            println("asoaso currentMission posted2 ")
             _joinedChallengeList.postValue(challengeList.ifEmpty {
                 listOf(newChallenge)
             })

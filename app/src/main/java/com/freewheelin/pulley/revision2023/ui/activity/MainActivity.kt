@@ -67,6 +67,7 @@ import com.freewheelin.pulley.legacy.views.snackBar.SnackBarViewListener
 import com.freewheelin.pulley.revision2021.activity.AlarmActivity
 import com.freewheelin.pulley.revision2021.activity.dialog.UpdateGradeDialog
 import com.freewheelin.pulley.revision2021.activity.fragments.ConceptCourseFragment
+import com.freewheelin.pulley.revision2021.model.response.School
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.SchoolType
 import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
@@ -384,7 +385,7 @@ class MainActivity : PermissionActivity(),
             if (currentUser?.affiliationInfo?.showUiBySchoolLevel == true) {
                 when (currentUser.affiliationInfo.institutionType) {
                     "ELEMENTARY" -> {
-                        schoolSpinner.visibility = View.GONE
+                        schoolSpinner.visibility = View.INVISIBLE
                         return
                     }
                     "MIDDLE" -> {
@@ -657,6 +658,18 @@ class MainActivity : PermissionActivity(),
             user.observe(this@MainActivity) { user ->
                 user?.let {
                     MyApplication.user = it
+
+                    if (it.affiliationInfo.showUiBySchoolLevel) {
+                        when (it.affiliationInfo.institutionType) {
+                            "ELEMENTARY" -> {
+                                MyApplication.schoolType = SchoolType.ELEMENTARY
+                            }
+                            "MIDDLE" -> {
+                                MyApplication.schoolType = SchoolType.MIDDLE
+                            }
+                            else -> { MyApplication.schoolType = SchoolType.HIGH }
+                        }
+                    }
                     saveSignedEmail()
                     if (it.token.isNotEmpty()) {
                         MyApplication.token = it.token
@@ -706,7 +719,7 @@ class MainActivity : PermissionActivity(),
     }
     private fun updateHeaderItems(type: SchoolType) {
         binding.apply {
-            mainTl.updateSchoolType()
+            mainTl.updateSchoolType(type)
             val alarmBtnColor = when (type) {
                 SchoolType.ELEMENTARY -> R.color.purple_200
                 SchoolType.MIDDLE -> R.color.gray_500
@@ -718,7 +731,7 @@ class MainActivity : PermissionActivity(),
     }
 
     private fun updateHeaderColors(type: SchoolType) {
-        binding.mainTl.setTabTextColorsBySchoolType()
+        binding.mainTl.setTabTextColorsBySchoolType(type)
         val transitionDrawable = binding.mainTl.makeHeaderTransitionDrawable(type)
 
         binding.apply {
