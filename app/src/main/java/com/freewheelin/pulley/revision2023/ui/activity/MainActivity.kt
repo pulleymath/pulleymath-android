@@ -177,6 +177,7 @@ class MainActivity : PermissionActivity(),
         initActivityResult()
         initTabFragment()
         addBackBtnCallback()
+        initSchoolSpinner()
         if(referActivity == null) referActivity = this@MainActivity
 
         binding.apply {
@@ -376,27 +377,41 @@ class MainActivity : PermissionActivity(),
         val emoji = StringUtils.getEmojiByUnicode(0x1F977)
         binding.spyBtn.text = emoji
     }
-    private fun setSchoolSpinner() {
-        binding.apply {
-            val currentUser = viewModel.user.value
-            var spinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
-            schoolSpinner.visibility = View.VISIBLE
 
-            if (currentUser?.affiliationInfo?.showUiBySchoolLevel == true) {
-                when (currentUser.affiliationInfo.institutionType) {
-                    "ELEMENTARY" -> {
-                        schoolSpinner.visibility = View.INVISIBLE
-                        return
-                    }
-                    "MIDDLE" -> {
-                        spinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean)
-                    }
-                    else -> { }
+    private lateinit var schoolSpinnerAdapter: SchoolSpinnerAdapter
+    private val spinnerItems = mutableListOf<String>()
+    private fun initSchoolSpinner() {
+        schoolSpinnerAdapter = SchoolSpinnerAdapter(this, R.layout.item_school_spinner_textview, spinnerItems)
+        binding.schoolSpinnerAdapter = schoolSpinnerAdapter
+    }
+    private fun setSchoolSpinner() {
+        val currentUser = viewModel.user.value
+        val newSpinnerItems: List<String>
+
+        binding.schoolSpinner.visibility = View.VISIBLE
+        if (currentUser?.affiliationInfo?.showUiBySchoolLevel == true) {
+            when (currentUser.affiliationInfo?.institutionType) {
+                "ELEMENTARY" -> {
+                    binding.schoolSpinner.visibility = View.INVISIBLE
+                    newSpinnerItems = emptyList()
+                }
+                "MIDDLE" -> {
+                    newSpinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean)
+                }
+                else -> {
+                    newSpinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
                 }
             }
-
-            schoolSpinnerAdapter = SchoolSpinnerAdapter(this@MainActivity, R.layout.item_school_spinner_textview, spinnerItems)
+        } else {
+            newSpinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
         }
+
+        if (spinnerItems != newSpinnerItems) {
+            spinnerItems.clear()
+            spinnerItems.addAll(newSpinnerItems)
+            schoolSpinnerAdapter.notifyDataSetChanged()
+        }
+
     }
 
     private fun initActivityResult() {
@@ -659,8 +674,8 @@ class MainActivity : PermissionActivity(),
                 user?.let {
                     MyApplication.user = it
 
-                    if (it.affiliationInfo.showUiBySchoolLevel) {
-                        when (it.affiliationInfo.institutionType) {
+                    if (it.affiliationInfo?.showUiBySchoolLevel == true) {
+                        when (it.affiliationInfo?.institutionType) {
                             "ELEMENTARY" -> {
                                 MyApplication.schoolType = SchoolType.ELEMENTARY
                             }

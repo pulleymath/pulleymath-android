@@ -36,7 +36,7 @@ data class UserV4(
     val isExceedDevice: Boolean,
     var isValidPhone: Boolean,
     var isValidEmail: Boolean,
-    var affiliationInfo: AffiliationInfo
+    var affiliationInfo: AffiliationInfo?
 ) {
     var token:String = ""
 
