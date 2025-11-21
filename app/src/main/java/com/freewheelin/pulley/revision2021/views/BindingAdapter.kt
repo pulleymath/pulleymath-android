@@ -36,579 +36,573 @@ import com.freewheelin.pulley.revision2023.ui.view.MainTab
 import com.freewheelin.pulley.revision2023.ui.view.MainUserStatusChip
 
 
-object BindingAdapter {
 
-    @JvmStatic
-    @BindingAdapter("bind_note_selector")
-    fun bindNoteSelectorRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
-        Log.d("bind_note_selector", "list=$item")
-        item?.let { cardList ->
-            val adapter = recyclerView.adapter as LCWrongNoteActivity.NoteNumberListAdapter
-            adapter.submitList(cardList)
+@BindingAdapter("bind_note_selector")
+fun bindNoteSelectorRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
+    Log.d("bind_note_selector", "list=$item")
+    item?.let { cardList ->
+        val adapter = recyclerView.adapter as LCWrongNoteActivity.NoteNumberListAdapter
+        adapter.submitList(cardList)
+    }
+}
+
+@BindingAdapter("layout_margin_top_dimen")
+fun setLayoutMarginTop(view: View, dimen: Float) {
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        this.topMargin = dimen.toInt()
+    }
+}
+
+@BindingAdapter("layout_margin_start_dimen")
+fun setLayoutMarginStart(view: View, dimen: Float) {
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        this.marginStart = dimen.toInt()
+    }
+}
+
+
+@BindingAdapter("layout_margin_end_dimen")
+fun setLayoutMarginEnd(view: View, dimen: Float) {
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        this.marginEnd = dimen.toInt()
+    }
+}
+
+@BindingAdapter("layout_margin_bottom_dimen")
+fun setLayoutMarginBottom(view: View, dimen: Float) {
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        this.bottomMargin = dimen.toInt()
+    }
+}
+
+
+@BindingAdapter("imageview_tint")
+fun ImageView.setImageTint(@ColorInt color: Int?) {
+    color?.let {
+        setColorFilter(it)
+    }
+}
+
+
+@BindingAdapter("imagebtn_tint")
+fun ImageButton.setImageTint(@ColorInt color: Int?) {
+    color?.let {
+        setColorFilter(it)
+    }
+}
+
+@BindingAdapter("commonBackgroundIf")
+fun commonBackgroundIf(view: View, show: Boolean?) {
+    view.setBackgroundResource(if (show == true) R.drawable.bg_purple_300_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
+}
+
+@BindingAdapter("secondaryBackgroundIf")
+fun secondaryBackgroundIf(view: View, show: Boolean?) {
+    view.setBackgroundResource(if (show == true) R.drawable.bg_purple_100_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
+}
+
+
+@BindingAdapter("layout_margin_end_dimen_on_text_length")
+fun setLayoutMarginEndOnTextLength(view: View, length: Int) {
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        when (length) {
+            3 -> { this.marginEnd = 43.toPx() }
+            4 -> { this.marginEnd = 47.toPx() }
+            5 -> { this.marginEnd = 51.toPx() }
+            6 -> { this.marginEnd = 55.toPx() }
+            7 -> { this.marginEnd = 59.toPx() }
+            else -> { this.marginEnd = 59.toPx() }
         }
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("layout_margin_top_dimen")
-    fun setLayoutMarginTop(view: View, dimen: Float) {
-        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            this.topMargin = dimen.toInt()
+
+@BindingAdapter("bind_img_url")
+fun setImageUrl(v: ImageView, url: String) {
+    Glide.with(v.context)
+        .load(url)
+        .apply(RequestOptions().centerCrop())
+        .into(v)
+}
+
+
+@BindingAdapter("bind_img_url_")
+fun setImageUrl_(v: ImageView, url: String?) {
+    url?.let {
+        v.setImageURL(it)
+    }
+}
+
+
+@BindingAdapter("bind_study_chapter")
+fun bindStudyChapterRecyclerView(recyclerView: RecyclerView, item: List<StudyChapter>?){
+    Log.d("bind_study_chapter", "list=$item")
+    item?.let { chapterList ->
+        val adapter = recyclerView.adapter as? ConceptCourseFragment.ChapterAdapter
+        println("bind_study_chapter size : ${chapterList.size} , adapter :${adapter == null}")
+        adapter?.submitList(chapterList)
+    }
+}
+
+
+@BindingAdapter("bind_small_chapter")
+fun bindSmallChapterRv(rv: RecyclerView, item: List<StudyChapter>?) {
+    Log.d("bind_small_chapter", "list=$item")
+    item?.let { chapterList ->
+        val adapter = rv.adapter as? ConceptCourseSmallAdapter
+        adapter?.submitList(chapterList)
+    }
+}
+
+
+@BindingAdapter("progress_layout_width")
+fun setLayoutWidth(view: View, rate: Double) {
+    println("progress_layout_width , view: ${view.id} , rate: ${rate}")
+    val layoutParams = view.layoutParams
+    layoutParams.width = (rate * 170).toInt().dpToPx()
+    view.layoutParams = layoutParams
+}
+
+
+@BindingAdapter("bind_cooking_list")
+fun bindCookingRecyclerView(recyclerView: RecyclerView, item: List<CookingInfoItem>?) {
+    println("bind_cooking_list, size=${item?.size}")
+    item?.let { itemList ->
+        if (recyclerView.adapter == null) return
+        val adapter = recyclerView.adapter as LCCookingFragment.CookingAdapter
+        adapter.submitList(itemList)
+    }
+}
+
+@BindingAdapter("bind_cooking_selection_image")
+fun bindCookingSelectionImageRecyclerView(recyclerView: RecyclerView, item: List<CookingQuizSelection>?) {
+    Log.d("bind_cooking_selection_image", "list=$item")
+    item?.let { contentList ->
+        if (recyclerView.adapter == null) { return }
+        val adapter = recyclerView.adapter as LCCookingFragment.SelectionListAdapter
+        adapter.submitList(contentList)
+    }
+}
+
+
+@BindingAdapter("floatingSheetStepBtnText")
+fun setFloatingBtnText(sheet: FloatingAnswerSheet, value: String) {
+    if(sheet.binding.scoringBtn.text.toString() != value) {
+        sheet.binding.scoringBtn.setText(value)
+    }
+}
+
+
+@BindingAdapter("floatingSheetAnswerType")
+fun setFloatingBtnAnswerType(sheet: FloatingAnswerSheet, isShortFormat: Boolean) {
+    sheet.binding.apply {
+        if (isShortFormat) {
+            shortAnswerView.visibility = View.VISIBLE
+            selectionAnswerView.visibility = View.INVISIBLE
+        } else {
+            shortAnswerView.visibility = View.INVISIBLE
+            selectionAnswerView.visibility = View.VISIBLE
         }
     }
-    @JvmStatic
-    @BindingAdapter("layout_margin_start_dimen")
-    fun setLayoutMarginStart(view: View, dimen: Float) {
-        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            this.marginStart = dimen.toInt()
+}
+
+
+@BindingAdapter("floatingStepBtnBackground")
+fun setFloatingStepBtnBackground(sheet: FloatingAnswerSheet, isAnswerEntered: Boolean) {
+    sheet.binding.apply {
+        if (isAnswerEntered) {
+            scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40_disabled)
+        } else {
+            scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40)
         }
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("layout_margin_end_dimen")
-    fun setLayoutMarginEnd(view: View, dimen: Float) {
-        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            this.marginEnd = dimen.toInt()
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("layout_margin_bottom_dimen")
-    fun setLayoutMarginBottom(view: View, dimen: Float) {
-        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            this.bottomMargin = dimen.toInt()
-        }
-    }
 
-    @JvmStatic
-    @BindingAdapter("imageview_tint")
-    fun ImageView.setImageTint(@ColorInt color: Int?) {
-        color?.let {
-            setColorFilter(it)
-        }
+@BindingAdapter("answerAreaEnabled")
+fun setFloatingBtnAnswerAreaEnabled(sheet: FloatingAnswerSheet, isEnabled: Boolean) {
+    sheet.binding.apply {
+        selectionAnswerView.isEnabled = isEnabled
+        shortAnswerView.isEnabled = isEnabled
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("imagebtn_tint")
-    fun ImageButton.setImageTint(@ColorInt color: Int?) {
-        color?.let {
-            setColorFilter(it)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("commonBackgroundIf")
-    fun commonBackgroundIf(view: View, show: Boolean?) {
-        view.setBackgroundResource(if (show == true) R.drawable.bg_purple_300_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
-    }
-    @JvmStatic
-    @BindingAdapter("secondaryBackgroundIf")
-    fun secondaryBackgroundIf(view: View, show: Boolean?) {
-        view.setBackgroundResource(if (show == true) R.drawable.bg_purple_100_round_28_ripple else R.drawable.bg_white_round_28_ripple_gray200)
-    }
 
-    @JvmStatic
-    @BindingAdapter("layout_margin_end_dimen_on_text_length")
-    fun setLayoutMarginEndOnTextLength(view: View, length: Int) {
-        view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            when (length) {
-                3 -> { this.marginEnd = 43.toPx() }
-                4 -> { this.marginEnd = 47.toPx() }
-                5 -> { this.marginEnd = 51.toPx() }
-                6 -> { this.marginEnd = 55.toPx() }
-                7 -> { this.marginEnd = 59.toPx() }
-                else -> { this.marginEnd = 59.toPx() }
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_img_url")
-    fun setImageUrl(v: ImageView, url: String) {
-        Glide.with(v.context)
-            .load(url)
-            .apply(RequestOptions().centerCrop())
-            .into(v)
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_img_url_")
-    fun setImageUrl_(v: ImageView, url: String?) {
-        url?.let {
-            v.setImageURL(it)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_study_chapter")
-    fun bindStudyChapterRecyclerView(recyclerView: RecyclerView, item: List<StudyChapter>?){
-        Log.d("bind_study_chapter", "list=$item")
-        item?.let { chapterList ->
-            val adapter = recyclerView.adapter as? ConceptCourseFragment.ChapterAdapter
-            println("bind_study_chapter size : ${chapterList.size} , adapter :${adapter == null}")
-            adapter?.submitList(chapterList)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_small_chapter")
-    fun bindSmallChapterRv(rv: RecyclerView, item: List<StudyChapter>?) {
-        Log.d("bind_small_chapter", "list=$item")
-        item?.let { chapterList ->
-            val adapter = rv.adapter as? ConceptCourseSmallAdapter
-            adapter?.submitList(chapterList)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("progress_layout_width")
-    fun setLayoutWidth(view: View, rate: Double) {
-        println("progress_layout_width , view: ${view.id} , rate: ${rate}")
-        val layoutParams = view.layoutParams
-        layoutParams.width = (rate * 170).toInt().dpToPx()
-        view.layoutParams = layoutParams
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_cooking_list")
-    fun bindCookingRecyclerView(recyclerView: RecyclerView, item: List<CookingInfoItem>?) {
-        println("bind_cooking_list, size=${item?.size}")
-        item?.let { itemList ->
-            if (recyclerView.adapter == null) return
-            val adapter = recyclerView.adapter as LCCookingFragment.CookingAdapter
-            adapter.submitList(itemList)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("bind_cooking_selection_image")
-    fun bindCookingSelectionImageRecyclerView(recyclerView: RecyclerView, item: List<CookingQuizSelection>?) {
-        Log.d("bind_cooking_selection_image", "list=$item")
-        item?.let { contentList ->
-            if (recyclerView.adapter == null) { return }
-            val adapter = recyclerView.adapter as LCCookingFragment.SelectionListAdapter
-            adapter.submitList(contentList)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("floatingSheetStepBtnText")
-    fun setFloatingBtnText(sheet: FloatingAnswerSheet, value: String) {
-        if(sheet.binding.scoringBtn.text.toString() != value) {
-            sheet.binding.scoringBtn.setText(value)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("floatingSheetAnswerType")
-    fun setFloatingBtnAnswerType(sheet: FloatingAnswerSheet, isShortFormat: Boolean) {
-        sheet.binding.apply {
-            if (isShortFormat) {
-                shortAnswerView.visibility = View.VISIBLE
-                selectionAnswerView.visibility = View.INVISIBLE
-            } else {
-                shortAnswerView.visibility = View.INVISIBLE
-                selectionAnswerView.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("floatingStepBtnBackground")
-    fun setFloatingStepBtnBackground(sheet: FloatingAnswerSheet, isAnswerEntered: Boolean) {
-        sheet.binding.apply {
-            if (isAnswerEntered) {
-                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40_disabled)
-            } else {
-                scoringBtn.background = ContextCompat.getDrawable(sheet.context, R.drawable.bg_purple_300_round_40)
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("answerAreaEnabled")
-    fun setFloatingBtnAnswerAreaEnabled(sheet: FloatingAnswerSheet, isEnabled: Boolean) {
-        sheet.binding.apply {
-            selectionAnswerView.isEnabled = isEnabled
-            shortAnswerView.isEnabled = isEnabled
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bind_solution_list")
-    fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AssessmentSolution>?) {
+@BindingAdapter("bind_solution_list")
+fun bindSolutionRecyclerView(recyclerView: RecyclerView, item: List<AssessmentSolution>?) {
 //    Log.d("bind_solution_video_response", " size=${item?.size}")
-        item?.let { workbookList ->
-            val adapter = recyclerView.adapter as AssessmentSolveSolutionFragment.VideoSolutionAdapter
-            adapter.submitList(null)
-            adapter.submitList(workbookList)
-            adapter.notifyDataSetChanged()
-        }
+    item?.let { workbookList ->
+        val adapter = recyclerView.adapter as AssessmentSolveSolutionFragment.VideoSolutionAdapter
+        adapter.submitList(null)
+        adapter.submitList(workbookList)
+        adapter.notifyDataSetChanged()
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("bind_lc_wrong_note_card")
-    fun bindLCWrongNoteCardRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
-        Log.d("bind_lc_wrong_note_card", "list=$item")
-        item?.let { reviewList ->
-            val adapter = recyclerView.adapter as LCWrongNoteMapFragment.WrongNoteAdapter
-            adapter.submitList(reviewList)
-        }
-    }
 
-    @JvmStatic
-    @BindingAdapter("cookingImgRes")
-    fun loadImage(view: ImageView, imageUrl: String?) {
-//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
-        if (imageUrl?.isEmpty() == true) return
-        imageUrl?.let {
-            view.setImageUrlGlide(it)
-        }
+@BindingAdapter("bind_lc_wrong_note_card")
+fun bindLCWrongNoteCardRecyclerView(recyclerView: RecyclerView, item: List<LCWrongNoteMapCard>?){
+    Log.d("bind_lc_wrong_note_card", "list=$item")
+    item?.let { reviewList ->
+        val adapter = recyclerView.adapter as LCWrongNoteMapFragment.WrongNoteAdapter
+        adapter.submitList(reviewList)
     }
-    @JvmStatic
-    @BindingAdapter("cookingImgResOnPicasso")
-    fun loadImagePicasso(view: ImageView, imageUrl: String?) {
-//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
-        if (imageUrl?.isEmpty() == true) return
-        imageUrl?.let {
-            view.setImageUrlPicasso(it)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("cookingImgResOnPicassoDownScale")
-    fun loadImagePicassoDownScale(view: ImageView, imageUrl: String?) {
-//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
-        if (imageUrl?.isEmpty() == true) return
-        imageUrl?.let {
-            view.setImageUrlPicassoDownScale(it)
-        }
-    }
+}
 
-    @JvmStatic
-    @BindingAdapter("imgResAtQuiz")
-    fun loadImage2(view: ImageView, imageUrl: String?) {
-//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
-        if (imageUrl?.isEmpty() == true) return
-        imageUrl?.let {
-            view.setCookingImageURL(it)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("visibleIf")
-    fun visibleIf(view: View, show: Boolean?) {
-        view.visibility = if (show == true) View.VISIBLE else View.GONE
-    }
-    @JvmStatic
-    @BindingAdapter("visibleOrInvisibleIf")
-    fun visibleOrInvisibleIf(view: View, show: Boolean?) {
-        view.visibility = if (show == true) View.VISIBLE else View.INVISIBLE
-    }
 
-    @JvmStatic
-    @BindingAdapter("visibleAnimIf")
-    fun visibleAnimIf(view: View, show: Boolean?) {
-        if (show == true) {
-            view.show(600)
+@BindingAdapter("cookingImgRes")
+fun loadImage(view: ImageView, imageUrl: String?) {
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+    if (imageUrl?.isEmpty() == true) return
+    imageUrl?.let {
+        view.setImageUrlGlide(it)
+    }
+}
+
+@BindingAdapter("cookingImgResOnPicasso")
+fun loadImagePicasso(view: ImageView, imageUrl: String?) {
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+    if (imageUrl?.isEmpty() == true) return
+    imageUrl?.let {
+        view.setImageUrlPicasso(it)
+    }
+}
+
+@BindingAdapter("cookingImgResOnPicassoDownScale")
+fun loadImagePicassoDownScale(view: ImageView, imageUrl: String?) {
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+    if (imageUrl?.isEmpty() == true) return
+    imageUrl?.let {
+        view.setImageUrlPicassoDownScale(it)
+    }
+}
+
+
+@BindingAdapter("imgResAtQuiz")
+fun loadImage2(view: ImageView, imageUrl: String?) {
+//        imageUrl?.split("https://")?.let { println("imgRes, url : ${it}") }
+    if (imageUrl?.isEmpty() == true) return
+    imageUrl?.let {
+        view.setCookingImageURL(it)
+    }
+}
+
+@BindingAdapter("visibleIf")
+fun visibleIf(view: View, show: Boolean?) {
+    view.visibility = if (show == true) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("visibleOrInvisibleIf")
+fun visibleOrInvisibleIf(view: View, show: Boolean?) {
+    view.visibility = if (show == true) View.VISIBLE else View.INVISIBLE
+}
+
+
+@BindingAdapter("visibleAnimIf")
+fun visibleAnimIf(view: View, show: Boolean?) {
+    if (show == true) {
+        view.show(600)
+    } else {
+        view.hide(200)
+    }
+}
+
+@BindingAdapter("visibleGoneAnimIf")
+fun visibleGoneAnimIf(view: View, show: Boolean?) {
+    if (show == true) {
+        view.show(400)
+    } else {
+        view.hideToGone(400)
+    }
+}
+
+@BindingAdapter("setUserServiceType")
+fun makeUserStatusChip(view: MainUserStatusChip, type: PaidServiceType?) {
+    view.type = type
+}
+
+
+@BindingAdapter("planV2Cover")
+fun loadPlanV2Cover(view: ImageView, id: Int?) {
+    id?.let {
+        val imgRes = when (it) {
+            1 -> R.drawable.book_plan_v2_cover_1
+            2 -> R.drawable.book_plan_v2_cover_2
+            3 -> R.drawable.book_plan_v2_cover_3
+            4 -> R.drawable.book_plan_v2_cover_4
+            5 -> R.drawable.book_plan_v2_cover_5
+            6 -> R.drawable.book_plan_v2_cover_6
+            7 -> R.drawable.book_plan_v2_cover_7
+            8 -> R.drawable.book_plan_v2_cover_8
+            9 -> R.drawable.book_plan_v2_cover_9
+            10 -> R.drawable.book_plan_v2_cover_10
+            11 -> R.drawable.book_plan_v2_cover_11
+            12 -> R.drawable.book_plan_v2_cover_12
+            13 -> R.drawable.book_plan_v2_cover_13
+            14 -> R.drawable.book_plan_v2_cover_14
+            15 -> R.drawable.book_plan_v2_cover_15
+            16 -> R.drawable.book_plan_v2_cover_16
+            17 -> R.drawable.book_plan_v2_cover_17
+            18 -> R.drawable.book_plan_v2_cover_18
+            19 -> R.drawable.book_plan_v2_cover_19
+            20 -> R.drawable.book_plan_v2_cover_20
+            21 -> R.drawable.book_plan_v2_cover_21
+            22 -> R.drawable.book_plan_v2_cover_22
+            23 -> R.drawable.book_plan_v2_cover_23
+            24 -> R.drawable.book_plan_v2_cover_24
+            25 -> R.drawable.book_plan_v2_cover_25
+            26 -> R.drawable.book_plan_v2_cover_26
+            27 -> R.drawable.book_plan_v2_cover_27
+            28 -> R.drawable.book_plan_v2_cover_28
+            29 -> R.drawable.book_plan_v2_cover_29
+            30 -> R.drawable.book_plan_v2_cover_30
+            31 -> R.drawable.book_plan_v2_cover_31
+            32 -> R.drawable.book_plan_v2_cover_32
+            33 -> R.drawable.book_plan_v2_cover_33
+            34 -> R.drawable.book_plan_v2_cover_34
+            35 -> R.drawable.book_plan_v2_cover_35
+            36 -> R.drawable.book_plan_v2_cover_36
+            else -> R.drawable.book_plan_v2_cover_8
+        }
+        view.setImageResource(imgRes)
+    }
+}
+
+
+@BindingAdapter("purchase_guide_badge_background")
+fun setBadgeBackground(view: LinearLayout, type: PaidServiceType?) {
+    type?.let {
+        val imgRes = when (it) {
+            PaidServiceType.BASIC_C, PaidServiceType.BASIC_P -> R.drawable.bg_bronze_round_13
+            PaidServiceType.STANDARD -> R.drawable.bg_gray_600_round_13
+            PaidServiceType.PREMIUM -> R.drawable.bg_yellow_300_round_13
+            else -> R.drawable.bg_gray_600_round_13
+        }
+        view.setBackgroundResource(imgRes)
+    }
+}
+
+
+@BindingAdapter("assessment_card_background")
+fun setAssessmentCardBackground(view: View, skin: AssessmentDesignSkin?) {
+    skin?.let {
+        view.setBackgroundResource(skin.cardBackgroundSrc)
+    }
+}
+
+@BindingAdapter("assessment_card_character")
+fun setAssessmentCardCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
+    skin?.let {
+        view.setImageResource(it.cardCharacterSrc)
+    }
+}
+
+@BindingAdapter("assessment_completed_character")
+fun setAssessmentCompletedCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
+    skin?.let {
+        view.setImageResource(it.completedSrc)
+    }
+}
+
+
+@BindingAdapter("searchview_hint_size")
+fun setSearchViewHindSize(v: SearchView, dimen: Float) {
+    ((((v.getChildAt(0) as LinearLayout
+        ).getChildAt(2) as LinearLayout
+        ).getChildAt(1) as LinearLayout
+        ).getChildAt(0) as AutoCompleteTextView
+        ).setTextSize(dimen, dimen)
+}
+
+
+@BindingAdapter("mainTabTextStyle")
+fun setMainTabTextStyle(view: TextView, type: MainTab?) {
+    type?.let { it ->
+        val tabName = view.text.toString()
+        val color = if (tabName in it.names) {
+            view.setTextAppearance(R.style.b1)
+            when (schoolType) {
+                SchoolType.ELEMENTARY -> R.color.white
+                SchoolType.MIDDLE -> R.color.gray_800
+                SchoolType.HIGH -> R.color.white
+                SchoolType.UNIVERSITY -> R.color.white
+            }
         } else {
-            view.hide(200)
+            view.setTextAppearance(R.style.b1r)
+            when (schoolType){
+                SchoolType.ELEMENTARY -> R.color.purple_150
+                else -> R.color.gray_700
+            }
         }
+        view.setTextColor(ContextCompat.getColor(view.context, color))
     }
-    @JvmStatic
-    @BindingAdapter("visibleGoneAnimIf")
-    fun visibleGoneAnimIf(view: View, show: Boolean?) {
-        if (show == true) {
-            view.show(400)
+}
+
+@BindingAdapter("mainPlannerCategory")
+fun setMainPlannerCategory(view: TextView, value: String?) {
+    value?.let {
+        val textColor = when (it) {
+            WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_400
+            WeeklyPlanTag.CONCEPT.inKorean, WeeklyPlanTag.PRACTICE.inKorean -> R.color.purple_300
+            WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_500
+            WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_300
+            WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_400
+            WeeklyPlanTag.NOTE.inKorean -> R.color.red_300
+            WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_600
+            WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_300
+            else -> R.color.purple_300
+        }
+        val backgroundColor = when (it) {
+            WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_100
+            WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_150
+            WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_150
+            WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_100
+            WeeklyPlanTag.NOTE.inKorean -> R.color.red_100
+            WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_200
+            WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_100
+            else -> R.color.purple_100
+        }
+
+        view.setTextColor(ContextCompat.getColor(view.context, textColor))
+        view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
+    }
+}
+
+
+@BindingAdapter("studyPlannerSubjectCategoryCard")
+fun setPlannerMakerCategory(view: TextView, value: StudyPlannerItem?) {
+    value?.let {
+        val category = it.category
+        val textColor = when (category) {
+            WeeklyPlanTag.PULLEY_WORKBOOK ->
+                if (it.isCompleted) {
+                    R.color.dark_blue_400_opa_50
+                } else {
+                    R.color.dark_blue_400
+                }
+            else -> {
+                if (it.isCompleted) {
+                    R.color.purple_300_opa_50
+                } else {
+                    R.color.purple_300
+                }
+            }
+        }
+        val backgroundColor = when (category) {
+            WeeklyPlanTag.PULLEY_WORKBOOK -> {
+                if (it.isCompleted) {
+                    R.color.dark_blue_100_opa_50
+                } else {
+                    R.color.dark_blue_100
+                }
+            }
+            else -> {
+                if (it.isCompleted) {
+                    R.color.purple_100_opa_50
+                } else {
+                    R.color.purple_100
+                }
+            }
+        }
+
+        view.setTextColor(ContextCompat.getColor(view.context, textColor))
+        view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
+    }
+}
+
+@BindingAdapter("mainPlannerCorrectRate")
+fun setMainPlannerCorrectRate(view: TextView, value: Int?) {
+    value?.let {
+        val textColor = when (it) {
+            in 0..30 -> R.color.red_250
+            in 30..70 -> R.color.yellow_200
+            in 70.. 100 -> R.color.green_300
+            else -> R.color.gray_500
+        }
+        view.setTextColor(ContextCompat.getColor(view.context, textColor))
+    }
+}
+
+@BindingAdapter("mainUserUnitPlanCompleteIcon")
+fun setMainUserUnitPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
+    value?.let {
+        val imgRes = when {
+            it.isPast -> {
+                when (value.statusOfPlan) {
+                    WeeklyPlanStatus.NONE, WeeklyPlanStatus.ING  -> R.drawable.ic_round_gray_400
+                    WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected
+                    WeeklyPlanStatus.FAILED -> R.drawable.ic_round_x
+                }
+            }
+            else -> {
+                when (value.statusOfPlan) {
+                    WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected_purple_300
+                    else -> R.drawable.ic_round_gray_400
+                }
+            }
+        }
+        view.setImageResource(imgRes)
+    }
+}
+
+@BindingAdapter("mainDailyUserPlanCompleteIcon")
+fun setMainDailyUserPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
+    value?.let {
+        val imgRes = when {
+            it.isChildrenEmpty -> R.drawable.ic_round_none
+            it.isCompleted -> R.drawable.ic_round_check_filled_green_300
+            it.isFailed -> R.drawable.ic_round_x_filled
+            else -> R.drawable.ic_check_gray_400_filled
+        }
+        view.setImageResource(imgRes)
+    }
+}
+
+@BindingAdapter("mainPlannerHeaderTextColor")
+fun setMainPlannerHeaderTextColor(view: TextView, value: MainUserPlannerItem?) {
+    value?.let {
+        val resource = if (it.isPast) {
+            R.color.gray_500
+        } else if (it.isToday) {
+            R.color.purple_300
         } else {
-            view.hideToGone(400)
+            R.color.gray_700
         }
-    }
-    @JvmStatic
-    @BindingAdapter("setUserServiceType")
-    fun makeUserStatusChip(view: MainUserStatusChip, type: PaidServiceType?) {
-        view.type = type
-    }
 
-    @JvmStatic
-    @BindingAdapter("planV2Cover")
-    fun loadPlanV2Cover(view: ImageView, id: Int?) {
-        id?.let {
-            val imgRes = when (it) {
-                1 -> R.drawable.book_plan_v2_cover_1
-                2 -> R.drawable.book_plan_v2_cover_2
-                3 -> R.drawable.book_plan_v2_cover_3
-                4 -> R.drawable.book_plan_v2_cover_4
-                5 -> R.drawable.book_plan_v2_cover_5
-                6 -> R.drawable.book_plan_v2_cover_6
-                7 -> R.drawable.book_plan_v2_cover_7
-                8 -> R.drawable.book_plan_v2_cover_8
-                9 -> R.drawable.book_plan_v2_cover_9
-                10 -> R.drawable.book_plan_v2_cover_10
-                11 -> R.drawable.book_plan_v2_cover_11
-                12 -> R.drawable.book_plan_v2_cover_12
-                13 -> R.drawable.book_plan_v2_cover_13
-                14 -> R.drawable.book_plan_v2_cover_14
-                15 -> R.drawable.book_plan_v2_cover_15
-                16 -> R.drawable.book_plan_v2_cover_16
-                17 -> R.drawable.book_plan_v2_cover_17
-                18 -> R.drawable.book_plan_v2_cover_18
-                19 -> R.drawable.book_plan_v2_cover_19
-                20 -> R.drawable.book_plan_v2_cover_20
-                21 -> R.drawable.book_plan_v2_cover_21
-                22 -> R.drawable.book_plan_v2_cover_22
-                23 -> R.drawable.book_plan_v2_cover_23
-                24 -> R.drawable.book_plan_v2_cover_24
-                25 -> R.drawable.book_plan_v2_cover_25
-                26 -> R.drawable.book_plan_v2_cover_26
-                27 -> R.drawable.book_plan_v2_cover_27
-                28 -> R.drawable.book_plan_v2_cover_28
-                29 -> R.drawable.book_plan_v2_cover_29
-                30 -> R.drawable.book_plan_v2_cover_30
-                31 -> R.drawable.book_plan_v2_cover_31
-                32 -> R.drawable.book_plan_v2_cover_32
-                33 -> R.drawable.book_plan_v2_cover_33
-                34 -> R.drawable.book_plan_v2_cover_34
-                35 -> R.drawable.book_plan_v2_cover_35
-                36 -> R.drawable.book_plan_v2_cover_36
-                else -> R.drawable.book_plan_v2_cover_8
-            }
-            view.setImageResource(imgRes)
-        }
+        view.setTextColor(ContextCompat.getColor(view.context, resource))
     }
+}
 
-    @JvmStatic
-    @BindingAdapter("purchase_guide_badge_background")
-    fun setBadgeBackground(view: LinearLayout, type: PaidServiceType?) {
-        type?.let {
-            val imgRes = when (it) {
-                PaidServiceType.BASIC_C, PaidServiceType.BASIC_P -> R.drawable.bg_bronze_round_13
-                PaidServiceType.STANDARD -> R.drawable.bg_gray_600_round_13
-                PaidServiceType.PREMIUM -> R.drawable.bg_yellow_300_round_13
-                else -> R.drawable.bg_gray_600_round_13
-            }
-            view.setBackgroundResource(imgRes)
+@BindingAdapter("makePlannerHeaderTextColor")
+fun setMakePlannerHeaderTextColor(view: TextView, value: UserPlannerItem?) {
+    value?.let {
+        val resource = if (it.isPast) {
+            R.color.gray_500
+        } else if (it.isToday) {
+            R.color.purple_300
+        } else {
+            R.color.gray_700
         }
-    }
 
-    @JvmStatic
-    @BindingAdapter("assessment_card_background")
-    fun setAssessmentCardBackground(view: View, skin: AssessmentDesignSkin?) {
-        skin?.let {
-            view.setBackgroundResource(skin.cardBackgroundSrc)
-        }
+        view.setTextColor(ContextCompat.getColor(view.context, resource))
     }
-    @JvmStatic
-    @BindingAdapter("assessment_card_character")
-    fun setAssessmentCardCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
-        skin?.let {
-            view.setImageResource(it.cardCharacterSrc)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("assessment_completed_character")
-    fun setAssessmentCompletedCharacter(view: ImageView, skin: AssessmentDesignSkin?) {
-        skin?.let {
-            view.setImageResource(it.completedSrc)
-        }
-    }
+}
 
-    @JvmStatic
-    @BindingAdapter("searchview_hint_size")
-    fun setSearchViewHindSize(v: SearchView, dimen: Float) {
-        ((((v.getChildAt(0) as LinearLayout
-            ).getChildAt(2) as LinearLayout
-            ).getChildAt(1) as LinearLayout
-            ).getChildAt(0) as AutoCompleteTextView
-            ).setTextSize(dimen, dimen)
-    }
 
-    @JvmStatic
-    @BindingAdapter("mainTabTextStyle")
-    fun setMainTabTextStyle(view: TextView, type: MainTab?) {
-        type?.let { it ->
-            val tabName = view.text.toString()
-            val color = if (tabName in it.names) {
-                view.setTextAppearance(R.style.b1)
-                when (schoolType) {
-                    SchoolType.ELEMENTARY -> R.color.white
-                    SchoolType.MIDDLE -> R.color.gray_800
-                    SchoolType.HIGH -> R.color.white
-                    SchoolType.UNIVERSITY -> R.color.white
-                }
-            } else {
-                view.setTextAppearance(R.style.b1r)
-                when (schoolType){
-                    SchoolType.ELEMENTARY -> R.color.purple_150
-                    else -> R.color.gray_700
-                }
-            }
-            view.setTextColor(ContextCompat.getColor(view.context, color))
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("mainPlannerCategory")
-    fun setMainPlannerCategory(view: TextView, value: String?) {
-        value?.let {
-            val textColor = when (it) {
-                WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_400
-                WeeklyPlanTag.CONCEPT.inKorean, WeeklyPlanTag.PRACTICE.inKorean -> R.color.purple_300
-                WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_500
-                WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_300
-                WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_400
-                WeeklyPlanTag.NOTE.inKorean -> R.color.red_300
-                WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_600
-                WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_300
-                else -> R.color.purple_300
-            }
-            val backgroundColor = when (it) {
-                WeeklyPlanTag.PULLEY_WORKBOOK.inKorean -> R.color.dark_blue_100
-                WeeklyPlanTag.CUSTOM_WORKBOOK.inKorean -> R.color.dark_blue_150
-                WeeklyPlanTag.MOCK.inKorean -> R.color.yellow_150
-                WeeklyPlanTag.COMMERCIAL_BOOK.inKorean -> R.color.blue_100
-                WeeklyPlanTag.NOTE.inKorean -> R.color.red_100
-                WeeklyPlanTag.RECOMMEND.inKorean -> R.color.gray_200
-                WeeklyPlanTag.TEACHER.inKorean -> R.color.yellow_100
-                else -> R.color.purple_100
-            }
-
-            view.setTextColor(ContextCompat.getColor(view.context, textColor))
-            view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("studyPlannerSubjectCategoryCard")
-    fun setPlannerMakerCategory(view: TextView, value: StudyPlannerItem?) {
-        value?.let {
-            val category = it.category
-            val textColor = when (category) {
-                WeeklyPlanTag.PULLEY_WORKBOOK ->
-                    if (it.isCompleted) {
-                        R.color.dark_blue_400_opa_50
-                    } else {
-                        R.color.dark_blue_400
-                    }
-                else -> {
-                    if (it.isCompleted) {
-                        R.color.purple_300_opa_50
-                    } else {
-                        R.color.purple_300
-                    }
-                }
-            }
-            val backgroundColor = when (category) {
-                WeeklyPlanTag.PULLEY_WORKBOOK -> {
-                    if (it.isCompleted) {
-                        R.color.dark_blue_100_opa_50
-                    } else {
-                        R.color.dark_blue_100
-                    }
-                }
-                else -> {
-                    if (it.isCompleted) {
-                        R.color.purple_100_opa_50
-                    } else {
-                        R.color.purple_100
-                    }
-                }
-            }
-
-            view.setTextColor(ContextCompat.getColor(view.context, textColor))
-            view.setBackgroundColor(ContextCompat.getColor(view.context, backgroundColor))
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("mainPlannerCorrectRate")
-    fun setMainPlannerCorrectRate(view: TextView, value: Int?) {
-        value?.let {
-            val textColor = when (it) {
-                in 0..30 -> R.color.red_250
-                in 30..70 -> R.color.yellow_200
-                in 70.. 100 -> R.color.green_300
-                else -> R.color.gray_500
-            }
-            view.setTextColor(ContextCompat.getColor(view.context, textColor))
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("mainUserUnitPlanCompleteIcon")
-    fun setMainUserUnitPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
-        value?.let {
-            val imgRes = when {
-                it.isPast -> {
-                    when (value.statusOfPlan) {
-                        WeeklyPlanStatus.NONE, WeeklyPlanStatus.ING  -> R.drawable.ic_round_gray_400
-                        WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected
-                        WeeklyPlanStatus.FAILED -> R.drawable.ic_round_x
-                    }
-                }
-                else -> {
-                    when (value.statusOfPlan) {
-                        WeeklyPlanStatus.DONE -> R.drawable.ic_round_selected_purple_300
-                        else -> R.drawable.ic_round_gray_400
-                    }
-                }
-            }
-            view.setImageResource(imgRes)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("mainDailyUserPlanCompleteIcon")
-    fun setMainDailyUserPlanCompleteIcon(view: ImageView, value: MainUserPlannerItem?) {
-        value?.let {
-            val imgRes = when {
-                it.isChildrenEmpty -> R.drawable.ic_round_none
-                it.isCompleted -> R.drawable.ic_round_check_filled_green_300
-                it.isFailed -> R.drawable.ic_round_x_filled
-                else -> R.drawable.ic_check_gray_400_filled
-            }
-            view.setImageResource(imgRes)
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("mainPlannerHeaderTextColor")
-    fun setMainPlannerHeaderTextColor(view: TextView, value: MainUserPlannerItem?) {
-        value?.let {
-            val resource = if (it.isPast) {
-                R.color.gray_500
-            } else if (it.isToday) {
-                R.color.purple_300
-            } else {
-                R.color.gray_700
-            }
-
-            view.setTextColor(ContextCompat.getColor(view.context, resource))
-        }
-    }
-    @JvmStatic
-    @BindingAdapter("makePlannerHeaderTextColor")
-    fun setMakePlannerHeaderTextColor(view: TextView, value: UserPlannerItem?) {
-        value?.let {
-            val resource = if (it.isPast) {
-                R.color.gray_500
-            } else if (it.isToday) {
-                R.color.purple_300
-            } else {
-                R.color.gray_700
-            }
-
-            view.setTextColor(ContextCompat.getColor(view.context, resource))
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("layoutBottomMarginChangeAnim")
-    fun layoutBottomMarginChangeAnim(view: View, value: UserPlannerItem?) {
-        value?.let {
+@BindingAdapter("layoutBottomMarginChangeAnim")
+fun layoutBottomMarginChangeAnim(view: View, value: UserPlannerItem?) {
+    value?.let {
 //            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
 //                this.topMargin = dimen.toInt()
 //            }
-            val params = view.layoutParams as LinearLayout.LayoutParams
-            val animator = ValueAnimator.ofInt(24.toPx(), params.bottomMargin)
-            animator.addUpdateListener {
-                params.bottomMargin = (animator.animatedValue as Int)
-                view.requestLayout()
-            }
-            animator.duration = 300
-            animator.start()
+        val params = view.layoutParams as LinearLayout.LayoutParams
+        val animator = ValueAnimator.ofInt(24.toPx(), params.bottomMargin)
+        animator.addUpdateListener {
+            params.bottomMargin = (animator.animatedValue as Int)
+            view.requestLayout()
         }
-
-
-
+        animator.duration = 300
+        animator.start()
     }
+
 }

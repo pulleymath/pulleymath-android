@@ -1,11 +1,11 @@
 [versions]
-agp = "8.5.0"
+agp = "8.5.1"
 androidJoda = "2.10.1.2"
-androidLibrary = "8.4.0"
+androidLibrary = "8.5.1"
 appUpdateKtx = "2.1.0"
 assetDeliveryKtx = "2.2.2"
 browser = "1.5.0"
-databinding-compiler = "3.1.4"
+#databinding-compiler = "3.1.4"
 exoplayer = "2.19.1"
 facebookAndroidSdk = "7.1.0"
 flexbox = "3.0.0"
@@ -13,7 +13,8 @@ htAndroidRecycleradapters = "0.6"
 glide = "4.14.2"
 installreferrerVersion = "2.2"
 jsoup = "1.13.1"
-kotlin = "1.9.0"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -42,6 +43,8 @@ sqliteJdbc = "3.34.0"
 tedpermissionNormal = "3.3.0"
 viewpager2 = "1.1.0"
 activity = "1.9.1"
+kotlinxCoroutines = "1.8.1"
+firebaseCrashlytics = "2.9.9"
 
 [libraries]
 android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
@@ -58,10 +61,12 @@ androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdateKtx" }
 asset-delivery-ktx = { module = "com.google.android.play:asset-delivery-ktx", version.ref = "assetDeliveryKtx" }
-databinding-compiler = { module = "com.android.databinding:compiler", version.ref = "databinding-compiler" }
+#databinding-compiler = { module = "com.android.databinding:compiler", version.ref = "databinding-compiler" }
+androidx-databinding-compiler = { group = "androidx.databinding", name = "databinding-compiler", version.ref = "agp" }
 exoplayer-dash = { module = "com.google.android.exoplayer:exoplayer-dash", version.ref = "exoplayer" }
 exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayer" }
 exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version.ref = "exoplayer" }
+exoplayer-hls = { module = "com.google.android.exoplayer:exoplayer-hls", version.ref = "exoplayer" }
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
 feature-delivery-ktx = { module = "com.google.android.play:feature-delivery-ktx", version.ref = "appUpdateKtx" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
@@ -90,7 +95,6 @@ google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-
 google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
 google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx"}
 
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 org-jetbrain-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin"}
 channel-talk-plugin-android = { module = "io.channel:plugin-android", version.ref = "channel-talk" }
@@ -114,11 +118,13 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
 tedpermission-normal = { module = "io.github.ParkSangGwon:tedpermission-normal", version.ref = "tedpermissionNormal" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" } # 👈 추가
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-service = { id = "com.google.gms.google-services", version.ref = "googleService" }
-
+google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

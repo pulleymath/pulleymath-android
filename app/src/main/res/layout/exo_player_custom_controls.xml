@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D000000"> <!-- React의 bg-black/50 효과 -->
+
+    <!-- 중앙 재생/일시정지 버튼 -->
+    <ImageButton
+        android:id="@id/exo_play"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/icon_video_play"
+        app:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@id/exo_pause"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/icon_video_pause"
+        app:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 하단 컨트롤 바 (그라데이션 배경 포함) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:background="@drawable/bg_player_gradient"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- 프로그레스 바 (React의 range input 대응) -->
+        <com.google.android.exoplayer2.ui.DefaultTimeBar
+            android:id="@id/exo_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:buffered_color="#80FFFFFF"
+            app:played_color="#DC2626"
+            app:unplayed_color="#4DFFFFFF"
+            app:scrubber_color="#DC2626"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <!-- 현재 시간 / 전체 시간 -->
+            <TextView
+                android:id="@id/exo_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textColor="#CCCCCC"
+                android:layout_marginHorizontal="4dp"/>
+
+            <TextView
+                android:id="@id/exo_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#CCCCCC"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginStart="12dp">
+
+                <ImageButton
+                    android:id="@+id/btn_volume"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_volume_high"
+                    app:tint="@android:color/white" />
+
+                <SeekBar
+                    android:id="@+id/volume_seekbar"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="100"
+                    android:progressTint="@android:color/white"
+                    android:thumbTint="@android:color/white"
+                    android:secondaryProgressTint="#80FFFFFF"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- 배속 버튼 (커스텀 로직 필요) -->
+            <TextView
+                android:id="@+id/btn_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.0x"
+                android:textColor="@android:color/white"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- 전체화면 버튼 (커스텀 로직 필요) -->
+            <ImageButton
+                android:id="@+id/btn_fullscreen"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/icon_volume_expand"
+                app:tint="@android:color/white" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 되감기/빨리감기 버튼 (React의 Skip Back/Forward 대응) -->
+    <!-- 실제로는 제스처로 처리하겠지만 버튼도 배치하려면 여기에 추가 -->
+</androidx.constraintlayout.widget.ConstraintLayout>

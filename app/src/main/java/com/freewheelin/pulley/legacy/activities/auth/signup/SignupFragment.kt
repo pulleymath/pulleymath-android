@@ -846,7 +846,7 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
     }
 
     var authType: String = "ALIMTALK"
-    override fun onCheckedChanged(switch: CompoundButton?, flag: Boolean) {
+    override fun onCheckedChanged(switch: CompoundButton, flag: Boolean) {
         authType = if (flag) "SMS" else "ALIMTALK"
     }
 

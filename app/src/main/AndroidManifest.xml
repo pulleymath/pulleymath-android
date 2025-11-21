@@ -71,6 +71,7 @@
         android:icon="@mipmap/pulley_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:screenOrientation="sensorLandscape"
         android:resizeableActivity="false"
         android:roundIcon="@mipmap/pulley_launcher_round"
         android:supportsRtl="true"
@@ -80,7 +81,8 @@
         <activity
             android:name=".revision2023.ui.activity.OnBoardingActivity"
             android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"/>
         <activity
             android:name=".revision2023.ui.activity.MockListActivity"
             android:exported="true"
@@ -102,7 +104,8 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".revision2023.ui.activity.TerminalActivity"
-            android:exported="true">
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize">
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -111,7 +114,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="pulleymath"
-                    android:host="terminal" />
+                    android:host="terminal"
+                    tools:ignore="AppLinkUrlError" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -167,7 +171,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="pulleymath" />
-                <data android:host="signin" />
+                <data android:host="signin"
+                    tools:ignore="AppLinkUrlError" />
                 <data android:pathPattern="/complete/whalespace" />
             </intent-filter>
         </activity>
@@ -175,7 +180,8 @@
             android:name=".revision2023.ui.activity.MainActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
         <activity
             android:name=".revision2023.ui.activity.PurchaseInduceWebViewActivity"
             android:exported="false"
@@ -308,7 +314,8 @@
             android:name=".legacy.activities.SplashActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

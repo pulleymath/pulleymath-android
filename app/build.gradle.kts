@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    kotlin("kapt")
     alias(libs.plugins.google.service)
     id("com.google.firebase.crashlytics")
-
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -26,14 +25,13 @@ android {
 //        }
     }
     namespace = "com.freewheelin.pulley"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
-        targetSdk = 35
-        versionCode = 549
-        versionName = "1.6.129"
+        versionCode = 550
+        versionName = "1.6.130"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,16 +49,11 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         dataBinding = true
     }
-//    dataBinding {
-//        isEnabled = true
-//    }
-//    viewBinding {
-//        isEnabled = true
-//    }
-
+    dataBinding {
+        enable = true
+    }
     flavorDimensions.add("type")
 
     productFlavors {
@@ -97,9 +90,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        jvmToolchain(17)
     }
     lint {
         abortOnError = false
@@ -107,11 +99,15 @@ android {
 
 }
 
-//repositories {
-//    mavenCentral()
-//    google()
-//}
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
 
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+    }
+}
 dependencies {
 
     implementation(fileTree(mapOf("dir" to "libs", "includes" to listOf("*.jar"))))
@@ -149,7 +145,6 @@ dependencies {
 
     implementation(libs.androidx.viewpager2)
 
-    implementation(libs.kotlin.stdlib)
 
     implementation(libs.tedpermission.normal)
 
@@ -198,15 +193,14 @@ dependencies {
     implementation(libs.exoplayer.core)
     implementation(libs.exoplayer.dash)
     implementation(libs.exoplayer.ui)
-
-    kapt(libs.databinding.compiler)
+    implementation(libs.exoplayer.hls)
 
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
+//    annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.rxjava2)
+//    ksp(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
-    kapt(libs.sqlite.jdbc)
 
     implementation(libs.channel.talk.plugin.android)
     implementation(libs.channel.talk.plugin.android.fcm)
@@ -215,10 +209,6 @@ dependencies {
 
     implementation(libs.installreferrer)
 
-//    implementation("androidx.core:core-splashscreen:1.1.0-alpha01"
-    // lesson pagecall
-    // host 처리 문제로 사용안함
-    // implementation("com.github.pplink.pagecall-android-sdk:sdk:0.0.3"
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")

@@ -1,12 +1,9 @@
 plugins {
-//    alias(libs.plugins.android.library)
     id("com.android.library")
     alias(libs.plugins.jetbrains.kotlin.android)
-    kotlin("kapt")
+//    id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.kapt)
 }
-
-//group = 'com.pulleymath.android.pdf'
-//version = '0.0.1'
 
 android {
     namespace = "com.pulleymath.android.pdf"
@@ -16,6 +13,17 @@ android {
         minSdk = 25
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        ndk {
+            abiFilters += setOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+        }
+        externalNativeBuild {
+            // For ndk-build, instead use the ndkBuild block.
+            cmake {
+                // Passes optional arguments to CMake.
+                arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
+            }
+        }
     }
 
     buildTypes {
@@ -33,48 +41,62 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    packaging {
+        jniLibs {
+            // 네이티브 라이브러리 압축 해제
+            useLegacyPackaging = false
+            // 디버그 심볼 유지
+            keepDebugSymbols += "**/*.so"
+        }
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt"
+            )
+        }
+    }
+    kotlin {
+        jvmToolchain(17)
+    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    // java 암호화 모듈
-//    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.12-b140109.1041'
-    implementation(group = "javax.xml.bind", name = "jaxb-api", version = "2.2.12-b140109.1041")
 
-//    implementation group: 'xerces', name: 'xercesImpl', version: '2.12.0'
+    // java 암호화 모듈 (TOML에 없으므로 유지)
+    implementation(group = "javax.xml.bind", name = "jaxb-api", version = "2.2.12-b140109.1041")
     implementation(group = "xerces", name = "xercesImpl", version = "2.12.0")
 
+//    implementation("com.artifex.mupdf:fitz:1.23.7")
     implementation("com.artifex.mupdf:fitz:1.18.0")
-    // retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.4.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.4.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
+
+    // retrofit (버전 업데이트 됨)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.adapter.rxjava2)
+
     // Room
-    val room_version = "2.3.0"
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+//    ksp(libs.androidx.databinding.compiler)
 
-    implementation("androidx.room:room-runtime:${room_version}")
-    annotationProcessor("androidx.room:room-compiler:${room_version}")
+    // UI 및 기타 (버전 업데이트 됨)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.android.joda)
 
-    // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:${room_version}")
-    kapt("org.xerial:sqlite-jdbc:3.34.0")
-    // Gson
-    implementation("com.squareup.retrofit2:converter-gson:2.4.0")
-    
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("net.danlew:android.joda:2.10.1.2")
+    implementation(libs.kotlinx.coroutines.android)
 
+    // TOML에 없으므로 유지
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
-    testImplementation("junit:junit:4.+")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    // Test (버전 명시 및 업데이트 됨)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
-
-//repositories {
-//    mavenCentral()
-//}

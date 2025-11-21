@@ -1,17 +1,11 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        gradlePluginPortal()
+        google()
         mavenCentral()
         maven {
             url 'https://maven.fabric.io/public'
         }
-        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {

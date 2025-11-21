@@ -28,6 +28,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/videoContainer"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -71,37 +72,176 @@
 
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                android:id="@+id/quizTabHeaderWrapperLl"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/expPlayerContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="14dp"
-                android:paddingTop="22dp"
-                android:paddingHorizontal="22dp"
-                android:background="@drawable/shadow_concept_page_example_box_top"
-                app:layout_constraintTop_toBottomOf="@+id/videoContainer"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <LinearLayout
-                    android:id="@+id/quizTabHeader"
+            <!-- ExoPlayer View -->
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:id="@+id/playerView"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:orientation="horizontal"
-                    android:weightSum="60"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:background="@drawable/bg_purple_100_round"
+                    android:layout_height="match_parent"
+                    app:resize_mode="fit"
+                    app:surface_type="texture_view"
+                    app:use_controller="true"
+                    app:controller_layout_id="@layout/exo_player_custom_controls"
+                    app:show_timeout="3000"
+                    android:background="@android:color/black" />
 
-                    >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/thumbnailOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+                <ImageView
+                    android:id="@+id/thumbnailView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@color/black" />
+                <ImageView
+                    android:id="@+id/playButtonBackground"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/shape_play_button_background"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/playIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/icon_video_play"
+                    app:layout_constraintBottom_toBottomOf="@+id/playButtonBackground"
+                    app:layout_constraintEnd_toEndOf="@+id/playButtonBackground"
+                    app:layout_constraintStart_toStartOf="@+id/playButtonBackground"
+                    app:layout_constraintTop_toTopOf="@+id/playButtonBackground"
+                    app:tint="@android:color/white" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 더블탭 피드백을 위한 오버레이 (동적 제어) -->
+                <FrameLayout
+                    android:id="@+id/doubleTapOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <!-- 왼쪽 피드백 -->
+                    <LinearLayout
+                        android:id="@+id/doubleTapLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|start"
+                        android:layout_marginStart="40dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="-10"
+                            android:textColor="#FFF"
+                            android:textSize="24sp"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="seconds"
+                            android:textColor="#FFF"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <!-- 오른쪽 피드백 -->
+                    <LinearLayout
+                        android:id="@+id/doubleTapRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="40dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="+10"
+                            android:textColor="#FFF" android:textSize="24sp" android:textStyle="bold" />
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="seconds" android:textColor="#FFF" android:textSize="12sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+            <!-- 로딩 뷰 (기존 코드 유지) -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/loadingContainer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/videoLoadingLottie2"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        app:lottie_speed="1"
+                        app:lottie_repeatMode="restart"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_fileName="circle_loading.json"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/quizTabHeaderWrapperLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="14dp"
+            android:paddingTop="22dp"
+            android:paddingHorizontal="22dp"
+            android:background="@drawable/shadow_concept_page_example_box_top"
+            app:layout_constraintTop_toBottomOf="@+id/videoContainerCl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/quizTabHeader"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:orientation="horizontal"
+                android:weightSum="60"
+                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="@drawable/bg_purple_100_round"
+
+                >
+
+            </LinearLayout>
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/exerciseContainer"
@@ -113,7 +253,7 @@
             android:paddingEnd="26dp"
             android:paddingTop="16dp"
             android:background="@drawable/shadow_concept_page_example_box_middle"
-            app:layout_constraintTop_toBottomOf="@+id/videoContainerCl"
+            app:layout_constraintTop_toBottomOf="@+id/quizTabHeaderWrapperLl"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             >

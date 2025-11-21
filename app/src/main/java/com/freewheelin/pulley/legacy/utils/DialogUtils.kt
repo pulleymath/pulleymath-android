@@ -21,7 +21,7 @@ import com.freewheelin.pulley.revision2023.ui.dialogs.CommonDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.DaebakDialogV2
 
 enum class DialogType {
-    default,
+    DEFAULT,
     alert
 }
 
@@ -214,7 +214,7 @@ class DialogUtils {
         fun toLoginDialog(activity:Activity, rightCallback: (() -> Unit), leftCallback:()->Unit) {
             LogUtils.logEvent(activity, user!!, PulleyEvent.DIALOG, "마이페이지", "비밀번호변경")
             val dialog = DaebakDialog(activity)
-            dialog.type = DialogType.default
+            dialog.type = DialogType.DEFAULT
             dialog.binding.titleTv.text = "완료"
             dialog.binding.contentTv.text = "비밀번호가 변경되었습니다."
             dialog.binding.rightBtn.text = "다시 로그인 하기"
@@ -471,11 +471,11 @@ class DialogUtils {
         val binding: DialogDaebakTitleOnlyBinding by lazy {
             DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_daebak_title_only, null, false)
         }
-        var type: DialogType = DialogType.default
+        var type: DialogType = DialogType.DEFAULT
             set(value) {
                 field = value
                 when(type) {
-                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                    DialogType.DEFAULT -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                     DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                 }
             }
@@ -506,11 +506,11 @@ class DialogUtils {
         val binding: DialogDaebakBinding by lazy {
             DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_daebak, null, false)
         }
-        var type: DialogType = DialogType.default
+        var type: DialogType = DialogType.DEFAULT
             set(value) {
                 field = value
                 when(type) {
-                    DialogType.default -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
+                    DialogType.DEFAULT -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.purple_300))
                     DialogType.alert -> binding.rightBtn.setTextColor(ContextCompat.getColor(context, R.color.red_300))
                 }
             }

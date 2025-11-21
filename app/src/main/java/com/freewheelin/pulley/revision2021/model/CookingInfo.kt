@@ -37,6 +37,7 @@ data class CookingInfo(
         var uuid: String = ""
         var startTime: Int? = null
         var endTime: Int? = null
+        var thumbnailUrl: String? = null
     }
 }
 

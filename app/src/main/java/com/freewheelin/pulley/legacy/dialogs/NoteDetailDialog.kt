@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.core.manage.ProblemManager
 import com.freewheelin.pulley.databinding.DialogNoteDetailBinding
@@ -19,7 +20,7 @@ import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.Result
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.DateTimeUtils
-import com.freewheelin.pulley.legacy.utils.GlideApp
+//import com.freewheelin.pulley.legacy.utils.GlideApp
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.toPx
@@ -130,7 +131,7 @@ class NoteDetailDialog: Dialog {
 //        Picasso.get().load(problem.getProblemUrl()).into(problemSdv)
             CoroutineScope(Dispatchers.IO).launch {
                 val problemImage =
-                    GlideApp.with(binding.problemSdv).asBitmap().load(problem.getProblemUrl())
+                    Glide.with(binding.problemSdv).asBitmap().load(problem.getProblemUrl())
                         .submit().get()
                 withContext(Dispatchers.Main) {
                     problemSdv.setImageBitmap(problemImage)

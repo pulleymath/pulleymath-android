@@ -54,12 +54,12 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
         contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             val user = userRepository.getUser()
             if (user.affiliationInfo?.showUiBySchoolLevel == true) {
-                val fetchedSchoolType = SchoolType.convertFromStr(user.affiliationInfo?.institutionType ?: SchoolType.HIGH.name)
+                val fetchedSchoolType = SchoolType.convertFromStr(user.affiliationInfo?.institutionType ?: SchoolType.ELEMENTARY.name)
                 initSchoolType(fetchedSchoolType)
                 schoolSpinnerPosition.postValue(fetchedSchoolType.mainSpinnerPosition)
             } else {
-                initSchoolType(user.schoolType ?: SchoolType.HIGH)
-                schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 2)
+                initSchoolType(user.schoolType ?: SchoolType.ELEMENTARY)
+                schoolSpinnerPosition.postValue(user.schoolType?.mainSpinnerPosition ?: 0)
             }
             _errorAction.postValue(CoroutineExceptionType.NONE)
             cb(user)

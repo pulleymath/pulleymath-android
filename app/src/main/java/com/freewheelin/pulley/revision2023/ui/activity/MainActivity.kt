@@ -389,6 +389,7 @@ class MainActivity : PermissionActivity(),
         val newSpinnerItems: List<String>
 
         binding.schoolSpinner.visibility = View.VISIBLE
+        if (spinnerItems.size > 0) return
         if (currentUser?.affiliationInfo?.showUiBySchoolLevel == true) {
             when (currentUser.affiliationInfo?.institutionType) {
                 "ELEMENTARY" -> {
@@ -405,11 +406,14 @@ class MainActivity : PermissionActivity(),
         } else {
             newSpinnerItems = listOf(SchoolType.ELEMENTARY.inKorean, SchoolType.MIDDLE.inKorean, SchoolType.HIGH.inKorean)
         }
-
         if (spinnerItems != newSpinnerItems) {
             spinnerItems.clear()
             spinnerItems.addAll(newSpinnerItems)
             schoolSpinnerAdapter.notifyDataSetChanged()
+            if (newSpinnerItems.isNotEmpty()) {
+                val currentUserSchoolType = SchoolType.convertFromStr(currentUser?.affiliationInfo?.institutionType ?: SchoolType.ELEMENTARY.name)
+                binding.schoolSpinner.setSelection(currentUserSchoolType.mainSpinnerPosition)
+            }
         }
 
     }

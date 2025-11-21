@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AlphaAnimation
+import android.webkit.WebSettings
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -12,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.databinding.*
@@ -33,6 +37,12 @@ import com.freewheelin.pulley.legacy.views.memoView.PathRedoUndoCountChangeListe
 import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import java.lang.ref.WeakReference
 
 class LCCookingFragment() : Fragment(),
     PencilPanelListener,
@@ -150,6 +160,7 @@ class LCCookingFragment() : Fragment(),
     }
 
     inner class CookingAdapter(): ListAdapter<CookingInfoItem, RecyclerView.ViewHolder>(DiffCallback<CookingInfoItem>()) {
+        private val activeHolders = mutableListOf<WeakReference<CookingItemHolder>>()
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return CookingItemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_cooking_right_view, parent, false))
         }
@@ -159,10 +170,27 @@ class LCCookingFragment() : Fragment(),
         override fun getItemViewType(position: Int): Int {
             return position
         }
+        fun releaseAllPlayers() {
+            val iterator = activeHolders.iterator()
+            while (iterator.hasNext()) {
+                val ref = iterator.next()
+                val holder = ref.get()
+                if (holder != null) {
+                    holder.releasePlayer() // 뷰홀더의 플레이어 해제
+                } else {
+                    iterator.remove() // 이미 메모리에서 사라진 뷰홀더는 리스트에서 제거
+                }
+            }
+            // 리스트 초기화는 선택사항이지만, Fragment 재진입을 고려하면 clear하지 않거나
+            // 어댑터가 새로 생성되므로 괜찮습니다. 안전하게 비워줍니다.
+            activeHolders.clear()
+        }
     }
 
     var prevExerciseMemoView: MemoView? = null
     inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        private var player: ExoPlayer? = null
+        private var gestureDetector: GestureDetector? = null
         fun bind(item: CookingInfoItem, position: Int) {
             itemBinding.apply {
                 this.item = item
@@ -177,13 +205,23 @@ class LCCookingFragment() : Fragment(),
                 when (item.type) {
                     CookingInfoItem.ItemType.Video -> {
                         videoContainerCl.visibility = View.VISIBLE
+                        quizTabHeaderWrapperLl.visibility = View.VISIBLE
                         if (item.video !== null) {
-                            webView.setOnTouchListener { view, motionEvent ->
-                                (activity as LearningCourseActivity).hidePenPanel()
-                                false
+                            val isVideoTypeHls = item.video?.url?.contains("m3u8") == true
+                            println("aspasp isVideoTypeHls : ${isVideoTypeHls}")
+                            if (isVideoTypeHls) {
+                                expPlayerContainer.visibleIf(true)
+                                initializePlayer(item)
+                            } else { // youtube type
+                                videoContainer.visibleIf(true)
+                                webView.setOnTouchListener { view, motionEvent ->
+                                    (activity as LearningCourseActivity).hidePenPanel()
+                                    false
+                                }
+                                addVideo(item)
                             }
-                            addVideo(item)
                         } else {
+                            expPlayerContainer.visibleIf(false)
                             videoContainer.visibleIf(false)
                         }
 
@@ -191,6 +229,8 @@ class LCCookingFragment() : Fragment(),
                         item.exerciseList?.let {
                             addExerciseBtn(it)
                         }
+                        Glide.with(itemView).load(item.video?.thumbnailUrl).into(itemBinding.thumbnailView)
+
                     }
                     CookingInfoItem.ItemType.Exercise -> {
                         exerciseContainer.visibility = View.VISIBLE
@@ -281,6 +321,7 @@ class LCCookingFragment() : Fragment(),
         private fun setAllContainerViewGone(view: ItemCookingRightViewBinding) {
             view.apply {
                 videoContainerCl.visibility = View.GONE
+                quizTabHeaderWrapperLl.visibility = View.GONE
                 exerciseContainer.visibility = View.GONE
                 footerContainer.visibility = View.GONE
             }
@@ -425,6 +466,225 @@ class LCCookingFragment() : Fragment(),
 
             binding.selectionImageRv.adapter = SelectionListAdapter()
 
+        }
+
+        private fun initializePlayer(item: CookingInfoItem) {
+            // 기존 플레이어가 있다면 해제
+            releasePlayer()
+
+            itemBinding.expPlayerContainer.apply {
+                val marginHorizontal = 64.toPx() // 웹뷰 로직 참고 (필요시 조정)
+                // 만약 fragment의 screenWidth 접근이 어렵다면 resources.displayMetrics.widthPixels 등을 사용
+                val vWidth = (((screenWidth * 0.55) - marginHorizontal) / 16 * 9).toInt()
+
+                val lp = layoutParams
+                lp.height = vWidth
+                layoutParams = lp
+            }
+
+            val context = itemBinding.root.context
+            itemBinding.loadingContainer2.visibleIf(true)
+
+            // ExoPlayer 생성
+            player = ExoPlayer.Builder(context).build()
+            itemBinding.playerView.player = player
+            itemBinding.playerView.controllerShowTimeoutMs = 5000
+            // HLS 소스 설정 (URL이 .m3u8이라고 가정)
+            val videoUrl = item.video?.url ?: return // 실제 모델 필드에 맞게 수정 필요
+
+            // 만약 .m3u8이라면 HlsMediaSource 사용, 아니라면 일반 MediaItem
+            val dataSourceFactory = DefaultHttpDataSource.Factory()
+            val mediaItem = MediaItem.fromUri(videoUrl)
+            val mediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+
+            player?.setMediaSource(mediaSource)
+            player?.prepare()
+
+            // 리스너 설정
+            player?.addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_READY) {
+                        itemBinding.loadingContainer2.visibility = View.GONE
+                        // 재생이 시작되면 썸네일 숨김
+                        if (player?.playWhenReady == true) {
+                            itemBinding.thumbnailOverlay.visibility = View.GONE
+                        }
+                    }
+                }
+
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    if (isPlaying) {
+                        itemBinding.thumbnailOverlay.visibility = View.GONE
+                    }
+                }
+            })
+
+            // 커스텀 UI 이벤트 연결
+            setupCustomControls(context)
+            setupGestures(context)
+        }
+
+        private fun setupCustomControls(context: android.content.Context) {
+            val btnSpeed = itemBinding.playerView.findViewById<TextView>(R.id.btn_speed)
+            btnSpeed?.setOnClickListener {
+                showSpeedSelectionDialog(context, btnSpeed)
+            }
+
+            val btnFullscreen = itemBinding.playerView.findViewById<View>(R.id.btn_fullscreen)
+            btnFullscreen?.setOnClickListener {
+                // 전체화면 로직 (Activity 레벨에서 처리 필요하거나 다이얼로그로 띄우기)
+                // 간단하게는 가로/세로 모드 전환
+            }
+
+            // [추가] 3. 볼륨 컨트롤 로직
+            setupVolumeControl()
+        }
+
+        private fun showSpeedSelectionDialog(context: android.content.Context, btnSpeed: TextView) {
+            val speeds = arrayOf("0.25x", "0.5x", "0.75x", "1.0x", "1.25x", "1.5x", "2.0x")
+            val speedValues = floatArrayOf(0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
+
+            AlertDialog.Builder(context)
+                .setTitle("재생 속도")
+                .setItems(speeds) { _, which ->
+                    val speed = speedValues[which]
+                    player?.setPlaybackSpeed(speed)
+                    btnSpeed.text = speeds[which]
+                }
+                .show()
+        }
+
+        private fun setupGestures(context: android.content.Context) {
+            gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDown(e: MotionEvent): Boolean {
+                    return true
+                }
+
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    val viewWidth = itemBinding.playerView.width
+                    val isLeft = e.x < viewWidth / 3
+                    val isRight = e.x > (viewWidth * 2) / 3
+
+                    if (isLeft) {
+                        rewind()
+                        showDoubleTapFeedback(isLeft = true)
+                        return true
+                    } else if (isRight) {
+                        forward()
+                        showDoubleTapFeedback(isLeft = false)
+                        return true
+                    }
+                    return false
+                }
+
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    // 탭하면 컨트롤 보이기/숨기기 토글
+                    if (itemBinding.playerView.isControllerVisible) {
+                        itemBinding.playerView.hideController()
+                    } else {
+                        itemBinding.playerView.showController()
+                    }
+                    return true
+                }
+            })
+
+            itemBinding.playerView.setOnTouchListener { _, event ->
+                gestureDetector?.onTouchEvent(event)
+                // [추가 2] 반드시 true를 반환하여 이벤트가 PlayerView 내부 로직으로 전파되는 것을 막아야 합니다.
+                true
+            }
+        }
+
+        private fun rewind() {
+            val current = player?.currentPosition ?: 0
+            player?.seekTo((current - 10000).coerceAtLeast(0))
+        }
+
+        private fun forward() {
+            val current = player?.currentPosition ?: 0
+            val duration = player?.duration ?: 0
+            player?.seekTo((current + 10000).coerceAtMost(duration))
+        }
+
+        private fun showDoubleTapFeedback(isLeft: Boolean) {
+            val overlay = itemBinding.doubleTapOverlay
+            val leftView = itemBinding.doubleTapLeft
+            val rightView = itemBinding.doubleTapRight
+
+            overlay.visibility = View.VISIBLE
+            leftView.visibility = if (isLeft) View.VISIBLE else View.GONE
+            rightView.visibility = if (!isLeft) View.VISIBLE else View.GONE
+
+            // 깜빡이는 애니메이션
+            val anim = AlphaAnimation(1.0f, 0.0f).apply {
+                duration = 800
+                fillAfter = true
+            }
+            if (isLeft) leftView.startAnimation(anim) else rightView.startAnimation(anim)
+
+            // 0.8초 후 숨김
+            itemBinding.root.postDelayed({
+                overlay.visibility = View.GONE
+            }, 800)
+        }
+
+        // RecyclerView에서 뷰가 재활용되거나 프래그먼트가 파괴될 때 호출되어야 함
+        fun releasePlayer() {
+            player?.release()
+            player = null
+        }
+        private var lastVolume: Float = 1.0f
+
+
+        private fun setupVolumeControl() {
+            val btnVolume = itemBinding.playerView.findViewById<ImageButton>(R.id.btn_volume)
+            val volumeSeekBar = itemBinding.playerView.findViewById<SeekBar>(R.id.volume_seekbar) ?: return
+
+            // 초기 상태 설정
+            val currentVolume = player?.volume ?: 1.0f
+            volumeSeekBar.progress = (currentVolume * 100).toInt()
+            updateVolumeIcon(btnVolume, currentVolume > 0)
+            lastVolume = if (currentVolume == 0f) 1.0f else currentVolume
+
+            // 3-1. SeekBar 리스너 (볼륨 조절)
+            volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        val newVolume = progress / 100f
+                        player?.volume = newVolume
+                        updateVolumeIcon(btnVolume, newVolume > 0)
+
+                        if (newVolume > 0) lastVolume = newVolume
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+            // 3-2. 아이콘 클릭 리스너 (음소거 토글)
+            btnVolume?.setOnClickListener {
+                val isMuted = (player?.volume ?: 0f) == 0f
+
+                if (isMuted) {
+                    // 음소거 해제 (이전 볼륨으로 복구)
+                    player?.volume = lastVolume
+                    volumeSeekBar.progress = (lastVolume * 100).toInt()
+                    updateVolumeIcon(btnVolume, true)
+                } else {
+                    // 음소거 설정
+                    lastVolume = player?.volume ?: 1.0f // 현재 볼륨 저장
+                    player?.volume = 0f
+                    volumeSeekBar.progress = 0
+                    updateVolumeIcon(btnVolume, false)
+                }
+            }
+        }
+
+        private fun updateVolumeIcon(btnVolume: ImageButton?, isSoundOn: Boolean) {
+            btnVolume?.setImageResource(
+                if (isSoundOn) R.drawable.icon_volume_high // 소리 켜짐 아이콘
+                else R.drawable.icon_volume_mute       // 소리 꺼짐(Mute) 아이콘
+            )
         }
     }
 
@@ -614,6 +874,9 @@ class LCCookingFragment() : Fragment(),
         viewModel.run {
             clearCompositeDisposable()
         }
+
+        // [추가됨] Fragment가 멈출 때(닫힐 때 포함) 플레이어 리소스 해제
+        cookingAdapter.releaseAllPlayers()
     }
 
     override fun onUndoCountChanged(undoCount: Int) {

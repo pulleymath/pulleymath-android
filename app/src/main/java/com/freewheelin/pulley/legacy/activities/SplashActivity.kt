@@ -288,7 +288,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         println("온보딩 :checkSign : isNeedNewOnBoarding: ${isNeedNewOnBoarding}")
 
         if (isNeedNewOnBoarding && !whaleSpaceStart) {
-            println("aspasp 1")
             viewModel.getOnBoardItems (
                 successCb = { images ->
                     finishAffinity()
@@ -306,7 +305,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         checkTokenAndMoveActivity(whaleSpaceStart)
     }
     private fun checkTokenAndMoveActivity(whaleSpaceStart: Boolean) {
-        println("aspasp 2 ${whaleSpaceStart}")
         val goStartActivity: () -> Unit = {
             if (whaleSpaceStart) {
                 println("aspasp 5")
@@ -320,7 +318,6 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
             finish()
         }
         if(MyApplication.user?.token?.isNotEmpty() == true) {
-            println("aspasp 3")
             viewModel.refreshAutoLoginToken(successCb = {
                 viewModel.fetchUser { user ->
                     MyApplication.isAppFirstLaunch = true
