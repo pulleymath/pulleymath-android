@@ -116,6 +116,11 @@ class PurchaseWebViewActivity : AppCompatActivity() {
                     } catch (e: URISyntaxException) {
                         return false
                     }
+
+                    // 보안: selector와 component 제거
+                    schemeIntent.selector = null
+                    schemeIntent.component = null
+
                     try {
                         startActivity(schemeIntent)
                         return true

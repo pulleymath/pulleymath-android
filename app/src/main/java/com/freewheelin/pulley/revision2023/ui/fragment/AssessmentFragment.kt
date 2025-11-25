@@ -19,6 +19,7 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -483,9 +484,14 @@ class AssessmentFragment: MainTabFragment() {
                 }
                 if (photoFile != null) {
                     photoPath = "file:" + photoFile.absolutePath
+                    val photoURI = FileProvider.getUriForFile(
+                        requireContext(),
+                        getString(R.string.provider_id),
+                        photoFile
+                    )
                     takePictureIntent.putExtra(
                         MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile)
+                        photoURI
                     )
                 } else {
                     takePictureIntent = null

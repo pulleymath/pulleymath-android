@@ -208,7 +208,6 @@ class LCCookingFragment() : Fragment(),
                         quizTabHeaderWrapperLl.visibility = View.VISIBLE
                         if (item.video !== null) {
                             val isVideoTypeHls = item.video?.url?.contains("m3u8") == true
-                            println("aspasp isVideoTypeHls : ${isVideoTypeHls}")
                             if (isVideoTypeHls) {
                                 expPlayerContainer.visibleIf(true)
                                 initializePlayer(item)
@@ -366,10 +365,34 @@ class LCCookingFragment() : Fragment(),
                     javaScriptEnabled = true
                     mediaPlaybackRequiresUserGesture = false
                     allowFileAccess = true
+                    domStorageEnabled = true
+                    mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                    useWideViewPort = true
+                    loadWithOverviewMode = true
                 }
                 val videoUrl = makeYoutubeUrl(item)
-                println("YOUTUBE_URL, :${videoUrl}")
-                webView.loadUrl(videoUrl)
+                val htmlData = """
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <style>
+                            body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: black; }
+                            iframe { width: 100%; height: 100%; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe  src="${videoUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </body>
+                    </html>
+                """.trimIndent()
+                webView.loadDataWithBaseURL(
+                    "https://pulleymath.com",
+                    htmlData,
+                    "text/html",
+                    "UTF-8",
+                    null
+                )
             }
         }
         private fun makeYoutubeUrl(item: CookingInfoItem): String {
@@ -876,6 +899,7 @@ class LCCookingFragment() : Fragment(),
         }
 
         // [추가됨] Fragment가 멈출 때(닫힐 때 포함) 플레이어 리소스 해제
+        println("aspasp lccf onstop")
         cookingAdapter.releaseAllPlayers()
     }
 

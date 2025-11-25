@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -175,6 +177,7 @@ class MainActivity : PermissionActivity(),
         initReceiver()
         initObserve()
         initActivityResult()
+        requestNotificationPermission()
         initTabFragment()
         addBackBtnCallback()
         initSchoolSpinner()
@@ -845,6 +848,15 @@ class MainActivity : PermissionActivity(),
     override fun permissionDenied(requestCode: Int) {
         when(requestCode) {
             lessonRequest -> DaebakToast.show(this, "카메라와 마이크 권한요청을 수락해야지만 과외서비스를 사용할 수 있습니다.")
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        // Android 13(API 33) 이상에서만 POST_NOTIFICATIONS 권한 필요
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
+            }
         }
     }
 

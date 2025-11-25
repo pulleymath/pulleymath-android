@@ -3,8 +3,10 @@ package com.freewheelin.pulley.legacy.activities.mypage
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -70,8 +72,15 @@ class MyVersionFragment : MyPageBaseFragment() {
         var marketFound = false
 
         // find all applications able to handle our rateIntent
-        val otherApps: List<ResolveInfo> = context.getPackageManager()
-                .queryIntentActivities(rateIntent, 0)
+        val otherApps: List<ResolveInfo> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.packageManager.queryIntentActivities(
+                rateIntent,
+                PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            context.packageManager.queryIntentActivities(rateIntent, 0)
+        }
         for (otherApp in otherApps) {
             // look for Google Play application
             if (otherApp.activityInfo.applicationInfo.packageName
