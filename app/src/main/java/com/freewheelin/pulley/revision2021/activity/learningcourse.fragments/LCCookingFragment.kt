@@ -160,7 +160,7 @@ class LCCookingFragment() : Fragment(),
     }
 
     inner class CookingAdapter(): ListAdapter<CookingInfoItem, RecyclerView.ViewHolder>(DiffCallback<CookingInfoItem>()) {
-        private val activeHolders = mutableListOf<WeakReference<CookingItemHolder>>()
+        internal val activeHolders = mutableListOf<WeakReference<CookingItemHolder>>()
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return CookingItemHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_cooking_right_view, parent, false))
         }
@@ -170,19 +170,31 @@ class LCCookingFragment() : Fragment(),
         override fun getItemViewType(position: Int): Int {
             return position
         }
+
+        fun pauseAllPlayers() {
+            val iterator = activeHolders.iterator()
+            while (iterator.hasNext()) {
+                val ref = iterator.next()
+                val holder = ref.get()
+                if (holder != null) {
+                    holder.pausePlayer()
+                } else {
+                    iterator.remove()
+                }
+            }
+        }
+
         fun releaseAllPlayers() {
             val iterator = activeHolders.iterator()
             while (iterator.hasNext()) {
                 val ref = iterator.next()
                 val holder = ref.get()
                 if (holder != null) {
-                    holder.releasePlayer() // 뷰홀더의 플레이어 해제
+                    holder.releasePlayer()
                 } else {
-                    iterator.remove() // 이미 메모리에서 사라진 뷰홀더는 리스트에서 제거
+                    iterator.remove()
                 }
             }
-            // 리스트 초기화는 선택사항이지만, Fragment 재진입을 고려하면 clear하지 않거나
-            // 어댑터가 새로 생성되므로 괜찮습니다. 안전하게 비워줍니다.
             activeHolders.clear()
         }
     }
@@ -191,6 +203,8 @@ class LCCookingFragment() : Fragment(),
     inner class CookingItemHolder(private val itemBinding: ItemCookingRightViewBinding): RecyclerView.ViewHolder(itemBinding.root) {
         private var player: ExoPlayer? = null
         private var gestureDetector: GestureDetector? = null
+        private var fullscreenDialog: AlertDialog? = null
+        private var isFullscreen = false
         fun bind(item: CookingInfoItem, position: Int) {
             itemBinding.apply {
                 this.item = item
@@ -510,10 +524,12 @@ class LCCookingFragment() : Fragment(),
 
             // ExoPlayer 생성
             player = ExoPlayer.Builder(context).build()
+
+            cookingAdapter.activeHolders.add(WeakReference(this))
             itemBinding.playerView.player = player
             itemBinding.playerView.controllerShowTimeoutMs = 5000
             // HLS 소스 설정 (URL이 .m3u8이라고 가정)
-            val videoUrl = item.video?.url ?: return // 실제 모델 필드에 맞게 수정 필요
+            val videoUrl = item.video?.url ?: return
 
             // 만약 .m3u8이라면 HlsMediaSource 사용, 아니라면 일반 MediaItem
             val dataSourceFactory = DefaultHttpDataSource.Factory()
@@ -553,10 +569,9 @@ class LCCookingFragment() : Fragment(),
                 showSpeedSelectionDialog(context, btnSpeed)
             }
 
-            val btnFullscreen = itemBinding.playerView.findViewById<View>(R.id.btn_fullscreen)
+            val btnFullscreen = itemBinding.playerView.findViewById<ImageButton>(R.id.btn_fullscreen)
             btnFullscreen?.setOnClickListener {
-                // 전체화면 로직 (Activity 레벨에서 처리 필요하거나 다이얼로그로 띄우기)
-                // 간단하게는 가로/세로 모드 전환
+                toggleFullscreen()
             }
 
             // [추가] 3. 볼륨 컨트롤 로직
@@ -651,8 +666,20 @@ class LCCookingFragment() : Fragment(),
             }, 800)
         }
 
+        fun pausePlayer() {
+            player?.pause()
+        }
+
+        fun resumePlayer() {
+            // resume 에서 비디오에 필요한 동작
+        }
+
         // RecyclerView에서 뷰가 재활용되거나 프래그먼트가 파괴될 때 호출되어야 함
         fun releasePlayer() {
+            // 풀스크린 다이얼로그가 열려있다면 닫기
+            if (isFullscreen) {
+                closeFullscreen()
+            }
             player?.release()
             player = null
         }
@@ -709,6 +736,193 @@ class LCCookingFragment() : Fragment(),
                 else R.drawable.icon_volume_mute       // 소리 꺼짐(Mute) 아이콘
             )
         }
+
+        private fun toggleFullscreen() {
+            if (isFullscreen) {
+                closeFullscreen()
+            } else {
+                openFullscreen()
+            }
+        }
+
+        private fun openFullscreen() {
+            val context = requireContext()
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_fullscreen_player, null)
+
+            val fullscreenPlayerView = dialogView.findViewById<com.google.android.exoplayer2.ui.PlayerView>(R.id.fullscreen_player_view)
+            val doubleTapOverlay = dialogView.findViewById<FrameLayout>(R.id.fullscreen_double_tap_overlay)
+            val doubleTapLeft = dialogView.findViewById<LinearLayout>(R.id.fullscreen_double_tap_left)
+            val doubleTapRight = dialogView.findViewById<LinearLayout>(R.id.fullscreen_double_tap_right)
+
+            // ExoPlayer를 풀스크린 PlayerView에 연결
+            itemBinding.playerView.player = null
+            fullscreenPlayerView.player = player
+
+            // 다이얼로그 생성
+            fullscreenDialog = AlertDialog.Builder(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+                .setView(dialogView)
+                .setCancelable(true)
+                .setOnDismissListener {
+                    // 다이얼로그가 닫힐 때 ExoPlayer를 원래 PlayerView로 복원
+                    if (isFullscreen) {
+                        val fullscreenPlayerView = fullscreenDialog?.findViewById<com.google.android.exoplayer2.ui.PlayerView>(R.id.fullscreen_player_view)
+                        fullscreenPlayerView?.player = null
+                        itemBinding.playerView.player = player
+                        isFullscreen = false
+                        updateFullscreenIcon()
+                    }
+                }
+                .create()
+
+            fullscreenDialog?.window?.apply {
+                // 시스템 UI 숨기기 (상태바, 네비게이션바)
+                decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            }
+
+            fullscreenDialog?.show()
+            isFullscreen = true
+
+            // 풀스크린 버튼 아이콘 변경
+            updateFullscreenIcon()
+
+            // 풀스크린 다이얼로그에서도 컨트롤 및 제스처 설정
+            setupFullscreenControls(fullscreenPlayerView, context)
+            setupFullscreenGestures(fullscreenPlayerView, context, doubleTapOverlay, doubleTapLeft, doubleTapRight)
+        }
+
+        private fun closeFullscreen() {
+            fullscreenDialog?.dismiss()
+            fullscreenDialog = null
+        }
+
+        private fun updateFullscreenIcon() {
+            val btnFullscreen = itemBinding.playerView.findViewById<ImageButton>(R.id.btn_fullscreen)
+            btnFullscreen?.setImageResource(
+                if (isFullscreen) R.drawable.icon_volume_contract
+                else R.drawable.icon_volume_expand
+            )
+        }
+
+        private fun setupFullscreenControls(playerView: com.google.android.exoplayer2.ui.PlayerView, context: android.content.Context) {
+            val btnSpeed = playerView.findViewById<TextView>(R.id.btn_speed)
+            btnSpeed?.setOnClickListener {
+                showSpeedSelectionDialog(context, btnSpeed)
+            }
+
+            val btnFullscreen = playerView.findViewById<ImageButton>(R.id.btn_fullscreen)
+            btnFullscreen?.setOnClickListener {
+                toggleFullscreen()
+            }
+            btnFullscreen?.setImageResource(R.drawable.icon_volume_contract)
+
+            // 볼륨 컨트롤
+            setupFullscreenVolumeControl(playerView)
+        }
+
+        private fun setupFullscreenVolumeControl(playerView: com.google.android.exoplayer2.ui.PlayerView) {
+            val btnVolume = playerView.findViewById<ImageButton>(R.id.btn_volume)
+            val volumeSeekBar = playerView.findViewById<SeekBar>(R.id.volume_seekbar) ?: return
+
+            val currentVolume = player?.volume ?: 1.0f
+            volumeSeekBar.progress = (currentVolume * 100).toInt()
+            updateVolumeIcon(btnVolume, currentVolume > 0)
+
+            volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        val newVolume = progress / 100f
+                        player?.volume = newVolume
+                        updateVolumeIcon(btnVolume, newVolume > 0)
+                        if (newVolume > 0) lastVolume = newVolume
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+            btnVolume?.setOnClickListener {
+                val isMuted = (player?.volume ?: 0f) == 0f
+                if (isMuted) {
+                    player?.volume = lastVolume
+                    volumeSeekBar.progress = (lastVolume * 100).toInt()
+                    updateVolumeIcon(btnVolume, true)
+                } else {
+                    lastVolume = player?.volume ?: 1.0f
+                    player?.volume = 0f
+                    volumeSeekBar.progress = 0
+                    updateVolumeIcon(btnVolume, false)
+                }
+            }
+        }
+
+        private fun setupFullscreenGestures(
+            playerView: com.google.android.exoplayer2.ui.PlayerView,
+            context: android.content.Context,
+            doubleTapOverlay: FrameLayout,
+            doubleTapLeft: LinearLayout,
+            doubleTapRight: LinearLayout
+        ) {
+            val fullscreenGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDown(e: MotionEvent): Boolean {
+                    return true
+                }
+
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    val viewWidth = playerView.width
+                    val isLeft = e.x < viewWidth / 3
+                    val isRight = e.x > (viewWidth * 2) / 3
+
+                    if (isLeft) {
+                        rewind()
+                        showFullscreenDoubleTapFeedback(true, doubleTapOverlay, doubleTapLeft, doubleTapRight)
+                        return true
+                    } else if (isRight) {
+                        forward()
+                        showFullscreenDoubleTapFeedback(false, doubleTapOverlay, doubleTapLeft, doubleTapRight)
+                        return true
+                    }
+                    return false
+                }
+
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    if (playerView.isControllerVisible) {
+                        playerView.hideController()
+                    } else {
+                        playerView.showController()
+                    }
+                    return true
+                }
+            })
+
+            playerView.setOnTouchListener { _, event ->
+                fullscreenGestureDetector.onTouchEvent(event)
+                true
+            }
+        }
+
+        private fun showFullscreenDoubleTapFeedback(
+            isLeft: Boolean,
+            overlay: FrameLayout,
+            leftView: LinearLayout,
+            rightView: LinearLayout
+        ) {
+            overlay.visibility = View.VISIBLE
+            leftView.visibility = if (isLeft) View.VISIBLE else View.GONE
+            rightView.visibility = if (!isLeft) View.VISIBLE else View.GONE
+
+            val anim = AlphaAnimation(1.0f, 0.0f).apply {
+                duration = 800
+                fillAfter = true
+            }
+            if (isLeft) leftView.startAnimation(anim) else rightView.startAnimation(anim)
+
+            overlay.postDelayed({
+                overlay.visibility = View.GONE
+            }, 800)
+        }
     }
 
     inner class SelectionListAdapter(): ListAdapter<CookingQuizSelection, RecyclerView.ViewHolder>(
@@ -726,6 +940,7 @@ class LCCookingFragment() : Fragment(),
     override fun onPause() {
         super.onPause()
         viewModel.rightViewBinding?.webView?.onPause()
+        cookingAdapter.pauseAllPlayers()
     }
 
     inner class SelectionViewHolder(private val binding: ItemLcCookingSelectionBinding): RecyclerView.ViewHolder(binding.root), CookingSelectionItemClickListener {
@@ -898,8 +1113,6 @@ class LCCookingFragment() : Fragment(),
             clearCompositeDisposable()
         }
 
-        // [추가됨] Fragment가 멈출 때(닫힐 때 포함) 플레이어 리소스 해제
-        println("aspasp lccf onstop")
         cookingAdapter.releaseAllPlayers()
     }
 

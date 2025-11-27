@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/fullscreen_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:resize_mode="fit"
+        app:surface_type="texture_view"
+        app:use_controller="true"
+        app:controller_layout_id="@layout/exo_player_custom_controls"
+        app:show_timeout="3000"
+        android:background="@android:color/black" />
+
+    <!-- 더블탭 피드백을 위한 오버레이 -->
+    <FrameLayout
+        android:id="@+id/fullscreen_double_tap_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <!-- 왼쪽 피드백 -->
+        <LinearLayout
+            android:id="@+id/fullscreen_double_tap_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="40dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="-10"
+                android:textColor="#FFF"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="seconds"
+                android:textColor="#FFF"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <!-- 오른쪽 피드백 -->
+        <LinearLayout
+            android:id="@+id/fullscreen_double_tap_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="40dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="+10"
+                android:textColor="#FFF"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="seconds"
+                android:textColor="#FFF"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

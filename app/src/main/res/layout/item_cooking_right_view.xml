@@ -83,6 +83,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -97,6 +99,8 @@
                     app:use_controller="true"
                     app:controller_layout_id="@layout/exo_player_custom_controls"
                     app:show_timeout="3000"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:background="@android:color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
