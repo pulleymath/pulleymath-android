@@ -40,10 +40,10 @@ Copyright (C) 2004-2025 Artifex Software, Inc.
 License: GNU Affero General Public License v3.0 — 전문: LICENSE
 https://mupdf.com
 
-- 라이브러리: com.artifex.mupdf:fitz 1.18.0 (pdf 모듈 의존성)
+- 라이브러리: com.artifex.mupdf:fitz 1.26.11 (pdf 모듈 의존성)
   이 버전의 소스:
-    https://github.com/ArtifexSoftware/mupdf-android-fitz/tree/1.18.0
-    https://github.com/ArtifexSoftware/mupdf/tree/1.18.0
+    https://github.com/ArtifexSoftware/mupdf-android-fitz/tree/1.26.11
+    https://github.com/ArtifexSoftware/mupdf/tree/1.26.11
 - 파생 코드: MuPDF Android viewer(https://github.com/ArtifexSoftware/mupdf-android-viewer)
   에서 파생되어 Freewheelin Inc.가 2021년부터 수정한 아래 파일들. 각 파일 헤더에
   원저작권과 수정 사실을 표기했다.

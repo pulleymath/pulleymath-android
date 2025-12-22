@@ -200,7 +200,26 @@ public class MuPDFCore
 			e.printStackTrace();
 		}
 
-		return page != null ? page.search(text) : new Quad[]{};
+		if (page != null) {
+			Quad[][] results = page.search(text);
+			if (results != null && results.length > 0) {
+				int totalQuads = 0;
+				for (Quad[] result : results) {
+					if (result != null) totalQuads += result.length;
+				}
+				Quad[] flattened = new Quad[totalQuads];
+				int index = 0;
+				for (Quad[] result : results) {
+					if (result != null) {
+						for (Quad q : result) {
+							flattened[index++] = q;
+						}
+					}
+				}
+				return flattened;
+			}
+		}
+		return new Quad[]{};
 	}
 
 	public synchronized boolean hasOutline() {

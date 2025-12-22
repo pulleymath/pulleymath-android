@@ -6,8 +6,9 @@ plugins {
 }
 
 android {
+    ndkVersion = "28.0.12674087"  // NDK r28c for 16KB page size support
     namespace = "com.pulleymath.android.pdf"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 25
@@ -70,8 +71,7 @@ dependencies {
     implementation(group = "javax.xml.bind", name = "jaxb-api", version = "2.2.12-b140109.1041")
     implementation(group = "xerces", name = "xercesImpl", version = "2.12.0")
 
-//    implementation("com.artifex.mupdf:fitz:1.23.7")
-    implementation("com.artifex.mupdf:fitz:1.18.0")
+    implementation("com.artifex.mupdf:fitz:1.26.11")
 
     // retrofit (버전 업데이트 됨)
     implementation(libs.retrofit)
