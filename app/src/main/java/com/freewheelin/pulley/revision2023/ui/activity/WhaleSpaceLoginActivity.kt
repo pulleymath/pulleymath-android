@@ -37,7 +37,7 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
     val viewModel: WhaleSpaceLoginViewModel by viewModels()
 
 
-    val endpoint = "https://authn.whalespace.io/oauth2/v2.0/authorize"
+    val endpoint = "https://auth.worksmobile.com/oauth2/v2.0/authorize"
     val clientId = "_R0zU6c0PFjN_mm658N9"
     val redirectUri = "${Network.homePageUrl}/signin/complete/whalespace/android"
 
