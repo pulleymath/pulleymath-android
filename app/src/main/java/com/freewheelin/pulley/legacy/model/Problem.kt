@@ -287,6 +287,30 @@ open class Problem: Serializable {
 
     companion object {
 
+        /**
+         * 주관식 답안에서 부호('+'/'-')는 보존하면서 숫자 부분만 정규화한다.
+         * (예: "+008" → "+8", "-008" → "-8", "008" → "8")
+         * Long 한도 초과(>18자리) 입력은 18자리 단위로 분할 후 결합.
+         * 변환 불가 입력이면 null 반환.
+         */
+        fun normalizeUserAnswer(input: String?): String? {
+            if (input == null) return null
+            val sign = when (input.firstOrNull()) {
+                '+', '-' -> input.first().toString()
+                else -> ""
+            }
+            val numeric = if (sign.isEmpty()) input else input.substring(1)
+            if (numeric.isEmpty()) return null
+            return if (numeric.length > 18) {
+                val former = numeric.substring(0, 18).toLongOrNull()?.toString() ?: return null
+                val latter = numeric.substring(18, numeric.length).toLongOrNull()?.toString() ?: return null
+                sign + former + latter
+            } else {
+                val n = numeric.toLongOrNull()?.toString() ?: return null
+                sign + n
+            }
+        }
+
         fun convertFromNoteReviewProblem(nrProblem: NoteReviewProblem): Problem {
             return Problem().apply {
                 studyID = nrProblem.studyID
@@ -334,18 +358,7 @@ open class Problem: Serializable {
         try {
             // 멀티선택 아닐경우
             if (userAnswer?.contains(",") == false) {
-                userAnswer = userAnswer?.let {
-                    if (it.length > 18) {
-                        val former = it.substring(0, 18).toLongOrNull()?.toString()
-                        val latter = it.substring(18, it.length).toLongOrNull()?.toString()
-                        val result = former + latter
-                        // 둘중에 하나가 null일 경우
-                        if (result.contains("null")) null
-                        else result
-                    } else {
-                        it.toLongOrNull()?.toString()
-                    }
-                }
+                userAnswer = normalizeUserAnswer(userAnswer)
 //                userAnswer = userAnswer?.let { it.toLong().toString() } // 앞에 0 있을 때 처리만
             }
 

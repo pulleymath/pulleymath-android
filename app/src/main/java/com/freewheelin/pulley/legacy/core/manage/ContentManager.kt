@@ -118,18 +118,7 @@ object ContentManager {
             // 멀티 선택 처리
             if(it.userAnswer?.contains(",") == false) { // - 주관식이나 선다형이 아닐때
                 try { // 숫자 변환 시 Exception 처리
-                    it.userAnswer = it.userAnswer?.let { userAnswer ->
-                        if (userAnswer.length > 18) {
-                            val former = userAnswer.substring(0, 18).toLongOrNull()?.toString()
-                            val latter = userAnswer.substring(18, userAnswer.length).toLongOrNull()?.toString()
-                            val result = former + latter
-                            // 둘중에 하나가 null일 경우
-                            if (result.contains("null")) null
-                            else result
-                        } else {
-                            it.userAnswer?.toLongOrNull()?.toString()
-                        }
-                    }
+                    it.userAnswer = Problem.normalizeUserAnswer(it.userAnswer)
                 } catch (e: Exception) {
                     LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
                     it.userAnswer = null
@@ -158,7 +147,7 @@ object ContentManager {
                 // 멀티 선택 아닐 경우만
                 if(it.userAnswer?.contains(",") == false) {
                     try { // 숫자 변환 시 Exceptio 처리
-                        it.userAnswer = it.userAnswer?.toLongOrNull()?.toString()
+                        it.userAnswer = Problem.normalizeUserAnswer(it.userAnswer)
                     } catch (e:Exception) {
                         LogUtils.errorEvent(PulleyEvent.ERROR, user, "${it.userAnswer} 를 int로 변환할 수 없음")
                         it.userAnswer = null

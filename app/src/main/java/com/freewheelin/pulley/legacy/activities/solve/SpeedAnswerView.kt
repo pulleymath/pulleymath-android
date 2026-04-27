@@ -268,6 +268,9 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
 //                        ,KeyEvent.KEYCODE_NUMPAD_5,KeyEvent.KEYCODE_NUMPAD_6,KeyEvent.KEYCODE_NUMPAD_7,KeyEvent.KEYCODE_NUMPAD_8,KeyEvent.KEYCODE_NUMPAD_9
 //                        ,KeyEvent.KEYCODE_0,KeyEvent.KEYCODE_1,KeyEvent.KEYCODE_2,KeyEvent.KEYCODE_3,KeyEvent.KEYCODE_4
 //                        ,KeyEvent.KEYCODE_5,KeyEvent.KEYCODE_6,KeyEvent.KEYCODE_7,KeyEvent.KEYCODE_8,KeyEvent.KEYCODE_9 -> enterNumberBtnClicked()
+                    KeyEvent.KEYCODE_MINUS -> toggleSpecificSign('-')
+                    KeyEvent.KEYCODE_PLUS,
+                    KeyEvent.KEYCODE_NUMPAD_ADD -> toggleSpecificSign('+')
                     KeyEvent.KEYCODE_DPAD_DOWN -> next()
                     KeyEvent.KEYCODE_DPAD_UP -> prev()
                 }
@@ -488,16 +491,38 @@ class SpeedAnswerHolder(val holderBinding: ItemSpeedyScoringBinding): RecyclerVi
         deleteBtnClicked()
     }
 
+    // 키패드 ± 버튼: 없음 → '-' → '+' → 없음 순환
     fun enterMinusBtnClicked() {
-        if(shortAnswerView.text.firstOrNull() == '-') {
-            shortAnswerView.text.delete(0, 1)
-        } else {
-            val length = shortAnswerView.text.length
-            if(length == 9)
-                shortAnswerView.text.delete(length - 1, length)
-            shortAnswerView.text.insert(0, "-")
+        val next: Char? = when (shortAnswerView.text.firstOrNull()) {
+            '-' -> '+'
+            '+' -> null
+            else -> '-'
         }
+        applySignPrefix(next)
         delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString())
+    }
+
+    // 외부 키보드 +/- 키: 같은 부호면 제거, 다른 부호면 교체, 없으면 삽입
+    private fun toggleSpecificSign(sign: Char) {
+        val first = shortAnswerView.text.firstOrNull()
+        applySignPrefix(if (first == sign) null else sign)
+        delegate?.onAnswerChanged(itemView, shortAnswerView.text.toString())
+    }
+
+    // 맨 앞 부호를 sign('+'/'-')으로 설정. null이면 부호 제거. 길이 9 한도 유지.
+    private fun applySignPrefix(sign: Char?) {
+        val text = shortAnswerView.text
+        val first = text.firstOrNull()
+        val hadSign = first == '-' || first == '+'
+        when {
+            sign == null && hadSign -> text.delete(0, 1)
+            sign == null -> Unit
+            hadSign -> text.replace(0, 1, sign.toString())
+            else -> {
+                if (text.length == 9) text.delete(8, 9)
+                text.insert(0, sign.toString())
+            }
+        }
     }
 
     override fun onPlusMinusBtnClicked(button: ImageButton) {

@@ -79,7 +79,9 @@ class AnswerV2View : ConstraintLayout,
                         if (shortAnswerView?.text?.isNotBlank() == true) delegate?.onEnter()
                     }
                     KeyEvent.KEYCODE_DEL -> deleteBtnClicked()
-                    KeyEvent.KEYCODE_MINUS -> enterMinusBtnClicked()
+                    KeyEvent.KEYCODE_MINUS -> toggleSpecificSign('-')
+                    KeyEvent.KEYCODE_PLUS,
+                    KeyEvent.KEYCODE_NUMPAD_ADD -> toggleSpecificSign('+')
                     KeyEvent.KEYCODE_0 -> enterNumberBtnClicked("0")
                     KeyEvent.KEYCODE_1 -> enterNumberBtnClicked("1")
                     KeyEvent.KEYCODE_2 -> enterNumberBtnClicked("2")
@@ -322,28 +324,53 @@ class AnswerV2View : ConstraintLayout,
             )
         delegate?.onAnswerChanged(this, shortAnswerView.text.toString())
 
-        if(shortAnswerView.text.length == 1 && shortAnswerView.text.toString() == "-")
-            disableMarking()
+        if (isBareSign()) disableMarking()
     }
 
     override fun onPlusMinusBtnClicked(button: ImageButton) {
         enterMinusBtnClicked()
     }
 
+    // 키패드 ± 버튼: 없음 → '-' → '+' → 없음 순환
     fun enterMinusBtnClicked() {
-        if (shortAnswerView.text.firstOrNull() == '-') {
-            shortAnswerView.text.delete(0, 1)
-        } else {
-            val length = shortAnswerView.text.length
-            if (length == 9)
-                shortAnswerView.text.delete(length - 1, length)
-            shortAnswerView.text.insert(0, "-")
+        val next: Char? = when (shortAnswerView.text.firstOrNull()) {
+            '-' -> '+'
+            '+' -> null
+            else -> '-'
         }
-        // - 한개만 입력 시 버튼 활성화 막기
-        if(shortAnswerView.text.length == 1 && shortAnswerView.text.toString() == "-")
-            return
-
+        applySignPrefix(next)
+        // 부호 단독 입력 시 채점 활성화 막기
+        if (isBareSign()) return
         delegate?.onAnswerChanged(this, shortAnswerView.text.toString())
+    }
+
+    // 외부 키보드 +/- 키: 같은 부호면 제거, 다른 부호면 교체, 없으면 삽입
+    private fun toggleSpecificSign(sign: Char) {
+        val first = shortAnswerView.text.firstOrNull()
+        applySignPrefix(if (first == sign) null else sign)
+        if (isBareSign()) return
+        delegate?.onAnswerChanged(this, shortAnswerView.text.toString())
+    }
+
+    // 맨 앞 부호를 sign('+'/'-')으로 설정. null이면 부호 제거. 길이 9 한도 유지.
+    private fun applySignPrefix(sign: Char?) {
+        val text = shortAnswerView.text
+        val first = text.firstOrNull()
+        val hadSign = first == '-' || first == '+'
+        when {
+            sign == null && hadSign -> text.delete(0, 1)
+            sign == null -> Unit
+            hadSign -> text.replace(0, 1, sign.toString())
+            else -> {
+                if (text.length == 9) text.delete(8, 9)
+                text.insert(0, sign.toString())
+            }
+        }
+    }
+
+    private fun isBareSign(): Boolean {
+        val s = shortAnswerView.text.toString()
+        return s.length == 1 && (s == "-" || s == "+")
     }
 
     override fun onAnswerChanged(view: AnswerSelectionView, answerStr: String?) {
