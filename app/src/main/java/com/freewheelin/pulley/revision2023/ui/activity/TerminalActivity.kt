@@ -16,6 +16,8 @@ import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.HttpException401
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.NONE
+import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.viewmodel.TerminalViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,9 +42,18 @@ class TerminalActivity : AppCompatActivity() {
         val intent = intent
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             intent.data?.let {
+                Log.d(javaClass.simpleName, "deep link path=${it.path} server=${Preferences.onServerAPI.get()} springUrl=${Network.springUrl}")
+                if (it.path?.startsWith("/link/aiep") == true) {
+                    aiep(it)
+                    return
+                }
                 val target = it.getQueryParameter("target")
                 if (target == "whalespace") {
                     whalespace()
+                    return
+                }
+                if (target == "aiep") {
+                    aiep(it)
                     return
                 }
                 val token = it.getQueryParameter("token")
@@ -109,6 +120,28 @@ class TerminalActivity : AppCompatActivity() {
         intent.putExtra("AUTO_ACTION", true)
         startActivity(intent)
         finishAffinity()
+    }
+
+    private fun aiep(uri: Uri) {
+        val token = uri.getQueryParameter("token")
+        if (token.isNullOrEmpty()) {
+            unauthorizedAccess(4011)
+            return
+        }
+        MyApplication.token = token
+
+        viewModel.fetchUser { user ->
+            MyApplication.user = user
+            MyApplication.token = user.token
+            commitUser()
+            putFcmToken()
+            viewModel.fetchMainProfile {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                finishAffinity()
+            }
+        }
     }
     private fun unauthorizedAccess(error: Int) {
         DialogUtils.confirmV2(this,

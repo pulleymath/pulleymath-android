@@ -42,6 +42,7 @@ import com.freewheelin.pulley.legacy.views.editText.*
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.AiepEducationOfficeDialogFragment
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -109,6 +110,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 val intent = Intent(this@LoginActivity, WhaleSpaceLoginActivity::class.java)
                 intent.putExtra("AUTO_ACTION", true)
                 startActivity(intent)
+            }
+            aiepLoginBtn.setOnClickListener {
+                Log.d(javaClass.simpleName, "aiepLoginBtn clicked")
+                AiepEducationOfficeDialogFragment.openAiepLink(this@LoginActivity)
             }
             findIdPwTv.setOnClickListener {
                 this@LoginActivity.onFindIdPwTvClicked()

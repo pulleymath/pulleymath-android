@@ -78,7 +78,9 @@ class MySignUpInfoFragment : MyPageBaseFragment(), MyPageSettingDialogListener {
                     ivConfirmPhone.visibleIf(it.isValidPhone)
                     ivConfirmEmail.visibleIf(it.isValidEmail)
 
+                    Log.d(javaClass.simpleName, "signInChannel=${it.signInChannel}")
                     socialIconIv.visibleIf(it.signInChannel == SignInChannel.WHALESPACE)
+                    aiepBadgeLl.visibleIf(it.signInChannel == SignInChannel.AIEP)
                     passwordLl.visibleIf(it.signInChannel == SignInChannel.PULLEY)
                 }
 

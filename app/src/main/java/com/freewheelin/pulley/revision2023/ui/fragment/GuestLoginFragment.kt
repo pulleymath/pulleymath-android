@@ -33,6 +33,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.GuestJoinViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.editText.*
 import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
+import com.freewheelin.pulley.revision2023.ui.dialogs.AiepEducationOfficeDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -95,6 +96,10 @@ class GuestLoginFragment : Fragment(),
                 intent.putExtra("AUTO_ACTION", true)
                 startActivity(intent)
                 viewModel?.exitBtn()
+            }
+            aiepLoginBtn.setOnClickListener {
+                Log.d(javaClass.simpleName, "aiepLoginBtn clicked")
+                AiepEducationOfficeDialogFragment.openAiepLink(requireContext())
             }
 
             dummyLoginBtn.setOnClickListener {

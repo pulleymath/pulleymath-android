@@ -1,0 +1,46 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="12dp"
+    android:viewportWidth="44"
+    android:viewportHeight="12">
+
+    <group
+        android:translateX="0"
+        android:translateY="0.108">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M0 10.998C0.48922 9.126 1.0381 7.212 1.64664 5.256C2.26712 3.288 2.87566 1.536 3.47227 0H7.28461C7.88122 1.536 8.4838 3.288 9.09234 5.256C9.71281 7.212 10.2677 9.126 10.7569 10.998L7.96475 11.16C7.77383 10.488 7.52325 9.48 7.21302 8.136H3.54386C3.17397 9.552 2.92339 10.56 2.79214 11.16L0 10.998ZM6.55078 5.742C6.24054 4.662 5.89451 3.558 5.51268 2.43H5.2442C4.88624 3.426 4.53424 4.53 4.1882 5.742H6.55078Z" />
+    </group>
+
+    <group
+        android:translateX="12.43"
+        android:translateY="0.108">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M0 0H2.68474V11.16H0V0Z" />
+    </group>
+
+    <group
+        android:translateX="17.4944"
+        android:translateY="0.108">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M4.70725 11.34C3.2038 11.34 2.04041 11.172 1.21708 10.836C0.405695 10.488 0 9.87 0 8.982V0H8.32271V2.466H2.68475V4.464H7.4099V6.822H2.68475V8.694C3.29329 8.814 3.99729 8.874 4.79675 8.874C6.0019 8.874 7.0937 8.76 8.07214 8.532L8.41221 10.944C7.38604 11.208 6.15105 11.34 4.70725 11.34Z" />
+    </group>
+
+    <group
+        android:translateX="27.896"
+        android:translateY="0">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M0 0.576C0.536949 0.396 1.15146 0.258 1.84353 0.162C2.53559 0.054 3.23959 0 3.95553 0C5.55444 0 6.74169 0.312 7.51729 0.936C8.30481 1.548 8.69858 2.544 8.69858 3.924C8.69858 5.304 8.29885 6.36 7.49939 7.092C6.69993 7.824 5.48285 8.19 3.84814 8.19H2.66685V11.268H0V0.576ZM3.43648 5.742C3.98536 5.742 4.43281 5.73 4.77885 5.706C5.13681 5.67 5.47091 5.604 5.78115 5.508C5.9482 5.088 6.03173 4.608 6.03173 4.068C6.03173 3.492 5.88854 3.084 5.60217 2.844C5.3158 2.592 4.81464 2.466 4.09871 2.466C3.57369 2.466 3.09641 2.514 2.66685 2.61V5.742H3.43648Z" />
+    </group>
+
+    <group
+        android:translateX="39.578"
+        android:translateY="7.698">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M1.86441 3.75C2.89409 3.75 3.72881 2.91053 3.72881 1.875C3.72881 0.839466 2.89409 0 1.86441 0C0.834723 0 0 0.839466 0 1.875C0 2.91053 0.834723 3.75 1.86441 3.75Z" />
+    </group>
+</vector>

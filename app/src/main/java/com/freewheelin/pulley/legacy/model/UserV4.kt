@@ -58,5 +58,5 @@ data class UserV4(
 }
 
 enum class SignInChannel {
-    WHALESPACE, PULLEY, NAVER, APPLE
+    WHALESPACE, PULLEY, NAVER, APPLE, AIEP
 }
